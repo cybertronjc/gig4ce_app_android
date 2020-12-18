@@ -13,7 +13,7 @@ android {
             storePassword 'gigforce'
             keyAlias 'key0'
             keyPassword 'gigforce'
-            }
+        }
 
         production {
             storeFile file('/Users/apple/Documents/gigforce-upload.jks')
@@ -70,11 +70,12 @@ android {
          */
         production {
             dimension "default"
-           signingConfig signingConfigs.production
+            signingConfig signingConfigs.production
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Prod"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://qslv7bpakk.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_force_users_prod"'
         }
 
         /**
@@ -88,6 +89,7 @@ android {
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
         }
     }
 
@@ -201,6 +203,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:19.1.0'
 
 
+    implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
+
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
 
@@ -308,9 +312,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc03'
 
     implementation 'com.google.android:flexbox:2.0.1'
-
-
-
 
 
 }

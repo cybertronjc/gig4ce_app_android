@@ -1,147 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#EFEFEF">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_contactDetails"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:cardElevation="10dp"
-        android:layout_marginBottom="8dp"
-        android:id="@+id/cv_contactDetails"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        app:cardElevation="10dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
+                android:id="@+id/iv_backArrowInChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/ic_arrow_back_black"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="10dp"
-                android:id="@+id/iv_backArrowInChat"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/first_member"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                app:cardCornerRadius="24dp"
-                app:layout_constraintStart_toEndOf="@id/iv_backArrowInChat"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                >
+                app:cardCornerRadius="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_backArrowInChat"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:id="@+id/civ_personImage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
             </androidx.cardview.widget.CardView>
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/na"
-                android:textSize="20sp"
-                android:textColor="#d72467"
-                android:fontFamily="@font/lato"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/first_member"
-                android:layout_marginStart="10dp"
                 android:id="@+id/tv_nameValueInChat"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato"
+                android:text="NA"
+                android:textColor="#d72467"
+                android:textSize="22sp"
+                app:layout_constraintStart_toEndOf="@+id/first_member"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/na"
-                android:textSize="12sp"
-                android:textColor="@color/gray_chat_module"
-                app:layout_constraintTop_toBottomOf="@+id/tv_nameValueInChat"
-                app:layout_constraintStart_toStartOf="@+id/tv_nameValueInChat"
                 android:id="@+id/tv_lastSeenValue"
-                />
-            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textColor="@color/gray_chat_module"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_nameValueInChat"
+                app:layout_constraintTop_toBottomOf="@+id/tv_nameValueInChat" />
+
+            <ImageView
+                android:id="@+id/iv_verticalDots"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="10dp"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
                 android:src="@drawable/ic_three_dots"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="10dp"
-                android:id="@+id/iv_verticalDots"
-                />
+                app:tint="@color/black" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
+        android:id="@+id/contact_blocked_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"
         android:layout_below="@+id/cv_contactDetails"
-        android:id="@+id/rv_chats"
-        android:paddingBottom="60dp"
-        />
+        android:orientation="horizontal">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:cardBackgroundColor="#f6f7f8"
-        app:cardElevation="15dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/cv_editTextContainer"
-        >
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/contact_blocked_label"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_sentiment_very_satisfied_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/iv_happyFace"
-                />
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/iv_happyFace"
-                app:layout_constraintEnd_toStartOf="@+id/iv_greyPlus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="15dp"
-                android:textSize="17sp"
-                android:textColor="#585858"
-                android:fontFamily="@font/lato"
-                android:hint="@string/type_a_message"
-                android:background="#00000000"
-                android:id="@+id/et_typedMessageValue"
-                />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_add_24"
-                app:layout_constraintEnd_toStartOf="@+id/iv_sendMessage"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="15dp"
-                android:id="@+id/iv_greyPlus"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_send_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="5dp"
-                android:id="@+id/iv_sendMessage"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+            android:layout_marginBottom="8dp"
+            android:background="@color/red"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:text="You've blocked this contact"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/container_footer"
+        android:layout_below="@+id/contact_blocked_container"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#EFEFEF">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:id="@+id/container_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:background="@color/mdtp_white"
+        android:gravity="center_vertical"
+        android:minHeight="60dp">
+
+        <ImageView
+            android:id="@+id/iv_greyPlus"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleY="0.7"
+            android:scaleX="0.7"
+            android:layout_marginStart="14dp"
+            android:src="@drawable/ic_attachment_grey"
+             />
+
+        <EditText
+            android:id="@+id/et_typedMessageValue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/lato"
+            android:hint="Type a message"
+            android:textColor="#585858"
+            android:textSize="17sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_sendMessage"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="10dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:src="@drawable/ic_baseline_send_24" />
+    </LinearLayout>
 
 </RelativeLayout>

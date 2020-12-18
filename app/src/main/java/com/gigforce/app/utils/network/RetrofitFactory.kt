@@ -1,5 +1,6 @@
 package com.gigforce.app.utils.network
 
+import com.gigforce.app.modules.chatmodule.remote.SyncContactsService
 import com.gigforce.app.modules.verification.AppConstants
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.google.gson.GsonBuilder
@@ -15,11 +16,12 @@ object RetrofitFactory {
     private val gsonConverter: GsonConverterFactory
         get() {
             return GsonConverterFactory
-                    .create(
-                            GsonBuilder()
-                                    .setLenient()
-                                    .disableHtmlEscaping()
-                                    .create())
+                .create(
+                    GsonBuilder()
+                        .setLenient()
+                        .disableHtmlEscaping()
+                        .create()
+                )
         }
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -28,11 +30,17 @@ object RetrofitFactory {
 
     //Not logging the authkey if not debug
     private val client =
-            OkHttpClient().newBuilder()
-                    .addInterceptor(loggingInterceptor)
-                    .build()
+        OkHttpClient().newBuilder()
+            .addInterceptor(loggingInterceptor)
+            .build()
 
 
+//    fun retrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+//        .client(client)
+//        .baseUrl(baseUrl)
+//        .addConverterFactory(MoshiConverterFactory.create())
+//        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+//        .build()
     fun retrofit(baseUrl: String): NetworkCalls = Retrofit.Builder()
             .client(client)
             .baseUrl(baseUrl)
@@ -42,11 +50,16 @@ object RetrofitFactory {
 
 
     fun generatePaySlipService() = Retrofit.Builder()
-            .baseUrl(AppConstants.IDFY_BASE_URL)
-            .addConverterFactory(gsonConverter)
-            .client(client)
-            .build()
-            .create(GeneratePaySlipService::class.java)
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(GeneratePaySlipService::class.java)
 
-
+    fun generateSyncContactsService() = Retrofit.Builder()
+        .baseUrl(AppConstants.IDFY_BASE_URL)
+        .addConverterFactory(gsonConverter)
+        .client(client)
+        .build()
+        .create(SyncContactsService::class.java)
 }

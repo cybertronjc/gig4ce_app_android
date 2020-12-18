@@ -117,7 +117,6 @@ class SelfiVideoViewModel constructor(
                     transcodeJob.cancel(true)
                 }
             }
-
         }
 
 

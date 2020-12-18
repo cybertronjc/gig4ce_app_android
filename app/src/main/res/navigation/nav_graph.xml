@@ -59,7 +59,7 @@
         tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatFragment"
         tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/contactScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ContactScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatListFragment"
         tools:layout="@layout/contact_screen_fragment" />
 
     <fragment
@@ -768,6 +768,22 @@
         android:id="@+id/payslipMonthlyFragment"
         android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
         android:label="PayslipMonthlyFragment" />
+    <fragment
+        android:id="@+id/chatNewContactFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"
+        android:label="ChatNewContactFragment" />
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupChatFragment"
+        android:label="GroupChatFragment" />
+    <fragment
+        android:id="@+id/groupDetailsFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupDetailsFragment"
+        android:label="GroupDetailsFragment" />
+    <fragment
+        android:id="@+id/groupMediaListFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupMediaListFragment"
+        android:label="GroupMediaListFragment" />
 
     <fragment
         android:id="@+id/application_questionnaire"

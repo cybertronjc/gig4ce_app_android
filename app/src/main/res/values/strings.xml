@@ -345,7 +345,7 @@
     // chat appbar menu items
     <string name="action_block">Block</string>
     <string name="action_report">Report</string>
-    <string name="action_invite_friends">Invite a friends</string>
+    <string name="action_invite_friends">Invite a friend</string>
     <string name="action_refresh">Refresh</string>
     <string name="uploaded">Uploaded</string>
     <string name="let_s_go">Let\'s Go</string>

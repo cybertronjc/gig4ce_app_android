@@ -67,13 +67,25 @@
 
         <ImageView
             android:id="@+id/chat_icon_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_home_chat"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_homescreen_chat"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+        <ImageView
+            android:id="@+id/unread_message_count_tv"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintEnd_toStartOf="@id/cardView"
+            app:layout_constraintTop_toTopOf="@id/cardView" />
+
 
         <ImageView
             android:id="@+id/imageView30"

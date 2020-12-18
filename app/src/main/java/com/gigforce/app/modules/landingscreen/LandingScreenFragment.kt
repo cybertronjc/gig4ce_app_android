@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -34,6 +35,7 @@ import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.app.modules.client_activation.models.JobProfile
+import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -48,10 +50,7 @@ import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
@@ -81,6 +80,7 @@ class LandingScreenFragment : BaseFragment() {
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -235,7 +235,6 @@ class LandingScreenFragment : BaseFragment() {
             return false
         }
     }
-
     fun getAppVersion(): String {
         var result = "";
 
@@ -354,7 +353,6 @@ class LandingScreenFragment : BaseFragment() {
         viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
             val profile: ProfileData = profileObs!!
-
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
@@ -386,8 +384,24 @@ class LandingScreenFragment : BaseFragment() {
                 }
 
             })
-
         verificationViewModel.startListeningForGigerVerificationStatusChanges()
+
+
+        chatHeadersViewModel.unreadMessageCount
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
+
+        chatHeadersViewModel.startWatchingChatHeaders()
 
 
         landingScreenViewModel
@@ -711,7 +725,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            //            navigate(R.id.fakeGigContactScreenFragment)
+            navigate(R.id.contactScreenFragment)
         }
 
         contact_us.setOnClickListener {

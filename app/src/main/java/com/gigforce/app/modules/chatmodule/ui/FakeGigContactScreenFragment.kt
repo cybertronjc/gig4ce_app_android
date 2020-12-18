@@ -30,7 +30,7 @@ class FakeGigContactScreenFragment : BaseFragment() {
         }
 
         tv_nameValue.text = "Help Contact"
-        tv_dateValue.text = "040 - 48217315"
+        tv_subtitle.text = "040 - 48217315"
 
 
         val drawable = TextDrawable.builder().buildRound(

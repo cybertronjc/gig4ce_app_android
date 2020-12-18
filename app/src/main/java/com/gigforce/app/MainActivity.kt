@@ -213,11 +213,13 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        /*
+        todo: Check if hiding Keyboard is really required!
         if (currentFocus != null) {
             val imm: InputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
+        }*/
         return super.dispatchTouchEvent(ev)
     }
 

@@ -638,7 +638,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         if (AppConstants.UNLOCK_FEATURE) {
-            datalist.add(FeatureModel("Chat", R.drawable.chat, R.id.contactScreenFragment))
+            datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
         }
 //        datalist.add(
 //            FeatureModel(
