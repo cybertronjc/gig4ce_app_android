@@ -83,6 +83,9 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+        viewModel.observableError.observe(viewLifecycleOwner, Observer {
+            showToast(it ?: "")
+        })
         viewModel.observableJPSettings.observe(viewLifecycleOwner, Observer {
             adapter.addData(it.checkItems)
             tv_title_toolbar.text = it.title

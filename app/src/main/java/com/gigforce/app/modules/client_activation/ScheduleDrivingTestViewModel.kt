@@ -45,8 +45,10 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     val observableApplied: SingleLiveEvent<Boolean> get() = _observableApplied
     fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
         val model = getJPApplication(mJobProfileId, type, title)
-        _observableJpApplication.value = model
+        if (model != null) {
+            _observableJpApplication.value = model
 
+        }
     }
 
     var verificationId: String? = null
@@ -75,23 +77,30 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         type: String,
         title: String
     ): DrivingCertificate? {
-        val items = repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
-            .whereEqualTo("gigerId", repository.getUID()).get()
-            .await()
-        if (items.documents.isNullOrEmpty()) {
-            return null
-        }
-        applicationId = items.documents[0].id
-        val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
-                "title", title
-            ).whereEqualTo("type", type).get().await()
-        if (submissions.documents.isNullOrEmpty()) {
-            return null
-        }
-        submissionId = submissions.documents[0].id
+        try {
+            val items =
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
+            if (items.documents.isNullOrEmpty()) {
+                return null
+            }
+            applicationId = items.documents[0].id
+            val submissions = repository.getCollectionReference().document(items.documents[0].id)
+                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                    "title", title
+                ).whereEqualTo("type", type).get().await()
+            if (submissions.documents.isNullOrEmpty()) {
+                return null
+            }
+            submissionId = submissions.documents[0].id
 
-        return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+            return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+        } catch (e: Exception) {
+            _observableError.value = e.message
+            return null
+        }
+
     }
 
     fun getUIData(workOrderId: String) {
@@ -188,6 +197,8 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 observableApplied.value = true
+                            } else {
+                                _observableError.value = it.exception?.message ?: ""
                             }
                         }
                 }
