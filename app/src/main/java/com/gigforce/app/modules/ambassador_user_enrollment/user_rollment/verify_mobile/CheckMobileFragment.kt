@@ -12,6 +12,7 @@ import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
+import java.util.regex.Pattern
 
 class CheckMobileFragment : BaseFragment() {
 
@@ -37,6 +38,11 @@ class CheckMobileFragment : BaseFragment() {
 
     private fun validateDataAndsubmit() {
         if (mobile_no_et.text.length != 10) {
+            showAlertDialog("", "Enter a valid Mobile No")
+            return
+        }
+        val mobileNo = mobile_no_et.text.toString()
+        if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
             showAlertDialog("", "Enter a valid Mobile No")
             return
         }
@@ -83,5 +89,9 @@ class CheckMobileFragment : BaseFragment() {
                     }
                 }
             })
+    }
+
+    companion object{
+        private val INDIAN_MOBILE_NUMBER = Pattern.compile("^[6-9][0-9]{9}\$")
     }
 }

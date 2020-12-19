@@ -80,7 +80,8 @@
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
             android:enabled="true"
-            android:text="@string/submit_all_caps"
+            android:textAllCaps="false"
+            android:text="Start Onboarding Gigers"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 

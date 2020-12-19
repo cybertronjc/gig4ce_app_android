@@ -76,6 +76,10 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
         profileViewModel.setUserAsAmbassador()
     }
 
+    override fun isCancelable(): Boolean {
+        return false
+    }
+
     private fun initViewModel() {
         profileViewModel.viewState
             .observe(viewLifecycleOwner, Observer {

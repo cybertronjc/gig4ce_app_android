@@ -58,32 +58,35 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="12dp"
-                app:singleSelection="true"
-                app:chipSpacingHorizontal="14dp">
+                app:chipSpacingHorizontal="14dp"
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_interest_driving"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Profile" />
+                    android:text="Profile"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_interest_bike_rider"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="Sourcing" />
+                    android:text="Sourcing"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_interest_delivery_executive"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="Managing Gigs" />
+                    android:text="Managing Gigs"
+                    app:chipStrokeWidth="1dp" />
 
 
             </com.google.android.material.chip.ChipGroup>
@@ -104,12 +107,12 @@
         android:minHeight="@dimen/size_48"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
-        android:visibility="gone"
         android:text="Create Profile"
-        app:strokeColor="@color/colorPrimary"
-        app:strokeWidth="2dp"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="2dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -117,51 +120,72 @@
         app:layout_constraintBottom_toTopOf="@id/createProfileBtn"
         app:layout_constraintTop_toBottomOf="@id/toolbar_filter_layout">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/enrolled_users_rv"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/total_users_enrolled_tv"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="16sp"
+                android:paddingStart="18dp"
+                android:textColor="#333333"
+                android:lineSpacingExtra="3sp"
+                android:visibility="gone"
+                android:gravity="center_vertical"
+                android:background="#c6ddf3"/>
+            
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/enrolled_users_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/no_users_enrolled_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="230dp"
                 android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:src="@drawable/banner_users_grid"/>
+                android:src="@drawable/banner_users_grid" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_bold"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:textColor="#333333"
                 android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="4sp"
                 android:text="All good here! "
-                />
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
-                android:textStyle="normal"
-                android:textSize="14sp"
-                android:textColor="#333333"
+                android:layout_gravity="center"
                 android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
-                android:layout_gravity="center"
                 android:text="There are no Profiles to show."
-                />
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal" />
 
             <Button
                 android:id="@+id/create_profile_btn"
@@ -183,9 +207,6 @@
 
         </LinearLayout>
     </FrameLayout>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.Lse
@@ -17,7 +18,8 @@ import java.util.*
 
 class UserDetailsViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val enrolledUserListRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
 
     private val _submitUserDetailsState = MutableLiveData<Lse>()
@@ -25,7 +27,7 @@ class UserDetailsViewModel constructor(
 
     fun updateUserDetails(
         uid: String,
-        phoneNumber : String,
+        phoneNumber: String,
         name: String,
         dateOfBirth: Date,
         gender: String,
@@ -42,6 +44,7 @@ class UserDetailsViewModel constructor(
                 gender = gender,
                 highestQualification = highestQualification
             )
+            enrolledUserListRepository.updateUserProfileName(uid, name)
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null
         } catch (e: Exception) {
@@ -105,6 +108,11 @@ class UserDetailsViewModel constructor(
             val fname: String = taskSnap.metadata?.reference?.name.toString()
 
             profileFirebaseRepository.setProfileAvatarName(userId, fname)
+
+            if (userId != null) {
+                enrolledUserListRepository.updateUserProfilePicture(userId, fname)
+            }
+
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null
         } catch (e: Exception) {
@@ -118,10 +126,10 @@ class UserDetailsViewModel constructor(
     private val _profile = MutableLiveData<ProfileData>()
     val profile: LiveData<ProfileData> = _profile
 
-    private var listenerRegistration : ListenerRegistration? = null
+    private var listenerRegistration: ListenerRegistration? = null
 
     fun startWatchingProfile(userId: String?) {
-        listenerRegistration = profileFirebaseRepository.getProfileRef(userId )
+        listenerRegistration = profileFirebaseRepository.getProfileRef(userId)
             .addSnapshotListener { value, error ->
 
                 error?.printStackTrace()

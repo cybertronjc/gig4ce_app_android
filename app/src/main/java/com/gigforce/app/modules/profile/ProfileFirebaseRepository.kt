@@ -3,6 +3,7 @@ package com.gigforce.app.modules.profile
 import android.util.Log
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.profile.models.*
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -164,10 +165,10 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
     }
 
-    suspend fun getProfileData(): ProfileData = suspendCoroutine { cont ->
+    suspend fun getProfileData(userId : String? = null): ProfileData = suspendCoroutine { cont ->
 
         getCollectionReference()
-            .document(uid)
+            .document(userId ?: uid)
             .get()
             .addOnSuccessListener {
                 val profileData = it.toObject(ProfileData::class.java)
@@ -226,6 +227,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .collection(profileCollectionName)
             .document(uid)
             .set(profileData)
+
     }
 
     suspend fun updateCurrentAddressDetails(
@@ -254,5 +256,31 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                     "readyToChangeLocationForWork" to readyToChangeLocationForWork
                 )
             )
+    }
+
+    suspend fun submitInterest(
+        uid: String,
+        interest: List<String>
+    ) {
+
+        val interests = interest.map {
+            Interest(
+                name = it,
+                haveExperience = false
+            )
+        }
+        db.collection(profileCollectionName)
+            .document(uid)
+            .update("interests", interests)
+    }
+
+    suspend fun submitExperience(experience: Experience): Task<Void> {
+        return firebaseDB.collection(profileCollectionName)
+            .document(uid).update("experiences", FieldValue.arrayUnion(experience))
+    }
+
+    suspend fun submitExperience(userId : String, experience: Experience): Task<Void> {
+        return firebaseDB.collection(profileCollectionName)
+            .document(userId).update("experiences", FieldValue.arrayUnion(experience))
     }
 }

@@ -1,7 +1,9 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -30,6 +33,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.StorageReference
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_add_selfie_capture_video.*
 import kotlinx.android.synthetic.main.fragment_ambsd_profile_picture.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -86,14 +90,19 @@ class AddProfilePictureFragment : BaseFragment(),
     private fun initListeners() {
 
         imageView13.setOnClickListener {
-            ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+
+            if (hasStoragePermissions())
+                ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+            else
+                requestStoragePermission()
+
         }
 
         submitBtn.setOnClickListener {
 
             if (userId != null) {
                 navigate(
-                    R.id.addCurrentAddressFragment, bundleOf(
+                    R.id.addUserInterestFragment, bundleOf(
                         EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
                     )
                 )
@@ -105,6 +114,30 @@ class AddProfilePictureFragment : BaseFragment(),
         ic_back_btn.setOnClickListener {
             activity?.onBackPressed()
         }
+    }
+
+    private fun hasStoragePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+
+        cameraMainLayout.gone()
+        cameraPermissionLayout.visible()
+
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            REQUEST_STORAGE_PERMISSION
+        )
     }
 
     private fun showAlertDialog(title: String, message: String) {
@@ -148,11 +181,36 @@ class AddProfilePictureFragment : BaseFragment(),
                 PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
                 .load(profilePicRef)
+                .placeholder(getCircularProgressDrawable())
                 .into(imageView13)
         } else {
             GlideApp.with(this.requireContext())
                 .load(R.drawable.avatar)
                 .into(imageView13)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_STORAGE_PERMISSION -> {
+
+                var allPermsGranted = true
+                for (i in grantResults.indices) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        allPermsGranted = false
+                        break
+                    }
+                }
+
+                if (allPermsGranted)
+                    ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+                else {
+                    showToast("Please grant storage permission")
+                }
+            }
         }
     }
 
@@ -261,6 +319,11 @@ class AddProfilePictureFragment : BaseFragment(),
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
+
+        private const val actionCamera = 0
+        private const val actionGallery = 1
+
+        private const val REQUEST_STORAGE_PERMISSION = 102
     }
 
 }

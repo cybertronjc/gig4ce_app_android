@@ -31,17 +31,48 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_Enrolled_Users)
                 .document(response.uid)
-                .setOrThrow( EnrolledUser(
-                    uid = response.uid,
-                    enrolledOn = Timestamp.now(),
-                    enrolledBy = getUID(),
-                    enrollmentStepsCompleted = EnrollmentStepsCompleted(),
-                    name = mobile
-                ))
+                .setOrThrow(
+                    EnrolledUser(
+                        uid = response.uid,
+                        enrolledOn = Timestamp.now(),
+                        enrolledBy = getUID(),
+                        enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                        name = mobile
+                    )
+                )
 
             return response
         }
     }
+
+    suspend fun updateUserProfileName(
+        userId: String,
+        name: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+            .document(getUID())
+            .collection(COLLECTION_Enrolled_Users)
+            .document(userId)
+            .update("name", name)
+
+        //tofo update or throw
+    }
+
+    suspend fun updateUserProfilePicture(
+        userId: String,
+        profilePic: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+            .document(getUID())
+            .collection(COLLECTION_Enrolled_Users)
+            .document(userId)
+            .update("profilePic", profilePic)
+
+        //tofo update or throw
+    }
+
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME

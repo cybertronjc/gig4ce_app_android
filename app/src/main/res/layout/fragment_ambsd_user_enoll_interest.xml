@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
 
@@ -72,8 +72,10 @@
         android:textStyle="bold" />
 
     <com.google.android.material.chip.ChipGroup
+        android:id="@+id/interest_chipgroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
@@ -101,13 +103,6 @@
             android:text="Delivery Executive" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_delivery_cleaning"
-            style="@style/AppSingleChoiceChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cleaning" />
-
-        <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_warehouse_helper"
             style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
@@ -115,11 +110,40 @@
             android:text="Warehouse Helper" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_security"
+            android:id="@+id/chip_interest_operator"
             style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Security" />
+            android:text="Operator" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_technician"
+            style="@style/AppSingleChoiceChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Technician" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_supervisor"
+            style="@style/AppSingleChoiceChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Supervisor/Manager" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_Inspector"
+            style="@style/AppSingleChoiceChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspector" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_tele_calling"
+            style="@style/AppSingleChoiceChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tele calling" />
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_factory_worker"
@@ -129,18 +153,40 @@
             android:text="Factory Worker" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_sales"
+            android:id="@+id/chip_interest_security"
             style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sales" />
+            android:text="Security" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_others"
+            android:id="@+id/chip_interest_delivery_cleaning"
             style="@style/AppSingleChoiceChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Others" />
+            android:text="Cleaner" />
+
+
+
+
     </com.google.android.material.chip.ChipGroup>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/gradient_button"
+        android:enabled="true"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
 
 </LinearLayout>

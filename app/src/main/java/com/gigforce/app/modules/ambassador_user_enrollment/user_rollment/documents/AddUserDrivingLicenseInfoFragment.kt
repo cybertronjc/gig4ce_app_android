@@ -22,6 +22,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragment
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
@@ -46,7 +48,8 @@ enum class DrivingLicenseSides {
     BACK_SIDE
 }
 
-class AddUserDrivingLicenseInfoFragment : BaseFragment() {
+class AddUserDrivingLicenseInfoFragment : BaseFragment(),
+    UserDetailsFilledDialogFragmentResultListener {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -304,11 +307,13 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment() {
     private fun documentUploaded() {
         showToast(getString(R.string.dl_details_uploaded))
 
-        navigate(
-            R.id.addUserBankDetailsInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
-            )
+        UserDetailsFilledDialogFragment.launch(
+            userId = userId,
+            userName = "",
+            fragmentManager = childFragmentManager,
+            okayClickListener = this@AddUserDrivingLicenseInfoFragment
         )
+
     }
 
     private fun showLoadingState() {
@@ -442,6 +447,10 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment() {
             .load(aadharBackImagePath)
             .placeholder(getCircularProgressDrawable())
             .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
+    override fun onOkayClicked() {
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
 }

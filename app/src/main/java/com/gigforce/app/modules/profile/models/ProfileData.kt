@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.profile.models
 
+import com.gigforce.app.modules.profile.Interest
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
@@ -46,10 +47,15 @@ data class ProfileData(
 
     @get:PropertyName("dateOfBirth")
     @set:PropertyName("dateOfBirth")
-    var dateOfBirth: Timestamp = Timestamp.now()
+    var dateOfBirth: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("interests")
+    @set:PropertyName("interests")
+    var interests: ArrayList<Interest>? = null
 
 ) {
 
     @Exclude
-    fun hasUserUploadedProfilePicture() = profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
+    fun hasUserUploadedProfilePicture() =
+        profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }

@@ -39,6 +39,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
         initViewModel()
     }
 
+
     private fun initUi() {
         ic_back_iv?.setOnClickListener {
             activity?.onBackPressed()

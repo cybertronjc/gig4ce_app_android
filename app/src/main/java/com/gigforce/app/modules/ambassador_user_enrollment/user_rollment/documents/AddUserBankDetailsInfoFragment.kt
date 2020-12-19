@@ -293,10 +293,11 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun documentsUploaded() {
         showToast(getString(R.string.bank_details_uploaded))
 
-        navigate(R.id.addUserInterestFragment, bundleOf(
-            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
-        ))
-
+        navigate(
+            R.id.addUserPanCardInfoFragment, bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+            )
+        )
     }
 
     override fun onBackPressed(): Boolean {

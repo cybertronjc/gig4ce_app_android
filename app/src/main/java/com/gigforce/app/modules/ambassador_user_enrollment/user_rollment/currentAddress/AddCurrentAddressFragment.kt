@@ -134,7 +134,7 @@ class AddCurrentAddressFragment : BaseFragment() {
                         showToast("User Current Address Details submitted")
 
                         navigate(
-                            R.id.addUserPanCardInfoFragment, bundleOf(
+                            R.id.addUserBankDetailsInfoFragment, bundleOf(
                                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
                             )
                         )

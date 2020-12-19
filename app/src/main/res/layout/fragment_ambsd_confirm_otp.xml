@@ -95,6 +95,7 @@
                 android:inputType="number"
                 android:paddingBottom="@dimen/size_15"
                 android:textSize="20sp"
+                android:maxLength="6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/we_will_send_otp_label" />

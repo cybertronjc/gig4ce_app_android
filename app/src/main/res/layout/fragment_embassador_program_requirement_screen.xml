@@ -58,15 +58,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginStart="45dp"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/company_name_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
         android:text="Thanks for showing interest in  " />
+
+    <TextView
+        android:id="@+id/company_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/thanks_for_label"
+        app:layout_constraintTop_toBottomOf="@id/apply_image"
+        android:text="Gigforce " />
 
     <TextView
         android:id="@+id/complete_form_label"
@@ -128,7 +142,7 @@ your Application" />
         android:layout_marginEnd="@dimen/size_8"
         android:indeterminate="false"
         android:progress="0"
-        android:progressDrawable="@drawable/curved_h_progress_bar"
+        android:progressDrawable="@drawable/curved_h_gradient_progress_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/steps_pending_label" />
@@ -152,8 +166,6 @@ your Application" />
             android:id="@+id/profile_pic_check_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:background="@drawable/round_green"
-            android:src="@drawable/ic_baseline_check_32"
              />
 
         <TextView
@@ -233,7 +245,7 @@ your Application" />
             android:id="@+id/bank_details_check_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_check_in_green" />
+             />
 
         <TextView
             android:layout_width="0dp"
@@ -255,7 +267,7 @@ your Application" />
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/apply_amb_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -263,12 +275,14 @@ your Application" />
         android:layout_marginTop="@dimen/size_24"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_32"
-        android:background="@drawable/bg_next_assess_frag"
+        android:background="@drawable/gradient_button"
         android:letterSpacing="0"
         android:minHeight="@dimen/size_48"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
-        android:text="@string/submit_all_caps"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -65,11 +67,17 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                 if(it.isEmpty()){
                     enrolledUserAdapter.setData(emptyList())
                     no_users_enrolled_layout.visible()
-                    create_profile_btn.gone()
+                    createProfileBtn.gone()
+                    total_users_enrolled_tv.gone()
                 } else{
                     no_users_enrolled_layout.gone()
-                    create_profile_btn.visible()
+                    createProfileBtn.visible()
                     enrolledUserAdapter.setData(it)
+                    total_users_enrolled_tv.visible()
+                    total_users_enrolled_tv.text = buildSpannedString {
+                        append("Total profiles Created : ")
+                        bold { append(it.size.toString()) }
+                    }
                 }
             })
     }

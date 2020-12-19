@@ -769,8 +769,12 @@
         android:label="AddUserDrivingLicenseInfoFragment" />
     <fragment
         android:id="@+id/addUserInterestFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest.AddUserInterestFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserInterestFragment"
         android:label="AddUserInterestFragment" />
+    <fragment
+        android:id="@+id/addUserExperienceFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserExperienceFragment"
+        android:label="AddUserExperienceFragment" />
 
 
 </navigation>

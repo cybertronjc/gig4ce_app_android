@@ -94,6 +94,8 @@ class AddUserDetailsFragment : BaseFragment() {
         }
 
         date_of_birth_et.setOnClickListener {
+
+            dateOfBirthPicker.datePicker.maxDate = Date().time
             dateOfBirthPicker.show()
         }
 
