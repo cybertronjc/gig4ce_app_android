@@ -187,6 +187,7 @@ class GroupChatFragment : BaseFragment(),
             .sendingMessage
             .observe(viewLifecycleOwner, Observer {
                 mAdapter.addItem(it)
+                rv_chats.smoothScrollToPosition(mAdapter.itemCount - 1)
             })
 
         viewModel
