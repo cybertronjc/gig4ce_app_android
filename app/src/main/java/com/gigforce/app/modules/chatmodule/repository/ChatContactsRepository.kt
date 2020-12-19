@@ -64,8 +64,9 @@ class ChatContactsRepository constructor(
             }
         }
 
-        val batch = db.batch()
-        for (contact in oldContacts) {
+        var batch = db.batch()
+        for (i in oldContacts.indices) {
+            val contact = oldContacts[i]
             val contactMatch = newContacts.find { it.mobile == contact.mobile }
 
             if (contactMatch == null) {
@@ -97,6 +98,10 @@ class ChatContactsRepository constructor(
                     }
                 }
             }
+            if (0 == i % 500) {
+                batch.commitOrThrow()
+                batch = db.batch();
+            }
         }
 
         val newAddedContacts =
@@ -120,7 +125,9 @@ class ChatContactsRepository constructor(
             if (newAddedContactsFiltered.isNotEmpty()) {
 
                 val currentUserChatHeaders = getChatHeadersOfCurrentUser()
-                newAddedContactsFiltered.forEach { pickedContact ->
+
+                for (i in newAddedContactsFiltered.indices) {
+                    val pickedContact = newAddedContactsFiltered[i]
                     val matchedHeader = currentUserChatHeaders.find { header ->
                         header.otherUser?.name?.contains(pickedContact.mobile) ?: false
                     }
@@ -132,6 +139,10 @@ class ChatContactsRepository constructor(
 
                     val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
                     batch.set(contactRef, pickedContact)
+                    if (0 == i % 500) {
+                        batch.commitOrThrow()
+                        batch = db.batch();
+                    }
                 }
             }
         }
@@ -183,7 +194,6 @@ class ChatContactsRepository constructor(
             return headers
         }
     }
-
 
 
     companion object {

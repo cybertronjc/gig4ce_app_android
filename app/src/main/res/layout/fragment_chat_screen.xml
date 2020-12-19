@@ -95,7 +95,7 @@
             android:id="@+id/contact_blocked_label"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
+
             android:background="@color/red"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
