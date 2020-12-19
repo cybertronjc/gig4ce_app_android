@@ -552,4 +552,5 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     override fun lastLocationReceiver(location: Location?) {
     }
 
+
 }
