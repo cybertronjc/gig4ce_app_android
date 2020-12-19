@@ -59,6 +59,7 @@
 
                 <ImageView
                     android:layout_width="80dp"
+                    android:src="@drawable/banner_users_grid"
                     android:layout_height="match_parent" />
 
                 <TextView
@@ -67,7 +68,7 @@
                     android:fontFamily="@font/lato"
                     android:lineHeight="17sp"
                     android:lineSpacingExtra="3sp"
-                    android:text="Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros."
+                    android:text="Glad to know about your interest. Give a bit more details to show best Gigs to you"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />

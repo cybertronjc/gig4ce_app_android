@@ -19,6 +19,7 @@ class AddUserInterestFragment : BaseFragment() {
 
     private val interestAndExperienceViewModel: InterestAndExperienceViewModel by viewModels()
     private lateinit var userId: String
+    private lateinit var userName: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,16 +37,19 @@ class AddUserInterestFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
 
@@ -87,7 +91,8 @@ class AddUserInterestFragment : BaseFragment() {
                     }
                     Lse.Success -> {
                         navigate(R.id.addUserExperienceFragment, bundleOf(
-                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                         ))
                     }
                     is Lse.Error -> {

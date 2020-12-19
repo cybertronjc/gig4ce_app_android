@@ -43,6 +43,7 @@
 
         <ImageView
             android:layout_width="80dp"
+            android:src="@drawable/banner_users_grid"
             android:layout_height="match_parent"/>
 
         <TextView
@@ -54,7 +55,7 @@
             android:textColor="#333333"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros."
+            android:text="Let us know your interest so that we can show the best jobs for you"
             />
 
     </LinearLayout>

@@ -30,6 +30,7 @@ class AddUserExperienceFragment : BaseFragment() {
 
     private val interestAndExperienceViewModel: InterestAndExperienceViewModel by viewModels()
     private lateinit var userId: String
+    private lateinit var userName: String
 
     private var startDate: Date? = null
     private var endDate: Date? = null
@@ -105,16 +106,19 @@ class AddUserExperienceFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
     private fun initListeners() {
@@ -325,13 +329,15 @@ class AddUserExperienceFragment : BaseFragment() {
                                 //All Exps filled
                                 navigate(
                                     R.id.addCurrentAddressFragment, bundleOf(
-                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                                     )
                                 )
                             } else {
                                 navigate(
                                     R.id.addUserExperienceFragment, bundleOf(
-                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                                     )
                                 )
                             }

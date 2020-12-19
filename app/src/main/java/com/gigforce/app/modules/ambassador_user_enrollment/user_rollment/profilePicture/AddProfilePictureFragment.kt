@@ -46,6 +46,7 @@ class AddProfilePictureFragment : BaseFragment(),
     private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private var userId: String? = null
+    private var userName : String = ""
 
     val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
         setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
@@ -75,16 +76,19 @@ class AddProfilePictureFragment : BaseFragment(),
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
     private fun initListeners() {
@@ -103,7 +107,8 @@ class AddProfilePictureFragment : BaseFragment(),
             if (userId != null) {
                 navigate(
                     R.id.addUserInterestFragment, bundleOf(
-                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                     )
                 )
             } else {

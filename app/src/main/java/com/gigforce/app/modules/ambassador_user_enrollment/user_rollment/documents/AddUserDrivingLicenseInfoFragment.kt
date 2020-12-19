@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,27 +16,20 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.ic_back_iv
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -65,7 +56,8 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private var dlFrontImagePath: Uri? = null
     private var dlBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
-    private lateinit var userId : String
+    private lateinit var userId: String
+    private lateinit var userName: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +67,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(arguments,savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         initViews()
         initViewModel()
     }
@@ -83,16 +75,19 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
     private fun initViews() {
@@ -291,7 +286,6 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     }
 
 
-
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
         dlMainLayout.visibility = View.VISIBLE
@@ -309,7 +303,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
         UserDetailsFilledDialogFragment.launch(
             userId = userId,
-            userName = "",
+            userName = userName,
             fragmentManager = childFragmentManager,
             okayClickListener = this@AddUserDrivingLicenseInfoFragment
         )

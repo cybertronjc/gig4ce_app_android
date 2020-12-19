@@ -22,6 +22,7 @@ class AddCurrentAddressFragment : BaseFragment() {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var userId: String
+    private lateinit var userName: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +40,19 @@ class AddCurrentAddressFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
 
     private fun initListeners() {
@@ -135,7 +139,8 @@ class AddCurrentAddressFragment : BaseFragment() {
 
                         navigate(
                             R.id.addUserBankDetailsInfoFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                             )
                         )
                     }

@@ -50,7 +50,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_decline_gig_dialog, container, false)
+        return inflater.inflate(R.layout.fragment_user_enrolled_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +100,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             }
             append("submitted")
             bold {
-                append("$userName's")
+                append(" $userName's ")
             }
             append("details !!\n\n")
             append("Soon gigs will assign to him, and you will receive your incentive.")

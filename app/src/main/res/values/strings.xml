@@ -406,7 +406,7 @@
     <string name="ifsc">IFSC *</string>
     <string name="bank_name">Bank Name *</string>
     <string name="account_no">Account No *</string>
-    <string name="bank_passbook_front_image">Bank Passbook (Front Image)</string>
+    <string name="bank_passbook_front_image">Bank Passbook/Cheque (Front Image)</string>
     <string name="ifsc_code">IFSC Code :</string>
     <string name="bank_name_with_colon">Bank Name :</string>
     <string name="bank_account_no">Bank Account No :</string>

@@ -165,7 +165,8 @@ class AddUserDetailsFragment : BaseFragment() {
                         showToast("User Details submitted")
                         navigate(
                             R.id.addProfilePictureFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString()
                             )
                         )
                     }

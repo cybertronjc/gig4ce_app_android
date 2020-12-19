@@ -48,6 +48,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
     private val viewModel: GigVerificationViewModel by viewModels()
     private lateinit var userId : String
+    private lateinit var userName : String
+
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
@@ -69,17 +71,21 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
+
 
     private fun initViews() {
         aadharFrontImageHolder.documentUploadLabelTV.text =
@@ -260,7 +266,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         showToast(getString(R.string.aadhar_card_details_uploaded))
 
         navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
         )
     }

@@ -46,6 +46,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private lateinit var userId : String
+    private lateinit var userName : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,17 +63,21 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
+            userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
     }
+
 
     private fun initViews() {
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
@@ -221,7 +226,8 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
         navigate(
             R.id.addUserAadharCardInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
         )
     }
