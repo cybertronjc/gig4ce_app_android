@@ -15,6 +15,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+
             android:layout_height="match_parent">
 
             <ImageView
@@ -104,7 +105,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chats"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/container_footer"
         android:layout_below="@+id/group_deactivated_container"
         android:layout_marginTop="4dp"

@@ -145,7 +145,7 @@ class GroupChatFragment : BaseFragment(),
     private fun initRecycler() {
         val layoutManager = LinearLayoutManager(requireContext())
 
-//       layoutManager.stackFromEnd = true
+       layoutManager.stackFromEnd = true
 //        layoutManager.reverseLayout = true
         rv_chats.layoutManager = layoutManager
 

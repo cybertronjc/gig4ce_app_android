@@ -9,6 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_contactDetails"
         android:layout_width="match_parent"
+        android:background="@color/red"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
@@ -108,7 +109,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chats"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/container_footer"
         android:layout_below="@+id/contact_blocked_container"
         android:layout_marginTop="4dp"
