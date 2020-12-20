@@ -79,12 +79,11 @@
                     android:id="@+id/playerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_weight="3"
                     app:controller_layout_id="@layout/fragment_play_video_controls"
-
                     app:show_buffering="always" />
             </androidx.cardview.widget.CardView>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_content_gig_activation"
