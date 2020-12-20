@@ -51,7 +51,11 @@ data class ProfileData(
 
     @get:PropertyName("interests")
     @set:PropertyName("interests")
-    var interests: ArrayList<Interest>? = null
+    var interests: ArrayList<Interest>? = null,
+
+    @get:PropertyName("enrolledBy")
+    @set:PropertyName("enrolledBy")
+    var enrolledBy: EnrollmentInfo? = null
 
 ) {
 
@@ -59,3 +63,14 @@ data class ProfileData(
     fun hasUserUploadedProfilePicture() =
         profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }
+
+data class EnrollmentInfo(
+
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String = "",
+
+    @get:PropertyName("enrolledOn")
+    @set:PropertyName("enrolledOn")
+    var enrolledOn: Timestamp? = null
+)

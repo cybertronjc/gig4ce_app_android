@@ -73,6 +73,8 @@ android {
            signingConfig signingConfigs.production
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
         }
 
         /**
@@ -84,6 +86,8 @@ android {
             signingConfig signingConfigs.debug
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
         }
     }
 

@@ -14,7 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
 
-class CheckMobileFragment : BaseFragment() {
+class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentActionListener {
 
     private val viewModel: VerifyUserMobileViewModel by viewModels()
 
@@ -34,9 +34,14 @@ class CheckMobileFragment : BaseFragment() {
         submitBtn.setOnClickListener {
             validateDataAndsubmit()
         }
+
+        ic_back_iv.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     private fun validateDataAndsubmit() {
+
         if (mobile_no_et.text.length != 10) {
             showAlertDialog("", "Enter a valid Mobile No")
             return
@@ -48,7 +53,7 @@ class CheckMobileFragment : BaseFragment() {
         }
 
         viewModel.checkMobileNo(
-            "+91${mobile_no_et.text}"
+            mobile_no_et.text.toString()
         )
     }
 
@@ -66,32 +71,42 @@ class CheckMobileFragment : BaseFragment() {
 
                 when (it) {
                     Lce.Loading -> {
-                      //  UtilMethods.showLoading(requireContext())
+                        UtilMethods.showLoading(requireContext())
                     }
                     is Lce.Content -> {
-                       // UtilMethods.hideLoading()
+                        UtilMethods.hideLoading()
                         showToast("Otp sent")
 
                         if (it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog
+                            showMobileAlreadyRegisterdDialog()
                         } else {
                             navigate(
                                 R.id.confirmOtpFragment, bundleOf(
                                     ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
-                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_SENT to it.content.otpSent
+                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
                                 )
                             )
                         }
                     }
                     is Lce.Error -> {
-                    //    UtilMethods.hideLoading()
+                        UtilMethods.hideLoading()
                         showAlertDialog("", it.error)
                     }
                 }
             })
     }
 
-    companion object{
+    private fun showMobileAlreadyRegisterdDialog() {
+        UserAlreadyExistDialogFragment.launch(childFragmentManager, this)
+
+    }
+
+    companion object {
         private val INDIAN_MOBILE_NUMBER = Pattern.compile("^[6-9][0-9]{9}\$")
+    }
+
+    override fun onOkayClicked() {
+
     }
 }

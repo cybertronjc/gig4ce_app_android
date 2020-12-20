@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -106,6 +106,10 @@ class AddUserDetailsFragment : BaseFragment() {
         submitBtn.setOnClickListener {
             validateDataAndsubmit()
         }
+
+        ic_back_iv.setOnClickListener {
+            showGoBackConfirmationDialog()
+        }
     }
 
     private fun validateDataAndsubmit() {
@@ -161,20 +165,39 @@ class AddUserDetailsFragment : BaseFragment() {
 //                        UtilMethods.showLoading(requireContext())
                     }
                     Lse.Success -> {
-  //                      UtilMethods.hideLoading()
+                        //                      UtilMethods.hideLoading()
                         showToast("User Details submitted")
                         navigate(
                             R.id.addProfilePictureFragment, bundleOf(
                                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString()
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pin_code_et.text.toString()
                             )
                         )
                     }
                     is Lse.Error -> {
- //                       UtilMethods.hideLoading()
-                     showAlertDialog("Could not submit info", it.error)
+                        //                       UtilMethods.hideLoading()
+                        showAlertDialog("Could not submit info", it.error)
                     }
                 }
             })
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
+
+    private fun showGoBackConfirmationDialog(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
+            .setNegativeButton("No"){_,_ ->}
+            .show()
+    }
+
+    private fun goBackToUsersList(){
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 }

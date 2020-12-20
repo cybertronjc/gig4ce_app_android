@@ -30,11 +30,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/ic_back_iv"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
@@ -105,16 +108,18 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/exp_yes"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
                     android:text="Yes, I have an Experience" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/exp_no"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
                     android:text="No I don't have" />
 
 
@@ -150,7 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:minHeight="30dp"
+                    android:minHeight="40dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/rectangle_round_grey"
                     app:layout_constraintTop_toBottomOf="@id/what_was_your_role_label" />
@@ -246,7 +251,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/rectangle_round_grey"
                     android:fontFamily="@font/lato"
-                    android:hint="Earnings"
+                    android:hint="Earnings Per Day"
                     android:lineSpacingExtra="3sp"
                     android:inputType="number"
                     android:maxLength="8"
@@ -285,30 +290,34 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_0_1"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="0 - 1" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_1_3"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="1 - 3" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_3_6"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="3 - 6" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_above_6"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="6 +" />
 
 
@@ -352,30 +361,34 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_car"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Car" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_truck"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Truck" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_auto"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
+                        app:chipStrokeWidth="1dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Autorickshaw" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_bike"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Bike" />
 
 
@@ -422,23 +435,26 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/delivery_exec_bicycle"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Truck" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/delivery_exec_scooty"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Scooty" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/delivery_exec_option_bike"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Bike" />
 
 
@@ -466,7 +482,7 @@
                     android:textColor="#333333"
                     android:lineSpacingExtra="3sp"
                     android:layout_marginTop="20dp"
-                    android:text="Are you comfortable in lifting heavy goods(Around 20-30 kg)?"
+                    android:text="Are you comfortable in lifting heavy goods(Around 15-20 kg)?"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/earning_et"
                     />
@@ -484,16 +500,18 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/option_weight_yes"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="Yes" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/option_weight_no"
-                        style="@style/AppSingleChoiceChip"
+                        style="@style/AppSingleChoiceChip2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:chipStrokeWidth="1dp"
                         android:text="No" />
 
                 </com.google.android.material.chip.ChipGroup>

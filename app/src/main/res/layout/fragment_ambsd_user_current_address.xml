@@ -29,14 +29,18 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/ic_back_iv"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
+                    android:id="@+id/toolbar_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -152,20 +156,19 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:hint="State"
-                android:entries="@array/indian_states"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:background="@drawable/rectangle_round_grey"
-                app:layout_constraintEnd_toStartOf="@+id/city_et"
+                app:layout_constraintEnd_toStartOf="@+id/city_spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_2_et" />
 
 
-            <EditText
-                android:id="@+id/city_et"
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/city_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -173,7 +176,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="City"
                 android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
@@ -276,16 +278,18 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_location_change_yes"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yes, I am ready" />
+                    android:text="Yes, I am ready"
+                    app:chipStrokeWidth="1dp"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_location_change_no"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
                     android:text="No, I am not" />
 
             </com.google.android.material.chip.ChipGroup>

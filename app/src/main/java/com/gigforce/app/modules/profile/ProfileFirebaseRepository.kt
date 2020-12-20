@@ -165,7 +165,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
     }
 
-    suspend fun getProfileData(userId : String? = null): ProfileData = suspendCoroutine { cont ->
+    suspend fun getProfileData(userId: String? = null): ProfileData = suspendCoroutine { cont ->
 
         getCollectionReference()
             .document(userId ?: uid)
@@ -219,6 +219,10 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         email = ""
                     )
                 )
+            ),
+            enrolledBy = EnrollmentInfo(
+                id = getUID(),
+                enrolledOn = Timestamp.now()
             )
         )
 
@@ -227,11 +231,10 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .collection(profileCollectionName)
             .document(uid)
             .set(profileData)
-
     }
 
     suspend fun updateCurrentAddressDetails(
-        uid: String,
+        uid: String?,
         pinCode: String,
         addressLine1: String,
         addressLine2: String,
@@ -240,22 +243,38 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         preferredDistanceInKm: Int,
         readyToChangeLocationForWork: Boolean
     ) {
-        firebaseDB
-            .collection(profileCollectionName)
-            .document(uid)
-            .update(
-                mapOf(
-                    "address.current.firstLine" to addressLine1,
-                    "address.current.area" to addressLine2,
-                    "address.current.pincode" to pinCode,
-                    "address.current.state" to state,
-                    "address.current.city" to city,
-                    "address.current.empty" to false,
-                    "address.current.preferredDistanceActive" to true,
-                    "address.current.preferred_distance" to preferredDistanceInKm,
-                    "readyToChangeLocationForWork" to readyToChangeLocationForWork
+        if(uid == null){
+            firebaseDB
+                .collection(profileCollectionName)
+                .document(getUID())
+                .update(
+                    mapOf(
+                        "address.current.firstLine" to addressLine1,
+                        "address.current.area" to addressLine2,
+                        "address.current.pincode" to pinCode,
+                        "address.current.state" to state,
+                        "address.current.city" to city,
+                        "address.current.empty" to false
+                    )
                 )
-            )
+        } else {
+            firebaseDB
+                .collection(profileCollectionName)
+                .document(uid)
+                .update(
+                    mapOf(
+                        "address.current.firstLine" to addressLine1,
+                        "address.current.area" to addressLine2,
+                        "address.current.pincode" to pinCode,
+                        "address.current.state" to state,
+                        "address.current.city" to city,
+                        "address.current.empty" to false,
+                        "address.current.preferredDistanceActive" to true,
+                        "address.current.preferred_distance" to preferredDistanceInKm,
+                        "readyToChangeLocationForWork" to readyToChangeLocationForWork
+                    )
+                )
+        }
     }
 
     suspend fun submitInterest(
@@ -279,7 +298,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .document(uid).update("experiences", FieldValue.arrayUnion(experience))
     }
 
-    suspend fun submitExperience(userId : String, experience: Experience): Task<Void> {
+    suspend fun submitExperience(userId: String, experience: Experience): Task<Void> {
         return firebaseDB.collection(profileCollectionName)
             .document(userId).update("experiences", FieldValue.arrayUnion(experience))
     }

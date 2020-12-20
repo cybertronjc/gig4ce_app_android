@@ -6,7 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.app.modules.ambassador_user_enrollment.models.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.Lse
@@ -19,8 +22,12 @@ import java.util.*
 class UserDetailsViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val enrolledUserListRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+    private val enrolledUserListRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
+    private val configurationRepository: AppConfigurationRepository = AppConfigurationRepository()
 ) : ViewModel() {
+
+    var states: List<State> = emptyList()
+    var cities: List<City> = emptyList()
 
     private val _submitUserDetailsState = MutableLiveData<Lse>()
     val submitUserDetailsState: LiveData<Lse> = _submitUserDetailsState
@@ -56,7 +63,7 @@ class UserDetailsViewModel constructor(
 
 
     fun updateUserCurrentAddressDetails(
-        uid: String,
+        uid: String?,
         pinCode: String,
         addressLine1: String,
         addressLine2: String,
@@ -143,6 +150,22 @@ class UserDetailsViewModel constructor(
                 }
             }
     }
+
+    private val _citiesAndStateLoadState = MutableLiveData<Lse>()
+    val citiesAndStateLoadState: LiveData<Lse> = _citiesAndStateLoadState
+
+    fun loadCityAndStates() = viewModelScope.launch {
+        try {
+            _citiesAndStateLoadState.value = Lse.loading()
+            states = configurationRepository.getStates()
+            cities = configurationRepository.getCities()
+
+            _citiesAndStateLoadState.value = Lse.success()
+        } catch (e: Exception) {
+            _citiesAndStateLoadState.value = Lse.error(e.message!!)
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()

@@ -80,8 +80,8 @@ class EnrolledUsersRecyclerAdapter constructor(
             } else {
                 //
                 val daysDiff = Duration.between(
-                    LocalDate.now().atStartOfDay(),
-                    userEnrolledDate.atStartOfDay()
+                    userEnrolledDate.atStartOfDay(),
+                    LocalDate.now().atStartOfDay()
                 ).toDays()
                 userAddedTimeTV.text = "Added $daysDiff days ago"
             }

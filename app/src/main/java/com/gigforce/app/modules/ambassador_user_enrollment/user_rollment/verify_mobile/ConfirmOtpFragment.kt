@@ -18,7 +18,7 @@ class ConfirmOtpFragment : BaseFragment() {
 
     private val viewModel: VerifyUserMobileViewModel by viewModels()
 
-    private lateinit var otpSent: String
+    private lateinit var verificationToken: String
     private lateinit var mobileNo: String
 
     override fun onCreateView(
@@ -37,19 +37,19 @@ class ConfirmOtpFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
-            otpSent = it.getString(INTENT_EXTRA_OTP_SENT) ?: return@let
+            verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
 
         savedInstanceState?.let {
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
-            otpSent = it.getString(INTENT_EXTRA_OTP_SENT) ?: return@let
+            verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_MOBILE_NO, mobileNo)
-        outState.putString(INTENT_EXTRA_OTP_SENT, otpSent)
+        outState.putString(INTENT_EXTRA_OTP_TOKEN, verificationToken)
     }
 
     private fun initListeners() {
@@ -57,6 +57,10 @@ class ConfirmOtpFragment : BaseFragment() {
 
         submitBtn.setOnClickListener {
             validateDataAndsubmit()
+        }
+
+        ic_back_iv.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 
@@ -66,9 +70,11 @@ class ConfirmOtpFragment : BaseFragment() {
             return
         }
 
-        if (otpSent.trim() == txt_otp.text.toString()) {
-            viewModel.otpMatchedCreateProfile(mobileNo)
-        }
+        viewModel.checkOtpAndCreateProfile(
+            verificationToken,
+            txt_otp.text.toString(),
+            mobileNo
+        )
     }
 
     private fun showAlertDialog(title: String, message: String) {
@@ -107,6 +113,6 @@ class ConfirmOtpFragment : BaseFragment() {
 
     companion object {
         const val INTENT_EXTRA_MOBILE_NO = "mobileNo"
-        const val INTENT_EXTRA_OTP_SENT = "otp_sent"
+        const val INTENT_EXTRA_OTP_TOKEN = "otp_token"
     }
 }

@@ -13,6 +13,7 @@ import androidx.core.text.color
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -31,6 +32,7 @@ class AddUserExperienceFragment : BaseFragment() {
     private val interestAndExperienceViewModel: InterestAndExperienceViewModel by viewModels()
     private lateinit var userId: String
     private lateinit var userName: String
+    private var pincode = ""
 
     private var startDate: Date? = null
     private var endDate: Date? = null
@@ -107,11 +109,13 @@ class AddUserExperienceFragment : BaseFragment() {
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
+            pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
+            pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
     }
 
@@ -119,6 +123,7 @@ class AddUserExperienceFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
     }
 
     private fun initListeners() {
@@ -150,17 +155,25 @@ class AddUserExperienceFragment : BaseFragment() {
         end_date_tv.setOnClickListener {
             showEndDatePicker()
         }
+
+        ic_back_iv.setOnClickListener {
+            showGoBackConfirmationDialog()
+        }
     }
 
     private fun showStartDatePicker() {
         if (endDate != null) {
             startDatePicker.datePicker.maxDate = endDate!!.time
+        } else {
+            startDatePicker.datePicker.maxDate = Date().time
         }
 
         startDatePicker.show()
     }
 
     private fun showEndDatePicker() {
+
+        endDatePicker.datePicker.maxDate = Date().time
         if (startDate != null) {
             endDatePicker.datePicker.minDate = startDate!!.time
         }
@@ -330,14 +343,16 @@ class AddUserExperienceFragment : BaseFragment() {
                                 navigate(
                                     R.id.addCurrentAddressFragment, bundleOf(
                                         EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
                                     )
                                 )
                             } else {
                                 navigate(
                                     R.id.addUserExperienceFragment, bundleOf(
                                         EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
                                     )
                                 )
                             }
@@ -410,6 +425,24 @@ class AddUserExperienceFragment : BaseFragment() {
             role_spinner.gone()
             what_was_your_role_label.gone()
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
+
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
+    }
+
+    private fun goBackToUsersList() {
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
     companion object {

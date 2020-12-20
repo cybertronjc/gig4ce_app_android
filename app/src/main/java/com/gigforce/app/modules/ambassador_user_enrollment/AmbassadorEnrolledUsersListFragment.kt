@@ -16,18 +16,17 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.utils.VerticalItemDecorator
-import kotlinx.android.synthetic.main.fragment_chat_screen.*
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener {
 
-    private val viewModel : AmbassadorEnrollViewModel by viewModels()
+    private val viewModel: AmbassadorEnrollViewModel by viewModels()
 
-    private val enrolledUserAdapter : EnrolledUsersRecyclerAdapter by lazy {
+    private val enrolledUserAdapter: EnrolledUsersRecyclerAdapter by lazy {
         EnrolledUsersRecyclerAdapter(requireContext()).apply {
-                this.setListener(this@AmbassadorEnrolledUsersListFragment)
-            }
+            this.setListener(this@AmbassadorEnrolledUsersListFragment)
+        }
     }
 
     override fun onCreateView(
@@ -64,12 +63,12 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         viewModel.enrolledUsers
             .observe(viewLifecycleOwner, Observer {
 
-                if(it.isEmpty()){
+                if (it.isEmpty()) {
                     enrolledUserAdapter.setData(emptyList())
                     no_users_enrolled_layout.visible()
                     createProfileBtn.gone()
                     total_users_enrolled_tv.gone()
-                } else{
+                } else {
                     no_users_enrolled_layout.gone()
                     createProfileBtn.visible()
                     enrolledUserAdapter.setData(it)
@@ -83,7 +82,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.landinghomefragment, false)
+
+        try {
+            findNavController().getBackStackEntry(R.id.mainHomeScreen)
+            findNavController().popBackStack(R.id.mainHomeScreen, false)
+        } catch (e: Exception) {
+            findNavController().popBackStack(R.id.landinghomefragment, false)
+        }
         return true
     }
 

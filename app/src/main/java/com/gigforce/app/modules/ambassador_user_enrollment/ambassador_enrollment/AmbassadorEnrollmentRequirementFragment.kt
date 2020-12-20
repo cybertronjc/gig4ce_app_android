@@ -56,7 +56,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
         }
 
         current_address_layout.setOnClickListener {
-            navigate(R.id.currentAddressViewFragment)
+            navigate(R.id.addCurrentAddressFragment)
         }
 
         profile_photo_layout.setOnClickListener {
@@ -71,23 +71,15 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
                     updateProgress()
 
                     if (it.hasUserUploadedProfilePicture()) {
-                        profile_pic_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                        profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        profile_pic_check_iv.setImageResource(R.drawable.ic_done)
                     } else {
-                        profile_pic_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                        profile_pic_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        profile_pic_check_iv.setImageResource(R.drawable.ic_pending_yellow_round)
                     }
 
                     if (it.address.current.isEmpty()) {
-                        current_address_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                        current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        current_address_check_iv.setImageResource(R.drawable.ic_pending_yellow_round)
                     } else {
-                        current_address_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                        current_address_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        current_address_check_iv.setImageResource(R.drawable.ic_done)
                     }
                 })
 
@@ -97,13 +89,9 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
                     updateProgress()
 
                     if (it.bankDetailsUploaded) {
-                        bank_details_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_green)
-                        bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        bank_details_check_iv.setImageResource(R.drawable.ic_done)
                     } else {
-                        bank_details_check_iv.background =
-                                ContextCompat.getDrawable(requireContext(), R.drawable.round_yellow)
-                        bank_details_check_iv.setImageResource(R.drawable.ic_baseline_check_32)
+                        bank_details_check_iv.setImageResource(R.drawable.ic_pending_yellow_round)
                     }
                 })
 

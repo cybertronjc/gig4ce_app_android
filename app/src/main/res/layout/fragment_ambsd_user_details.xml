@@ -29,11 +29,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/ic_back_iv"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
@@ -58,8 +61,8 @@
 
                 <ImageView
                     android:layout_width="80dp"
-                    android:src="@drawable/banner_users_grid"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:src="@drawable/banner_users_grid" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,8 +103,8 @@
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:paddingStart="8dp"
                 android:minHeight="36dp"
+                android:paddingStart="8dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -142,12 +145,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:gravity="center_vertical"
-                android:paddingStart="8dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
+                android:gravity="center_vertical"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
+                android:paddingStart="8dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -193,24 +196,27 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_male"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Male" />
+                    android:text="Male"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_female"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female" />
+                    android:text="Female"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_other"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Other" />
+                    android:text="Other"
+                    app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -241,10 +247,10 @@
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:inputType="number"
-                android:paddingStart="8dp"
                 android:lineSpacingExtra="3sp"
                 android:maxLength="6"
                 android:minHeight="36dp"
+                android:paddingStart="8dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -291,38 +297,43 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_less_than_10th"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="upto 10th" />
+                    android:text="Upto 10th"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_10th_pass"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10th Pass" />
+                    android:text="10th Pass"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_12th_pass"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12th Pass" />
+                    android:text="12th Pass"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_diploma"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Diploma" />
+                    android:text="Diploma"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_graduation"
-                    style="@style/AppSingleChoiceChip"
+                    style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Graduation" />
+                    android:text="Graduation"
+                    app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
 

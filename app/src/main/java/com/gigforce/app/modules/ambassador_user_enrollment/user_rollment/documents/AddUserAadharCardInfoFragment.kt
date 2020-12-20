@@ -102,7 +102,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
 
         ic_back_iv.setOnClickListener {
-            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+            showGoBackConfirmationDialog()
         }
 
         helpIconViewIV.setOnClickListener {
@@ -278,11 +278,23 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
-        return true
+    private fun showGoBackConfirmationDialog(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
+            .setNegativeButton("No"){_,_ ->}
+            .show()
     }
 
+    private fun goBackToUsersList(){
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
+        return true
+    }
 
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE

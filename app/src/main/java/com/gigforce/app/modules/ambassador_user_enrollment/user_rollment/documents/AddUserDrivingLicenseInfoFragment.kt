@@ -111,7 +111,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         dlSubmitSliderBtn.isEnabled = false
 
         ic_back_iv.setOnClickListener {
-            findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+            showGoBackConfirmationDialog()
         }
 
 
@@ -269,8 +269,21 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         )
     }
 
-    override fun onBackPressed(): Boolean {
+    private fun showGoBackConfirmationDialog(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
+            .setNegativeButton("No"){_,_ ->}
+            .show()
+    }
+
+    private fun goBackToUsersList(){
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+    }
+
+    override fun onBackPressed(): Boolean {
+        showGoBackConfirmationDialog()
         return true
     }
 

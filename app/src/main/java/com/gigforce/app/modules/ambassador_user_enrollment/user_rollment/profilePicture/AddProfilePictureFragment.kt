@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.ImagePicker
 import com.gigforce.app.core.base.BaseFragment
@@ -33,7 +34,6 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.StorageReference
 import com.yalantis.ucrop.UCrop
-import kotlinx.android.synthetic.main.fragment_add_selfie_capture_video.*
 import kotlinx.android.synthetic.main.fragment_ambsd_profile_picture.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -46,7 +46,8 @@ class AddProfilePictureFragment : BaseFragment(),
     private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private var userId: String? = null
-    private var userName : String = ""
+    private var userName: String = ""
+    private var pincode = ""
 
     val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
         setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
@@ -77,11 +78,13 @@ class AddProfilePictureFragment : BaseFragment(),
         arguments?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
+            pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
 
         savedInstanceState?.let {
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
+            pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
     }
 
@@ -89,6 +92,7 @@ class AddProfilePictureFragment : BaseFragment(),
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
     }
 
     private fun initListeners() {
@@ -108,7 +112,8 @@ class AddProfilePictureFragment : BaseFragment(),
                 navigate(
                     R.id.addUserInterestFragment, bundleOf(
                         EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
                     )
                 )
             } else {
@@ -117,7 +122,11 @@ class AddProfilePictureFragment : BaseFragment(),
         }
 
         ic_back_btn.setOnClickListener {
-            activity?.onBackPressed()
+            if (userId == null) {
+               activity?.onBackPressed()
+            } else {
+                showGoBackConfirmationDialog()
+            }
         }
     }
 
@@ -128,18 +137,19 @@ class AddProfilePictureFragment : BaseFragment(),
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
 
-        cameraMainLayout.gone()
-        cameraPermissionLayout.visible()
-
         requestPermissions(
             arrayOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
             ),
             REQUEST_STORAGE_PERMISSION
         )
@@ -314,6 +324,29 @@ class AddProfilePictureFragment : BaseFragment(),
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarTitle("Crop and Rotate")
         return options
+    }
+
+    override fun onBackPressed(): Boolean {
+
+        return if (userId == null) {
+            false
+        } else {
+            showGoBackConfirmationDialog()
+            true
+        }
+    }
+
+    private fun showGoBackConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
+    }
+
+    private fun goBackToUsersList() {
+        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
 
