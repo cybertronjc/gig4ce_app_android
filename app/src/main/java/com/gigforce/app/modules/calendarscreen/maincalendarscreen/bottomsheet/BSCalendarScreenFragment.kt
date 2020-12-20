@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -310,7 +311,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        ) as ImageView).setBackgroundResource(R.drawable.assessment_line_pending)
 
 
                     })
@@ -764,7 +765,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
 
                     } else {
                         getTextView(viewHolder, R.id.status).text = getString(R.string.pending)
@@ -775,7 +776,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
                     }
 
                 })!!
@@ -894,8 +895,10 @@ class BSCalendarScreenFragment : BaseFragment() {
             ll_search_role.setOnClickListener {
                 navigate(R.id.fragment_explore_by_role)
             }
-            landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { gig ->
+            landingScreenViewModel.observerRole.observe(viewLifecycleOwner, Observer { items ->
                 run {
+                    val gig = items?.get(0)
+                    ll_search_role.visibility = if (items?.size!! > 1) View.VISIBLE else View.GONE
                     showGlideImage(gig?.role_image ?: "", iv_role)
                     tv_title_role.text = gig?.role_title
                     if (!gig?.job_description.isNullOrEmpty()) {

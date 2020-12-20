@@ -56,26 +56,16 @@ class AssessmentListAdapter(
 
             holder.statusTV.text = "PENDING"
             holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_pending)
-            holder.statusSlideRibbon.setCardBackgroundColor(
-                ResourcesCompat.getColor(
-                    resources,
-                    R.color.yellow,
-                    null
-                )
-            )
+            holder.statusSlideRibbon.setBackgroundResource(R.drawable.assessment_line_pending)
+
 
         } else {
 
             holder.statusTV.text = "COMPLETED"
             holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_completed)
 
-            holder.statusSlideRibbon.setCardBackgroundColor(
-                ResourcesCompat.getColor(
-                    resources,
-                    R.color.green,
-                    null
-                )
-            )
+            holder.statusSlideRibbon.setBackgroundResource(R.drawable.assessment_line_done)
+
         }
     }
 

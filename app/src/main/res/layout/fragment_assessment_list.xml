@@ -40,6 +40,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/assessmentListRV"
             android:layout_width="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/size_10"
+
             android:layout_height="wrap_content"
             android:visibility="gone" />
 

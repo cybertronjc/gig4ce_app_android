@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
@@ -27,6 +25,8 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.CornerFamily
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_main_learning_most_popular_learni
 import kotlinx.android.synthetic.main.fragment_main_learning_recommended_learnings.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import kotlinx.android.synthetic.main.fragment_main_learning_toolbar.*
+import kotlinx.android.synthetic.main.most_popular_item.view.*
 import java.util.*
 
 
@@ -79,6 +80,7 @@ class MainLearningFragment : BaseFragment() {
         initLearningViewModel()
         imageView30.gone()
     }
+
     private fun initLearningViewModel() {
         learningViewModel
             .roleBasedCourses
@@ -183,7 +185,7 @@ class MainLearningFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        ) as ImageView).setBackgroundResource(R.drawable.assessment_line_pending)
 
 
                     })
@@ -237,7 +239,7 @@ class MainLearningFragment : BaseFragment() {
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
@@ -253,7 +255,8 @@ class MainLearningFragment : BaseFragment() {
                     var comImg = getImageView(viewHolder, R.id.completed_iv)
                     comImg.isVisible = obj?.completed ?: false
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = getImageView(viewHolder,R.id.learning_img)
+
                     if (!obj!!.coverPicture.isNullOrBlank()) {
                         if (obj.coverPicture!!.startsWith("http", true)) {
 
@@ -276,7 +279,7 @@ class MainLearningFragment : BaseFragment() {
                                         .into(img)
                                 }
                         }
-                    } else{
+                    } else {
                         GlideApp.with(requireContext())
                             .load(R.drawable.ic_learning_default_back)
                             .into(img)
@@ -329,7 +332,7 @@ class MainLearningFragment : BaseFragment() {
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
@@ -368,7 +371,7 @@ class MainLearningFragment : BaseFragment() {
                                         .into(img)
                                 }
                         }
-                    } else{
+                    } else {
                         GlideApp.with(requireContext())
                             .load(R.drawable.ic_learning_default_back)
                             .into(img)
@@ -390,6 +393,7 @@ class MainLearningFragment : BaseFragment() {
         })
 
     }
+
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
@@ -405,11 +409,12 @@ class MainLearningFragment : BaseFragment() {
                 .into(profile_image_main)
         }
     }
+
     private fun listener() {
-        chat_icon_iv.setOnClickListener{
+        chat_icon_iv.setOnClickListener {
             navigate(R.id.contactScreenFragment)
         }
-        cardView.setOnClickListener{
+        cardView.setOnClickListener {
             navigate(R.id.profileFragment)
         }
     }
@@ -425,7 +430,8 @@ class MainLearningFragment : BaseFragment() {
         datalist.add(
             TitleSubtitleModel(
                 "Delivery",
-                "Maintaining hygiene and safety at gig", "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
+                "Maintaining hygiene and safety at gig",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
             )
         )
 
@@ -448,7 +454,8 @@ class MainLearningFragment : BaseFragment() {
         datalist.add(
             TitleSubtitleModel(
                 "Barista",
-                "How to prepare coffee?", "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
+                "How to prepare coffee?",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
             )
         )
 
@@ -463,7 +470,7 @@ class MainLearningFragment : BaseFragment() {
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
@@ -478,7 +485,7 @@ class MainLearningFragment : BaseFragment() {
 
                     obj?.imgStr?.let {
                         var img = getImageView(viewHolder, R.id.img)
-                        showGlideImage(it,img)
+                        showGlideImage(it, img)
                     }
 
 //                    var img = getImageView(viewHolder,R.id.img)
@@ -493,12 +500,14 @@ class MainLearningFragment : BaseFragment() {
         )
         mostPopularLearningsRV.adapter = recyclerGenericAdapter
     }
-    private fun showGlideImage(url:String,imgview: ImageView){
+
+    private fun showGlideImage(url: String, imgview: ImageView) {
         GlideApp.with(requireContext())
             .load(url)
             .placeholder(getCircularProgressDrawable())
             .into(imgview)
     }
+
     var width: Int = 0
     private fun initializeExploreByIndustry() {
         val displayMetrics = DisplayMetrics()
@@ -531,7 +540,7 @@ class MainLearningFragment : BaseFragment() {
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
@@ -545,7 +554,7 @@ class MainLearningFragment : BaseFragment() {
                     subtitle.text = obj?.subtitle
                     obj?.imgStr?.let {
                         var img = getImageView(viewHolder, R.id.learning_img)
-                        showGlideImage(it,img)
+                        showGlideImage(it, img)
                     }
                 })
         recyclerGenericAdapter.list = datalist

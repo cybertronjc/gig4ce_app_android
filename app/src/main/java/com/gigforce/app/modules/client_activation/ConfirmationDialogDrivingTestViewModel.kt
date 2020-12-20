@@ -65,7 +65,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                                     "title" to title,
                                     "type" to type,
                                     "stepId" to workOrderID,
-                                    "inserted_on" to Date(),
+                                    "insertedOn" to Date(),
                                     "certificate" to DrivingCertificate(
                                             partnerSchoolDetails = partnerDetails,
                                             slotDate = date,

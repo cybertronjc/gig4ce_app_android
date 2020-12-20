@@ -49,6 +49,7 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="13dp"
         android:fontFamily="@font/lato_bold"
+        android:textStyle="bold"
         android:letterSpacing="0"
         android:padding="8dp"
         android:text="@string/update_now"
