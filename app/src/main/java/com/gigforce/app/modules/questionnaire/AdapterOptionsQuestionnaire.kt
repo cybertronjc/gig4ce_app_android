@@ -255,9 +255,12 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (item.options[position].type == "mcq") TYPE_TEXT
-        else if (item.options[position].type == "state_city_dropdown") TYPE_DROPDOWN
-        else if (item.options[position].type == "date") DATE else TYPE_TEXT
+        return when (item.options[position].type) {
+            "mcq" -> TYPE_TEXT
+            "state_city_dropdown" -> TYPE_DROPDOWN
+            "date" -> DATE
+            else -> TYPE_TEXT
+        }
     }
 
     companion object {

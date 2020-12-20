@@ -12,6 +12,7 @@ import com.gigforce.app.modules.questionnaire.models.Questions
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 
 class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     var initialized: Boolean = false
@@ -79,7 +80,8 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                         "title" to title,
                                         "type" to type,
                                         "stepId" to mJobProfileId,
-                                        "answers" to questions
+                                        "answers" to questions,
+                                        "submissionDate" to Date()
 
                                     )
                                 ).addOnCompleteListener { complete ->
@@ -110,7 +112,12 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                 .document(jp_application.documents[0].id)
                                 .collection("Submissions")
                                 .document(questionnaire?.documents?.get(0)?.id!!)
-                                .update("answers", questions)
+                                .update(
+                                    mapOf(
+                                        "answers" to questions,
+                                        "submissionDate" to Date()
+                                    )
+                                )
                                 .addOnCompleteListener { complete ->
                                     if (complete.isSuccessful) {
                                         val jpApplication =

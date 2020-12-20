@@ -16,7 +16,12 @@ data class JpApplication(
     var submitOn: String = "",
     @SerializedName("application") var application: MutableList<Dependency> = mutableListOf(),
     @SerializedName("activation") var activation: MutableList<Dependency> = mutableListOf(),
-    var applyOn: Date = Date()
+    var applicationStart: Date? = Date(),
+    var applicationComplete: Date? = null,
+    var activationStart: Date? = null,
+    var activationComplete: Date? = null,
+    var applicationLearningCompletionDate: Date? = null,
+    var activationLearningCompletionDate: Date? = null
 
 
 )

@@ -11,7 +11,9 @@ import com.gigforce.app.modules.learning.models.progress.LessonProgress
 import com.gigforce.app.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import kotlin.Exception
+import kotlin.collections.ArrayList
 
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     val repository = GigActivationRepository()
@@ -94,10 +96,15 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
             if (model.activation.isNullOrEmpty()) {
                 model.activation = dependency.toMutableList()
+                model.activationStart=Date()
             }
-            if (model.activation.all { it.isDone }) {
-                model.status = "Inprocess"
+            if(model.status!="Inprocess"){
+                if (model.activation.all { it.isDone }) {
+                    model.status = "Inprocess"
+                    model.activationComplete=Date()
+                }
             }
+
 
             model.activation.forEach {
                 if (!it.isDone) {
@@ -117,6 +124,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             it.isDone = checkIfCourseCompleted(it.moduleId)
                             if (it.isDone) {
                                 it.status = ""
+                                model.activationLearningCompletionDate= Date()
                             }
                         }
 

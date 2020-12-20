@@ -11,6 +11,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 
 class ApplicationClientActivationViewModel : ViewModel() {
     var profileAvatarName: String = "avatar.jpg"
@@ -119,7 +120,11 @@ class ApplicationClientActivationViewModel : ViewModel() {
                                 )
                         }
                         "learning" -> {
+
                             it.isDone = checkIfCourseCompleted(it.moduleId)
+                            if (it.isDone) {
+                                model.applicationLearningCompletionDate = Date()
+                            }
                         }
 
 
@@ -160,13 +165,16 @@ class ApplicationClientActivationViewModel : ViewModel() {
             .update(
                 mapOf(
                     "stepsTotal" to (observableWorkOrderDependency.value?.step ?: 0),
-                    "status" to "Applied"
+                    "status" to "Applied",
+                    "applicationComplete" to Date()
 
                 )
             )
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     observableApplicationStatus.value = true
+                } else {
+                    observableError.value = it?.exception?.message ?: ""
                 }
             }
     }
@@ -183,6 +191,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         observableApplicationStatus.value = true
+                    } else {
+                        observableError.value = it?.exception?.message ?: ""
                     }
                 }
         }

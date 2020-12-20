@@ -202,11 +202,11 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 //            match = OTP_NUMBER.matcher(otpIn)
 //            if (match.matches()) {
             if (otpIn == "000000") {
-                verify_otp_button_schedule.setEnabled(false)
+                verify_otp_button_schedule.isEnabled = false
                 Handler().postDelayed(Runnable {
                     // This method will be executed once the timer is over
                     if (verify_otp_button_schedule != null) {
-                        verify_otp_button_schedule.setEnabled(true)
+                        verify_otp_button_schedule.isEnabled = true
 
                     }
                 }, 3000)
@@ -320,7 +320,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     override fun enableConfirmOtpButton(enable: Boolean) {
         this.enableOtpEditText = enable
-        txt_otp.setText(txt_otp.text)
+        txt_otp.text = txt_otp.text
     }
 
 
