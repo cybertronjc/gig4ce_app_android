@@ -28,6 +28,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/helpVideoRV"
         android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/size_8"
+        android:layout_marginEnd="@dimen/size_8"
+        android:paddingBottom="@dimen/size_16"
+        android:clipToPadding="false"
         android:layout_height="match_parent"/>
 
 

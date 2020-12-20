@@ -66,8 +66,8 @@
         android:id="@+id/unread_message_count_tv"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="6dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintEnd_toStartOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="@+id/cardView" />
 
@@ -141,6 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/about_us_cl"
                 android:layout_width="match_parent"
@@ -230,6 +231,7 @@
                 android:layout_height="124dp"
                 android:nestedScrollingEnabled="false"
                 android:visibility="gone" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
@@ -308,11 +310,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="15dp"
                         android:clipToPadding="false"
-                        android:paddingBottom="@dimen/size_4"
-                        android:paddingLeft="@dimen/size_16"
                         android:nestedScrollingEnabled="false"
+                        android:paddingLeft="@dimen/size_16"
                         android:paddingRight="20dp"
-                        android:visibility="gone"/>
+                        android:paddingBottom="@dimen/size_4"
+                        android:visibility="gone" />
 
                     <ProgressBar
                         android:id="@+id/client_activation_progress_bar"
@@ -332,6 +334,7 @@
 
                 </FrameLayout>
             </RelativeLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mygigs_cl"
                 android:layout_width="match_parent"
@@ -547,6 +550,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintLeft_toRightOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="129dp"
@@ -629,77 +633,6 @@
                     app:layout_constraintEnd_toStartOf="@+id/textView119"
                     app:layout_constraintTop_toTopOf="@+id/textView119" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/help_cl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <ImageView
-                    android:id="@+id/imageView37"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_help_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:letterSpacing="0"
-                    android:text="@string/help"
-                    android:textColor="#080808"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@id/imageView37"
-                    app:layout_constraintLeft_toRightOf="@id/imageView37"
-                    app:layout_constraintTop_toTopOf="@id/imageView37" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/helpVideoRV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:elevation="5dp"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingBottom="8dp"
-                    app:cardCornerRadius="4dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageView37" />
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/seeMoreBtn"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/lato_bold"
-                    android:gravity="center"
-                    android:letterSpacing="0"
-                    android:text="@string/see_more"
-                    android:textColor="@color/colorLightAccent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/helpVideoRV"
-                    app:strokeColor="@color/colorPrimary" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
             <RelativeLayout
                 android:id="@+id/rl_explore_by_role"
@@ -819,6 +752,7 @@
 
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -857,10 +791,72 @@
                     app:layout_constraintTop_toBottomOf="@+id/industry" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/help_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
 
+                <ImageView
+                    android:id="@+id/imageView37"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_help_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/help"
+                    android:textColor="#080808"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/imageView37"
+                    app:layout_constraintLeft_toRightOf="@id/imageView37"
+                    app:layout_constraintTop_toTopOf="@id/imageView37" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/helpVideoRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:elevation="5dp"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingBottom="8dp"
+                    app:cardCornerRadius="4dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageView37" />
 
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/seeMoreBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="center"
+                    android:letterSpacing="0"
+                    android:text="@string/see_more"
+                    android:textColor="@color/colorLightAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/helpVideoRV"
+                    app:strokeColor="@color/colorPrimary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

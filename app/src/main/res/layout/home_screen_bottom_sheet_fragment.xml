@@ -292,58 +292,6 @@
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>
-
-
-    <TextView
-        android:id="@+id/assessment_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
-        android:text="@string/assessment_"
-        android:textColor="#686868"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
-
-    <FrameLayout
-        android:id="@+id/assessment_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:minHeight="170dp"
-        android:visibility="gone">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assessment_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/learning_assessment_progress_bar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/learning_assessment_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_cross_grey"
-            android:drawablePadding="10dp"
-            tools:text="Unable to load your stuff" />
-
-    </FrameLayout>
-
-
     <RelativeLayout
         android:id="@+id/explore_by_role_rl"
         android:layout_width="match_parent"
@@ -497,6 +445,59 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/industry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/assessment_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:text="@string/assessment_"
+        android:textColor="#686868"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+
+    <FrameLayout
+        android:id="@+id/assessment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="170dp"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assessment_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/learning_assessment_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/learning_assessment_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            tools:text="Unable to load your stuff" />
+
+    </FrameLayout>
+
+
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
