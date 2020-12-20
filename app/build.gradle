@@ -76,9 +76,9 @@ android {
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Prod"'
             buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://qslv7bpakk.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_force_users_prod"'
-            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
-            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
-            buildConfigField "String", 'VERIFY_OTP_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
         }
 
         /**
