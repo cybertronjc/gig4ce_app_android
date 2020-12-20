@@ -145,7 +145,7 @@ class GroupChatFragment : BaseFragment(),
     private fun initRecycler() {
         val layoutManager = LinearLayoutManager(requireContext())
 
-//       layoutManager.stackFromEnd = true
+       layoutManager.stackFromEnd = true
 //        layoutManager.reverseLayout = true
         rv_chats.layoutManager = layoutManager
 
@@ -187,6 +187,7 @@ class GroupChatFragment : BaseFragment(),
             .sendingMessage
             .observe(viewLifecycleOwner, Observer {
                 mAdapter.addItem(it)
+                rv_chats.smoothScrollToPosition(mAdapter.itemCount - 1)
             })
 
         viewModel

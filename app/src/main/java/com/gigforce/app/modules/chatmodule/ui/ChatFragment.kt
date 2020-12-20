@@ -171,7 +171,7 @@ class ChatFragment : BaseFragment(),
 
     private fun initRecycler() {
         val layoutManager = LinearLayoutManager(requireContext())
-        layoutManager.reverseLayout = false
+//        layoutManager.reverseLayout = false
         layoutManager.stackFromEnd = true
         rv_chats.layoutManager = layoutManager
 
