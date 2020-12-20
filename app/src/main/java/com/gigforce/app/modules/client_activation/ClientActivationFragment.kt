@@ -194,6 +194,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
             pb_client_activation.gone()
+            tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
 
             run {
                 if (FirebaseAuth.getInstance().currentUser?.uid == null) {
@@ -245,7 +246,6 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                             )
                         }
                     }
-                    tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
                     if (jpApplication == null) return@Observer
                     if (jpApplication.status == "")
                         tv_applied_client_activation.gone()
