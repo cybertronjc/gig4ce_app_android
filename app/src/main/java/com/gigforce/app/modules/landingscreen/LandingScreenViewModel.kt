@@ -24,10 +24,10 @@ class LandingScreenViewModel constructor(
 ) : ViewModel(), LandingScreenCallbacks.ResponseCallbacks {
     private var allTips: List<Tip>? = arrayListOf()
     private var callbacks: LandingScreenCallbacks? = null
-    private val _observerRole: SingleLiveEvent<Role> by lazy {
-        SingleLiveEvent<Role>();
+    private val _observerRole: SingleLiveEvent<List<Role>> by lazy {
+        SingleLiveEvent<List<Role>>();
     }
-    val observerRole: SingleLiveEvent<Role> get() = _observerRole
+    val observerRole: SingleLiveEvent<List<Role>> get() = _observerRole
 
     private val _observerWorkOrder: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
         SingleLiveEvent<ArrayList<JobProfile>>();
@@ -213,10 +213,17 @@ class LandingScreenViewModel constructor(
     ) {
         if (error == null) {
             try {
-                val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
-                role?.id = querySnapshot?.documents?.get(0)?.id
-                observerRole.value = role
+                if (!querySnapshot?.documents.isNullOrEmpty()) {
+                    val role = querySnapshot?.toObjects(Role::class.java)
+                    for (i in 0 until (querySnapshot?.documents?.size ?: 0)) {
+                        role?.get(i)?.id = querySnapshot?.documents?.get(i)?.id
+
+                    }
+                    observerRole.value = role
+                }
+
             } catch (e: Exception) {
+
             }
         }
     }
@@ -228,7 +235,7 @@ class LandingScreenViewModel constructor(
         if (error == null) {
             if (querySnapshot?.documents?.isNotEmpty() == true) {
                 var allClientActivations = ArrayList<JobProfile>()
-                for(clientActi in querySnapshot.documents){
+                for (clientActi in querySnapshot.documents) {
                     val jobProfileData = clientActi.toObject(JobProfile::class.java)
                     jobProfileData?.let {
                         jobProfileData.id = clientActi.id

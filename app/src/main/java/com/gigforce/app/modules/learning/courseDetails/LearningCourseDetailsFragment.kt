@@ -9,6 +9,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -655,7 +656,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
                     } else {
 
                         getTextView(viewHolder, R.id.status).text = "PENDING"
@@ -666,7 +667,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
                     }
 
                 })

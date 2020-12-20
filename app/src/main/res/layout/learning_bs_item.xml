@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="148dp"
+    android:layout_height="wrap_content"
+    android:minHeight="148dp"
     android:layout_marginLeft="18dp"
     android:layout_marginBottom="2dp"
     app:cardCornerRadius="4dp"
@@ -12,13 +13,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:paddingBottom="@dimen/size_10"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.gigforce.app.utils.widgets.RoundCornerImageView
             android:id="@+id/learning_img"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="@dimen/size_100"
             android:scaleType="centerCrop"
+            app:sriv_right_top_corner_radius="@dimen/size_4"
+            app:sriv_left_top_corner_radius="@dimen/size_4"
             android:adjustViewBounds="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -57,6 +61,7 @@
             android:text="CASHIER"
             android:textColor="#000000"
             android:textSize="14sp"
+
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/learning_img" />
