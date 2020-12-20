@@ -820,6 +820,62 @@
         android:name="com.gigforce.app.modules.client_activation.ScheduleDrivingTestFragment"
         android:label="fragment_schedule_test"
         tools:layout="@layout/layout_fragment_schedule_driving_test" />
+    <fragment
+        android:id="@+id/ambassadorProgramDetailsFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramDetailsFragment"
+        android:label="AmbassadorProgramDetailsFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrollmentRequirementFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
+        android:label="AmbassadorEnrollmentRequirementFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrolledUsersListFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrolledUsersListFragment"
+        android:label="AmbassadorEnrolledUsersListFragment" />
+    <fragment
+        android:id="@+id/checkMobileFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.CheckMobileFragment"
+        android:label="CheckMobileFragment" />
+    <fragment
+        android:id="@+id/confirmOtpFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment"
+        android:label="ConfirmOtpFragment" />
+    <fragment
+        android:id="@+id/addUserDetailsFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.AddUserDetailsFragment"
+        android:label="AddUserDetailsFragment" />
+    <fragment
+        android:id="@+id/addProfilePictureFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.AddProfilePictureFragment"
+        android:label="AddProfilePictureFragment" />
+    <fragment
+        android:id="@+id/addCurrentAddressFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddCurrentAddressFragment"
+        android:label="AddCurrentAddressFragment" />
+    <fragment
+        android:id="@+id/addUserPanCardInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserPanCardInfoFragment"
+        android:label="AddUserPanCardInfoFragment" />
+    <fragment
+        android:id="@+id/addUserBankDetailsInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserBankDetailsInfoFragment"
+        android:label="AddUserBankDetailsInfoFragment" />
+    <fragment
+        android:id="@+id/addUserAadharCardInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserAadharCardInfoFragment"
+        android:label="AddUserAadharCardInfoFragment" />
+    <fragment
+        android:id="@+id/addUserDrivingLicenseInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserDrivingLicenseInfoFragment"
+        android:label="AddUserDrivingLicenseInfoFragment" />
+    <fragment
+        android:id="@+id/addUserInterestFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserInterestFragment"
+        android:label="AddUserInterestFragment" />
+    <fragment
+        android:id="@+id/addUserExperienceFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserExperienceFragment"
+        android:label="AddUserExperienceFragment" />
 
 
 </navigation>

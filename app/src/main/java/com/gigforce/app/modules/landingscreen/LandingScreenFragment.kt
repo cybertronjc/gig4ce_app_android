@@ -17,7 +17,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -177,26 +176,26 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-                ConfigRepository.LatestAPPUpdateListener {
+            ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
-                            getString(R.string.new_version_available),
-                            getString(R.string.new_version_available_detail),
-                            getString(R.string.update_now),
-                            getString(R.string.cancel_update),
-                            object : ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                }
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object : ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
 
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    if (latestAPPUpdateModel?.force_update_required)
-                                        activity?.finish()
-                                    dialog?.dismiss()
-                                }
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel?.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
 
-                            })
+                        })
             }
         })
     }
@@ -241,8 +240,8 @@ class LandingScreenFragment : BaseFragment() {
 
         try {
             result = context?.getPackageManager()
-                    ?.getPackageInfo(context?.getPackageName(), 0)
-                    ?.versionName ?: "";
+                ?.getPackageInfo(context?.getPackageName(), 0)
+                ?.versionName ?: "";
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -351,12 +350,21 @@ class LandingScreenFragment : BaseFragment() {
     lateinit var viewModelProfile: ProfileViewModel
     private fun observers() {
         // load user data
-        viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
             val profile: ProfileData = profileObs!!
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
+
+            ambassador_layout.visible()
+            if (profile.isUserAmbassador) {
+                join_as_amb_label.text = "Ambassador Program"
+                amb_join_open_btn.text = "Open"
+            } else {
+                join_as_amb_label.text = "Join Us as an Ambassador"
+                amb_join_open_btn.text = "Join Now"
+            }
         })
 
         verificationViewModel
@@ -757,6 +765,14 @@ class LandingScreenFragment : BaseFragment() {
         }
         ll_search_role.setOnClickListener {
             navigate(R.id.fragment_explore_by_role)
+        }
+        amb_join_open_btn.setOnClickListener {
+
+            if (amb_join_open_btn.text == "Open") {
+                navigate(R.id.ambassadorEnrolledUsersListFragment)
+            } else {
+                navigate(R.id.ambassadorProgramDetailsFragment)
+            }
         }
     }
 

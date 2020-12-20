@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    app:layout_constraintBottom_toTopOf="@id/startNavigationSliderBtn"
+    tools:context=".modules.gigPage.GigPageFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar_banner_layout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/light_pink"
+            android:paddingBottom="15dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_btn_iv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:src="@drawable/ic_arrow_back_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ellipses_iv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:visibility="gone"
+                android:src="@drawable/ic_ellipses"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/amb_banner_iv"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="21dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/banner_group"
+                app:layout_constraintTop_toBottomOf="@id/back_btn_iv" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/gigOverViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_banner_layout">
+
+
+            <TextView
+                android:id="@+id/roleNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="5sp"
+                android:text="Ambassador"
+                android:textColor="@color/lipstick"
+                android:textSize="24sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="2sp"
+                android:textColor="#707070"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/roleNameTV"
+                android:text="Gigforce" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/separator30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5fe94b81"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:text="@string/earn_rs_50_per_giger_onboarding_no_limit_on_earning"
+            app:layout_constraintTop_toBottomOf="@id/gigOverViewLayout" />
+
+        <include
+            android:id="@+id/gig_info"
+            layout="@layout/fragment_ambassador_program_details_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/separator30" />
+
+        <include
+            android:id="@+id/gig_keywords"
+            layout="@layout/fragment_gig_page_2_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/gig_info" />
+
+        <include
+            android:id="@+id/learning_based_role_layout"
+            layout="@layout/fragment_main_learning_role_based_learnings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/gig_keywords" />
+
+        <View
+            android:id="@+id/separator31"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#c0c0c0"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/learning_based_role_layout" />
+
+        <ImageView
+            android:id="@+id/gig_req_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_credit_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator31" />
+
+
+        <TextView
+            android:id="@+id/gig_req_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0.02"
+            android:text="Requirements"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/gig_req_iv"
+            app:layout_constraintTop_toBottomOf="@id/separator31" />
+
+
+        <LinearLayout
+            android:id="@+id/ambReqContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/gig_req_label" />
+
+
+        <TextView
+            android:id="@+id/ambRequirementsSeeMoreTV"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="35dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:letterSpacing="0"
+            android:text="@string/plus_see_more"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/ambReqContainer" />
+
+        <View
+            android:id="@+id/separator32"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#c0c0c0"
+            app:layout_constraintTop_toBottomOf="@id/ambRequirementsSeeMoreTV" />
+
+        <ImageView
+            android:id="@+id/gig_resp_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_credit_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator32" />
+
+
+        <TextView
+            android:id="@+id/gig_resp_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0.02"
+            android:text="Responsibilities"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/gig_resp_iv"
+            app:layout_constraintTop_toBottomOf="@id/separator32" />
+
+
+        <LinearLayout
+            android:id="@+id/ambRespContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/gig_resp_label" />
+
+        <TextView
+            android:id="@+id/ambRespContainerSeeMoreTV"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="35dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:letterSpacing="0"
+            android:text="@string/plus_see_more"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/ambRespContainer" />
+
+        <View
+            android:id="@+id/separator33"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#c0c0c0"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/ambRespContainerSeeMoreTV" />
+
+
+        <ImageView
+            android:id="@+id/gig_faq_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_credit_card"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator33" />
+
+
+        <TextView
+            android:id="@+id/gig_faq_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0.02"
+            android:visibility="gone"
+            android:text="Frequently Asked Questions"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/gig_faq_iv"
+            app:layout_constraintTop_toBottomOf="@id/separator33" />
+
+
+        <LinearLayout
+            android:id="@+id/gig_faq_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/gig_faq_label" />
+
+
+        <View
+            android:id="@+id/separator36"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="16dp"
+            android:background="#c0c0c0"
+            app:layout_constraintTop_toBottomOf="@id/gig_faq_container" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_apply_now"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginEnd="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_32"
+            android:background="@drawable/gradient_button"
+            android:letterSpacing="0"
+            android:minHeight="@dimen/size_48"
+            android:paddingTop="@dimen/size_8"
+            android:paddingBottom="@dimen/size_8"
+            android:textAllCaps="false"
+            android:text="Apply Now"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator36" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+
+
+

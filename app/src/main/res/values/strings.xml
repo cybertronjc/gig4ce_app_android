@@ -406,7 +406,7 @@
     <string name="ifsc">IFSC *</string>
     <string name="bank_name">Bank Name *</string>
     <string name="account_no">Account No *</string>
-    <string name="bank_passbook_front_image">Bank Passbook (Front Image)</string>
+    <string name="bank_passbook_front_image">Bank Passbook/Cheque (Front Image)</string>
     <string name="ifsc_code">IFSC Code :</string>
     <string name="bank_name_with_colon">Bank Name :</string>
     <string name="bank_account_no">Bank Account No :</string>
@@ -1113,6 +1113,9 @@
     <string name="set_location_to_high_accuracy">Please turn on your location and set it to high accuracy to continue!!</string>
     <string name="current_state">Current State</string>
     <string name="current_city">Current City</string>
+    <string name="number_of_offs">Number of offs</string>
+    <string name="view_gig_details"><u>View Gig Details</u></string>
+    <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn <b>Rs. 50</b> per Giger Onboarding. No limit on earning.</string>
 
 
 </resources>

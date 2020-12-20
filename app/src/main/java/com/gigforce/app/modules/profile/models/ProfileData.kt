@@ -1,5 +1,8 @@
 package com.gigforce.app.modules.profile.models
 
+import com.gigforce.app.modules.profile.Interest
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class ProfileData(
@@ -36,7 +39,38 @@ data class ProfileData(
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")
-    var companies: ArrayList<Company>? = null
+    var companies: ArrayList<Company>? = null,
+
+    @get:PropertyName("isUserAmbassador")
+    @set:PropertyName("isUserAmbassador")
+    var isUserAmbassador: Boolean = false,
+
+    @get:PropertyName("dateOfBirth")
+    @set:PropertyName("dateOfBirth")
+    var dateOfBirth: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("interests")
+    @set:PropertyName("interests")
+    var interests: ArrayList<Interest>? = null,
+
+    @get:PropertyName("enrolledBy")
+    @set:PropertyName("enrolledBy")
+    var enrolledBy: EnrollmentInfo? = null
+
 ) {
 
+    @Exclude
+    fun hasUserUploadedProfilePicture() =
+        profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }
+
+data class EnrollmentInfo(
+
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String = "",
+
+    @get:PropertyName("enrolledOn")
+    @set:PropertyName("enrolledOn")
+    var enrolledOn: Timestamp? = null
+)

@@ -58,12 +58,17 @@ import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.MainLearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.amb_join_open_btn
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ambassador_layout
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.explore_by_industry
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.join_as_amb_label
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
@@ -85,6 +90,7 @@ class BSCalendarScreenFragment : BaseFragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
+    private val profileViewModel : ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,6 +106,31 @@ class BSCalendarScreenFragment : BaseFragment() {
         initGigViewModel()
         initLearningViewModel()
         initializeClientActivation()
+        initProfileViewModel()
+    }
+
+    private fun initProfileViewModel() {
+        profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            val profile: ProfileData = profileObs!!
+
+            ambassador_layout.visible()
+            if (profile.isUserAmbassador) {
+                join_as_amb_label.text = "Ambassador Program"
+                amb_join_open_btn.text = "Open"
+            } else {
+                join_as_amb_label.text = "Join Us as an Ambassador"
+                amb_join_open_btn.text = "Join Now"
+            }
+        })
+
+        amb_join_open_btn.setOnClickListener {
+
+            if (amb_join_open_btn.text == "Open") {
+                navigate(R.id.ambassadorEnrolledUsersListFragment)
+            } else {
+                navigate(R.id.ambassadorProgramDetailsFragment)
+            }
+        }
     }
 
     private fun initLearningViewModel() {
@@ -638,9 +669,8 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        if (AppConstants.UNLOCK_FEATURE) {
-            datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
-        }
+        datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
+
 //        datalist.add(
 //            FeatureModel(
 //                "Home Screen",

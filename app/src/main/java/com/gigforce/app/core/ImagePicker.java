@@ -128,6 +128,70 @@ public class ImagePicker {
         return null;
     }
 
+    @Nullable
+    public static Intent getPickImageIntentsOnly(Context context) {
+        Intent chooserIntent = null;
+        List<Intent> intentList = new ArrayList<>();
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Uri tempUri = FileProvider.getUriForFile(
+                context.getApplicationContext(),
+                context.getApplicationContext().getPackageName() + ".provider",
+                getTempFile(context)
+        );
+        if (tempUri != null) {
+            intentList = addIntentsToList(context, intentList, pickIntent);
+
+            if (intentList.size() > 0) {
+                chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
+                        context.getString(R.string.pick_image_intent_text));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+            }
+
+            return chooserIntent;
+        }
+        return null;
+    }
+
+    public static Intent getCaptureImageIntentsOnly(Context context) {
+        Intent chooserIntent = null;
+        List<Intent> intentList = new ArrayList<>();
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhotoIntent.putExtra("return-data", true);
+        Uri tempUri = FileProvider.getUriForFile(
+                context.getApplicationContext(),
+                context.getApplicationContext().getPackageName() + ".provider",
+                getTempFile(context)
+        );
+        if (tempUri != null) {
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
+            intentList = addIntentsToList(context, intentList, takePhotoIntent);
+
+            if (intentList.size() > 0) {
+                chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
+                        context.getString(R.string.pick_image_intent_text));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (takePhotoIntent != null) {
+                    takePhotoIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+            } else {
+                ClipData clip =
+                        ClipData.newUri(context.getContentResolver(), "whatevs", tempUri);
+
+                if (takePhotoIntent != null) {
+                    takePhotoIntent.setClipData(clip);
+                }
+                if (takePhotoIntent != null) {
+                    takePhotoIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+            }
+            return chooserIntent;
+        }
+        return null;
+    }
+
     /**
      * method to collect the activities whose intent filter matches the required type
      *

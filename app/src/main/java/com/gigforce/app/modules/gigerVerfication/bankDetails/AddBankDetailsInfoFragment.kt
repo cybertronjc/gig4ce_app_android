@@ -38,6 +38,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
+        const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
@@ -45,6 +46,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var gigerVerificationStatus: GigerVerificationStatus? = null
     private var bankDetailsDataModel: BankDetailsDataModel? = null
+    private var didUserCameFromAmbassadorScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +56,29 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         initViews()
         initViewModel()
+    }
+
+    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
+        arguments?.let {
+            didUserCameFromAmbassadorScreen =
+                it.getBoolean(INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT)
+        }
+
+        savedInstanceState?.let {
+            didUserCameFromAmbassadorScreen =
+                it.getBoolean(INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(
+            INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+            didUserCameFromAmbassadorScreen
+        )
     }
 
     private fun initViews() {
@@ -65,7 +88,12 @@ class AddBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.upload_bank_passbook_sublabel)
 
         toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+
+            if (didUserCameFromAmbassadorScreen) {
+                activity?.onBackPressed()
+            } else {
+                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            }
         }
 
         helpIconViewIV.setOnClickListener {
@@ -135,7 +163,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
                 else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
-                     (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
+                    (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
                 )
                     enableSubmitButton()
                 else
@@ -406,8 +434,13 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-        return true
+
+        if (didUserCameFromAmbassadorScreen)
+            return false
+        else {
+            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            return true
+        }
     }
 
     private fun errorOnUploadingDocuments(error: String) {
@@ -426,18 +459,22 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     private fun documentsUploaded() {
         showToast(getString(R.string.bank_details_uploaded))
 
-        gigerVerificationStatus?.let {
+        if (didUserCameFromAmbassadorScreen) {
+            activity?.onBackPressed()
+        } else {
+            gigerVerificationStatus?.let {
 
-            if (!it.selfieVideoUploaded) {
-                navigate(R.id.addSelfieVideoFragment)
-            } else if (!it.panCardDetailsUploaded) {
-                navigate(R.id.addPanCardInfoFragment)
-            } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addAadharCardInfoFragment)
-            } else if (!it.dlCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
-            } else {
-                showDetailsUploaded()
+                if (!it.selfieVideoUploaded) {
+                    navigate(R.id.addSelfieVideoFragment)
+                } else if (!it.panCardDetailsUploaded) {
+                    navigate(R.id.addPanCardInfoFragment)
+                } else if (!it.aadharCardDetailsUploaded) {
+                    navigate(R.id.addAadharCardInfoFragment)
+                } else if (!it.dlCardDetailsUploaded) {
+                    navigate(R.id.addDrivingLicenseInfoFragment)
+                } else {
+                    showDetailsUploaded()
+                }
             }
         }
     }

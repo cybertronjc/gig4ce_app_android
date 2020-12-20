@@ -927,4 +927,6 @@
     <string name="total_number_of_days">మొత్తం రోజుల సంఖ్య</string>
     <string name="total_working_days">మొత్తం పని రోజులు</string>
     <string name="number_of_offs">ఆఫ్‌ల సంఖ్య</string>
+    <string name="view_gig_details">View Gig Details</string>
+    <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn Rs. 50 per Giger Onboarding. No limit on earning.</string>
 </resources>

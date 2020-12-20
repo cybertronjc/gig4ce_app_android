@@ -544,7 +544,7 @@
         <item>ಮುಂಬೈ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಸೆಂಟ್ರಲ್ ಕೋ-ಒಪಿ</item>
         <item>ನಾಗಪುರ ನಗರಿಕ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
         <item>ರಾಷ್ಟ್ರೀಯ ಆಸ್ಟ್ರೇಲಿಯಾ ಬ್ಯಾಂಕ್</item>
-        <item>ನ್ಯೂ ಇಂಡಿಯಾ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ನ್ಯೂ ಇಂಡಿಯಾ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>string>
         <item>ಎನ್‌ಕೆಜಿಎಸ್‌ಬಿ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
         <item>ಉತ್ತರ ಮಲಬಾರ್ ಗ್ರಾಮೀಣ ಬ್ಯಾಂಕ್</item>
         <item>ನೂತನ್ ನಗರಿಕ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
@@ -929,4 +929,6 @@
     <string name="total_working_days">ಒಟ್ಟು ಕೆಲಸದ ದಿನಗಳು</string>
     <string name="number_of_offs">ಆಫ್‌ಗಳ ಸಂಖ್ಯೆ</string>
     <string name="download_payslip">Download Payslip</string>
+    <string name="view_gig_details">View Gig Details</string>
+    <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn Rs. 50 per Giger Onboarding. No limit on earning.</string>
 </resources>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lipstick_two"
+        android:gravity="center_vertical"
+        android:minHeight="72dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ic_back_iv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Add Interest"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="16dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:src="@drawable/banner_users_grid"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#333333"
+            android:lineHeight="17sp"
+            android:lineSpacingExtra="3sp"
+            android:text="Let us know your interest so that we can show the best jobs for you"
+            />
+
+    </LinearLayout>
+    
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:text="Select Jobs you are interested in "
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/interest_chipgroup"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:chipSpacingHorizontal="14dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_driving"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driving" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_bike_rider"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bike Rider" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_delivery_executive"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivery Executive" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_warehouse_helper"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Warehouse Helper" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_operator"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Operator" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_technician"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Technician" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_supervisor"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Supervisor/Manager" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_Inspector"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspector" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_tele_calling"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tele calling" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_factory_worker"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Factory Worker" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_security"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Security" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_delivery_cleaning"
+            style="@style/AppSingleChoiceChip2"
+            app:chipStrokeWidth="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cleaner" />
+
+
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/gradient_button"
+        android:enabled="true"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
+
+</LinearLayout>
