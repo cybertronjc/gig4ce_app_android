@@ -51,17 +51,17 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
     }
 
     suspend fun setInJPApplication(
-            workOrderID: String,
+        jobProfileID: String,
             cert: DrivingCertificate,
             type: String,
             title: String
     ): JpApplication {
-        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
+        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
                 .whereEqualTo("gigerId", repository.getUID()).get()
                 .await()
         val toObject = items.toObjects(JpApplication::class.java).get(0)
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                         "title", title
                 ).whereEqualTo("type", type).get().await()
 
@@ -73,7 +73,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                             mapOf(
                                     "title" to title,
                                     "type" to type,
-                                    "stepId" to workOrderID,
+                                    "stepId" to jobProfileID,
                                     "certificate" to cert,
                                     "inserted_on" to Date()
 

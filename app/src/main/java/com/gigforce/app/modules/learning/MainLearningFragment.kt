@@ -185,7 +185,7 @@ class MainLearningFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as ImageView).setBackgroundResource(R.drawable.assessment_line_pending)
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
 
 
                     })

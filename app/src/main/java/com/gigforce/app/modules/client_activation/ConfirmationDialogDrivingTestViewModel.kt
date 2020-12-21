@@ -40,7 +40,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
 
 
     suspend fun setInJPApplication(
-            workOrderID: String,
+        jobProfileID: String,
             type: String,
             title: String,
             partnerDetails: PartnerSchoolDetails,
@@ -48,11 +48,11 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
             slot: String,
             drivingLicenseCheck: Boolean
     ) {
-        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
+        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
                 .whereEqualTo("gigerId", repository.getUID()).get()
                 .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                         "title", title
                 ).whereEqualTo("type", type).get().await()
 
@@ -64,7 +64,7 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
                             mapOf(
                                     "title" to title,
                                     "type" to type,
-                                    "stepId" to workOrderID,
+                                    "stepId" to jobProfileID,
                                     "insertedOn" to Date(),
                                     "certificate" to DrivingCertificate(
                                             partnerSchoolDetails = partnerDetails,

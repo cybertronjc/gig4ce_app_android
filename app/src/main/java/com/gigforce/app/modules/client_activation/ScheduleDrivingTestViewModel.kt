@@ -73,13 +73,13 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     suspend fun getJPApplication(
-        workOrderID: String,
+        jobProfileID: String,
         type: String,
         title: String
     ): DrivingCertificate? {
         try {
             val items =
-                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
             if (items.documents.isNullOrEmpty()) {
@@ -87,7 +87,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             }
             applicationId = items.documents[0].id
             val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                     "title", title
                 ).whereEqualTo("type", type).get().await()
             if (submissions.documents.isNullOrEmpty()) {
@@ -103,9 +103,9 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
     }
 
-    fun getUIData(workOrderId: String) {
+    fun getUIData(jobProfileID: String) {
 
-        repository.db.collection("JP_Settings").limit(1).whereEqualTo("jobProfileId", workOrderId)
+        repository.db.collection("JP_Settings").limit(1).whereEqualTo("jobProfileId", jobProfileID)
             .whereEqualTo("type", "driving_certificate").addSnapshotListener { success, err ->
                 if (err == null) {
                     if (success?.documents?.isNotEmpty() == true) {
@@ -136,15 +136,15 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
 
     suspend fun setInJPApplication(
-        workOrderID: String,
+        jobProfileID: String,
         type: String,
         title: String, options: List<CheckItem>
     ) {
-        val items = repository.getCollectionReference().whereEqualTo("jpid", workOrderID)
+        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
             .whereEqualTo("gigerId", repository.getUID()).get()
             .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-            .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+            .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                 "title", title
             ).whereEqualTo("type", type).get().await()
 

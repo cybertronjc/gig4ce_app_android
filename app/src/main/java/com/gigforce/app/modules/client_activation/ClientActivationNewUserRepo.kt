@@ -8,14 +8,14 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
     private var firebaseDB = FirebaseFirestore.getInstance()
 
 
-    override fun getWorkOrder(
+    override fun getJobProfile(
         docID: String,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         firebaseDB.collection("Job_Profiles").document(docID)
             .addSnapshotListener { success, error ->
                 run {
-                    responseCallbacks.workOrderResponse(success, error)
+                    responseCallbacks.jobProfileResponse(success, error)
 
 
                 }
@@ -35,12 +35,12 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
     }
 
     override fun getApplication(
-        workOrderId: String,
+        jobProfileID: String,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         var listener: ListenerRegistration? = null
         listener = firebaseDB.collection("JP_Applications")
-            .whereEqualTo("jpid", workOrderId)
+            .whereEqualTo("jpid", jobProfileID)
             .whereEqualTo("gigerId", getUserID())
             .addSnapshotListener { success, err ->
                 listener?.remove()
@@ -51,7 +51,7 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
     }
 
     override fun addInviteUserID(
-        mWorkOrderId: String,
+        jobProfileID: String,
         mInviteUserId: String,
         location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks

@@ -7,12 +7,12 @@ interface LandingScreenCallbacks {
 
     fun getRoles(enableLimit: Boolean, responseCallbacks: ResponseCallbacks)
 
-    fun getWorkOrder(responseCallbacks: ResponseCallbacks)
+    fun getJobProfile(responseCallbacks: ResponseCallbacks)
 
 
     interface ResponseCallbacks {
         fun getRolesResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
-        fun getWorkOrderResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
+        fun getJobProfileResponse(querySnapshot: QuerySnapshot?, error: FirebaseFirestoreException?)
 
     }
 }

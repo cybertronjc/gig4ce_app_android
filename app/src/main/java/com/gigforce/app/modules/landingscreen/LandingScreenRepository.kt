@@ -29,10 +29,10 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
 
     }
 
-    override fun getWorkOrder(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
+    override fun getJobProfile(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
         db.collection("Job_Profiles").whereEqualTo("isActive", true).limit(1)
             .addSnapshotListener { success, error ->
-                responseCallbacks.getWorkOrderResponse(success, error)
+                responseCallbacks.getJobProfileResponse(success, error)
             }
     }
 }

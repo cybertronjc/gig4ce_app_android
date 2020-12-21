@@ -23,9 +23,9 @@ class SelectPartnerSchoolViewModel(private val savedStateHandle: SavedStateHandl
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
-    fun getPartnerSchoolDetails(type: String, workOrderId: String) {
+    fun getPartnerSchoolDetails(type: String, jobProfileID: String) {
         repository.db.collection("JP_Settings").whereEqualTo("type", type)
-            .whereEqualTo("jobProfileId", workOrderId).addSnapshotListener { success, err ->
+            .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, err ->
             if (err == null) {
                 _observablePartnerSchool.value =
                     success?.toObjects(PartnerSchool::class.java)?.get(0)
