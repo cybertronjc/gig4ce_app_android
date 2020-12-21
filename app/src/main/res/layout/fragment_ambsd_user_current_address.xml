@@ -257,7 +257,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Preferred distance from current address"
+                android:text="Are you ready to change location for work?"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"

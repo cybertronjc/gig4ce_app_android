@@ -54,7 +54,6 @@ class AddCurrentAddressFragment : BaseFragment() {
             ready_to_change_location_label.gone()
             arround_current_add_seekbar.gone()
             pref_distance_label.gone()
-            ready_to_change_location_label.gone()
             seekbardependent.gone()
             maxDistanceTV.gone()
             minDistanceTV.gone()
@@ -65,7 +64,6 @@ class AddCurrentAddressFragment : BaseFragment() {
             ready_to_change_location_label.visible()
             arround_current_add_seekbar.visible()
             pref_distance_label.visible()
-            ready_to_change_location_label.visible()
             seekbardependent.visible()
             maxDistanceTV.visible()
             minDistanceTV.visible()
@@ -201,6 +199,9 @@ class AddCurrentAddressFragment : BaseFragment() {
         val state = (state_spinner.selectedItem as State).name
         val city = (city_spinner.selectedItem as City).name
 
+        var progress = arround_current_add_seekbar.progress
+        if (progress < 5) progress = 5
+
         viewModel.updateUserCurrentAddressDetails(
             uid = userId,
             pinCode = pin_code_et.text.toString(),
@@ -208,7 +209,7 @@ class AddCurrentAddressFragment : BaseFragment() {
             addressLine2 = address_line_2_et.text.toString(),
             state = state,
             city = city,
-            preferredDistanceInKm = arround_current_add_seekbar.progress,
+            preferredDistanceInKm = progress,
             readyToChangeLocationForWork = ready_to_change_location_chipgroup.checkedChipId == R.id.chip_location_change_yes
         )
     }
