@@ -55,9 +55,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.client_activation_item.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class LandingScreenFragment : BaseFragment() {
@@ -999,15 +997,15 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun initializeClientActivation() {
-        landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
+        landingScreenViewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { jobProfile ->
             run {
-                workOrder?.let {
-                    showClientActivations(workOrder)
+                jobProfile?.let {
+                    showClientActivations(jobProfile)
                 }
 
             }
         })
-        landingScreenViewModel.getWorkOrder()
+        landingScreenViewModel.getJobProfile()
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {

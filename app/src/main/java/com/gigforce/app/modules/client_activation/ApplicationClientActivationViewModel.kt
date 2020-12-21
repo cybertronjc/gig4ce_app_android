@@ -20,10 +20,10 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
     var redirectToNextStep: Boolean = false
 
-    private val _observableWorkOrderDependency: SingleLiveEvent<JpSettings> by lazy {
+    private val _observableJobProfile: SingleLiveEvent<JpSettings> by lazy {
         SingleLiveEvent<JpSettings>();
     }
-    val observableWorkOrderDependency: SingleLiveEvent<JpSettings> get() = _observableWorkOrderDependency
+    val observableJobProfile: SingleLiveEvent<JpSettings> get() = _observableJobProfile
 
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
@@ -44,10 +44,10 @@ class ApplicationClientActivationViewModel : ViewModel() {
     private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
     val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
 
-    fun getWorkOrderDependency(jobProfileId: String) = viewModelScope.launch {
+    fun getJonProfileDependency(jobProfileId: String) = viewModelScope.launch {
         val item = getJpSettings(jobProfileId)
         if (item != null)
-            observableWorkOrderDependency.value = item
+            observableJobProfile.value = item
     }
 
     suspend fun getJpSettings(jobProfileId: String): JpSettings? {
@@ -164,7 +164,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
         repository.db.collection("JP_Applications").document(application.id)
             .update(
                 mapOf(
-                    "stepsTotal" to (observableWorkOrderDependency.value?.step ?: 0),
+                    "stepsTotal" to (observableJobProfile.value?.step ?: 0),
                     "status" to "Applied",
                     "applicationComplete" to Date()
 

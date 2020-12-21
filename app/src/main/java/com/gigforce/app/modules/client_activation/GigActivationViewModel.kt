@@ -38,9 +38,9 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     private val _observableGigActivation = MutableLiveData<GigActivation>()
     val observableGigActivation: MutableLiveData<GigActivation> = _observableGigActivation
 
-    fun getActivationData(workOrderId: String) {
+    fun getActivationData(jobProfileID: String) {
 
-        repository.getCollectionReference().whereEqualTo("jobProfileId", workOrderId)
+        repository.getCollectionReference().whereEqualTo("jobProfileId", jobProfileID)
             .whereEqualTo("type", "activation").addSnapshotListener { success, err ->
                 if (err == null) {
                     if (success?.documents?.isNotEmpty() == true) {
@@ -68,10 +68,10 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
     }
 
-    suspend fun getJPApplication(workOrderID: String): JpApplication? {
+    suspend fun getJPApplication(jobProfileID: String): JpApplication? {
         return try {
             val items =
-                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
             val toObject = items.toObjects(JpApplication::class.java).get(0)
@@ -160,13 +160,13 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
         }
 
     suspend fun checkForDrivingCertificate(
-        workOrderID: String,
+        jobProfileID: String,
         type: String,
         title: String
     ): Boolean {
         try {
             val items =
-                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
             if (items.documents.isNullOrEmpty()) {
@@ -174,7 +174,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
             }
             val documentSnapshot = items.documents[0]
             return !repository.db.collection("JP_Applications").document(documentSnapshot.id)
-                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                     "title", title
                 ).whereEqualTo("type", type).get().await().documents.isNullOrEmpty()
         } catch (e: Exception) {

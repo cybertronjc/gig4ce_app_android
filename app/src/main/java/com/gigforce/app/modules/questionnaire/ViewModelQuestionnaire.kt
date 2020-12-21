@@ -40,9 +40,9 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
         _observableCities
 
 
-    fun getQuestionnaire(workOrderID: String) {
+    fun getQuestionnaire(jobProfileID: String) {
         questionnaireRepository.getCollectionReference().whereEqualTo("type", "questionnaire")
-            .whereEqualTo("jobProfileId", workOrderID).addSnapshotListener { success, error ->
+            .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, error ->
                 if (error == null) {
                     if (!success?.documents.isNullOrEmpty()) {
                         val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)

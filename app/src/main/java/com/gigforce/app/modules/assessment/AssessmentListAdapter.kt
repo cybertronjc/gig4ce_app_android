@@ -56,15 +56,15 @@ class AssessmentListAdapter(
 
             holder.statusTV.text = "PENDING"
             holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_pending)
-            holder.statusSlideRibbon.setBackgroundResource(R.drawable.assessment_line_pending)
+            holder.itemView.side_bar_status.setImageResource(R.drawable.assessment_line_pending)
 
 
         } else {
 
             holder.statusTV.text = "COMPLETED"
+            holder.itemView.side_bar_status.setImageResource(R.drawable.assessment_line_done)
             holder.statusTV.setBackgroundResource(R.drawable.rect_assessment_status_completed)
 
-            holder.statusSlideRibbon.setBackgroundResource(R.drawable.assessment_line_done)
 
         }
     }

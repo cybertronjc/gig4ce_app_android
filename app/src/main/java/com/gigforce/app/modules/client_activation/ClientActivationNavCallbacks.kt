@@ -9,11 +9,11 @@ import com.google.firebase.firestore.QuerySnapshot
 import java.lang.Exception
 
 interface ClientActivationNavCallbacks {
-    fun getWorkOrder(docID: String, responseCallbacks: ClientActivationResponseCallbacks)
+    fun getJobProfile(docID: String, responseCallbacks: ClientActivationResponseCallbacks)
     fun getCoursesList(lessons: List<String>, responseCallbacks: ClientActivationResponseCallbacks)
-    fun getApplication(workOrderId: String, responseCallbacks: ClientActivationResponseCallbacks)
+    fun getApplication(jobProfileId: String, responseCallbacks: ClientActivationResponseCallbacks)
     fun addInviteUserID(
-        mWorkOrderId: String,
+        jobProfileID: String,
         mInviteUserId: String,
         location: Location,
         responseCallbacks: ClientActivationResponseCallbacks
@@ -22,7 +22,7 @@ interface ClientActivationNavCallbacks {
     fun getUserID(): String
     public interface ClientActivationResponseCallbacks {
         fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?)
-        fun workOrderResponse(snapShot: DocumentSnapshot?, exception: Exception?)
+        fun jobProfileResponse(snapShot: DocumentSnapshot?, exception: Exception?)
         fun applicationResponse(snapShot: QuerySnapshot?, exception: Exception?)
         fun addMarkInterestStatus(it: Task<Void>)
 

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -22,7 +21,6 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -30,8 +28,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,14 +39,10 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.modules.learning.LearningConstants
@@ -75,7 +67,6 @@ import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -342,7 +333,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as ImageView).setBackgroundResource(R.drawable.assessment_line_pending)
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
 
 
                     })
@@ -959,19 +950,19 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initializeClientActivation() {
-        landingScreenViewModel.observerWorkOrder.observe(viewLifecycleOwner, Observer { workOrder ->
+        landingScreenViewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { jobProfile ->
 
 
             run {
-                workOrder?.let {
-                    showClientActivations(workOrder)
+                jobProfile?.let {
+                    showClientActivations(jobProfile)
                 }
 
             }
 
 
         })
-        landingScreenViewModel.getWorkOrder()
+        landingScreenViewModel.getJobProfile()
 
     }
 

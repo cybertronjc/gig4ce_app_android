@@ -3,7 +3,6 @@ package com.gigforce.app.modules.client_activation
 import android.location.Location
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.profile.models.ClientActs
-import com.gigforce.app.modules.profile.models.RoleInterests
 import com.google.firebase.firestore.FieldValue
 
 import com.google.firebase.firestore.ListenerRegistration
@@ -13,14 +12,14 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
         return "Job_Profiles"
     }
 
-    override fun getWorkOrder(
+    override fun getJobProfile(
         docID: String,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         getCollectionReference().document(docID)
             .addSnapshotListener { success, error ->
                 run {
-                    responseCallbacks.workOrderResponse(success, error)
+                    responseCallbacks.jobProfileResponse(success, error)
 
 
                 }
@@ -40,12 +39,12 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
     }
 
     override fun getApplication(
-        workOrderId: String,
+        jobProfileId: String,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         var listener: ListenerRegistration? = null
         listener = db.collection("JP_Applications")
-            .whereEqualTo("jpid", workOrderId)
+            .whereEqualTo("jpid", jobProfileId)
             .whereEqualTo("gigerId", getUID())
             .addSnapshotListener { success, err ->
                 listener?.remove()
@@ -56,7 +55,7 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
     }
 
     override fun addInviteUserID(
-        mWorkOrderId: String,
+        jobProfileID: String,
         mInviteUserId: String, location: Location,
         responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
@@ -65,7 +64,7 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
                 "invited_client_activations",
                 FieldValue.arrayUnion(
                     ClientActs(
-                        jobProfileId = mWorkOrderId,
+                        jobProfileId = jobProfileID,
                         lat = location.latitude.toString(),
                         lon = location.longitude.toString(),
                         invitedBy = mInviteUserId ?: ""

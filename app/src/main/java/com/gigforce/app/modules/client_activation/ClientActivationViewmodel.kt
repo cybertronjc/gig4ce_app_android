@@ -12,7 +12,6 @@ import com.gigforce.app.utils.SingleLiveEvent
 import com.gigforce.app.utils.StringConstants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import java.lang.Exception
 
@@ -26,12 +25,12 @@ class ClientActivationViewmodel(
     }
 
     var initialized: Boolean = false
-    private val _observableWorkOrder: MutableLiveData<JobProfile>
+    private val _observableJobProfile: MutableLiveData<JobProfile>
         get() = savedStateHandle.getLiveData(
             StringConstants.SAVED_STATE.value,
             JobProfile()
         )
-    val observableWorkOrder: MutableLiveData<JobProfile> = _observableWorkOrder
+    val observableJobProfile: MutableLiveData<JobProfile> = _observableJobProfile
 
 
     private val _observableCourses: SingleLiveEvent<Lce<List<LessonModel>>> by lazy {
@@ -53,8 +52,8 @@ class ClientActivationViewmodel(
     }
     val observableAddInterest: SingleLiveEvent<Boolean> get() = _observableAddInterest
 
-    fun getWorkOrder(docID: String) {
-        clientActivationNavCallbacks.getWorkOrder(docID, this)
+    fun getJobProfile(docID: String) {
+        clientActivationNavCallbacks.getJobProfile(docID, this)
 
 
     }
@@ -67,8 +66,8 @@ class ClientActivationViewmodel(
 
     }
 
-    fun getApplication(workOrderId: String) {
-        clientActivationNavCallbacks.getApplication(workOrderId, this)
+    fun getApplication(jobProfileID: String) {
+        clientActivationNavCallbacks.getApplication(jobProfileID, this)
 
     }
 
@@ -95,13 +94,13 @@ class ClientActivationViewmodel(
         }
     }
 
-    override fun workOrderResponse(snapShot: DocumentSnapshot?, exception: Exception?) {
+    override fun jobProfileResponse(snapShot: DocumentSnapshot?, exception: Exception?) {
         if (exception != null) {
             _observableError.value = exception.message
         } else {
             val toObject = snapShot?.toObject(JobProfile::class.java)
             savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
-            _observableWorkOrder.value = toObject
+            _observableJobProfile.value = toObject
         }
         initialized = true
     }

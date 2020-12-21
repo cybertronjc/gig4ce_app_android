@@ -22,17 +22,17 @@ class DocSubSchedulerViewModel : ViewModel() {
     }
 
     suspend fun getJPApplication(
-        workOrderID: String,
+        jobProfileID: String,
         type: String,
         title: String
     ): DrivingCertificate? {
         try {
             val items =
-                repository.db.collection("JP_Applications").whereEqualTo("jpid", workOrderID)
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
             val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", workOrderID).whereEqualTo(
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                     "title", title
                 ).whereEqualTo("type", type).get().await()
             if (submissions.documents.isNullOrEmpty()) {
@@ -54,10 +54,10 @@ class DocSubSchedulerViewModel : ViewModel() {
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
-    fun getPartnerSchoolDetails(type: String, workOrderId: String) {
+    fun getPartnerSchoolDetails(type: String, jobProfileID: String) {
 
         repository.db.collection("JP_Settings").whereEqualTo("type", type)
-            .whereEqualTo("jobProfileId", workOrderId).limit(1)
+            .whereEqualTo("jobProfileId", jobProfileID).limit(1)
             .addSnapshotListener { success, err ->
                 if (err == null) {
                     _observablePartnerSchool.value =

@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.client_activation
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -130,7 +129,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             showToast(it ?: "")
             pb_client_activation.gone()
         })
-        viewModel.observableWorkOrder.observe(viewLifecycleOwner, Observer { it ->
+        viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { it ->
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
@@ -186,7 +185,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             if (it == true) {
                 navigate(
                     R.id.fragment_application_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableWorkOrder.value?.profileId
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
                     )
                 )
             }
@@ -231,7 +230,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                             } else {
                                 navigate(
                                     R.id.fragment_application_client_activation, bundleOf(
-                                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableWorkOrder.value?.profileId
+                                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
                                     )
                                 )
                                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
@@ -240,8 +239,8 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         } else if (jpApplication.status == "Applied") {
                             navigate(
                                 R.id.fragment_gig_activation, bundleOf(
-                                    StringConstants.JOB_PROFILE_ID.value to viewModel.observableWorkOrder.value?.profileId,
-                                    StringConstants.NEXT_DEP.value to viewModel.observableWorkOrder.value?.nextDependency
+                                    StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
+                                    StringConstants.NEXT_DEP.value to viewModel.observableJobProfile.value?.nextDependency
                                 )
                             )
                         }
@@ -278,7 +277,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
         })
         if (!viewModel.initialized)
-            viewModel.getWorkOrder(docID = mJobProfileId)
+            viewModel.getJobProfile(docID = mJobProfileId)
 
 
     }
@@ -369,7 +368,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         } else {
                             PlayVideoDialogFragment.launch(
                                 childFragmentManager = childFragmentManager,
-                                lessonId = viewModel.observableWorkOrder.value?.requiredMedia?.media?.get(
+                                lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
                                     position
                                 )?.lessonId ?: "",
                                 moduleId = "",

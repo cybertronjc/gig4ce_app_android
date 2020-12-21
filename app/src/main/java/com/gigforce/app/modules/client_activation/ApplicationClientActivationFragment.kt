@@ -116,7 +116,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })
-        viewModel.observableWorkOrderDependency.observe(viewLifecycleOwner, Observer {
+        viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             Glide.with(this).load(it?.coverImg).placeholder(
                 com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)
@@ -130,7 +130,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         })
 
-        viewModel.getWorkOrderDependency(mJobProfileId)
+        viewModel.getJonProfileDependency(mJobProfileId)
 
 
     }

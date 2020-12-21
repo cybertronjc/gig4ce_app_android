@@ -29,10 +29,10 @@ class LandingScreenViewModel constructor(
     }
     val observerRole: SingleLiveEvent<List<Role>> get() = _observerRole
 
-    private val _observerWorkOrder: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
+    private val _observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
         SingleLiveEvent<ArrayList<JobProfile>>();
     }
-    val observerWorkOrder: SingleLiveEvent<ArrayList<JobProfile>> get() = _observerWorkOrder
+    val observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> get() = _observableJobProfile
 
 
     companion object {
@@ -197,8 +197,8 @@ class LandingScreenViewModel constructor(
 
     }
 
-    fun getWorkOrder() {
-        callbacks?.getWorkOrder(this)
+    fun getJobProfile() {
+        callbacks?.getJobProfile(this)
     }
 
     override fun onCleared() {
@@ -228,7 +228,7 @@ class LandingScreenViewModel constructor(
         }
     }
 
-    override fun getWorkOrderResponse(
+    override fun getJobProfileResponse(
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
@@ -242,9 +242,8 @@ class LandingScreenViewModel constructor(
                         allClientActivations.add(jobProfileData)
                     }
                 }
-                _observerWorkOrder.value = allClientActivations
-//                val workOrder = documentSnapshot
-//                workOrder?.id = documentSnapshot.id
+                _observableJobProfile.value = allClientActivations
+
 
 
             }
