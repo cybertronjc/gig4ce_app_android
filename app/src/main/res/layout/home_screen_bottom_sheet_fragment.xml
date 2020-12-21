@@ -159,10 +159,40 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+
+
+        <TextView
+            android:id="@+id/textView109"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="@string/my_interest"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView33"
+            app:layout_constraintStart_toEndOf="@+id/imageView33"
+            app:layout_constraintTop_toTopOf="@+id/imageView33" />
+
+        <TextView
+            android:id="@+id/textView113"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/explore_gigs_start_earning"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/textView109"
+            app:layout_constraintTop_toBottomOf="@+id/textView109" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/ambassador_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:layout_margin="16dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/light_pink">
@@ -227,45 +257,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/learning_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
-        android:text="@string/learning"
-        android:textColor="#080808"
-        android:textSize="16sp" />
-        <TextView
-            android:id="@+id/textView109"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/lato_bold"
-            android:letterSpacing="0"
-            android:text="@string/my_interest"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView33"
-            app:layout_constraintStart_toEndOf="@+id/imageView33"
-            app:layout_constraintTop_toTopOf="@+id/imageView33" />
-
-        <TextView
-            android:id="@+id/textView113"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="@string/explore_gigs_start_earning"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/textView109"
-            app:layout_constraintTop_toBottomOf="@+id/textView109" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/rl_cient_activation_bs"
