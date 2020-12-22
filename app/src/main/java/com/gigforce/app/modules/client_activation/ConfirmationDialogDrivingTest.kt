@@ -17,7 +17,14 @@ import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_contact
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_location
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView137
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView139
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView143
+import kotlinx.android.synthetic.main.layout_confirm_driving_slot.tv_change_slot
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
     TimeSlotsDialog.TimeSlotDialogCallbacks {
@@ -100,12 +107,18 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
             )
         textView143.text = timeSlot
         textView139.text = dateSelected
-        iv_location.setOnClickListener {
-            val uri =
-                "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-            startActivity(intent)
+
+        if (!selectedPartner?.lat.isNullOrEmpty()) {
+            iv_location.setOnClickListener {
+                val uri =
+                    "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(intent)
+            }
+        } else {
+            iv_location.gone()
         }
+
         iv_contact.setOnClickListener {
             if (!selectedPartner?.contact.isNullOrEmpty()) {
                 val callIntent = Intent(Intent.ACTION_DIAL);
