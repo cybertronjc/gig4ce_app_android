@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class PartnerSchoolDetails(
     var line2: String? = null, var landmark: String? = "", var name:
     String? = null, var line3: String? = null, var contact: List<ContactPartnerSchool> = listOf(),
-    var lat: String = "28.491269998581263", var lon: String = "77.28332054102471",
+    var lat: String = "", var lon: String = "",
     var line1: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
