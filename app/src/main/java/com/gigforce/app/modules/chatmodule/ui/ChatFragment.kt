@@ -17,8 +17,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -52,7 +50,6 @@ import kotlinx.android.synthetic.main.fragment_chat_screen.*
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 
 
 class ChatFragment : BaseFragment(),
@@ -310,8 +307,8 @@ class ChatFragment : BaseFragment(),
                 val popUp = PopupMenu::class.java.getDeclaredField("mPopup")
                 popUp.isAccessible = true
                 val menu = popUp.get(popUpMenu)
-                menu.javaClass.getDeclaredMethod("setForceShowIcon" ,Boolean::class.java)
-                    .invoke(menu,true)
+                menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(menu, true)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -335,7 +332,7 @@ class ChatFragment : BaseFragment(),
         val formatted = current.format(formatter)
 
         println("Current Date and Time is: $formatted")
-       // tv_lastSeenValue.text = "last seen at : -"
+        // tv_lastSeenValue.text = "last seen at : -"
         return current
     }
 
@@ -463,6 +460,8 @@ class ChatFragment : BaseFragment(),
 
     private fun manageBackIcon() {
         iv_backArrowInChat.setOnClickListener {
+
+            hideSoftKeyboard()
             activity?.onBackPressed()
         }
     }
