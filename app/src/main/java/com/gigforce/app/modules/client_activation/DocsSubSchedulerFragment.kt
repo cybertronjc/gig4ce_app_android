@@ -49,6 +49,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
     private lateinit var mTitle: String
     private lateinit var mType: String
     private var selectedTimeSlot: String? = null
+    private var isCheckOutDone: Boolean = false
 
 
     override fun onCreateView(
@@ -64,7 +65,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
 
         initViews()
-        initClicks()
+
         initObservers()
     }
 
@@ -72,9 +73,15 @@ class DocsSubSchedulerFragment : BaseFragment(),
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
         })
+        viewModel.observableIsCheckoutDone.observe(viewLifecycleOwner, Observer {
+            if (it == false) {
+                initClicks()
+            }
+        })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
 
             set_preference_fot_test.text = Html.fromHtml(it.headerTitle)
+
 
             viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
 
@@ -94,14 +101,19 @@ class DocsSubSchedulerFragment : BaseFragment(),
                                 selectedPartner?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b><br>" }
                                     ?.reduce { a, o -> a + o }
                     )
-                iv_location.visible()
-                iv_contact.visible()
-                iv_location.setOnClickListener {
-                    val uri =
-                        "http://maps.google.com/maps?saddr=" + "&daddr=" + selectedPartner?.lat + "," + selectedPartner?.lon
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                    startActivity(intent)
+
+                if (!partnerAddress?.lat.isNullOrEmpty()) {
+                    iv_location.visible()
+                    iv_location.setOnClickListener {
+                        val uri =
+                            "http://maps.google.com/maps?saddr=" + "&daddr=" + partnerAddress?.lat + "," + partnerAddress?.lon
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        startActivity(intent)
+                    }
+                } else {
+                    iv_location.gone()
                 }
+                iv_contact.visible()
                 iv_contact.setOnClickListener {
                     if (!selectedPartner?.contact.isNullOrEmpty()) {
                         val callIntent = Intent(Intent.ACTION_DIAL);
@@ -116,8 +128,14 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 dateString = it.slotDate
                 imageView35.gone()
                 imageView34.gone()
-                slider_checkout.isLocked = false
-                slider_checkout.visibility = View.VISIBLE
+                if (viewModel.observableIsCheckoutDone.value == null || viewModel.observableIsCheckoutDone.value == false) {
+                    slider_checkout.isLocked = false
+                    slider_checkout.visibility = View.VISIBLE
+                } else {
+                    slider_checkout.isLocked = true
+                    slider_checkout.visibility = View.GONE
+                }
+
 //            stateChangeSlot()
                 textView136.text = getString(R.string.partner_address)
                 textView142.text = getString(R.string.slot_of_visit)
@@ -126,15 +144,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
             })
 
 
-            view_select_time_slots.setOnClickListener { view ->
-                val newInstance = TimeSlotsDialog.newInstance()
-                newInstance.arguments = bundleOf(
-                    StringConstants.TIME_SLOTS.value to it.timeSlots
-                )
-                newInstance
-                newInstance.setCallbacks(this)
-                newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
-            }
+
             viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
         viewModel.getPartnerSchoolDetails(mType, mJobProfileId);
@@ -198,7 +208,15 @@ class DocsSubSchedulerFragment : BaseFragment(),
         imageView11.setOnClickListener {
             popBackState()
         }
-
+        view_select_time_slots.setOnClickListener { view ->
+            val newInstance = TimeSlotsDialog.newInstance()
+            newInstance.arguments = bundleOf(
+                StringConstants.TIME_SLOTS.value to viewModel.observablePartnerSchool.value?.timeSlots
+            )
+            newInstance
+            newInstance.setCallbacks(this)
+            newInstance.show(parentFragmentManager, TimeSlotsDialog::class.java.name)
+        }
 
     }
 
@@ -246,12 +264,18 @@ class DocsSubSchedulerFragment : BaseFragment(),
                         address?.contact?.map { "<b><font color=\'#000000\'>" + it.name + "</font></b><br>" }
                             ?.reduce { a, o -> a + o }
             )
-        iv_location.setOnClickListener {
-            val uri =
-                "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-            startActivity(intent)
+        if (!partnerAddress?.lat.isNullOrEmpty()) {
+            iv_location.visible()
+            iv_location.setOnClickListener {
+                val uri =
+                    "http://maps.google.com/maps?saddr=" + "&daddr=" + address?.lat + "," + address?.lon
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(intent)
+            }
+        } else {
+            iv_location.gone()
         }
+
         iv_contact.setOnClickListener {
             if (!address.contact.isNullOrEmpty()) {
                 val callIntent = Intent(Intent.ACTION_DIAL);
@@ -261,7 +285,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         }
 //        imageView34.gone()
         iv_contact.visible()
-        iv_location.visible()
+
         checkIfCompleteProcessComplete()
         textView136.text = getString(R.string.partner_address)
 

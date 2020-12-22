@@ -13,6 +13,8 @@ class DocSubSchedulerViewModel : ViewModel() {
     val repository: DocSubSchedulerRepository = DocSubSchedulerRepository()
     private val _observableJpApplication: MutableLiveData<DrivingCertificate> = MutableLiveData()
     val observableJpApplication: MutableLiveData<DrivingCertificate> = _observableJpApplication
+    private val _observableIsCheckoutDone: MutableLiveData<Boolean> = MutableLiveData()
+    val observableIsCheckoutDone: MutableLiveData<Boolean> = _observableIsCheckoutDone
 
 
     fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
@@ -31,6 +33,11 @@ class DocSubSchedulerViewModel : ViewModel() {
                 repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
                     .await()
+            if (items.documents.isNullOrEmpty()) {
+                return null
+            }
+            val toObject = items.documents[0].toObject(JpApplication::class.java)
+            _observableIsCheckoutDone.value = toObject?.activation?.all { it.isDone }
             val submissions = repository.getCollectionReference().document(items.documents[0].id)
                 .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
                     "title", title
@@ -68,8 +75,6 @@ class DocSubSchedulerViewModel : ViewModel() {
                 }
             }
     }
-
-
 
 
 }
