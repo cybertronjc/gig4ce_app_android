@@ -1,11 +1,13 @@
 package com.gigforce.app.core.base
 
 import android.app.Dialog
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -408,6 +410,14 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         circularProgressDrawable.centerRadius = 20f
         circularProgressDrawable.start()
         return circularProgressDrawable
+    }
+
+    fun hideSoftKeyboard() {
+
+        val activity = activity ?: return
+
+        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
     }
 
 }

@@ -424,6 +424,8 @@ class GroupChatFragment : BaseFragment(),
 
     private fun manageBackIcon() {
         iv_backArrowInChat.setOnClickListener {
+
+            hideSoftKeyboard()
             activity?.onBackPressed()
         }
     }

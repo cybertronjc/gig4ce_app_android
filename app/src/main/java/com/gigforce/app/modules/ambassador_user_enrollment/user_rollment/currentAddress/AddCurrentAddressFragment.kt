@@ -67,7 +67,7 @@ class AddCurrentAddressFragment : BaseFragment() {
             seekbardependent.visible()
             maxDistanceTV.visible()
             minDistanceTV.visible()
-            toolbar_text.text = "User Current Address"
+            toolbar_text.text = "User Local Address"
         }
     }
 
@@ -145,7 +145,7 @@ class AddCurrentAddressFragment : BaseFragment() {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
                 }.toMutableList().apply {
-                    add(0, City(name = "Select City"))
+                    add(0, City(name = "Select District"))
                 }
 
                 val cityAdapter: ArrayAdapter<City> =
@@ -163,7 +163,7 @@ class AddCurrentAddressFragment : BaseFragment() {
     }
 
     private fun validateDataAndSubmit() {
-        if (pin_code_et.text.length != 6 || pin_code_et.text.toString().toInt() < 10_00_00) {
+        if (pin_code_et.text.isNotBlank() &&  pin_code_et.text.toString().toInt() < 10_00_00) {
             showAlertDialog("Invalid Pincode", "Provide a valid Pin Code")
             return
         }
@@ -184,7 +184,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         }
 
         if (city_spinner.childCount == 0 || city_spinner.selectedItemPosition == 0) {
-            showAlertDialog("Provide City", "Please select city name")
+            showAlertDialog("Provide City", "Please select district name")
             return
         }
 
@@ -279,7 +279,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         state_spinner.adapter = adapter
 
         val cities = viewModel.cities.toMutableList().apply {
-            add(0, City(name = "Select city"))
+            add(0, City(name = "Select district"))
         }
         val cityAdapter: ArrayAdapter<City> =
             ArrayAdapter<City>(requireContext(), android.R.layout.simple_spinner_item, cities)
