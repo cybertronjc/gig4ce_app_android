@@ -21,7 +21,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
@@ -70,7 +69,10 @@ class ContactsFragment : DialogFragment(),
 
 
     private val chatGroupViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
+        ViewModelProvider(
+            this,
+            GroupChatViewModelFactory(requireContext())
+        ).get(GroupChatViewModel::class.java)
     }
     private var onContactSelectedListener: OnContactsSelectedListener? = null
 
@@ -111,7 +113,7 @@ class ContactsFragment : DialogFragment(),
         setClickListeners()
         initViewModel()
 
-       // if (syncPref.shouldSyncContacts())
+        if (syncPref.shouldSyncContacts())
             checkForPermissionElseSyncContacts()
     }
 
