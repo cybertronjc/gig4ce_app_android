@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.database.Cursor
-import android.os.*
+import android.os.Binder
+import android.os.Bundle
+import android.os.IBinder
 import android.provider.ContactsContract
 import android.util.Log
-import android.widget.SimpleCursorAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
@@ -30,7 +31,8 @@ private val PROJECTION: Array<out String> = arrayOf(
 
 // Defines the text expression
 @SuppressLint("InlinedApi")
-private val SELECTION: String = "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
+private val SELECTION: String =
+    "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
 
 /*
  * Defines an array that contains resource ids for the layout views
@@ -41,6 +43,7 @@ private val TO_IDS: IntArray = intArrayOf(R.id.txt_contact_item)
 
 // The column index for the _ID column
 private const val CONTACT_ID_INDEX: Int = 0
+
 // The column index for the CONTACT_KEY column
 private const val CONTACT_KEY_INDEX: Int = 1
 
@@ -50,27 +53,29 @@ private const val CONTACT_KEY_INDEX: Int = 1
 
 class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
 
-    private val TAG:String = "service/fetch/contacts"
+    private val TAG: String = "service/fetch/contacts"
 
     private val binder: LocalBinder = LocalBinder()
 
     // Defines a variable for the search string
     private val searchString: String = ""
+
     // Defines the array to hold values that replace the ?
     private val selectionArgs = arrayOf(searchString)
 
-    private val chatContactsRepository : ChatContactsRepository by lazy {
+    private val chatContactsRepository: ChatContactsRepository by lazy {
         ChatContactsRepository(SyncPref.getInstance(applicationContext))
     }
 
-    val phoneContacts:MutableLiveData<ArrayList<ContactModel>> = MutableLiveData()
 
+    private val syncPref : SyncPref by lazy {
+        SyncPref.getInstance(applicationContext)
+    }
     override fun onBind(intent: Intent): IBinder {
-        return  binder
+        return binder
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-
 
 
         selectionArgs[0] = "%$searchString%"
@@ -86,11 +91,11 @@ class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
         )
     }
 
-    private fun cleanPhoneNo(phone:String):String {
+    private fun cleanPhoneNo(phone: String): String {
         var updated_phone = phone.replace("\\s|\t|[(]|[)]|[-]".toRegex(), "")
-        if(updated_phone.startsWith('+')){
+        if (updated_phone.startsWith('+')) {
             updated_phone = updated_phone.replace("[+]".toRegex(), "")
-        }else{
+        } else {
             updated_phone = updated_phone.replace("^0".toRegex(), "")
             updated_phone = "91${updated_phone}"  // todo: CountryCode need to be generalised
         }
@@ -104,41 +109,46 @@ class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
         cursor.moveToFirst()
 
 
-        val contacts:ArrayList<ContactModel> = ArrayList<ContactModel>()
+        val contacts: ArrayList<ContactModel> = ArrayList<ContactModel>()
 
-        while(!cursor.isLast)
-        {
-            val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
-            val phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+        while (!cursor.isLast) {
+            val name =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
+            val phone =
+                cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
             val contactId = cursor.getString(cursor.getColumnIndex((ContactsContract.Contacts._ID)))
 
-            contacts.add(ContactModel(
-                id = null,
-                mobile = cleanPhoneNo(phone),
-                name = name,
-                contactId = contactId
-            ))
+            contacts.add(
+                ContactModel(
+                    id = null,
+                    mobile = cleanPhoneNo(phone),
+                    name = name,
+                    contactId = contactId
+                )
+            )
             cursor.moveToNext()
         }
-        return  contacts.distinctBy { it.mobile }
+        return contacts.distinctBy { it.mobile }
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
 
-        cursor ?. let {
-            var processCursor = processCursor(cursor)
-            Log.d(TAG, "Count : ${processCursor.size}")
-            Log.d(TAG, "Size : ${processCursor}")
+        if (syncPref.shouldSyncContacts()) {
 
-            GlobalScope.launch {
+            cursor?.let {
+                val processCursor = processCursor(cursor)
+                Log.d(TAG, "Count : ${processCursor.size}")
+                Log.d(TAG, "Size : ${processCursor}")
 
-                try {
-                    chatContactsRepository.updateContacts(processCursor)
-                } catch (e: Exception){
-                    e.printStackTrace()
+                GlobalScope.launch {
+
+                    try {
+                        chatContactsRepository.updateContacts(processCursor)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
-           // phoneContacts.postValue(processCursor)
         }
     }
 
@@ -146,7 +156,7 @@ class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
         //todo: Handle this??
     }
 
-    inner class LocalBinder: Binder(){
+    inner class LocalBinder : Binder() {
         fun getService(): FetchContactsService = this@FetchContactsService
     }
 }
