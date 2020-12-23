@@ -54,11 +54,11 @@ class ChatContactsRepository constructor(
 
     private var currentBatchSize = 0
     private var batch = db.batch()
-    private var batchArray : MutableList<WriteBatch> = mutableListOf()
+   // private var batchArray : MutableList<WriteBatch> = mutableListOf()
 
     suspend fun updateContacts(newContacts: List<ContactModel>) {
         Log.d(TAG,"Sync Started")
-        // Log.d(TAG,"New Batch ${batch}")
+        batch = db.batch()
 
         val querySnap = getUserContacts().getOrThrow()
         val oldContacts = querySnap.documents.map {
@@ -72,20 +72,20 @@ class ChatContactsRepository constructor(
             val contactMatch = newContacts.find { it.mobile == contact.mobile }
 
             if (contactMatch == null) {
-                //user has removed that contact add to remove batch
+                //user has removed that phone contacts add to remove batch
                 val contactRef = userChatContactsCollectionRef.document(contact.mobile)
                 batch.delete(contactRef)
-       //         Log.d(TAG,"Del Query Added")
+                Log.d(TAG,"Del Query Added")
 
                 checkBatchForOverFlowAndCommit()
 
-                //Updating names with nos in headers
+                //Updating names with phone numbers in headers
                 if (contact.uid != null) {
                     val userChatHeaders = getChatHeadersForUser(contact.uid!!)
                     userChatHeaders.forEach {
                         val chatHeaderRef = userChatHeadersCollectionRef.document(it.id)
                         batch.update(chatHeaderRef, "otherUser.name", contact.mobile)
-                        //              Log.d(TAG,"update Query Added")
+                        Log.d(TAG,"update Query Added")
 
                         checkBatchForOverFlowAndCommit()
                     }
@@ -95,7 +95,7 @@ class ChatContactsRepository constructor(
                 if (contactMatch.name != contact.name) {
                     val contactRef = userChatContactsCollectionRef.document(contact.mobile)
                     batch.update(contactRef, "name", contactMatch.name)
-                    //       Log.d(TAG,"update Query Added")
+                    Log.d(TAG,"update Query Added")
 
                     checkBatchForOverFlowAndCommit()
 
@@ -105,7 +105,7 @@ class ChatContactsRepository constructor(
                         userChatHeaders.forEach {
                             val chatHeaderRef = userChatHeadersCollectionRef.document(it.id)
                             batch.update(chatHeaderRef, "otherUser.name", contactMatch.name)
-                            //      Log.d(TAG,"update Query Added")
+                            Log.d(TAG,"update Query Added")
 
                             checkBatchForOverFlowAndCommit()
                         }
@@ -114,8 +114,10 @@ class ChatContactsRepository constructor(
             }
         }
 
-        val newAddedContacts =
-            newContacts.filter { newContact -> oldContacts.find { it.mobile == newContact.mobile } == null }
+        val newAddedContacts = newContacts.filter {
+                newContact -> oldContacts.find { it.mobile == newContact.mobile } == null
+        }
+
         if (newAddedContacts.isNotEmpty()) {
 
             val newAddedContactsFiltered = newAddedContacts.filter {
@@ -124,7 +126,7 @@ class ChatContactsRepository constructor(
                     if (currentUser.phoneNumber == null) {
                         true
                     } else {
-                        //remove user if user has no equal to current user
+                        //remove user if user has phone-number equal to current user's phone number
                         !currentUser.phoneNumber!!.contains(it.mobile)
                     }
                 } else {
@@ -142,10 +144,10 @@ class ChatContactsRepository constructor(
                         header.otherUser?.name?.contains(pickedContact.mobile) ?: false
                     }
                     if (matchedHeader != null) {
-                        //There's header wihtout name
+                        //There's header without name
                         val chatHeaderRef = userChatHeadersCollectionRef.document(matchedHeader.id)
                         batch.update(chatHeaderRef, "otherUser.name", pickedContact.name)
-                        //             Log.d(TAG,"update Query Added")
+                        Log.d(TAG,"update Query Added")
 
                         checkBatchForOverFlowAndCommit()
                     }
@@ -158,9 +160,14 @@ class ChatContactsRepository constructor(
             }
         }
 
-        batchArray.forEach {
-            it.commitOrThrow()
+//        batchArray.forEach {
+//            it.commitOrThrow()
+//        }
+
+        if(currentBatchSize != 0){
+            batch.commitOrThrow()
         }
+
         Log.d(TAG,"Final Commit batch")
         val response = syncContactsService.startSyncingUploadedContactsWithGigforceUsers(
             apiUrl = BuildConfig.SYNC_CHAT_CONTACTS_URL,
@@ -176,18 +183,15 @@ class ChatContactsRepository constructor(
 
     private suspend fun checkBatchForOverFlowAndCommit() {
         currentBatchSize++
-        Log.d(TAG,"Size updates to $currentBatchSize")
+        Log.d(TAG,"Size updated to $currentBatchSize")
 
         if (currentBatchSize > 50) {
-            //     Log.d(TAG,"Commiting batch")
-            batchArray.add(batch)
-            //Reseting batch
-            //    Log.d(TAG,"Reset size to 0")
+         //   batchArray.add(batch)
+            batch.commitOrThrow()
             currentBatchSize = 0
 
-            //      Log.d(TAG,"New Batch")
             batch = db.batch()
-            //   Log.d(TAG,"New Batch ${batch}")
+            Log.d(TAG,"New Batch ${batch}")
         }
 
     }
