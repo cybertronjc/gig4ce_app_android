@@ -404,6 +404,7 @@ class AddUserDetailsFragment : BaseFragment() {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
+                    checkForGpsPermissionsAndGpsStatus()
                 } else {
                     validateDataAndsubmit(0.0,0.0,"")
                 }

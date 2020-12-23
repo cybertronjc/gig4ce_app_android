@@ -270,6 +270,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
+                    checkForGpsPermissionsAndGpsStatus()
                 } else {
                     viewModel.getProfileData(0.0, 0.0, "")
                 }
