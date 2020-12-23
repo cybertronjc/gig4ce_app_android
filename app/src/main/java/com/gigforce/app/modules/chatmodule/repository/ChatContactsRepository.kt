@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.chatmodule.repository
 
+import android.util.Log
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.chatmodule.SyncPref
@@ -11,10 +12,7 @@ import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.network.RetrofitFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 
 class ChatContactsRepository constructor(
@@ -54,8 +52,13 @@ class ChatContactsRepository constructor(
             .whereEqualTo("isGigForceUser", true)
     }
 
+    private var currentBatchSize = 0
+    private var batch = db.batch()
+    private var batchArray : MutableList<WriteBatch> = mutableListOf()
 
     suspend fun updateContacts(newContacts: List<ContactModel>) {
+        Log.d(TAG,"Sync Started")
+        // Log.d(TAG,"New Batch ${batch}")
 
         val querySnap = getUserContacts().getOrThrow()
         val oldContacts = querySnap.documents.map {
@@ -64,7 +67,6 @@ class ChatContactsRepository constructor(
             }
         }
 
-        var batch = db.batch()
         for (i in oldContacts.indices) {
             val contact = oldContacts[i]
             val contactMatch = newContacts.find { it.mobile == contact.mobile }
@@ -73,6 +75,9 @@ class ChatContactsRepository constructor(
                 //user has removed that contact add to remove batch
                 val contactRef = userChatContactsCollectionRef.document(contact.mobile)
                 batch.delete(contactRef)
+       //         Log.d(TAG,"Del Query Added")
+
+                checkBatchForOverFlowAndCommit()
 
                 //Updating names with nos in headers
                 if (contact.uid != null) {
@@ -80,6 +85,9 @@ class ChatContactsRepository constructor(
                     userChatHeaders.forEach {
                         val chatHeaderRef = userChatHeadersCollectionRef.document(it.id)
                         batch.update(chatHeaderRef, "otherUser.name", contact.mobile)
+                        //              Log.d(TAG,"update Query Added")
+
+                        checkBatchForOverFlowAndCommit()
                     }
                 }
             } else {
@@ -87,6 +95,9 @@ class ChatContactsRepository constructor(
                 if (contactMatch.name != contact.name) {
                     val contactRef = userChatContactsCollectionRef.document(contact.mobile)
                     batch.update(contactRef, "name", contactMatch.name)
+                    //       Log.d(TAG,"update Query Added")
+
+                    checkBatchForOverFlowAndCommit()
 
                     //Updating names in headers
                     if (contact.uid != null) {
@@ -94,13 +105,12 @@ class ChatContactsRepository constructor(
                         userChatHeaders.forEach {
                             val chatHeaderRef = userChatHeadersCollectionRef.document(it.id)
                             batch.update(chatHeaderRef, "otherUser.name", contactMatch.name)
+                            //      Log.d(TAG,"update Query Added")
+
+                            checkBatchForOverFlowAndCommit()
                         }
                     }
                 }
-            }
-            if (0 == i % 500) {
-                batch.commitOrThrow()
-                batch = db.batch();
             }
         }
 
@@ -135,19 +145,23 @@ class ChatContactsRepository constructor(
                         //There's header wihtout name
                         val chatHeaderRef = userChatHeadersCollectionRef.document(matchedHeader.id)
                         batch.update(chatHeaderRef, "otherUser.name", pickedContact.name)
+                        //             Log.d(TAG,"update Query Added")
+
+                        checkBatchForOverFlowAndCommit()
                     }
 
                     val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
                     batch.set(contactRef, pickedContact)
-                    if (0 == i % 500) {
-                        batch.commitOrThrow()
-                        batch = db.batch();
-                    }
+                    Log.d(TAG,"set Query Added")
+                    checkBatchForOverFlowAndCommit()
                 }
             }
         }
 
-        batch.commitOrThrow()
+        batchArray.forEach {
+            it.commitOrThrow()
+        }
+        Log.d(TAG,"Final Commit batch")
         val response = syncContactsService.startSyncingUploadedContactsWithGigforceUsers(
             apiUrl = BuildConfig.SYNC_CHAT_CONTACTS_URL,
             uid = getUID()
@@ -158,6 +172,24 @@ class ChatContactsRepository constructor(
         }
 
         syncPref.setContactsAsSynced()
+    }
+
+    private suspend fun checkBatchForOverFlowAndCommit() {
+        currentBatchSize++
+        Log.d(TAG,"Size updates to $currentBatchSize")
+
+        if (currentBatchSize > 50) {
+            //     Log.d(TAG,"Commiting batch")
+            batchArray.add(batch)
+            //Reseting batch
+            //    Log.d(TAG,"Reset size to 0")
+            currentBatchSize = 0
+
+            //      Log.d(TAG,"New Batch")
+            batch = db.batch()
+            //   Log.d(TAG,"New Batch ${batch}")
+        }
+
     }
 
     private suspend fun getChatHeadersForUser(uid: String): List<ChatHeader> {
@@ -200,6 +232,7 @@ class ChatContactsRepository constructor(
         const val COLLECTION_CHATS = "chats"
         const val COLLECTION_CHATS_CONTACTS = "contacts"
         const val COLLECTION_HEADERS = "headers"
+        const val TAG = "ChatContactsBatch"
     }
 
 }
