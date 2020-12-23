@@ -405,7 +405,7 @@ class AddUserDetailsFragment : BaseFragment() {
                     isGPSRequestCompleted = true
                     initializeGPS()
                 } else {
-                    showToast("This APP require GPS permission to work properly")
+                    validateDataAndsubmit(0.0,0.0,"")
                 }
             }
         }

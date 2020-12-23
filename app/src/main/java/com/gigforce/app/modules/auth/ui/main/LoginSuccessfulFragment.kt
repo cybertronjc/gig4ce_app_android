@@ -271,7 +271,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                     isGPSRequestCompleted = true
                     initializeGPS()
                 } else {
-                    showToast("This APP require GPS permission to work properly")
+                    viewModel.getProfileData(0.0, 0.0, "")
                 }
             }
         }
