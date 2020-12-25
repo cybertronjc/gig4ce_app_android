@@ -80,7 +80,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="5sp"
-                android:text="Ambassador"
+                android:text="@string/ambassador"
                 android:textColor="@color/lipstick"
                 android:textSize="24sp"
                 android:textStyle="normal"
@@ -99,7 +99,7 @@
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/roleNameTV"
-                android:text="Gigforce" />
+                android:text="@string/gigforce" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -172,7 +172,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:text="Requirements"
+            android:text="@string/requirements"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="gone"
@@ -233,7 +233,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:text="Responsibilities"
+            android:text="@string/responsibilities"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/gig_resp_iv"
@@ -295,7 +295,7 @@
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
             android:visibility="gone"
-            android:text="Frequently Asked Questions"
+            android:text="@string/frequently_asked_questions"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/gig_faq_iv"
@@ -335,7 +335,7 @@
             android:paddingTop="@dimen/size_8"
             android:paddingBottom="@dimen/size_8"
             android:textAllCaps="false"
-            android:text="Apply Now"
+            android:text="@string/apply_now"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator36" />

@@ -63,9 +63,10 @@ class AddUserInterestFragment : BaseFragment() {
 
             if (interest_chipgroup.checkedChipIds.isEmpty()) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Please Select At Least One Chip")
-                    .setPositiveButton("Okay") { _, _ -> }
-                    .show()
+                    .setMessage(getString(R.string.please_select_atleast_one_chip))
+                    .setPositiveButton(
+                        getString(R.string.okay).capitalize()
+                    ) { _, _ -> }.show()
 
                 return@setOnClickListener
             }
@@ -99,18 +100,20 @@ class AddUserInterestFragment : BaseFragment() {
 
                     }
                     Lse.Success -> {
-                        navigate(R.id.addUserExperienceFragment, bundleOf(
-                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                            EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
-                        ))
+                        navigate(
+                            R.id.addUserExperienceFragment, bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
+                            )
+                        )
                     }
                     is Lse.Error -> {
 
                         MaterialAlertDialogBuilder(requireContext())
-                            .setMessage("Unable to submit interest")
+                            .setMessage(getString(R.string.unable_to_submit_interest))
                             .setMessage(it.error)
-                            .setPositiveButton("Okay") { _, _ -> }
+                            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
                             .show()
                     }
                 }
@@ -122,16 +125,16 @@ class AddUserInterestFragment : BaseFragment() {
         return true
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Alert")
             .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
-            .setNegativeButton("No"){_,_ ->}
+            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
+            .setNegativeButton("No") { _, _ -> }
             .show()
     }
 
-    private fun goBackToUsersList(){
+    private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 }

@@ -57,8 +57,8 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
     private fun setAmbassadorProgramDetails() {
         inflateAmbResponsibilities(
             listOf(
-                "You have to look for people who are looking for Jobs like Driver, Warehouse Helper, Delivery Executive etc",
-                "If they are interested, you have to create their profiles on Gigforce app. Creating profile means entering their basic details and uploading  verifiying Documents like Adhaar, PAN, Bank passbook etc."
+                getString(R.string.you_have_to_look_for),
+                getString(R.string.if_they_are_interested)
             )
         )
     }
@@ -66,7 +66,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
     private fun initUi() {
 
-        roleBasedLearningTV.text = "Related Learnings"
+        roleBasedLearningTV.text = getString(R.string.related_learnings)
         ambRequirementsSeeMoreTV.setOnClickListener {
 
         }
@@ -138,7 +138,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
                     )
                 },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
                     var view = getView(viewHolder, R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height

@@ -23,7 +23,7 @@ class EnrolledUsersRecyclerAdapter constructor(
 ) : RecyclerView.Adapter<EnrolledUsersRecyclerAdapter.EnrolledUserViewHolder>() {
 
     private var enrolledUsers: List<EnrolledUser> = emptyList()
-    private lateinit var enrolledUsersRecyclerAdapterClickListener : EnrolledUsersRecyclerAdapterClickListener
+    private lateinit var enrolledUsersRecyclerAdapterClickListener: EnrolledUsersRecyclerAdapterClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EnrolledUserViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,7 +31,7 @@ class EnrolledUsersRecyclerAdapter constructor(
         return EnrolledUserViewHolder(view)
     }
 
-    fun setListener(enrolledUsersRecyclerAdapterClickListener : EnrolledUsersRecyclerAdapterClickListener){
+    fun setListener(enrolledUsersRecyclerAdapterClickListener: EnrolledUsersRecyclerAdapterClickListener) {
         this.enrolledUsersRecyclerAdapterClickListener = enrolledUsersRecyclerAdapterClickListener
     }
 
@@ -76,14 +76,17 @@ class EnrolledUsersRecyclerAdapter constructor(
             val userEnrolledDate = user.enrolledOn.toLocalDate()
             if (userEnrolledDate.equals(LocalDate.now())) {
                 // enrolled today
-                userAddedTimeTV.text = "Added today"
+                userAddedTimeTV.text = itemView.resources.getString(R.string.added_today)
             } else {
                 //
                 val daysDiff = Duration.between(
                     userEnrolledDate.atStartOfDay(),
                     LocalDate.now().atStartOfDay()
                 ).toDays()
-                userAddedTimeTV.text = "Added $daysDiff days ago"
+                userAddedTimeTV.text =
+                    "${itemView.resources.getString(R.string.added)} $daysDiff ${itemView.resources.getString(
+                        R.string.days_ago
+                    )}"
             }
         }
 
@@ -92,7 +95,7 @@ class EnrolledUsersRecyclerAdapter constructor(
         }
     }
 
-    interface EnrolledUsersRecyclerAdapterClickListener{
+    interface EnrolledUsersRecyclerAdapterClickListener {
 
         fun onUserClicked(enrolledUser: EnrolledUser)
     }

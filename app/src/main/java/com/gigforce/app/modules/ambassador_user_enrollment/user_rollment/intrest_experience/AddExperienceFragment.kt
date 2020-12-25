@@ -135,7 +135,7 @@ class AddUserExperienceFragment : BaseFragment() {
         currently_work_here_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked) {
-                end_date_tv.text = "Current"
+                end_date_tv.text = getString(R.string.current)
             } else {
                 if (endDate != null) {
                     end_date_tv.setText(dateFormatter.format(endDate!!.time))
@@ -184,12 +184,15 @@ class AddUserExperienceFragment : BaseFragment() {
     private fun validateDataAndSubmit() {
 
         if (currentExperienceTitle == null) {
-            showAlertDialog("Wait", "Please wait intrest not loaded yet")
+            showAlertDialog(getString(R.string.wait), getString(R.string.interest_not_loaded_yet))
             return
         }
 
         if (exp_chipgroup.checkedChipId == -1) {
-            showAlertDialog("Select Experience", "Please Select if you have experience or not")
+            showAlertDialog(
+                getString(R.string.select_experience),
+                getString(R.string.select_experience_or_not)
+            )
             return
         }
 
@@ -197,37 +200,49 @@ class AddUserExperienceFragment : BaseFragment() {
 
         if (doHaveAndExp) {
             if (role_spinner.isVisible && role_spinner.selectedItemPosition == 0) {
-                showAlertDialog("Select Role", "Please Select Role")
+                showAlertDialog(
+                    getString(R.string.select_role),
+                    getString(R.string.please_select_role)
+                )
                 return
             }
 
             if (company_name_et.text.isBlank()) {
-                showAlertDialog("Select Company", "Please Select Company")
+                showAlertDialog(
+                    getString(R.string.select_company),
+                    getString(R.string.please_select_company)
+                )
                 return
             }
 
             if (total_exp_chipgroup.checkedChipId == -1) {
-                showAlertDialog("Select Experience", "Please Select Experience")
+                showAlertDialog(
+                    getString(R.string.select_experience),
+                    getString(R.string.please_select_experience)
+                )
                 return
             }
 
             if (startDate == null) {
-                showAlertDialog("Select Start Date", "Please Select Start Date")
+                showAlertDialog(
+                    getString(R.string.select_start_date),
+                    getString(R.string.please_select_start_date)
+                )
                 return
             }
 
             if (endDate == null && !currently_work_here_checkbox.isChecked) {
                 showAlertDialog(
-                    "Select End date",
-                    "Please Select end date or Check Currently working here"
+                    getString(R.string.select_end_date),
+                    getString(R.string.please_select_end_date)
                 )
                 return
             }
 
             if (helper_exec_question_layout.isVisible && helper_weight_chipgroup.checkedChipId == -1) {
                 showAlertDialog(
-                    "Select Weight question answer",
-                    "Please Select answer to last question"
+                    getString(R.string.select_weight_question_answert),
+                    getString(R.string.please_select_asnwer_to_last_question)
                 )
                 return
             }
@@ -304,7 +319,7 @@ class AddUserExperienceFragment : BaseFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -337,7 +352,7 @@ class AddUserExperienceFragment : BaseFragment() {
                         Lce.Loading -> {
                         }
                         is Lce.Content -> {
-                            showToast("$currentExperienceTitle Experience Submitted")
+                            showToast(currentExperienceTitle.toString() + " " + getString(R.string.experience_submitted))
                             if (it.content == null) {
                                 //All Exps filled
                                 navigate(
@@ -366,7 +381,7 @@ class AddUserExperienceFragment : BaseFragment() {
     }
 
     private fun populateRoleSpinner(items: MutableList<String>) {
-        items.add(0, "Select Role")
+        items.add(0, getString(R.string.select_role))
         val adapter: ArrayAdapter<String> =
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -376,13 +391,13 @@ class AddUserExperienceFragment : BaseFragment() {
     private fun showExpDetailsOnScreen(content: String?) {
         currentExperienceTitle = content
         do_you_have_exp_label.text = buildSpannedString {
-            append("Do you have experience in")
+            append(getString(R.string.do_u_have_experience_in))
             color(ResourcesCompat.getColor(resources, R.color.colorPrimary, null)) {
                 append(" $content ?")
             }
         }
 
-        if (content == "Driving") {
+        if (content == getString(R.string.driving)) {
             driver_question_layout.visible()
             delivery_exec_question_layout.gone()
             helper_exec_question_layout.gone()
@@ -391,10 +406,15 @@ class AddUserExperienceFragment : BaseFragment() {
 
             populateRoleSpinner(
                 mutableListOf(
-                    "Car", "Truck", "Bus", "Autorickshaw"
+                    getString(R.string.car),
+                    getString(R.string.truck),
+                    getString(R.string.bus),
+                    getString(
+                        R.string.auto_rickshaw
+                    )
                 )
             )
-        } else if (content == "Delivery Executive") {
+        } else if (content == getString(R.string.delivery_excecutive)) {
             driver_question_layout.gone()
             delivery_exec_question_layout.visible()
             helper_exec_question_layout.gone()
@@ -403,10 +423,12 @@ class AddUserExperienceFragment : BaseFragment() {
 
             populateRoleSpinner(
                 mutableListOf(
-                    "Food Parcel", "Luggage parcel", "Documents parcel"
+                    getString(R.string.food_parcel),
+                    getString(R.string.luggage_parcel),
+                    getString(R.string.documents_parcel)
                 )
             )
-        } else if (content == "Warehouse Helper") {
+        } else if (content == getString(R.string.warehoiuse_helper)) {
             driver_question_layout.gone()
             delivery_exec_question_layout.gone()
             helper_exec_question_layout.visible()
@@ -434,10 +456,10 @@ class AddUserExperienceFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-            .setNegativeButton("No") { _, _ -> }
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 

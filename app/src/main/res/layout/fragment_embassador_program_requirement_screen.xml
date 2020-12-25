@@ -34,7 +34,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="Application - Gig4ce"
+            android:text="@string/application_gig4ce"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toStartOf="@id/company_name_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="Thanks for showing interest in  " />
+        android:text="@string/thanks_for_showing_interest_in" />
 
     <TextView
         android:id="@+id/company_name_tv"
@@ -80,7 +80,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/thanks_for_label"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="Gigforce " />
+        android:text="@string/gigforce" />
 
     <TextView
         android:id="@+id/complete_form_label"
@@ -97,8 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/thanks_for_label"
-        android:text="Please complete the below information to submit
-your Application" />
+        android:text="@string/please_complete_the_below_information_to_submit_your_application" />
 
     <TextView
         android:id="@+id/steps_pending_label"
@@ -113,7 +112,7 @@ your Application" />
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        android:text="Steps Completed" />
+        android:text="@string/steps_completed" />
 
     <TextView
         android:id="@+id/steps_completed_tv"
@@ -178,7 +177,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="Profile Photo" />
+            android:text="@string/profile_photo" />
 
 
         <ImageView
@@ -217,7 +216,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="Current Address" />
+            android:text="@string/current_address" />
 
 
         <ImageView
@@ -257,7 +256,7 @@ your Application" />
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="Bank Details" />
+            android:text="@string/bank_details" />
 
 
         <ImageView
@@ -280,7 +279,7 @@ your Application" />
         android:minHeight="@dimen/size_48"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />

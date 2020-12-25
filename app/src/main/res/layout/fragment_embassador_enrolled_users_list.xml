@@ -45,7 +45,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
-                    android:text="Application - Gig4ce"
+                    android:text="@string/application_gig4ce"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Profile"
+                    android:text="@string/profile"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="Sourcing"
+                    android:text="@string/sourcing"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="Managing Gigs"
+                    android:text="@string/managing_gigs"
                     app:chipStrokeWidth="1dp" />
 
 
@@ -107,7 +107,7 @@
         android:minHeight="@dimen/size_48"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
-        android:text="Create Profile"
+        android:text="@string/create_profile"
         android:textAllCaps="false"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -169,7 +169,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/lato_bold"
                 android:lineSpacingExtra="4sp"
-                android:text="All good here! "
+                android:text="@string/all_good_here"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -182,7 +182,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="3sp"
-                android:text="There are no Profiles to show."
+                android:text="@string/there_are_no_profiles_to_show"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -200,7 +200,7 @@
                 android:minHeight="@dimen/size_48"
                 android:paddingTop="@dimen/size_8"
                 android:paddingBottom="@dimen/size_8"
-                android:text="Create Profile"
+                android:text="@string/create_profile"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

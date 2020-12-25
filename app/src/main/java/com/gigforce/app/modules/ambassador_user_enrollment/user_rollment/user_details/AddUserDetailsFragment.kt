@@ -141,17 +141,20 @@ class AddUserDetailsFragment : BaseFragment() {
         address: String
     ) {
         if (user_name_et.text.length <= 2) {
-            showAlertDialog("Invalid name", "Name should be more than 2 characters")
+            showAlertDialog(
+                getString(R.string.invalid_name),
+                getString(R.string.name_should_be_more_than_2_chars)
+            )
             return
         }
 
         if (dateOfBirth == null) {
-            showAlertDialog("Dob not filled", "Select your date of birth")
+            showAlertDialog(getString(R.string.db_not_filled), getString(R.string.select_ur_dob))
             return
         }
 
         if (gender_chip_group.checkedChipId == -1) {
-            showAlertDialog("select Gender", "Select your gender")
+            showAlertDialog(getString(R.string.select_gender), getString(R.string.select_ur_gender))
             return
         }
 
@@ -161,7 +164,10 @@ class AddUserDetailsFragment : BaseFragment() {
 //        }
 
         if (highest_qual_chipgroup.checkedChipId == -1) {
-            showAlertDialog("Select highest qualification", "Please fill highest qualification")
+            showAlertDialog(
+                getString(R.string.select_highest_qualification),
+                getString(R.string.please_fill_highest_qual)
+            )
             return
         }
 
@@ -182,7 +188,7 @@ class AddUserDetailsFragment : BaseFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -196,7 +202,7 @@ class AddUserDetailsFragment : BaseFragment() {
                     }
                     Lse.Success -> {
                         //                      UtilMethods.hideLoading()
-                        showToast("User Details submitted")
+                        showToast(getString(R.string.user_details_submitted))
                         navigate(
                             R.id.addProfilePictureFragment, bundleOf(
                                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
@@ -207,7 +213,7 @@ class AddUserDetailsFragment : BaseFragment() {
                     }
                     is Lse.Error -> {
                         //                       UtilMethods.hideLoading()
-                        showAlertDialog("Could not submit info", it.error)
+                        showAlertDialog(getString(R.string.cannot_submit_info), it.error)
                     }
                 }
             })
@@ -220,10 +226,10 @@ class AddUserDetailsFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-            .setNegativeButton("No") { _, _ -> }
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 
@@ -293,8 +299,7 @@ class AddUserDetailsFragment : BaseFragment() {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val title = dialog?.findViewById(R.id.title) as TextView
-        title.text =
-            "Important!!, Gps Not Turned On" + "\n" + "You will be redirected to settings page , Please turn on GPS and set mode to High Accuracy"
+        title.text = getString(R.string.gps_warning)
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
@@ -405,7 +410,7 @@ class AddUserDetailsFragment : BaseFragment() {
                     isGPSRequestCompleted = true
                     initializeGPS()
                 } else {
-                    showToast("This APP require GPS permission to work properly")
+                    showToast(getString(R.string.app_requires_gps_perm))
                 }
             }
         }
@@ -414,7 +419,7 @@ class AddUserDetailsFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == LoginSuccessfulFragment.REQUEST_CODE_TOGGLE_GPS_MANUAL){
+        if (requestCode == LoginSuccessfulFragment.REQUEST_CODE_TOGGLE_GPS_MANUAL) {
             checkForGpsPermissionsAndGpsStatus()
         }
     }

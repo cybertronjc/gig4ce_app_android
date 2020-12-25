@@ -18,12 +18,16 @@ class GigHistoryItemDecorator(private val mItemOffset: Int) : RecyclerView.ItemD
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        if (parent.getChildAdapterPosition(view) == 0) {
-            outRect[mItemOffset, mItemOffset * 2, mItemOffset] = mItemOffset / 2
-        } else if (parent.getChildAdapterPosition(view) == 1) {
-            outRect[0, mItemOffset / 2, 0] = mItemOffset / 2
-        } else {
-            outRect[mItemOffset, mItemOffset / 2, mItemOffset] = mItemOffset / 2
+        when {
+            parent.getChildAdapterPosition(view) == 0 -> {
+                outRect[mItemOffset, mItemOffset * 2, mItemOffset] = mItemOffset / 2
+            }
+            parent.getChildAdapterPosition(view) == 1 -> {
+                outRect[0, mItemOffset / 2, 0] = mItemOffset / 2
+            }
+            else -> {
+                outRect[mItemOffset, mItemOffset / 2, mItemOffset] = mItemOffset / 2
+            }
         }
     }
 
