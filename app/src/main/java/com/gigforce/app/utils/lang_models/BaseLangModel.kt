@@ -16,7 +16,7 @@ open class BaseLangModel {
                 val nestedLang = it.getAnnotation(NestedLang::class.java)
                 if (nestedLang != null) {
                     it.isAccessible=true
-                    checkForLangTranslation(it.get(this))
+                    checkForNestedTranslation(it.get(this))
                 } else {
                     val annotation = it.getAnnotation(Lang::class.java)
                     if (annotation != null) {
@@ -32,7 +32,7 @@ open class BaseLangModel {
 
     }
 
-    private fun <T : Any> checkForLangTranslation(nestedObj: T) {
+    private fun <T : Any> checkForNestedTranslation(nestedObj: T) {
 
 
         val langMap = LangMapSingleton.langMap
@@ -42,7 +42,7 @@ open class BaseLangModel {
                 val nestedLang = it.getAnnotation(NestedLang::class.java)
                 if (nestedLang != null) {
                     it.isAccessible=true
-                    checkForLangTranslation(it.get(nestedObj))
+                    checkForNestedTranslation(it.get(nestedObj))
                 } else {
                     val annotation = it.getAnnotation(Lang::class.java)
                     if (annotation != null) {
