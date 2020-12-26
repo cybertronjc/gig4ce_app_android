@@ -33,12 +33,14 @@ import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
+import kotlinx.android.synthetic.main.fragment_ambassador_program_details_info.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
     Toolbar.OnMenuItemClickListener {
 
     private val learningViewModel: LearningViewModel by viewModels()
+    private val viewModel: AmbassadorProgramViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +54,18 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         initViewModel()
         initLearningViewModel()
         setAmbassadorProgramDetails()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.observableAmbassadorProgram.observe(viewLifecycleOwner, Observer {
+//            it?.checkForLangTranslation()
+            address_label.text = it?.role?.label
+            separator30.text = it?.payoutNote
+            gig_address_tv.text = it?.role?.check?.check_
+        })
+        viewModel.getAmbassadorProfiles()
+
     }
 
     private fun setAmbassadorProgramDetails() {
