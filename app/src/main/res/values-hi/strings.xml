@@ -1105,5 +1105,10 @@
         <item>नौकरी के लिए समय का पाबंद रहें</item>
         <item>अधिक कमाने के लिए अधिक काम करें</item>
     </string-array>
+    <string name="more_you_create_profiles_more_you_earn">जितनी ज़्यादा प्रोफाइल बनाएँगे, उतना ज़्यादा कमाएंगे</string>
+    <string name="join_now">अभी जुड़े</string>
+    <string name="ambassador_program">Ambassador प्रोग्राम</string>
+    <string name="open">खोले</string>
+    <string name="join_us_as_an_ambassador">एक Ambassador के रूप में हमसे जुड़ें</string>
 
 </resources>

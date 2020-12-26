@@ -124,7 +124,8 @@
             layout="@layout/fragment_ambassador_program_details_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/separator30" />
+            app:layout_constraintTop_toBottomOf="@id/separator30"
+            tools:layout_editor_absoluteX="0dp" />
 
         <include
             android:id="@+id/gig_keywords"
