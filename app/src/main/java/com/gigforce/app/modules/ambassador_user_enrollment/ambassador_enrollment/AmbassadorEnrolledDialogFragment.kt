@@ -19,11 +19,13 @@ import com.gigforce.app.core.capitalizeWords
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorApplication
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ErrorWhileSettingUserAsAmbassador
 import com.gigforce.app.modules.profile.models.SettingUserAsAmbassador
 import com.gigforce.app.modules.profile.models.UserSetAsAmbassadorSuccessfully
 import com.gigforce.app.modules.roster.inflate
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_apply_for_ambassador.*
 import kotlinx.android.synthetic.main.fragment_apply_for_ambassador_main.*
@@ -40,19 +42,21 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
     companion object {
         const val TAG = "AmbassadorEnrolledSuccessfullyDialogFragment"
 
-        private lateinit var guidelines: List<String>
 
         fun launch(
             fragmentManager: FragmentManager,
-            ambassadorEnrolledSuccessfullyDialogFragmentListener: AmbassadorEnrolledSuccessfullyDialogFragmentListeners
+            ambassadorEnrolledSuccessfullyDialogFragmentListener: AmbassadorEnrolledSuccessfullyDialogFragmentListeners,
+            bundle: Bundle
         ) {
             val frag = AmbassadorEnrolledDialogFragment()
+            frag.arguments = bundle
             frag.ambassadorEnrolledSuccessfullyDialogFragmentListener =
                 ambassadorEnrolledSuccessfullyDialogFragmentListener
             frag.show(fragmentManager, TAG)
         }
     }
 
+    private lateinit var mAmbObj: AmbassadorApplication
     private lateinit var ambassadorEnrolledSuccessfullyDialogFragmentListener: AmbassadorEnrolledSuccessfullyDialogFragmentListeners
     private val profileViewModel: ProfileViewModel by viewModels()
 
@@ -64,9 +68,35 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
         return inflater.inflate(R.layout.fragment_apply_for_ambassador, container, false)
     }
 
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mAmbObj =
+                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
+                    ?: AmbassadorApplication()
+
+
+        }
+
+        arguments?.let {
+            mAmbObj =
+                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
+                    ?: AmbassadorApplication()
+
+
+        }
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(StringConstants.AMB_APPLICATION_OBJ.value, mAmbObj)
+
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        guidelines = resources.getStringArray(R.array.ambassador_guidelines).toList()
+        getDataFromIntents(savedInstanceState)
         initView()
         initViewModel()
 
@@ -121,12 +151,16 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
 
 
     private fun initView() {
+        happy_earning_label.text=mAmbObj.ambassadorDialogTitle
+        your_are_label.text=mAmbObj.ambassadorDialogSubtitle
+        submitBtn.text=mAmbObj.ambassadorDialogAction
+
         submitBtn.setOnClickListener {
             ambassadorEnrolledSuccessfullyDialogFragmentListener.onStartingOnBoardingGigersClicked()
             dismiss()
         }
 
-        inflateUserGuidelines(guidelines)
+        inflateUserGuidelines(mAmbObj.guideLines)
     }
 
     private fun inflateUserGuidelines(guidelines: List<String>) = guidelines.forEach {

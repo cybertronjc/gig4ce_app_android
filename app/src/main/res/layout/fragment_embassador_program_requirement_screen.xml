@@ -28,13 +28,14 @@
             android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
+            android:id="@+id/tv_tb_title_amb_appl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="@string/application_gig4ce"
+            tools:text="@string/application_gig4ce"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -64,23 +65,12 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/company_name_tv"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="@string/thanks_for_showing_interest_in" />
+        tools:text="@string/thanks_for_showing_interest_in" />
 
-    <TextView
-        android:id="@+id/company_name_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/thanks_for_label"
-        app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="@string/gigforce" />
+
 
     <TextView
         android:id="@+id/complete_form_label"
@@ -97,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/thanks_for_label"
-        android:text="@string/please_complete_the_below_information_to_submit_your_application" />
+        tools:text="@string/please_complete_the_below_information_to_submit_your_application" />
 
     <TextView
         android:id="@+id/steps_pending_label"
@@ -112,7 +102,7 @@
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        android:text="@string/steps_completed" />
+        tools:text="@string/steps_completed" />
 
     <TextView
         android:id="@+id/steps_completed_tv"
@@ -168,6 +158,7 @@
              />
 
         <TextView
+            android:id="@+id/tv_profile_photo_amb_appl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -177,7 +168,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="@string/profile_photo" />
+            tools:text="@string/profile_photo" />
 
 
         <ImageView
@@ -207,6 +198,7 @@
             android:layout_height="24dp" />
 
         <TextView
+            android:id="@+id/tv_current_addr_amb_appl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -216,7 +208,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="@string/current_address" />
+            tools:text="@string/current_address" />
 
 
         <ImageView
@@ -247,6 +239,7 @@
              />
 
         <TextView
+            android:id="@+id/tv_bank_details_amb_appl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -256,7 +249,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:text="@string/bank_details" />
+            tools:text="@string/bank_details" />
 
 
         <ImageView

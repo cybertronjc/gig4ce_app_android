@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramViewModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
@@ -55,6 +57,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
+import kotlinx.android.synthetic.main.fragment_ambassador_program_details_info.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
@@ -94,6 +98,7 @@ class LandingScreenFragment : BaseFragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+    private val viewModelAmb: AmbassadorProgramViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,7 +117,6 @@ class LandingScreenFragment : BaseFragment() {
     }
 
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 //        showToast((LandingScreenFragment::class.java.getDeclaredField("name").getAnnotation(Lang::class.java) as Lang).langKey)
@@ -128,6 +132,7 @@ class LandingScreenFragment : BaseFragment() {
         initializeExploreByRole()
         initializeClientActivation()
         initializeExploreByIndustry()
+        initAmbassadorProgram()
         initializeLearningModule()
         listener()
         observers()
@@ -153,6 +158,16 @@ class LandingScreenFragment : BaseFragment() {
             }
         }
 
+    }
+
+    private fun initAmbassadorProgram() {
+        viewModelAmb.observableAmbassadorProgram.observe(viewLifecycleOwner, Observer {
+
+            join_as_amb_label.text = it?.ambassadorCardTitle
+            amb_subtitle_landing_screen.text = it?.ambassadorCardSubTitle
+            amb_join_open_btn.text = it?.ambassadorCardActionText
+        })
+        viewModelAmb.getAmbassadorProfiles()
     }
 
     private fun checkForDeepLink() {
@@ -248,7 +263,8 @@ class LandingScreenFragment : BaseFragment() {
 
             }
         } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("isNotLatestVersion Method Exception")
+            FirebaseCrashlytics.getInstance()
+                .log("isNotLatestVersion Method Exception" + e.message ?: "")
 
             return false
         }

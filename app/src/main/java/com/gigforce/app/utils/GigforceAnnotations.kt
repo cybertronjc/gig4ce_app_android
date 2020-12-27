@@ -9,7 +9,7 @@ package com.gigforce.app.utils
     AnnotationTarget.PROPERTY_SETTER
 )
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class Lang(val langKey: String)
+annotation class TranslationNeeded(val langKey: String)
 
 @Target(
     AnnotationTarget.ANNOTATION_CLASS,
@@ -20,4 +20,15 @@ annotation class Lang(val langKey: String)
     AnnotationTarget.PROPERTY_SETTER
 )
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class NestedLang()
+annotation class CheckNestedTranslation(val langKey: String)
+
+@Target(
+    AnnotationTarget.ANNOTATION_CLASS,
+    AnnotationTarget.CLASS,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class CheckCollectionTranslation(val langKey: String)
