@@ -1274,6 +1274,7 @@
     <string name="ambassador_program">Ambassador Program</string>
     <string name="open">Open</string>
     <string name="join_us_as_an_ambassador">Join Us as an Ambassador</string>
+    <string name="otp_sent">Otp sent</string>
     <string-array name="ambassador_guidelines">
 
         <item>Be nice to your customers and colleagues</item>

@@ -8,8 +8,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorApplication
+import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorEnrollmentProfile
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
@@ -17,6 +20,7 @@ import java.util.regex.Pattern
 class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentActionListener {
 
     private val viewModel: VerifyUserMobileViewModel by viewModels()
+    private lateinit var mAmbObj: AmbassadorEnrollmentProfile
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,9 +29,18 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        getDataFromIntents(savedInstanceState)
+        initUI()
         initListeners()
         initViewModel()
+    }
+
+    private fun initUI() {
+        enter_mobile_label.text = mAmbObj.enterUserMobileText
+        we_will_send_otp_label.text = mAmbObj.sendOtpText
+        country_code_label.text = mAmbObj.countryCodeText
+        submitBtn.text = mAmbObj.actionButtonText
+
     }
 
     private fun initListeners() {
@@ -43,12 +56,12 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
     private fun validateDataAndsubmit() {
 
         if (mobile_no_et.text.length != 10) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", mAmbObj.dialogValidationText)
             return
         }
         val mobileNo = mobile_no_et.text.toString()
         if (!INDIAN_MOBILE_NUMBER.matcher(mobileNo).matches()) {
-            showAlertDialog("", "Enter a valid Mobile No")
+            showAlertDialog("", mAmbObj.dialogValidationText)
             return
         }
 
@@ -61,7 +74,7 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -75,7 +88,7 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
                     }
                     is Lce.Content -> {
                         UtilMethods.hideLoading()
-                        showToast("Otp sent")
+                        showToast(getString(R.string.otp_sent))
 
                         if (it.content.isUserAlreadyRegistered) {
                             //show user already registered dialog
@@ -84,7 +97,8 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
                             navigate(
                                 R.id.confirmOtpFragment, bundleOf(
                                     ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
-                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
+                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken,
+                                    StringConstants.AMB_APPLICATION_OBJ.value to mAmbObj
                                 )
                             )
                         }
@@ -98,7 +112,11 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
     }
 
     private fun showMobileAlreadyRegisterdDialog() {
-        UserAlreadyExistDialogFragment.launch(childFragmentManager, this)
+        UserAlreadyExistDialogFragment.launch(
+            childFragmentManager, this, bundleOf(
+                StringConstants.AMB_APPLICATION_OBJ.value to mAmbObj
+            )
+        )
 
     }
 
@@ -107,6 +125,32 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
     }
 
     override fun onOkayClicked() {
+
+    }
+
+    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            mAmbObj =
+                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
+                    ?: AmbassadorEnrollmentProfile()
+
+
+        }
+
+        arguments?.let {
+            mAmbObj =
+                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
+                    ?: AmbassadorEnrollmentProfile()
+
+
+        }
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(StringConstants.AMB_APPLICATION_OBJ.value, mAmbObj)
+
 
     }
 }

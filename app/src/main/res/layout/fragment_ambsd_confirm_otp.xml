@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ScrollView
@@ -61,7 +62,7 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
-                android:text="Enter code sent to User’s number"
+                tools:text="Enter code sent to User’s number"
                 android:textColor="#131415"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -120,7 +121,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/submit_all_caps"
+        tools:text="@string/submit_all_caps"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 

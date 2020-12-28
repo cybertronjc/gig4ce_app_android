@@ -58,7 +58,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
             steps_pending_label.text = it?.stepsText
             apply_amb_btn.setOnClickListener { view ->
                 AmbassadorEnrolledDialogFragment.launch(
-                    childFragmentManager,
+                        childFragmentManager,
                     this@AmbassadorEnrollmentRequirementFragment,
                     bundleOf(StringConstants.AMB_APPLICATION_OBJ.value to it)
                 )
@@ -172,7 +172,11 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
     }
 
     override fun onStartingOnBoardingGigersClicked() {
-        navigate(R.id.ambassadorEnrolledUsersListFragment)
+        navigate(
+            R.id.ambassadorEnrolledUsersListFragment, bundleOf(
+                StringConstants.AMBASSADOR_ID.value to  mAmbassadorID
+            )
+        )
     }
 
     override fun onViewGigDetailsClicked() {
