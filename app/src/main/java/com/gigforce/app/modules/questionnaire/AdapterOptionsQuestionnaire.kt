@@ -20,6 +20,7 @@ import com.gigforce.app.utils.GenericSpinnerAdapter
 import kotlinx.android.synthetic.main.layout_answers_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_date_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_drop_down_questionnaire.view.*
+import kotlinx.android.synthetic.main.layout_rv_dropdown_questionnaire.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,8 +32,9 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     private var stateCityMap: MutableMap<States, MutableList<Cities>?> = mutableMapOf()
 
     class ViewHolderText(itemView: View) : RecyclerView.ViewHolder(itemView)
-    class ViewHolderDropDown(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolderStateCityDropdown(itemView: View) : RecyclerView.ViewHolder(itemView)
     class ViewHolderDate(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolderDropdown(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -42,13 +44,18 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     LayoutInflater.from(parent.context)
                         .inflate(R.layout.layout_answers_rv_questionnaire, parent, false)
                 )
-            TYPE_DROPDOWN -> ViewHolderDropDown(
+            STATE_CITY_DROPDOWN -> ViewHolderStateCityDropdown(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_drop_down_questionnaire, parent, false)
             )
+            TYPE_DROPDOWN -> {
+                ViewHolderDropdown(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.layout_rv_dropdown_questionnaire, parent, false)
+                )
+            }
 
             DATE -> ViewHolderDate(
-
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_date_rv_questionnaire, parent, false)
             )
@@ -79,13 +86,9 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val option = item.options[position]
-
-
         when (getItemViewType(position)) {
             TYPE_TEXT -> {
                 holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
-
-
                 holder.itemView.tv_answer_questionnaire.text = option.answer
                 holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
                     if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
@@ -95,21 +98,19 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                 )
                 if (item.selectedAnswer == position) {
                     setTextViewDrawableColor(
-                        holder.itemView.tv_answer_questionnaire,R.color.lipstick
+                        holder.itemView.tv_answer_questionnaire, R.color.lipstick
                     )
                 } else {
                     setTextViewDrawableColor(
-                        holder.itemView.tv_answer_questionnaire,R.color.thumbs_down_color
+                        holder.itemView.tv_answer_questionnaire, R.color.thumbs_down_color
                     )
                 }
                 holder.itemView.setOnClickListener {
                     if (holder.adapterPosition == -1) return@setOnClickListener
                     callbacks.onClick(holder.adapterPosition, null, null, option.type)
                 }
-
-
             }
-            TYPE_DROPDOWN -> {
+            STATE_CITY_DROPDOWN -> {
                 if (stateCityMap.isEmpty()) {
                     callbacks.getStates(stateCityMap, position)
                     holder.itemView.sp_state.gone()
@@ -127,9 +128,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                     holder.itemView.sp_state.onItemSelectedListener =
                         object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                            }
+                            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                             override fun onItemSelected(
                                 parent: AdapterView<*>?,
@@ -192,13 +191,10 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                 holder.itemView.tv_date_label.text = option.answer
                 holder.itemView.ll_date.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
                 holder.itemView.setOnClickListener {
-
                     val c = Calendar.getInstance()
                     val year = c.get(Calendar.YEAR)
                     val month = c.get(Calendar.MONTH)
                     val day = c.get(Calendar.DAY_OF_MONTH)
-
-
                     val dpd = DatePickerDialog(
                         holder.itemView.context,
                         R.style.DatePickerDialogTheme,
@@ -226,7 +222,6 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                             dpd.datePicker.minDate = System.currentTimeMillis();
                         }
                     }
-
                     dpd.show()
                     dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE)
                         .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
@@ -234,6 +229,40 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                         .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
 
                 }
+            }
+            TYPE_DROPDOWN -> {
+                if (option.options[0] != option.dropDownHint) {
+                    option.options.add(0, option.dropDownHint)
+                }
+                val arrayAdapter: GenericSpinnerAdapter<String> = GenericSpinnerAdapter(
+                    holder.itemView.context,
+                    R.layout.tv_options_header_sp,
+                    option.options
+                )
+                holder.itemView.sp_dropdown.adapter = arrayAdapter
+                if (option.selectedItemPosition != -1) {
+                    holder.itemView.sp_dropdown.setSelection(option.selectedItemPosition)
+                }
+                holder.itemView.sp_dropdown.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if (holder.adapterPosition == -1) return
+                            item.selectedAnswer = position - 1
+                            item.options[holder.adapterPosition].selectedItemPosition = position
+                            item.selectedDropdownValue =
+                                holder.itemView.sp_dropdown.selectedItem.toString()
+
+                        }
+
+
+                    }
+
             }
         }
 
@@ -257,8 +286,9 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     override fun getItemViewType(position: Int): Int {
         return when (item.options[position].type) {
             "mcq" -> TYPE_TEXT
-            "state_city_dropdown" -> TYPE_DROPDOWN
+            "state_city_dropdown" -> STATE_CITY_DROPDOWN
             "date" -> DATE
+            "dropdown" -> TYPE_DROPDOWN
             else -> TYPE_TEXT
         }
     }
@@ -267,6 +297,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         val TYPE_TEXT = 0
         val TYPE_DROPDOWN = 1
         val DATE = 2
+        val STATE_CITY_DROPDOWN = 3
 
 
     }
