@@ -1,54 +1,40 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.models
 
 import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 
 data class PincodeResponse(
-    @get:PropertyName("Message")
-    @set:PropertyName("Message")
+    @SerializedName("Message")
     var message: String = "",
-    @get:PropertyName("Status")
-    @set:PropertyName("Status")
+    @SerializedName("Status")
     var status: String = "",
-    @get:PropertyName("PostOffice")
-    @set:PropertyName("PostOffice")
-    var postOffice: List<PostalOffice>
+    @SerializedName("PostOffice")
+    var postOffice: ArrayList<PostalOffice>
 )
 
 data class PostalOffice(
-    @get:PropertyName("Name")
-    @set:PropertyName("Name")
+    @SerializedName("Name")
     var name: String = "",
-    @get:PropertyName("Description")
-    @set:PropertyName("Description")
+    @SerializedName("Description")
     var description: String = "",
-    @get:PropertyName("BranchType")
-    @set:PropertyName("BranchType")
+    @SerializedName("BranchType")
     var branchType: String = "",
-    @get:PropertyName("DeliveryStatus")
-    @set:PropertyName("DeliveryStatus")
+    @SerializedName("DeliveryStatus")
     var deliveryStatus: String = "",
-    @get:PropertyName("Circle")
-    @set:PropertyName("Circle")
+    @SerializedName("Circle")
     var circle: String = "",
-    @get:PropertyName("District")
-    @set:PropertyName("District")
+    @SerializedName("District")
     var district: String = "",
-    @get:PropertyName("Division")
-    @set:PropertyName("Division")
+    @SerializedName("Division")
     var division: String = "",
-    @get:PropertyName("Region")
-    @set:PropertyName("Region")
+    @SerializedName("Region")
     var region: String = "",
-    @get:PropertyName("Block")
-    @set:PropertyName("Block")
+    @SerializedName("Block")
     var block: String = "",
-    @get:PropertyName("State")
-    @set:PropertyName("State")
+    @SerializedName("State")
     var state: String = "",
-    @get:PropertyName("Country")
-    @set:PropertyName("Country")
+    @SerializedName("Country")
     var country: String = "",
-    @get:PropertyName("Pincode")
-    @set:PropertyName("Pincode")
+    @SerializedName("Pincode")
     var pincode: String = ""
 )
