@@ -22,6 +22,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.models.City
 import com.gigforce.app.modules.ambassador_user_enrollment.models.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
@@ -95,6 +96,8 @@ class AddCurrentAddressFragment : BaseFragment() {
     private fun initListeners() {
         pin_code_et.textChanged {
             pin_code_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
+            if (pin_code_okay_iv.isVisible)
+            viewModel.loadCityAndStateUsingPincode(it.toString())
         }
 
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
@@ -163,7 +166,7 @@ class AddCurrentAddressFragment : BaseFragment() {
     }
 
     private fun validateDataAndSubmit() {
-        if (pin_code_et.text.isNotBlank() &&  pin_code_et.text.toString().toInt() < 10_00_00) {
+        if (pin_code_et.text.isNotBlank() && pin_code_et.text.toString().toInt() < 10_00_00) {
             showAlertDialog("Invalid Pincode", "Provide a valid Pin Code")
             return
         }
@@ -265,6 +268,34 @@ class AddCurrentAddressFragment : BaseFragment() {
             }
         )
         viewModel.loadCityAndStates()
+
+        viewModel.pincodeResponse
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
+                    }
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+                        val allPostoffices = it.content.postOffice
+                        for (index in 0..state_spinner.adapter.count - 1) {
+                            val item = state_spinner.adapter.getItem(index)
+                            allPostoffices.mapIndexed { index, postalOffice ->
+                                if (item.equals(postalOffice.state)) {
+                                    state_spinner.setSelection(index)
+
+                                }
+                            }
+                        }
+
+                    }
+                    is Lce.Error -> {
+                        UtilMethods.hideLoading()
+                        showAlertDialog("", it.error)
+                    }
+                }
+            })
 
     }
 

@@ -7,11 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserResponse
+import com.gigforce.app.modules.ambassador_user_enrollment.models.PincodeResponse
 import com.gigforce.app.modules.ambassador_user_enrollment.models.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.putFileOrThrow
 import com.google.firebase.firestore.ListenerRegistration
@@ -31,6 +34,8 @@ class UserDetailsViewModel constructor(
 
     private val _submitUserDetailsState = MutableLiveData<Lse>()
     val submitUserDetailsState: LiveData<Lse> = _submitUserDetailsState
+    val _pincodeResponse = MutableLiveData<Lce<PincodeResponse>>()
+    val pincodeResponse: LiveData<Lce<PincodeResponse>> = _pincodeResponse
 
     fun updateUserDetails(
         uid: String,
@@ -39,9 +44,9 @@ class UserDetailsViewModel constructor(
         dateOfBirth: Date,
         gender: String,
         highestQualification: String,
-        latitude : Double,
-        longitude : Double,
-        address : String
+        latitude: Double,
+        longitude: Double,
+        address: String
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
@@ -172,6 +177,14 @@ class UserDetailsViewModel constructor(
         }
     }
 
+    fun loadCityAndStateUsingPincode(pinCode: String) = viewModelScope.launch {
+        try {
+            val cityStateData = enrolledUserListRepository.loadCityAndStateUsingPincode(pinCode)
+            _pincodeResponse.value = Lce.content(cityStateData)
+        } catch (e: Exception) {
+            _pincodeResponse.value = Lce.error("Some Error occured!!")
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()
