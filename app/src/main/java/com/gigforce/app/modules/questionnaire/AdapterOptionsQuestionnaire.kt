@@ -90,19 +90,20 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
             TYPE_TEXT -> {
                 holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
                 holder.itemView.tv_answer_questionnaire.text = option.answer
-                holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
-                    if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
-                    0,
-                    0,
-                    0
-                )
+
                 if (item.selectedAnswer == position) {
-                    setTextViewDrawableColor(
-                        holder.itemView.tv_answer_questionnaire, R.color.lipstick
+                    holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
+                        if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
+                        0,
+                        0,
+                        0
                     )
                 } else {
-                    setTextViewDrawableColor(
-                        holder.itemView.tv_answer_questionnaire, R.color.thumbs_down_color
+                    holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
+                        if (option.isAnswer) R.drawable.ic_thumbs_up_not_selected else R.drawable.ic_thumbs_down_not_selected,
+                        0,
+                        0,
+                        0
                     )
                 }
                 holder.itemView.setOnClickListener {
