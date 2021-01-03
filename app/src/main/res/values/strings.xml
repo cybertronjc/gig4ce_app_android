@@ -1275,6 +1275,12 @@
     <string name="open">Open</string>
     <string name="join_us_as_an_ambassador">Join Us as an Ambassador</string>
     <string name="otp_sent">Otp sent</string>
+    <string name="application_check_pending"><![CDATA[Application Check : <b>Pending</b>]]></string>
+    <string name="application_check_approved"><![CDATA[Application Check : <b>Approved</b>]]></string>
+    <string name="application_check_rejected"><![CDATA[Application Check : <b>Rejected</b>]]></string>
+    <string name="pending_bold"><![CDATA[<b>Pending</b>]]></string>
+    <string name="approved_bold"><![CDATA[<b>Approved </b>]]></string>
+    <string name="rejected_bold"><![CDATA[<b>Rejected </b>]]></string>
     <string-array name="ambassador_guidelines">
 
         <item>Be nice to your customers and colleagues</item>

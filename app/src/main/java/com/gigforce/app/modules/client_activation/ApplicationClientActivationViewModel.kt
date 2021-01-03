@@ -44,7 +44,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
     private val _observableJpApplication: MutableLiveData<JpApplication> = MutableLiveData()
     val observableJpApplication: MutableLiveData<JpApplication> = _observableJpApplication
 
-    fun getJonProfileDependency(jobProfileId: String) = viewModelScope.launch {
+    fun getJobProfileDependency(jobProfileId: String) = viewModelScope.launch {
         val item = getJpSettings(jobProfileId)
         if (item != null)
             observableJobProfile.value = item

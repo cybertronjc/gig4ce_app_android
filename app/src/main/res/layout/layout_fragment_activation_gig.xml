@@ -111,7 +111,7 @@
                     android:layout_marginTop="@dimen/size_19"
                     android:layout_marginEnd="@dimen/size_21"
 
-                    android:background="@drawable/bg_thanks_for_applying"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -122,7 +122,7 @@
                         android:layout_height="@dimen/font_24"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/size_16"
-                        app:srcCompat="@drawable/ic_applied" />
+                      />
 
                     <TextView
                         android:id="@+id/tv_application_gig_activation"
