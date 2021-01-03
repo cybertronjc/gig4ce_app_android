@@ -68,6 +68,7 @@
     <color name="lipstick">#d72467</color>
     <color name="lipstick_two">#e42c64</color>
     <color name="light_pink">#ffd9e6</color>
+    <color name="light_pink_30">#30ffd9e6</color>
     <color name="warm_grey">#888888</color>
     <color name="warm_grey_20">#33888888</color>
 
@@ -118,7 +119,7 @@
     <color name="pending_color">#F7B500</color>
     <color name="activated_color">#4E9405</color>
     <color name="rejected_color">#FF000F</color>
-
+    <color name="black_666">#666666</color>
     <color name="thumbs_down_color">#27979797</color>
 
 </resources>

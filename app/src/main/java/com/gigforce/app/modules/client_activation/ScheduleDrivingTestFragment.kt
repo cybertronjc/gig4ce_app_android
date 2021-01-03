@@ -62,6 +62,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         setupRecycler()
         initViews()
         initObservers()
+
 //        pb_schedule_test.visible()
     }
 
@@ -93,22 +94,21 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-            if (it == null) return@Observer
-            if (!it.partnerSchoolDetails?.contact.isNullOrEmpty()) {
-                var contactNumber = ""
-                if (!it.partnerSchoolDetails?.contact!![0].number.contains("+91")) {
-                    contactNumber = "+91"
-                }
-                contactNumber += it.partnerSchoolDetails?.contact!![0].number
-                val number = contactNumber
-                tv_number_otp.text = getString(R.string.we_have_send_otp) + " " + number
-//                sendVerificationCode(number)
-                resend_otp.setOnClickListener {
-                    pb_schedule_test.visible()
-                    sendVerificationCode(number)
-                }
-
-            }
+//            if (it == null) return@Observer
+//            if (!it.partnerSchoolDetails?.contact.isNullOrEmpty()) {
+//                var contactNumber = ""
+//                if (!it.partnerSchoolDetails?.contact!![0].number.contains("+91")) {
+//                    contactNumber = "+91"
+//                }
+//                contactNumber += it.partnerSchoolDetails?.contact!![0].number
+//                val number = contactNumber
+//                tv_number_otp.text = getString(R.string.we_have_send_otp) + " " + number
+//                resend_otp.setOnClickListener {
+//                    pb_schedule_test.visible()
+//                    sendVerificationCode(number)
+//                }
+//
+//            }
 
         })
         viewModel.liveState.observe(viewLifecycleOwner, Observer {
@@ -193,7 +193,12 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             }
 
         })
-
+        generate_otp.setOnClickListener{
+            it.gone()
+            note_msg.gone()
+            verify_otp_button_schedule.visible()
+            otp_screen.visible()
+        }
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
             Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
@@ -320,6 +325,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     override fun enableConfirmOtpButton(enable: Boolean) {
         this.enableOtpEditText = enable
+        generate_otp.isEnabled = true
         txt_otp.text = txt_otp.text
     }
 

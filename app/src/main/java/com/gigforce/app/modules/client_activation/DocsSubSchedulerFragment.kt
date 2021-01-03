@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_all_set
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_change_slot
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view7
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view_select_time_slots
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
 
 
 class DocsSubSchedulerFragment : BaseFragment(),
@@ -65,7 +64,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
 
         initViews()
-
+        initClicks()
         initObservers()
     }
 
@@ -75,12 +74,12 @@ class DocsSubSchedulerFragment : BaseFragment(),
         })
         viewModel.observableIsCheckoutDone.observe(viewLifecycleOwner, Observer {
             if (it == false) {
-                initClicks()
+//                initClicks()
             }
         })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
 
-            set_preference_fot_test.text = Html.fromHtml(it.headerTitle)
+            doc_details.text = Html.fromHtml(it.headerTitle)
 
 
             viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
@@ -129,10 +128,10 @@ class DocsSubSchedulerFragment : BaseFragment(),
                 imageView35.gone()
                 imageView34.gone()
                 if (viewModel.observableIsCheckoutDone.value == null || viewModel.observableIsCheckoutDone.value == false) {
-                    slider_checkout.isLocked = false
+//                    slider_checkout.isLocked = false
                     slider_checkout.visibility = View.VISIBLE
                 } else {
-                    slider_checkout.isLocked = true
+//                    slider_checkout.isLocked = true
                     slider_checkout.visibility = View.GONE
                 }
 
@@ -153,7 +152,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
     }
 
     fun stateChangeSlot() {
-        set_preference_fot_test.gone()
+        doc_details.gone()
         helpIconIV.gone()
         tv_why_we_need_docs_scheduler.gone()
         driving_license_title.visible()
@@ -286,7 +285,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
 //        imageView34.gone()
         iv_contact.visible()
 
-        checkIfCompleteProcessComplete()
+//        checkIfCompleteProcessComplete()
         textView136.text = getString(R.string.partner_address)
 
         imageView34.gone()
@@ -297,7 +296,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         this.selectedTimeSlot = time
         textView143.text = time
         imageView36.gone()
-        checkIfCompleteProcessComplete()
+//        checkIfCompleteProcessComplete()
 //        stateChangeSlot()
         textView142.text = getString(R.string.slot_of_visit)
 
@@ -333,7 +332,7 @@ class DocsSubSchedulerFragment : BaseFragment(),
         this.dateString = date;
         textView139.text = dateString
         imageView35.gone()
-        checkIfCompleteProcessComplete()
+//        checkIfCompleteProcessComplete()
         textView138.text = getString(R.string.date_of_visit)
 
     }
