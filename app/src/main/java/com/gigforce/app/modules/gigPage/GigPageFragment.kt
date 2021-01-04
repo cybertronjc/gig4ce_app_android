@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -82,7 +83,7 @@ import java.util.concurrent.TimeUnit
 
 
 class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItemClickListener,
-    DeclineGigDialogFragmentResultListener {
+    DeclineGigDialogFragmentResultListener, PopupMenu.OnMenuItemClickListener {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -150,11 +151,14 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
 //            }
 //        }
 
-        toolbar?.setNavigationOnClickListener {
+
+        iv_back_gig_page.setOnClickListener {
             activity?.onBackPressed()
         }
 
-        toolbar?.setOnMenuItemClickListener(this)
+      iv_options_gig_page.setOnClickListener {
+          openPopupMenu(it,R.menu.menu_gig_attendance,this,requireActivity())
+      }
 
         contactUsLayout?.setOnClickListener {
             navigate(R.id.fakeGigContactScreenFragment)
@@ -561,7 +565,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         }
 
 
-        toolbar.title = gig.title
+        tv_title_gig_page.text = gig.title
         roleNameTV.text = gig.title
         companyNameTV.text = "@ ${gig.companyName}"
         gigTypeTV.text = gig.gigType
@@ -885,7 +889,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
 
 
             userFeedbackRatingBar.rating = gig.gigRating
-            if (gig.gigUserFeedback != null) {
+            if (!gig.gigUserFeedback.isNullOrEmpty()) {
                 usersFeedbackTV.visible()
                 usersFeedbackTV.text = "“ ${gig.gigUserFeedback} “"
             } else
