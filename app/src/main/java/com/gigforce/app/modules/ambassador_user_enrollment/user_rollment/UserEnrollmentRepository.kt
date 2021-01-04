@@ -6,6 +6,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.models.*
 import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.setOrThrow
+import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
 
 class UserEnrollmentRepository constructor(
@@ -28,7 +29,7 @@ class UserEnrollmentRepository constructor(
             } else {
                 db.collection(COLLECTION_NAME)
                     .document(getUID())
-                    .collection(COLLECTION_Enrolled_Users)
+                    .collection(COLLECTION_ENROLLED_USERS)
                     .document(response.uid!!)
                     .setOrThrow(
                         EnrolledUser(
@@ -45,7 +46,7 @@ class UserEnrollmentRepository constructor(
         }
     }
 
-    suspend fun registerUser(mobile: String): RegisterMobileNoResponse {
+    suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
             BuildConfig.CHECK_USER_OR_SEND_OTP_URL,
             RegisterMobileNoRequest(mobile)
@@ -79,11 +80,9 @@ class UserEnrollmentRepository constructor(
 
         db.collection(COLLECTION_NAME)
             .document(getUID())
-            .collection(COLLECTION_Enrolled_Users)
+            .collection(COLLECTION_ENROLLED_USERS)
             .document(userId)
-            .update("name", name)
-
-        //tofo update or throw
+            .updateOrThrow("name", name)
     }
 
     suspend fun updateUserProfilePicture(
@@ -93,12 +92,113 @@ class UserEnrollmentRepository constructor(
 
         db.collection(COLLECTION_NAME)
             .document(getUID())
-            .collection(COLLECTION_Enrolled_Users)
+            .collection(COLLECTION_ENROLLED_USERS)
             .document(userId)
-            .update("profilePic", profilePic)
-
-        //tofo update or throw
+            .updateOrThrow("profilePic", profilePic)
     }
+
+    suspend fun setUserDetailsAsFilled(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("userDetailsUploaded", true)
+
+    }
+
+    suspend fun setProfilePictureAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("profilePicUploaded", true)
+    }
+
+    suspend fun setInterestAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("interestUploaded", true)
+    }
+
+    suspend fun setExperienceAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("experienceUploaded", true)
+    }
+
+    suspend fun setCurrentAddressAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("currentAddressUploaded", true)
+    }
+
+    suspend fun setAadharAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("aadharDetailsUploaded", true)
+    }
+
+    suspend fun setBankDetailsAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("bankDetailsUploaded", true)
+    }
+
+    suspend fun setDrivingDetailsAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("drivingLicenseDetailsUploaded", true)
+    }
+
+    suspend fun setPANDetailsAsUploaded(
+            userId: String
+    ) {
+
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("panDetailsUploaded", true)
+    }
+
+
+
 
 
     override fun getCollectionName(): String {
@@ -107,6 +207,6 @@ class UserEnrollmentRepository constructor(
 
     companion object {
         private const val COLLECTION_NAME = "Ambassador_Enrolled_User"
-        private const val COLLECTION_Enrolled_Users = "Enrolled_Users"
+        private const val COLLECTION_ENROLLED_USERS = "Enrolled_Users"
     }
 }

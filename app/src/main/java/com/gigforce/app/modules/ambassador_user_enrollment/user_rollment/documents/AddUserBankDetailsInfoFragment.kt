@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -24,15 +23,31 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.bankEditLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.bankViewLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.ic_back_iv
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.accountNoEditText
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.bankDetailsDataConfirmationCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.bankNameEditText
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.ifscEditText
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookSubmitSliderBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.passbookYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_view.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
@@ -48,6 +63,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private var clickedImagePath: Uri? = null
     private lateinit var userId : String
     private lateinit var userName : String
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
+    private var bankDetailsDataModel: BankDetailsDataModel? = null
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +78,11 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         getDataFromIntents(arguments,savedInstanceState)
         initViews()
         initViewModel()
+        getUserDetails()
+    }
+
+    private fun getUserDetails() {
+        viewModel.getVerificationStatus()
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -269,6 +292,36 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
+
+        viewModel.gigerVerificationStatus
+                .observe(viewLifecycleOwner, Observer {
+                    this.gigerVerificationStatus = it
+                    this.bankDetailsDataModel = it.bankUploadDetailsDataModel
+                    progressBar.gone()
+
+                    if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
+
+                        if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
+                            if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                                setDataOnViewLayout(it)
+                            } else {
+                                setDataOnEditLayout(null)
+                                passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
+                            }
+                        } else {
+                            //Uncheck both and hide capture layout
+                            setDataOnEditLayout(null)
+                            passbookAvailaibilityOptionRG.clearCheck()
+                            hidePassbookImageAndInfoLayout()
+                        }
+                    } else {
+
+                        setDataOnEditLayout(null)
+                        passbookAvailaibilityOptionRG.clearCheck()
+                        hidePassbookImageAndInfoLayout()
+                    }
+                })
+
         viewModel.documentUploadState
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -415,6 +468,99 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
             .load(panInfoPath)
             .placeholder(getCircularProgressDrawable())
             .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
+    }
+
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        bankEditLayout.gone()
+        bankViewLayout.visible()
+
+        val bankDetails = gigVerificationStatus.bankUploadDetailsDataModel ?: return
+
+        statusTV.text = bankDetails.verifiedString
+        statusTV.setTextColor(
+                ResourcesCompat.getColor(
+                        resources,
+                        gigVerificationStatus.getColorCodeForStatus(bankDetails.state),
+                        null
+                )
+        )
+
+
+        if (bankDetails.passbookImagePath != null) {
+
+            if (bankDetails.passbookImagePath.startsWith("http", true)) {
+                Glide.with(requireContext()).load(bankDetails.passbookImagePath)
+                        .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
+            } else {
+                firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(bankDetails.passbookImagePath)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext())
+                                    .load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(bankViewImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+            }
+        }
+        bankViewImageErrorMessage.gone()
+
+
+        ifscNoTV.text = bankDetails.ifscCode
+        ifscErrorMessage.gone()
+
+        bankNameTV.text = bankDetails.bankName
+        bankNameErrorMessage.gone()
+
+        bankAccountNoTV.text = bankDetails.accountNo
+        bankAccountNoErrorMessage.gone()
+    }
+
+
+    private fun setDataOnEditLayout(it: BankDetailsDataModel?) {
+        bankViewLayout.gone()
+        bankEditLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            passbookAvailaibilityOptionRG.gone()
+            doYouHavePassbookLabel.gone()
+        } else {
+            passbookAvailaibilityOptionRG.visible()
+            doYouHavePassbookLabel.visible()
+
+            bankEditOverallErrorMessage.gone()
+            bankIfscEditErrorMessage.gone()
+            bankNameEditErrorMessage.gone()
+            bankAccNoEditErrorMessage.gone()
+            bankImageEditErrorMessage.gone()
+        }
+
+        val bankData = it ?: return
+        passbookSubmitSliderBtn.text = getString(R.string.update)
+        ifscEditText.setText(bankData.ifscCode)
+        bankNameEditText.setText(bankData.bankName)
+        accountNoEditText.setText(bankData.accountNo)
+
+        if (bankData.passbookImagePath != null) {
+
+            if (bankData.passbookImagePath.startsWith("http", true)) {
+                showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
+            } else {
+                firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(bankData.passbookImagePath)
+                        .downloadUrl.addOnSuccessListener {
+                            showPassbookInfoCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+            }
+        }
     }
 
 

@@ -5,18 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <include
-        android:id="@+id/user_details_main_layout"
-        layout="@layout/fragment_ambsd_user_details_main"/>
+        android:id="@+id/user_address_main_layout"
+        layout="@layout/fragment_user_current_address_main"/>
 
     <ProgressBar
-        android:id="@+id/user_details_progressbar"
+        android:id="@+id/loading_user_address"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/user_details_error"
+        android:id="@+id/address_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

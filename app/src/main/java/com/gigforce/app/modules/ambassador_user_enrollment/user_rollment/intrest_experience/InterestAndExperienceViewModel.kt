@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.Lce
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 
 class InterestAndExperienceViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
 
     private val _submitInterestState = MutableLiveData<Lse>()
@@ -30,6 +32,8 @@ class InterestAndExperienceViewModel constructor(
                 uid = uid,
                 interest = interests
             )
+            userEnrollmentRepository.setInterestAsUploaded(uid)
+
             _submitInterestState.value = Lse.success()
             _submitInterestState.value = null
         } catch (e: Exception) {

@@ -118,10 +118,12 @@ open class GigVerificationViewModel constructor(
                 }
     }
 
-    fun getVerificationStatus() = viewModelScope.launch {
+    fun getVerificationStatus(
+            userId : String? = null
+    ) = viewModelScope.launch {
 
         try {
-            getVerificationModel().let {
+            getVerificationModel(userId).let {
 
                 val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
                         && it.pan_card?.userHasPanCard != null

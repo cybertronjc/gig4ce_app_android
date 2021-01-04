@@ -12,6 +12,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnr
 import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.putFileOrThrow
 import com.google.firebase.firestore.ListenerRegistration
@@ -52,6 +53,8 @@ class UserDetailsViewModel constructor(
                 highestQualification = highestQualification
             )
             enrolledUserListRepository.updateUserProfileName(uid, name)
+            enrolledUserListRepository.setUserDetailsAsFilled(uid)
+
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null
         } catch (e: Exception) {
@@ -118,6 +121,7 @@ class UserDetailsViewModel constructor(
 
             if (userId != null) {
                 enrolledUserListRepository.updateUserProfilePicture(userId, fname)
+                enrolledUserListRepository.setProfilePictureAsUploaded(userId)
             }
 
             _submitUserDetailsState.value = Lse.success()
@@ -130,15 +134,12 @@ class UserDetailsViewModel constructor(
         }
     }
 
-    private val _profile = MutableLiveData<ProfileData>()
-    val profile: LiveData<ProfileData> = _profile
 
     private var listenerRegistration: ListenerRegistration? = null
 
     fun startWatchingProfile(userId: String?) {
         listenerRegistration = profileFirebaseRepository.getProfileRef(userId)
             .addSnapshotListener { value, error ->
-
                 error?.printStackTrace()
 
                 value?.let {
@@ -146,7 +147,7 @@ class UserDetailsViewModel constructor(
                     val profileData = it.toObject(ProfileData::class.java)!!.apply {
                         this.id = it.id
                     }
-                    _profile.value = profileData
+                    _profile.value = Lce.content(profileData)
                 }
             }
     }
@@ -166,6 +167,23 @@ class UserDetailsViewModel constructor(
         }
     }
 
+    private val _profile = MutableLiveData<Lce<ProfileData>>()
+    val profile: LiveData<Lce<ProfileData>> = _profile
+
+    fun getProfileForUser(
+        userId: String?
+    ) = viewModelScope.launch {
+        try {
+            _profile.value = Lce.loading()
+            val profileData = profileFirebaseRepository.getProfileData(
+                userId = userId
+            )
+
+            _profile.value = Lce.content(profileData)
+        } catch (e: Exception) {
+            _profile.value = Lce.error(e.message!!)
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

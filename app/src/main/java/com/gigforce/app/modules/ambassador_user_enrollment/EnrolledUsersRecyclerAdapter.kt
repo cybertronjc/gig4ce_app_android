@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,7 @@ class EnrolledUsersRecyclerAdapter constructor(
 ) : RecyclerView.Adapter<EnrolledUsersRecyclerAdapter.EnrolledUserViewHolder>() {
 
     private var enrolledUsers: List<EnrolledUser> = emptyList()
-    private lateinit var enrolledUsersRecyclerAdapterClickListener : EnrolledUsersRecyclerAdapterClickListener
+    private lateinit var enrolledUsersRecyclerAdapterClickListener: EnrolledUsersRecyclerAdapterClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EnrolledUserViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,7 +32,7 @@ class EnrolledUsersRecyclerAdapter constructor(
         return EnrolledUserViewHolder(view)
     }
 
-    fun setListener(enrolledUsersRecyclerAdapterClickListener : EnrolledUsersRecyclerAdapterClickListener){
+    fun setListener(enrolledUsersRecyclerAdapterClickListener: EnrolledUsersRecyclerAdapterClickListener) {
         this.enrolledUsersRecyclerAdapterClickListener = enrolledUsersRecyclerAdapterClickListener
     }
 
@@ -51,11 +52,15 @@ class EnrolledUsersRecyclerAdapter constructor(
     inner class EnrolledUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
         private val userImageIV: ImageView = itemView.findViewById(R.id.image_view)
+        private val statusImageIV: ImageView = itemView.findViewById(R.id.status_iv)
         private val nameTv: TextView = itemView.findViewById(R.id.user_name_tv)
         private val userAddedTimeTV: TextView = itemView.findViewById(R.id.user_added_time)
+        private val editProfileBtn: Button = itemView.findViewById(R.id.edit_profile_btn)
+
 
         init {
             itemView.setOnClickListener(this)
+            editProfileBtn.setOnClickListener(this)
         }
 
         fun bindValues(user: EnrolledUser) {
@@ -85,15 +90,29 @@ class EnrolledUsersRecyclerAdapter constructor(
                 ).toDays()
                 userAddedTimeTV.text = "Added $daysDiff days ago"
             }
+
+            if (user.enrollmentStepsCompleted.allStepsCompleted()) {
+                statusImageIV.setImageResource(R.drawable.ic_applied)
+            } else {
+                statusImageIV.setImageResource(R.drawable.ic_pending_yellow_round)
+            }
         }
 
         override fun onClick(v: View?) {
-            enrolledUsersRecyclerAdapterClickListener.onUserClicked(enrolledUsers[adapterPosition])
+            val view = v ?: return
+
+            if (view.id == R.id.edit_profile_btn) {
+                enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(enrolledUsers[adapterPosition])
+            } else {
+                enrolledUsersRecyclerAdapterClickListener.onUserClicked(enrolledUsers[adapterPosition])
+            }
         }
     }
 
-    interface EnrolledUsersRecyclerAdapterClickListener{
+    interface EnrolledUsersRecyclerAdapterClickListener {
 
         fun onUserClicked(enrolledUser: EnrolledUser)
+
+        fun onUserEditButtonclicked(enrolledUser: EnrolledUser)
     }
 }

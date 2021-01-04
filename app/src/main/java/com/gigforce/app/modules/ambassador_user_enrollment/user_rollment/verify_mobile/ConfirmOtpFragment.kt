@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.invisible
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_confirm_otp.*
@@ -22,16 +25,20 @@ class ConfirmOtpFragment : BaseFragment() {
     private lateinit var mobileNo: String
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_confirm_otp, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         getDataFromIntents(arguments, savedInstanceState)
+        initView()
         initListeners()
         initViewModel()
+    }
+
+    private fun initView() {
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -71,44 +78,47 @@ class ConfirmOtpFragment : BaseFragment() {
         }
 
         viewModel.checkOtpAndCreateProfile(
-            verificationToken,
-            txt_otp.text.toString(),
-            mobileNo
+                verificationToken,
+                txt_otp.text.toString(),
+                mobileNo
         )
     }
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
     }
 
     private fun initViewModel() {
         viewModel.createProfile
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                when (it) {
-                    Lce.Loading -> {
-                        UtilMethods.showLoading(requireContext())
-                    }
-                    is Lce.Content -> {
-                        UtilMethods.hideLoading()
-                        showToast("Otp Confirmed, Profile Created")
-                        navigate(
-                            R.id.addUserDetailsFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to it.content.uid,
-                                EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.phoneNumber
+                    when (it) {
+                        Lce.Loading -> {
+                            submitBtn.invisible()
+                            confirming_otp_pb.visible()
+                        }
+                        is Lce.Content -> {
+                            showToast("Otp Confirmed, Profile Created")
+                            navigate(
+                                    R.id.addUserDetailsFragment, bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to it.content.uid,
+                                    EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.phoneNumber,
+                                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ADD
                             )
-                        )
+                            )
+                        }
+                        is Lce.Error -> {
+                            confirming_otp_pb.gone()
+                            submitBtn.visible()
+
+                            showAlertDialog("", it.error)
+                        }
                     }
-                    is Lce.Error -> {
-                        UtilMethods.hideLoading()
-                        showAlertDialog("", it.error)
-                    }
-                }
-            })
+                })
     }
 
     companion object {

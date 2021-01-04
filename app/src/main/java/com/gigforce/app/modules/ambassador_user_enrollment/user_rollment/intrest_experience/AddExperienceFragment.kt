@@ -37,6 +37,8 @@ class AddUserExperienceFragment : BaseFragment() {
     private var startDate: Date? = null
     private var endDate: Date? = null
     private var currentExperienceTitle: String? = null
+    private var mode : Int = EnrollmentConstants.MODE_ADD
+    private var currentInterestIndex : Int = 0
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -107,12 +109,16 @@ class AddUserExperienceFragment : BaseFragment() {
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
+            currentInterestIndex = it.getInt(INTENT_EXTRA_CURRENT_INTREST_INDEX)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
             pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
 
         savedInstanceState?.let {
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
+            currentInterestIndex = it.getInt(INTENT_EXTRA_CURRENT_INTREST_INDEX)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
             pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
@@ -124,6 +130,8 @@ class AddUserExperienceFragment : BaseFragment() {
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
+        outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
+        outState.putInt(INTENT_EXTRA_CURRENT_INTREST_INDEX, currentInterestIndex)
     }
 
     private fun initListeners() {
@@ -445,7 +453,7 @@ class AddUserExperienceFragment : BaseFragment() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
-    companion object {
-
+    companion object{
+        const val INTENT_EXTRA_CURRENT_INTREST_INDEX = "currentIndex"
     }
 }

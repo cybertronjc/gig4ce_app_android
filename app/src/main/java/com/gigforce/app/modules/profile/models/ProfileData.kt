@@ -55,13 +55,30 @@ data class ProfileData(
 
     @get:PropertyName("enrolledBy")
     @set:PropertyName("enrolledBy")
-    var enrolledBy: EnrollmentInfo? = null
+    var enrolledBy: EnrollmentInfo? = null,
+
+    @get:PropertyName("howYouCameToKnowAboutCurrentJob")
+    @set:PropertyName("howYouCameToKnowAboutCurrentJob")
+    var howYouCameToKnowAboutCurrentJob: String? = null,
+
+    @get:PropertyName("readyToChangeLocationForWork")
+    @set:PropertyName("readyToChangeLocationForWork")
+    var readyToChangeLocationForWork: Boolean = false,
+
+    @get:PropertyName("loginMobileNo")
+    @set:PropertyName("loginMobileNo")
+    var loginMobile: String = ""
 
 ) {
 
     @Exclude
     fun hasUserUploadedProfilePicture() =
         profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
+
+
+    @Exclude
+    fun isCurrentAddressAndPermanentAddressTheSame() =
+            profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }
 
 data class EnrollmentInfo(

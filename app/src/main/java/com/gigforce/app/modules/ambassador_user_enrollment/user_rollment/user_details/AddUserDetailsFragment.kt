@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,17 @@ import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.selectChipWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details.*
+import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,8 +32,9 @@ class AddUserDetailsFragment : BaseFragment() {
     private val viewModel: UserDetailsViewModel by viewModels()
 
     private lateinit var userId: String
-    private lateinit var phoneNumber : String
+    private lateinit var phoneNumber: String
     private var dateOfBirth: Date? = null
+    private var mode: Int = EnrollmentConstants.MODE_ADD
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -35,31 +42,31 @@ class AddUserDetailsFragment : BaseFragment() {
 
         val cal = Calendar.getInstance()
         DatePickerDialog(
-            requireContext(),
-            { _, year, month, dayOfMonth ->
+                requireContext(),
+                { _, year, month, dayOfMonth ->
 
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, month)
-                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                newCal.set(Calendar.HOUR_OF_DAY, 0)
-                newCal.set(Calendar.MINUTE, 0)
-                newCal.set(Calendar.SECOND, 0)
-                newCal.set(Calendar.MILLISECOND, 0)
+                    val newCal = Calendar.getInstance()
+                    newCal.set(Calendar.YEAR, year)
+                    newCal.set(Calendar.MONTH, month)
+                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    newCal.set(Calendar.HOUR_OF_DAY, 0)
+                    newCal.set(Calendar.MINUTE, 0)
+                    newCal.set(Calendar.SECOND, 0)
+                    newCal.set(Calendar.MILLISECOND, 0)
 
-                dateOfBirth = newCal.time
-                date_of_birth_et.setText(dateFormatter.format(newCal.time))
-                dob_okay_iv.visible()
-            },
-            1995,
-            cal.get(Calendar.MONTH),
-            cal.get(Calendar.DAY_OF_MONTH)
+                    dateOfBirth = newCal.time
+                    date_of_birth_et.text = dateFormatter.format(newCal.time)
+                    dob_okay_iv.visible()
+                },
+                1995,
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
         )
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_user_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,17 +75,31 @@ class AddUserDetailsFragment : BaseFragment() {
         getDataFromIntents(arguments, savedInstanceState)
         initListeners()
         initViewModel()
+        getProfileDetailsForUser()
+    }
+
+    private fun getProfileDetailsForUser() {
+
+        if (mode == EnrollmentConstants.MODE_EDIT) {
+            viewModel.getProfileForUser(userId)
+        } else {
+            showUserDetailsMainLayout(showEditActions = false)
+        }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            phoneNumber= it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+            phoneNumber = it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
         }
 
         savedInstanceState?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
-            phoneNumber= it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
+            phoneNumber = it.getString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER) ?: return@let
         }
     }
 
@@ -86,6 +107,7 @@ class AddUserDetailsFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER, phoneNumber)
+        outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
     }
 
     private fun initListeners() {
@@ -110,6 +132,17 @@ class AddUserDetailsFragment : BaseFragment() {
         ic_back_iv.setOnClickListener {
             showGoBackConfirmationDialog()
         }
+
+        skip_btn.setOnClickListener {
+            navigate(
+                    R.id.addProfilePictureFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pin_code_et.text.toString(),
+                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+            )
+            )
+        }
     }
 
     private fun validateDataAndsubmit() {
@@ -128,59 +161,109 @@ class AddUserDetailsFragment : BaseFragment() {
             return
         }
 
-//        if (pin_code_et.text.length != 6 && pin_code_et.text.toString().toInt() > 10_00_00) {
-//            showAlertDialog("Invalid pincode", "Provide a valid Pin Code")
-//            return
-//        }
-
         if (highest_qual_chipgroup.checkedChipId == -1) {
             showAlertDialog("Select highest qualification", "Please fill highest qualification")
             return
         }
 
         viewModel.updateUserDetails(
-            uid = userId,
-            phoneNumber = phoneNumber,
-            name = user_name_et.text.toString(),
-            dateOfBirth = dateOfBirth!!,
-            gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
-            highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
+                uid = userId,
+                phoneNumber = phoneNumber,
+                name = user_name_et.text.toString(),
+                dateOfBirth = dateOfBirth!!,
+                gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
+                highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
         )
     }
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
     }
 
     private fun initViewModel() {
-        viewModel.submitUserDetailsState
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                when (it) {
-                    Lse.Loading -> {
-//                        UtilMethods.showLoading(requireContext())
-                    }
-                    Lse.Success -> {
-                        //                      UtilMethods.hideLoading()
-                        showToast("User Details submitted")
-                        navigate(
-                            R.id.addProfilePictureFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
-                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pin_code_et.text.toString()
+        viewModel.profile
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    when (it) {
+                        Lce.Loading -> {
+
+                            user_details_main_layout.gone()
+                            user_details_error.gone()
+                            user_details_progressbar.visible()
+                        }
+                        is Lce.Content -> {
+                            showUserDetailsMainLayout(
+                                    showEditActions = true
                             )
-                        )
+                            showUserDetailsOnView(it.content)
+                        }
+                        is Lce.Error -> {
+                            user_details_progressbar.gone()
+                            user_details_main_layout.gone()
+                            user_details_error.visible()
+
+                            user_details_error.text = it.error
+                        }
                     }
-                    is Lse.Error -> {
-                        //                       UtilMethods.hideLoading()
-                        showAlertDialog("Could not submit info", it.error)
+                })
+
+        viewModel.submitUserDetailsState
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+                    when (it) {
+                        Lse.Loading -> {
+
+//                            submitBtn.showProgress {
+//                                this.progressColor = Color.WHITE
+//                            }
+                        }
+                        Lse.Success -> {
+//                            submitBtn.hideProgress()
+
+                            showToast("User Details submitted")
+                            navigate(
+                                    R.id.addProfilePictureFragment, bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pin_code_et.text.toString(),
+                                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                            )
+                            )
+                        }
+                        is Lse.Error -> {
+//                            submitBtn.hideProgress()
+
+                            showAlertDialog("Could not submit info", it.error)
+                        }
                     }
-                }
-            })
+                })
+    }
+
+    private fun showUserDetailsMainLayout(showEditActions: Boolean) {
+        user_details_error.gone()
+        user_details_progressbar.gone()
+        user_details_main_layout.visible()
+
+        if (showEditActions) {
+            skip_btn.visible()
+        } else {
+            skip_btn.gone()
+        }
+    }
+
+    private fun showUserDetailsOnView(content: ProfileData) = with(content) {
+        user_name_et.setText(this.name)
+        val dob = dateFormatter.format(this.dateOfBirth)
+        date_of_birth_et.text = dob
+
+        gender_chip_group.selectChipWithText(this.gender)
+        highest_qual_chipgroup.selectChipWithText(this.highestEducation)
+
+        pin_code_et.setText(this.address.current.pincode)
     }
 
     override fun onBackPressed(): Boolean {
@@ -188,16 +271,16 @@ class AddUserDetailsFragment : BaseFragment() {
         return true
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
-            .setNegativeButton("No"){_,_ ->}
-            .show()
+                .setTitle("Alert")
+                .setMessage("Are you sure you want to go back")
+                .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
+                .setNegativeButton("No") { _, _ -> }
+                .show()
     }
 
-    private fun goBackToUsersList(){
+    private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 }

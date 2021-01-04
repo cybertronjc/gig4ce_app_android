@@ -17,8 +17,7 @@
         android:layout_height="44dp"
         app:shapeAppearanceOverlay="@style/circleImageView"
         app:srcCompat="@drawable/avatar"
-        android:layout_alignParentStart="true"
-        />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/user_name_tv"
@@ -31,9 +30,14 @@
         android:layout_toEndOf="@id/image_view"
         android:textColor="#d9000000"
         android:lineSpacingExtra="3sp"
-        tools:text="Sumit Verma"
-        />
+        tools:text="Sumit Verma" />
 
+    <ImageView
+        android:id="@+id/status_iv"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@drawable/ic_done"
+        android:layout_toLeftOf="@id/user_name_tv"/>
 
     <TextView
         android:id="@+id/user_added_time"
@@ -48,8 +52,25 @@
         android:layout_toEndOf="@id/image_view"
         android:textColor="@color/warm_grey_two"
         android:lineSpacingExtra="2sp"
-        tools:text="Added 2 days ago"
-        />
+        tools:text="Added 2 days ago" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/edit_profile_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:textAllCaps="false"
+        android:layout_marginEnd="16dp"
+        app:shapeAppearanceOverlay="@style/circleImageView"/>
+
+
 
 
 </RelativeLayout>

@@ -118,7 +118,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
-                android:hint="Address Line 1"
+                android:hint="House No/ Street No *"
                 android:paddingStart="10dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:lineSpacingExtra="3sp"
@@ -138,7 +138,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="Address Line 2"
+                android:hint="Area / Village / Town *"
                 android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
@@ -249,6 +249,117 @@
 
 
             <TextView
+                android:id="@+id/migrant_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Are you a localite or Migrant Here* ?"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seekbardependent" />
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/localite_migrant_chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="16dp"
+                app:chipSpacingHorizontal="14dp"
+                app:layout_constraintTop_toBottomOf="@id/migrant_label"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/migrant_no"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I am Localite"
+                    app:chipStrokeWidth="1dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/migrant_yes"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
+                    android:text="I am Migrant" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/permanent_address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                app:layout_constraintTop_toBottomOf="@id/localite_migrant_chipgroup">
+
+
+                <TextView
+                    android:id="@+id/permanent_address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Permanent Address"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/permanent_state_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/lato"
+                    android:hint="State"
+                    android:lineSpacingExtra="3sp"
+                    android:minHeight="36dp"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:background="@drawable/rectangle_round_grey"
+                    app:layout_constraintEnd_toStartOf="@+id/permanent_city_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
+
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/permanent_city_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/rectangle_round_grey"
+                    android:fontFamily="@font/lato"
+                    android:paddingStart="10dp"
+                    android:lineSpacingExtra="3sp"
+                    android:minHeight="36dp"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/permanent_state_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
                 android:id="@+id/ready_to_change_location_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -256,12 +367,12 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Are you ready to change location for work?"
+                android:text="Are you ready to migrate in nearby cities?"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/seekbardependent" />
+                app:layout_constraintTop_toBottomOf="@id/permanent_address_layout" />
 
 
             <com.google.android.material.chip.ChipGroup
@@ -290,6 +401,76 @@
                     android:layout_height="wrap_content"
                     app:chipStrokeWidth="1dp"
                     android:text="No, I am not" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+
+            <TextView
+                android:id="@+id/how_do_you_came_to_know_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="How do you came to know about your current job ?"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_chipgroup" />
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/how_do_you_came_to_know_chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="16dp"
+                app:chipSpacingHorizontal="14dp"
+                app:layout_constraintTop_toBottomOf="@id/how_do_you_came_to_know_label"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/how_do_you_came_to_know_local_vendor"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Local Vendor"
+                    app:chipStrokeWidth="1dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/how_do_you_came_to_know_self"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
+                    android:text="Self" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/how_do_you_came_to_know_friends_relative"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
+                    android:text="Friends/ Relative" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/how_do_you_came_to_know_others"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
+                    android:text="Others" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/how_do_you_came_to_know_not_working_right_now"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeWidth="1dp"
+                    android:text="Not Working Right Now" />
 
             </com.google.android.material.chip.ChipGroup>
 

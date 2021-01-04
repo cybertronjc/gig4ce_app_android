@@ -53,7 +53,7 @@
         <include
             android:id="@+id/bankViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_bank_details_info_view"/>
+            layout="@layout/fragment_ambsd_add_bank_details_info_view"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

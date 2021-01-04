@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.viewModels
@@ -15,7 +16,10 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
+import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.VerticalItemDecorator
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
@@ -79,6 +83,38 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                     }
                 }
             })
+
+        viewModel
+            .sendOtpToPhoneNumber
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
+                    }
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+
+                        showToast("Otp Sent")
+                        navigate(
+                            R.id.checkMobileFragment, bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to it.content.enrolledUser.uid,
+                                EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.enrolledUser.mobileNumber,
+                                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_EDIT
+                            )
+                        )
+                    }
+                    is Lce.Error -> {
+
+                        UtilMethods.hideLoading()
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage(it.error)
+                            .setPositiveButton("Okay") { _, _ -> }
+                            .show()
+                    }
+                }
+            })
     }
 
     override fun onBackPressed(): Boolean {
@@ -96,4 +132,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     }
 
+    override fun onUserEditButtonclicked(enrolledUser: EnrolledUser) {
+        viewModel.getMobileNumberAndSendOtpInfo(enrolledUser)
+    }
 }
