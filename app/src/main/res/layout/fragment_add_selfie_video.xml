@@ -17,14 +17,39 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/white"
-            app:contentInsetStartWithNavigation="@dimen/size_19"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/giger_verification"
-            app:titleMarginStart="0dp"
-            app:titleTextColor="@color/black" />
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_back_add_selfie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_18"
+                    app:srcCompat="@drawable/ic_arrow_back_black" />
+
+                <TextView
+                    android:id="@+id/tv_title_add_selfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_toEndOf="@+id/iv_back_add_selfie"
+                    android:letterSpacing="0"
+                    android:text="@string/giger_verification"
+                    android:textColor="#080808"
+                    android:textSize="@dimen/font_20" />
+
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -118,7 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="13dp"
         android:fontFamily="@font/lato"
         android:text="@string/yes_i_confirm_the_data_is_correct"
         app:layout_constraintBottom_toTopOf="@id/selfieVideoSubmitSliderBtn"

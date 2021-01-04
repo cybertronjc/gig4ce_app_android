@@ -67,7 +67,7 @@
                             android:layout_height="@dimen/size_24"
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="@dimen/size_15"
-                            android:layout_marginEnd="3dp"
+                            android:layout_marginEnd="@dimen/size_16"
                             android:layout_marginBottom="@dimen/size_8"
 
                             app:srcCompat="@drawable/ic_three_dots"

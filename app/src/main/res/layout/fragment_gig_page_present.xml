@@ -56,7 +56,7 @@
                             android:layout_marginStart="@dimen/size_19"
                             android:layout_marginTop="@dimen/size_14"
                             android:layout_marginBottom="@dimen/size_9"
-                            android:layout_toStartOf="@+id/iv_options_gig_details"
+                            android:layout_toStartOf="@+id/iv_options_gig_page"
                             android:layout_toEndOf="@+id/iv_back_gig_page"
                             android:letterSpacing="0"
                             android:textColor="#080808"
@@ -69,7 +69,7 @@
                             android:layout_height="@dimen/size_24"
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="@dimen/size_15"
-                            android:layout_marginEnd="3dp"
+                            android:layout_marginEnd="@dimen/size_16"
                             android:layout_marginBottom="@dimen/size_8"
 
                             app:srcCompat="@drawable/ic_three_dots"

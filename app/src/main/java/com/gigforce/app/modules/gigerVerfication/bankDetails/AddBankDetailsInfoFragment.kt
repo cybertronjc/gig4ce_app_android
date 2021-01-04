@@ -87,7 +87,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         passbookImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_bank_passbook_sublabel)
 
-        toolbar.setNavigationOnClickListener {
+        iv_back_add_bank_details_info.setOnClickListener {
 
             if (didUserCameFromAmbassadorScreen) {
                 activity?.onBackPressed()
