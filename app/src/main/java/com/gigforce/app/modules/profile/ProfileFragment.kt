@@ -300,7 +300,7 @@ class ProfileFragment : BaseFragment() {
 
             layout.main_about_card.card_title.text = getString(R.string.about_me)
             layout.main_about_card.card_content.text = mainAboutString
-            layout.main_about_card.card_icon.setImageResource(R.drawable.about_me_new)
+            layout.main_about_card.card_icon.setImageResource(R.drawable.ic_user_profile_about_me)
             if (mainAboutString.trim().isEmpty())
                 layout.main_about_card.card_view_more.text = getString(R.string.add_bio_profile)
             layout.main_about_card.card_view_more.setOnClickListener {
