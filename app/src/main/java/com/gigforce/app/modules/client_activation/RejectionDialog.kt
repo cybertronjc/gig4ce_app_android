@@ -16,29 +16,28 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.getScreenWidth
-import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.layout_rejection_dialog.*
 
-class RejectionDialog : DialogFragment() {
+open class RejectionDialog : DialogFragment() {
 
     companion object {
         const val REJECTION_NORMAL = 0
         const val REJECTION_QUESTIONNAIRE = 1
     }
 
-    private var WRONGQUESTIONS: ArrayList<String>? = null
-    private var REJECTIONTYPE: Int = REJECTION_NORMAL
-    private var REJECTION_TITLE: String? = null
-    private var REJECTION_ILLUSTRATION: String? = null
+    open var CONTENT: ArrayList<String>? = null
+    open var TYPE: Int = REJECTION_NORMAL
+    open var TITLE: String? = null
+    open var ILLUSTRATION: String? = null
     private lateinit var callbacks: RejectionDialogCallbacks
-    private val adapter: AdapterRejectedAnswers by lazy {
+    open val adapter: AdapterRejectedAnswers by lazy {
         AdapterRejectedAnswers()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.layout_rejection_dialog, container, false)
     }
@@ -48,9 +47,9 @@ class RejectionDialog : DialogFragment() {
         val dialog: Dialog? = dialog
         if (dialog != null) {
             dialog.window?.setLayout(
-                getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
-                    R.dimen.size_48
-                ), ViewGroup.LayoutParams.WRAP_CONTENT
+                    getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
+                            R.dimen.size_48
+                    ), ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -63,8 +62,8 @@ class RejectionDialog : DialogFragment() {
         initUiAsPerState()
     }
 
-    private fun initUiAsPerState() {
-        if (REJECTIONTYPE == REJECTION_QUESTIONNAIRE) {
+    open fun initUiAsPerState() {
+        if (TYPE == REJECTION_QUESTIONNAIRE) {
             stateQuestionnaireRejection()
         }
 
@@ -72,59 +71,60 @@ class RejectionDialog : DialogFragment() {
     }
 
     private fun stateQuestionnaireRejection() {
-        setupRecyclerWrongAnswers()
+        setupRecycler()
         tv_sub_one_rejection_dialog.gone()
         tv_sub_two_rejection_dialog.gone()
-        tv_content_title_rejection_dialog.text = Html.fromHtml(REJECTION_TITLE)
-        Glide.with(this).load(REJECTION_ILLUSTRATION).placeholder(
-            com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+        tv_content_title_rejection_dialog.text = Html.fromHtml(TITLE)
+        Glide.with(this).load(ILLUSTRATION).placeholder(
+                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
         ).into(iv_rejection_illustration)
         rv_wrong_questions_rejection_dialog.visible()
     }
 
-    private fun setupRecyclerWrongAnswers() {
+    open fun setupRecycler() {
         rv_wrong_questions_rejection_dialog.adapter = adapter
         rv_wrong_questions_rejection_dialog.layoutManager = LinearLayoutManager(requireContext())
         rv_wrong_questions_rejection_dialog.addItemDecoration(
-            ItemOffsetDecoration(
-                resources.getDimensionPixelSize(
-                    R.dimen.size_16
+                ItemOffsetDecoration(
+                        resources.getDimensionPixelSize(
+                                R.dimen.size_16
+                        )
                 )
-            )
         )
-        adapter.addData(WRONGQUESTIONS ?: listOf())
+        adapter.addData(CONTENT ?: listOf())
 
 
     }
 
-    private fun getDataFromIntents(savedInstanceState: Bundle?) {
+    open fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            REJECTIONTYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
-            WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
-                ?: arrayListOf()
-            REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
-            REJECTION_ILLUSTRATION =
-                it.getString(StringConstants.REJECTION_ILLUSTRATION.value) ?: ""
+            TYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
+            CONTENT = it.getStringArrayList(StringConstants.CONTENT.value)
+                    ?: arrayListOf()
+            TITLE = it.getString(StringConstants.TITLE.value) ?: ""
+            ILLUSTRATION =
+                    it.getString(StringConstants.ILLUSTRATION.value) ?: ""
 
         }
 
         arguments?.let {
-            REJECTIONTYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
-            WRONGQUESTIONS = it.getStringArrayList(StringConstants.WRONG_ANSWERS.value)
-                ?: arrayListOf()
-            REJECTION_TITLE = it.getString(StringConstants.TITLE.value) ?: ""
-            REJECTION_ILLUSTRATION =
-                it.getString(StringConstants.REJECTION_ILLUSTRATION.value) ?: ""
+            TYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
+            CONTENT = it.getStringArrayList(StringConstants.CONTENT.value)
+                    ?: arrayListOf()
+            TITLE = it.getString(StringConstants.TITLE.value) ?: ""
+            ILLUSTRATION =
+
+                    it.getString(StringConstants.ILLUSTRATION.value) ?: ""
 
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putStringArrayList(StringConstants.WRONG_ANSWERS.value, WRONGQUESTIONS)
-        outState.putInt(StringConstants.FROM_CLIENT_ACTIVATON.value, REJECTIONTYPE)
-        outState.putString(StringConstants.TITLE.value, REJECTION_TITLE)
-        outState.putString(StringConstants.REJECTION_ILLUSTRATION.value, REJECTION_ILLUSTRATION)
+        outState.putStringArrayList(StringConstants.CONTENT.value, CONTENT)
+        outState.putInt(StringConstants.FROM_CLIENT_ACTIVATON.value, TYPE)
+        outState.putString(StringConstants.TITLE.value, TITLE)
+        outState.putString(StringConstants.ILLUSTRATION.value, ILLUSTRATION)
 
 
     }
@@ -132,11 +132,11 @@ class RejectionDialog : DialogFragment() {
 
     private fun initView() {
         tv_take_me_home_rejection_dialog.paintFlags =
-            tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+                tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
 
     }
 
-    private fun initClicks() {
+    fun initClicks() {
         tv_refer_rejection_dialog.setOnClickListener {
             dismiss()
             callbacks.onClickRefer()

@@ -4,19 +4,31 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class DocReceiving(
-    var title: String = "",
-    var subtitle: String = "",
-    var checkItems: List<CheckItem> = listOf(),
-    var jobProfileId: String = "",
-    var type: String = ""
+        var title: String = "",
+        var subtitle: String = "",
+        var checkItems: List<CheckItem> = listOf(),
+        var jobProfileId: String = "",
+        var type: String = "",
+        var dialogTitle: String = "",
+        var dialogSubtitle: String = "",
+        var dialogContent: List<String> = listOf(),
+        var dialogActionMain: String = "",
+        var dialogActionSec: String = "",
+        var dialogIllustration: String = ""
+
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.createTypedArrayList(CheckItem) ?: listOf(),
-        parcel.readString() ?: "",
-        parcel.readString() ?: ""
-    ) {
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.createTypedArrayList(CheckItem) ?: listOf(),
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.createStringArrayList() ?: listOf(),
+            parcel.readString() ?: "",
+            parcel.readString() ?: "",
+            parcel.readString() ?: "") {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -25,6 +37,12 @@ data class DocReceiving(
         parcel.writeTypedList(checkItems)
         parcel.writeString(jobProfileId)
         parcel.writeString(type)
+        parcel.writeString(dialogTitle)
+        parcel.writeString(dialogSubtitle)
+        parcel.writeStringList(dialogContent)
+        parcel.writeString(dialogActionMain)
+        parcel.writeString(dialogActionSec)
+        parcel.writeString(dialogIllustration)
     }
 
     override fun describeContents(): Int {
