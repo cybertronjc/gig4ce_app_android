@@ -38,6 +38,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
+    private lateinit var mNumber: String
     private val adapter: AdapterScheduleTestCb by lazy {
         AdapterScheduleTestCb()
     }
@@ -203,12 +204,14 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+            mNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
         }
 
         arguments?.let {
+            mNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
@@ -220,8 +223,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
-
-
+        outState.putString(StringConstants.MOBILE_NUMBER.value, mNumber)
     }
 
     private val OTP_NUMBER =
@@ -242,7 +244,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
         })
         generate_otp.setOnClickListener {
-            viewModel.sendOTPToMobile("8010154384")
+            viewModel.sendOTPToMobile(mNumber)
         }
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
@@ -266,7 +268,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                         if (time.toString().length < 2) {
                             timeStr = timeStr + "0" + time
                         } else {
-                            timeStr = timeStr + time
+                            timeStr += time
                         }
                         timer_tv?.text = timeStr
 

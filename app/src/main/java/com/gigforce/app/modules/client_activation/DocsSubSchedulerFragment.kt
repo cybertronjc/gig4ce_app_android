@@ -1,8 +1,5 @@
 package com.gigforce.app.modules.client_activation
 
-import android.content.Intent
-import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -17,41 +14,28 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
-import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.driving_license_title
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.iv_contact
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.iv_location
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView136
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView137
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView138
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView139
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView142
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.textView143
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_all_set
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.tv_change_slot
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view7
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.view_select_time_slots
 
 
 class DocsSubSchedulerFragment : BaseFragment() {
     private val viewModel: DocSubSchedulerViewModel by viewModels()
 
     private var dateString: String? = null
-//    private var partnerAddress: PartnerSchoolDetails? = null
+
+    //    private var partnerAddress: PartnerSchoolDetails? = null
     private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
-//    private var selectedTimeSlot: String? = null
+
+    //    private var selectedTimeSlot: String? = null
     private var isCheckOutDone: Boolean = false
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -69,13 +53,13 @@ class DocsSubSchedulerFragment : BaseFragment() {
     private fun initObservers() {
         viewModel.observableQuestionnairDocument.observe(viewLifecycleOwner, Observer {
             showToast(it?.stepId.toString())
-            Log.e("data",it?.stepId.toString())
+            Log.e("data", it?.stepId.toString())
             it?.answers?.forEach {
-                Log.e("data",it?.type!!+it?.options?.size.toString())
-                showToast(it?.type!!+it?.options?.size.toString())
-                if(it?.type == "dropdown" && it?.options?.size==1){
+                Log.e("data", it?.type!! + it?.options?.size.toString())
+                showToast(it?.type!! + it?.options?.size.toString())
+                if (it?.type == "dropdown" && it?.options?.size == 1) {
                     it?.options?.forEach {
-                        Log.e("datamsg",it.answer)
+                        Log.e("datamsg", it.answer)
                         viewModel.getMappedUser(it.answer.toString())
                     }
                 }
@@ -83,7 +67,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
         })
 
         viewModel.observableMappedUser.observe(viewLifecycleOwner, Observer {
-            Log.e("datamsg",it.name)
+            Log.e("datamsg", it.name)
             initMappedUser(it)
         })
 
@@ -173,6 +157,23 @@ class DocsSubSchedulerFragment : BaseFragment() {
         textView144.text = it?.name
         textView145.text = it?.number.toString()
         textView146.text = it?.city
+
+        slider_checkout.onSlideCompleteListener =
+                object : SlideToActView.OnSlideCompleteListener {
+
+                    override fun onSlideComplete(view: SlideToActView) {
+
+                        navigate(
+                                R.id.fragment_schedule_test,
+                                bundleOf(
+                                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                        StringConstants.TITLE.value to mTitle,
+                                        StringConstants.TYPE.value to mType,
+                                        StringConstants.MOBILE_NUMBER.value to it?.number
+                                )
+                        )
+                    }
+                }
     }
 
     fun stateChangeSlot() {
@@ -192,22 +193,6 @@ class DocsSubSchedulerFragment : BaseFragment() {
 //        }
 //        tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
 
-
-        slider_checkout.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
-
-                    navigate(
-                        R.id.fragment_schedule_test,
-                        bundleOf(
-                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                            StringConstants.TITLE.value to mTitle,
-                            StringConstants.TYPE.value to mType
-                        )
-                    )
-                }
-            }
 
 //        view_date_picker.setOnClickListener {
 //            val gigforceDatePickerDialog = GigforceDatePickerDialog()

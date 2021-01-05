@@ -56,7 +56,8 @@ enum class StringConstants(val value: String) {
     TIME_SLOTS("TIME_SLOTS"),
     ACTION_MAIN("ACTION_MAIN"),
     ACTION_SEC("ACTION_SEC"),
-    SUBTITLE("SUBTITLE")
+    SUBTITLE("SUBTITLE"),
+    MOBILE_NUMBER("MOBILE_NUMBER")
 
 
 }
