@@ -39,11 +39,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
 
 
             setInJPApplication(
-                    mJobProfileId, DrivingCertificate(
-                    verified = false,
-                    certificateUrl = frontImageFileNameAtServer
-
-            ), type, title
+                    mJobProfileId, type, title
             )
         } catch (e: Exception) {
             _documentUploadState.postValue(Lse.error("Unable to save document."))
@@ -52,7 +48,6 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
 
     suspend fun setInJPApplication(
         jobProfileID: String,
-            cert: DrivingCertificate,
             type: String,
             title: String
     ): JpApplication {
@@ -74,7 +69,6 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                                     "title" to title,
                                     "type" to type,
                                     "stepId" to jobProfileID,
-                                    "certificate" to cert,
                                     "inserted_on" to Date()
 
                             )
@@ -108,7 +102,7 @@ class UploadDrivingCertificateViewmodel : ViewModel() {
                     .document(items?.documents!![0].id)
                     .collection("Submissions")
                     .document(submissions?.documents?.get(0)?.id!!)
-                    .update("certificate", cert)
+                    .update("isCheckoutDone", true)
                     .addOnCompleteListener { complete ->
                         if (complete.isSuccessful) {
                             val jpApplication =

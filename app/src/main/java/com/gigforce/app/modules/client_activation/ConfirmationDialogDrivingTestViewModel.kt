@@ -48,97 +48,97 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
             slot: String,
             drivingLicenseCheck: Boolean
     ) {
-        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
-        val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
-                        "title", title
-                ).whereEqualTo("type", type).get().await()
-
-
-        if (submissions?.documents.isNullOrEmpty()) {
-            repository.db.collection("JP_Applications")
-                    .document(items.documents[0].id).collection("Submissions")
-                    .document().set(
-                            mapOf(
-                                    "title" to title,
-                                    "type" to type,
-                                    "stepId" to jobProfileID,
-                                    "insertedOn" to Date(),
-                                    "certificate" to DrivingCertificate(
-                                            partnerSchoolDetails = partnerDetails,
-                                            slotDate = date,
-                                            slotTime = slot,
-                                            subDLChequeInSameCentre = drivingLicenseCheck,
-                                            slotBooked = true
-
-                                    )
-
-                            )
-                    ).addOnCompleteListener { complete ->
-                        run {
-
-                            if (complete.isSuccessful) {
-                                val jpApplication =
-                                        items.toObjects(JpApplication::class.java)[0]
-                                jpApplication.activation.forEach { draft ->
-                                    if (draft.title == title || draft.type == "onsite_document") {
-                                        draft.isDone = false
-                                        draft.isSlotBooked = true
-                                        draft.status = "Slot Booked"
-                                    }
-                                }
-                                repository.db.collection("JP_Applications")
-                                        .document(items.documents[0].id)
-                                        .update("activation", jpApplication.activation)
-                                        .addOnCompleteListener {
-                                            if (it.isSuccessful) {
-                                                observableJpApplication.value = true
-
-                                            }
-                                        }
-                            }
-                        }
-                    }
-        } else {
-            repository.db.collection("JP_Applications")
-                    .document(items?.documents!![0].id)
-                    .collection("Submissions")
-                    .document(submissions?.documents?.get(0)?.id!!)
-                    .update(
-                            "certificate", DrivingCertificate(
-                            partnerSchoolDetails = partnerDetails,
-                            slotDate = date,
-                            slotTime = slot,
-                            subDLChequeInSameCentre = drivingLicenseCheck,
-                            slotBooked = true
-
-                    )
-                    )
-                    .addOnCompleteListener { complete ->
-                        if (complete.isSuccessful) {
-                            val jpApplication =
-                                    items.toObjects(JpApplication::class.java)[0]
-                            jpApplication.activation.forEach { draft ->
-                                if (draft.title == title) {
-                                    draft.isDone = false
-                                    draft.isSlotBooked = true
-                                    draft.status = "Slot Booked"
-
-                                }
-                            }
-                            repository.db.collection("JP_Applications")
-                                    .document(items.documents[0].id)
-                                    .update("activation", jpApplication.activation)
-                                    .addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            observableJpApplication.value = true
-                                        }
-                                    }
-                        }
-                    }
-        }
+//        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
+//                .whereEqualTo("gigerId", repository.getUID()).get()
+//                .await()
+//        val submissions = repository.getCollectionReference().document(items.documents[0].id)
+//                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
+//                        "title", title
+//                ).whereEqualTo("type", type).get().await()
+//
+//
+//        if (submissions?.documents.isNullOrEmpty()) {
+//            repository.db.collection("JP_Applications")
+//                    .document(items.documents[0].id).collection("Submissions")
+//                    .document().set(
+//                            mapOf(
+//                                    "title" to title,
+//                                    "type" to type,
+//                                    "stepId" to jobProfileID,
+//                                    "insertedOn" to Date(),
+//                                    "certificate" to DrivingCertificate(
+//                                            partnerSchoolDetails = partnerDetails,
+//                                            slotDate = date,
+//                                            slotTime = slot,
+//                                            subDLChequeInSameCentre = drivingLicenseCheck,
+//                                            slotBooked = true
+//
+//                                    )
+//
+//                            )
+//                    ).addOnCompleteListener { complete ->
+//                        run {
+//
+//                            if (complete.isSuccessful) {
+//                                val jpApplication =
+//                                        items.toObjects(JpApplication::class.java)[0]
+//                                jpApplication.activation.forEach { draft ->
+//                                    if (draft.title == title || draft.type == "onsite_document") {
+//                                        draft.isDone = false
+//                                        draft.isSlotBooked = true
+//                                        draft.status = "Slot Booked"
+//                                    }
+//                                }
+//                                repository.db.collection("JP_Applications")
+//                                        .document(items.documents[0].id)
+//                                        .update("activation", jpApplication.activation)
+//                                        .addOnCompleteListener {
+//                                            if (it.isSuccessful) {
+//                                                observableJpApplication.value = true
+//
+//                                            }
+//                                        }
+//                            }
+//                        }
+//                    }
+//        } else {
+//            repository.db.collection("JP_Applications")
+//                    .document(items?.documents!![0].id)
+//                    .collection("Submissions")
+//                    .document(submissions?.documents?.get(0)?.id!!)
+//                    .update(
+//                            "certificate", DrivingCertificate(
+//                            partnerSchoolDetails = partnerDetails,
+//                            slotDate = date,
+//                            slotTime = slot,
+//                            subDLChequeInSameCentre = drivingLicenseCheck,
+//                            slotBooked = true
+//
+//                    )
+//                    )
+//                    .addOnCompleteListener { complete ->
+//                        if (complete.isSuccessful) {
+//                            val jpApplication =
+//                                    items.toObjects(JpApplication::class.java)[0]
+//                            jpApplication.activation.forEach { draft ->
+//                                if (draft.title == title) {
+//                                    draft.isDone = false
+//                                    draft.isSlotBooked = true
+//                                    draft.status = "Slot Booked"
+//
+//                                }
+//                            }
+//                            repository.db.collection("JP_Applications")
+//                                    .document(items.documents[0].id)
+//                                    .update("activation", jpApplication.activation)
+//                                    .addOnCompleteListener {
+//                                        if (it.isSuccessful) {
+//                                            observableJpApplication.value = true
+//                                        }
+//                                    }
+//                        }
+//                    }
+//        }
 
 
     }

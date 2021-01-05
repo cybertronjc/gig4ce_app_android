@@ -19,13 +19,16 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.app.modules.auth.ui.main.LoginResponse
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel
+import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.network.Status
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.resend_otp
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
@@ -73,15 +76,6 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         rv_cb_schedule_test.addItemDecoration(ItemOffsetDecoration(resources.getDimensionPixelSize(R.dimen.size_4)))
     }
 
-    fun sendVerificationCode(phoneNumber: String) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber, // Phone number to verify
-            60, // Timeout duration
-            TimeUnit.SECONDS, // Unit of timeout
-            requireActivity(), // Activity (for callback binding)
-            viewModel.callbacks // OnVerificationStateChangedCallbacks
-        ) // ForceResendingToken from callbacks
-    }
 
     private fun initObservers() {
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
@@ -94,7 +88,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
-//            if (it == null) return@Observer
+            //            if (it == null) return@Observer
 //            if (!it.partnerSchoolDetails?.contact.isNullOrEmpty()) {
 //                var contactNumber = ""
 //                if (!it.partnerSchoolDetails?.contact!![0].number.contains("+91")) {
@@ -130,22 +124,70 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                     showToast(it.msg)
                     countDownTimer?.cancel()
                     showResendOTPMessage(false)
-
-
                 }
-
-
             }
-
-
         })
 
 
 
 
         viewModel.getUIData(mJobProfileId)
+        viewModel.sendOTP
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
+                    }
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+                        generate_otp.gone()
+                        showToast("Otp sent")
+                        note_msg.gone()
+                        verify_otp_button_schedule.visible()
+                        otp_screen.visible()
+                        viewModel.otpVerificationToken = it.content.verificationToken.toString()
+                    }
+                    is Lce.Error -> {
+                        UtilMethods.hideLoading()
+                        showToast("" + it.error)
+                    }
+                }
+            })
+        viewModel.verifyOTP.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
+            when (it) {
+                Lce.Loading -> {
+                    UtilMethods.showLoading(requireContext())
+                }
+                is Lce.Content -> {
+                    countDownTimer?.cancel()
+                    val drivingCertSuccessDialog =
+                        DrivingCertSuccessDialog()
+                    drivingCertSuccessDialog.isCancelable = false
+                    drivingCertSuccessDialog.setCallbacks(this)
+                    drivingCertSuccessDialog
+                    drivingCertSuccessDialog.show(
+                        parentFragmentManager,
+                        DrivingCertSuccessDialog::class.java.name
+                    )
+                    viewModel.apply(
+                        mJobProfileId,
+                        mType,
+                        mTitle,
+                        adapter.selectedItems
+                    )
+                    pb_schedule_test.visible()
+
+                    UtilMethods.hideLoading()
+//                    showToast("Otp sent")
+                }
+                is Lce.Error -> {
+                    UtilMethods.hideLoading()
+                    showToast("" + it.error)
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -193,79 +235,16 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             }
 
         })
-        generate_otp.setOnClickListener{
-            it.gone()
-            note_msg.gone()
-            verify_otp_button_schedule.visible()
-            otp_screen.visible()
+        generate_otp.setOnClickListener {
+            viewModel.sendOTPToMobile("8010154384")
         }
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
             Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
         verify_otp_button_schedule?.setOnClickListener {
             val otpIn = txt_otp?.text.toString()
-//            match = OTP_NUMBER.matcher(otpIn)
-//            if (match.matches()) {
-            if (otpIn == "000000") {
-                verify_otp_button_schedule.isEnabled = false
-                Handler().postDelayed(Runnable {
-                    // This method will be executed once the timer is over
-                    if (verify_otp_button_schedule != null) {
-                        verify_otp_button_schedule.isEnabled = true
-
-                    }
-                }, 3000)
-
-//                viewModel.downloadCertificate(viewModel.applicationId, viewModel.submissionId)
-//                    .observe(viewLifecycleOwner, Observer {
-//                        it?.let { resource ->
-//                            when (resource.status) {
-//                                Status.SUCCESS -> {
-//                                    viewModel.observableApplied.observe(
-//                                        viewLifecycleOwner,
-//                                        Observer { application ->
-//                                            pb_schedule_test.gone()
-//                                            if (application == true) {
-                                                countDownTimer?.cancel()
-                                                val drivingCertSuccessDialog =
-                                                    DrivingCertSuccessDialog()
-                                                drivingCertSuccessDialog.isCancelable = false
-//                                                drivingCertSuccessDialog.arguments = bundleOf(
-//                                                    StringConstants.DOC_URL.value to it.data?.downloadLink
-//                                                )
-                                                drivingCertSuccessDialog.setCallbacks(this)
-                                                drivingCertSuccessDialog
-                                                drivingCertSuccessDialog.show(
-                                                    parentFragmentManager,
-                                                    DrivingCertSuccessDialog::class.java.name
-                                                )
-//                                            }
-//                                        })
-                                    viewModel.apply(
-                                        mJobProfileId,
-                                        mType,
-                                        mTitle,
-                                        adapter.selectedItems
-                                    )
-
-//                                }
-//                                Status.ERROR -> {
-//                                    pb_schedule_test.gone()
-//                                    showToast(it.message ?: "")
-//
-//
-//                                }
-//                                Status.LOADING -> {
-//                                    pb_schedule_test.visible()
-//                                }
-//                            }
-//                        }
-//                    })
-                pb_schedule_test.visible()
-//                viewModel.verifyPhoneNumberWithCodeScheduleDrivingTest(otpIn.toString())
-            } else {
-                showToast("Wrong OTP")
-            }
+            verify_otp_button_schedule.isEnabled = false
+            viewModel.verifyOTP(otpIn)
         }
         iv_back_application_gig_activation.setOnClickListener { popBackState() }
     }
@@ -314,7 +293,6 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     var timerStarted = false
     override fun onBackPressed(): Boolean {
         countDownTimer?.cancel()
-
         return super.onBackPressed()
 
     }
@@ -329,5 +307,13 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         txt_otp.text = txt_otp.text
     }
 
-
+//    fun sendVerificationCode(phoneNumber: String) {
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//            phoneNumber, // Phone number to verify
+//            60, // Timeout duration
+//            TimeUnit.SECONDS, // Unit of timeout
+//            requireActivity(), // Activity (for callback binding)
+//            viewModel.callbacks // OnVerificationStateChangedCallbacks
+//        ) // ForceResendingToken from callbacks
+//    }
 }

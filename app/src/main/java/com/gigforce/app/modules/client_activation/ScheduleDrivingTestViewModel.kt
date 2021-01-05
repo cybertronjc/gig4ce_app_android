@@ -2,19 +2,14 @@ package com.gigforce.app.modules.client_activation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.ambassador_user_enrollment.models.RegisterMobileNoResponse
+import com.gigforce.app.modules.ambassador_user_enrollment.models.VerifyOtpResponse
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.auth.ui.main.LoginResponse
-import com.gigforce.app.modules.auth.ui.main.LoginViewModel
 import com.gigforce.app.modules.client_activation.models.*
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
-import com.gigforce.app.utils.network.Resource
-import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -22,10 +17,15 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     var applicationId = ""
     var submissionId = ""
     val repository = ScheduleDrivingTestRepository()
+    val userEnrollmentRepository = UserEnrollmentRepository()
 
     private val _observableJPSettings = MutableLiveData<DocReceiving>()
     val observableJPSettings: MutableLiveData<DocReceiving> = _observableJPSettings
 
+    private val _sendOTP = MutableLiveData<Lce<RegisterMobileNoResponse>>()
+    val sendOTP : MutableLiveData<Lce<RegisterMobileNoResponse>> = _sendOTP
+    private val _verifyOTP = MutableLiveData<Lce<VerifyOtpResponse>>()
+    val verifyOTP : MutableLiveData<Lce<VerifyOtpResponse>> = _verifyOTP
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
     }
@@ -43,6 +43,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         SingleLiveEvent<Boolean>();
     }
     val observableApplied: SingleLiveEvent<Boolean> get() = _observableApplied
+    var otpVerificationToken :String = ""
     fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
         val model = getJPApplication(mJobProfileId, type, title)
         if (model != null) {
@@ -50,28 +51,6 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
         }
     }
-
-    var verificationId: String? = null
-    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
-//            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
-        }
-
-        override fun onVerificationFailed(e: FirebaseException) {
-            liveState.postValue(LoginResponse(VERIFY_FAILED, e.message ?: ""))
-        }
-
-        override fun onCodeSent(
-            _verificationId: String,
-            _token: PhoneAuthProvider.ForceResendingToken
-        ) {
-            super.onCodeSent(_verificationId, _token)
-            verificationId = _verificationId
-            liveState.postValue(LoginResponse(CODE_SENT, "OTP Sent Successfully"));
-        }
-    }
-
     suspend fun getJPApplication(
         jobProfileID: String,
         type: String,
@@ -95,7 +74,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             }
             submissionId = submissions.documents[0].id
 
-            return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+            return submissions.toObjects(CheckoutGigforceOffice::class.java)[0].certificate
         } catch (e: Exception) {
             _observableError.value = e.message
             return null
@@ -153,7 +132,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             .collection("Submissions")
             .document(submissions?.documents?.get(0)?.id!!)
             .update(
-                "certificate.options", options
+                "options", options
             )
             .addOnCompleteListener { complete ->
                 if (complete.isSuccessful) {
@@ -168,7 +147,6 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                                         draft.isDone = true
                                         draft.status = ""
                                     }
-
                                 }
                             }
                         }
@@ -206,41 +184,38 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
 
     }
+    fun sendOTPToMobile(
+        mobileNo: String
+    ) = viewModelScope.launch {
 
-
-    fun verifyPhoneNumberWithCodeScheduleDrivingTest(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
-    }
-
-    private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
-        FirebaseAuth.getInstance()
-            .signInWithCredential(credential)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
-
-                } else {
-                    liveState.postValue(LoginResponse(VERIFY_FAILED, it.exception?.message ?: ""))
-                }
-            }
-    }
-
-    fun downloadCertificate(_id: String, drivingCertificateID: String) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
+        _sendOTP.postValue(Lce.loading())
         try {
-            emit(
-                Resource.success(
-                    data = repository.getDrivingCertificate(
-                        _id,
-                        drivingCertificateID
-                    )
-                )
-            )
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+            val repsonse = userEnrollmentRepository.registerUser(mobileNo)
+            _sendOTP.value = Lce.content(repsonse)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _sendOTP.value = Lce.error(e.message ?: "Unable to check mobile number")
+            _sendOTP.value = null
         }
     }
+
+    fun verifyOTP(
+        otp: String
+    ) = viewModelScope.launch {
+        try {
+            val verifyOtpResponse = userEnrollmentRepository.verifyOtp(otpVerificationToken, otp)
+
+            if (verifyOtpResponse.isVerified) {
+                _verifyOTP.value = Lce.content(verifyOtpResponse)
+            } else {
+                _verifyOTP.value = Lce.error("Not Verified")
+            }
+
+        } catch (e: Exception) {
+            _verifyOTP.value = Lce.error(e.message ?: "Not Verified")
+        }
+    }
+
 
     companion object {
         val CODE_SENT = 2;
@@ -249,4 +224,58 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
 
+
+//    fun downloadCertificate(_id: String, drivingCertificateID: String) = liveData(Dispatchers.IO) {
+//        emit(Resource.loading(data = null))
+//        try {
+//            emit(
+//                Resource.success(
+//                    data = repository.getDrivingCertificate(
+//                        _id,
+//                        drivingCertificateID
+//                    )
+//                )
+//            )
+//        } catch (exception: Exception) {
+//            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+//        }
+//    }
+
+//    fun verifyPhoneNumberWithCodeScheduleDrivingTest(code: String) {
+//        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+//        signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+//    }
+
+//    private fun signInWithPhoneAuthCredentialScheduleDrivingTest(credential: PhoneAuthCredential) {
+//        FirebaseAuth.getInstance()
+//            .signInWithCredential(credential)
+//            .addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
+//
+//                } else {
+//                    liveState.postValue(LoginResponse(VERIFY_FAILED, it.exception?.message ?: ""))
+//                }
+//            }
+//    }
+//      var verificationId: String? = null
+//    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+//            liveState.postValue(LoginResponse(VERIFY_SUCCESS, "OTP Verified"))
+////            signInWithPhoneAuthCredentialScheduleDrivingTest(credential)
+//        }
+//
+//        override fun onVerificationFailed(e: FirebaseException) {
+//            liveState.postValue(LoginResponse(VERIFY_FAILED, e.message ?: ""))
+//        }
+//
+//        override fun onCodeSent(
+//            _verificationId: String,
+//            _token: PhoneAuthProvider.ForceResendingToken
+//        ) {
+//            super.onCodeSent(_verificationId, _token)
+//            verificationId = _verificationId
+//            liveState.postValue(LoginResponse(CODE_SENT, "OTP Sent Successfully"));
+//        }
+//    }
 }

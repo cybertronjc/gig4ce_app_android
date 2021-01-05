@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.*
 import com.gigforce.app.utils.SingleLiveEvent
-import com.gigforce.app.utils.StringConstants
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -46,7 +45,7 @@ class DocSubSchedulerViewModel : ViewModel() {
                 return null
             }
 
-            return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+            return submissions.toObjects(CheckoutGigforceOffice::class.java)[0].certificate
         } catch (e: Exception) {
             observableError.value = e.message
             return null
