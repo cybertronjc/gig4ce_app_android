@@ -242,7 +242,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
         })
         generate_otp.setOnClickListener {
-            viewModel.sendOTPToMobile("8178409879")
+            viewModel.sendOTPToMobile("8010154384")
         }
         resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
