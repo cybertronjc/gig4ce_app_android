@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
@@ -65,6 +67,26 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     private fun initObservers() {
+        viewModel.observableQuestionnairDocument.observe(viewLifecycleOwner, Observer {
+            showToast(it?.stepId.toString())
+            Log.e("data",it?.stepId.toString())
+            it?.answers?.forEach {
+                Log.e("data",it?.type!!+it?.options?.size.toString())
+                showToast(it?.type!!+it?.options?.size.toString())
+                if(it?.type == "dropdown" && it?.options?.size==1){
+                    it?.options?.forEach {
+                        Log.e("datamsg",it.answer)
+                        viewModel.getMappedUser(it.answer.toString())
+                    }
+                }
+            }
+        })
+
+        viewModel.observableMappedUser.observe(viewLifecycleOwner, Observer {
+            Log.e("datamsg",it.name)
+            initMappedUser(it)
+        })
+
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
         })
@@ -145,6 +167,12 @@ class DocsSubSchedulerFragment : BaseFragment() {
         viewModel.getPartnerSchoolDetails(mType, mJobProfileId);
 
 
+    }
+
+    private fun initMappedUser(it: GFMappedUser?) {
+        textView144.text = it?.name
+        textView145.text = it?.number.toString()
+        textView146.text = it?.city
     }
 
     fun stateChangeSlot() {
