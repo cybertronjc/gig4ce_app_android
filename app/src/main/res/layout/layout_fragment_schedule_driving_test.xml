@@ -97,13 +97,13 @@
                         android:layout_marginLeft="@dimen/size_16"
                         android:layout_marginTop="@dimen/size_16"
                         android:src="@drawable/pending_icon"
-                        app:layout_constraintEnd_toStartOf="@+id/textView140"
+                        app:layout_constraintEnd_toStartOf="@+id/alert_message"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView140"
+                        android:id="@+id/alert_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_16"
@@ -352,11 +352,15 @@ will apply auto to the fields
 
     <TextView
         android:id="@+id/note_msg"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_12"
         android:text="Note :The OTP will sent to Team leader’s Mobile Number"
-        app:layout_constraintStart_toStartOf="@+id/generate_otp"
+        android:textSize="@dimen/font_12"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/generate_otp" />
 
 

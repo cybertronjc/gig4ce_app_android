@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -86,13 +86,13 @@
                         android:layout_marginLeft="@dimen/size_16"
                         android:layout_marginTop="@dimen/size_16"
                         android:src="@drawable/pending_icon"
-                        app:layout_constraintEnd_toStartOf="@+id/textView140"
+                        app:layout_constraintEnd_toStartOf="@+id/alert_message"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView140"
+                        android:id="@+id/alert_message"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_16"
@@ -118,19 +118,45 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <TextView
-                    android:id="@+id/doc_details"
+                    android:id="@+id/doc_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_24"
                     android:layout_marginEnd="@dimen/size_16"
-                    android:layout_marginBottom="@dimen/size_24"
                     android:fontFamily="@font/lato"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_three"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/doc_sub_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_9"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black_three"
                     android:textSize="14sp"
                     android:textStyle="normal" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_bullet_points"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_24"/>
+
+                </LinearLayout>
                 <!--        android:layout_toStartOf="@+id/tv_why_we_need_docs_scheduler"-->
 
                 <ImageView
@@ -705,8 +731,9 @@
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
-        app:text="@string/active"
-        app:text_size="@dimen/font_16" />
+        app:text="@string/activate"
+        app:text_size="@dimen/font_16"
+        app:text_style="bold"/>
 
     <ProgressBar
         android:id="@+id/pb_docs_submission"

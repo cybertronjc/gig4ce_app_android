@@ -77,7 +77,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             tv_title_toolbar.text = docReceiving.title
             tv_driving_test_certification.text = docReceiving.subtitle
             otp_label.text = docReceiving.otpLabel
-            note_msg.text = Html.fromHtml("<font color=\'#333333\'>Note : </font>"+docReceiving.noteMsg)
+            note_msg.text = Html.fromHtml("<b><font color=\'#333333\'>Note</font></b> : "+docReceiving.noteMsg)
             viewModel.getApplication(mJobProfileId, mType, mTitle)
 
 

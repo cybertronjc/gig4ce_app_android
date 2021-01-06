@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -28,7 +29,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
     private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
-
+    private lateinit var adapterBulletStrings: AdapterBulletStrings
     //    private var selectedTimeSlot: String? = null
     private var isCheckOutDone: Boolean = false
 
@@ -79,8 +80,11 @@ class DocsSubSchedulerFragment : BaseFragment() {
             }
         })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
-
-            doc_details.text = Html.fromHtml(it.headerTitle)
+            alert_message.text = it?.alertMessage
+            doc_title.text = Html.fromHtml(it?.documentTitle)
+            header_title.text = it?.headerTitle
+            doc_sub_title.text = Html.fromHtml(it?.documentSubTitle)
+            adapterBulletStrings.addData(it?.documentInfo!!)
 
 
             viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
@@ -152,6 +156,16 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
     }
 
+    private fun setupBulletPontsRv() {
+        adapterBulletStrings = AdapterBulletStrings();
+
+        rv_bullet_points.adapter = adapterBulletStrings
+        rv_bullet_points.layoutManager =
+            LinearLayoutManager(requireContext())
+
+
+    }
+
     private fun initMappedUser(it: GFMappedUser?) {
         textView144.text = it?.name
         textView145.text = it?.number.toString()
@@ -176,7 +190,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     fun stateChangeSlot() {
-        doc_details.gone()
+        doc_title.gone()
         helpIconIV.gone()
         tv_why_we_need_docs_scheduler.gone()
         driving_license_title.visible()
@@ -228,6 +242,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     private fun initViews() {
+        setupBulletPontsRv()
 //        if (partnerAddress != null) {
 //            setPartnerAddress(partnerAddress!!)
 //        }

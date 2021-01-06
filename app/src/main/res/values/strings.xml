@@ -1117,6 +1117,7 @@
     <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn <b>Rs. 50</b> per Giger Onboarding. No limit on earning.</string>
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
+    <string name="activate">Activate</string>
 
 
 </resources>
