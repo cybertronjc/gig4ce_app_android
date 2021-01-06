@@ -44,6 +44,8 @@ class ContactsViewModel constructor(
             _syncContacts.value = null
         } catch (e: Exception) {
             Log.e(TAG, "Error while syncing contacts", e)
+            Log.e("ChatContactsBatch", "Error while syncing contacts", e)
+
             _syncContacts.value = Lse.error(e.message ?: "Unable to sync contacts")
             _syncContacts.value = null
         }

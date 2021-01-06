@@ -4,17 +4,18 @@ import android.util.Log
 import androidx.annotation.Keep
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.functions.FirebaseFunctions
+import kotlinx.coroutines.launch
 import java.util.*
 
 data class ProfileAnGigInfo(
@@ -24,7 +25,7 @@ data class ProfileAnGigInfo(
 
 @Keep
 data class UserVersionInfo(
-    var currentVersion: String ="",
+    var currentVersion: String = "",
     var time: Timestamp = Timestamp.now()
 )
 
@@ -35,27 +36,25 @@ class LoginSuccessfulViewModel constructor(
     var profileFirebaseRepository = ProfileFirebaseRepository()
 
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
-    var userProfileAndGigData: MutableLiveData<ProfileAnGigInfo> = MutableLiveData<ProfileAnGigInfo>()
+    var userProfileAndGigData: MutableLiveData<ProfileAnGigInfo> =
+        MutableLiveData<ProfileAnGigInfo>()
 
-    fun getProfileData() {
-        profileFirebaseRepository.getDBCollection()
-            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
-                if (e != null) {
-                    var errProfileData = ProfileData()
-                    errProfileData.status = false
-                    errProfileData.errormsg = e.toString()
-                    userProfileData.postValue(errProfileData)
-                    return@EventListener
-                }
-                if (value!!.data == null) {
-                    profileFirebaseRepository.createEmptyProfile()
-                } else {
-                    Log.d("ProfileViewModel", value!!.data.toString())
-                    userProfileData.postValue(
-                        value!!.toObject(ProfileData::class.java)
-                    )
-                }
-            })
+    fun getProfileData(
+        latitude: Double ,
+        longitude: Double,
+        locationAddress: String
+    ) = viewModelScope.launch {
+        try {
+            val profile = profileFirebaseRepository.updateLoginInfoIfUserProfileExistElseCreateProfile(
+                latitude, longitude, locationAddress
+            )
+            userProfileData.postValue(profile)
+        } catch (e: Exception) {
+            val errProfileData = ProfileData()
+            errProfileData.status = false
+            errProfileData.errormsg = e.toString()
+            userProfileData.postValue(errProfileData)
+        }
     }
 
 

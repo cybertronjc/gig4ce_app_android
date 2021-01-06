@@ -105,9 +105,11 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         ) {
             Log.v(TAG, "Permission Required. Requesting Permission")
             requestPermissions(
-                arrayOf(android.Manifest.permission.READ_CONTACTS,
+                arrayOf(
+                    android.Manifest.permission.READ_CONTACTS,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
                 REQUEST_CONTACTS_PERMISSION
             )
         } else {
@@ -116,7 +118,7 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
     }
 
     private fun bindSyncContactService() {
-        if(syncPref.shouldSyncContacts()) {
+        if (syncPref.shouldSyncContacts()) {
 
             Intent(this.context, FetchContactsService::class.java).also {
                 Log.v(TAG, "Binding Service")

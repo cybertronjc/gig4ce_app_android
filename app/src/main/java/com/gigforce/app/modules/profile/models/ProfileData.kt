@@ -57,6 +57,10 @@ data class ProfileData(
     @set:PropertyName("enrolledBy")
     var enrolledBy: EnrollmentInfo? = null,
 
+    @get:PropertyName("firstLogin")
+    @set:PropertyName("firstLogin")
+    var firstLogin: Timestamp? = null,
+
     @get:PropertyName("howYouCameToKnowAboutCurrentJob")
     @set:PropertyName("howYouCameToKnowAboutCurrentJob")
     var howYouCameToKnowAboutCurrentJob: String? = null,
@@ -71,8 +75,15 @@ data class ProfileData(
 
     @get:PropertyName("profilePicThumbnail")
     @set:PropertyName("profilePicThumbnail")
-    var profileAvatarThumbnail: String = ""
+    var profileAvatarThumbnail: String = "",
 
+    @get:PropertyName("created_on")
+    @set:PropertyName("created_on")
+    var createdOn: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("lastLoginDetails")
+    @set:PropertyName("lastLoginDetails")
+    var lastLoginDetails: LastLoginDetails? = null
 ) {
 
     @Exclude
@@ -90,5 +101,36 @@ data class EnrollmentInfo(
 
     @get:PropertyName("enrolledOn")
     @set:PropertyName("enrolledOn")
-    var enrolledOn: Timestamp? = null
+    var enrolledOn: Timestamp? = null,
+
+    @get:PropertyName("enrolledLocationLatitude")
+    @set:PropertyName("enrolledLocationLatitude")
+    var enrolledLocationLatitude: Double = 0.0,
+
+    @get:PropertyName("enrolledLocationLongitude")
+    @set:PropertyName("enrolledLocationLongitude")
+    var enrolledLocationLongitude: Double = 0.0,
+
+    @get:PropertyName("enrolledLocationAddress")
+    @set:PropertyName("enrolledLocationAddress")
+    var enrolledLocationAddress: String = ""
+
+)
+
+data class LastLoginDetails(
+    @get:PropertyName("lastLoginTime")
+    @set:PropertyName("lastLoginTime")
+    var lastLoginTime: Timestamp? = null,
+
+    @get:PropertyName("lastLoginLocationLatitude")
+    @set:PropertyName("lastLoginLocationLatitude")
+    var lastLoginLocationLatitude: Double = 0.0,
+
+    @get:PropertyName("lastLoginLocationLongitude")
+    @set:PropertyName("lastLoginLocationLongitude")
+    var lastLoginLocationLongitude: Double = 0.0,
+
+    @get:PropertyName("lastLoginFromAddress")
+    @set:PropertyName("lastLoginFromAddress")
+    var lastLoginFromAddress: String = ""
 )

@@ -138,7 +138,7 @@
                     android:layout_width="@dimen/size_24"
                     android:layout_height="@dimen/size_24"
                     android:layout_marginEnd="@dimen/size_8"
-                    android:background="@drawable/circle_ffd9e6"
+                    android:background="@drawable/ic_location_drawable"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/textView137"
 
