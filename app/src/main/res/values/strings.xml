@@ -1117,6 +1117,9 @@
     <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn <b>Rs. 50</b> per Giger Onboarding. No limit on earning.</string>
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
+    <string name="allow_gigforce_to_access_this_device_s_location">Allow Gigforce to access this device’s location?</string>
+    <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find you best Gig near you</string>
+    <string name="allow_access_location">Allow Access Location</string>
 
 
 </resources>

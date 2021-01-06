@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -255,7 +256,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
-        locationUpdates!!.startUpdates(requireActivity())
+        locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates!!.setLocationUpdateCallbacks(this)
     }
 
@@ -289,7 +290,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
                     grantResults
                 )
             ) {
-                locationUpdates!!.startUpdates(requireActivity())
+                locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
             }
         }
     }
@@ -299,7 +300,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
         when (requestCode) {
 
             LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates!!.startUpdates(
-                requireActivity()
+                requireActivity() as AppCompatActivity
             )
 
         }
