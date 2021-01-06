@@ -390,7 +390,6 @@ class AddUserDetailsFragment : BaseFragment() {
         val is_gps_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (userGpsDialogActionCount == 0 && !is_gps_enabled) {
             showEnableGPSDialog()
-            checkInCheckOutSliderBtn?.resetSlider()
             return;
         }
 
@@ -403,7 +402,6 @@ class AddUserDetailsFragment : BaseFragment() {
             checkAndUpdateUserDetails()
         } else {
             requestPermissionForGPS()
-            checkInCheckOutSliderBtn?.resetSlider()
         }
     }
 

@@ -37,27 +37,27 @@ class UserDetailsViewModel constructor(
     val submitUserDetailsState: LiveData<Lse> = _submitUserDetailsState
 
     fun updateUserDetails(
-        uid: String,
-        phoneNumber: String,
-        name: String,
-        dateOfBirth: Date,
-        gender: String,
-        pinCode: String,
-        highestQualification: String,
-        latitude : Double,
-        longitude : Double,
-        address : String
+            uid: String,
+            phoneNumber: String,
+            name: String,
+            dateOfBirth: Date,
+            gender: String,
+            pinCode: String,
+            highestQualification: String,
+            latitude: Double,
+            longitude: Double,
+            address: String
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
             profileFirebaseRepository.updateUserDetails(
-                uid = uid,
-                phoneNumber = phoneNumber,
-                name = name,
-                dateOfBirth = dateOfBirth,
-                gender = gender,
-                highestQualification = highestQualification,
+                    uid = uid,
+                    phoneNumber = phoneNumber,
+                    name = name,
+                    dateOfBirth = dateOfBirth,
+                    gender = gender,
+                    highestQualification = highestQualification,
                     pincode = pinCode,
                     latitude = latitude,
                     longitude = longitude,

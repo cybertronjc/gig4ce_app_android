@@ -44,109 +44,109 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 //    }
 
     fun createEmptyProfile(
-        latitude: Double = 0.0,
-        longitude: Double = 0.0,
-        locationAddress: String = ""
+            latitude: Double = 0.0,
+            longitude: Double = 0.0,
+            locationAddress: String = ""
     ) {
         firebaseDB.collection(profileCollectionName).document(uid).set(
-            ProfileData(
-                contact = ArrayList(
-                    listOf(
-                        Contact(
-                            phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                            email = ""
+                ProfileData(
+                        contact = ArrayList(
+                                listOf(
+                                        Contact(
+                                                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                                                email = ""
+                                        )
+                                )
+                        ),
+                        createdOn = Timestamp.now(),
+                        lastLoginDetails = LastLoginDetails(
+                                lastLoginTime = Timestamp.now(),
+                                lastLoginLocationLatitude = latitude,
+                                lastLoginLocationLongitude = longitude,
+                                lastLoginFromAddress = locationAddress
                         )
-                    )
-                ),
-                createdOn = Timestamp.now(),
-                lastLoginDetails = LastLoginDetails(
-                    lastLoginTime = Timestamp.now(),
-                    lastLoginLocationLatitude = latitude,
-                    lastLoginLocationLongitude = longitude,
-                    lastLoginFromAddress = locationAddress
                 )
-            )
         )
     }
 
     private suspend fun createAndReturnEmptyProfile(
-        latitude: Double = 0.0,
-        longitude: Double = 0.0,
-        locationAddress: String = ""
-    ) : ProfileData{
+            latitude: Double = 0.0,
+            longitude: Double = 0.0,
+            locationAddress: String = ""
+    ): ProfileData {
         val profile = ProfileData(
-            contact = ArrayList(
-                listOf(
-                    Contact(
-                        phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                        email = ""
-                    )
+                contact = ArrayList(
+                        listOf(
+                                Contact(
+                                        phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                                        email = ""
+                                )
+                        )
+                ),
+                createdOn = Timestamp.now(),
+                firstLogin = Timestamp.now(),
+                lastLoginDetails = LastLoginDetails(
+                        lastLoginTime = Timestamp.now(),
+                        lastLoginLocationLatitude = latitude,
+                        lastLoginLocationLongitude = longitude,
+                        lastLoginFromAddress = locationAddress
                 )
-            ),
-            createdOn = Timestamp.now(),
-            firstLogin = Timestamp.now(),
-            lastLoginDetails = LastLoginDetails(
-                lastLoginTime = Timestamp.now(),
-                lastLoginLocationLatitude = latitude,
-                lastLoginLocationLongitude = longitude,
-                lastLoginFromAddress = locationAddress
-            )
         )
         firebaseDB
-            .collection(profileCollectionName)
-            .document(uid)
-            .setOrThrow(
-                profile
-            )
+                .collection(profileCollectionName)
+                .document(uid)
+                .setOrThrow(
+                        profile
+                )
 
         return profile
     }
 
 
     suspend fun updateLoginInfoIfUserProfileExistElseCreateProfile(
-        latitude: Double = 0.0,
-        longitude: Double = 0.0,
-        locationAddress: String = ""
-    ) : ProfileData{
+            latitude: Double = 0.0,
+            longitude: Double = 0.0,
+            locationAddress: String = ""
+    ): ProfileData {
         val docRef = firebaseDB
-            .collection(profileCollectionName)
-            .document(uid)
-            .getOrThrow()
+                .collection(profileCollectionName)
+                .document(uid)
+                .getOrThrow()
 
         if (docRef.exists()) {
 
             val firstLoginPresent = docRef.get("firstLogin") != null
 
-            if(firstLoginPresent) {
+            if (firstLoginPresent) {
                 firebaseDB
-                    .collection(profileCollectionName)
-                    .document(uid)
-                    .updateOrThrow(
-                        mapOf(
-                            "lastLoginDetails.lastLoginTime" to Timestamp.now(),
-                            "lastLoginDetails.lastLoginLocationLatitude" to latitude,
-                            "lastLoginDetails.lastLoginLocationLongitude" to longitude,
-                            "lastLoginDetails.lastLoginFromAddress" to locationAddress
+                        .collection(profileCollectionName)
+                        .document(uid)
+                        .updateOrThrow(
+                                mapOf(
+                                        "lastLoginDetails.lastLoginTime" to Timestamp.now(),
+                                        "lastLoginDetails.lastLoginLocationLatitude" to latitude,
+                                        "lastLoginDetails.lastLoginLocationLongitude" to longitude,
+                                        "lastLoginDetails.lastLoginFromAddress" to locationAddress
+                                )
                         )
-                    )
             } else {
                 firebaseDB
-                    .collection(profileCollectionName)
-                    .document(uid)
-                    .updateOrThrow(
-                        mapOf(
-                            "lastLoginDetails.lastLoginTime" to Timestamp.now(),
-                            "lastLoginDetails.lastLoginLocationLatitude" to latitude,
-                            "lastLoginDetails.lastLoginLocationLongitude" to longitude,
-                            "lastLoginDetails.lastLoginFromAddress" to locationAddress,
-                            "firstLogin" to Timestamp.now()
+                        .collection(profileCollectionName)
+                        .document(uid)
+                        .updateOrThrow(
+                                mapOf(
+                                        "lastLoginDetails.lastLoginTime" to Timestamp.now(),
+                                        "lastLoginDetails.lastLoginLocationLatitude" to latitude,
+                                        "lastLoginDetails.lastLoginLocationLongitude" to longitude,
+                                        "lastLoginDetails.lastLoginFromAddress" to locationAddress,
+                                        "firstLogin" to Timestamp.now()
+                                )
                         )
-                    )
             }
 
             return getProfileData()
         } else {
-           return createAndReturnEmptyProfile(latitude, longitude, locationAddress)
+            return createAndReturnEmptyProfile(latitude, longitude, locationAddress)
         }
     }
 
@@ -316,7 +316,10 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             dateOfBirth: Date,
             gender: String,
             pincode: String,
-            highestQualification: String
+            highestQualification: String,
+            latitude : Double,
+            longitude : Double,
+            address : String
     ) {
 
         var profileData = getProfileDataIfExist(userId = uid)
@@ -377,7 +380,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             readyToChangeLocationForWork: Boolean,
             homeCity: String = "",
             homeState: String = "",
-            howDidYouCameToKnowOfCurrentJob : String = ""
+            howDidYouCameToKnowOfCurrentJob: String = ""
     ) {
         if (uid == null) {
             firebaseDB
@@ -437,7 +440,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document(uid).update("experiences", FieldValue.arrayUnion(experience))
     }
 
-    suspend fun submitExperience(userId: String, experience: Experience){
+    suspend fun submitExperience(userId: String, experience: Experience) {
         firebaseDB.collection(profileCollectionName)
                 .document(userId).updateOrThrow("experiences", FieldValue.arrayUnion(experience))
     }
