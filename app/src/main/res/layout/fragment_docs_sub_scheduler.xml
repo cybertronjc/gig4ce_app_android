@@ -118,43 +118,45 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                <TextView
-                    android:id="@+id/doc_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_24"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:fontFamily="@font/lato"
-                    android:textColor="@color/black_three"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/doc_sub_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginTop="@dimen/size_9"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:fontFamily="@font/lato"
-                    android:textColor="@color/black_three"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    <TextView
+                        android:id="@+id/doc_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_24"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:textColor="@color/black_three"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_bullet_points"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:layout_marginTop="@dimen/size_8"
-                    android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
-                    android:layout_marginBottom="@dimen/size_24"/>
+                    <TextView
+                        android:id="@+id/doc_sub_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_9"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:textColor="@color/black_three"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_bullet_points"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:layout_marginBottom="@dimen/size_24"
+                        android:nestedScrollingEnabled="false" />
 
                 </LinearLayout>
                 <!--        android:layout_toStartOf="@+id/tv_why_we_need_docs_scheduler"-->
@@ -274,10 +276,12 @@
                 android:background="@color/schedule_doc_sub_bg" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/contact_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/size_16">
+                android:paddingBottom="@dimen/size_16"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView141"
@@ -298,10 +302,10 @@
                     android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
+                    android:background="@drawable/rect_lipstick_border"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView141"
-                    android:background="@drawable/rect_lipstick_border">
+                    app:layout_constraintTop_toBottomOf="@id/textView141">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -313,12 +317,12 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
+                            android:alpha=".5"
+                            android:background="#ffe9ef"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:alpha=".5"
-                            android:background="#ffe9ef"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/imageView46"
@@ -388,11 +392,13 @@
                             app:layout_constraintStart_toEndOf="@+id/imageView49"
                             app:layout_constraintTop_toBottomOf="@+id/textView145"
                             tools:text="Gurgaon" />
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/size_16"
-                                app:layout_constraintTop_toBottomOf="@+id/textView147"
-                                app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/size_16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView147" />
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/textView147"
                             android:layout_width="0dp"
@@ -402,7 +408,7 @@
                             android:background="@drawable/rect_lipstick"
                             android:paddingTop="@dimen/size_8"
                             android:paddingBottom="@dimen/size_8"
-                            app:layout_constraintEnd_toStartOf="@+id/textView148"
+                            app:layout_constraintEnd_toStartOf="@+id/call"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/imageView46">
@@ -437,7 +443,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/textView148"
+                            android:id="@+id/call"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/size_16"
@@ -462,23 +468,23 @@
                                 android:text="Call"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/font_14"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView148"
-                                app:layout_constraintEnd_toEndOf="@+id/textView148"
+                                app:layout_constraintBottom_toBottomOf="@+id/call"
+                                app:layout_constraintEnd_toEndOf="@+id/call"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/imageView152"
-                                app:layout_constraintTop_toTopOf="@+id/textView148" />
+                                app:layout_constraintTop_toTopOf="@+id/call" />
 
                             <ImageView
                                 android:id="@+id/imageView152"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/call_white"
-                                app:layout_constraintBottom_toBottomOf="@+id/textView148"
+                                app:layout_constraintBottom_toBottomOf="@+id/call"
                                 app:layout_constraintEnd_toStartOf="@+id/textView151"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintHorizontal_chainStyle="packed"
-                                app:layout_constraintStart_toStartOf="@+id/textView148"
-                                app:layout_constraintTop_toTopOf="@+id/textView148" />
+                                app:layout_constraintStart_toStartOf="@+id/call"
+                                app:layout_constraintTop_toTopOf="@+id/call" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -733,7 +739,7 @@
         app:slider_icon_color="@color/white"
         app:text="@string/activate"
         app:text_size="@dimen/font_16"
-        app:text_style="bold"/>
+        app:text_style="bold" />
 
     <ProgressBar
         android:id="@+id/pb_docs_submission"

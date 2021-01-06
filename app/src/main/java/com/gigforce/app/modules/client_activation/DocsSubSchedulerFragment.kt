@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -53,11 +55,9 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
     private fun initObservers() {
         viewModel.observableQuestionnairDocument.observe(viewLifecycleOwner, Observer {
-            showToast(it?.stepId.toString())
             Log.e("data", it?.stepId.toString())
             it?.answers?.forEach {
                 Log.e("data", it?.type!! + it?.options?.size.toString())
-                showToast(it?.type!! + it?.options?.size.toString())
                 if (it?.type == "dropdown" && it?.options?.size == 1) {
                     it?.selectedDropdownValue?.let {
                         viewModel.getMappedUser(it)
@@ -80,11 +80,13 @@ class DocsSubSchedulerFragment : BaseFragment() {
             }
         })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
-            alert_message.text = it?.alertMessage
-            doc_title.text = Html.fromHtml(it?.documentTitle)
-            header_title.text = it?.headerTitle
-            doc_sub_title.text = Html.fromHtml(it?.documentSubTitle)
-            adapterBulletStrings.addData(it?.documentInfo!!)
+            alert_message.text = it?.alertMessage?:""
+            doc_title.text = Html.fromHtml(it?.documentTitle?:"")
+            header_title.text = it?.headerTitle?:""
+            doc_sub_title.text = Html.fromHtml(it?.documentSubTitle?:"")
+            it?.documentInfo?.let {
+                adapterBulletStrings.addData(it)
+            }
 
 
             viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer {
@@ -167,26 +169,10 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     private fun initMappedUser(it: GFMappedUser?) {
+        contact_card.visible()
         textView144.text = it?.name
         textView145.text = it?.number.toString()
         textView146.text = it?.city
-
-        slider_checkout.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
-
-                    override fun onSlideComplete(view: SlideToActView) {
-
-                        navigate(
-                                R.id.fragment_schedule_test,
-                                bundleOf(
-                                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                                        StringConstants.TITLE.value to mTitle,
-                                        StringConstants.TYPE.value to mType,
-                                        StringConstants.MOBILE_NUMBER.value to it?.number
-                                )
-                        )
-                    }
-                }
     }
 
     fun stateChangeSlot() {
@@ -199,7 +185,29 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     private fun initClicks() {
+        call.setOnClickListener { viewModel?.gfmappedUserObj?.number?.let {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+            startActivity(intent)
+        } }
 
+        slider_checkout.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
+
+                override fun onSlideComplete(view: SlideToActView) {
+                    viewModel?.gfmappedUserObj?.number?.let {
+                        navigate(
+                            R.id.fragment_schedule_test,
+                            bundleOf(
+                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                StringConstants.TITLE.value to mTitle,
+                                StringConstants.TYPE.value to mType,
+                                StringConstants.MOBILE_NUMBER.value to it
+                            )
+                        )
+                    }
+
+                }
+            }
 //        tv_change_slot.setOnClickListener {
 //            changeSlot()
 //
