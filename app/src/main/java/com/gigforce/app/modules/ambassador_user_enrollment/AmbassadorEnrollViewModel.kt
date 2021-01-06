@@ -70,8 +70,10 @@ class AmbassadorEnrollViewModel constructor(
                     checkMobileResponse = response
                 )
             )
+            _sendOtpToPhoneNumber.value = null
         } catch (e: Exception) {
             _sendOtpToPhoneNumber.value = Lce.error(e.message ?: "Unable to send otp")
+            _sendOtpToPhoneNumber.value = null
         }
     }
 

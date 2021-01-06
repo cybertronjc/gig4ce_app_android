@@ -124,7 +124,7 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
     }
 
     override fun onViewGigDetailsClicked() {
-        TODO("Not yet implemented")
+
     }
 
 }

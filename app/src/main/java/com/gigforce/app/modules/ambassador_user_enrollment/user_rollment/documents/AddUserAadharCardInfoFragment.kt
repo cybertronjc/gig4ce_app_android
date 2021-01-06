@@ -36,19 +36,31 @@ import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_bac
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageHolder
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharCardET
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageHolder
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoRB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharSubmitSliderBtn
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.doYouHaveAadharLabel
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.helpIconViewIV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.topSeaparator
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNoTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNumberViewErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackErrorMessageTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.editLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.statusTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -85,7 +97,13 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         getDataFromIntents(arguments,savedInstanceState)
         initViews()
         initViewModel()
+        getUserDetails()
     }
+
+    private fun getUserDetails() {
+        viewModel.getVerificationStatus(userId)
+    }
+
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -194,6 +212,34 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharBackImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForBackSideImage()
         }
+
+        ambsd_aadhar_skip_btn.setOnClickListener {
+
+            navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+            )
+        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.you_are_reuploading_aadhar))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+
+                        aadharViewLayout.gone()
+                        aadharEditLayout.visible()
+
+                        setDataOnEditLayout(aadharCardDataModel)
+                        aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
+                        aadharSubmitSliderBtn.isEnabled = true
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
+        }
+
 
 
         aadharSubmitSliderBtn.onSlideCompleteListener =

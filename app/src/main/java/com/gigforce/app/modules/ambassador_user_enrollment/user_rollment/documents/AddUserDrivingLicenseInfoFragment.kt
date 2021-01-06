@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragment
@@ -23,13 +25,32 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDet
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.dlMainLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.dlViewLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.confirmDLDataCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlBackImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlFrontImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlSubmitSliderBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.drivingLicenseEditText
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.stateSpinner
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.editLayout
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -58,6 +79,8 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
     private lateinit var userId: String
     private lateinit var userName: String
+    private var drivingLicenseDetail: DrivingLicenseDataModel? = null
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +93,13 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         getDataFromIntents(arguments, savedInstanceState)
         initViews()
         initViewModel()
+        getUserDetails()
     }
+
+    private fun getUserDetails() {
+        viewModel.getVerificationStatus(userId)
+    }
+
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -235,6 +264,34 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                     }
                 }
             }
+
+
+        ambsd_dl_skip_btn.setOnClickListener {
+
+            UserDetailsFilledDialogFragment.launch(
+                    userId = userId,
+                    userName = userName,
+                    fragmentManager = childFragmentManager,
+                    okayClickListener = this@AddUserDrivingLicenseInfoFragment
+            )
+        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.reuploading_driving_license))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+
+                        dlViewLayout.gone()
+                        dlMainLayout.visible()
+
+                        setDataOnEditLayout(drivingLicenseDetail)
+                        dlSubmitSliderBtn.isEnabled = true
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
+        }
 
 
 
@@ -459,5 +516,73 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     override fun onOkayClicked() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
+
+    private fun setDataOnEditLayout(it: DrivingLicenseDataModel?) {
+        dlViewLayout.gone()
+        dlMainLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            dlAvailaibilityOptionRG.gone()
+            doYouHaveDLLabel.gone()
+        } else {
+            dlAvailaibilityOptionRG.visible()
+            doYouHaveDLLabel.visible()
+
+            dlEditOverallErrorMessage.gone()
+            dlStateEditErrorMessage.gone()
+            dlNoEditErrorMessage.gone()
+            dlFrontEditErrorMessage.gone()
+            dlBackEditErrorMessage.gone()
+        }
+
+        val dlData = it ?: return
+        dlSubmitSliderBtn.text = getString(R.string.update)
+
+        drivingLicenseEditText.setText(dlData.dlNo)
+        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState)
+
+        dlAvailaibilityOptionRG.check(R.id.dlYesRB)
+
+
+        if (dlData.frontImage != null) {
+
+            if (dlData.frontImage.startsWith("http", true)) {
+                showFrontDrivingLicense(Uri.parse(dlData.frontImage))
+            } else {
+
+                val imageRef = firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(dlData.frontImage)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    showFrontDrivingLicense(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+            }
+        }
+
+        if (dlData.backImage != null) {
+
+            if (dlData.backImage.startsWith("http", true)) {
+                showBackDrivingLicense(Uri.parse(dlData.backImage))
+            } else {
+
+                val imageRef = firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(dlData.backImage)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    showBackDrivingLicense(it)
+                }.addOnFailureListener {
+                    print("ee")
+                }
+            }
+        }
+    }
+
 
 }

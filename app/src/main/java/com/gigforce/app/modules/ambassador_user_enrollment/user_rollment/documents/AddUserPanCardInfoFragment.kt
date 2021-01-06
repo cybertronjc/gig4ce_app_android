@@ -32,18 +32,28 @@ import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panEditLa
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panViewLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.doYouHavePanCardLabel
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.helpIconIV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardEditText
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panDataCorrectCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageHolder
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoRB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panSubmitSliderBtn
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panYesRB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.editLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewImageErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewNoErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewNoTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.statusTV
 import java.util.*
 
 class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
@@ -165,6 +175,35 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             } else
                 disableSubmitButton()
         }
+
+        ambsd_pan_skip_btn.setOnClickListener {
+
+            navigate(
+                    R.id.addUserAadharCardInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+            )
+        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.you_are_reuploading_pan_card))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+
+                        panViewLayout.gone()
+                        panEditLayout.visible()
+
+                        setDataOnEditLayout(panCardDataModel)
+                        panCardAvailaibilityOptionRG.check(R.id.panYesRB)
+                        panSubmitSliderBtn.isEnabled = true
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
+        }
+
 
 
         panSubmitSliderBtn.onSlideCompleteListener =

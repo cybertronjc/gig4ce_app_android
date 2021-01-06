@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:enabled="true"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/skip"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/gradient_button"
+        android:enabled="true"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/skip_btn" />
+
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="80dp"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/submitBtn"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -109,6 +149,23 @@
                 app:layout_constraintEnd_toEndOf="@id/pin_code_et"
                 app:layout_constraintTop_toTopOf="@id/pin_code_et" />
 
+            <TextView
+                android:id="@+id/pin_code_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:layout_marginStart="16dp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pin_code_et"
+                tools:text="Some Error" />
+
+
 
             <EditText
                 android:id="@+id/address_line_1_et"
@@ -126,8 +183,23 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/pin_code_et" />
+                app:layout_constraintTop_toBottomOf="@id/pin_code_error" />
 
+            <TextView
+                android:id="@+id/address_line_1_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_line_1_et"
+                tools:text="Some Error" />
 
             <EditText
                 android:id="@+id/address_line_2_et"
@@ -145,7 +217,25 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/address_line_1_et" />
+                app:layout_constraintTop_toBottomOf="@id/address_line_1_error" />
+
+
+            <TextView
+                android:id="@+id/address_line_2_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_et"
+                tools:text="Some Error" />
+
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/state_spinner"
@@ -163,8 +253,24 @@
                 android:background="@drawable/rectangle_round_grey"
                 app:layout_constraintEnd_toStartOf="@+id/city_spinner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/address_line_2_et" />
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
 
+
+            <TextView
+                android:id="@+id/state_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/state_spinner"
+                tools:text="Some Error" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/city_spinner"
@@ -183,7 +289,24 @@
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/state_spinner"
-                app:layout_constraintTop_toBottomOf="@id/address_line_2_et" />
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
+
+            <TextView
+                android:id="@+id/city_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/state_spinner"
+                app:layout_constraintTop_toBottomOf="@id/state_spinner"
+                tools:text="Some Error" />
+
 
 
             <TextView
@@ -199,7 +322,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/state_spinner" />
+                app:layout_constraintTop_toBottomOf="@id/state_error" />
 
             <SeekBar
                 android:id="@+id/arround_current_add_seekbar"
@@ -263,6 +386,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/seekbardependent" />
 
+            <TextView
+                android:id="@+id/migrant_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/migrant_label"
+                tools:text="Some Error" />
+
+
+
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/localite_migrant_chipgroup"
@@ -272,7 +413,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
                 app:chipSpacingHorizontal="14dp"
-                app:layout_constraintTop_toBottomOf="@id/migrant_label"
+                app:layout_constraintTop_toBottomOf="@id/migrant_error"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -299,6 +440,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="12dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/localite_migrant_chipgroup">
 
 
@@ -337,6 +479,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
 
+                <TextView
+                    android:id="@+id/permanent_state_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_state_spinner"
+                    tools:text="Some Error" />
+
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/permanent_city_spinner"
@@ -357,6 +515,24 @@
                     app:layout_constraintStart_toEndOf="@id/permanent_state_spinner"
                     app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
 
+                <TextView
+                    android:id="@+id/permanent_city_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toEndOf="@id/permanent_state_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_city_spinner"
+                    tools:text="Some Error" />
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -371,8 +547,25 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/permanent_address_layout" />
+
+            <TextView
+                android:id="@+id/ready_to_migrate_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_label"
+                tools:text="Some Error" />
 
 
             <com.google.android.material.chip.ChipGroup
@@ -383,7 +576,8 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
                 app:chipSpacingHorizontal="14dp"
-                app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_label"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/ready_to_migrate_error"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -417,6 +611,7 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_chipgroup" />
 
@@ -429,6 +624,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
                 app:chipSpacingHorizontal="14dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/how_do_you_came_to_know_label"
                 app:singleSelection="true">
 
@@ -477,22 +673,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/submitBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:background="@drawable/gradient_button"
-        android:enabled="true"
-        android:fontFamily="@font/lato_bold"
-        android:gravity="center"
-        android:text="@string/next"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

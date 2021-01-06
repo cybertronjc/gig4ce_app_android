@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
@@ -36,6 +38,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var userId: String
     private lateinit var userName: String
+
+    private var mode: Int = EnrollmentConstants.MODE_ADD
+    private var profileData: ProfileData? = null
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -48,10 +53,21 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         getDataFromIntents(arguments, savedInstanceState)
         initListeners()
         initViewModel()
+        getProfileForUser()
+    }
+
+    private fun getProfileForUser() {
+        if (mode == EnrollmentConstants.MODE_EDIT) {
+            viewModel.getProfileForUser(userId)
+            skip_btn.visible()
+        } else {
+            skip_btn.gone()
+        }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
 
@@ -60,6 +76,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         }
 
         savedInstanceState?.let {
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
@@ -69,6 +86,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
+        outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
     }
 
     private fun initListeners() {
@@ -135,44 +153,132 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        localite_migrant_chipgroup.setOnCheckedChangeListener { group, checkedId ->
+
+            if (checkedId == R.id.migrant_no) {
+                permanent_address_layout.gone()
+
+                ready_to_change_location_label.visible()
+                ready_to_change_location_chipgroup.visible()
+
+                how_do_you_came_to_know_label.gone()
+                how_do_you_came_to_know_chipgroup.gone()
+            } else {
+                permanent_address_layout.visible()
+
+                ready_to_change_location_label.gone()
+                ready_to_change_location_chipgroup.gone()
+
+                how_do_you_came_to_know_label.visible()
+                how_do_you_came_to_know_chipgroup.visible()
+            }
+        }
+
+        skip_btn.setOnClickListener {
+
+            navigate(
+                    R.id.addUserBankDetailsInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+            )
+        }
     }
 
     private fun validateDataAndSubmit() {
-        if (pin_code_et.text.isNotBlank() && pin_code_et.text.toString().toInt() < 10_00_00) {
-            showAlertDialog("Invalid Pincode", "Provide a valid Pin Code")
+        if (pin_code_et.text.isBlank() || pin_code_et.text.toString().toInt() < 10_00_00) {
+            pin_code_error.visible()
+            pin_code_error.text = "Provide a valid Pin Code"
             return
+        } else {
+            pin_code_error.gone()
+            pin_code_error.text = null
         }
 
         if (address_line_1_et.text.isBlank()) {
-            showAlertDialog("Provide Address Line 1", "Please provide address line 1")
+            address_line_1_error.visible()
+            address_line_1_error.text = "Please provide House No/ Street No"
             return
+        } else {
+            address_line_1_error.gone()
+            address_line_1_error.text = null
         }
 
         if (address_line_2_et.text.isBlank()) {
-            showAlertDialog("Provide Address Line 2", "Please provide address line 2")
+            address_line_2_error.visible()
+            address_line_2_error.text = "Please provide Area / Village / Town"
             return
+        } else {
+            address_line_2_error.gone()
+            address_line_2_error.text = null
         }
 
         if (state_spinner.childCount == 0 || state_spinner.selectedItemPosition == 0) {
-            showAlertDialog("Provide State", "Please select state name")
+            state_error.visible()
+            state_error.text = "Select state name"
             return
+        } else {
+            state_error.gone()
+            state_error.text = null
         }
 
         if (city_spinner.childCount == 0 || city_spinner.selectedItemPosition == 0) {
-            showAlertDialog("Provide City", "Please select district name")
+
+            city_error.visible()
+            city_error.text = "Select district name"
             return
+        } else {
+            city_error.gone()
+            city_error.text = null
         }
 
-        if (userId != null) {
+        if (permanent_address_layout.isVisible && (permanent_state_spinner.childCount == 0 || permanent_state_spinner.selectedItemPosition == 0)) {
+            permanent_state_error.visible()
+            permanent_state_error.text = "Select state name"
+            return
+        } else {
+            permanent_state_error.gone()
+            permanent_state_error.text = null
+        }
 
-            if (ready_to_change_location_chipgroup.checkedChipId == -1) {
-                showAlertDialog("", "Select if you want to change your location")
-                return
-            }
+        if (permanent_address_layout.isVisible && (permanent_city_spinner.childCount == 0 || permanent_city_spinner.selectedItemPosition == 0)) {
+            permanent_city_error.visible()
+            permanent_city_error.text = "Select state name"
+            return
+        } else {
+            permanent_city_error.gone()
+            permanent_city_error.text = null
+        }
+
+        if (ready_to_change_location_chipgroup.isVisible && ready_to_change_location_chipgroup.checkedChipId == -1) {
+            ready_to_migrate_error.visible()
+            ready_to_migrate_error.text = "Select If you are ready to migrate"
+            return
+        } else {
+            ready_to_migrate_error.gone()
+            ready_to_migrate_error.text = null
         }
 
         val state = (state_spinner.selectedItem as State).name
         val city = (city_spinner.selectedItem as City).name
+
+        var homeCity = ""
+        var homeState = ""
+
+        if (permanent_address_layout.isVisible) {
+            homeCity = (permanent_city_spinner.selectedItem as City).name
+            homeState = (permanent_state_spinner.selectedItem as State).name
+        } else {
+            homeState = state
+            homeCity = city
+        }
+
+        val howDidYouCameToKnowAboutJob = if (how_do_you_came_to_know_chipgroup.isVisible && how_do_you_came_to_know_chipgroup.checkedChipId != -1) {
+            how_do_you_came_to_know_chipgroup.findViewById<Chip>(how_do_you_came_to_know_chipgroup.checkedChipId).text.toString()
+        } else {
+            ""
+        }
 
         var progress = arround_current_add_seekbar.progress
         if (progress < 5) progress = 5
@@ -185,7 +291,10 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 state = state,
                 city = city,
                 preferredDistanceInKm = progress,
-                readyToChangeLocationForWork = ready_to_change_location_chipgroup.checkedChipId == R.id.chip_location_change_yes
+                readyToChangeLocationForWork = ready_to_change_location_chipgroup.checkedChipId == R.id.chip_location_change_yes,
+                homeCity = homeCity,
+                homeState = homeState,
+                howDidYouCameToKnowOfCurrentJob = howDidYouCameToKnowAboutJob
         )
     }
 
@@ -218,7 +327,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                     }
                 })
 
-        viewModel.getProfileForUser(userId)
+
 
         viewModel.submitUserDetailsState
                 .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -274,17 +383,19 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     }
 
     private fun setUserDataOnView(content: ProfileData) {
+        profileData = content
+
         content.address.current.apply {
             pin_code_et.setText(pincode)
             address_line_1_et.setText(this.firstLine)
-            address_line_2_et.setText(this.secondLine)
+            address_line_2_et.setText(this.area)
 
             state_spinner.selectItemWithText(this.state)
             city_spinner.selectItemWithText(this.city)
             arround_current_add_seekbar.progress = this.preferred_distance
         }
 
-        if (content.isCurrentAddressAndPermanentAddressTheSame()) {
+        if (content.address.isCurrentAddressAndPermanentAddressTheSame()) {
             localite_migrant_chipgroup.check(R.id.migrant_no)
             permanent_address_layout.gone()
 
@@ -294,7 +405,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             ready_to_change_location_label.visible()
             ready_to_change_location_chipgroup.visible()
 
-            if(content.readyToChangeLocationForWork){
+            if (content.readyToChangeLocationForWork) {
                 ready_to_change_location_chipgroup.check(R.id.chip_location_change_yes)
             } else {
                 ready_to_change_location_chipgroup.check(R.id.chip_location_change_no)
@@ -327,6 +438,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, states)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         state_spinner.adapter = adapter
+        permanent_state_spinner.adapter = adapter
 
         val cities = viewModel.cities.toMutableList().apply {
             add(0, City(name = "Select district"))
@@ -335,6 +447,17 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         city_spinner.adapter = cityAdapter
+        permanent_city_spinner.adapter = cityAdapter
+
+        if (profileData != null) {
+            state_spinner.selectItemWithText(profileData!!.address.current.state)
+            permanent_state_spinner.selectItemWithText(profileData!!.address.home.state)
+
+            Handler().postDelayed({
+                permanent_city_spinner.selectItemWithText(profileData!!.address.home.city)
+                city_spinner.selectItemWithText(profileData!!.address.current.city)
+            }, 500)
+        }
     }
 
     override fun onBackPressed(): Boolean {

@@ -1,12 +1,12 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
 import android.app.DatePickerDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,7 +56,10 @@ class AddUserDetailsFragment : BaseFragment() {
 
                     dateOfBirth = newCal.time
                     date_of_birth_et.text = dateFormatter.format(newCal.time)
+
                     dob_okay_iv.visible()
+                    dob_error_tv.gone()
+                    dob_error_tv.text = null
                 },
                 1995,
                 cal.get(Calendar.MONTH),
@@ -113,6 +116,11 @@ class AddUserDetailsFragment : BaseFragment() {
     private fun initListeners() {
         user_name_et.textChanged {
             user_name_okay_iv.isVisible = it.length > 2
+
+            if (it.length > 2) {
+                full_name_error_tv.gone()
+                full_name_error_tv.text = null
+            }
         }
 
         date_of_birth_et.setOnClickListener {
@@ -123,6 +131,14 @@ class AddUserDetailsFragment : BaseFragment() {
 
         pin_code_et.textChanged {
             pin_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
+
+            if (it.isNotBlank()) {
+                pincode_error_tv.isVisible = it.length != 6 || it.toString().toInt() < 10_00_00
+                pincode_error_tv.text = "Please fill Pincode"
+            } else {
+                pincode_error_tv.gone()
+                pincode_error_tv.text = null
+            }
         }
 
         submitBtn.setOnClickListener {
@@ -143,27 +159,76 @@ class AddUserDetailsFragment : BaseFragment() {
             )
             )
         }
+
+        gender_chip_group.setOnCheckedChangeListener { group, checkedId ->
+
+            if (checkedId != View.NO_ID) {
+                gender_error_tv.gone()
+                gender_error_tv.text = null
+            }
+        }
+
+        highest_qual_chipgroup.setOnCheckedChangeListener { group, checkedId ->
+
+            if (checkedId != View.NO_ID) {
+                highest_qual_error_tv.gone()
+                highest_qual_error_tv.text = null
+            }
+        }
     }
 
     private fun validateDataAndsubmit() {
         if (user_name_et.text.length <= 2) {
-            showAlertDialog("Invalid name", "Name should be more than 2 characters")
+            full_name_error_tv.visible()
+            full_name_error_tv.text = "Name should be more than 2 characters"
             return
+        } else {
+            full_name_error_tv.gone()
+            full_name_error_tv.text = null
         }
 
         if (dateOfBirth == null) {
-            showAlertDialog("Dob not filled", "Select your date of birth")
+            dob_error_tv.visible()
+            dob_error_tv.text = "Select date of birth"
             return
+        } else {
+            dob_error_tv.gone()
+            dob_error_tv.text = null
         }
 
         if (gender_chip_group.checkedChipId == -1) {
-            showAlertDialog("select Gender", "Select your gender")
+            gender_error_tv.visible()
+            gender_error_tv.text = "Select your gender"
             return
+        } else {
+            gender_error_tv.gone()
+            gender_error_tv.text = null
+        }
+
+        if (pin_code_et.text.isNotBlank()) {
+            val pinCode = pin_code_et.text.toString().toInt()
+
+            if (pinCode < 10_00_00) {
+
+                pincode_error_tv.visible()
+                pincode_error_tv.text = "Please fill Pincode"
+            } else {
+                pincode_error_tv.gone()
+                pincode_error_tv.text = null
+            }
+        } else {
+            pincode_error_tv.gone()
+            pincode_error_tv.text = null
         }
 
         if (highest_qual_chipgroup.checkedChipId == -1) {
-            showAlertDialog("Select highest qualification", "Please fill highest qualification")
+
+            highest_qual_error_tv.visible()
+            highest_qual_error_tv.text = "Please fill highest qualification"
             return
+        } else {
+            highest_qual_error_tv.gone()
+            highest_qual_error_tv.text = null
         }
 
         viewModel.updateUserDetails(
@@ -171,6 +236,7 @@ class AddUserDetailsFragment : BaseFragment() {
                 phoneNumber = phoneNumber,
                 name = user_name_et.text.toString(),
                 dateOfBirth = dateOfBirth!!,
+                pinCode = pin_code_et.text.toString(),
                 gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
                 highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
         )
@@ -250,20 +316,23 @@ class AddUserDetailsFragment : BaseFragment() {
 
         if (showEditActions) {
             skip_btn.visible()
+            submitBtn.text = "Update"
         } else {
             skip_btn.gone()
+            submitBtn.text = "Submit"
         }
     }
 
-    private fun showUserDetailsOnView(content: ProfileData) = with(content) {
-        user_name_et.setText(this.name)
-        val dob = dateFormatter.format(this.dateOfBirth)
+    private fun showUserDetailsOnView(content: ProfileData) = content.let {
+        user_name_et.setText(it.name)
+        val dob = dateFormatter.format(it.dateOfBirth.toDate())
+        this.dateOfBirth = it.dateOfBirth.toDate()
         date_of_birth_et.text = dob
 
-        gender_chip_group.selectChipWithText(this.gender)
-        highest_qual_chipgroup.selectChipWithText(this.highestEducation)
+        gender_chip_group.selectChipWithText(it.gender)
+        highest_qual_chipgroup.selectChipWithText(it.highestEducation)
 
-        pin_code_et.setText(this.address.current.pincode)
+        pin_code_et.setText(it.address.current.pincode)
     }
 
     override fun onBackPressed(): Boolean {

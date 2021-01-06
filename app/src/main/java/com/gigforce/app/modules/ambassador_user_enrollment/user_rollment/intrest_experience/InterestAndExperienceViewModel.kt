@@ -9,6 +9,7 @@ import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
@@ -38,6 +39,7 @@ class InterestAndExperienceViewModel constructor(
             _submitInterestState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(e)
             _submitInterestState.value = Lse.error(e.message ?: "Unable to submit interest")
             _submitInterestState.value = null
         }
@@ -46,18 +48,73 @@ class InterestAndExperienceViewModel constructor(
     private val _saveExpAndReturnNextOne = MutableLiveData<Lce<String?>>()
     val saveExpAndReturnNextOne: LiveData<Lce<String?>> = _saveExpAndReturnNextOne
 
-    fun saveExpAndReturnNewOne(userId : String,experience: Experience) = viewModelScope.launch {
-        profileFirebaseRepository
-            .submitExperience(userId,experience)
-            .addOnSuccessListener {
-                checkForPendingInterestExperience(userId)
-            }
-            .addOnFailureListener {
-                _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${it.message}")
-            }
+    fun saveExpAndReturnNewOne(userId: String, experience: Experience) = viewModelScope.launch {
+
+        try {
+            _saveExpAndReturnNextOne.value = Lce.loading()
+
+            profileFirebaseRepository.submitExperience(userId, experience)
+            checkForPendingInterestExperience(userId)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
+        }
     }
 
-    private fun checkForPendingInterestExperience(userId: String) = viewModelScope.launch {
+    fun updateExpAndReturnNewOne(userId: String, experience: Experience) = viewModelScope.launch {
+        _saveExpAndReturnNextOne.value = Lce.loading()
+
+        try {
+            profileFirebaseRepository.updateExistingExperienceElseAdd(userId, experience)
+
+            val profileData = profileFirebaseRepository.getProfileData(userId)
+            val experienceList = profileData.experiences ?: return@launch
+
+            for (i in experienceList.indices) {
+                if (experienceList[i].title == experience.title) {
+
+                    if (i == experienceList.size - 1) {
+                        _saveExpAndReturnNextOne.value = Lce.content(null)
+                    } else {
+                        _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                    }
+                    return@launch
+                }
+            }
+            _saveExpAndReturnNextOne.value = Lce.content(null)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+        }
+    }
+
+    fun skipCurrentExperienceAndFetchNextOne(userId: String, expName: String) = viewModelScope.launch {
+        _saveExpAndReturnNextOne.value = Lce.loading()
+
+        try {
+            val profileData = profileFirebaseRepository.getProfileData(userId)
+            val experienceList = profileData.experiences ?: return@launch
+
+            for (i in experienceList.indices) {
+                if (experienceList[i].title == expName) {
+
+                    if (i == experienceList.size - 1) {
+                        _saveExpAndReturnNextOne.value = Lce.content(null)
+                    } else {
+                        _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                    }
+                    return@launch
+                }
+            }
+            _saveExpAndReturnNextOne.value = Lce.content(null)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+        }
+    }
+
+
+    private suspend fun checkForPendingInterestExperience(userId: String) {
         try {
             val profileData = profileFirebaseRepository.getProfileData(userId)
 
@@ -67,19 +124,21 @@ class InterestAndExperienceViewModel constructor(
             } ?: emptyList()
 
             if (pendingInts.isEmpty()) {
+                userEnrollmentRepository.setExperienceAsUploaded(userId)
                 _saveExpAndReturnNextOne.value = Lce.content(null)
             } else {
                 _saveExpAndReturnNextOne.value = Lce.content(pendingInts.first().name)
             }
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
         }
     }
 
-    private val _experience = MutableLiveData<Lce<String?>>()
-    val experience: LiveData<Lce<String?>> = _experience
+    private val _experience = MutableLiveData<Lce<InterestAndExperienceData?>>()
+    val experience: LiveData<Lce<InterestAndExperienceData?>> = _experience
 
-    fun getPendingInterestExperience(userId : String) = viewModelScope.launch {
+    fun getPendingInterestExperience(userId: String) = viewModelScope.launch {
         try {
             val profileData = profileFirebaseRepository.getProfileData(userId)
 
@@ -91,14 +150,76 @@ class InterestAndExperienceViewModel constructor(
             if (pendingInts.isEmpty()) {
                 _experience.value = Lce.content(null)
             } else {
-                _experience.value = Lce.content(pendingInts.first().name)
+                _experience.value = Lce.content(
+                    InterestAndExperienceData(
+                        interestName = pendingInts.first().name,
+                        experience = null
+                    )
+                )
             }
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             _experience.value = Lce.error("Unable to get Exp : ${e.message}")
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun getInterestDetailsOrFetchFirstOneIfInterestNameIsNull(
+        userId: String,
+        interestName: String?
+    ) = viewModelScope.launch {
+        try {
+            val profileData = profileFirebaseRepository.getProfileData(userId)
+
+            if (interestName == null && !profileData.interests.isNullOrEmpty()) {
+                //Show First one
+                val interest = profileData.interests!!.first()
+                val expMatch = profileData.experiences!!.find { exp -> exp.title == interest.name }
+
+                if (expMatch == null) {
+                    //Did not filled exp for this interest
+                    _experience.value = Lce.content(
+                        InterestAndExperienceData(
+                            interestName = interest.name,
+                            experience = null
+                        )
+                    )
+                } else {
+                    _experience.value = Lce.content(
+                        InterestAndExperienceData(
+                            interestName = interest.name,
+                            experience = expMatch
+                        )
+                    )
+                }
+            } else {
+                val expMatch = profileData.experiences!!.find { exp -> exp.title == interestName }
+
+                if (expMatch == null) {
+                    //Did not filled exp for this interest
+                    _experience.value = Lce.content(
+                        InterestAndExperienceData(
+                            interestName = interestName!!,
+                            experience = null
+                        )
+                    )
+                } else {
+                    _experience.value = Lce.content(
+                        InterestAndExperienceData(
+                            interestName = interestName!!,
+                            experience = expMatch
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+            _experience.value = Lce.error("Unable to get Exp : ${e.message}")
+        }
     }
+
 }
+
+data class InterestAndExperienceData(
+    val interestName: String,
+    val experience: Experience?
+)

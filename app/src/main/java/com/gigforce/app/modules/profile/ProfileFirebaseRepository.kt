@@ -2,6 +2,7 @@ package com.gigforce.app.modules.profile
 
 import android.util.Log
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.app.core.replace
 import com.gigforce.app.modules.profile.models.*
 import com.gigforce.app.utils.setOrThrow
 import com.gigforce.app.utils.updateOrThrow
@@ -141,9 +142,18 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document(uid).update("profileAvatarName", profileAvatarName)
     }
 
-    fun setProfileAvatarName(userId: String?, profileAvatarName: String) {
+    fun setProfileAvatarName(
+            userId: String?,
+            profileAvatarName: String,
+            profileAvatarNameThumbnail: String? = null
+    ) {
         firebaseDB.collection(profileCollectionName)
-                .document(userId ?: getUID()).update("profileAvatarName", profileAvatarName)
+                .document(userId ?: getUID()).update(
+                        mapOf(
+                                "profileAvatarName" to profileAvatarName,
+                                "profilePicThumbnail" to profileAvatarNameThumbnail
+                        )
+                )
     }
 
     fun removeProfileTag(tags: ArrayList<String>) {
@@ -173,9 +183,15 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document(userId ?: uid)
                 .get()
                 .addOnSuccessListener {
-                    val profileData = it.toObject(ProfileData::class.java)
-                            ?: throw  IllegalStateException("unable to parse profile object")
-                    cont.resume(profileData)
+
+                    if (it.exists()) {
+                        val profileData = it.toObject(ProfileData::class.java)
+                                ?: throw  IllegalStateException("unable to parse profile object")
+                        profileData.id = it.id
+                        cont.resume(profileData)
+                    } else {
+                        cont.resume(ProfileData())
+                    }
                 }
                 .addOnFailureListener {
                     cont.resumeWithException(it)
@@ -206,28 +222,46 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             name: String,
             dateOfBirth: Date,
             gender: String,
+            pincode: String,
             highestQualification: String
     ) {
 
-        val profileData = ProfileData(
-                name = name,
-                gender = gender,
-                loginMobile = "+91$phoneNumber",
-                dateOfBirth = Timestamp(dateOfBirth),
-                highestEducation = highestQualification,
-                contact = ArrayList(
-                        listOf(
-                                Contact(
-                                        phone = phoneNumber,
-                                        email = ""
-                                )
-                        )
-                ),
-                enrolledBy = EnrollmentInfo(
-                        id = getUID(),
-                        enrolledOn = Timestamp.now()
-                )
-        )
+        var profileData = getProfileDataIfExist(userId = uid)
+
+        if (profileData == null) {
+            profileData = ProfileData(
+                    name = name,
+                    gender = gender,
+                    loginMobile = phoneNumber,
+                    address = AddressFirestoreModel(
+                            current = AddressModel(pincode = pincode)
+                    ),
+                    dateOfBirth = Timestamp(dateOfBirth),
+                    highestEducation = highestQualification,
+                    contact = ArrayList(
+                            listOf(
+                                    Contact(
+                                            phone = phoneNumber,
+                                            email = ""
+                                    )
+                            )
+                    ),
+                    isonboardingdone = true,
+                    enrolledBy = EnrollmentInfo(
+                            id = getUID(),
+                            enrolledOn = Timestamp.now()
+                    )
+            )
+        } else {
+            profileData.apply {
+                this.name = name
+                this.dateOfBirth = Timestamp(dateOfBirth)
+                this.gender = gender
+                this.address.current.pincode = pincode
+                this.highestEducation = highestQualification
+                this.isonboardingdone = true
+            }
+        }
 
         firebaseDB
                 .collection(profileCollectionName)
@@ -243,7 +277,10 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             state: String,
             city: String,
             preferredDistanceInKm: Int,
-            readyToChangeLocationForWork: Boolean
+            readyToChangeLocationForWork: Boolean,
+            homeCity: String = "",
+            homeState: String = "",
+            howDidYouCameToKnowOfCurrentJob : String = ""
     ) {
         if (uid == null) {
             firebaseDB
@@ -270,6 +307,9 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                                     "address.current.pincode" to pinCode,
                                     "address.current.state" to state,
                                     "address.current.city" to city,
+                                    "address.home.state" to homeState,
+                                    "address.home.city" to homeCity,
+                                    "address.howDidYouCameToKnowOfCurrentJob" to howDidYouCameToKnowOfCurrentJob,
                                     "address.current.empty" to false,
                                     "address.current.preferredDistanceActive" to true,
                                     "address.current.preferred_distance" to preferredDistanceInKm,
@@ -300,8 +340,44 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document(uid).update("experiences", FieldValue.arrayUnion(experience))
     }
 
-    suspend fun submitExperience(userId: String, experience: Experience): Task<Void> {
-        return firebaseDB.collection(profileCollectionName)
-                .document(userId).update("experiences", FieldValue.arrayUnion(experience))
+    suspend fun submitExperience(userId: String, experience: Experience){
+        firebaseDB.collection(profileCollectionName)
+                .document(userId).updateOrThrow("experiences", FieldValue.arrayUnion(experience))
     }
+
+    suspend fun updateExistingExperienceElseAdd(userId: String, experience: Experience) {
+        val profileData = getProfileData(userId = userId)
+
+        val updatedExpList = profileData.experiences?.replace(newValue = experience) {
+            it.title == experience.title
+        }
+
+        firebaseDB
+                .collection(profileCollectionName)
+                .document(userId)
+                .updateOrThrow("experiences", updatedExpList!!)
+    }
+
+    suspend fun getProfileDataIfExist(userId: String? = null): ProfileData? =
+            suspendCoroutine { cont ->
+
+                getCollectionReference()
+                        .document(userId ?: uid)
+                        .get()
+                        .addOnSuccessListener {
+
+                            if (it.exists()) {
+                                val profileData = it.toObject(ProfileData::class.java)
+                                        ?: throw  IllegalStateException("unable to parse profile object")
+                                profileData.id = it.id
+                                cont.resume(profileData)
+                            } else {
+                                cont.resume(null)
+                            }
+                        }
+                        .addOnFailureListener {
+                            cont.resumeWithException(it)
+                        }
+            }
+
 }

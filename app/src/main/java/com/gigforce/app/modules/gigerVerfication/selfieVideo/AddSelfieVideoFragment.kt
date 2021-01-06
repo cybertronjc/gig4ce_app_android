@@ -24,6 +24,7 @@ import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.utils.DateHelper
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_selfie_play_selfie_video.*

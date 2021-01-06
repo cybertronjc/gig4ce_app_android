@@ -10,36 +10,39 @@ import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
 
 class UserEnrollmentRepository constructor(
-    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+        private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
 ) : BaseFirestoreDBRepository() {
 
-    suspend fun createUser(mobile: String): CreateUserResponse {
+    suspend fun createUser(mobile: String, enrolledByName: String): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
-            BuildConfig.CREATE_USER_URL, listOf(
+                BuildConfig.CREATE_USER_URL, listOf(
                 CreateUserRequest(mobile)
-            )
+        )
         )
 
         if (!createUserResponse.isSuccessful) {
             throw Exception(createUserResponse.message())
         } else {
             val response = createUserResponse.body()!!.first()
-            if(response.error != null){
+            if (response.error != null) {
                 throw Exception(response.error)
             } else {
                 db.collection(COLLECTION_NAME)
-                    .document(getUID())
-                    .collection(COLLECTION_ENROLLED_USERS)
-                    .document(response.uid!!)
-                    .setOrThrow(
-                        EnrolledUser(
-                            uid = response.uid,
-                            enrolledOn = Timestamp.now(),
-                            enrolledBy = getUID(),
-                            enrollmentStepsCompleted = EnrollmentStepsCompleted(),
-                            name = mobile
+                        .document(getUID())
+                        .collection(COLLECTION_ENROLLED_USERS)
+                        .document(response.uid!!)
+                        .setOrThrow(
+                                EnrolledUser(
+                                        uid = response.uid,
+                                        enrolledOn = Timestamp.now(),
+                                        enrolledBy = getUID(),
+                                        enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                                        name = mobile,
+                                        enrolledByName = enrolledByName,
+                                        mobileNumber = mobile
+
+                                )
                         )
-                    )
             }
 
             return response
@@ -48,8 +51,8 @@ class UserEnrollmentRepository constructor(
 
     suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
-            BuildConfig.CHECK_USER_OR_SEND_OTP_URL,
-            RegisterMobileNoRequest(mobile)
+                BuildConfig.CHECK_USER_OR_SEND_OTP_URL,
+                RegisterMobileNoRequest(mobile)
         )
 
         if (!registerUserRequest.isSuccessful) {
@@ -59,11 +62,11 @@ class UserEnrollmentRepository constructor(
         }
     }
 
-    suspend fun verifyOtp(token: String,otp : String): VerifyOtpResponse {
+    suspend fun verifyOtp(token: String, otp: String): VerifyOtpResponse {
         val verifyOtpResponse = createUserApi.verifyOtp(
-            BuildConfig.VERIFY_OTP_URL,
-            token,
-            otp
+                BuildConfig.VERIFY_OTP_URL,
+                token,
+                otp
         )
 
         if (!verifyOtpResponse.isSuccessful) {
@@ -74,27 +77,31 @@ class UserEnrollmentRepository constructor(
     }
 
     suspend fun updateUserProfileName(
-        userId: String,
-        name: String
+            userId: String,
+            name: String
     ) {
 
         db.collection(COLLECTION_NAME)
-            .document(getUID())
-            .collection(COLLECTION_ENROLLED_USERS)
-            .document(userId)
-            .updateOrThrow("name", name)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow("name", name)
     }
 
     suspend fun updateUserProfilePicture(
-        userId: String,
-        profilePic: String
+            userId: String,
+            profilePic: String,
+            thumbnailPic: String?
     ) {
 
         db.collection(COLLECTION_NAME)
-            .document(getUID())
-            .collection(COLLECTION_ENROLLED_USERS)
-            .document(userId)
-            .updateOrThrow("profilePic", profilePic)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow(mapOf(
+                        "profilePic" to profilePic,
+                        "profilePic_thumbnail" to thumbnailPic
+                ))
     }
 
     suspend fun setUserDetailsAsFilled(
@@ -105,7 +112,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("userDetailsUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.userDetailsUploaded", true)
 
     }
 
@@ -117,7 +124,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("profilePicUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.profilePicUploaded", true)
     }
 
     suspend fun setInterestAsUploaded(
@@ -128,7 +135,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("interestUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.interestUploaded", true)
     }
 
     suspend fun setExperienceAsUploaded(
@@ -139,7 +146,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("experienceUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.experienceUploaded", true)
     }
 
     suspend fun setCurrentAddressAsUploaded(
@@ -150,7 +157,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("currentAddressUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.currentAddressUploaded", true)
     }
 
     suspend fun setAadharAsUploaded(
@@ -161,7 +168,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("aadharDetailsUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.aadharDetailsUploaded", true)
     }
 
     suspend fun setBankDetailsAsUploaded(
@@ -172,7 +179,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("bankDetailsUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.bankDetailsUploaded", true)
     }
 
     suspend fun setDrivingDetailsAsUploaded(
@@ -183,7 +190,7 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("drivingLicenseDetailsUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.drivingLicenseDetailsUploaded", true)
     }
 
     suspend fun setPANDetailsAsUploaded(
@@ -194,11 +201,8 @@ class UserEnrollmentRepository constructor(
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("panDetailsUploaded", true)
+                .updateOrThrow("enrollmentStepsCompleted.panDetailsUploaded", true)
     }
-
-
-
 
 
     override fun getCollectionName(): String {

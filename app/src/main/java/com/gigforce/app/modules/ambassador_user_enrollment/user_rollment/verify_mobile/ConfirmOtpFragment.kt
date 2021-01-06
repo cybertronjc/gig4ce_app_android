@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,9 @@ class ConfirmOtpFragment : BaseFragment() {
     private lateinit var verificationToken: String
     private lateinit var mobileNo: String
 
+    private var userId: String? = null
+    private var mode = EnrollmentConstants.MODE_ADD
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -43,11 +45,17 @@ class ConfirmOtpFragment : BaseFragment() {
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
+            userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
 
         savedInstanceState?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
+            userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             mobileNo = it.getString(INTENT_EXTRA_MOBILE_NO) ?: return@let
             verificationToken = it.getString(INTENT_EXTRA_OTP_TOKEN) ?: return@let
         }
@@ -57,13 +65,15 @@ class ConfirmOtpFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_MOBILE_NO, mobileNo)
         outState.putString(INTENT_EXTRA_OTP_TOKEN, verificationToken)
+        outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
+        outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
     }
 
     private fun initListeners() {
         we_will_send_otp_label.text = "We sent it to the number +91 - $mobileNo"
 
         submitBtn.setOnClickListener {
-            validateDataAndsubmit()
+            validateDataAndSubmit()
         }
 
         ic_back_iv.setOnClickListener {
@@ -71,16 +81,17 @@ class ConfirmOtpFragment : BaseFragment() {
         }
     }
 
-    private fun validateDataAndsubmit() {
+    private fun validateDataAndSubmit() {
         if (txt_otp.text?.length != 6) {
             showAlertDialog("", "Enter a valid otp")
             return
         }
 
         viewModel.checkOtpAndCreateProfile(
-                verificationToken,
-                txt_otp.text.toString(),
-                mobileNo
+                mode = mode,
+                token = verificationToken,
+                otp = txt_otp.text.toString(),
+                mobile = mobileNo
         )
     }
 
@@ -103,13 +114,24 @@ class ConfirmOtpFragment : BaseFragment() {
                         }
                         is Lce.Content -> {
                             showToast("Otp Confirmed, Profile Created")
-                            navigate(
-                                    R.id.addUserDetailsFragment, bundleOf(
-                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to it.content.uid,
-                                    EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.phoneNumber,
-                                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ADD
-                            )
-                            )
+
+                            if (mode == EnrollmentConstants.MODE_EDIT) {
+                                navigate(
+                                        R.id.addUserDetailsFragment, bundleOf(
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                        EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to mobileNo,
+                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                                )
+                                )
+                            } else {
+                                navigate(
+                                        R.id.addUserDetailsFragment, bundleOf(
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to it.content.uid,
+                                        EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to it.content.phoneNumber,
+                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                                )
+                                )
+                            }
                         }
                         is Lce.Error -> {
                             confirming_otp_pb.gone()

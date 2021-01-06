@@ -126,14 +126,32 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/total_users_enrolled_tv"
+                android:id="@+id/total_complete_profile_tv"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/lato"
                 android:textStyle="normal"
                 android:textSize="16sp"
                 android:paddingStart="18dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="6dp"
+                android:textColor="#333333"
+                android:lineSpacingExtra="3sp"
+                android:visibility="gone"
+                android:gravity="center_vertical"
+                android:background="#c6ddf3"/>
+
+            <TextView
+                android:id="@+id/total_incomplete_profile_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="16sp"
+                android:paddingStart="18dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="16dp"
                 android:textColor="#333333"
                 android:lineSpacingExtra="3sp"
                 android:visibility="gone"

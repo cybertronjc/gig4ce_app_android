@@ -84,7 +84,7 @@ fun Spinner.selectItemWithText(text: String) {
     if (this.count == 0)
         return
 
-    for (i in 0..this.adapter.count) {
+    for (i in 0 until this.adapter.count) {
         val item = this.adapter.getItem(i)
 
         item ?: continue
@@ -171,4 +171,10 @@ fun ChipGroup.selectChipWithText(vararg text: String) {
 
 fun ChipGroup.selectChipsWithText(text: List<String>) {
     selectChipWithText(*text.toTypedArray())
+}
+
+fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
+    return map {
+        if (block(it)) newValue else it
+    }
 }

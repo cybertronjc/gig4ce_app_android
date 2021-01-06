@@ -269,5 +269,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ambsd_bank_skip_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/skip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/colorPrimary"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -10,6 +10,24 @@
     android:paddingStart="18dp"
     android:paddingTop="8dp">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/edit_profile_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:textAllCaps="false"
+        android:layout_marginEnd="16dp"
+        app:shapeAppearanceOverlay="@style/circleImageView"/>
+
+
+
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_view"
@@ -26,10 +44,11 @@
         android:fontFamily="@font/lato"
         android:textStyle="normal"
         android:textSize="14sp"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
+        android:layout_toStartOf="@id/edit_profile_btn"
         android:layout_toEndOf="@id/image_view"
         android:textColor="#d9000000"
-        android:lineSpacingExtra="3sp"
         tools:text="Sumit Verma" />
 
     <ImageView
@@ -53,22 +72,6 @@
         android:textColor="@color/warm_grey_two"
         android:lineSpacingExtra="2sp"
         tools:text="Added 2 days ago" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/edit_profile_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/colorPrimary"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:textAllCaps="false"
-        android:layout_marginEnd="16dp"
-        app:shapeAppearanceOverlay="@style/circleImageView"/>
 
 
 

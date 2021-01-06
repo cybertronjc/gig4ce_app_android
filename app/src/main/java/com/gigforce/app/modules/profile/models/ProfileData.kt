@@ -20,7 +20,7 @@ data class ProfileData(
     var achievements: ArrayList<Achievement>? = ArrayList<Achievement>(),
     var languages: ArrayList<Language>? = ArrayList<Language>(),
     var contact: ArrayList<Contact>? = ArrayList<Contact>(),
-    var experiences: ArrayList<Experience>? = ArrayList<Experience>(),
+    var experiences: List<Experience>? = ArrayList<Experience>(),
     var tags: ArrayList<String>? = ArrayList<String>(),
     var connections: Int = 0,
     var rating: Rating? = Rating(),
@@ -67,7 +67,11 @@ data class ProfileData(
 
     @get:PropertyName("loginMobileNo")
     @set:PropertyName("loginMobileNo")
-    var loginMobile: String = ""
+    var loginMobile: String = "",
+
+    @get:PropertyName("profilePicThumbnail")
+    @set:PropertyName("profilePicThumbnail")
+    var profileAvatarThumbnail: String = ""
 
 ) {
 
@@ -76,9 +80,6 @@ data class ProfileData(
         profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 
 
-    @Exclude
-    fun isCurrentAddressAndPermanentAddressTheSame() =
-            profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
 }
 
 data class EnrollmentInfo(
