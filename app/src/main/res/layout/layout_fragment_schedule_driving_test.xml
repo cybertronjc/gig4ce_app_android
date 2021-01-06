@@ -188,7 +188,7 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/textView29"
+                    android:id="@+id/otp_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_16"
@@ -218,7 +218,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView29"
+                    app:layout_constraintTop_toBottomOf="@+id/otp_label"
                     tools:text="We have send the OTP on 7898971681
 will apply auto to the fields
 " />
@@ -321,7 +321,7 @@ will apply auto to the fields
         android:id="@+id/verify_otp_button_schedule"
         style="@style/button_style"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/size_44"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_13"
         android:layout_marginEnd="@dimen/size_16"
@@ -338,27 +338,26 @@ will apply auto to the fields
         android:id="@+id/generate_otp"
         style="@style/button_style"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/size_44"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_13"
         android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_54"
         android:background="@drawable/selector_bg_application_client_activation"
         android:enabled="false"
         android:text="@string/generate_otp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/size_54"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/note_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Note :The OTP will sent to Team leader’s Mobile Number"
         android:layout_marginTop="@dimen/size_12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generate_otp"/>
+        android:text="Note :The OTP will sent to Team leader’s Mobile Number"
+        app:layout_constraintStart_toStartOf="@+id/generate_otp"
+        app:layout_constraintTop_toBottomOf="@+id/generate_otp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

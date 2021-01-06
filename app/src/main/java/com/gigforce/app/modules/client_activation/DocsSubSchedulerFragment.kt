@@ -58,9 +58,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
                 Log.e("data", it?.type!! + it?.options?.size.toString())
                 showToast(it?.type!! + it?.options?.size.toString())
                 if (it?.type == "dropdown" && it?.options?.size == 1) {
-                    it?.options?.forEach {
-                        Log.e("datamsg", it.answer)
-                        viewModel.getMappedUser(it.answer.toString())
+                    it?.selectedDropdownValue?.let {
+                        viewModel.getMappedUser(it)
                     }
                 }
             }

@@ -23,10 +23,8 @@ import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
-import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.resend_otp
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.txt_otp
-import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -78,6 +76,8 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             adapter.addData(docReceiving.checkItems)
             tv_title_toolbar.text = docReceiving.title
             tv_driving_test_certification.text = docReceiving.subtitle
+            otp_label.text = docReceiving.otpLabel
+            note_msg.text = Html.fromHtml("<font color=\'#333333\'>Note : </font>"+docReceiving.noteMsg)
             viewModel.getApplication(mJobProfileId, mType, mTitle)
 
 
@@ -161,6 +161,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                             note_msg.gone()
                             verify_otp_button_schedule.visible()
                             otp_screen.visible()
+                            counterStart()
                             viewModel.otpVerificationToken = it.content.verificationToken.toString()
                         }
                         is Lce.Error -> {
@@ -246,7 +247,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         generate_otp.setOnClickListener {
             viewModel.sendOTPToMobile(mNumber)
         }
-        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+//        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
                 Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
         verify_otp_button_schedule?.setOnClickListener {
@@ -276,8 +277,8 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
                     override fun onFinish() {
                         showResendOTPMessage(true)
-                        if (reenter_mobile != null)
-                            reenter_mobile.visibility = View.VISIBLE
+//                        if (reenter_mobile != null)
+//                            reenter_mobile.visibility = View.VISIBLE
                     }
                 }.start()
     }
@@ -286,13 +287,13 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         if (isShow) {
             tv_number_otp.visibility = View.VISIBLE
             otpnotcorrect_schedule_test.visibility = View.VISIBLE
-            resend_otp.visibility = View.VISIBLE
+//            resend_otp.visibility = View.VISIBLE
             setTextViewColor(timer_tv, R.color.time_up_color)
             timerStarted = false
         } else {
             tv_number_otp.visibility = View.GONE
             otpnotcorrect_schedule_test.visibility = View.GONE
-            resend_otp.visibility = View.GONE
+//            resend_otp.visibility = View.GONE
             setTextViewColor(timer_tv, R.color.timer_color)
             timerStarted = true
         }

@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView29"
+        android:id="@+id/otp_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
@@ -104,7 +104,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView29" />
+        app:layout_constraintTop_toBottomOf="@+id/otp_label" />
 
     <TextView
         android:id="@+id/timer_tv"
