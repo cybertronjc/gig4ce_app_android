@@ -191,12 +191,12 @@ class AddUserInterestFragment : BaseFragment() {
         }
     }
 
-    private fun setDataOnView(content: ProfileData) = content.interests?.let {
+    private fun setDataOnView(content: ProfileData) = content.skills?.let {
 
         if (it.isNotEmpty()) {
             interest_chipgroup.selectChipsWithText(
                     it.map { interest ->
-                        interest.name
+                        interest.id
                     })
 
             submitBtn.text = "Update"

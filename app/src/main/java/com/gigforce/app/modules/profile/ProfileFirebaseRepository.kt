@@ -419,20 +419,19 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         }
     }
 
-    suspend fun submitInterest(
+    suspend fun submitSkills(
             uid: String,
             interest: List<String>
     ) {
 
-        val interests = interest.map {
-            Interest(
-                    name = it,
-                    haveExperience = false
+        val skills = interest.map {
+            Skill(
+                    id = it
             )
         }
         db.collection(profileCollectionName)
                 .document(uid)
-                .updateOrThrow("interests", interests)
+                .updateOrThrow("skills", skills)
     }
 
     suspend fun submitExperience(experience: Experience): Task<Void> {

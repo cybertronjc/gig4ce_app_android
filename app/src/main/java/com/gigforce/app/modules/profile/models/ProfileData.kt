@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.profile.models
 
-import com.gigforce.app.modules.profile.Interest
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
@@ -16,7 +15,11 @@ data class ProfileData(
     var profileAvatarName: String = "avatar.jpg",
     var isVerified: Boolean = false,
     var educations: ArrayList<Education>? = ArrayList<Education>(),
+
+    @get:PropertyName("skills")
+    @set:PropertyName("skills")
     var skills: ArrayList<Skill>? = ArrayList<Skill>(),
+
     var achievements: ArrayList<Achievement>? = ArrayList<Achievement>(),
     var languages: ArrayList<Language>? = ArrayList<Language>(),
     var contact: ArrayList<Contact>? = ArrayList<Contact>(),
@@ -48,10 +51,6 @@ data class ProfileData(
     @get:PropertyName("dateOfBirth")
     @set:PropertyName("dateOfBirth")
     var dateOfBirth: Timestamp = Timestamp.now(),
-
-    @get:PropertyName("interests")
-    @set:PropertyName("interests")
-    var interests: ArrayList<Interest>? = null,
 
     @get:PropertyName("enrolledBy")
     @set:PropertyName("enrolledBy")

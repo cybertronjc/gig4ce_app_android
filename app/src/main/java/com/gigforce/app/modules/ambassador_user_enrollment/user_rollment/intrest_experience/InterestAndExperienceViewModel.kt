@@ -29,7 +29,7 @@ class InterestAndExperienceViewModel constructor(
 
         _submitInterestState.postValue(Lse.loading())
         try {
-            profileFirebaseRepository.submitInterest(
+            profileFirebaseRepository.submitSkills(
                 uid = uid,
                 interest = interests
             )
@@ -119,15 +119,15 @@ class InterestAndExperienceViewModel constructor(
             val profileData = profileFirebaseRepository.getProfileData(userId)
 
             val filledExps = profileData.experiences!!.map { it.title }
-            val pendingInts = profileData.interests?.filter {
-                !filledExps.contains(it.name)
+            val pendingInts = profileData.skills?.filter {
+                !filledExps.contains(it.id)
             } ?: emptyList()
 
             if (pendingInts.isEmpty()) {
                 userEnrollmentRepository.setExperienceAsUploaded(userId)
                 _saveExpAndReturnNextOne.value = Lce.content(null)
             } else {
-                _saveExpAndReturnNextOne.value = Lce.content(pendingInts.first().name)
+                _saveExpAndReturnNextOne.value = Lce.content(pendingInts.first().id)
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -143,8 +143,8 @@ class InterestAndExperienceViewModel constructor(
             val profileData = profileFirebaseRepository.getProfileData(userId)
 
             val filledExps = profileData.experiences!!.map { it.title }
-            val pendingInts = profileData.interests?.filter {
-                !filledExps.contains(it.name)
+            val pendingInts = profileData.skills?.filter {
+                !filledExps.contains(it.id)
             } ?: emptyList()
 
             if (pendingInts.isEmpty()) {
@@ -152,7 +152,7 @@ class InterestAndExperienceViewModel constructor(
             } else {
                 _experience.value = Lce.content(
                     InterestAndExperienceData(
-                        interestName = pendingInts.first().name,
+                        interestName = pendingInts.first().id,
                         experience = null
                     )
                 )
@@ -170,23 +170,23 @@ class InterestAndExperienceViewModel constructor(
         try {
             val profileData = profileFirebaseRepository.getProfileData(userId)
 
-            if (interestName == null && !profileData.interests.isNullOrEmpty()) {
+            if (interestName == null && !profileData.skills.isNullOrEmpty()) {
                 //Show First one
-                val interest = profileData.interests!!.first()
-                val expMatch = profileData.experiences!!.find { exp -> exp.title == interest.name }
+                val interest = profileData.skills!!.first()
+                val expMatch = profileData.experiences!!.find { exp -> exp.title == interest.id }
 
                 if (expMatch == null) {
                     //Did not filled exp for this interest
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
-                            interestName = interest.name,
+                            interestName = interest.id,
                             experience = null
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
-                            interestName = interest.name,
+                            interestName = interest.id,
                             experience = expMatch
                         )
                     )
