@@ -14,7 +14,7 @@
         android:id="@+id/gig_people_to_expect_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_location"
+        android:src="@drawable/ic_group_pink"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +31,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@id/gig_people_to_expect_iv"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="People To Except" />
+        android:text="@string/people_to_except" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/people_to_expect_rv"

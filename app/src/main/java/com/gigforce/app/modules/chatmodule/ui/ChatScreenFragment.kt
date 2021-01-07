@@ -18,6 +18,8 @@ import com.gigforce.app.modules.chatmodule.viewModels.ChatViewModel
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import kotlinx.android.synthetic.main.fragment_chat_screen.*
+import kotlinx.android.synthetic.main.fragment_chat_screen.rv_chats
+import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -71,9 +73,8 @@ class ChatScreenFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun initRecycler() {
-        rv_chats.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        rv_chats.addItemDecoration(VerticalItemDecorator(30))
-        rv_chats.adapter = mAdapter
+        people_to_expect_rv.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        people_to_expect_rv.adapter = mAdapter
     }
 
     private fun subscribeViewModel() {

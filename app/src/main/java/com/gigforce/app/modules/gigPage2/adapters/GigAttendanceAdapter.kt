@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2
+package com.gigforce.app.modules.gigPage2.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,6 +17,7 @@ import java.time.format.TextStyle
 import java.util.*
 
 interface GigAttendanceAdapterClickListener {
+
     fun onAttendanceClicked(option: Gig)
 }
 

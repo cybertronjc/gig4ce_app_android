@@ -35,11 +35,15 @@ import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.app.modules.gigPage.models.GigPeopleToExpect
+import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
+import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
+import com.gigforce.app.utils.VerticalItemDecorator
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -53,6 +57,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_completiton_payment_de
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_payment_info.*
+import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_timer_layout.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
 import java.text.SimpleDateFormat
@@ -61,7 +66,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
-    PopupMenu.OnMenuItemClickListener, DeclineGigDialogFragmentResultListener {
+        PopupMenu.OnMenuItemClickListener, DeclineGigDialogFragmentResultListener, GigPeopleToExpectAdapterClickListener {
 
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
@@ -73,9 +78,15 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     val PERMISSION_FINE_LOCATION = 100
 
+    private val peopleToExpectAdapter: GigPeopleToExpectAdapter by lazy {
+        GigPeopleToExpectAdapter(requireContext()).apply {
+            this.setListener(this@GigPage2Fragment)
+        }
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_2, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,8 +107,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         }
 
         if (::gigId.isLateinit.not()) {
-            FirebaseCrashlytics.getInstance()
-                .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+            FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             FirebaseCrashlytics.getInstance().log("GigPage2Fragment: No Gig id found")
         }
     }
@@ -106,11 +116,15 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
         details_label.setOnClickListener {
             navigate(
-                R.id.gigDetailsFragment, bundleOf(
+                    R.id.gigDetailsFragment, bundleOf(
                     GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
+            )
             )
         }
+
+        people_to_expect_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
+        people_to_expect_rv.addItemDecoration(VerticalItemDecorator(30))
+        people_to_expect_rv.adapter = peopleToExpectAdapter
 
 //        gig_page_top_bar.setOnClickListener {
 //            val gig = viewModel.currentGig ?: return@setOnClickListener
@@ -130,17 +144,17 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             val gig = viewModel.currentGig ?: return@setOnClickListener
 
             navigate(
-                R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
+                    R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
                     GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to gig.gigId
-                )
+            )
             )
         }
 
         expand_iv.setOnClickListener {
             navigate(
-                R.id.gigDetailsFragment, bundleOf(
+                    R.id.gigDetailsFragment, bundleOf(
                     GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
+            )
             )
         }
 
@@ -171,61 +185,61 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
     private fun initializeGPS() {
         fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
+                LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     fun requestPermissionForGPS() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ), PERMISSION_FINE_LOCATION
+                    arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ), PERMISSION_FINE_LOCATION
             )
         }
     }
 
     private fun listener() {
         checkInCheckOutSliderBtn?.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-                override fun onSlideComplete(view: SlideToActView) {
-                    var manager =
-                        activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                    var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                    if (userGpsDialogActionCount == 0 && !statusOfGPS) {
-                        showEnableGPSDialog()
-                        checkInCheckOutSliderBtn?.resetSlider()
-                        return;
-                    }
+                object : SlideToActView.OnSlideCompleteListener {
+                    override fun onSlideComplete(view: SlideToActView) {
+                        var manager =
+                                activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                        var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                        if (userGpsDialogActionCount == 0 && !statusOfGPS) {
+                            showEnableGPSDialog()
+                            checkInCheckOutSliderBtn?.resetSlider()
+                            return;
+                        }
 
-                    if (userGpsDialogActionCount == 1 || ContextCompat.checkSelfPermission(
-                            requireActivity(),
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        var intent = Intent(context, ImageCaptureActivity::class.java)
-                        startActivityForResult(
-                            intent,
-                            GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-                        )
-                    } else {
-                        requestPermissionForGPS()
-                        checkInCheckOutSliderBtn?.resetSlider()
+                        if (userGpsDialogActionCount == 1 || ContextCompat.checkSelfPermission(
+                                        requireActivity(),
+                                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                        ) {
+                            var intent = Intent(context, ImageCaptureActivity::class.java)
+                            startActivityForResult(
+                                    intent,
+                                    GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                            )
+                        } else {
+                            requestPermissionForGPS()
+                            checkInCheckOutSliderBtn?.resetSlider()
+                        }
                     }
                 }
-            }
 
     }
 
     private fun turnGPSOn() {
         val provider = Settings.Secure.getString(
-            context?.getContentResolver(),
-            Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+                context?.getContentResolver(),
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED
         )
         if (!provider.contains("gps")) { //if gps is disabled
             val poke = Intent()
             poke.setClassName(
-                "com.android.settings",
-                "com.android.settings.widget.SettingsAppWidgetProvider"
+                    "com.android.settings",
+                    "com.android.settings.widget.SettingsAppWidgetProvider"
             )
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
             poke.setData(Uri.parse("3"))
@@ -237,22 +251,22 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     var userGpsDialogActionCount = 0
     private fun showEnableGPSDialog() {
         showConfirmationDialogType2("Please enable your GPS!!\n                                                               ",
-            object : ConfirmationDialogOnClickListener {
-                override fun clickedOnYes(dialog: Dialog?) {
-                    if (canToggleGPS()) turnGPSOn()
-                    else {
-                        showToast("Please Enable your GPS manually in setting!!")
+                object : ConfirmationDialogOnClickListener {
+                    override fun clickedOnYes(dialog: Dialog?) {
+                        if (canToggleGPS()) turnGPSOn()
+                        else {
+                            showToast("Please Enable your GPS manually in setting!!")
+                        }
+                        dialog?.dismiss()
                     }
-                    dialog?.dismiss()
-                }
 
-                override fun clickedOnNo(dialog: Dialog?) {
-                    popFragmentFromStack(R.id.earningFragment)
-                    userGpsDialogActionCount = 1
-                    dialog?.dismiss()
-                }
+                    override fun clickedOnNo(dialog: Dialog?) {
+                        popFragmentFromStack(R.id.earningFragment)
+                        userGpsDialogActionCount = 1
+                        dialog?.dismiss()
+                    }
 
-            })
+                })
     }
 
 
@@ -280,13 +294,13 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
     private fun initViewModel() {
         viewModel.gigDetails
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lce.Loading -> showGigDetailsAsLoading()
-                    is Lce.Content -> setGigDetailsOnView(it.content)
-                    is Lce.Error -> showErrorWhileLoadingGigData(it.error)
-                }
-            })
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lce.Loading -> showGigDetailsAsLoading()
+                        is Lce.Content -> setGigDetailsOnView(it.content)
+                        is Lce.Error -> showErrorWhileLoadingGigData(it.error)
+                    }
+                })
 
         viewModel.watchGig(gigId)
     }
@@ -322,21 +336,21 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(gig.companyLogo)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(company_logo_iv)
+                        .load(gig.companyLogo)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(company_logo_iv)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(gig.companyLogo!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference("companies_gigs_images")
+                        .child(gig.companyLogo!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(company_logo_iv)
-                    }
+                            GlideApp.with(requireContext())
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(company_logo_iv)
+                        }
             }
         } else {
             val companyInitials = if (gig.companyName.isNullOrBlank())
@@ -344,8 +358,8 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             else
                 gig.companyName!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                    companyInitials,
+                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
             )
 
             company_logo_iv.setImageDrawable(drawable)
@@ -366,7 +380,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             else
                 gig_duration.text = ": ${dateFormatter.format(gig.startDateTime!!.toDate())} - ${
                     dateFormatter.format(
-                        gig.endDateTime!!.toDate()
+                            gig.endDateTime!!.toDate()
                     )
                 }"
         } else {
@@ -377,17 +391,26 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_address_tv.text = gig.address
 
         //TODO show people to expect when availabel
-        people_to_expect_layout.gone()
-        divider_below_people_to_expect.gone()
+
+        if (gig.contactPersons.isNotEmpty()) {
+            people_to_expect_layout.visible()
+            divider_below_people_to_expect.visible()
+
+            peopleToExpectAdapter.updatePeopleToExpect(gig.contactPersons)
+        } else {
+            people_to_expect_layout.gone()
+            divider_below_people_to_expect.gone()
+        }
+
 
         if (gig.isMonthlyGig) {
             gross_wage_label.text = "Gross payment : "
             gross_wage.text =
-                if (gig.gigAmount == 0.0) "As per contract" else "Rs ${gig.gigAmount}/mo"
+                    if (gig.gigAmount == 0.0) "As per contract" else "Rs ${gig.gigAmount}/mo"
         } else {
             gross_wage_label.text = "Gross wage per hour : "
             gross_wage.text =
-                if (gig.gigAmount == 0.0) "As per contract" else "Rs ${gig.gigAmount}/hr"
+                    if (gig.gigAmount == 0.0) "As per contract" else "Rs ${gig.gigAmount}/hr"
         }
 
         showOtherOptions()
@@ -398,13 +421,13 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         val optionList = listOf(DRESS_CODE, REIMBURSMENT, ID_CARD, HELP)
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
         )
         val adapter = OtherOptionsAdapter(
-            requireContext(),
-            optionList
+                requireContext(),
+                optionList
         ).apply {
             setListener(this@GigPage2Fragment)
         }
@@ -417,21 +440,21 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(gig.companyLogo)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(company_logo_iv)
+                        .load(gig.companyLogo)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(company_logo_iv)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(gig.companyLogo!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference("companies_gigs_images")
+                        .child(gig.companyLogo!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(company_logo_iv)
-                    }
+                            GlideApp.with(requireContext())
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(company_logo_iv)
+                        }
             }
         } else {
             val companyInitials = if (gig.companyName.isNullOrBlank())
@@ -439,11 +462,11 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
             else
                 gig.companyName!![0].toString().toUpperCase()
             val drawable =
-                TextDrawable.builder().beginConfig().textColor(R.color.colorPrimary).endConfig()
-                    .buildRound(
-                        companyInitials,
-                        ResourcesCompat.getColor(resources, R.color.white, null)
-                    )
+                    TextDrawable.builder().beginConfig().textColor(R.color.colorPrimary).endConfig()
+                            .buildRound(
+                                    companyInitials,
+                                    ResourcesCompat.getColor(resources, R.color.white, null)
+                            )
 
             company_logo_iv.setImageDrawable(drawable)
         }
@@ -460,18 +483,18 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         }
 
         gig_page_top_bar.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_pink,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_pink,
+                        null
+                )
         )
         gig_page_timer_layout.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_pink_light,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_pink_light,
+                        null
+                )
         )
 
         gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
@@ -537,18 +560,18 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
 
         gig_page_top_bar.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_green,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_green,
+                        null
+                )
         )
         gig_page_timer_layout.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_green_light,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_green_light,
+                        null
+                )
         )
 
         gig_date_tv.text = "Today, ${dateFormatter.format(gig.startDateTime!!.toDate())}"
@@ -593,7 +616,6 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         val diffInMillisec: Long = currentTime - gigStartDateTime.time
 
 
-
         val diffInHours: Long = if (diffInMillisec > 3600000)
             TimeUnit.MILLISECONDS.toHours(diffInMillisec)
         else
@@ -613,18 +635,18 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         gig_status_tv.text = "Pending"
 
         gig_page_top_bar.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_orange,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_orange,
+                        null
+                )
         )
         gig_page_timer_layout.setBackgroundColor(
-            ResourcesCompat.getColor(
-                resources,
-                R.color.gig_orange_light,
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        R.color.gig_orange_light,
+                        null
+                )
         )
 
         gig_date_tv.text = "${dateFormatter.format(gig.startDateTime!!.toDate())}"
@@ -684,10 +706,10 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Cannot decline past or ongoing gig")
-                        .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
-                        .show()
+                            .setTitle("Alert")
+                            .setMessage("Cannot decline past or ongoing gig")
+                            .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
+                            .show()
 
                     return true
                 }
@@ -709,11 +731,6 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        
-    }
-
     override fun onPause() {
         super.onPause()
         countUpTimer?.cancel()
@@ -721,9 +738,9 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -745,9 +762,9 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         var manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (statusOfGPS && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
         ) {
             if (!isGPSRequestCompleted) {
                 initializeGPS()
@@ -761,21 +778,21 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         } else {
             if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
                 var markAttendance =
-                    GigAttendance(
-                        true,
-                        Date(),
-                        0.0,
-                        0.0,
-                        selfieImg,
-                        ""
-                    )
+                        GigAttendance(
+                                true,
+                                Date(),
+                                0.0,
+                                0.0,
+                                selfieImg,
+                                ""
+                        )
                 viewModel.markAttendance(markAttendance, gigId)
 
             } else {
                 gig!!.attendance!!.setCheckout(
-                    true, Date(), 0.0,
-                    0.0, selfieImg,
-                    ""
+                        true, Date(), 0.0,
+                        0.0, selfieImg,
+                        ""
                 )
                 viewModel.markAttendance(gig!!.attendance!!, gigId)
 
@@ -807,23 +824,23 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
 
             if (!ifAttendanceMarked) {
                 val markAttendance =
-                    GigAttendance(
+                        GigAttendance(
+                                true,
+                                Date(),
+                                latitude,
+                                longitude,
+                                selfieImg,
+                                locationAddress
+                        )
+                viewModel.markAttendance(markAttendance, gigId)
+            } else {
+                it.attendance?.setCheckout(
                         true,
                         Date(),
                         latitude,
                         longitude,
                         selfieImg,
                         locationAddress
-                    )
-                viewModel.markAttendance(markAttendance, gigId)
-            } else {
-                it.attendance?.setCheckout(
-                    true,
-                    Date(),
-                    latitude,
-                    longitude,
-                    selfieImg,
-                    locationAddress
                 )
                 viewModel.markAttendance(it.attendance!!, gigId)
             }
@@ -831,7 +848,7 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         } ?: run {
             FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
             FirebaseCrashlytics.getInstance()
-                .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
         }
     }
 
@@ -859,27 +876,33 @@ class GigPage2Fragment : BaseFragment(), OtherOptionClickListener,
         private const val ID_HELP = "NXyRQLeIol"
 
         private val DRESS_CODE = OtherOption(
-            id = ID_DRESS_CODE,
-            name = "Dress code",
-            icon = R.drawable.ic_clothes
+                id = ID_DRESS_CODE,
+                name = "Dress code",
+                icon = R.drawable.ic_clothes
         )
 
         private val REIMBURSMENT = OtherOption(
-            id = ID_REIMBURSMENT,
-            name = "Reimbursment",
-            icon = R.drawable.ic_compensation
+                id = ID_REIMBURSMENT,
+                name = "Reimbursment",
+                icon = R.drawable.ic_compensation
         )
 
         private val ID_CARD = OtherOption(
-            id = ID_IDENTITY_CARD,
-            name = "Idenitity card",
-            icon = R.drawable.ic_id_card
+                id = ID_IDENTITY_CARD,
+                name = "Idenitity card",
+                icon = R.drawable.ic_id_card
         )
 
         private val HELP = OtherOption(
-            id = ID_HELP,
-            name = "Help",
-            icon = R.drawable.ic_question
+                id = ID_HELP,
+                name = "Help",
+                icon = R.drawable.ic_question
         )
+    }
+
+    override fun onPeopleToExpectClicked(option: GigPeopleToExpect) {
+        navigate(R.id.gigContactPersonBottomSheet, bundleOf(
+                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
+        ))
     }
 }

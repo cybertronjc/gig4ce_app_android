@@ -731,6 +731,10 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <dialog
+        android:id="@+id/gigContactPersonBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.GigContactPersonBottomSheet"
+        android:label="GigContactPersonBottomSheet" />
 
 
 </navigation>

@@ -87,8 +87,12 @@ data class Gig(
     var declinedBy: String? = null,
     var declineReason: String? = null,
 
-    var regularisationRequest : GigRegularisationRequest? =null
-) {
+    var regularisationRequest : GigRegularisationRequest? =null,
+
+    @get:PropertyName("contactPersons")
+    @set:PropertyName("contactPersons")
+    var contactPersons: List<GigPeopleToExpect> = emptyList()
+    ) {
 
     @get:Exclude
     @set:Exclude
@@ -243,3 +247,35 @@ data class Gig(
 
     }
 }
+
+@Parcelize
+data class GigPeopleToExpect(
+
+        @get:PropertyName("uid")
+        @set:PropertyName("uid")
+        var uid : String? = null,
+
+        @get:PropertyName("profilePicture")
+        @set:PropertyName("profilePicture")
+        var profilePicture : String? = null,
+
+        @get:PropertyName("whatsAppNo")
+        @set:PropertyName("whatsAppNo")
+        var whatsAppNo : String? = null,
+
+        @get:PropertyName("name")
+        @set:PropertyName("name")
+        var name : String? = null,
+
+        @get:PropertyName("designation")
+        @set:PropertyName("designation")
+        var designation : String? = null,
+
+        @get:PropertyName("contactNumber")
+        @set:PropertyName("contactNumber")
+        var contactNumber : String? = null,
+
+        @get:PropertyName("rating")
+        @set:PropertyName("rating")
+        var rating : Float? = null
+) : Parcelable
