@@ -41,29 +41,29 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         return when (viewType) {
             TYPE_TEXT ->
                 ViewHolderText(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.layout_answers_rv_questionnaire, parent, false)
+                        LayoutInflater.from(parent.context)
+                                .inflate(R.layout.layout_answers_rv_questionnaire, parent, false)
                 )
             STATE_CITY_DROPDOWN -> ViewHolderStateCityDropdown(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.layout_drop_down_questionnaire, parent, false)
+                    LayoutInflater.from(parent.context)
+                            .inflate(R.layout.layout_drop_down_questionnaire, parent, false)
             )
             TYPE_DROPDOWN -> {
                 ViewHolderDropdown(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.layout_rv_dropdown_questionnaire, parent, false)
+                        LayoutInflater.from(parent.context)
+                                .inflate(R.layout.layout_rv_dropdown_questionnaire, parent, false)
                 )
             }
 
             DATE -> ViewHolderDate(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.layout_date_rv_questionnaire, parent, false)
+                    LayoutInflater.from(parent.context)
+                            .inflate(R.layout.layout_date_rv_questionnaire, parent, false)
             )
 
             else ->
                 ViewHolderText(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.layout_answers_rv_questionnaire, parent, false)
+                        LayoutInflater.from(parent.context)
+                                .inflate(R.layout.layout_answers_rv_questionnaire, parent, false)
                 )
 
         }
@@ -75,10 +75,10 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         for (drawable in textView.compoundDrawables) {
             if (drawable != null) {
                 drawable.colorFilter = PorterDuffColorFilter(
-                    ContextCompat.getColor(
-                        textView.context,
-                        color
-                    ), PorterDuff.Mode.SRC_IN
+                        ContextCompat.getColor(
+                                textView.context,
+                                color
+                        ), PorterDuff.Mode.SRC_IN
                 )
             }
         }
@@ -93,22 +93,24 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 if (item.selectedAnswer == position) {
                     holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
-                        if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
-                        0,
-                        0,
-                        0
+                            if (option.isAnswer) R.drawable.ic_thumbs_up else R.drawable.ic_thumbs_down,
+                            0,
+                            0,
+                            0
                     )
+
                 } else {
                     holder.itemView.tv_answer_questionnaire.setCompoundDrawablesWithIntrinsicBounds(
-                        if (option.isAnswer) R.drawable.ic_thumbs_up_not_selected else R.drawable.ic_thumbs_down_not_selected,
-                        0,
-                        0,
-                        0
+                            if (option.isAnswer) R.drawable.ic_thumbs_up_not_selected else R.drawable.ic_thumbs_down_not_selected,
+                            0,
+                            0,
+                            0
                     )
+
                 }
                 holder.itemView.setOnClickListener {
                     if (holder.adapterPosition == -1) return@setOnClickListener
-                    callbacks.onClick(holder.adapterPosition, null, null, option.type)
+                    callbacks.onClick(holder.adapterPosition, item.options[holder.adapterPosition].answer, null, option.type)
                 }
             }
             STATE_CITY_DROPDOWN -> {
@@ -119,71 +121,71 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                 } else {
                     holder.itemView.sp_state.visible()
                     val arrayAdapter: GenericSpinnerAdapter<States> = GenericSpinnerAdapter(
-                        holder.itemView.context,
-                        R.layout.tv_options_header_sp,
-                        stateCityMap.keys.toList()
+                            holder.itemView.context,
+                            R.layout.tv_options_header_sp,
+                            stateCityMap.keys.toList()
                     )
                     holder.itemView.sp_state.adapter = arrayAdapter
                     if (option.selectedItemPosition != -1) {
                         holder.itemView.sp_state.setSelection(option.selectedItemPosition)
                     }
                     holder.itemView.sp_state.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                if (holder.adapterPosition == -1) return
-                                item.selectedAnswer = -1
-                                item.options[holder.adapterPosition].selectedItemPosition = position
-                                val states = holder.itemView.sp_state.selectedItem as States
-                                val cityForState = getCityForState(states)
-                                item.selectedState = states.id
+                                override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                ) {
+                                    if (holder.adapterPosition == -1) return
+                                    item.selectedAnswer = -1
+                                    item.options[holder.adapterPosition].selectedItemPosition = position
+                                    val states = holder.itemView.sp_state.selectedItem as States
+                                    val cityForState = getCityForState(states)
+                                    item.selectedState = states.id
 
-                                if (cityForState.isNotEmpty()) {
-                                    holder.itemView.pb_state_city.gone()
-                                    val arrayAdapter: GenericSpinnerAdapter<Cities> =
-                                        GenericSpinnerAdapter(
-                                            holder.itemView.context,
-                                            R.layout.tv_options_header_sp,
-                                            cityForState
-                                        )
-                                    holder.itemView.sp_city.visible()
-                                    holder.itemView.sp_city.adapter = arrayAdapter
-                                    holder.itemView.sp_city.onItemSelectedListener =
-                                        object : AdapterView.OnItemSelectedListener {
-                                            override fun onItemSelected(
-                                                parent: AdapterView<*>?,
-                                                view: View?,
-                                                position: Int,
-                                                id: Long
-                                            ) {
-                                                if (holder.adapterPosition == -1 || position == 0) return
-                                                item.selectedAnswer = 0
-                                                val city =
-                                                    holder.itemView.sp_city.selectedItem as Cities
-                                                item.selectedCity = city.name
+                                    if (cityForState.isNotEmpty()) {
+                                        holder.itemView.pb_state_city.gone()
+                                        val arrayAdapter: GenericSpinnerAdapter<Cities> =
+                                                GenericSpinnerAdapter(
+                                                        holder.itemView.context,
+                                                        R.layout.tv_options_header_sp,
+                                                        cityForState
+                                                )
+                                        holder.itemView.sp_city.visible()
+                                        holder.itemView.sp_city.adapter = arrayAdapter
+                                        holder.itemView.sp_city.onItemSelectedListener =
+                                                object : AdapterView.OnItemSelectedListener {
+                                                    override fun onItemSelected(
+                                                            parent: AdapterView<*>?,
+                                                            view: View?,
+                                                            position: Int,
+                                                            id: Long
+                                                    ) {
+                                                        if (holder.adapterPosition == -1 || position == 0) return
+                                                        item.selectedAnswer = 0
+                                                        val city =
+                                                                holder.itemView.sp_city.selectedItem as Cities
+                                                        item.selectedCity = city.name
 
-                                            }
+                                                    }
 
-                                            override fun onNothingSelected(parent: AdapterView<*>?) {
-                                            }
-                                        }
+                                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                                                    }
+                                                }
 
-                                } else {
-                                    holder.itemView.sp_city.gone()
-                                    holder.itemView.pb_state_city.visible()
+                                    } else {
+                                        holder.itemView.sp_city.gone()
+                                        holder.itemView.pb_state_city.visible()
+
+                                    }
 
                                 }
 
+
                             }
-
-
-                        }
 
                 }
 
@@ -197,24 +199,24 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     val month = c.get(Calendar.MONTH)
                     val day = c.get(Calendar.DAY_OF_MONTH)
                     val dpd = DatePickerDialog(
-                        holder.itemView.context,
-                        R.style.DatePickerDialogTheme,
-                        { view, year, monthOfYear, dayOfMonth ->
-                            val calendar = Calendar.getInstance()
-                            calendar[year, monthOfYear] = dayOfMonth
-                            val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
-                            val dateString: String = dateFormat.format(calendar.time)
-                            holder.itemView.tv_date_value.text = dateString
-                            callbacks.onClick(
-                                holder.adapterPosition,
-                                null, calendar.time, option.type
-                            )
-                            // Display Selected date in textbox
+                            holder.itemView.context,
+                            R.style.DatePickerDialogTheme,
+                            { view, year, monthOfYear, dayOfMonth ->
+                                val calendar = Calendar.getInstance()
+                                calendar[year, monthOfYear] = dayOfMonth
+                                val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
+                                val dateString: String = dateFormat.format(calendar.time)
+                                holder.itemView.tv_date_value.text = dateString
+                                callbacks.onClick(
+                                        holder.adapterPosition,
+                                        null, calendar.time, option.type
+                                )
+                                // Display Selected date in textbox
 
-                        },
-                        year,
-                        month,
-                        day
+                            },
+                            year,
+                            month,
+                            day
                     )
                     if (item.openDates?.openAllDates == false) {
                         if (item.openDates?.openPastDates == true) {
@@ -225,9 +227,9 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                     dpd.show()
                     dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE)
-                        .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
+                            .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
                     dpd.getButton(DatePickerDialog.BUTTON_POSITIVE)
-                        .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
+                            .setTextColor(holder.itemView.resources.getColor(R.color.colorPrimary));
 
                 }
             }
@@ -236,33 +238,33 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     option.options.add(0, option.dropDownHint)
                 }
                 val arrayAdapter: GenericSpinnerAdapter<String> = GenericSpinnerAdapter(
-                    holder.itemView.context,
-                    R.layout.tv_options_header_sp,
-                    option.options
+                        holder.itemView.context,
+                        R.layout.tv_options_header_sp,
+                        option.options
                 )
                 holder.itemView.sp_dropdown.adapter = arrayAdapter
                 if (option.selectedItemPosition != -1) {
                     holder.itemView.sp_dropdown.setSelection(option.selectedItemPosition)
                 }
                 holder.itemView.sp_dropdown.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            if (holder.adapterPosition == -1) return
-                            item.selectedAnswer = position - 1
-                            item.options[holder.adapterPosition].selectedItemPosition = position
-                            item.selectedDropdownValue =
-                                holder.itemView.sp_dropdown.selectedItem.toString()
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onNothingSelected(parent: AdapterView<*>?) {}
+                            override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                            ) {
+                                if (holder.adapterPosition == -1) return
+                                item.selectedAnswer = position - 1
+                                item.options[holder.adapterPosition].selectedItemPosition = position
+                                item.answer =
+                                        holder.itemView.sp_dropdown.selectedItem.toString()
+
+                            }
+
 
                         }
-
-
-                    }
 
             }
         }

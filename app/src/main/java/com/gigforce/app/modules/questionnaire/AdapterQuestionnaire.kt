@@ -31,39 +31,39 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_rv_questionnaire_cards, parent, false)
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.layout_rv_questionnaire_cards, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val question = items[position]
         holder.itemView.tv_question_no_questionnaire.text = Html.fromHtml(
-            "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items?.size} :"
+                "${holder.itemView.resources.getString(R.string.ques)} ${position + 1}/${items?.size} :"
         )
         holder.itemView.tv_question_questionnaire.text = Html.fromHtml(question.question)
         if (question.url.isNotEmpty()) {
             holder.itemView.iv_hint_questionnaire.visible()
             Glide.with(holder.itemView).load(question.url)
-                .placeholder(getCircularProgressDrawable(holder.itemView.context))
-                .into(holder.itemView.iv_hint_questionnaire)
+                    .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                    .into(holder.itemView.iv_hint_questionnaire)
         } else {
             holder.itemView.iv_hint_questionnaire.gone()
         }
         if (horizontalItemDecoration == null) {
             horizontalItemDecoration =
-                ItemOffsetDecoration(
-                    holder.itemView.resources.getDimensionPixelSize(
-                        R.dimen.size_16
+                    ItemOffsetDecoration(
+                            holder.itemView.resources.getDimensionPixelSize(
+                                    R.dimen.size_16
+                            )
                     )
-                )
         } else {
             holder.itemView.rv_answers_questionnaire.removeItemDecoration(
-                horizontalItemDecoration!!
+                    horizontalItemDecoration!!
             )
         }
         holder.itemView.rv_answers_questionnaire.addItemDecoration(
-            horizontalItemDecoration!!
+                horizontalItemDecoration!!
         )
         val adapterAnswers = AdapterOptionsQuestionnaire()
         if (!stateCityMap.isNullOrEmpty()) {
@@ -78,13 +78,15 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         }
         holder.itemView.rv_answers_questionnaire.adapter = adapterAnswers
         holder.itemView.rv_answers_questionnaire.layoutManager =
-            LinearLayoutManager(holder.itemView.context)
+                LinearLayoutManager(holder.itemView.context)
         adapterAnswers.addData(question)
         adapterAnswers.setCallbacks(object :
-            AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
+                AdapterOptionsQuestionnaire.AdapterOptionsQuestionnaireCallbacks {
             override fun onClick(position: Int, value: String?, date: Date?, type: String) {
                 if (holder.adapterPosition == -1) return
                 items[holder.adapterPosition].selectedAnswer = position
+                items[holder.adapterPosition].answer = value ?: ""
+
                 when (type) {
                     "date" -> {
                         items[holder.adapterPosition].selectedDate = date
@@ -102,16 +104,16 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
             }
 
             override fun getStates(
-                stateCityMap: MutableMap<States, MutableList<Cities>?>,
-                position: Int
+                    stateCityMap: MutableMap<States, MutableList<Cities>?>,
+                    position: Int
             ) {
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 callbacks.getStates(position, holder.adapterPosition)
             }
 
             override fun getCities(
-                stateCityMap: MutableMap<States, MutableList<Cities>?>,
-                states: States
+                    stateCityMap: MutableMap<States, MutableList<Cities>?>,
+                    states: States
             ) {
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 this@AdapterQuestionnaire.state = states
