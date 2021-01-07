@@ -40,232 +40,247 @@
             android:textStyle="normal" />
     </LinearLayout>
 
-
-    <ImageView
-        android:id="@+id/apply_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_apply_ambassador"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
-
-
-    <TextView
-        android:id="@+id/thanks_for_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="45dp"
-        android:fontFamily="@font/lato"
-        android:lineSpacingExtra="3sp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/company_name_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="Thanks for showing interest in  " />
-
-    <TextView
-        android:id="@+id/company_name_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/lato"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/thanks_for_label"
-        app:layout_constraintTop_toBottomOf="@id/apply_image"
-        android:text="Gigforce " />
-
-    <TextView
-        android:id="@+id/complete_form_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/lato"
-        android:lineSpacingExtra="3sp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/thanks_for_label"
-        android:text="Please complete the below information to submit
-your Application" />
-
-    <TextView
-        android:id="@+id/steps_pending_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="22dp"
-        android:fontFamily="@font/lato"
-        android:lineSpacingExtra="3sp"
-        android:textColor="@color/warm_grey"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        android:text="Steps Completed" />
-
-    <TextView
-        android:id="@+id/steps_completed_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/lato"
-        android:lineSpacingExtra="3sp"
-        android:textColor="@color/warm_grey"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        tools:text="2/5" />
-
-
-    <ProgressBar
-        android:id="@+id/pb_amb_req"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/size_9"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/size_16"
-        android:layout_marginTop="@dimen/size_16"
-        android:layout_marginEnd="@dimen/size_8"
-        android:indeterminate="false"
-        android:progress="0"
-        android:progressDrawable="@drawable/curved_h_gradient_progress_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/steps_pending_label" />
-
-    <LinearLayout
-        android:id="@+id/profile_photo_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_24"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/size_16"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_100"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pb_amb_req">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/apply_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_apply_ambassador"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ImageView
-            android:id="@+id/profile_pic_check_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-             />
+            <TextView
+                android:id="@+id/thanks_for_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Thanks for showing interest in  "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/company_name_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/apply_image" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:text="Profile Photo" />
+            <TextView
+                android:id="@+id/company_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/lato"
+                android:text="Gigforce "
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/thanks_for_label"
+                app:layout_constraintTop_toBottomOf="@id/apply_image" />
 
+            <TextView
+                android:id="@+id/complete_form_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Please complete the below information to submit
+your Application"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/thanks_for_label" />
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_forward" />
+            <TextView
+                android:id="@+id/steps_pending_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Steps Completed"
+                android:textColor="@color/warm_grey"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/complete_form_label" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/current_address_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/size_16"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_photo_layout">
-
-
-        <ImageView
-            android:id="@+id/current_address_check_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:text="Current Address" />
-
-
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_forward" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bank_details_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/size_16"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/current_address_layout">
-
-
-        <ImageView
-            android:id="@+id/bank_details_check_iv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-             />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:text="Bank Details" />
+            <TextView
+                android:id="@+id/steps_completed_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@color/warm_grey"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/complete_form_label"
+                tools:text="2/5" />
 
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_forward" />
+            <ProgressBar
+                android:id="@+id/pb_amb_req"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_9"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_8"
+                android:indeterminate="false"
+                android:progress="0"
+                android:progressDrawable="@drawable/curved_h_gradient_progress_bar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/steps_pending_label" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/profile_photo_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_24"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pb_amb_req">
+
+
+                <ImageView
+                    android:id="@+id/profile_pic_check_iv"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Profile Photo"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_forward" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/current_address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_photo_layout">
+
+
+                <ImageView
+                    android:id="@+id/current_address_check_iv"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Current Address"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_forward" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bank_details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/current_address_layout">
+
+
+                <ImageView
+                    android:id="@+id/bank_details_check_iv"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Bank Details"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_forward" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/apply_amb_btn"

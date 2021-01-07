@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment
 
-import android.app.Activity
-import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -14,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -36,16 +33,13 @@ import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
-import com.gigforce.app.utils.PermissionUtils
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
         Toolbar.OnMenuItemClickListener, LocationUpdates.LocationUpdateCallbacks {
-    private val locationUpdates: LocationUpdates by lazy {
-        LocationUpdates()
-    }
+
 
     private val learningViewModel: LearningViewModel by viewModels()
 
@@ -378,43 +372,6 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        locationUpdates!!.stopLocationUpdates(requireActivity())
-    }
-
-    override fun onResume() {
-        super.onResume()
-        locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
-        locationUpdates!!.setLocationUpdateCallbacks(this)
-    }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String?>,
-            grantResults: IntArray
-    ) {
-        when (requestCode) {
-
-            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (PermissionUtils.permissionsGrantedCheck(
-                            grantResults
-                    )
-            ) {
-                locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-
-            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates!!.startUpdates(
-                    requireActivity() as AppCompatActivity
-            )
-
-        }
-    }
 
     override fun locationReceiver(location: Location?) {
 

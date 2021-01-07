@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment
 
+import android.location.Location
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.*
@@ -9,36 +10,39 @@ import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.Timestamp
 
 class UserEnrollmentRepository constructor(
-    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+        private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
 ) : BaseFirestoreDBRepository() {
 
-    suspend fun createUser(mobile: String): CreateUserResponse {
+    suspend fun createUser(mobile: String, location: Location): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
-            BuildConfig.CREATE_USER_URL, listOf(
+                BuildConfig.CREATE_USER_URL, listOf(
                 CreateUserRequest(mobile)
-            )
+        )
         )
 
         if (!createUserResponse.isSuccessful) {
             throw Exception(createUserResponse.message())
         } else {
             val response = createUserResponse.body()!!.first()
-            if(response.error != null){
+            if (response.error != null) {
                 throw Exception(response.error)
             } else {
                 db.collection(COLLECTION_NAME)
-                    .document(getUID())
-                    .collection(COLLECTION_Enrolled_Users)
-                    .document(response.uid!!)
-                    .setOrThrow(
-                        EnrolledUser(
-                            uid = response.uid,
-                            enrolledOn = Timestamp.now(),
-                            enrolledBy = getUID(),
-                            enrollmentStepsCompleted = EnrollmentStepsCompleted(),
-                            name = mobile
+                        .document(getUID())
+                        .collection(COLLECTION_Enrolled_Users)
+                        .document(response.uid!!)
+                        .setOrThrow(
+                                EnrolledUser(
+                                        uid = response.uid,
+                                        enrolledOn = Timestamp.now(),
+                                        enrolledBy = getUID(),
+                                        enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                                        name = mobile,
+                                        lat = location.latitude.toString(),
+                                        lon = location.longitude.toString()
+
+                                )
                         )
-                    )
             }
 
             return response
@@ -47,8 +51,8 @@ class UserEnrollmentRepository constructor(
 
     suspend fun registerUser(mobile: String): RegisterMobileNoResponse {
         val registerUserRequest = createUserApi.registerMobile(
-            BuildConfig.CHECK_USER_OR_SEND_OTP_URL,
-            RegisterMobileNoRequest(mobile)
+                BuildConfig.CHECK_USER_OR_SEND_OTP_URL,
+                RegisterMobileNoRequest(mobile)
         )
 
         if (!registerUserRequest.isSuccessful) {
@@ -58,11 +62,11 @@ class UserEnrollmentRepository constructor(
         }
     }
 
-    suspend fun verifyOtp(token: String,otp : String): VerifyOtpResponse {
+    suspend fun verifyOtp(token: String, otp: String): VerifyOtpResponse {
         val verifyOtpResponse = createUserApi.verifyOtp(
-            BuildConfig.VERIFY_OTP_URL,
-            token,
-            otp
+                BuildConfig.VERIFY_OTP_URL,
+                token,
+                otp
         )
 
         if (!verifyOtpResponse.isSuccessful) {
@@ -73,29 +77,29 @@ class UserEnrollmentRepository constructor(
     }
 
     suspend fun updateUserProfileName(
-        userId: String,
-        name: String
+            userId: String,
+            name: String
     ) {
 
         db.collection(COLLECTION_NAME)
-            .document(getUID())
-            .collection(COLLECTION_Enrolled_Users)
-            .document(userId)
-            .update("name", name)
+                .document(getUID())
+                .collection(COLLECTION_Enrolled_Users)
+                .document(userId)
+                .update("name", name)
 
         //tofo update or throw
     }
 
     suspend fun updateUserProfilePicture(
-        userId: String,
-        profilePic: String
+            userId: String,
+            profilePic: String
     ) {
 
         db.collection(COLLECTION_NAME)
-            .document(getUID())
-            .collection(COLLECTION_Enrolled_Users)
-            .document(userId)
-            .update("profilePic", profilePic)
+                .document(getUID())
+                .collection(COLLECTION_Enrolled_Users)
+                .document(userId)
+                .update("profilePic", profilePic)
 
         //tofo update or throw
     }

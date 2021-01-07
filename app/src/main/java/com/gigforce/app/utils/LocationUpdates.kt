@@ -1,6 +1,7 @@
 package com.gigforce.app.utils
 
 import android.Manifest
+import com.gigforce.app.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -8,15 +9,19 @@ import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import com.gigforce.app.modules.ambassador_user_enrollment.BsLocationAccess
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import javax.inject.Inject
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class LocationUpdates @Inject constructor() {
+
+class LocationUpdates {
     private val locationAccessDialog: BsLocationAccess by lazy {
         BsLocationAccess()
     }
@@ -103,7 +108,10 @@ class LocationUpdates @Inject constructor() {
         if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
             locationAccessDialog.isCancelable = false
             locationAccessDialog.show(context.supportFragmentManager, BsLocationAccess::class.simpleName)
+
+
         }
+
     }
 
     private fun createLocationCallbacks(context: AppCompatActivity) {

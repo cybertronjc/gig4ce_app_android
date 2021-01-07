@@ -301,11 +301,12 @@
 
                     <TextView
                         android:id="@+id/join_as_amb_label"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
                         android:layout_marginStart="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:text="Join Us as an Ambassador"
                         android:textColor="@color/black"
                         android:textSize="16sp"

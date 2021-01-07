@@ -31,7 +31,13 @@ data class EnrolledUser(
 
     @get:PropertyName("enrollmentStepsCompleted")
     @set:PropertyName("enrollmentStepsCompleted")
-    var enrollmentStepsCompleted : EnrollmentStepsCompleted? = null
+    var enrollmentStepsCompleted : EnrollmentStepsCompleted? = null,
+    @get:PropertyName("lat")
+    @set:PropertyName("lat")
+    var lat : String? = null,
+    @get:PropertyName("lon")
+    @set:PropertyName("lon")
+    var lon : String? = null
 )
 
 data class EnrollmentStepsCompleted(
