@@ -204,7 +204,12 @@
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-
+            <TextView
+                android:id="@+id/invite_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Invite Link"
+                android:padding="2dp"/>
         </LinearLayout>
     </FrameLayout>
 
