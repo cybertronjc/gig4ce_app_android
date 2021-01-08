@@ -68,4 +68,9 @@ interface CreateUserAccEnrollmentAPi {
         @Query("token") token: String,
         @Query("otp") otp: String
     ): Response<VerifyOtpResponse> // body data
+
+    @GET
+    suspend fun loadCityAndStateUsingPincode(
+        @Url fullUrl: String
+    ): Response<List<PincodeResponse>> // body data
 }

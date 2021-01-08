@@ -5,6 +5,7 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.*
 import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.Timestamp
 
@@ -100,6 +101,16 @@ class UserEnrollmentRepository constructor(
         //tofo update or throw
     }
 
+    suspend fun loadCityAndStateUsingPincode(pinCode:String):PincodeResponse{
+        val pincodeResponse = createUserApi.loadCityAndStateUsingPincode(AppConstants.PINCODE_URL+pinCode)
+
+        if (!pincodeResponse.isSuccessful) {
+            throw Exception(pincodeResponse.message())
+        } else {
+            val response = pincodeResponse.body()!!.first()
+            return response
+        }
+    }
 
     override fun getCollectionName(): String {
         return COLLECTION_NAME
