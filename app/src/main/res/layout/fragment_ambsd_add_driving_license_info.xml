@@ -48,7 +48,7 @@
 
         <include
             android:id="@+id/dlMainLayout"
-            android:visibility="visible"
+            android:visibility="gone"
             layout="@layout/fragment_ambsd_add_driving_license_info_main"/>
 
         <include

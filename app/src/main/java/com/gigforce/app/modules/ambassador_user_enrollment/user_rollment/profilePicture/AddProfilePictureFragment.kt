@@ -87,6 +87,7 @@ class AddProfilePictureFragment : BaseFragment(),
             submitBtn.text = "Upload Photo"
         } else {
             submitBtn.text = "Change Photo"
+            skipButton.visible()
             viewModel.getProfileForUser(userId)
         }
     }

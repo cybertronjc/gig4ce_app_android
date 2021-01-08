@@ -15,6 +15,7 @@ import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -126,7 +127,7 @@ class UserDetailsViewModel constructor(
     ) = viewModelScope.launch(Dispatchers.IO) {
         _submitUserDetailsState.postValue(Lse.loading())
 
-        Log.v("Upload Image", "started")
+        Log.v("ProfilePicture", "started")
         val mReference =
                 firebaseStorage.reference.child("profile_pics").child(uri!!.lastPathSegment!!)
 
@@ -149,13 +150,20 @@ class UserDetailsViewModel constructor(
             }
 
             _submitUserDetailsState.postValue(Lse.success())
-            _submitUserDetailsState.postValue(null)
+//            _submitUserDetailsState.postValue(null)
+
+            Log.v("ProfilePicture", "Sucess")
         } catch (e: Exception) {
+            Log.v("ProfilePicture", "error")
             e.printStackTrace()
+
+            FirebaseCrashlytics.getInstance().log("Error while uploading profile pic")
+            FirebaseCrashlytics.getInstance().recordException(e)
+
             _submitUserDetailsState.postValue(
                     Lse.error(e.message ?: "Unable to upload profile picture")
             )
-            _submitUserDetailsState.postValue(null)
+ //           _submitUserDetailsState.postValue(null)
         }
     }
 

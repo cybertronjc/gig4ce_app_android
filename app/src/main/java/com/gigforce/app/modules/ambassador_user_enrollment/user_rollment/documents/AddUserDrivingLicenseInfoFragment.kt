@@ -23,6 +23,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -39,18 +40,33 @@ import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.pr
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.confirmDLDataCB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlBackEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlBackImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlFrontEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlFrontImageHolder
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlNoEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlStateEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlSubmitSliderBtn
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.dlYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.doYouHaveDLLabel
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.drivingLicenseEditText
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.helpIconIV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.stateSpinner
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlBackErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlBackImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlFrontErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlFrontImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlNoErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlNoTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlStateErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.dlStateTV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.editLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.statusTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
@@ -80,6 +96,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private lateinit var userId: String
     private lateinit var userName: String
     private var drivingLicenseDetail: DrivingLicenseDataModel? = null
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
@@ -345,6 +362,35 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     }
 
     private fun initViewModel() {
+
+        viewModel.gigerVerificationStatus
+                .observe(viewLifecycleOwner, Observer {
+                    this.gigerVerificationStatus = it
+                    this.drivingLicenseDetail = it.drivingLicenseDataModel
+                    progressBar.gone()
+
+                    if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
+                        if (it.drivingLicenseDataModel.userHasDL != null) {
+                            if (it.drivingLicenseDataModel.userHasDL) {
+                                setDataOnViewLayout(it)
+                            } else {
+                                setDataOnEditLayout(null)
+                                dlAvailaibilityOptionRG.check(R.id.dlNoRB)
+                            }
+                        } else {
+                            //Uncheck both and hide capture layout
+                            setDataOnEditLayout(null)
+                            dlAvailaibilityOptionRG.clearCheck()
+                            hideDLImageAndInfoLayout()
+                        }
+                    } else {
+                        //Uncheck both and hide capture layout
+                        setDataOnEditLayout(null)
+                        dlAvailaibilityOptionRG.clearCheck()
+                        hideDLImageAndInfoLayout()
+                    }
+                })
+
         viewModel.documentUploadState
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -583,6 +629,77 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             }
         }
     }
+
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        dlMainLayout.gone()
+        dlViewLayout.visible()
+        //TODO handle error message when process is ready
+
+        val dlDetails = gigVerificationStatus.drivingLicenseDataModel ?: return
+
+        statusTV.text = dlDetails.verifiedString
+        statusTV.setTextColor(
+                ResourcesCompat.getColor(
+                        resources,
+                        gigVerificationStatus.getColorCodeForStatus(dlDetails.state),
+                        null
+                )
+        )
+
+        if (dlDetails.frontImage != null) {
+
+            if (dlDetails.frontImage.startsWith("http", true)) {
+                Glide.with(requireContext())
+                        .load(dlDetails.frontImage)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(dlFrontImageIV)
+            } else {
+
+                firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(dlDetails.frontImage)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext()).load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(dlFrontImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+            }
+        }
+        dlFrontErrorMessage.gone()
+
+        if (dlDetails.backImage != null) {
+            if (dlDetails.backImage.startsWith("http", true)) {
+                Glide.with(requireContext())
+                        .load(dlDetails.backImage)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(dlBackImageIV)
+            } else {
+
+                firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(dlDetails.backImage)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext()).load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(dlBackImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+            }
+        }
+        dlBackErrorMessage.gone()
+
+        dlNoTV.text = dlDetails.dlNo
+        dlNoErrorMessage.gone()
+
+        dlStateTV.text = dlDetails.dlState
+        dlStateErrorMessage.gone()
+    }
+
 
 
 }
