@@ -11,9 +11,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.gigforce.app.R
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorApplication
-import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorEnrollmentProfile
-import com.gigforce.app.utils.StringConstants
 import kotlinx.android.synthetic.main.fragment_user_already_exist_dialog.*
 
 interface UserAlreadyExistDialogFragmentActionListener {
@@ -28,17 +25,15 @@ class UserAlreadyExistDialogFragment : DialogFragment() {
 
         fun launch(
             fragmentManager: FragmentManager,
-            okayClickListener: UserAlreadyExistDialogFragmentActionListener, bundle: Bundle
+            okayClickListener: UserAlreadyExistDialogFragmentActionListener
         ) {
             val frag = UserAlreadyExistDialogFragment()
-            frag.arguments = bundle
+
             frag.mOkayResultListener = okayClickListener
             frag.show(fragmentManager, TAG)
         }
 
     }
-
-    private lateinit var mAmbObj: AmbassadorEnrollmentProfile
 
     private lateinit var mOkayResultListener: UserAlreadyExistDialogFragmentActionListener
 
@@ -52,7 +47,6 @@ class UserAlreadyExistDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(savedInstanceState)
         initView()
     }
 
@@ -75,38 +69,10 @@ class UserAlreadyExistDialogFragment : DialogFragment() {
 
 
     private fun initView() {
-        tv_user_already_exists_title.text = mAmbObj.alreadyExistsDialogTitle
-        congrats_text.text = mAmbObj.alreadyExistsDialogContent
-        submitBtn.text = mAmbObj.alreadyExistsDialogAction
+
         submitBtn.setOnClickListener {
             mOkayResultListener.onOkayClicked()
             dismiss()
         }
-    }
-
-    private fun getDataFromIntents(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            mAmbObj =
-                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
-                    ?: AmbassadorEnrollmentProfile()
-
-
-        }
-
-        arguments?.let {
-            mAmbObj =
-                it.getParcelable(StringConstants.AMB_APPLICATION_OBJ.value)
-                    ?: AmbassadorEnrollmentProfile()
-
-
-        }
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(StringConstants.AMB_APPLICATION_OBJ.value, mAmbObj)
-
-
     }
 }

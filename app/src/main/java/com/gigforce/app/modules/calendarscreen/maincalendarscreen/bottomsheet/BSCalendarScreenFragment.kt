@@ -39,7 +39,6 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramViewModel
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigViewModel
@@ -68,7 +67,6 @@ import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,7 +82,6 @@ class BSCalendarScreenFragment : BaseFragment() {
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
     private val profileViewModel : ProfileViewModel by viewModels()
-    private val viewModelAmb: AmbassadorProgramViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,7 +98,6 @@ class BSCalendarScreenFragment : BaseFragment() {
         initLearningViewModel()
         initializeClientActivation()
         initProfileViewModel()
-        initAmbassadorProgram()
     }
 
     private fun initProfileViewModel() {
@@ -1020,14 +1016,5 @@ class BSCalendarScreenFragment : BaseFragment() {
             client_activation_rv_bs.adapter = recyclerGenericAdapter
 
         }
-    }
-    private fun initAmbassadorProgram() {
-        viewModelAmb.observableAmbassadorProgram.observe(viewLifecycleOwner, Observer {
-
-            join_as_amb_label.text=it?.ambassadorCardTitle
-            amb_subtitle.text=it?.ambassadorCardSubTitle
-            amb_join_open_btn.text=it?.ambassadorCardActionText
-        })
-        viewModelAmb.getAmbassadorProfiles()
     }
 }

@@ -31,17 +31,14 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.StringConstants
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
-import kotlinx.android.synthetic.main.fragment_ambassador_program_details_info.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
     Toolbar.OnMenuItemClickListener {
 
     private val learningViewModel: LearningViewModel by viewModels()
-    private val viewModel: AmbassadorProgramViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,26 +51,16 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         initUi()
         initViewModel()
         initLearningViewModel()
-        initObservers()
+        setAmbassadorProgramDetails()
     }
 
-    private fun initObservers() {
-        viewModel.observableAmbassadorProgram.observe(viewLifecycleOwner, Observer {
-//            it?.checkForLangTranslation()
-            roleNameTV.text = it?.title
-            tv_sub_title.text = it?.subTitle
-            address_label.text = it?.ambassadorQuestion
-            separator30.text = Html.fromHtml(it?.payoutNote)
-            gig_address_tv.text = it?.ambassadorAnswer
-            btn_apply_now.text = it?.actionButtonText
-            gig_resp_label.text = it?.responsibilitiesTitle
-            inflateAmbResponsibilities(
-                it?.responsibilities ?: listOf()
+    private fun setAmbassadorProgramDetails() {
+        inflateAmbResponsibilities(
+            listOf(
+                getString(R.string.you_have_to_look_for),
+                getString(R.string.if_they_are_interested)
             )
-
-        })
-        viewModel.getAmbassadorProfiles()
-
+        )
     }
 
 
@@ -89,11 +76,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         }
 
         btn_apply_now.setOnClickListener {
-            navigate(
-                R.id.ambassadorEnrollmentRequirementFragment, bundleOf(
-                    StringConstants.AMBASSADOR_ID.value to viewModel.observableAmbassadorProgram.value?.id
-                )
-            )
+            navigate(R.id.ambassadorEnrollmentRequirementFragment)
         }
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.viewModels
@@ -16,13 +15,11 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
-import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.utils.VerticalItemDecorator
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener {
-    private lateinit var mAmbassadorID: String
 
     private val viewModel: AmbassadorEnrollViewModel by viewModels()
 
@@ -40,7 +37,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(savedInstanceState)
         initUi()
         initViewModel()
     }
@@ -50,7 +46,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
             activity?.onBackPressed()
         }
 
+        create_profile_btn.setOnClickListener {
+            navigate(R.id.checkMobileFragment)
+        }
 
+        createProfileBtn.setOnClickListener {
+            navigate(R.id.checkMobileFragment)
+        }
 
         enrolled_users_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
         enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
@@ -77,35 +79,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                     }
                 }
             })
-
-        viewModel.observableEnrollmentProfile.observe(viewLifecycleOwner, Observer {
-            tb_title_enrollment.text = it?.enrollmentTitle
-            chip_interest_driving.text = it?.profileTabText
-            chip_interest_bike_rider.text = it?.sourcingTabText
-            chip_interest_delivery_executive.text = it?.managingGigsTabText
-            tv_no_profiles_title.text = it?.noProfileHeaderText
-            tv_no_profiles.text = it?.noProfileSubtitleText
-            create_profile_btn.text = it?.noProfileActionText
-            createProfileBtn.text = it?.noProfileActionText
-            create_profile_btn.setOnClickListener {view->
-                navigate(
-                    R.id.checkMobileFragment, bundleOf(
-                        StringConstants.AMB_APPLICATION_OBJ.value to it
-                    )
-                )
-            }
-
-            createProfileBtn.setOnClickListener {
-                navigate(
-                    R.id.checkMobileFragment, bundleOf(
-                        StringConstants.AMB_APPLICATION_OBJ.value to it
-                    )
-                )
-            }
-
-
-        })
-        viewModel.getAmbassadorApplication(mAmbassadorID)
     }
 
     override fun onBackPressed(): Boolean {
@@ -122,28 +95,5 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun onUserClicked(enrolledUser: EnrolledUser) {
 
     }
-
-    private fun getDataFromIntents(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            mAmbassadorID = it.getString(StringConstants.AMBASSADOR_ID.value) ?: ""
-
-
-        }
-
-        arguments?.let {
-            mAmbassadorID = it.getString(StringConstants.AMBASSADOR_ID.value) ?: ""
-
-
-        }
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.AMBASSADOR_ID.value, mAmbassadorID)
-
-
-    }
-
 
 }
