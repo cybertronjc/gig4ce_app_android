@@ -29,7 +29,6 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
-import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -73,7 +72,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
         enrolled_users_rv.adapter = enrolledUserAdapter
 
-        invite_link.setOnClickListener{
+        title.setOnClickListener{
             shareLink()
         }
     }
@@ -181,7 +180,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         } catch (e: Exception) {
             //e.toString();
         }
-        pb_client_activation.gone()
     }
 
 }

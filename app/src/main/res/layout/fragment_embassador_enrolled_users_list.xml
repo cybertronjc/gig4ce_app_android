@@ -39,6 +39,7 @@
                     android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -204,12 +205,7 @@
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-            <TextView
-                android:id="@+id/invite_link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Invite Link"
-                android:padding="2dp"/>
+
         </LinearLayout>
     </FrameLayout>
 
