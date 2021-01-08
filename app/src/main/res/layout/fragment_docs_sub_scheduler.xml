@@ -297,6 +297,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RelativeLayout
+                    android:id="@+id/contact_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_16"
@@ -491,7 +492,32 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/contact_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:background="@color/white">
 
+                    <CheckBox
+                        android:id="@+id/cb_activate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginLeft="@dimen/size_16"
+                        android:button="@drawable/check_box_confirmation_dialog"
+                        android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/lato"
+                        android:paddingStart="@dimen/size_8"
+                        android:paddingEnd="@dimen/size_8"
+                        android:text="I have submitted all Documents to team leader."
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -723,6 +749,8 @@
     </androidx.core.widget.NestedScrollView>
 
 
+
+
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/slider_checkout"
         android:layout_width="match_parent"
@@ -731,9 +759,9 @@
         android:layout_marginBottom="@dimen/size_27"
         app:border_radius="8dp"
         app:icon_margin="@dimen/size_7"
-        app:inner_color="#d72467"
+        app:inner_color="#888888"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:outer_color="#ffd9e6"
+        app:outer_color="#dddddd"
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"

@@ -1118,6 +1118,7 @@
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
     <string name="activate">Activate</string>
+    <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
 
 
 </resources>

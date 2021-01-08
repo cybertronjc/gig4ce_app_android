@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -20,6 +21,7 @@ import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.app.utils.StringConstants
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
+import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.helpIconIV
 
 
 class DocsSubSchedulerFragment : BaseFragment() {
@@ -37,8 +39,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -80,10 +82,10 @@ class DocsSubSchedulerFragment : BaseFragment() {
             }
         })
         viewModel.observablePartnerSchool.observe(viewLifecycleOwner, Observer {
-            alert_message.text = it?.alertMessage?:""
-            doc_title.text = Html.fromHtml(it?.documentTitle?:"")
-            header_title.text = it?.headerTitle?:""
-            doc_sub_title.text = Html.fromHtml(it?.documentSubTitle?:"")
+            alert_message.text = it?.alertMessage ?: ""
+            doc_title.text = Html.fromHtml(it?.documentTitle ?: "")
+            header_title.text = it?.headerTitle ?: ""
+            doc_sub_title.text = Html.fromHtml(it?.documentSubTitle ?: "")
             it?.documentInfo?.let {
                 adapterBulletStrings.addData(it)
             }
@@ -184,11 +186,36 @@ class DocsSubSchedulerFragment : BaseFragment() {
         tv_change_slot.visible()
     }
 
+    private fun enableCheckoutButton() {
+        slider_checkout.isEnabled = true
+
+        slider_checkout.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        slider_checkout.innerColor =
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+    }
+
+    private fun disableCheckoutButton() {
+        slider_checkout.isEnabled = false
+
+        slider_checkout.outerColor =
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        slider_checkout.innerColor =
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+    }
+
     private fun initClicks() {
-        call.setOnClickListener { viewModel?.gfmappedUserObj?.number?.let {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
-            startActivity(intent)
-        } }
+        cb_activate.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                enableCheckoutButton()
+            } else disableCheckoutButton()
+        }
+        call.setOnClickListener {
+            viewModel?.gfmappedUserObj?.number?.let {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
+                startActivity(intent)
+            }
+        }
 
         slider_checkout.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {

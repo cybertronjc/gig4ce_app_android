@@ -162,6 +162,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                             verify_otp_button_schedule.visible()
                             otp_screen.visible()
                             counterStart()
+                            adapter.disableAllItems()
                             viewModel.otpVerificationToken = it.content.verificationToken.toString()
                         }
                         is Lce.Error -> {
@@ -247,9 +248,13 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         generate_otp.setOnClickListener {
             viewModel.sendOTPToMobile(mNumber)
         }
+        otpnotcorrect_schedule_test.setOnClickListener{
+            viewModel.sendOTPToMobile(mNumber)
+            counterStart()
+        }
 //        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
-                Html.fromHtml("If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>")
+                Html.fromHtml(getString(R.string.resend_message))
         verify_otp_button_schedule?.setOnClickListener {
             val otpIn = txt_otp?.text.toString()
             verify_otp_button_schedule.isEnabled = false
