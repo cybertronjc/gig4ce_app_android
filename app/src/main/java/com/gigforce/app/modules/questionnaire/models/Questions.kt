@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.questionnaire.models
 
+import com.gigforce.app.modules.client_activation.models.Cities
+import com.google.firebase.firestore.Exclude
 import java.util.*
 
 data class Questions(
@@ -16,6 +18,7 @@ data class Questions(
         var openDates: OpenDates? = null,
         var validation: DateValidation? = null,
         var answer: String = ""
+
 
 
 )

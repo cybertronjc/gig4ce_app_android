@@ -39,6 +39,11 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     val observableCities: MutableLiveData<MutableList<Cities>> =
             _observableCities
 
+    private val _observableAllCities = MutableLiveData<MutableList<Cities>>()
+
+    val observableAllCities: MutableLiveData<MutableList<Cities>> =
+            _observableAllCities
+
 
     fun getQuestionnaire(jobProfileID: String) {
         questionnaireRepository.getCollectionReference().whereEqualTo("type", "questionnaire")
@@ -125,7 +130,7 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                             .document(questionnaire?.documents?.get(0)?.id!!)
                                             .update(
                                                     mapOf(
-                                                            "answers" to  questions?.map {
+                                                            "answers" to questions?.map {
                                                                 mapOf(
                                                                         "question" to it.question,
                                                                         "selectedAnswer" to it.selectedAnswer,
@@ -175,17 +180,21 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getStatesFromDb(): MutableList<States> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_States").get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+            val toObjects = await.toObjects(States::class.java)
+            for (i in 0 until await.documents.size) {
+                toObjects[i].id = await.documents[i].id
 
-        val await = questionnaireRepository.db.collection("Mst_States").get().await()
-        if (await.documents.isNullOrEmpty()) {
+            }
+            return toObjects
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
-        val toObjects = await.toObjects(States::class.java)
-        for (i in 0 until await.documents.size) {
-            toObjects[i].id = await.documents[i].id
-
-        }
-        return toObjects
 
     }
 
@@ -196,14 +205,42 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getCitiesFromDb(states: States): MutableList<Cities> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_Cities")
+                    .whereEqualTo("state_code", states.id).get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
 
-        val await = questionnaireRepository.db.collection("Mst_Cities")
-                .whereEqualTo("state_code", states.id).get().await()
-        if (await.documents.isNullOrEmpty()) {
+            return await.toObjects(Cities::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
 
-        return await.toObjects(Cities::class.java)
+
+    }
+
+    fun getAllCities() = viewModelScope.launch {
+        _observableAllCities.value = getAllCitiesFromDb()
+
+    }
+
+
+    suspend fun getAllCitiesFromDb(): MutableList<Cities> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_Cities")
+                    .get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+
+            return await.toObjects(Cities::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
+            return mutableListOf()
+        }
+
 
     }
 

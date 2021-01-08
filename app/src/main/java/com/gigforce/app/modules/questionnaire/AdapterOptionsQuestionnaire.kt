@@ -1,14 +1,10 @@
 package com.gigforce.app.modules.questionnaire
 
 import android.app.DatePickerDialog
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
@@ -30,11 +26,13 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
     private lateinit var callbacks: AdapterOptionsQuestionnaireCallbacks
     private lateinit var item: Questions
     private var stateCityMap: MutableMap<States, MutableList<Cities>?> = mutableMapOf()
+    private var allCities: MutableList<Cities>? = null
 
     class ViewHolderText(itemView: View) : RecyclerView.ViewHolder(itemView)
     class ViewHolderStateCityDropdown(itemView: View) : RecyclerView.ViewHolder(itemView)
     class ViewHolderDate(itemView: View) : RecyclerView.ViewHolder(itemView)
     class ViewHolderDropdown(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolderCities(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -54,6 +52,12 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                                 .inflate(R.layout.layout_rv_dropdown_questionnaire, parent, false)
                 )
             }
+            CITIES -> {
+                ViewHolderCities(
+                        LayoutInflater.from(parent.context)
+                                .inflate(R.layout.layout_rv_dropdown_questionnaire, parent, false)
+                )
+            }
 
             DATE -> ViewHolderDate(
                     LayoutInflater.from(parent.context)
@@ -69,19 +73,6 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
 
-    }
-
-    private fun setTextViewDrawableColor(textView: TextView, color: Int) {
-        for (drawable in textView.compoundDrawables) {
-            if (drawable != null) {
-                drawable.colorFilter = PorterDuffColorFilter(
-                        ContextCompat.getColor(
-                                textView.context,
-                                color
-                        ), PorterDuff.Mode.SRC_IN
-                )
-            }
-        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -267,6 +258,46 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
 
             }
+            CITIES -> {
+                if (!option.cities.isNullOrEmpty()) {
+                    holder.itemView.pb_cities.visible()
+                    holder.itemView.sp_dropdown.gone()
+                } else {
+                    if (option.cities?.get(0)?.name != option.dropDownHint) {
+                        option.cities?.add(0, Cities(name = option.dropDownHint))
+                    }
+                    val arrayAdapter: GenericSpinnerAdapter<Cities> = GenericSpinnerAdapter(
+                            holder.itemView.context,
+                            R.layout.tv_options_header_sp,
+                            option.cities?.toList() ?: listOf()
+                    )
+                    holder.itemView.sp_dropdown.adapter = arrayAdapter
+                    if (option.selectedItemPosition != -1) {
+                        holder.itemView.sp_dropdown.setSelection(option.selectedItemPosition)
+                    }
+                    holder.itemView.sp_dropdown.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                        parent: AdapterView<*>?,
+                                        view: View?,
+                                        position: Int,
+                                        id: Long
+                                ) {
+                                    if (holder.adapterPosition == -1 || position == 0) return
+                                    item.selectedAnswer = 0
+                                    val city =
+                                            holder.itemView.sp_city.selectedItem as Cities
+                                    item.selectedCity = city.name
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                }
+                            }
+
+                }
+
+
+            }
         }
 
     }
@@ -292,6 +323,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
             "state_city_dropdown" -> STATE_CITY_DROPDOWN
             "date" -> DATE
             "dropdown" -> TYPE_DROPDOWN
+            "cities" -> CITIES
             else -> TYPE_TEXT
         }
     }
@@ -301,6 +333,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         val TYPE_DROPDOWN = 1
         val DATE = 2
         val STATE_CITY_DROPDOWN = 3
+        val CITIES = 4;
 
 
     }
@@ -344,6 +377,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         fun onClick(position: Int, value: String?, date: Date?, typ: String)
         fun getStates(stateCityMap: MutableMap<States, MutableList<Cities>?>, position: Int)
         fun getCities(stateCityMap: MutableMap<States, MutableList<Cities>?>, states: States)
+        fun getAllCities(childPosition: Int)
 
     }
 
