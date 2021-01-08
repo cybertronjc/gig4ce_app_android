@@ -152,8 +152,8 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                         rejectionDialog.arguments = bundleOf(
                             StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
                             StringConstants.TITLE.value to viewModel.observableQuestionnaireResponse.value?.rejectionTitle,
-                            StringConstants.REJECTION_ILLUSTRATION.value to viewModel.observableQuestionnaireResponse.value?.rejectionIllustration,
-                            StringConstants.WRONG_ANSWERS.value to items.map { it.rejectionPoint }
+                            StringConstants.ILLUSTRATION.value to viewModel.observableQuestionnaireResponse.value?.rejectionIllustration,
+                            StringConstants.CONTENT.value to items.map { it.rejectionPoint }
                         )
                         rejectionDialog.show(
                             parentFragmentManager,

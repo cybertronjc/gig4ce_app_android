@@ -132,4 +132,5 @@
     <dimen name="size_131">131dp</dimen>
     <dimen name="size_150">150dp</dimen>
     <dimen name="size_83">83dp</dimen>
+    <dimen name="size_3">3dp</dimen>
 </resources>

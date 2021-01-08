@@ -1115,6 +1115,10 @@
     <string name="number_of_offs">Number of offs</string>
     <string name="view_gig_details"><u>View Gig Details</u></string>
     <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn <b>Rs. 50</b> per Giger Onboarding. No limit on earning.</string>
+    <string name="active">Active</string>
+    <string name="generate_otp">Generate OTP</string>
+    <string name="activate">Activate</string>
+    <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
 
 
 </resources>

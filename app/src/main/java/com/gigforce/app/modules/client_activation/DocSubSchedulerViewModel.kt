@@ -1,11 +1,15 @@
 package com.gigforce.app.modules.client_activation
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.*
+import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.utils.SingleLiveEvent
-import com.gigforce.app.utils.StringConstants
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -16,6 +20,8 @@ class DocSubSchedulerViewModel : ViewModel() {
     private val _observableIsCheckoutDone: MutableLiveData<Boolean> = MutableLiveData()
     val observableIsCheckoutDone: MutableLiveData<Boolean> = _observableIsCheckoutDone
 
+    private val _observableQuestionnairDocument:MutableLiveData<QustionSubmissionsDocModel> = MutableLiveData()
+    var observableQuestionnairDocument = _observableQuestionnairDocument
 
     fun getApplication(mJobProfileId: String, type: String, title: String) = viewModelScope.launch {
         val model = getJPApplication(mJobProfileId, type, title)
@@ -29,6 +35,9 @@ class DocSubSchedulerViewModel : ViewModel() {
         title: String
     ): DrivingCertificate? {
         try {
+
+
+
             val items =
                 repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
                     .whereEqualTo("gigerId", repository.getUID()).get()
@@ -36,6 +45,14 @@ class DocSubSchedulerViewModel : ViewModel() {
             if (items.documents.isNullOrEmpty()) {
                 return null
             }
+
+            val qustionSubmission = repository.getCollectionReference().document(items.documents[0].id)
+                .collection("Submissions").whereEqualTo("type", "questionnaire").get().await()
+            if(qustionSubmission.documents.isNotEmpty()){
+                _observableQuestionnairDocument.value = qustionSubmission.toObjects(QustionSubmissionsDocModel::class.java)[0]
+                Log.e("data","working")
+            }
+
             val toObject = items.documents[0].toObject(JpApplication::class.java)
             _observableIsCheckoutDone.value = toObject?.activation?.all { it.isDone }
             val submissions = repository.getCollectionReference().document(items.documents[0].id)
@@ -46,7 +63,9 @@ class DocSubSchedulerViewModel : ViewModel() {
                 return null
             }
 
-            return submissions.toObjects(DrivingCertSubmission::class.java)[0].certificate
+
+
+            return submissions.toObjects(CheckoutGigforceOffice::class.java)[0].certificate
         } catch (e: Exception) {
             observableError.value = e.message
             return null
@@ -56,6 +75,11 @@ class DocSubSchedulerViewModel : ViewModel() {
 
     private val _observablePartnerSchool: MutableLiveData<PartnerSchool> = MutableLiveData()
     val observablePartnerSchool: MutableLiveData<PartnerSchool> = _observablePartnerSchool
+
+    private val _observableMappedUser : MutableLiveData<GFMappedUser> = MutableLiveData()
+    val observableMappedUser = _observableMappedUser
+    var gfmappedUserObj:GFMappedUser? = null
+
     private val _observableError: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>();
     }
@@ -74,6 +98,19 @@ class DocSubSchedulerViewModel : ViewModel() {
 
                 }
             }
+    }
+    fun getMappedUser(it: String)= viewModelScope.async{
+        getMappedUserWithCity(it)
+    }
+    suspend fun getMappedUserWithCity(it: String){
+        try {
+            val gfUsers = repository.db.collection("GF_Users").document(it).get().await()
+            var gfmappedUser = gfUsers.toObject(GFMappedUser::class.java)
+            gfmappedUserObj = gfmappedUser
+            _observableMappedUser.value = gfmappedUser
+        }catch (e:Exception){
+
+        }
     }
 
 
