@@ -10,8 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -35,6 +35,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.openPopupMenu
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -43,15 +44,14 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.gigRequirementsSeeMoreTV
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.roleNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_2_details.toolbar
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
-class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
-    DeclineGigDialogFragmentResultListener {
+class GigDetailsFragment : BaseFragment(),
+    DeclineGigDialogFragmentResultListener, PopupMenu.OnMenuItemClickListener {
 
     private val viewModel: GigViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
@@ -91,12 +91,15 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
     }
 
     private fun initUi() {
-        toolbar?.setNavigationOnClickListener {
+        iv_back_gig_details.setOnClickListener {
             activity?.onBackPressed()
         }
 
+
         roleBasedLearningTV.text = "Related Learnings"
-        toolbar?.setOnMenuItemClickListener(this)
+        iv_options_gig_details.setOnClickListener {
+            openPopupMenu(it,R.menu.menu_gig_attendance,GigDetailsFragment@this,requireActivity())
+        }
         gigRequirementsSeeMoreTV.setOnClickListener {
 
             if (viewModel.currentGig == null)
@@ -256,12 +259,12 @@ class GigDetailsFragment : BaseFragment(), Toolbar.OnMenuItemClickListener,
 
 
         if (gig.isPresentGig() || gig.isPastGig()) {
-            toolbar?.menu?.findItem(R.id.action_decline_gig)?.setVisible(false)
+           iv_options_gig_details.gone()
         } else {
-            toolbar.menu?.findItem(R.id.action_decline_gig)?.setVisible(true)
+            iv_options_gig_details.visible()
         }
 
-        toolbar?.title = gig.title
+        tv_title_gig_details.text = gig.title
         roleNameTV.text = gig.title
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
 

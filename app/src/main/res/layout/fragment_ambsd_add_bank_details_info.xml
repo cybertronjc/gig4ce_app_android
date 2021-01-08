@@ -34,7 +34,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="Upload Bank Details"
+            android:text="@string/upload_bank_details"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />

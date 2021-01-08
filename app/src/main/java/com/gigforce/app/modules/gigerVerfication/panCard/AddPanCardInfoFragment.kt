@@ -60,10 +60,11 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
-
-        toolbar.setNavigationOnClickListener {
+        iv_back_add_pan_card_info.setOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+
         }
+
 
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()

@@ -171,7 +171,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
             val face =
                 Typeface.createFromAsset(context.assets, "fonts/Lato-Regular.ttf")
             textView.typeface = face
-            var layoutParams1 = TableRow.LayoutParams(
+            val layoutParams1 = TableRow.LayoutParams(
                 getScreenWidth(context as Activity).width - (context.resources.getDimensionPixelSize(
                     R.dimen.size_66
                 )),
@@ -180,7 +180,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
 
                 layoutParams1.setMargins(
                     0,
-                    context.resources.getDimensionPixelSize(R.dimen.size_12),
+                    context.resources.getDimensionPixelSize(R.dimen.size_8),
                     0,
                     0
                 )

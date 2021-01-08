@@ -11,6 +11,7 @@ data class Questions(
     var selectedDate: Date? = null,
     var selectedState: String = "",
     var selectedCity: String = "",
+    var answer: String = "",
     var type: String = "",
     var rejectionPoint: String = "",
     var openDates: OpenDates? = null,

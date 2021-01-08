@@ -89,7 +89,7 @@
                 android:layout_marginRight="@dimen/size_8"
                 android:drawablePadding="@dimen/size_4"
                 android:fontFamily="@font/lato"
-                android:gravity="start"
+                android:gravity="start|center"
                 android:paddingStart="@dimen/size_8"
                 android:paddingEnd="@dimen/size_18"
                 android:text="@string/pending"

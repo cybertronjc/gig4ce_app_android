@@ -552,7 +552,7 @@ class AssessmentFragment : BaseFragment(),
             scenrio_placeholder.visible()
             scenrio_placeholder.setImageDrawable(getCircularProgressDrawable())
 
-            GlideApp.with(this.requireContext())
+            GlideApp.with(requireActivity())
                 .asBitmap()
                 .load(Path)
                 .into(object : CustomTarget<Bitmap>() {
@@ -560,8 +560,11 @@ class AssessmentFragment : BaseFragment(),
                         resource: Bitmap,
                         transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
                     ) {
-                        iv_scenario_value_assess_frag.setImageBitmap(resource)
-                        scenrio_placeholder.gone()
+                        if(activity!=null){
+                            iv_scenario_value_assess_frag.setImageBitmap(resource)
+                            scenrio_placeholder.gone()
+                        }
+
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_questionnaire"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/size_37"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/sp_dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_61979797_rad_4"
+        android:minHeight="@dimen/size_48"
+        android:overlapAnchor="false"
+        android:paddingStart="@dimen/size_16"
+        android:paddingTop="@dimen/size_17"
+        android:paddingEnd="@dimen/size_36"
+        android:paddingBottom="@dimen/size_16" />
+
+
+
+</FrameLayout>

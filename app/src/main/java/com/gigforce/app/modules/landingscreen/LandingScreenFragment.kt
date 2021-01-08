@@ -55,7 +55,21 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
+import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
+import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
+import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
+import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
+import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
+import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 
 class LandingScreenFragment : BaseFragment() {
@@ -357,11 +371,11 @@ class LandingScreenFragment : BaseFragment() {
 
             ambassador_layout.visible()
             if (profile.isUserAmbassador) {
-                join_as_amb_label.text = "Ambassador Program"
-                amb_join_open_btn.text = "Open"
+                join_as_amb_label.text = getString(R.string.ambassador_program)
+                amb_join_open_btn.text = getString(R.string.open)
             } else {
-                join_as_amb_label.text = "Join Us as an Ambassador"
-                amb_join_open_btn.text = "Join Now"
+                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
+                amb_join_open_btn.text = getString(R.string.join_now)
             }
         })
 

@@ -123,7 +123,7 @@ class AddProfilePictureFragment : BaseFragment(),
 
         ic_back_btn.setOnClickListener {
             if (userId == null) {
-               activity?.onBackPressed()
+                activity?.onBackPressed()
             } else {
                 showGoBackConfirmationDialog()
             }
@@ -159,7 +159,7 @@ class AddProfilePictureFragment : BaseFragment(),
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
             .show()
     }
 
@@ -173,12 +173,12 @@ class AddProfilePictureFragment : BaseFragment(),
                     }
                     Lse.Success -> {
                         profile_pic_Uploading.gone()
-                        showToast("Profile Picture uploaded")
+                        showToast(getString(R.string.profile_pic_uploaded))
 
                     }
                     is Lse.Error -> {
                         profile_pic_Uploading.gone()
-                        showAlertDialog("Could not submit info", it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_info), it.error)
                     }
                 }
             })
@@ -223,7 +223,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 if (allPermsGranted)
                     ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
                 else {
-                    showToast("Please grant storage permission")
+                    showToast(getString(R.string.please_grant_storage_permission))
                 }
             }
         }
@@ -247,7 +247,7 @@ class AddProfilePictureFragment : BaseFragment(),
             if (outputFileUri != null) {
                 startCrop(outputFileUri)
             } else {
-                showToast("Issue in capturing or selecting Image")
+                showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
@@ -268,14 +268,14 @@ class AddProfilePictureFragment : BaseFragment(),
                     if (faces.size > 0) {
                         Toast.makeText(
                             requireContext(),
-                            "Face Detected. Uploading...",
+                            getString(R.string.face_detected_upload),
                             Toast.LENGTH_LONG
                         ).show()
                         imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            "Something seems off. Please take a smart selfie with good lights.",
+                            getString(R.string.something_seems_of),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -322,7 +322,7 @@ class AddProfilePictureFragment : BaseFragment(),
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
         options.setToolbarColor(ResourcesCompat.getColor(resources, R.color.topBarDark, null))
-        options.setToolbarTitle("Crop and Rotate")
+        options.setToolbarTitle(getString(R.string.crop_and_rotate))
         return options
     }
 
@@ -338,10 +338,10 @@ class AddProfilePictureFragment : BaseFragment(),
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-            .setNegativeButton("No") { _, _ -> }
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 

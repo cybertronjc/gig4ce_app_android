@@ -74,7 +74,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                     enrolledUserAdapter.setData(it)
                     total_users_enrolled_tv.visible()
                     total_users_enrolled_tv.text = buildSpannedString {
-                        append("Total profiles Created : ")
+                        append(getString(R.string.total_profiles_created))
                         bold { append(it.size.toString()) }
                     }
                 }

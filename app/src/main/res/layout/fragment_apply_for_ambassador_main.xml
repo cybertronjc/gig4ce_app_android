@@ -35,7 +35,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="3sp"
             android:layout_marginTop="24dp"
-            android:text="Happy Earning!"
+            tools:text="@string/happy_earning"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ambassador_success_banner"
@@ -55,7 +55,7 @@
             android:layout_marginEnd="24dp"
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@id/happy_earning_label"
-            android:text="You are selected for the Ambassador role at Gig4ce . "
+            tools:text="@string/you_are_selected_for_the_ambassador_role_at_gig4ce"
             />
 
         <LinearLayout
@@ -73,17 +73,16 @@
             android:id="@+id/submitBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="24dp"
             android:background="@drawable/gradient_button"
+            android:enabled="true"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:enabled="true"
+            tools:text="@string/start_onboarding_gigers"
             android:textAllCaps="false"
-            android:text="Start Onboarding Gigers"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+            app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container"
+            tools:layout_editor_absoluteX="24dp" />
 
         <TextView
             android:id="@+id/view_gig_details_btn"

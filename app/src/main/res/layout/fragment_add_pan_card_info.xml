@@ -17,13 +17,39 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/white"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:contentInsetStartWithNavigation="@dimen/size_19"
-            app:title="@string/giger_verification"
-            app:titleTextColor="@color/black" />
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_back_add_pan_card_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_18"
+                    app:srcCompat="@drawable/ic_arrow_back_black" />
+
+                <TextView
+                    android:id="@+id/tv_title_add_pan_card_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_toEndOf="@+id/iv_back_add_pan_card_info"
+                    android:letterSpacing="0"
+                    android:text="@string/giger_verification"
+                    android:textColor="#080808"
+                    android:textSize="@dimen/font_20" />
+
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

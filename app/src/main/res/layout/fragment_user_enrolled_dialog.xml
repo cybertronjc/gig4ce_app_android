@@ -33,7 +33,7 @@
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 android:layout_marginStart="22dp"
-                android:text="Congratulations!!"
+                android:text="@string/congratulations_exclamation"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -64,8 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/congrats_image"
-            tools:text="You have successfully submitted Bharat’s details  !!
-Soon gigs will assign to him, and you will receive your incentive."
+            tools:text="@string/success_fully_details_submitted"
             />
 
 

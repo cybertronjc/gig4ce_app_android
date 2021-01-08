@@ -47,7 +47,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
-                    android:text="Experience"
+                    android:text="@string/experience"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -71,7 +71,7 @@
                     android:fontFamily="@font/lato"
                     android:lineHeight="17sp"
                     android:lineSpacingExtra="3sp"
-                    android:text="Glad to know about your interest. Give a bit more details to show best Gigs to you"
+                    android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -92,7 +92,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/breifing_layout"
-                android:text="Do you have experience in Delivery Executive ?" />
+                android:text="@string/do_you_have_experience_in_delivery_executive" />
 
 
             <com.google.android.material.chip.ChipGroup
@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipStrokeWidth="1dp"
-                    android:text="Yes, I have an Experience" />
+                    android:text="@string/yes_i_have_an_experience" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/exp_no"
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipStrokeWidth="1dp"
-                    android:text="No I don't have" />
+                    android:text="@string/no_i_don_t_have" />
 
 
             </com.google.android.material.chip.ChipGroup>
@@ -148,7 +148,7 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="What was your role ? " />
+                    android:text="@string/what_was_your_role" />
 
                 <Spinner
                     android:id="@+id/role_spinner"
@@ -236,7 +236,7 @@
                     android:lineSpacingExtra="3sp"
                     android:minHeight="36dp"
                     android:paddingStart="8dp"
-                    android:text="Currently Working Here"
+                    android:text="@string/currently_working_here"
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
@@ -251,7 +251,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/rectangle_round_grey"
                     android:fontFamily="@font/lato"
-                    android:hint="Earnings Per Day"
+                    android:hint="@string/earnings_per_day"
                     android:lineSpacingExtra="3sp"
                     android:inputType="number"
                     android:maxLength="8"
@@ -273,7 +273,7 @@
                     android:textColor="#333333"
                     android:lineSpacingExtra="3sp"
                     android:layout_marginTop="20dp"
-                    android:text="Total years of experience (years)"
+                    android:text="@string/total_years_of_experience_years"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/earning_et"
                     />
@@ -294,7 +294,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="0 - 1" />
+                        android:text="@string/_0_1" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_1_3"
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="1 - 3" />
+                        android:text="@string/_1_3" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_3_6"
@@ -310,7 +310,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="3 - 6" />
+                        android:text="@string/_3_6" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/exp_above_6"
@@ -318,7 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="6 +" />
+                        android:text="@string/_6" />
 
 
                 </com.google.android.material.chip.ChipGroup>
@@ -344,7 +344,7 @@
                     android:textColor="#333333"
                     android:lineSpacingExtra="3sp"
                     android:layout_marginTop="20dp"
-                    android:text="Owning any vehicle?"
+                    android:text="@string/owning_any_vehicle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/earning_et"
                     />
@@ -365,7 +365,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="Car" />
+                        android:text="@string/car" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_truck"
@@ -373,7 +373,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="Truck" />
+                        android:text="@string/truck" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_auto"
@@ -381,7 +381,7 @@
                         app:chipStrokeWidth="1dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Autorickshaw" />
+                        android:text="@string/autorickshaw" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/driver_option_bike"
@@ -389,7 +389,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:chipStrokeWidth="1dp"
-                        android:text="Bike" />
+                        android:text="@string/bike" />
 
 
                 </com.google.android.material.chip.ChipGroup>

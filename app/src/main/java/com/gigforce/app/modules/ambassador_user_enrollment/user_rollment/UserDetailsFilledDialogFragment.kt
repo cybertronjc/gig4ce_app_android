@@ -94,16 +94,17 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     private fun initView() {
 
         congrats_text.text = buildSpannedString {
-            append("You have ")
+            append(getString(R.string.you_have) + " ")
             bold {
-                append("successfully ")
+                append(getString(R.string.successfully) + " ")
             }
-            append("submitted")
+            append(getString(R.string.submitted))
             bold {
                 append(" $userName's ")
             }
-            append("details !!\n\n")
-            append("Soon gigs will assign to him, and you will receive your incentive.")
+            append(getString(R.string.details_exclamation)+"\n" +
+                    "\n")
+            append(getString(R.string.soon_gigs_will_assign))
         }
 
         submitBtn.setOnClickListener {

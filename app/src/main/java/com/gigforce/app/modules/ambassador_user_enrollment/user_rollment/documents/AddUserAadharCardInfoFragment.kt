@@ -47,8 +47,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
-    private lateinit var userId : String
-    private lateinit var userName : String
+    private lateinit var userId: String
+    private lateinit var userName: String
 
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
@@ -63,7 +63,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(arguments,savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         initViews()
         initViewModel()
     }
@@ -221,7 +221,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
                         )
 
                     } else if (aadharNoRB.isChecked) {
-                        viewModel.updateAadharData(false, null, null, null,userId)
+                        viewModel.updateAadharData(false, null, null, null, userId)
                     }
                 }
             }
@@ -265,9 +265,10 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     private fun documentUploaded() {
         showToast(getString(R.string.aadhar_card_details_uploaded))
 
-        navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+        navigate(
+            R.id.addUserDrivingLicenseInfoFragment, bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
         )
     }
@@ -278,16 +279,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
-            .setNegativeButton("No"){_,_ ->}
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 
-    private fun goBackToUsersList(){
+    private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 

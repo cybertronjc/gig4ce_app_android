@@ -35,7 +35,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="Upload Driving License Details"
+            android:text="@string/upload_driving_license_details"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
