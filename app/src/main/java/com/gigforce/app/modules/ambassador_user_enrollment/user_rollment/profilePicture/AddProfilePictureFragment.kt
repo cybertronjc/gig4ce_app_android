@@ -85,6 +85,7 @@ class AddProfilePictureFragment : BaseFragment(),
             submitBtn.visible()
             skipButton.gone()
             submitBtn.text = "Upload Photo"
+            editLayout.gone()
         } else {
             submitBtn.text = "Change Photo"
             skipButton.visible()
@@ -222,8 +223,10 @@ class AddProfilePictureFragment : BaseFragment(),
                             submitBtn.visible()
                             if (it.content.hasUserUploadedProfilePicture()) {
                                 displayImage(it.content.profileAvatarName)
+                                editLayout.visible()
                             } else {
                                 skipButton.gone()
+                                editLayout.gone()
                                 submitBtn.text = "Upload Photo"
                             }
                         }

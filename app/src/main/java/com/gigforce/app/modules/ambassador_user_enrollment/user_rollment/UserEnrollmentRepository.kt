@@ -78,14 +78,25 @@ class UserEnrollmentRepository constructor(
 
     suspend fun updateUserProfileName(
             userId: String,
-            name: String
+            name: String,
+            latitude: Double,
+            longitude: Double,
+            address: String
     ) {
 
         db.collection(COLLECTION_NAME)
                 .document(getUID())
                 .collection(COLLECTION_ENROLLED_USERS)
                 .document(userId)
-                .updateOrThrow("name", name)
+                .updateOrThrow(
+                        mapOf(
+                                "name" to name,
+                                "enrollmentStepsCompleted.userDetailsUploaded" to true,
+                                "enrolledFromLocation.latitude" to latitude,
+                                "enrolledFromLocation.longitude" to longitude,
+                                "enrolledFromLocation.completeAddress" to address
+                        )
+                )
     }
 
     suspend fun updateUserProfilePicture(

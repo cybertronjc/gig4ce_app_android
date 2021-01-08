@@ -291,14 +291,18 @@ class AddUserExperienceFragment : BaseFragment() {
             emptyList()
         }
 
-        val deliveryExecQuestionOwnVehicle =
-                if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipId != -1) {
-                    delivery_exec_own_vehicle_chipgroup.findViewById<Chip>(
-                            delivery_exec_own_vehicle_chipgroup.checkedChipId
-                    ).text.toString()
-                } else {
-                    ""
-                }
+        val deliveryExecQuestionOwnVehicles: List<String> = if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+            val deliveryVehiclesOwn: MutableList<String> = mutableListOf()
+
+            delivery_exec_own_vehicle_chipgroup.checkedChipIds.forEach {
+                val vehicle = delivery_exec_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+                deliveryVehiclesOwn.add(vehicle)
+            }
+
+            deliveryVehiclesOwn
+        } else {
+            emptyList()
+        }
 
         val helperComfortableLiftingHeavyWeights =
                 if (helper_exec_question_layout.isVisible && helper_weight_chipgroup.checkedChipId != -1) {
@@ -324,7 +328,9 @@ class AddUserExperienceFragment : BaseFragment() {
                 driverQuestionVehiclesOwn = driverQuestionOwnVehicle,
                 driverQuestionVehiclesCanDrive = driverQuestionCanDriveVehicles,
 
-                deliveryExecQuestionOwnVehicle = deliveryExecQuestionOwnVehicle,
+                deliveryExecQuestionOwnVehicle = "",
+                deliveryQuestionVehiclesOwn = deliveryExecQuestionOwnVehicles,
+
                 helperComfortableLiftingHeavyWeights = helperComfortableLiftingHeavyWeights
         )
 
@@ -504,7 +510,7 @@ class AddUserExperienceFragment : BaseFragment() {
                         role_spinner.selectItemWithText(it.role)
                     }
 
-                    val deliveryExecOwnVehicleList = it.deliveryQuestionVehiclesCanDrive.toMutableList()
+                    val deliveryExecOwnVehicleList = it.deliveryQuestionVehiclesOwn.toMutableList()
                     deliveryExecOwnVehicleList.add(it.deliveryExecQuestionOwnVehicle)
                     delivery_exec_own_vehicle_chipgroup.selectChipsWithText(deliveryExecOwnVehicleList)
                 }

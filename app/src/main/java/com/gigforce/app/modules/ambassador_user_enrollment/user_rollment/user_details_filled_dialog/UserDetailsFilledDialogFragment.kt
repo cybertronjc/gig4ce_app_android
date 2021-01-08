@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment
+package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,13 +9,20 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import kotlinx.android.synthetic.main.fragment_user_enrolled_dialog.*
 
 interface UserDetailsFilledDialogFragmentResultListener {
 
     fun onOkayClicked()
+
+    fun onReUploadDocumentsClicked()
 }
 
 class UserDetailsFilledDialogFragment : DialogFragment() {
@@ -24,15 +31,15 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
         const val TAG = "DeclineGigDialogFragment"
 
         fun launch(
-            userId: String,
-            userName: String,
-            fragmentManager: FragmentManager,
-            okayClickListener: UserDetailsFilledDialogFragmentResultListener
+                userId: String,
+                userName: String,
+                fragmentManager: FragmentManager,
+                okayClickListener: UserDetailsFilledDialogFragmentResultListener
         ) {
             val frag = UserDetailsFilledDialogFragment()
             frag.arguments = bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
             frag.mOkayResultListener = okayClickListener
             frag.show(fragmentManager, TAG)
@@ -40,15 +47,17 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
 
     }
 
+    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+
     private lateinit var userId: String
     private lateinit var userName: String
 
     private lateinit var mOkayResultListener: UserDetailsFilledDialogFragmentResultListener
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user_enrolled_dialog, container, false)
     }
@@ -65,6 +74,8 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
         }
         initView()
+        initViewModel()
+        getDocumentsUploadedByGigerDetails(userId)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -84,8 +95,8 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             setBackgroundDrawableResource(R.drawable.dialog_round_bg)
 
             setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -110,5 +121,51 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             mOkayResultListener.onOkayClicked()
             dismiss()
         }
+
+        will_do_later_btn.setOnClickListener {
+            mOkayResultListener.onOkayClicked()
+            dismiss()
+        }
+
+        upload_doc_btn.setOnClickListener {
+            mOkayResultListener.onReUploadDocumentsClicked()
+            dismiss()
+        }
+    }
+
+    private fun initViewModel() {
+        gigerVerificationViewModel.gigerVerificationStatus
+                .observe(viewLifecycleOwner, Observer {
+
+                    if (it.aadharCardDetailsUploaded ||
+                            it.bankDetailsUploaded ||
+                            it.panCardDetailsUploaded ||
+                            it.dlCardDetailsUploaded
+                    ) {
+
+                        showDocumentUploadedCard()
+                    } else {
+                        showAtLeastOneDocumentNecessaryCard()
+                    }
+                })
+    }
+
+    private fun showAtLeastOneDocumentNecessaryCard() {
+
+        loading_progresbar.gone()
+        document_uploaded_layout.gone()
+        upload_at_least_one_document_layout.visible()
+    }
+
+    private fun showDocumentUploadedCard() {
+
+        loading_progresbar.gone()
+        upload_at_least_one_document_layout.gone()
+        document_uploaded_layout.visible()
+    }
+
+    private fun getDocumentsUploadedByGigerDetails(userId: String) {
+
+        gigerVerificationViewModel.getVerificationStatus(userId)
     }
 }

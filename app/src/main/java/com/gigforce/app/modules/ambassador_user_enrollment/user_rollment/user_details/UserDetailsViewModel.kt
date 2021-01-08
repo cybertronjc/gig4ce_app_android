@@ -64,8 +64,8 @@ class UserDetailsViewModel constructor(
                     longitude = longitude,
                     address = address
             )
-            enrolledUserListRepository.updateUserProfileName(uid, name)
-            enrolledUserListRepository.setUserDetailsAsFilled(uid)
+            enrolledUserListRepository.updateUserProfileName(uid, name,latitude, longitude, address)
+          //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
 
             _submitUserDetailsState.value = Lse.success()
             _submitUserDetailsState.value = null

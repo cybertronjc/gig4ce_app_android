@@ -154,6 +154,43 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        permanent_state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+            ) {
+
+                if (permanent_state_spinner.childCount != 0 && permanent_state_spinner.selectedItemPosition != 0) {
+                    val state = permanent_state_spinner.selectedItem as State
+                    filterPermanentCitiesByStateAndSetOnCities(state.id)
+                }
+            }
+
+            private fun filterPermanentCitiesByStateAndSetOnCities(id: String) {
+                val cities = viewModel.cities.filter {
+                    it.stateCode == id
+                }.toMutableList().apply {
+                    add(0, City(name = "Select District"))
+                }
+
+                val permanentCityAdapter: ArrayAdapter<City> =
+                        ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_item,
+                                cities
+                        )
+                permanentCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                permanent_city_spinner.adapter = permanentCityAdapter
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+
+
         localite_migrant_chipgroup.setOnCheckedChangeListener { group, checkedId ->
 
             if (checkedId == R.id.migrant_no) {
