@@ -314,7 +314,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
     override fun getAllCities(adapterPosition: Int, childPosition: Int) {
         this.parentPosition = adapterPosition;
-        this.childPosition = adapterPosition;
+        this.childPosition = childPosition;
         viewModel.getAllCities()
     }
 
