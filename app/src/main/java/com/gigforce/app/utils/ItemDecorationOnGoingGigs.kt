@@ -19,7 +19,7 @@ class ItemDecorationOnGoingGigs(private val mItemOffset: Int) : RecyclerView.Ite
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect[parent.getChildAdapterPosition(view) * -mItemOffset, 0, 0] = 0
+        outRect[if(parent.getChildAdapterPosition(view)==0) mItemOffset else mItemOffset/2, 0, 0] = mItemOffset
 
     }
 

@@ -82,22 +82,23 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                                 if (it) View.GONE else View.VISIBLE
                     }
                     adapter = AdapterOnGoingGigs()
+
                     viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
-//                if (horizontalItemDecoration == null) {
-//                    horizontalItemDecoration =
-//                        ItemDecorationOnGoingGigs(
-//                            holder.itemView.resources.getDimensionPixelOffset(
-//                                R.dimen.size_32
-//                            )
-//                        )
-//                } else {
-//                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
-//                        horizontalItemDecoration!!
-//                    )
-//                }
-//                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
-//                    horizontalItemDecoration!!
-//                )
+                if (horizontalItemDecoration == null) {
+                    horizontalItemDecoration =
+                        ItemDecorationOnGoingGigs(
+                            holder.itemView.resources.getDimensionPixelSize(
+                                R.dimen.size_16
+                            )
+                        )
+                } else {
+                    viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.removeItemDecoration(
+                        horizontalItemDecoration!!
+                    )
+                }
+                viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.addItemDecoration(
+                    horizontalItemDecoration!!
+                )
                     viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.layoutManager =
                             LinearLayoutManager(
                                     holder.itemView.context,
