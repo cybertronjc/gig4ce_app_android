@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/cv_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,7 +36,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            tools:text="@string/application_gig4ce"
+            android:text="@string/application_gig4ce"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -68,7 +69,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/apply_image"
-        tools:text="@string/thanks_for_showing_interest_in" />
+        android:text="@string/thanks_for_showing_interest_in" />
 
 
 
@@ -87,7 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/thanks_for_label"
-        tools:text="@string/please_complete_the_below_information_to_submit_your_application" />
+        android:text="@string/please_complete_the_below_information_to_submit_your_application" />
 
     <TextView
         android:id="@+id/steps_pending_label"
@@ -102,7 +103,7 @@
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        tools:text="@string/steps_completed" />
+        android:text="@string/steps_completed" />
 
     <TextView
         android:id="@+id/steps_completed_tv"
@@ -117,7 +118,7 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/complete_form_label"
-        tools:text="2/5" />
+        android:text="2/5" />
 
 
     <ProgressBar
@@ -168,7 +169,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="@string/profile_photo" />
+            android:text="@string/profile_photo" />
 
 
         <ImageView
@@ -208,7 +209,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="@string/current_address" />
+            android:text="@string/current_address" />
 
 
         <ImageView
@@ -249,7 +250,7 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="@string/bank_details" />
+            android:text="@string/bank_details" />
 
 
         <ImageView

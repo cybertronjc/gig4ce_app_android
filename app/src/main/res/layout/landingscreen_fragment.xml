@@ -307,7 +307,7 @@
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
                         android:layout_marginStart="4dp"
-                        tools:text="@string/join_us_as_an_ambassador"
+                        android:text="@string/join_us_as_an_ambassador"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -328,7 +328,7 @@
                         app:layout_constraintStart_toEndOf="@+id/imageView11"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
-                        tools:text="@string/more_you_create_profiles_more_you_earn"
+                        android:text="@string/more_you_create_profiles_more_you_earn"
                         />
 
                     <com.google.android.material.button.MaterialButton
@@ -336,7 +336,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        tools:text="@string/join_now"
+                        android:text="@string/join_now"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:textAllCaps="false"/>
