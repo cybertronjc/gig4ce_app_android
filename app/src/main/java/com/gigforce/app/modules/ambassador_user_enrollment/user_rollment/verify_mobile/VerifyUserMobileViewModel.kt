@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ class VerifyUserMobileViewModel constructor(
     val checkMobileNo: LiveData<Lce<RegisterMobileNoResponse>> = _checkMobileNo
 
     fun checkMobileNo(
-            mobileNo: String
+        mobileNo: String
     ) = viewModelScope.launch {
 
         _checkMobileNo.postValue(Lce.loading())
@@ -73,6 +74,7 @@ class VerifyUserMobileViewModel constructor(
                       _createProfile.value = Lce.error("Otp does not match")
                   }
             }
+
         } catch (e: Exception) {
             _createProfile.value = Lce.error(e.message ?: "Unable to create user")
         }

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment
 
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -31,19 +32,21 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.LocationUpdates
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
-    Toolbar.OnMenuItemClickListener {
+        Toolbar.OnMenuItemClickListener, LocationUpdates.LocationUpdateCallbacks {
+
 
     private val learningViewModel: LearningViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambassador_program_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,15 +89,15 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
     private fun initLearningViewModel() {
         learningViewModel
-            .roleBasedCourses
-            .observe(viewLifecycleOwner, Observer {
+                .roleBasedCourses
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showRoleBasedLearningProgress()
-                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
-                    is Lce.Error -> showRoleBasedLearningError(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showRoleBasedLearningProgress()
+                        is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
+                        is Lce.Error -> showRoleBasedLearningError(it.error)
+                    }
+                })
 
         learningViewModel.getRoleBasedCourses()
     }
@@ -128,11 +131,22 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         // model will change when integrated with DB
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-            RecyclerGenericAdapter<Course>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    val course = item as Course
+                RecyclerGenericAdapter<Course>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                            val course = item as Course
 
+                            navigate(
+                                    R.id.learningCourseDetails,
+                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                            )
+                        },
+                        RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                            var view = getView(viewHolder, R.id.card_view)
+                            val lp = view.layoutParams
+                            lp.height = lp.height
+                            lp.width = itemWidth
+                            view.layoutParams = lp
                     navigate(
                         R.id.learningCourseDetails,
                         bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
@@ -368,5 +382,14 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
+
+
+    override fun locationReceiver(location: Location?) {
+
+    }
+
+    override fun lastLocationReceiver(location: Location?) {
+    }
+
 
 }

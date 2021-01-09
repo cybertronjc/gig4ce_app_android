@@ -47,11 +47,11 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
 
     fun getQuestionnaire(jobProfileID: String) {
         questionnaireRepository.getCollectionReference().whereEqualTo("type", "questionnaire")
-                .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, error ->
-                    if (error == null) {
-                        if (!success?.documents.isNullOrEmpty()) {
-                            val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)
-                            _observableQuestionnaireResponse.value = toObject
+            .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, error ->
+                if (error == null) {
+                    if (!success?.documents.isNullOrEmpty()) {
+                        val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)
+                        _observableQuestionnaireResponse.value = toObject
 //                        savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
                         }
 
@@ -60,10 +60,10 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     fun addQuestionnaire(
-            mJobProfileId: String,
-            title: String,
-            type: String,
-            questions: List<Questions>?
+        mJobProfileId: String,
+        title: String,
+        type: String,
+        questions: List<Questions>?
     ) {
         var listener: ListenerRegistration? = null
         listener = questionnaireRepository.db.collection("JP_Applications")

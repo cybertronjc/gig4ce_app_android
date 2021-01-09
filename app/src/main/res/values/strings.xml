@@ -1283,6 +1283,10 @@
     <string name="rejected_bold"><![CDATA[<b>Rejected </b>]]></string>
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
+    <string name="allow_gigforce_to_access_this_device_s_location">Allow Gigforce to access this device’s location?</string>
+    <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find you best Gig near you</string>
+    <string name="allow_access_location">Allow Access Location</string>
+    <string name="location_error">There is some problem in fetching your location ,Please enable it to continue</string>
     <string name="activate">Activate</string>
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
     //new strings

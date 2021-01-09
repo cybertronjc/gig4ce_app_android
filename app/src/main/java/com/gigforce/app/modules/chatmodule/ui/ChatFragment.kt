@@ -94,7 +94,7 @@ class ChatFragment : BaseFragment(),
         ChatRecyclerAdapter(
             requireContext(),
             appDirectoryFileRef,
-            initGlide()!!,
+            initGlide(R.drawable.ic_user,R.drawable.ic_user)!!,
             this
         )
     }
@@ -282,7 +282,7 @@ class ChatFragment : BaseFragment(),
     }
 
     private fun initIntent() {
-        val req = initGlide()
+        val req = initGlide(R.drawable.ic_user,R.drawable.ic_user)
 
         if (imageUrl.isNullOrBlank()) {
             req!!.load(R.drawable.ic_user).into(civ_personImage)
