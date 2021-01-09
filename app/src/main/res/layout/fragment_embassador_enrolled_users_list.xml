@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/cv_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    tools:context=".modules.assessment.AssessmentFragment">
+    android:clipToPadding="false">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/toolbar_filter_layout"
@@ -171,17 +170,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:background="#c6ddf3"
                 android:fontFamily="@font/lato"
-                android:textStyle="normal"
-                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="3sp"
                 android:paddingStart="18dp"
                 android:paddingTop="16dp"
                 android:paddingBottom="6dp"
                 android:textColor="#333333"
-                android:lineSpacingExtra="3sp"
-                android:visibility="gone"
-                android:gravity="center_vertical"
-                android:background="#c6ddf3"/>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/total_incomplete_profile_tv"
@@ -194,11 +191,8 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="16dp"
                 android:textColor="#333333"
-                android:lineSpacingExtra="3sp"
-                android:visibility="gone"
-                android:gravity="center_vertical"
-                android:background="#c6ddf3"/>
-            
+                android:visibility="gone" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/enrolled_users_rv"
                 android:layout_width="match_parent"
@@ -264,7 +258,7 @@
                 android:text="@string/create_profile"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
-<!--            android:background="@drawable/bg_next_assess_frag"-->
+
 
         </LinearLayout>
     </FrameLayout>
