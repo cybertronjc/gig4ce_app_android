@@ -1,20 +1,19 @@
 package com.gigforce.app.modules.ambassador_user_enrollment
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.app.Activity
-import android.content.Intent
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -46,9 +45,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
-        EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener {
 
-    EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener, LocationUpdates.LocationUpdateCallbacks {
+        EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener, LocationUpdates.LocationUpdateCallbacks {
     private val locationUpdates: LocationUpdates by lazy {
         LocationUpdates()
     }
@@ -90,7 +88,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
         enrolled_users_rv.adapter = enrolledUserAdapter
 
-        share_link.setOnClickListener{
+        share_link.setOnClickListener {
             shareLink()
         }
     }
@@ -173,7 +171,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                 })
     }
 
-    private fun getEnrolledUsers(){
+    private fun getEnrolledUsers() {
         viewModel.enrolledUsers
     }
 
@@ -191,10 +189,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun onUserClicked(enrolledUser: EnrolledUser) {
 
     }
-    fun shareLink(){
+
+    fun shareLink() {
         Firebase.dynamicLinks.shortLinkAsync {
             longLink =
-                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}&is_ambassador=true")).toString())
+                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}&is_ambassador=true")).toString())
         }.addOnSuccessListener { result ->
             // Short link created
             val shortLink = result.shortLink
@@ -208,19 +207,19 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse(deepLink.toString()))
-            .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
-            // Open links with this app on Android
-            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-            // Open links with com.example.ios on iOS
-            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
-                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
-                    .build()
-            ).buildDynamicLink()
+                .setLink(Uri.parse(deepLink.toString()))
+                .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
+                // Open links with this app on Android
+                .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+                // Open links with com.example.ios on iOS
+                .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+                .setSocialMetaTagParameters(
+                        DynamicLink.SocialMetaTagParameters.Builder()
+                                .setTitle("Gigforce")
+                                .setDescription("Flexible work and learning platform")
+                                .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                                .build()
+                ).buildDynamicLink()
 
         return dynamicLink.uri;
     }
@@ -230,13 +229,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
             shareIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.app_name)
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.app_name)
             )
             val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+                    BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 
@@ -248,11 +247,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
             outPutStream.close()
             outputFile.setReadable(true, false)
             shareIntent.putExtra(
-                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().packageName + ".provider",
                     outputFile
-                )
+            )
             )
             startActivity(Intent.createChooser(shareIntent, "choose one"))
         } catch (e: Exception) {
@@ -263,6 +262,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun onUserEditButtonclicked(enrolledUser: EnrolledUser) {
         viewModel.getMobileNumberAndSendOtpInfo(enrolledUser)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         locationUpdates.stopLocationUpdates(requireActivity())
