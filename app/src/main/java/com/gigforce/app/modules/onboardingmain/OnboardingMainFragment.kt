@@ -254,8 +254,10 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
+        val invite_by_ambassador =
         viewModel.setOnboardingCompleted(
             inviteId,
+            sharedDataInterface.getData(StringConstants.INVITE_BY_AMBASSADOR.value)?:"",
             navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
             navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
         )

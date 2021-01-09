@@ -61,6 +61,10 @@ class SplashScreen : AppCompatActivity() {
                         initApp(intent)
                         return@addOnSuccessListener
                     }else if(!isAmbassador.isNullOrEmpty()){
+                        sp.saveData(
+                            StringConstants.INVITE_BY_AMBASSADOR.value,
+                            "true"
+                        )
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)

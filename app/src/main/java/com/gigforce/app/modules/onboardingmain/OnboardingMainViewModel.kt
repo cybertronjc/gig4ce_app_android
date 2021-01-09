@@ -3,13 +3,15 @@ package com.gigforce.app.modules.onboardingmain
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.profile.models.EnrollmentInfo
+import com.gigforce.app.modules.profile.models.ErrorWhileSettingUserAsAmbassador
 import com.gigforce.app.modules.profile.models.Invites
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -133,7 +135,12 @@ class OnboardingMainViewModel : ViewModel() {
         profileFirebaseRepository.setDataAsKeyValue("workStatus", selectedDataFromRecycler)
     }
 
-    fun setOnboardingCompleted(invite: String?, roleID: String, jobProfileId: String) {
+    fun setOnboardingCompleted(
+        invite: String?,
+        inviteByAmbassador: String,
+        roleID: String,
+        jobProfileId: String
+    ) {
         if (!invite.isNullOrEmpty()) {
             var listener: ListenerRegistration? = null
             listener = profileFirebaseRepository.getCollectionReference()
@@ -156,6 +163,7 @@ class OnboardingMainViewModel : ViewModel() {
                                     )
                                 )
 
+//                                    EnrolledUser(uid = profileFirebaseRepository.uid,enrolledBy = invite, enrolledByLink = true )
                         } else {
                             profileFirebaseRepository.getCollectionReference()
                                 .document(invite)
@@ -169,6 +177,26 @@ class OnboardingMainViewModel : ViewModel() {
                                     )
                                 )
 
+                        }
+                        if (inviteByAmbassador.isNotBlank()) {
+
+                            profileFirebaseRepository.getDBCollection()
+                                .update(
+                                    "enrolledBy",
+                                    EnrollmentInfo(id = invite, enrolledOn = Timestamp.now())
+
+                                )
+
+                            profileFirebaseRepository.db.collection("Ambassador_Enrolled_User")
+                                .document(invite).collection("Enrolled_Users")
+                                .document(profileFirebaseRepository.uid).set(
+                                    mapOf(
+                                        "uid" to profileFirebaseRepository.uid,
+                                        "enrolledBy" to invite,
+                                        "enrolledOn" to Timestamp.now(),
+                                        "enrolledByLink" to true
+                                    )
+                                )
                         }
 
                     }

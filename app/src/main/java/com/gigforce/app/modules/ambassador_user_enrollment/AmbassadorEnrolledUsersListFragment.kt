@@ -116,7 +116,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     fun shareLink(){
         Firebase.dynamicLinks.shortLinkAsync {
             longLink =
-                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}")).toString())
+                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}&is_ambassador=true")).toString())
         }.addOnSuccessListener { result ->
             // Short link created
             val shortLink = result.shortLink
