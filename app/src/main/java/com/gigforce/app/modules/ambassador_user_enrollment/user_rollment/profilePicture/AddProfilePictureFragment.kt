@@ -27,6 +27,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_de
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ml.vision.FirebaseVision
@@ -41,15 +42,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddProfilePictureFragment : BaseFragment(),
-    ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
+        ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private var userId: String? = null
     private var userName: String = ""
     private var pincode = ""
+    private var mode: Int = EnrollmentConstants.MODE_UNSPECIFIED
 
-    val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
+    private val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
         setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
         setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
         setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
@@ -58,12 +60,12 @@ class AddProfilePictureFragment : BaseFragment(),
         build()
     }
 
-    val detector = FirebaseVision.getInstance()
-        .getVisionFaceDetector(options)
+    private val detector = FirebaseVision.getInstance()
+            .getVisionFaceDetector(options)
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_profile_picture, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,16 +74,37 @@ class AddProfilePictureFragment : BaseFragment(),
         getDataFromIntents(arguments, savedInstanceState)
         initListeners()
         initViewModel()
+        getProfilePictureForUser()
+    }
+
+    private fun getProfilePictureForUser() {
+        if (mode == EnrollmentConstants.MODE_ADD) {
+            //dont fetch doc
+
+            profile_pic_Uploading.gone()
+            submitBtn.visible()
+            skipButton.gone()
+            submitBtn.text = "Upload Photo"
+            editLayout.gone()
+        } else {
+            submitBtn.text = "Change Photo"
+            skipButton.visible()
+            viewModel.getProfileForUser(userId)
+        }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
             pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
         }
 
         savedInstanceState?.let {
+
+            mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
             pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
@@ -93,31 +116,41 @@ class AddProfilePictureFragment : BaseFragment(),
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
+        outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
     }
 
     private fun initListeners() {
 
         imageView13.setOnClickListener {
+            checkForPermissionElseShowCameraGalleryBottomSheet()
+        }
 
-            if (hasStoragePermissions())
-                ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
-            else
-                requestStoragePermission()
-
+        editLayout.setOnClickListener {
+            checkForPermissionElseShowCameraGalleryBottomSheet()
         }
 
         submitBtn.setOnClickListener {
 
             if (userId != null) {
-                navigate(
-                    R.id.addUserInterestFragment, bundleOf(
-                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode
-                    )
-                )
+
+                if (submitBtn.text == "Next") {
+                    navigate(
+                            R.id.addUserInterestFragment, bundleOf(
+                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                            EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                            EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                    ))
+                } else {
+                    checkForPermissionElseShowCameraGalleryBottomSheet()
+                }
             } else {
-                activity?.onBackPressed()
+
+                if (submitBtn.text == "Back") {
+                    activity?.onBackPressed()
+                } else {
+                    checkForPermissionElseShowCameraGalleryBottomSheet()
+                }
             }
         }
 
@@ -128,30 +161,48 @@ class AddProfilePictureFragment : BaseFragment(),
                 showGoBackConfirmationDialog()
             }
         }
+
+        skipButton.setOnClickListener {
+
+            navigate(
+                    R.id.addUserInterestFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                    EnrollmentConstants.INTENT_EXTRA_MODE to mode)
+            )
+        }
+    }
+
+    private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
+        if (hasStoragePermissions())
+            ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+        else
+            requestStoragePermission()
     }
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
+                requireContext(),
+                Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
 
         requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
         )
     }
 
@@ -164,50 +215,86 @@ class AddProfilePictureFragment : BaseFragment(),
     }
 
     private fun initViewModel() {
-        viewModel.submitUserDetailsState
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
-                when (it) {
-                    Lse.Loading -> {
-                        profile_pic_Uploading.visible()
-                    }
-                    Lse.Success -> {
-                        profile_pic_Uploading.gone()
-                        showToast(getString(R.string.profile_pic_uploaded))
-
-                    }
-                    is Lse.Error -> {
-                        profile_pic_Uploading.gone()
-                        showAlertDialog(getString(R.string.could_not_submit_info), it.error)
-                    }
-                }
-            })
         viewModel.profile
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                displayImage(it.profileAvatarName)
-            })
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    when (it) {
+                        Lce.Loading -> {
+                            profile_pic_Uploading.visible()
+                        }
+                        is Lce.Content -> {
+                            profile_pic_Uploading.gone()
 
-        viewModel.startWatchingProfile(userId)
+                            submitBtn.visible()
+                            if (it.content.hasUserUploadedProfilePicture()) {
+                                displayImage(it.content.profileAvatarName)
+                                editLayout.visible()
+                            } else {
+                                skipButton.gone()
+                                editLayout.gone()
+                                submitBtn.text = "Upload Photo"
+                            }
+                        }
+                        is Lce.Error -> {
+                            profile_pic_Uploading.gone()
+                            showToast(it.error)
+                        }
+                    }
+                })
+
+        viewModel.submitUserDetailsState
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    it ?: return@Observer
+
+                    when (it) {
+                        Lse.Loading -> {
+                            profile_pic_Uploading.visible()
+                        }
+                        Lse.Success -> {
+                            profile_pic_Uploading.gone()
+                            viewModel.getProfileForUser(userId)
+
+                            if (userId == null) {
+                                //Normal User login
+                                submitBtn.text = "Back"
+                            } else {
+                                submitBtn.text = "Next"
+                            }
+
+                            showToast(getString(R.string.profile_pic_uploaded))
+                        }
+                        is Lse.Error -> {
+                            profile_pic_Uploading.gone()
+                            showAlertDialog(getString(R.string.could_not_submit_info), it.error)
+                        }
+                    }
+                })
+
+
     }
 
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
-            val profilePicRef: StorageReference =
-                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+
+            val profilePicRef: StorageReference = PreferencesFragment
+                    .storage
+                    .reference
+                    .child("profile_pics")
+                    .child(profileImg)
+
             GlideApp.with(this.requireContext())
-                .load(profilePicRef)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView13)
+                    .load(profilePicRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView13)
         } else {
             GlideApp.with(this.requireContext())
-                .load(R.drawable.avatar)
-                .into(imageView13)
+                    .load(R.drawable.avatar)
+                    .into(imageView13)
         }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -258,33 +345,32 @@ class AddProfilePictureFragment : BaseFragment(),
                 val bitmap = data.data as Bitmap
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             }
-            val fvImage =
-                imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(requireContext(), it) }
+            val fvImage = imageUriResultCrop?.let { FirebaseVisionImage.fromFilePath(requireContext(), it) }
 
             //  Face detect - Check if face is present in the cropped image or not.
             val result = detector.detectInImage(fvImage!!)
-                .addOnSuccessListener { faces ->
-                    // Task completed successfully
-                    if (faces.size > 0) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.face_detected_upload),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.something_seems_of),
-                            Toast.LENGTH_LONG
-                        ).show()
+                    .addOnSuccessListener { faces ->
+                        // Task completed successfully
+                        if (faces.size > 0) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.face_detected_upload),
+                                    Toast.LENGTH_LONG
+                            ).show()
+                            imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
+                        } else {
+                            Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.something_seems_of),
+                                    Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    Log.d("CStatus", "Face detection failed! still uploading the image")
-                    imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
-                }
+                    .addOnFailureListener { e ->
+                        // Task failed with an exception
+                        Log.d("CStatus", "Face detection failed! still uploading the image")
+                        imageClickedOrSelectedNowUpload(imageUriResultCrop, baos.toByteArray())
+                    }
 
         }
     }
@@ -297,13 +383,13 @@ class AddProfilePictureFragment : BaseFragment(),
         Log.v("Start Crop", "started")
         //can use this for a new name every time
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         val imageFileName = PREFIX + "_" + timeStamp + "_"
         val uCrop: UCrop = UCrop.of(
-            uri,
-            Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
+                uri,
+                Uri.fromFile(File(requireContext().cacheDir, imageFileName + EXTENSION))
         )
         val resultIntent: Intent = Intent()
         resultIntent.putExtra("filename", imageFileName + EXTENSION)
@@ -357,9 +443,6 @@ class AddProfilePictureFragment : BaseFragment(),
 
         private const val PREFIX: String = "IMG"
         private const val EXTENSION: String = ".jpg"
-
-        private const val actionCamera = 0
-        private const val actionGallery = 1
 
         private const val REQUEST_STORAGE_PERMISSION = 102
     }

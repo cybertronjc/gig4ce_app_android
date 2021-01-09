@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.profile.models
 
-import com.gigforce.app.modules.profile.Interest
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
@@ -16,11 +15,15 @@ data class ProfileData(
     var profileAvatarName: String = "avatar.jpg",
     var isVerified: Boolean = false,
     var educations: ArrayList<Education>? = ArrayList<Education>(),
+
+    @get:PropertyName("skills")
+    @set:PropertyName("skills")
     var skills: ArrayList<Skill>? = ArrayList<Skill>(),
+
     var achievements: ArrayList<Achievement>? = ArrayList<Achievement>(),
     var languages: ArrayList<Language>? = ArrayList<Language>(),
     var contact: ArrayList<Contact>? = ArrayList<Contact>(),
-    var experiences: ArrayList<Experience>? = ArrayList<Experience>(),
+    var experiences: List<Experience>? = ArrayList<Experience>(),
     var tags: ArrayList<String>? = ArrayList<String>(),
     var connections: Int = 0,
     var rating: Rating? = Rating(),
@@ -49,10 +52,6 @@ data class ProfileData(
     @set:PropertyName("dateOfBirth")
     var dateOfBirth: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("interests")
-    @set:PropertyName("interests")
-    var interests: ArrayList<Interest>? = null,
-
     @get:PropertyName("enrolledBy")
     @set:PropertyName("enrolledBy")
     var enrolledBy: EnrollmentInfo? = null,
@@ -60,6 +59,22 @@ data class ProfileData(
     @get:PropertyName("firstLogin")
     @set:PropertyName("firstLogin")
     var firstLogin: Timestamp? = null,
+
+    @get:PropertyName("howYouCameToKnowAboutCurrentJob")
+    @set:PropertyName("howYouCameToKnowAboutCurrentJob")
+    var howYouCameToKnowAboutCurrentJob: String? = null,
+
+    @get:PropertyName("readyToChangeLocationForWork")
+    @set:PropertyName("readyToChangeLocationForWork")
+    var readyToChangeLocationForWork: Boolean = false,
+
+    @get:PropertyName("loginMobileNo")
+    @set:PropertyName("loginMobileNo")
+    var loginMobile: String = "",
+
+    @get:PropertyName("profilePicThumbnail")
+    @set:PropertyName("profilePicThumbnail")
+    var profileAvatarThumbnail: String = "",
 
     @get:PropertyName("created_on")
     @set:PropertyName("created_on")
@@ -73,6 +88,8 @@ data class ProfileData(
     @Exclude
     fun hasUserUploadedProfilePicture() =
         profileAvatarName.isNotBlank() && profileAvatarName != "avatar.jpg"
+
+
 }
 
 data class EnrollmentInfo(

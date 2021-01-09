@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
@@ -58,7 +59,8 @@ data class GigerVerificationStatus(
 
 open class GigVerificationViewModel constructor(
         private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
@@ -118,10 +120,12 @@ open class GigVerificationViewModel constructor(
                 }
     }
 
-    fun getVerificationStatus() = viewModelScope.launch {
+    fun getVerificationStatus(
+            userId: String? = null
+    ) = viewModelScope.launch {
 
         try {
-            getVerificationModel().let {
+            getVerificationModel(userId).let {
 
                 val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
                         && it.pan_card?.userHasPanCard != null
@@ -184,10 +188,10 @@ open class GigVerificationViewModel constructor(
     }
 
     fun updatePanImagePath(
-        userHasPan: Boolean,
-        panImage: Uri?,
-        panCardNo: String?,
-        userId: String
+            userHasPan: Boolean,
+            panImage: Uri?,
+            panCardNo: String?,
+            userId: String
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
 
@@ -201,15 +205,18 @@ open class GigVerificationViewModel constructor(
                 model.pan_card?.panCardImagePath
 
             model.pan_card = PanCardDataModel(
-                userHasPanCard = userHasPan,
-                panCardImagePath = fileNameAtServer,
-                verified = false,
-                panCardNo = panCardNo,
-                state = -1,
-                verifiedString = "Under Verification"
+                    userHasPanCard = userHasPan,
+                    panCardImagePath = fileNameAtServer,
+                    verified = false,
+                    panCardNo = panCardNo,
+                    state = -1,
+                    verifiedString = "Under Verification"
             )
             model.sync_status = false
             gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+            if (userHasPan)
+                userEnrollmentRepository.setPANDetailsAsUploaded(userId)
 
 //            val fileNameAtServer = if (userHasPan && panImage != null)
 //                uploadImage(panImage)
@@ -269,12 +276,12 @@ open class GigVerificationViewModel constructor(
     }
 
     fun updateBankPassbookImagePath(
-        userHasPassBook: Boolean,
-        passbookImagePath: Uri?,
-        ifscCode: String?,
-        bankName: String?,
-        accountNo: String?,
-        userId: String
+            userHasPassBook: Boolean,
+            passbookImagePath: Uri?,
+            ifscCode: String?,
+            bankName: String?,
+            accountNo: String?,
+            userId: String
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
 
@@ -288,19 +295,21 @@ open class GigVerificationViewModel constructor(
                 model.bank_details?.passbookImagePath
 
             model.bank_details = BankDetailsDataModel(
-                userHasPassBook = userHasPassBook,
-                passbookImagePath = fileNameAtServer,
-                verified = false,
-                ifscCode = ifscCode,
-                bankName = bankName,
-                accountNo = accountNo,
-                state = -1,
-                verifiedString = "Under Verification"
+                    userHasPassBook = userHasPassBook,
+                    passbookImagePath = fileNameAtServer,
+                    verified = false,
+                    ifscCode = ifscCode,
+                    bankName = bankName,
+                    accountNo = accountNo,
+                    state = -1,
+                    verifiedString = "Under Verification"
             )
             model.sync_status = false
 
             gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
 
+            if (userHasPassBook)
+                userEnrollmentRepository.setBankDetailsAsUploaded(userId)
 
 
 //            val fileNameAtServer = if (userHasPassBook && passbookImagePath != null)
@@ -430,11 +439,11 @@ open class GigVerificationViewModel constructor(
     }
 
     fun updateAadharData(
-        userHasAadhar: Boolean,
-        frontImagePath: Uri?,
-        backImagePath: Uri?,
-        aadharCardNumber: String?,
-        userId: String
+            userHasAadhar: Boolean,
+            frontImagePath: Uri?,
+            backImagePath: Uri?,
+            aadharCardNumber: String?,
+            userId: String
     ) = viewModelScope.launch {
         _documentUploadState.postValue(Lse.loading())
 
@@ -443,13 +452,13 @@ open class GigVerificationViewModel constructor(
             val model = getVerificationModel(userId)
             if (!userHasAadhar) {
                 model.aadhar_card = AadharCardDataModel(
-                    userHasAadharCard = false,
-                    frontImage = null,
-                    backImage = null,
-                    verified = false,
-                    aadharCardNo = null,
-                    state = -1,
-                    verifiedString = "Under Verification"
+                        userHasAadharCard = false,
+                        frontImage = null,
+                        backImage = null,
+                        verified = false,
+                        aadharCardNo = null,
+                        state = -1,
+                        verifiedString = "Under Verification"
                 )
             } else {
 
@@ -464,18 +473,21 @@ open class GigVerificationViewModel constructor(
                     model.aadhar_card?.backImage
 
                 model.aadhar_card = AadharCardDataModel(
-                    userHasAadharCard = true,
-                    frontImage = frontImageFileNameAtServer,
-                    backImage = backImageFileNameAtServer,
-                    verified = false,
-                    aadharCardNo = aadharCardNumber,
-                    state = -1,
-                    verifiedString = "Under Verification"
+                        userHasAadharCard = true,
+                        frontImage = frontImageFileNameAtServer,
+                        backImage = backImageFileNameAtServer,
+                        verified = false,
+                        aadharCardNo = aadharCardNumber,
+                        state = -1,
+                        verifiedString = "Under Verification"
                 )
                 model.sync_status = false
 
             }
             gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+            if (userHasAadhar)
+                userEnrollmentRepository.setAadharAsUploaded(userId)
 
 //            if (!userHasAadhar) {
 //                gigerVerificationRepository.updateAadharInfo(
@@ -565,12 +577,12 @@ open class GigVerificationViewModel constructor(
     }
 
     fun updateDLData(
-        userHasDL: Boolean,
-        frontImagePath: Uri?,
-        backImagePath: Uri?,
-        dlState: String?,
-        dlNo: String?,
-        userId: String
+            userHasDL: Boolean,
+            frontImagePath: Uri?,
+            backImagePath: Uri?,
+            dlState: String?,
+            dlNo: String?,
+            userId: String
     ) = viewModelScope.launch {
 
         _documentUploadState.postValue(Lse.loading())
@@ -580,12 +592,12 @@ open class GigVerificationViewModel constructor(
             val model = getVerificationModel(userId)
             if (!userHasDL) {
                 model.driving_license = DrivingLicenseDataModel(
-                    userHasDL = false,
-                    verified = false,
-                    frontImage = null,
-                    backImage = null,
-                    dlState = null,
-                    dlNo = null
+                        userHasDL = false,
+                        verified = false,
+                        frontImage = null,
+                        backImage = null,
+                        dlState = null,
+                        dlNo = null
                 )
             } else {
 
@@ -600,18 +612,21 @@ open class GigVerificationViewModel constructor(
                     model.driving_license?.backImage
 
                 model.driving_license = DrivingLicenseDataModel(
-                    userHasDL = true,
-                    verified = false,
-                    frontImage = frontImageFileNameAtServer,
-                    backImage = backImageFileNameAtServer,
-                    dlState = dlState,
-                    dlNo = dlNo,
-                    state = -1,
-                    verifiedString = "Under Verification"
+                        userHasDL = true,
+                        verified = false,
+                        frontImage = frontImageFileNameAtServer,
+                        backImage = backImageFileNameAtServer,
+                        dlState = dlState,
+                        dlNo = dlNo,
+                        state = -1,
+                        verifiedString = "Under Verification"
                 )
                 model.sync_status = false
             }
             gigerVerificationRepository.getCollectionReference().document(userId).setOrThrow(model)
+
+            if (userHasDL)
+                userEnrollmentRepository.setDrivingDetailsAsUploaded(userId)
 
 //            if (!userHasDL) {
 //                gigerVerificationRepository.updateDlDetails(
@@ -709,28 +724,28 @@ open class GigVerificationViewModel constructor(
             }
 
     suspend fun getVerificationModel(userId: String? = null): VerificationBaseModel =
-        suspendCoroutine { continuation ->
+            suspendCoroutine { continuation ->
 
-            val docRef =if(userId != null) {
-                gigerVerificationRepository.getCollectionReference().document(userId)
-            } else{
-                gigerVerificationRepository.getDBCollection()
-            }
-            docRef.get().addOnSuccessListener {
-                runCatching {
-                    if (it.data == null)
-                        VerificationBaseModel()
-                    else
-                        it.toObject(VerificationBaseModel::class.java)!!
-                }.onSuccess {
-                    continuation.resume(it)
-                }.onFailure {
+                val docRef = if (userId != null) {
+                    gigerVerificationRepository.getCollectionReference().document(userId)
+                } else {
+                    gigerVerificationRepository.getDBCollection()
+                }
+                docRef.get().addOnSuccessListener {
+                    runCatching {
+                        if (it.data == null)
+                            VerificationBaseModel()
+                        else
+                            it.toObject(VerificationBaseModel::class.java)!!
+                    }.onSuccess {
+                        continuation.resume(it)
+                    }.onFailure {
+                        continuation.resumeWithException(it)
+                    }
+                }.addOnFailureListener {
                     continuation.resumeWithException(it)
                 }
-            }.addOnFailureListener {
-                continuation.resumeWithException(it)
             }
-        }
 
     fun checkForSignedContract() {
         gigerVerificationRepository.checkForSignedContract().addSnapshotListener { success, err ->

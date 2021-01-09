@@ -193,7 +193,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
         _sendOTP.postValue(Lce.loading())
         try {
-            val repsonse = userEnrollmentRepository.registerUser(mobileNo)
+            val repsonse = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
             _sendOTP.value = Lce.content(repsonse)
         } catch (e: Exception) {
             e.printStackTrace()

@@ -19,7 +19,12 @@ data class Experience(
     var earningPerMonth: Double = 0.0,
     var totalExperence : String = "",
     var driverQuestionOwnVehicle: String = "",
+
+    var driverQuestionVehiclesOwn: List<String> = emptyList(),
+    var driverQuestionVehiclesCanDrive: List<String> = emptyList(),
+
     var deliveryExecQuestionOwnVehicle: String = "",
+    var deliveryQuestionVehiclesOwn: List<String> = emptyList(),
     var helperComfortableLiftingHeavyWeights: Boolean = false
 ) : BaseFirestoreDataModel(tableName = "experiences") {
 }

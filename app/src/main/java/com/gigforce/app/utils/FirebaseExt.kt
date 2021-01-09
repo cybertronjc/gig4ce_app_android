@@ -29,6 +29,20 @@ suspend fun StorageReference.putFileOrThrow(file: Uri) =
             .addOnFailureListener { cont.resumeWithException(it) }
     }
 
+suspend fun StorageReference.putBytesOrThrow(bytes: ByteArray) =
+        suspendCancellableCoroutine<UploadTask.TaskSnapshot> { cont ->
+            val putFileTask = putBytes(bytes)
+
+            cont.invokeOnCancellation {
+                if (!putFileTask.isComplete)
+                    putFileTask.cancel()
+            }
+
+            putFileTask
+                    .addOnSuccessListener { cont.resume(it) }
+                    .addOnFailureListener { cont.resumeWithException(it) }
+        }
+
 suspend fun Query.getOrThrow() = suspendCoroutine<QuerySnapshot> { cont ->
     get().addOnSuccessListener {
         cont.resume(it)

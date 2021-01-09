@@ -1281,16 +1281,17 @@
     <string name="pending_bold"><![CDATA[<b>Pending</b>]]></string>
     <string name="approved_bold"><![CDATA[<b>Approved </b>]]></string>
     <string name="rejected_bold"><![CDATA[<b>Rejected </b>]]></string>
-    <string-array name="ambassador_guidelines">
     <string name="active">Active</string>
     <string name="generate_otp">Generate OTP</string>
     <string name="activate">Activate</string>
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
-
+    <string-array name="ambassador_guidelines">
         <item>Be nice to your customers and colleagues</item>
         <item>Be punctual for Job</item>
         <item>Work more to earn more</item>
 
     </string-array>
 
+    <string name="i_will_do_it_later"><u>I will do it later</u></string>
+    <string name="upload_documents">Upload Documents</string>
 </resources>

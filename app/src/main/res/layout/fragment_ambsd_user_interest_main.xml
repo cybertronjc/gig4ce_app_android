@@ -75,6 +75,20 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:lineHeight="17sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:lineSpacingExtra="3sp"
+        android:text="( Select Max 3 )"
+        />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/interest_chipgroup"
         android:layout_width="match_parent"
@@ -201,8 +215,25 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:text="@string/next"
-        android:textColor="@color/white"
+        android:textColor="@color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:enabled="true"
+        android:visibility="gone"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/skip"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
 
 
 </LinearLayout>

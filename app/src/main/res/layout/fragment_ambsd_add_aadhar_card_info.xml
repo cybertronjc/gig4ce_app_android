@@ -54,7 +54,7 @@
         <include
             android:id="@+id/aadharViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_aadhar_card_view" />
+            layout="@layout/fragment_ambsd_add_aadhar_card_view" />
 
         <ProgressBar
             android:id="@+id/progressBar"
