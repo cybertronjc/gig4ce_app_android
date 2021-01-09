@@ -94,27 +94,67 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
-    <com.google.android.material.button.MaterialButton
+<!--    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
+<!--    app:strokeColor="@color/colorPrimary"-->
+<!--    app:strokeWidth="2dp"-->
+<!--    android:textAllCaps="false"-->
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--    android:visibility="gone"-->
+        <TextView
         android:id="@+id/createProfileBtn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_24"
         android:layout_marginEnd="@dimen/size_16"
-        android:layout_marginBottom="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_60"
         android:letterSpacing="0"
         android:minHeight="@dimen/size_48"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
         android:text="@string/create_profile"
-        android:textAllCaps="false"
-        android:visibility="gone"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/gradient_onboarding_progressbar_gradient"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:strokeColor="@color/colorPrimary"
-        app:strokeWidth="2dp" />
+         android:visibility="gone"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/share_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/createProfileBtn">
+
+        <ImageView
+            android:id="@+id/share_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_icon_share"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textView22"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:text="dfdfdfdf"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/lipstick_two"
+            android:textSize="@dimen/font_14"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/share_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -216,7 +256,7 @@
                 android:layout_marginTop="@dimen/size_24"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_32"
-                android:background="@drawable/bg_next_assess_frag"
+                android:background="@drawable/gradient_onboarding_progressbar_gradient"
                 android:letterSpacing="0"
                 android:minHeight="@dimen/size_48"
                 android:paddingTop="@dimen/size_8"
@@ -224,7 +264,7 @@
                 android:text="@string/create_profile"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
-
+<!--            android:background="@drawable/bg_next_assess_frag"-->
 
         </LinearLayout>
     </FrameLayout>

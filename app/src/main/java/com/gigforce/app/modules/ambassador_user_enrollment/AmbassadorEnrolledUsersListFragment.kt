@@ -80,9 +80,9 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
         enrolled_users_rv.adapter = enrolledUserAdapter
 
-//        title.setOnClickListener{
-//            shareLink()
-//        }
+        share_link.setOnClickListener{
+            shareLink()
+        }
     }
 
     private fun initViewModel() {
@@ -93,11 +93,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                         enrolledUserAdapter.setData(emptyList())
                         no_users_enrolled_layout.visible()
                         createProfileBtn.gone()
+                        share_link.gone()
                         total_complete_profile_tv.gone()
                         total_incomplete_profile_tv.gone()
                     } else {
                         no_users_enrolled_layout.gone()
                         createProfileBtn.visible()
+                        share_link.visible()
                         enrolledUserAdapter.setData(it)
                         total_complete_profile_tv.visible()
 
