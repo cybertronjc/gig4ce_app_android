@@ -263,6 +263,10 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         viewModel.getMobileNumberAndSendOtpInfo(enrolledUser)
     }
 
+    override fun openChat(enrollUser: EnrolledUser) {
+        TODO("Not yet implemented")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         locationUpdates.stopLocationUpdates(requireActivity())

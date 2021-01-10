@@ -1308,4 +1308,7 @@
 
     <string name="i_will_do_it_later"><u>I will do it later</u></string>
     <string name="upload_documents">Upload Documents</string>
+    <string name="send_invite_link">Send Invite Link</string>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
 </resources>
