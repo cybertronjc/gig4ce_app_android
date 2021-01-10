@@ -115,20 +115,27 @@ class DocSubSchedulerViewModel : ViewModel() {
         }
     }
 
-    fun openChat(loginMobile: String) = viewModelScope.launch {
+    fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
         getProfileAndOpenChat(loginMobile)
     }
 
     suspend fun getProfileAndOpenChat(loginMobile: String) {
         try {
+
             val profiles = repository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile).get().await()
             if (!profiles.documents.isNullOrEmpty()) {
-                _observableProfile.value = profiles.documents[0].toObject(ProfileData::class.java)
+                val toObject = profiles.documents[0].toObject(ProfileData::class.java)
+                toObject?.id = profiles.documents[0].id
+                _observableProfile.value = toObject
             }
 
         } catch (e: Exception) {
 
         }
+    }
+
+    fun getUid(): String {
+        return repository.getUID()
     }
 
 

@@ -18,6 +18,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.StringConstants
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
@@ -69,8 +70,26 @@ class DocsSubSchedulerFragment : BaseFragment() {
         })
 
         viewModel.observableMappedUser.observe(viewLifecycleOwner, Observer {
-            Log.e("datamsg", it.name)
+            if (!it.number.contains("+91")) {
+                it.number = "+91" + it.number
+            }
+            viewModel.checkIfTeamLeadersProfileExists(it.number)
             initMappedUser(it)
+
+        })
+        viewModel.observableProfile.observe(viewLifecycleOwner, Observer {
+            contact_card.visible()
+            textView147.setOnClickListener { view ->
+                val bundle = Bundle()
+                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
+                bundle.putString(AppConstants.CONTACT_NAME, it.name)
+                bundle.putString("chatHeaderId", "")
+                bundle.putString("forUserId", viewModel.getUid())
+                bundle.putString("otherUserId", it.id)
+                bundle.putString(StringConstants.MOBILE_NUMBER.value, it.loginMobile)
+                bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
+                navigate(R.id.chatScreenFragment, bundle)
+            }
         })
 
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
@@ -171,10 +190,11 @@ class DocsSubSchedulerFragment : BaseFragment() {
     }
 
     private fun initMappedUser(it: GFMappedUser?) {
-        contact_card.visible()
+
         textView144.text = it?.name
         textView145.text = it?.number.toString()
         textView146.text = it?.city
+
     }
 
     fun stateChangeSlot() {
