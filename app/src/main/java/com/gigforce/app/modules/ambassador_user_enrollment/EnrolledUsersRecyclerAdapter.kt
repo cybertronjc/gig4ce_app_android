@@ -141,6 +141,7 @@ class EnrolledUsersRecyclerAdapter constructor(
             if (view.id == R.id.iv_options_rv_enrolled_users) {
 //                val wrapper: Context = ContextThemeWrapper(view.context, R.style.CustomPopupTheme)
                 val popup = PopupMenu(view.context, view)
+
                 popup.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.action_edit -> enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(

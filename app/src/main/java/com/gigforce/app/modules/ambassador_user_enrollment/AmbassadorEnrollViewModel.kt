@@ -13,9 +13,9 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 
 class AmbassadorEnrollViewModel constructor(
-    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository = AmbassadorEnrollmentRepository(),
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+        private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository = AmbassadorEnrollmentRepository(),
+        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+        private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
 
     private val _enrolledUsers = MutableLiveData<List<EnrolledUser>>()
@@ -29,27 +29,27 @@ class AmbassadorEnrollViewModel constructor(
 
     private fun startWatchingEnrolledUsersList() {
         enrolledUserListener = ambassadorEnrollmentRepository
-            .getEnrolledUsersQuery()
-            .addSnapshotListener { value, error ->
-                error?.printStackTrace()
+                .getEnrolledUsersQuery()
+                .addSnapshotListener { value, error ->
+                    error?.printStackTrace()
 
-                value?.let {
-                    val enrolledUsers = it.documents.map {
-                        it.toObject(EnrolledUser::class.java)!!.apply {
-                            this.id = it.id
+                    value?.let {
+                        val enrolledUsers = it.documents.map {
+                            it.toObject(EnrolledUser::class.java)!!.apply {
+                                this.id = it.id
+                            }
                         }
-                    }
 
-                    _enrolledUsers.postValue(enrolledUsers)
+                        _enrolledUsers.postValue(enrolledUsers)
+                    }
                 }
-            }
     }
 
     private val _sendOtpToPhoneNumber = MutableLiveData<Lce<SendOtpResponseData>>()
     val sendOtpToPhoneNumber: LiveData<Lce<SendOtpResponseData>> = _sendOtpToPhoneNumber
 
     fun getMobileNumberAndSendOtpInfo(
-        enrolledUser: EnrolledUser
+            enrolledUser: EnrolledUser
     ) = viewModelScope.launch {
 
         try {
@@ -63,12 +63,12 @@ class AmbassadorEnrollViewModel constructor(
             }
 
             val response =
-                userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(userMobileNo)
+                    userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(userMobileNo)
             _sendOtpToPhoneNumber.value = Lce.content(
-                SendOtpResponseData(
-                    enrolledUser = enrolledUser,
-                    checkMobileResponse = response
-                )
+                    SendOtpResponseData(
+                            enrolledUser = enrolledUser,
+                            checkMobileResponse = response
+                    )
             )
             _sendOtpToPhoneNumber.value = null
         } catch (e: Exception) {
@@ -81,9 +81,13 @@ class AmbassadorEnrollViewModel constructor(
         super.onCleared()
         enrolledUserListener?.remove()
     }
+
+    fun getUID(): String {
+        return ambassadorEnrollmentRepository.getUID()
+    }
 }
 
 data class SendOtpResponseData(
-    val enrolledUser: EnrolledUser,
-    val checkMobileResponse: RegisterMobileNoResponse
+        val enrolledUser: EnrolledUser,
+        val checkMobileResponse: RegisterMobileNoResponse
 )

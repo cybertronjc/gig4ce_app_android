@@ -29,10 +29,7 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.LocationUpdates
-import com.gigforce.app.utils.PermissionUtils
-import com.gigforce.app.utils.VerticalItemDecorator
+import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -264,7 +261,15 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun openChat(enrollUser: EnrolledUser) {
-        TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putString(AppConstants.IMAGE_URL, enrollUser.profileAvatarThumbnail)
+        bundle.putString(AppConstants.CONTACT_NAME, enrollUser.name)
+        bundle.putString("chatHeaderId", "")
+        bundle.putString("forUserId", viewModel.getUID())
+        bundle.putString("otherUserId", enrollUser.id)
+        bundle.putString(StringConstants.MOBILE_NUMBER.value, enrollUser.mobileNumber)
+        bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
+        navigate(R.id.chatScreenFragment, bundle)
     }
 
     override fun onDestroy() {
