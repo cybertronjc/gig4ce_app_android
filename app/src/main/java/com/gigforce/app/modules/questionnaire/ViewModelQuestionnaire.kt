@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.QuestionnaireResponse
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.google.firebase.firestore.ListenerRegistration
@@ -39,9 +40,9 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     val observableCities: MutableLiveData<MutableList<Cities>> =
             _observableCities
 
-    private val _observableAllCities = MutableLiveData<MutableList<Cities>>()
+    private val _observableAllCities = MutableLiveData<MutableList<GfUsers>>()
 
-    val observableAllCities: MutableLiveData<MutableList<Cities>> =
+    val observableAllCities: MutableLiveData<MutableList<GfUsers>> =
             _observableAllCities
 
 
@@ -227,15 +228,15 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
 
-    suspend fun getAllCitiesFromDb(): MutableList<Cities> {
+    suspend fun getAllCitiesFromDb(): MutableList<GfUsers> {
         try {
-            val await = questionnaireRepository.db.collection("Mst_Cities")
+            val await = questionnaireRepository.db.collection("GF_Users")
                     .get().await()
             if (await.documents.isNullOrEmpty()) {
                 return mutableListOf()
             }
 
-            return await.toObjects(Cities::class.java)
+            return await.toObjects(GfUsers::class.java)
         } catch (e: Exception) {
             _observableError.value = e.message
             return mutableListOf()

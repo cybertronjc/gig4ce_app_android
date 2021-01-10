@@ -12,6 +12,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.getCircularProgressDrawable
@@ -154,7 +155,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         notifyItemChanged(parentPosition)
     }
 
-    fun setAllCities(cities: MutableList<Cities>, parentPosition: Int, childPosition: Int) {
+    fun setAllCities(cities: MutableList<GfUsers>, parentPosition: Int, childPosition: Int) {
         if (!items.isNullOrEmpty()) {
             items[parentPosition].options[childPosition].cities = cities
             notifyItemChanged(parentPosition)

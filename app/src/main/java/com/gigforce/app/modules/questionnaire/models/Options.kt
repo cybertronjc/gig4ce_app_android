@@ -10,7 +10,7 @@ data class Options(
         var options: MutableList<String> = mutableListOf(),
         var selectedItemPosition: Int = -1,
         var dropDownHint: String = "",
-      var cities: MutableList<Cities>? = null
+      var cities: MutableList<GfUsers>? = null
 
 
 )

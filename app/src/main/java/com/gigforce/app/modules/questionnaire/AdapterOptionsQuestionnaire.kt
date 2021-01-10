@@ -281,7 +281,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     holder.itemView.tv_cities.text = option.dropDownHint
                     val spinnerDialog = SpinnerDialog(
                         holder.itemView.context as Activity,
-                        option.cities?.map { it.name }?.toList() as ArrayList<String>,
+                        option.cities?.map { it.city }?.toList() as ArrayList<String>,
                         option.dropDownHint,
                         "close"
                     ) // With No Animation

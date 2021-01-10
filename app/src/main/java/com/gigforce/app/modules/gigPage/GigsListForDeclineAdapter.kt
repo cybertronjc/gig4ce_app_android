@@ -158,7 +158,7 @@ class GigsListForDeclineAdapter constructor(
                 "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
 
             contactPersonNameTV.text = gig.gigContactDetails?.contactName
-            callCard.isVisible = gig.gigContactDetails?.contactNumber != 0L
+            callCard.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty()
         }
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
