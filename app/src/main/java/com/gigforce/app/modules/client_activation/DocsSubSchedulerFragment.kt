@@ -21,7 +21,6 @@ import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.app.utils.StringConstants
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.helpIconIV
 
 
 class DocsSubSchedulerFragment : BaseFragment() {
@@ -34,13 +33,14 @@ class DocsSubSchedulerFragment : BaseFragment() {
     private lateinit var mTitle: String
     private lateinit var mType: String
     private lateinit var adapterBulletStrings: AdapterBulletStrings
+
     //    private var selectedTimeSlot: String? = null
     private var isCheckOutDone: Boolean = false
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -60,8 +60,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
             Log.e("data", it?.stepId.toString())
             it?.answers?.forEach {
                 Log.e("data", it?.type!! + it?.options?.size.toString())
-                if (it?.type == "dropdown" && it?.options?.size == 1) {
-                    it?.selectedDropdownValue?.let {
+                if (it?.type == "cities") {
+                    it?.answer?.let {
                         viewModel.getMappedUser(it)
                     }
                 }
@@ -165,7 +165,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
         rv_bullet_points.adapter = adapterBulletStrings
         rv_bullet_points.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 
 
     }
@@ -190,21 +190,22 @@ class DocsSubSchedulerFragment : BaseFragment() {
         slider_checkout.isEnabled = true
 
         slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+                ResourcesCompat.getColor(resources, R.color.light_pink, null)
         slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableCheckoutButton() {
         slider_checkout.isEnabled = false
 
         slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
         slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun initClicks() {
+
         cb_activate.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 enableCheckoutButton()
@@ -218,23 +219,23 @@ class DocsSubSchedulerFragment : BaseFragment() {
         }
 
         slider_checkout.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+                object : SlideToActView.OnSlideCompleteListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
-                    viewModel?.gfmappedUserObj?.number?.let {
-                        navigate(
-                            R.id.fragment_schedule_test,
-                            bundleOf(
-                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                                StringConstants.TITLE.value to mTitle,
-                                StringConstants.TYPE.value to mType,
-                                StringConstants.MOBILE_NUMBER.value to it
+                    override fun onSlideComplete(view: SlideToActView) {
+                        viewModel?.gfmappedUserObj?.number?.let {
+                            navigate(
+                                    R.id.fragment_schedule_test,
+                                    bundleOf(
+                                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                            StringConstants.TITLE.value to mTitle,
+                                            StringConstants.TYPE.value to mType,
+                                            StringConstants.MOBILE_NUMBER.value to it
+                                    )
                             )
-                        )
-                    }
+                        }
 
+                    }
                 }
-            }
 //        tv_change_slot.setOnClickListener {
 //            changeSlot()
 //

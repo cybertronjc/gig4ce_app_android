@@ -281,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="@dimen/size_16"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/textView141"
