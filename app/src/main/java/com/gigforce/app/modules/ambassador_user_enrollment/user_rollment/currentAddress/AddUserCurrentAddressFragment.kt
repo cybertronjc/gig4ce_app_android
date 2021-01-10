@@ -22,6 +22,7 @@ import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.app.modules.ambassador_user_enrollment.models.PostalOffice
 import com.gigforce.app.modules.ambassador_user_enrollment.models.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
@@ -30,14 +31,29 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.address_line_1_et
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.address_line_2_et
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.arround_current_add_seekbar
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.city_spinner
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.pin_code_et
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.pin_code_okay_iv
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.ready_to_change_location_chipgroup
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.ready_to_change_location_label
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.seekbardependent
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.state_spinner
+import kotlinx.android.synthetic.main.fragment_user_current_address_main.submitBtn
+import java.util.*
 
 class AddUserCurrentAddressFragment : BaseFragment() {
 
     private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var userId: String
     private lateinit var userName: String
+    var allPostoffices = ArrayList<PostalOffice>()
 
     private var mode: Int = EnrollmentConstants.MODE_ADD
     private var profileData: ProfileData? = null
@@ -92,6 +108,11 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     private fun initListeners() {
         pin_code_et.textChanged {
             pin_code_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
+            if (pin_code_okay_iv.isVisible) {
+                state_spinner.setSelection(0)
+                city_spinner.setSelection(0)
+                viewModel.loadCityAndStateUsingPincode(it.toString())
+            }
         }
 
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
@@ -131,29 +152,22 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 if (state_spinner.childCount != 0 && state_spinner.selectedItemPosition != 0) {
                     val state = state_spinner.selectedItem as State
                     filterCitiesByStateAndSetOnCities(state.id)
+                    for (index in 0..city_spinner.adapter.count - 1) {
+                        val item = city_spinner.adapter.getItem(index)
+                        allPostoffices.mapIndexed { index1, postalOffice ->
+                            if (item.toString().equals(postalOffice.district)) {
+                                city_spinner.setSelection(index)
+                                return
+                            }
+                        }
+                    }
                 }
             }
 
-            private fun filterCitiesByStateAndSetOnCities(id: String) {
-                val cities = viewModel.cities.filter {
-                    it.stateCode == id
-                }.toMutableList().apply {
-                    add(0, City(name = "Select District"))
-                }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
-                val cityAdapter: ArrayAdapter<City> =
-                        ArrayAdapter(
-                                requireContext(),
-                                android.R.layout.simple_spinner_item,
-                                cities
-                        )
-                cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                city_spinner.adapter = cityAdapter
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
         permanent_state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(
@@ -336,6 +350,40 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
+
+        viewModel.pincodeResponse
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+                    when (it) {
+                        Lce.Loading -> {
+                            UtilMethods.showLoading(requireContext())
+//                        allPostoffices.clear()
+                        }
+                        is Lce.Content -> {
+                            UtilMethods.hideLoading()
+                            if (it.content.status.equals("Success")) {
+                                allPostoffices = it.content.postOffice
+                                for (index in 0 until state_spinner.adapter.count) {
+                                    val item = state_spinner.adapter.getItem(index)
+                                    allPostoffices.mapIndexed { index1, postalOffice ->
+                                        if (item.toString().equals(postalOffice.state)) {
+                                            state_spinner.setSelection(index)
+                                            return@Observer
+                                        }
+                                    }
+                                }
+                            } else {
+                                state_spinner.setSelection(0)
+                                city_spinner.setSelection(0)
+                            }
+                        }
+                        is Lce.Error -> {
+                            UtilMethods.hideLoading()
+                            showAlertDialog("", it.error)
+//                        allPostoffices.clear()
+                        }
+                    }
+                })
 
         viewModel.profile
                 .observe(viewLifecycleOwner, Observer {
@@ -523,4 +571,24 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 .setPositiveButton("Okay") { _, _ -> }
                 .show()
     }
+    private fun filterCitiesByStateAndSetOnCities(id: String) {
+        val cities = viewModel.cities.filter {
+            it.stateCode == id
+        }.toMutableList().apply {
+            add(0, City(name = getString(R.string.select_district)))
+        }
+
+        val cityAdapter: ArrayAdapter<City> =
+                ArrayAdapter<City>(
+                        requireContext(),
+                        android.R.layout.simple_spinner_item,
+                        cities
+                )
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        city_spinner.adapter = cityAdapter
+    }
+
+
+
+
 }
