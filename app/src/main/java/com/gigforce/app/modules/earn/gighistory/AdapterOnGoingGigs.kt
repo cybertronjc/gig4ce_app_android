@@ -23,6 +23,8 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         val resources = itemView.context.resources
         val size16 = resources.getDimensionPixelSize(R.dimen.size_16)
         val size32 = resources.getDimensionPixelSize(R.dimen.size_32)
+        val size24 = resources.getDimensionPixelSize(R.dimen.size_28)
+
         val size4 = resources.getDimensionPixelSize(R.dimen.size_4)
         val size8 = resources.getDimensionPixelSize(R.dimen.size_8)
 
@@ -30,8 +32,8 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_rv_gig_details_gig_history, parent, false)
+                LayoutInflater.from(parent.context)
+                        .inflate(R.layout.layout_rv_on_going_gigs, parent, false)
         )
     }
 
@@ -40,16 +42,16 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val params: ConstraintLayout.LayoutParams =
-            holder.itemView.cv_gig_details_gig_hist.layoutParams as ConstraintLayout.LayoutParams
+        val params: RecyclerView.LayoutParams =
+                holder.itemView.cl_ongoing_gigs.layoutParams as RecyclerView.LayoutParams
 
         params.topMargin = holder.size4;
         params.leftMargin = 0
         params.rightMargin = 0
         params.bottomMargin = holder.size16
-        params.width = getScreenWidth(holder.itemView.context as Activity).width - holder.size32
+        params.width = getScreenWidth(holder.itemView.context as Activity).width - holder.size24
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        holder.itemView.cv_gig_details_gig_hist.layoutParams = params
+        holder.itemView.cl_ongoing_gigs.layoutParams = params
 
         val gig = onGoingGigs?.get(position)
 
@@ -67,9 +69,9 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         }
         setBrandLogo(gig ?: Gig(), holder)
         PushDownAnim.setPushDownAnimTo(holder.itemView)
-            .setOnClickListener(View.OnClickListener {
-                callbacks?.openGigDetails(onGoingGigs!![holder.adapterPosition])
-            })
+                .setOnClickListener(View.OnClickListener {
+                    callbacks?.openGigDetails(onGoingGigs!![holder.adapterPosition])
+                })
 
 
     }
@@ -89,28 +91,28 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
     }
 
     private fun setBrandLogo(
-        gig: Gig,
-        viewHolderGigDetails: ViewHolder
+            gig: Gig,
+            viewHolderGigDetails: ViewHolder
     ) {
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
 
                 GlideApp.with(viewHolderGigDetails.itemView.context)
-                    .load(gig.companyLogo)
-                    .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
-                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+                        .load(gig.companyLogo)
+                        .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                        .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(gig.companyLogo!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference("companies_gigs_images")
+                        .child(gig.companyLogo!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(viewHolderGigDetails.itemView)
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
-                            .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
-                    }
+                            GlideApp.with(viewHolderGigDetails.itemView)
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                                    .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
+                        }
             }
         } else {
             val companyInitials = if (gig.companyName.isNullOrBlank())
@@ -118,12 +120,12 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
             else
                 gig.companyName!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(
-                    viewHolderGigDetails.itemView.context.resources,
-                    R.color.lipstick,
-                    null
-                )
+                    companyInitials,
+                    ResourcesCompat.getColor(
+                            viewHolderGigDetails.itemView.context.resources,
+                            R.color.lipstick,
+                            null
+                    )
             )
 
             viewHolderGigDetails.itemView.iv_brand_rv_gig_hist.setImageDrawable(drawable)
@@ -140,8 +142,9 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         onGoingGigs?.add(itemToBeRemoved, gig)
         notifyItemInserted(itemToBeRemoved)
     }
+
     fun itemModified(index: Int, gig: Gig) {
-        onGoingGigs!![index]=gig
+        onGoingGigs!![index] = gig
         notifyItemChanged(index)
     }
 

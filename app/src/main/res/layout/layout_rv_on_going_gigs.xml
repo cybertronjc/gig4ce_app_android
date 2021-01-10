@@ -2,9 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_ongoing_gigs"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_gig_day_rv_gig_his"
@@ -24,12 +23,12 @@
         android:id="@+id/cv_gig_details_gig_hist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_4"
-        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_4"
         android:layout_marginBottom="@dimen/size_16"
         android:clipToPadding="false"
         app:cardCornerRadius="@dimen/size_5"
+
         app:cardElevation="@dimen/size_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
