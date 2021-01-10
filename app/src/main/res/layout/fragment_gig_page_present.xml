@@ -918,6 +918,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="1dp"
+                    android:visibility="gone"
                     android:scaleX="0.9"
                     android:scaleY="0.9"
                     app:cardBackgroundColor="@color/light_pink"

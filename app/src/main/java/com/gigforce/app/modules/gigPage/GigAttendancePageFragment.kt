@@ -230,7 +230,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         callCardView.setOnClickListener {
 
-            if (gig?.gigContactDetails?.contactNumber != 0L) {
+            if (gig?.gigContactDetails?.contactNumberString.isNullOrEmpty()==false) {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.gigContactDetails?.contactNumber?.toString(), null))
                 startActivity(intent)
             }
@@ -339,7 +339,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
-        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
+        callCardView.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty()==false
 
         addressTV.setOnClickListener {
 

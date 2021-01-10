@@ -18,10 +18,10 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
+import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.StringConstants
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.helpIconIV
 
 
 class DocsSubSchedulerFragment : BaseFragment() {
@@ -34,13 +34,14 @@ class DocsSubSchedulerFragment : BaseFragment() {
     private lateinit var mTitle: String
     private lateinit var mType: String
     private lateinit var adapterBulletStrings: AdapterBulletStrings
+
     //    private var selectedTimeSlot: String? = null
     private var isCheckOutDone: Boolean = false
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
@@ -60,8 +61,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
             Log.e("data", it?.stepId.toString())
             it?.answers?.forEach {
                 Log.e("data", it?.type!! + it?.options?.size.toString())
-                if (it?.type == "dropdown" && it?.options?.size == 1) {
-                    it?.selectedDropdownValue?.let {
+                if (it?.type == "cities") {
+                    it?.answer?.let {
                         viewModel.getMappedUser(it)
                     }
                 }
@@ -69,8 +70,26 @@ class DocsSubSchedulerFragment : BaseFragment() {
         })
 
         viewModel.observableMappedUser.observe(viewLifecycleOwner, Observer {
-            Log.e("datamsg", it.name)
+            if (!it.number.contains("+91")) {
+                it.number = "+91" + it.number
+            }
+            viewModel.checkIfTeamLeadersProfileExists(it.number)
             initMappedUser(it)
+
+        })
+        viewModel.observableProfile.observe(viewLifecycleOwner, Observer {
+            contact_card.visible()
+            textView147.setOnClickListener { view ->
+                val bundle = Bundle()
+                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
+                bundle.putString(AppConstants.CONTACT_NAME, it.name)
+                bundle.putString("chatHeaderId", "")
+                bundle.putString("forUserId", viewModel.getUid())
+                bundle.putString("otherUserId", it.id)
+                bundle.putString(StringConstants.MOBILE_NUMBER.value, it.loginMobile)
+                bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
+                navigate(R.id.chatScreenFragment, bundle)
+            }
         })
 
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
@@ -165,16 +184,17 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
         rv_bullet_points.adapter = adapterBulletStrings
         rv_bullet_points.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 
 
     }
 
     private fun initMappedUser(it: GFMappedUser?) {
-        contact_card.visible()
+
         textView144.text = it?.name
         textView145.text = it?.number.toString()
         textView146.text = it?.city
+
     }
 
     fun stateChangeSlot() {
@@ -190,21 +210,22 @@ class DocsSubSchedulerFragment : BaseFragment() {
         slider_checkout.isEnabled = true
 
         slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+                ResourcesCompat.getColor(resources, R.color.light_pink, null)
         slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableCheckoutButton() {
         slider_checkout.isEnabled = false
 
         slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
         slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun initClicks() {
+
         cb_activate.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 enableCheckoutButton()
@@ -218,23 +239,23 @@ class DocsSubSchedulerFragment : BaseFragment() {
         }
 
         slider_checkout.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+                object : SlideToActView.OnSlideCompleteListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
-                    viewModel?.gfmappedUserObj?.number?.let {
-                        navigate(
-                            R.id.fragment_schedule_test,
-                            bundleOf(
-                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                                StringConstants.TITLE.value to mTitle,
-                                StringConstants.TYPE.value to mType,
-                                StringConstants.MOBILE_NUMBER.value to it
+                    override fun onSlideComplete(view: SlideToActView) {
+                        viewModel?.gfmappedUserObj?.number?.let {
+                            navigate(
+                                    R.id.fragment_schedule_test,
+                                    bundleOf(
+                                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                            StringConstants.TITLE.value to mTitle,
+                                            StringConstants.TYPE.value to mType,
+                                            StringConstants.MOBILE_NUMBER.value to it
+                                    )
                             )
-                        )
-                    }
+                        }
 
+                    }
                 }
-            }
 //        tv_change_slot.setOnClickListener {
 //            changeSlot()
 //

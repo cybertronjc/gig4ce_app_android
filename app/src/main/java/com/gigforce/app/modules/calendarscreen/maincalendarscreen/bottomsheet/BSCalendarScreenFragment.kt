@@ -480,7 +480,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
 
                         val callView = getView(viewHolder, R.id.callCardView)
-                        if (obj.gigContactDetails?.contactNumber != 0L) {
+                        if (!obj.gigContactDetails?.contactNumberString.isNullOrEmpty()) {
 
 
                             callView.visible()
@@ -572,7 +572,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if (gig.gigContactDetails?.contactNumber == 0L) return
+            if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
             val intent = Intent(
                 Intent.ACTION_DIAL,
                 Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
