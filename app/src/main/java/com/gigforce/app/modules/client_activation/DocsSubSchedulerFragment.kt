@@ -70,11 +70,18 @@ class DocsSubSchedulerFragment : BaseFragment() {
         })
 
         viewModel.observableMappedUser.observe(viewLifecycleOwner, Observer {
-            if (!it.number.contains("+91")) {
-                it.number = "+91" + it.number
+            it?.let {
+                if (!it.number.contains("+91")) {
+                    it.numberWithoutnineone = it.number
+                    it.number = "+91" + it.number
+                }
+                else{
+                    it.numberWithoutnineone = it.number
+                }
+                viewModel.checkIfTeamLeadersProfileExists(it.number)
+                initMappedUser(it)
             }
-            viewModel.checkIfTeamLeadersProfileExists(it.number)
-            initMappedUser(it)
+
 
         })
         viewModel.observableProfile.observe(viewLifecycleOwner, Observer {
@@ -242,7 +249,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
                 object : SlideToActView.OnSlideCompleteListener {
 
                     override fun onSlideComplete(view: SlideToActView) {
-                        viewModel?.gfmappedUserObj?.number?.let {
+                        viewModel?.gfmappedUserObj?.numberWithoutnineone?.let {
                             navigate(
                                     R.id.fragment_schedule_test,
                                     bundleOf(
