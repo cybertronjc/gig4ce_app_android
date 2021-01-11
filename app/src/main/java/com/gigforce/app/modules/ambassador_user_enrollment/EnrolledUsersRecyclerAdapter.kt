@@ -9,18 +9,22 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.view.*
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.gigforce.app.IconMenuAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.utils.CustomTypeFaceSpan
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.IconPowerMenuItem
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.lang.reflect.Field
+import com.skydoves.powermenu.CustomPowerMenu
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
 import java.time.Duration
 import java.time.LocalDate
 
@@ -139,56 +143,114 @@ class EnrolledUsersRecyclerAdapter constructor(
             val view = v ?: return
 
             if (view.id == R.id.iv_options_rv_enrolled_users) {
-//                val wrapper: Context = ContextThemeWrapper(view.context, R.style.CustomPopupTheme)
-                val popup = PopupMenu(view.context, view)
-
-                popup.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.action_edit -> enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(
-                            enrolledUsers[adapterPosition]
-                        )
-                        R.id.action_call -> {
-                            val intent = Intent(
-                                Intent.ACTION_DIAL,
-                                Uri.fromParts(
-                                    "tel",
-                                    enrolledUsers[adapterPosition].mobileNumber,
-                                    null
-                                )
+                val wrapper: ContextThemeWrapper = ContextThemeWrapper(
+                    view.context,
+                    R.style.CustomPopupTheme
+                )
+                val context = view.context
+                var customPowerMenu: CustomPowerMenu<*, *>? = null
+                customPowerMenu =
+                    CustomPowerMenu.Builder(context, IconMenuAdapter())
+                        .addItem(
+                            IconPowerMenuItem(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_icon_edit_enrollment_menu
+                                )!!, "Edit"
                             )
-                            itemView.context.startActivity(intent)
-                        }
-                        R.id.action_chat -> enrolledUsersRecyclerAdapterClickListener.openChat(
-                            enrolledUsers[adapterPosition]
+                        )
+                        .addItem(
+                            IconPowerMenuItem(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_call_menu_enrollment
+                                )!!, "Call"
+                            )
+                        )
+                        .addItem(
+                            IconPowerMenuItem(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.ic_menu_icon_chat
+                                )!!, "Chat"
+                            )
+                        ).setShowBackground(false)
+                        .setOnMenuItemClickListener(object :
+                            OnMenuItemClickListener<IconPowerMenuItem> {
+                            override fun onItemClick(position: Int, item: IconPowerMenuItem?) {
+                                when (position) {
+                                    0 -> enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(
+                                        enrolledUsers[adapterPosition]
+                                    )
+                                    1 -> {
+                                        val intent = Intent(
+                                            Intent.ACTION_DIAL,
+                                            Uri.fromParts(
+                                                "tel",
+                                                enrolledUsers[adapterPosition].mobileNumber,
+                                                null
+                                            )
+                                        )
+                                        itemView.context.startActivity(intent)
+                                    }
+                                    2 -> enrolledUsersRecyclerAdapterClickListener.openChat(
+                                        enrolledUsers[adapterPosition]
+                                    )
+
+
+                                }
+                                customPowerMenu?.dismiss()
+                            }
+                        })
+                        .setAnimation(MenuAnimation.DROP_DOWN)
+                        .setMenuRadius(
+                            view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                        )
+                        .setMenuShadow(
+                            view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
                         )
 
-
-                    }
-                    true
-
-                }
-
-                val inflater = popup.menuInflater
-                inflater.inflate(R.menu.menu_rv_enrolled_users, popup.menu)
-                val menuHelper: Any
-                val argTypes: Array<Class<*>?>
-                try {
-                    val fMenuHelper: Field = PopupMenu::class.java.getDeclaredField("mPopup")
-                    fMenuHelper.isAccessible = true
-                    menuHelper = fMenuHelper.get(popup)
-                    argTypes = arrayOf(Boolean::class.javaPrimitiveType)
-                    menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes).invoke(
-                        menuHelper,
-                        true
+                        .build()
+                customPowerMenu.showAsDropDown(
+                    view,
+                    -((customPowerMenu.contentViewWidth - view.resources.getDimensionPixelSize(
+                        R.dimen.size_24
                     )
-                } catch (e: Exception) {
-                }
-                val menu: Menu = popup.menu
-                for (i in 0 until menu.size()) {
-                    val mi: MenuItem = menu.getItem(i)
-                    applyFontToMenuItem(mi)
-                }
-                popup.show()
+                            )),
+                    -(view.resources.getDimensionPixelSize(
+                        R.dimen.size_24
+                    )
+                            )
+                )
+
+
+//                popup.setOnMenuItemClickListener {
+//
+//                    true
+//
+//                }
+//
+//                val inflater = popup.menuInflater
+//                inflater.inflate(R.menu.menu_rv_enrolled_users, popup.menu)
+//                val menuHelper: Any
+//                val argTypes: Array<Class<*>?>
+//                try {
+//                    val fMenuHelper: Field = PopupMenu::class.java.getDeclaredField("mPopup")
+//                    fMenuHelper.isAccessible = true
+//                    menuHelper = fMenuHelper.get(popup)
+//                    argTypes = arrayOf(Boolean::class.javaPrimitiveType)
+//                    menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes).invoke(
+//                        menuHelper,
+//                        true
+//                    )
+//                } catch (e: Exception) {
+//                }
+//                val menu: Menu = popup.menu
+//                for (i in 0 until menu.size()) {
+//                    val mi: MenuItem = menu.getItem(i)
+//                    applyFontToMenuItem(mi)
+//                }
+//                popup.show()
 
             } else {
                 enrolledUsersRecyclerAdapterClickListener.onUserClicked(enrolledUsers[adapterPosition])
