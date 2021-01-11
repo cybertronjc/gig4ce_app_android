@@ -86,6 +86,7 @@ class LandingScreenFragment : BaseFragment() {
 
     }
 
+    private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var comingFromOrGoingToScreen = -1
@@ -367,7 +368,9 @@ class LandingScreenFragment : BaseFragment() {
         // load user data
         viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
-            val profile: ProfileData = profileObs!!
+            profile = profileObs!!
+            val profile: ProfileData = profileObs
+
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
@@ -783,7 +786,10 @@ class LandingScreenFragment : BaseFragment() {
         }
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text == "Open") {
+            if(profile == null)
+                return@setOnClickListener
+
+            if (profile!!.isUserAmbassador) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
             } else {
                 navigate(R.id.ambassadorProgramDetailsFragment)

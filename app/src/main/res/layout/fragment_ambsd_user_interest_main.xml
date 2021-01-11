@@ -105,7 +105,9 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/driving" />
+            android:text="Driving" />
+
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_bike_rider"
@@ -113,7 +115,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bike_rider" />
+            android:text="Bike Rider" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_executive"
@@ -121,7 +123,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delivery_executive" />
+            android:text="Delivery Executive" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_warehouse_helper"
@@ -129,7 +131,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/warehouse_helper" />
+            android:text="Warehouse Helper" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_operator"
@@ -137,7 +139,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/operator" />
+            android:text="Operator" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_technician"
@@ -145,7 +147,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/technician" />
+            android:text="Technician" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_supervisor"
@@ -153,7 +155,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/supervisor_manager" />
+            android:text="Supervisor/Manager" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_Inspector"
@@ -161,7 +163,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/inspector" />
+            android:text="Inspector" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_tele_calling"
@@ -169,7 +171,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tele_calling_" />
+            android:text="Tele calling" />
 
 
         <com.google.android.material.chip.Chip
@@ -178,7 +180,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/factory_worker" />
+            android:text="Factory Worker" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_security"
@@ -186,7 +188,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/security" />
+            android:text="Security" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_cleaning"
@@ -194,7 +196,9 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cleaner" />
+            android:text="Cleaner" />
+
+
 
 
 
