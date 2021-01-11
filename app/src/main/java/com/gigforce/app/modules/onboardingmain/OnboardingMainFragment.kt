@@ -254,14 +254,27 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
-        val invite_by_ambassador =
+        var ambassadorLatitude = 0.0
+        sharedDataInterface.getData(StringConstants.AMBASSADOR_LATITUDE.value)?.let {
+            if(it.isNotBlank())ambassadorLatitude = it.toDouble()
+        }
+        var ambassadorLongitude = 0.0
+        sharedDataInterface.getData(StringConstants.AMBASSADOR_LONGITUDE.value)?.let {
+            if(it.isNotBlank())
+            ambassadorLongitude = it.toDouble()
+        }
         viewModel.setOnboardingCompleted(
             inviteId,
             sharedDataInterface.getData(StringConstants.INVITE_BY_AMBASSADOR.value)?:"",
+            ambassadorLatitude,
+            ambassadorLongitude,
             navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
             navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
         )
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
+        sharedDataInterface.remove(StringConstants.INVITE_BY_AMBASSADOR.value)
+        sharedDataInterface.remove(StringConstants.AMBASSADOR_LATITUDE.value)
+        sharedDataInterface.remove(StringConstants.AMBASSADOR_LONGITUDE.value)
         saveOnBoardingCompleted()
         navigateToLoaderScreen()
     }

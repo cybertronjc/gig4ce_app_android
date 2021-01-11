@@ -48,7 +48,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         LocationUpdates()
     }
     private val viewModel: AmbassadorEnrollViewModel by viewModels()
-
+    private var location: Location? = null
     private val enrolledUserAdapter: EnrolledUsersRecyclerAdapter by lazy {
         EnrolledUsersRecyclerAdapter(requireContext()).apply {
             this.setListener(this@AmbassadorEnrolledUsersListFragment)
@@ -86,6 +86,9 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         enrolled_users_rv.adapter = enrolledUserAdapter
 
         share_link.setOnClickListener {
+            shareLink()
+        }
+        share_link_cl.setOnClickListener {
             shareLink()
         }
     }
@@ -190,7 +193,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     fun shareLink() {
         Firebase.dynamicLinks.shortLinkAsync {
             longLink =
-                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}&is_ambassador=true")).toString())
+                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=${FirebaseAuth.getInstance().currentUser?.uid!!}&is_ambassador=true&latitude=${location?.latitude?:0.0}&longitude=${location?.longitude?:0.0}")).toString())
         }.addOnSuccessListener { result ->
             // Short link created
             val shortLink = result.shortLink
@@ -311,9 +314,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun locationReceiver(location: Location?) {
+
     }
 
     override fun lastLocationReceiver(location: Location?) {
+        this.location = location
     }
 
 }

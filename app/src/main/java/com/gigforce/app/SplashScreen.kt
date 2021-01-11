@@ -38,6 +38,8 @@ class SplashScreen : AppCompatActivity() {
                     val isAmbassador = deepLink?.getQueryParameter("is_ambassador")
                     val roleID = deepLink?.getQueryParameter("role_id")
                     val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
+                    val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
+                    val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
                     val sp = SharedDataImp(this)
                     sp.saveData(
                         StringConstants.INVITE_USER_ID.value,
@@ -65,9 +67,19 @@ class SplashScreen : AppCompatActivity() {
                             StringConstants.INVITE_BY_AMBASSADOR.value,
                             "true"
                         )
+                        sp.saveData(
+                            StringConstants.AMBASSADOR_LATITUDE.value,
+                            ambassadorLatitude?:"0.0"
+                        )
+                        sp.saveData(
+                            StringConstants.AMBASSADOR_LONGITUDE.value,
+                            ambassadorLongitude?:"0.0"
+                        )
                         val intent = Intent(this, MainActivity::class.java)
                         intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        intent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
+                        intent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
                         initApp(intent)
                         return@addOnSuccessListener
                     }
