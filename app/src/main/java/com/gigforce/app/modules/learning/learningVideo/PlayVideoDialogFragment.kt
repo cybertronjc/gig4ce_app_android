@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -432,20 +433,22 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
                 viewModel.currentVideoLesson?.let {
                     Log.d(TAG, mLessonId)
 
-                    if (shouldShowFeedbackDialog) {
-                        RateLessonDialogFragment.launch(
-                            childFragmentManager,
-                            this@PlayVideoDialogFragment,
-                            mModuleId,
-                            mLessonId
-                        )
-                    } else {
-                        showLessonCompleteDialog()
-                        viewModel.markVideoAsComplete(
-                            moduleId = mModuleId,
-                            lessonId = mLessonId
-                        )
-                    }
+                    Handler().postDelayed({
+                        if (shouldShowFeedbackDialog) {
+                            RateLessonDialogFragment.launch(
+                                    childFragmentManager,
+                                    this@PlayVideoDialogFragment,
+                                    mModuleId,
+                                    mLessonId
+                            )
+                        } else {
+                            showLessonCompleteDialog()
+                            viewModel.markVideoAsComplete(
+                                    moduleId = mModuleId,
+                                    lessonId = mLessonId
+                            )
+                        }
+                    },300)
                 }
             } else { // STATE_IDLE, STATE_ENDED
                 // This prevents the screen from getting dim/lock
