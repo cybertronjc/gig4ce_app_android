@@ -199,7 +199,7 @@ class OnboardingMainViewModel : ViewModel() {
                                         "enrolledOn" to Timestamp.now(),
                                         "enrolledByLink" to true,
                                         "name" to userProfileData.value?.name,
-                                        "loginMobile" to FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                                        "mobileNumber" to getNumberWithoutNineone(FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()),
                                         "locationLogs" to FieldValue.arrayUnion(
                                             mapOf(
                                                 "enrollmentStepsCompleted.userDetailsUploaded" to true,
@@ -219,6 +219,13 @@ class OnboardingMainViewModel : ViewModel() {
         }
 
         profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
+    }
+
+    fun getNumberWithoutNineone(mobileNumber:String):String{
+        if(mobileNumber.contains("+91")){
+            return mobileNumber.takeLast(10)
+        }
+        return mobileNumber
     }
 
 
