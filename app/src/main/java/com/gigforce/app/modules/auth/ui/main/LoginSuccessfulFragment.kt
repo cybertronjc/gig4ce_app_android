@@ -156,7 +156,8 @@ class LoginSuccessfulFragment : BaseFragment() {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
         val title = dialog?.findViewById(R.id.title) as TextView
-        title.text = "Important!!, Gps Not Turned On" + "\n" + "You will be redirected to settings page , Please turn on GPS and set mode to High Accuracy"
+        title.text = "GPS should be turned on to access accurate Location.\n" +
+                "Do you want to turn on the GPS?"
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {

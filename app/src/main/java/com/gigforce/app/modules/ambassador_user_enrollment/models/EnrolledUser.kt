@@ -93,14 +93,9 @@ data class EnrollmentStepsCompleted(
 ) {
 
     @Exclude
-    fun allStepsCompleted() = profilePicUploaded
-            && userDetailsUploaded
-            && currentAddressUploaded
-            && interestUploaded
-            && experienceUploaded
-            && (aadharDetailsUploaded
+    fun allStepsCompleted() = aadharDetailsUploaded
             || panDetailsUploaded
             || drivingLicenseDetailsUploaded
             || bankDetailsUploaded
-            )
+
 }
