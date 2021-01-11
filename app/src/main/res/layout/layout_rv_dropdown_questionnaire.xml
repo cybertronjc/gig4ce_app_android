@@ -21,6 +21,12 @@
         android:paddingEnd="@dimen/size_36"
         android:paddingBottom="@dimen/size_16" />
 
+    <ProgressBar
+        android:id="@+id/pb_cities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 
 </FrameLayout>

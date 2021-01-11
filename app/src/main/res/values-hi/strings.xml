@@ -1111,4 +1111,11 @@
     <string name="open">खोले</string>
     <string name="join_us_as_an_ambassador">एक Ambassador के रूप में हमसे जुड़ें</string>
 
+    <string name="what_does_a_ambassador_do">एक Ambassador क्या करता है?</string>
+    <string name="you_have_to_onboard_potential_gigers_on_gigforce_app_by_creating_their_app_you_will_be_paid_based_on_the_number_of_profiles_created">You have to onboard potential Gigers on Gigforce app by creating their app. You will be paid based on the number of Profiles created</string>
+    <string name="enter_user_s_mobile_number">उपयोगकर्ता का मोबाइल नंबर दर्ज करें</string>
+    <string name="we_will_send_an_otp_on_this_number">हम इस नंबर पर एक ओटीपी भेजेंगे।</string>
+    <string name="country_code">+91-</string>
+    <string name="enter_code_sent_on_mobile">उपयोगकर्ता के नंबर पर भेजा गया कोड दर्ज करें</string>
+
 </resources>

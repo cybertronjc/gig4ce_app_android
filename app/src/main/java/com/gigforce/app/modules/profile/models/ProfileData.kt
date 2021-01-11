@@ -68,8 +68,8 @@ data class ProfileData(
     @set:PropertyName("readyToChangeLocationForWork")
     var readyToChangeLocationForWork: Boolean = false,
 
-    @get:PropertyName("loginMobileNo")
-    @set:PropertyName("loginMobileNo")
+    @get:PropertyName("loginMobile")
+    @set:PropertyName("loginMobile")
     var loginMobile: String = "",
 
     @get:PropertyName("profilePicThumbnail")

@@ -1,19 +1,31 @@
 package com.gigforce.app.utils
 
 import android.Manifest
+import com.gigforce.app.R
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
+import android.location.LocationManager
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
-import com.gigforce.app.utils.PermissionUtils.checkForPermission
+import com.gigforce.app.modules.ambassador_user_enrollment.BsLocationAccess
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import javax.inject.Inject
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class LocationUpdates @Inject constructor() {
+
+class LocationUpdates {
+    private val locationAccessDialog: BsLocationAccess by lazy {
+        BsLocationAccess()
+    }
+
     /**
      * Provides access to the Fused Location Provider API.
      */
@@ -73,7 +85,7 @@ class LocationUpdates @Inject constructor() {
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
         mLocationRequest!!.fastestInterval =
-            FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
+                FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
         mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
     /**
@@ -85,19 +97,42 @@ class LocationUpdates @Inject constructor() {
      * Handles the Start Updates button and requests start of location updates. Does nothing if
      * updates have already been requested.
      */
-    fun startUpdates(activity: Activity) {
+    fun startUpdates(activity: AppCompatActivity) {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         createLocationRequest()
         createLocationCallbacks(activity)
         start(activity)
     }
 
-    private fun createLocationCallbacks(context: Activity) {
+    fun showLocationDialog(context: AppCompatActivity) {
+        if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
+            locationAccessDialog.isCancelable = false
+            locationAccessDialog.show(context.supportFragmentManager, BsLocationAccess::class.simpleName)
+
+
+        }
+
+    }
+
+    private fun createLocationCallbacks(context: AppCompatActivity) {
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
+                val lm: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                try {
+                    if (!checkPermissions(context) || !lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        showLocationDialog(context)
+                    }
+
+                } catch (e: Exception) {
+
+                    return
+                }
+
                 if (locationResult == null) {
                     Toast.makeText(context, "Location can't be found", Toast.LENGTH_SHORT).show()
                     return
+
+
                 }
                 for (location in locationResult.locations) {
                     // Update UI with location data
@@ -106,29 +141,35 @@ class LocationUpdates @Inject constructor() {
                     }
                     // ...
                 }
+                checkForLocationAccessDialog()
             }
         }
     }
 
+    fun checkForLocationAccessDialog() {
+        if (locationAccessDialog.dialog != null && locationAccessDialog.dialog?.isShowing == true) {
+            locationAccessDialog.dismiss()
+        }
+
+    }
+
+    @SuppressLint("MissingPermission")
     private fun getLastKnownLocation(context: Activity) {
-        if (checkForPermission(
-                context,
-                REQUEST_PERMISSIONS_REQUEST_CODE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
+        if (checkPermissions(context)) {
+            checkForLocationAccessDialog()
             mFusedLocationClient!!.lastLocation
-                .addOnSuccessListener(context) { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null) {
-                        // Logic to handle location object
-                        if (locationUpdateCallbacks != null) {
-                            locationUpdateCallbacks!!.lastLocationReceiver(location)
+                    .addOnSuccessListener(context) { location: Location? ->
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            if (locationUpdateCallbacks != null) {
+                                locationUpdateCallbacks!!.lastLocationReceiver(location)
+                            }
                         }
                     }
-                }
+        }
     }
+
 
     /**
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
@@ -137,7 +178,7 @@ class LocationUpdates @Inject constructor() {
     private fun startLocationUpdates(context: Activity) {
         // Begin by checking if the device has the necessary location settings.
         val builder = LocationSettingsRequest.Builder().addLocationRequest(
-            mLocationRequest!!
+                mLocationRequest!!
         )
         val client = LocationServices.getSettingsClient(context)
         val task = client.checkLocationSettings(builder.build())
@@ -146,19 +187,19 @@ class LocationUpdates @Inject constructor() {
             // location requests here.
             // ...
             if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
+                            context,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return@addOnSuccessListener
             }
             mFusedLocationClient!!.requestLocationUpdates(
-                mLocationRequest,
-                mLocationCallback,
-                null /* Looper */
+                    mLocationRequest,
+                    mLocationCallback,
+                    null /* Looper */
             )
         }
         task.addOnFailureListener(context) { e: Exception? ->
@@ -187,7 +228,7 @@ class LocationUpdates @Inject constructor() {
         // recommended in applications that request frequent location updates.
         if (mFusedLocationClient != null && mLocationCallback != null) {
             mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
-                .addOnCompleteListener(context!!) { }
+                    .addOnCompleteListener(context!!) { }
         }
     }
 
@@ -195,21 +236,12 @@ class LocationUpdates @Inject constructor() {
 
         // Within {@code onPause()}, we remove location updates. Here, we resume receiving
         // location updates if the user has requested them.
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if (checkPermissions(context)) {
-                getLastKnownLocation(context)
-                startLocationUpdates(context)
-            } else {
-                checkForPermission(
-                    context,
-                    REQUEST_PERMISSIONS_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            }
-        } else {
+        if (checkPermissions(context)) {
+            checkForLocationAccessDialog()
             getLastKnownLocation(context)
             startLocationUpdates(context)
+        } else {
+            showLocationDialog(context as AppCompatActivity)
         }
     }
 
@@ -217,11 +249,15 @@ class LocationUpdates @Inject constructor() {
      * Return the current state of the permissions needed.
      */
     private fun checkPermissions(activity: Activity): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.ACCESS_FINE_LOCATION
+        val permissionStateFineLocation = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
         )
-        return permissionState == PackageManager.PERMISSION_GRANTED
+        val permissionStateCoarseLocation = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        return permissionStateFineLocation == PackageManager.PERMISSION_GRANTED && permissionStateCoarseLocation == PackageManager.PERMISSION_GRANTED
     }
 
     fun setLocationUpdateCallbacks(locationUpdateCallbacks: LocationUpdateCallbacks?) {
@@ -248,13 +284,13 @@ class LocationUpdates @Inject constructor() {
         /**
          * The desired interval for location updates. Inexact. Updates may be more or less frequent.
          */
-        private const val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
+        private const val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 2000
 
         /**
          * The fastest rate for active location updates. Exact. Updates will never be more frequent
          * than this value.
          */
         private const val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2
+                UPDATE_INTERVAL_IN_MILLISECONDS / 2
     }
 }

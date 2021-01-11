@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#EFEFEF">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_contactDetails"
         android:layout_width="match_parent"
-        android:background="@color/red"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
+        android:background="@color/red"
         app:cardElevation="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,21 +28,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/first_member"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                app:cardCornerRadius="24dp"
+
+            <com.gigforce.app.utils.widgets.CircleImageView
+                android:id="@+id/civ_personImage"
+                android:layout_width="@dimen/size_40"
+                android:layout_height="@dimen/size_40"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_backArrowInChat"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/civ_personImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/tv_nameValueInChat"
@@ -55,16 +48,16 @@
                 android:text="NA"
                 android:textColor="#d72467"
                 android:textSize="22sp"
-                app:layout_constraintStart_toEndOf="@+id/first_member"
+                app:layout_constraintStart_toEndOf="@+id/civ_personImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_lastSeenValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:textColor="@color/gray_chat_module"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/tv_nameValueInChat"
                 app:layout_constraintTop_toBottomOf="@+id/tv_nameValueInChat" />
 
@@ -87,9 +80,9 @@
         android:id="@+id/contact_blocked_container"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:visibility="gone"
         android:layout_below="@+id/cv_contactDetails"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/contact_blocked_label"
@@ -100,8 +93,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
             android:text="You've blocked this contact"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -135,11 +127,10 @@
             android:id="@+id/iv_greyPlus"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:scaleY="0.7"
-            android:scaleX="0.7"
             android:layout_marginStart="14dp"
-            android:src="@drawable/ic_attachment_grey"
-             />
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:src="@drawable/ic_attachment_grey" />
 
         <EditText
             android:id="@+id/et_typedMessageValue"

@@ -307,7 +307,7 @@
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
                         android:layout_marginStart="4dp"
-                        tools:text="@string/join_us_as_an_ambassador"
+                        android:text="@string/join_us_as_an_ambassador"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -336,7 +336,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        tools:text="@string/join_now"
+                        android:text="@string/join_now"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:textAllCaps="false"/>

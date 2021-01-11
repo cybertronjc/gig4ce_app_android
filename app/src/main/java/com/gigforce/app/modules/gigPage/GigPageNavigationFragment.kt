@@ -120,7 +120,7 @@ class GigPageNavigationFragment : BaseFragment() {
     private fun setDatOnView(gig: Gig) {
         contactPersonTV.text = gig.gigContactDetails?.contactName
         toReachTV.text = "to reach : ${gig.address}"
-        callCardView.isVisible = gig.gigContactDetails?.contactNumber != 0L
+        callCardView.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty()==false
 
         if (gig.locationPictures.isNotEmpty()) {
             //Inflate Pics

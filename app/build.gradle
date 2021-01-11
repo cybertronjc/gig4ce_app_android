@@ -319,5 +319,5 @@ dependencies {
 
     implementation 'com.google.android:flexbox:2.0.1'
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
-
+    implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
 }

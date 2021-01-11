@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.QuestionnaireResponse
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.google.firebase.firestore.ListenerRegistration
@@ -39,14 +40,19 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     val observableCities: MutableLiveData<MutableList<Cities>> =
             _observableCities
 
+    private val _observableAllCities = MutableLiveData<MutableList<GfUsers>>()
+
+    val observableAllCities: MutableLiveData<MutableList<GfUsers>> =
+            _observableAllCities
+
 
     fun getQuestionnaire(jobProfileID: String) {
         questionnaireRepository.getCollectionReference().whereEqualTo("type", "questionnaire")
-                .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, error ->
-                    if (error == null) {
-                        if (!success?.documents.isNullOrEmpty()) {
-                            val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)
-                            _observableQuestionnaireResponse.value = toObject
+            .whereEqualTo("jobProfileId", jobProfileID).addSnapshotListener { success, error ->
+                if (error == null) {
+                    if (!success?.documents.isNullOrEmpty()) {
+                        val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)
+                        _observableQuestionnaireResponse.value = toObject
 //                        savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
                         }
 
@@ -55,10 +61,10 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     fun addQuestionnaire(
-            mJobProfileId: String,
-            title: String,
-            type: String,
-            questions: List<Questions>?
+        mJobProfileId: String,
+        title: String,
+        type: String,
+        questions: List<Questions>?
     ) {
         var listener: ListenerRegistration? = null
         listener = questionnaireRepository.db.collection("JP_Applications")
@@ -125,7 +131,7 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                                             .document(questionnaire?.documents?.get(0)?.id!!)
                                             .update(
                                                     mapOf(
-                                                            "answers" to  questions?.map {
+                                                            "answers" to questions?.map {
                                                                 mapOf(
                                                                         "question" to it.question,
                                                                         "selectedAnswer" to it.selectedAnswer,
@@ -175,17 +181,21 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getStatesFromDb(): MutableList<States> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_States").get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+            val toObjects = await.toObjects(States::class.java)
+            for (i in 0 until await.documents.size) {
+                toObjects[i].id = await.documents[i].id
 
-        val await = questionnaireRepository.db.collection("Mst_States").get().await()
-        if (await.documents.isNullOrEmpty()) {
+            }
+            return toObjects
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
-        val toObjects = await.toObjects(States::class.java)
-        for (i in 0 until await.documents.size) {
-            toObjects[i].id = await.documents[i].id
-
-        }
-        return toObjects
 
     }
 
@@ -196,14 +206,42 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getCitiesFromDb(states: States): MutableList<Cities> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_Cities")
+                    .whereEqualTo("state_code", states.id).get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
 
-        val await = questionnaireRepository.db.collection("Mst_Cities")
-                .whereEqualTo("state_code", states.id).get().await()
-        if (await.documents.isNullOrEmpty()) {
+            return await.toObjects(Cities::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
 
-        return await.toObjects(Cities::class.java)
+
+    }
+
+    fun getAllCities() = viewModelScope.launch {
+        _observableAllCities.value = getAllCitiesFromDb()
+
+    }
+
+
+    suspend fun getAllCitiesFromDb(): MutableList<GfUsers> {
+        try {
+            val await = questionnaireRepository.db.collection("GF_Users")
+                    .get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+
+            return await.toObjects(GfUsers::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
+            return mutableListOf()
+        }
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment
 
+import android.location.Location
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.*
@@ -14,18 +15,18 @@ class UserEnrollmentRepository constructor(
         private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
 ) : BaseFirestoreDBRepository() {
 
-    suspend fun createUser(mobile: String, enrolledByName: String): CreateUserResponse {
+    suspend fun createUser(mobile: String, enrolledByName: String,location: Location): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
                 BuildConfig.CREATE_USER_URL, listOf(
                 CreateUserRequest(mobile)
-        )
+            )
         )
 
         if (!createUserResponse.isSuccessful) {
             throw Exception(createUserResponse.message())
         } else {
             val response = createUserResponse.body()!!.first()
-            if (response.error != null) {
+            if(response.error != null){
                 throw Exception(response.error)
             } else {
                 db.collection(COLLECTION_NAME)
@@ -40,7 +41,9 @@ class UserEnrollmentRepository constructor(
                                         enrollmentStepsCompleted = EnrollmentStepsCompleted(),
                                         name = mobile,
                                         enrolledByName = enrolledByName,
-                                        mobileNumber = mobile
+                                        mobileNumber = mobile,
+                                        lat = location.latitude.toString(),
+                                        lon = location.longitude.toString()
 
                                 )
                         )

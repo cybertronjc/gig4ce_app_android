@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/white"
     tools:context=".modules.client_activation.DocsSubSchedulerFragment">
 
 
@@ -58,8 +58,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/schedule_doc_sub_bg">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -111,169 +110,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_top_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/doc_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_24"
-                        android:layout_marginEnd="@dimen/size_16"
-                        android:fontFamily="@font/lato"
-                        android:textColor="@color/black_three"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/doc_sub_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_9"
-                        android:layout_marginEnd="@dimen/size_16"
-                        android:fontFamily="@font/lato"
-                        android:textColor="@color/black_three"
-                        android:textSize="14sp"
-                        android:textStyle="normal" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_bullet_points"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginTop="@dimen/size_8"
-                        android:layout_marginEnd="@dimen/size_16"
-                        android:layout_marginBottom="@dimen/size_24"
-                        android:nestedScrollingEnabled="false" />
-
-                </LinearLayout>
-                <!--        android:layout_toStartOf="@+id/tv_why_we_need_docs_scheduler"-->
-
-                <ImageView
-                    android:id="@+id/helpIconIV"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="13dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_time"
-                    android:visibility="gone"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <TextView
-                    android:id="@+id/tv_why_we_need_docs_scheduler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_toStartOf="@+id/helpIconIV"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="0"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/why_do_we_need_this"
-                    android:textColor="@color/battle_ship_grey"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView99"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/lato"
-                    android:text="@string/set_doc_preference"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView135"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="50dp"
-                    android:text="@string/set_doc_note"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView99" />
-
-
-                <TextView
-                    android:id="@+id/driving_license_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/size_25"
-                    android:layout_marginTop="@dimen/size_24"
-                    android:fontFamily="@font/lato"
-                    android:gravity="center_horizontal"
-                    android:text="@string/driving_test_details"
-                    android:textColor="@color/black_85"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_all_set"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/driving_license_title"
-                    android:layout_marginStart="@dimen/size_25"
-                    android:layout_marginTop="@dimen/size_8"
-                    android:layout_marginBottom="@dimen/size_16"
-                    android:fontFamily="@font/lato"
-                    android:text="@string/all_set_for_test"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tv_change_slot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/size_29"
-                    android:layout_marginEnd="@dimen/size_15"
-                    android:fontFamily="@font/lato"
-                    android:gravity="end"
-                    android:text="@string/change_slot"
-                    android:textColor="@color/lipstick"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/schedule_doc_sub_bg" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/contact_card"
@@ -492,33 +328,172 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>
-                <androidx.constraintlayout.widget.ConstraintLayout
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/schedule_doc_sub_bg" />
+
+            <RelativeLayout
+                android:id="@+id/rl_top_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/contact_info"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="@dimen/size_16"
-                    android:background="@color/white">
+                    android:orientation="vertical">
 
-                    <CheckBox
-                        android:id="@+id/cb_activate"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/doc_title"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/size_16"
-                        android:layout_marginLeft="@dimen/size_16"
-                        android:button="@drawable/check_box_confirmation_dialog"
-                        android:buttonTint="@color/colorPrimary"
+                        android:layout_marginTop="@dimen/size_24"
+                        android:layout_marginEnd="@dimen/size_16"
                         android:fontFamily="@font/lato"
-                        android:paddingStart="@dimen/size_8"
-                        android:paddingEnd="@dimen/size_8"
-                        android:text="I have submitted all Documents to team leader."
-                        android:textColor="@color/black"
+                        android:textColor="@color/black_three"
                         android:textSize="14sp"
-                        android:textStyle="normal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/doc_sub_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_9"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:textColor="@color/black_three"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_bullet_points"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_16"
+                        android:layout_marginTop="@dimen/size_8"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:layout_marginBottom="@dimen/size_24"
+                        android:nestedScrollingEnabled="false" />
+
+                </LinearLayout>
+                <!--        android:layout_toStartOf="@+id/tv_why_we_need_docs_scheduler"-->
+
+                <ImageView
+                    android:id="@+id/helpIconIV"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="13dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_time"
+                    android:visibility="gone"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/tv_why_we_need_docs_scheduler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_toStartOf="@+id/helpIconIV"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/why_do_we_need_this"
+                    android:textColor="@color/battle_ship_grey"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/helpIconIV"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView99"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/set_doc_preference"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView135"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="50dp"
+                    android:text="@string/set_doc_note"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView99" />
+
+
+                <TextView
+                    android:id="@+id/driving_license_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_25"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:fontFamily="@font/lato"
+                    android:gravity="center_horizontal"
+                    android:text="@string/driving_test_details"
+                    android:textColor="@color/black_85"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_all_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/driving_license_title"
+                    android:layout_marginStart="@dimen/size_25"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:layout_marginBottom="@dimen/size_16"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/all_set_for_test"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_change_slot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/size_29"
+                    android:layout_marginEnd="@dimen/size_15"
+                    android:fontFamily="@font/lato"
+                    android:gravity="end"
+                    android:text="@string/change_slot"
+                    android:textColor="@color/lipstick"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/select_partner_school"
@@ -749,25 +724,60 @@
     </androidx.core.widget.NestedScrollView>
 
 
-
-
-    <com.ncorti.slidetoact.SlideToActView
-        android:id="@+id/slider_checkout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_24"
-        android:layout_marginBottom="@dimen/size_27"
-        app:border_radius="8dp"
-        app:icon_margin="@dimen/size_7"
-        app:inner_color="#888888"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:outer_color="#dddddd"
-        app:slider_height="60dp"
-        app:slider_icon="@drawable/ic_arrow_forward_white"
-        app:slider_icon_color="@color/white"
-        app:text="@string/activate"
-        app:text_size="@dimen/font_16"
-        app:text_style="bold" />
+        android:paddingTop="@dimen/size_16"
+        android:paddingBottom="@dimen/size_8"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/slider_cl"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/cb_activate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+
+            android:button="@drawable/check_box_confirmation_dialog"
+            android:buttonTint="@color/colorPrimary"
+            android:fontFamily="@font/lato"
+            android:paddingStart="@dimen/size_8"
+            android:paddingEnd="@dimen/size_8"
+            android:text="I have submitted all Documents to team leader."
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/slider_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slider_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginBottom="@dimen/size_27"
+            app:border_radius="8dp"
+            app:icon_margin="@dimen/size_7"
+            app:inner_color="#888888"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:outer_color="#dddddd"
+            app:slider_height="60dp"
+            app:slider_icon="@drawable/ic_arrow_forward_white"
+            app:slider_icon_color="@color/white"
+            app:text="@string/activate"
+            app:text_size="@dimen/font_16"
+            app:text_style="bold" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ProgressBar
         android:id="@+id/pb_docs_submission"

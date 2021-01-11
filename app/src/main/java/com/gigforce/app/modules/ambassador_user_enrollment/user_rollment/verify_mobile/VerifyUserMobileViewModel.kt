@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,7 +45,8 @@ class VerifyUserMobileViewModel constructor(
             mode: Int,
             token: String,
             otp: String,
-            mobile: String
+            mobile: String,
+            location: Location
     ) = viewModelScope.launch {
 
         try {
@@ -53,26 +55,28 @@ class VerifyUserMobileViewModel constructor(
             val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
             if (mode == EnrollmentConstants.MODE_EDIT) {
                 if (verifyOtpResponse.isVerified) {
-                _createProfile.value = Lce.content(CreateUserResponse(
-                        phoneNumber = mobile,
-                        uid = null,
-                        error = null
-                ))
+                    _createProfile.value = Lce.content(CreateUserResponse(
+                            phoneNumber = mobile,
+                            uid = null,
+                            error = null
+                    ))
                 } else {
                     _createProfile.value = Lce.error("Otp does not match")
                 }
             } else {
-                  if (verifyOtpResponse.isVerified) {
-                val profile = profileFirebaseRepository.getProfileData()
-                val response = userEnrollmentRepository.createUser(
-                        mobile = mobile,
-                        enrolledByName = profile.name
-                )
-                _createProfile.value = Lce.content(response)
-                   } else {
-                      _createProfile.value = Lce.error("Otp does not match")
-                  }
+                if (verifyOtpResponse.isVerified) {
+                    val profile = profileFirebaseRepository.getProfileData()
+                    val response = userEnrollmentRepository.createUser(
+                            mobile = mobile,
+                            enrolledByName = profile.name,
+                            location = location
+                    )
+                    _createProfile.value = Lce.content(response)
+                } else {
+                    _createProfile.value = Lce.error("Otp does not match")
+                }
             }
+
         } catch (e: Exception) {
             _createProfile.value = Lce.error(e.message ?: "Unable to create user")
         }

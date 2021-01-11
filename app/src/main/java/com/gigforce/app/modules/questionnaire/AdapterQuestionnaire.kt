@@ -12,6 +12,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.ItemOffsetDecoration
 import com.gigforce.app.utils.getCircularProgressDrawable
@@ -107,6 +108,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                     stateCityMap: MutableMap<States, MutableList<Cities>?>,
                     position: Int
             ) {
+                if (holder.adapterPosition == -1) return
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 callbacks.getStates(position, holder.adapterPosition)
             }
@@ -115,9 +117,15 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                     stateCityMap: MutableMap<States, MutableList<Cities>?>,
                     states: States
             ) {
+                if (holder.adapterPosition == -1) return
                 this@AdapterQuestionnaire.stateCityMap = stateCityMap
                 this@AdapterQuestionnaire.state = states
                 callbacks.getCities(states, holder.adapterPosition)
+            }
+
+            override fun getAllCities(childPosition: Int) {
+                if (holder.adapterPosition == -1) return
+                callbacks.getAllCities(holder.adapterPosition, childPosition)
             }
 
         })
@@ -147,9 +155,18 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         notifyItemChanged(parentPosition)
     }
 
+    fun setAllCities(cities: MutableList<GfUsers>, parentPosition: Int, childPosition: Int) {
+        if (!items.isNullOrEmpty()) {
+            items[parentPosition].options[childPosition].cities = cities
+            notifyItemChanged(parentPosition)
+        }
+    }
+
     public interface AdapterQuestionnaireCallbacks {
         fun getStates(childPosition: Int, parentPosition: Int)
         fun getCities(state: States, parentPosition: Int)
+        fun getAllCities(adapterPosition: Int, childPosition: Int)
+
 
     }
 }
