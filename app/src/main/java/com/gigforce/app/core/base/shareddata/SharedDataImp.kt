@@ -124,6 +124,7 @@ class SharedDataImp : SharedDataInterface {
         saveSharedDataBoolean(key, value!!)
     }
 
+
     override fun getData(key: String?): String? {
         return getSharedData(key, "")
     }
