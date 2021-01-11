@@ -177,9 +177,10 @@
                 android:lineSpacingExtra="3sp"
                 android:paddingStart="18dp"
                 android:paddingTop="16dp"
+                android:textSize="16sp"
                 android:paddingBottom="6dp"
                 android:textColor="#333333"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/total_incomplete_profile_tv"
@@ -190,9 +191,10 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="16dp"
                 android:textColor="#333333"
+                android:background="#c6ddf3"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/enrolled_users_rv"
