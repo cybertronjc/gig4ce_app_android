@@ -45,13 +45,11 @@ data class EnrolledUser(
         @get:PropertyName("enrollmentStepsCompleted")
         @set:PropertyName("enrollmentStepsCompleted")
         var enrollmentStepsCompleted: EnrollmentStepsCompleted = EnrollmentStepsCompleted(),
-        @get:PropertyName("lat")
-        @set:PropertyName("lat")
-        var lat: String? = null,
 
-        @get:PropertyName("lon")
-        @set:PropertyName("lon")
-        var lon: String? = null
+        @get:PropertyName("locationLogs")
+        @set:PropertyName("locationLogs")
+        var locationLogs: List<LocationLog> = emptyList()
+
 )
 
 data class EnrollmentStepsCompleted(
@@ -99,3 +97,26 @@ data class EnrollmentStepsCompleted(
             || bankDetailsUploaded
 
 }
+
+
+data class LocationLog(
+        @get:PropertyName("completeAddress")
+        @set:PropertyName("completeAddress")
+        var completeAddress: String = "",
+
+        @get:PropertyName("latitude")
+        @set:PropertyName("latitude")
+        var latitude: Double = 0.0,
+
+        @get:PropertyName("longitude")
+        @set:PropertyName("longitude")
+        var longitude: Double = 0.0,
+
+        @get:PropertyName("entryType")
+        @set:PropertyName("entryType")
+        var entryType: String = "",
+
+        @get:PropertyName("addedOn")
+        @set:PropertyName("addedOn")
+        var addedOn: Timestamp = Timestamp.now()
+)

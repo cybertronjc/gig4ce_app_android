@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile
 
-import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,11 +41,14 @@ class VerifyUserMobileViewModel constructor(
     val createProfile: LiveData<Lce<CreateUserResponse>> = _createProfile
 
     fun checkOtpAndCreateProfile(
+            userId: String?,
             mode: Int,
             token: String,
             otp: String,
             mobile: String,
-            location: Location
+            latitude: Double,
+            longitude: Double,
+            fullAddress: String
     ) = viewModelScope.launch {
 
         try {
@@ -60,6 +62,15 @@ class VerifyUserMobileViewModel constructor(
                             uid = null,
                             error = null
                     ))
+
+                    if (userId != null) {
+                        userEnrollmentRepository.addEditLocationInLocationLogs(
+                                userId = userId,
+                                latitude = latitude,
+                                longitude = longitude,
+                                fullAddress = fullAddress
+                        )
+                    }
                 } else {
                     _createProfile.value = Lce.error("Otp does not match")
                 }
@@ -69,7 +80,9 @@ class VerifyUserMobileViewModel constructor(
                     val response = userEnrollmentRepository.createUser(
                             mobile = mobile,
                             enrolledByName = profile.name,
-                            location = location
+                            latitude = latitude,
+                            longitude = longitude,
+                            fullAddress = fullAddress
                     )
                     _createProfile.value = Lce.content(response)
                 } else {

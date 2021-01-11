@@ -22,7 +22,6 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -34,11 +33,10 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.selectChipWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.Lce
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
-
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -165,7 +163,7 @@ class AddUserDetailsFragment : BaseFragment() {
         }
 
         submitBtn.setOnClickListener {
-            checkForGpsPermissionsAndGpsStatus()
+            validateDataAndsubmit()
         }
 
         ic_back_iv.setOnClickListener {
@@ -200,14 +198,10 @@ class AddUserDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun validateDataAndsubmit(
-        latitude: Double,
-        longitude: Double,
-        address: String
-    ) {
+    private fun validateDataAndsubmit() {
         if (user_name_et.text.length <= 2) {
             full_name_error_tv.visible()
-            full_name_error_tv.text =        getString(R.string.name_should_be_more_than_2_chars)
+            full_name_error_tv.text = getString(R.string.name_should_be_more_than_2_chars)
 
             return
         } else {
@@ -260,26 +254,22 @@ class AddUserDetailsFragment : BaseFragment() {
         }
 
         viewModel.updateUserDetails(
-            uid = userId,
-            phoneNumber = phoneNumber,
-            name = user_name_et.text.toString(),
-            dateOfBirth = dateOfBirth!!,
+                uid = userId,
+                phoneNumber = phoneNumber,
+                name = user_name_et.text.toString(),
+                dateOfBirth = dateOfBirth!!,
                 pinCode = pin_code_et.text.toString(),
-
                 gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
-            highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString(),
-                latitude = latitude,
-                longitude = longitude,
-                address = address
+                highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
         )
     }
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
-            .show()
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                .show()
     }
 
     private fun initViewModel() {
@@ -357,9 +347,12 @@ class AddUserDetailsFragment : BaseFragment() {
 
     private fun showUserDetailsOnView(content: ProfileData) = content.let {
         user_name_et.setText(it.name)
-        val dob = dateFormatter.format(it.dateOfBirth.toDate())
-        this.dateOfBirth = it.dateOfBirth.toDate()
-        date_of_birth_et.text = dob
+
+        if(it.dateOfBirth != null) {
+            val dob = dateFormatter.format(it.dateOfBirth!!.toDate())
+            this.dateOfBirth = it.dateOfBirth!!.toDate()
+            date_of_birth_et.text = dob
+        }
 
         gender_chip_group.selectChipWithText(it.gender)
         highest_qual_chipgroup.selectChipWithText(it.highestEducation)
@@ -374,202 +367,14 @@ class AddUserDetailsFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
     }
 
     private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
-
-    var userGpsDialogActionCount = 0
-    private fun checkForGpsPermissionsAndGpsStatus() {
-        val manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val is_gps_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        if (userGpsDialogActionCount == 0 && !is_gps_enabled) {
-            showEnableGPSDialog()
-            return;
-        }
-
-        val has_permission_coarse_location = ContextCompat.checkSelfPermission(
-            requireActivity(),
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (userGpsDialogActionCount == 1 || has_permission_coarse_location) {
-            checkAndUpdateUserDetails()
-        } else {
-            requestPermissionForGPS()
-        }
-    }
-
-    fun requestPermissionForGPS() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), GigPageFragment.PERMISSION_FINE_LOCATION
-            )
-        }
-    }
-
-    private fun turnGPSOn() {
-        val provider = Settings.Secure.getString(
-            context?.contentResolver,
-            Settings.Secure.LOCATION_PROVIDERS_ALLOWED
-        )
-        if (!provider.contains("gps")) { //if gps is disabled
-            val poke = Intent()
-            poke.setClassName(
-                "com.android.settings",
-                "com.android.settings.widget.SettingsAppWidgetProvider"
-            )
-            poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
-            poke.data = Uri.parse("3")
-            context?.let { it ->
-                LocalBroadcastManager.getInstance(it).sendBroadcast(poke)
-            } ?: run {
-
-                FirebaseCrashlytics.getInstance()
-                    .log("Context found null in GigPageFragment/turnGPSOn()")
-            }
-        }
-    }
-
-    private fun showEnableGPSDialog() {
-        val dialog = activity?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(R.layout.confirmation_custom_alert_type1)
-        val title = dialog?.findViewById(R.id.title) as TextView
-        title.text = getString(R.string.gps_warning)
-        val yesBtn = dialog.findViewById(R.id.yes) as TextView
-        val noBtn = dialog.findViewById(R.id.cancel) as TextView
-        yesBtn.setOnClickListener {
-            if (canToggleGPS())
-                turnGPSOn()
-            else {
-                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).apply {
-                    startActivityForResult(
-                        this,
-                        LoginSuccessfulFragment.REQUEST_CODE_TOGGLE_GPS_MANUAL
-                    )
-                }
-            }
-
-            dialog.dismiss()
-        }
-
-        noBtn.setOnClickListener {
-            validateDataAndsubmit(0.0, 0.0, "")
-            userGpsDialogActionCount = 1
-
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-
-    private fun canToggleGPS(): Boolean {
-        val pacman = context?.getPackageManager()
-        var pacInfo: PackageInfo? = null
-        try {
-            pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
-        } catch (e: PackageManager.NameNotFoundException) {
-            return false //package not found
-        } catch (e: Exception) {
-
-        }
-        if (pacInfo != null) {
-            for (actInfo in pacInfo.receivers) {
-                //test if recevier is exported. if so, we can toggle GPS.
-                if (actInfo.name.equals("com.android.settings.widget.SettingsAppWidgetProvider") && actInfo.exported) {
-                    return true
-                }
-            }
-        }
-        return false //default
-    }
-
-    var isGPSRequestCompleted = false
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    private fun initializeGPS() {
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
-    }
-
-    private fun checkAndUpdateUserDetails() {
-        val manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val is_GPS_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        val has_GPS_permission = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (is_GPS_enabled && has_GPS_permission) {
-
-            if (!isGPSRequestCompleted) {
-                initializeGPS()
-            }
-
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                processLocationAndUpdateUserDetails(it)
-            }
-        } else if (userGpsDialogActionCount == 0) {
-            requestPermissionForGPS()
-        } else {
-            validateDataAndsubmit(0.0, 0.0, "")
-        }
-    }
-
-    fun processLocationAndUpdateUserDetails(location: Location?) {
-
-        val latitude: Double = location?.latitude ?: 0.0
-        val longitude: Double = location?.longitude ?: 0.0
-
-        var locationAddress = ""
-        try {
-            val geocoder = Geocoder(requireContext())
-            val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
-            locationAddress = addressArr?.get(0)?.getAddressLine(0) ?: ""
-        } catch (e: Exception) {
-
-        }
-
-        validateDataAndsubmit(latitude, longitude, locationAddress)
-    }
-
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            GigPageFragment.PERMISSION_FINE_LOCATION -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    isGPSRequestCompleted = true
-                    initializeGPS()
-                    checkForGpsPermissionsAndGpsStatus()
-                } else {
-                    validateDataAndsubmit(0.0,0.0,"")
-                }
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == LoginSuccessfulFragment.REQUEST_CODE_TOGGLE_GPS_MANUAL){
-            checkForGpsPermissionsAndGpsStatus()
-        }
-    }
-
-
 }

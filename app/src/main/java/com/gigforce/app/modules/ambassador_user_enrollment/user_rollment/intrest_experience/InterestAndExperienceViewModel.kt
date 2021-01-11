@@ -69,16 +69,32 @@ class InterestAndExperienceViewModel constructor(
 
             val profileData = profileFirebaseRepository.getProfileData(userId)
             val experienceList = profileData.experiences ?: return@launch
+            val skills = profileData.skills ?: return@launch
 
-            for (i in experienceList.indices) {
-                if (experienceList[i].title == experience.title) {
+            if(experienceList.size == profileData.skills!!.size) {
 
-                    if (i == experienceList.size - 1) {
-                        _saveExpAndReturnNextOne.value = Lce.content(null)
-                    } else {
-                        _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                for (i in experienceList.indices) {
+                    if (experienceList[i].title == experience.title) {
+
+                        if (i == experienceList.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                        } else {
+                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                        }
+                        return@launch
                     }
-                    return@launch
+                }
+            } else {
+                for (i in skills.indices) {
+                    if (skills[i].id == experience.title) {
+
+                        if (i == skills.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                        } else {
+                            _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                        }
+                        return@launch
+                    }
                 }
             }
             _saveExpAndReturnNextOne.value = Lce.content(null)
@@ -94,18 +110,36 @@ class InterestAndExperienceViewModel constructor(
         try {
             val profileData = profileFirebaseRepository.getProfileData(userId)
             val experienceList = profileData.experiences ?: return@launch
+            val skills = profileData.skills ?: return@launch
 
-            for (i in experienceList.indices) {
-                if (experienceList[i].title == expName) {
 
-                    if (i == experienceList.size - 1) {
-                        _saveExpAndReturnNextOne.value = Lce.content(null)
-                    } else {
-                        _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+            if(experienceList.size == profileData.skills!!.size) {
+
+                for (i in experienceList.indices) {
+                    if (experienceList[i].title == expName) {
+
+                        if (i == experienceList.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                        } else {
+                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                        }
+                        return@launch
                     }
-                    return@launch
+                }
+            } else {
+                for (i in skills.indices) {
+                    if (skills[i].id == expName) {
+
+                        if (i == skills.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                        } else {
+                            _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                        }
+                        return@launch
+                    }
                 }
             }
+
             _saveExpAndReturnNextOne.value = Lce.content(null)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)

@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify
 
 import android.app.Activity
 import android.content.Intent
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -96,17 +97,38 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
             showAlertDialog("", "Enter a valid otp")
             return
         }
+
         if (location == null) {
             showAlertDialog("", getString(R.string.location_error))
         }
 
         viewModel.checkOtpAndCreateProfile(
+                userId = userId,
                 mode = mode,
                 token = verificationToken,
                 otp = txt_otp.text.toString(),
                 mobile = mobileNo,
-               location= location!!
+                latitude = location!!.latitude,
+                longitude = location!!.longitude,
+                fullAddress = processLocationAndUpdateUserDetails(location!!)
         )
+    }
+
+    fun processLocationAndUpdateUserDetails(location: Location) : String {
+
+        val latitude: Double = location.latitude ?: 0.0
+        val longitude: Double = location.longitude ?: 0.0
+
+        var locationAddress = ""
+        try {
+            val geocoder = Geocoder(requireContext())
+            val addressArr = geocoder.getFromLocation(latitude, longitude, 1)
+            locationAddress = addressArr?.get(0)?.getAddressLine(0) ?: ""
+        } catch (e: Exception) {
+
+        }
+
+        return locationAddress
     }
 
     private fun showAlertDialog(title: String, message: String) {
@@ -157,8 +179,9 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
                 })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onPause() {
+        super.onPause()
         locationUpdates.stopLocationUpdates(requireActivity())
     }
 

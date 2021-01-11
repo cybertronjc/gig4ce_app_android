@@ -1,56 +1,153 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment
 
-import android.location.Location
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.*
+import com.gigforce.app.modules.profile.models.Contact
+import com.gigforce.app.modules.profile.models.EnrollmentInfo
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.setOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 
 class UserEnrollmentRepository constructor(
         private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
 ) : BaseFirestoreDBRepository() {
 
-    suspend fun createUser(mobile: String, enrolledByName: String,location: Location): CreateUserResponse {
+    suspend fun createUser(mobile: String,
+                           enrolledByName: String,
+                           latitude: Double,
+                           longitude: Double,
+                           fullAddress: String
+    ): CreateUserResponse {
         val createUserResponse = createUserApi.createUser(
                 BuildConfig.CREATE_USER_URL, listOf(
                 CreateUserRequest(mobile)
-            )
+        )
         )
 
         if (!createUserResponse.isSuccessful) {
             throw Exception(createUserResponse.message())
         } else {
             val response = createUserResponse.body()!!.first()
-            if(response.error != null){
+            if (response.error != null) {
                 throw Exception(response.error)
             } else {
-                db.collection(COLLECTION_NAME)
-                        .document(getUID())
-                        .collection(COLLECTION_ENROLLED_USERS)
-                        .document(response.uid!!)
-                        .setOrThrow(
-                                EnrolledUser(
-                                        uid = response.uid,
-                                        enrolledOn = Timestamp.now(),
-                                        enrolledBy = getUID(),
-                                        enrollmentStepsCompleted = EnrollmentStepsCompleted(),
-                                        name = mobile,
-                                        enrolledByName = enrolledByName,
-                                        mobileNumber = mobile,
-                                        lat = location.latitude.toString(),
-                                        lon = location.longitude.toString()
+                addUserToAmbassadorEnrolledUserList(
+                        response.uid!!,
+                        mobile,
+                        enrolledByName,
+                        fullAddress,
+                        latitude,
+                        longitude
+                )
 
-                                )
-                        )
+                createProfileDataForUser(
+                        uid = response.uid,
+                        mobile = mobile,
+                        latitude = latitude,
+                        longitude = longitude,
+                        fullAddress = fullAddress
+                )
             }
 
             return response
         }
+    }
+
+    private suspend fun createProfileDataForUser(
+            uid: String,
+            mobile: String,
+            latitude: Double,
+            longitude: Double,
+            fullAddress: String
+
+    ) {
+
+        val profileData = ProfileData(
+                loginMobile = "+91${mobile}",
+                contact = ArrayList(
+                        listOf(
+                                Contact(
+                                        phone = "+91${mobile}",
+                                        email = ""
+                                )
+                        )
+                ),
+                createdOn = Timestamp.now(),
+                enrolledBy = EnrollmentInfo(
+                        id = getUID(),
+                        enrolledOn = Timestamp.now(),
+                        enrolledLocationLatitude = latitude,
+                        enrolledLocationLongitude = longitude,
+                        enrolledLocationAddress = fullAddress
+                )
+        )
+
+        db.collection("Profiles")
+                .document(uid)
+                .setOrThrow(profileData)
+    }
+
+    private suspend fun addUserToAmbassadorEnrolledUserList(
+            uid: String,
+            mobile: String,
+            enrolledByName: String,
+            fullAddress: String,
+            latitude: Double,
+            longitude: Double
+    ) {
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(uid)
+                .setOrThrow(
+                        EnrolledUser(
+                                uid = uid,
+                                enrolledOn = Timestamp.now(),
+                                enrolledBy = getUID(),
+                                enrollmentStepsCompleted = EnrollmentStepsCompleted(),
+                                name = mobile,
+                                enrolledByName = enrolledByName,
+                                mobileNumber = mobile,
+                                locationLogs = listOf(
+                                        LocationLog(
+                                                completeAddress = fullAddress,
+                                                latitude = latitude,
+                                                longitude = longitude,
+                                                entryType = "created_by_ambassador"
+                                        )
+                                )
+                        )
+                )
+    }
+
+    suspend fun addEditLocationInLocationLogs(
+            userId: String,
+            latitude: Double,
+            longitude: Double,
+            fullAddress: String
+    ) {
+        db.collection(COLLECTION_NAME)
+                .document(getUID())
+                .collection(COLLECTION_ENROLLED_USERS)
+                .document(userId)
+                .updateOrThrow(
+                        mapOf(
+                                "locationLogs" to FieldValue.arrayUnion(
+                                        LocationLog(
+                                                latitude = latitude,
+                                                longitude = longitude,
+                                                completeAddress = fullAddress,
+                                                entryType = "edit_by_ambassador"
+                                        )
+                                )
+                        )
+                )
     }
 
     suspend fun checkMobileForExistingRegistrationElseSendOtp(mobile: String): RegisterMobileNoResponse {
@@ -82,10 +179,7 @@ class UserEnrollmentRepository constructor(
 
     suspend fun updateUserProfileName(
             userId: String,
-            name: String,
-            latitude: Double,
-            longitude: Double,
-            address: String
+            name: String
     ) {
 
         db.collection(COLLECTION_NAME)
@@ -95,10 +189,7 @@ class UserEnrollmentRepository constructor(
                 .updateOrThrow(
                         mapOf(
                                 "name" to name,
-                                "enrollmentStepsCompleted.userDetailsUploaded" to true,
-                                "enrolledFromLocation.latitude" to latitude,
-                                "enrolledFromLocation.longitude" to longitude,
-                                "enrolledFromLocation.completeAddress" to address
+                                "enrollmentStepsCompleted.userDetailsUploaded" to true
                         )
                 )
     }
@@ -219,8 +310,8 @@ class UserEnrollmentRepository constructor(
                 .updateOrThrow("enrollmentStepsCompleted.panDetailsUploaded", true)
     }
 
-    suspend fun loadCityAndStateUsingPincode(pinCode:String):PincodeResponse{
-        val pincodeResponse = createUserApi.loadCityAndStateUsingPincode(AppConstants.PINCODE_URL+pinCode)
+    suspend fun loadCityAndStateUsingPincode(pinCode: String): PincodeResponse {
+        val pincodeResponse = createUserApi.loadCityAndStateUsingPincode(AppConstants.PINCODE_URL + pinCode)
 
         if (!pincodeResponse.isSuccessful) {
             throw Exception(pincodeResponse.message())

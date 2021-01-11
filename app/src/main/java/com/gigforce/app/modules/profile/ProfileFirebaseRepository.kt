@@ -316,10 +316,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             dateOfBirth: Date,
             gender: String,
             pincode: String,
-            highestQualification: String,
-            latitude : Double,
-            longitude : Double,
-            address : String
+            highestQualification: String
     ) {
 
         var profileData = getProfileDataIfExist(userId = uid)
@@ -343,14 +340,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                             )
                     ),
                     createdOn = Timestamp.now(),
-                    isonboardingdone = true,
-                    enrolledBy = EnrollmentInfo(
-                            id = getUID(),
-                            enrolledOn = Timestamp.now(),
-                            enrolledLocationLatitude = latitude,
-                            enrolledLocationLongitude = longitude,
-                            enrolledLocationAddress = address
-                    )
+                    isonboardingdone = true
             )
         } else {
             profileData.apply {
@@ -451,10 +441,16 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             it.title == experience.title
         }
 
+        val expMatch = updatedExpList?.find { it.title == experience.title }
+        val mutableExpList = updatedExpList!!.toMutableList()
+        if (expMatch == null) {
+            mutableExpList.add(experience)
+        }
+
         firebaseDB
                 .collection(profileCollectionName)
                 .document(userId)
-                .updateOrThrow("experiences", updatedExpList!!)
+                .updateOrThrow("experiences", mutableExpList)
     }
 
     suspend fun getProfileDataIfExist(userId: String? = null): ProfileData? =

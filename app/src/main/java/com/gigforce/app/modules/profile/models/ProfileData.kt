@@ -50,7 +50,7 @@ data class ProfileData(
 
     @get:PropertyName("dateOfBirth")
     @set:PropertyName("dateOfBirth")
-    var dateOfBirth: Timestamp = Timestamp.now(),
+    var dateOfBirth: Timestamp? = null,
 
     @get:PropertyName("enrolledBy")
     @set:PropertyName("enrolledBy")

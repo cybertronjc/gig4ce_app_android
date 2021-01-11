@@ -1,16 +1,13 @@
 package com.gigforce.app.modules.ambassador_user_enrollment
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -42,11 +39,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
+        EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener {
 
-        EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener, LocationUpdates.LocationUpdateCallbacks {
-    private val locationUpdates: LocationUpdates by lazy {
-        LocationUpdates()
-    }
     private val viewModel: AmbassadorEnrollViewModel by viewModels()
 
     private val enrolledUserAdapter: EnrolledUsersRecyclerAdapter by lazy {
@@ -271,49 +265,4 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
         navigate(R.id.chatScreenFragment, bundle)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        locationUpdates.stopLocationUpdates(requireActivity())
-    }
-
-    override fun onResume() {
-        super.onResume()
-        locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
-        locationUpdates.setLocationUpdateCallbacks(this)
-    }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String?>,
-            grantResults: IntArray
-    ) {
-        when (requestCode) {
-
-            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (PermissionUtils.permissionsGrantedCheck(
-                            grantResults
-                    )
-            ) {
-                locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-
-            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
-                    requireActivity() as AppCompatActivity
-            )
-
-        }
-    }
-
-    override fun locationReceiver(location: Location?) {
-    }
-
-    override fun lastLocationReceiver(location: Location?) {
-    }
-
 }

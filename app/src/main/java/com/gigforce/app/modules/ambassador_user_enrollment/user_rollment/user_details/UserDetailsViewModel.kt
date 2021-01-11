@@ -51,10 +51,7 @@ class UserDetailsViewModel constructor(
             dateOfBirth: Date,
             gender: String,
             pinCode: String,
-            highestQualification: String,
-            latitude: Double,
-            longitude: Double,
-            address: String
+            highestQualification: String
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
@@ -66,12 +63,9 @@ class UserDetailsViewModel constructor(
                     dateOfBirth = dateOfBirth,
                     gender = gender,
                     highestQualification = highestQualification,
-                    pincode = pinCode,
-                    latitude = latitude,
-                    longitude = longitude,
-                    address = address
+                    pincode = pinCode
             )
-            enrolledUserListRepository.updateUserProfileName(uid, name,latitude, longitude, address)
+            enrolledUserListRepository.updateUserProfileName(uid, name)
           //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
 
             _submitUserDetailsState.value = Lse.success()
