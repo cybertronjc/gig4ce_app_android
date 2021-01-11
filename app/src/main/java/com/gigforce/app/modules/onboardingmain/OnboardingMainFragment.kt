@@ -255,13 +255,17 @@ class OnboardingMainFragment : BaseFragment() {
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
         var ambassadorLatitude = 0.0
+        var ambassadorLongitude = 0.0
+        try{
         sharedDataInterface.getData(StringConstants.AMBASSADOR_LATITUDE.value)?.let {
             if(it.isNotBlank())ambassadorLatitude = it.toDouble()
         }
-        var ambassadorLongitude = 0.0
         sharedDataInterface.getData(StringConstants.AMBASSADOR_LONGITUDE.value)?.let {
             if(it.isNotBlank())
             ambassadorLongitude = it.toDouble()
+        }}
+        catch (e:Exception){
+
         }
         viewModel.setOnboardingCompleted(
             inviteId,
