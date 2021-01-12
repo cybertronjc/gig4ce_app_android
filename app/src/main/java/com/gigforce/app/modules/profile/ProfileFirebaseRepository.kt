@@ -326,7 +326,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             profileData = ProfileData(
                     name = name,
                     gender = gender,
-                    loginMobile = phoneNumber,
+                    loginMobile = getNumberWithNineone(phoneNumber),
                     address = AddressFirestoreModel(
                             current = AddressModel(pincode = pincode)
                     ),
@@ -358,6 +358,12 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .collection(profileCollectionName)
                 .document(uid)
                 .setOrThrow(profileData)
+    }
+
+    private fun getNumberWithNineone(phoneNumber: String): String {
+        if(!phoneNumber.contains("+91"))
+            return "+91"+phoneNumber
+        return phoneNumber
     }
 
     suspend fun updateCurrentAddressDetails(

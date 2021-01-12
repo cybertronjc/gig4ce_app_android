@@ -246,10 +246,18 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
         })
         generate_otp.setOnClickListener {
-            viewModel.sendOTPToMobile(mNumber)
+            var finalMobileNumber = ""
+            if(mNumber.contains("+91"))
+                finalMobileNumber = mNumber.takeLast(10)
+            else finalMobileNumber = mNumber
+            viewModel.sendOTPToMobile(finalMobileNumber)
         }
         otpnotcorrect_schedule_test.setOnClickListener{
-            viewModel.sendOTPToMobile(mNumber)
+            var finalMobileNumber = ""
+            if(mNumber.contains("+91"))
+                finalMobileNumber = mNumber.takeLast(10)
+            else finalMobileNumber = mNumber
+            viewModel.sendOTPToMobile(finalMobileNumber)
             counterStart()
         }
 //        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
