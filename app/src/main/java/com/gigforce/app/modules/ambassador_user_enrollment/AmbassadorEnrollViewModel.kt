@@ -62,6 +62,10 @@ class AmbassadorEnrollViewModel constructor(
                 enrolledUser.mobileNumber = userMobileNo
             }
 
+            if(userMobileNo.startsWith("+91")){
+                userMobileNo = userMobileNo.substring(3)
+            }
+
             val response =
                     userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(userMobileNo)
             _sendOtpToPhoneNumber.value = Lce.content(
