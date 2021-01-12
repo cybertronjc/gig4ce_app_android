@@ -115,6 +115,7 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
+        android:scrollbars="none"
         android:paddingTop="14dp"
         android:paddingRight="20dp"
         android:paddingBottom="15dp" />

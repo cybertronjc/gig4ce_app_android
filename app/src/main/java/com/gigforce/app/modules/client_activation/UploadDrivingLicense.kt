@@ -30,6 +30,7 @@ import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDa
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.utils.GenericSpinnerAdapter
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -121,10 +122,10 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
     private fun initViews() {
         hideDLImageAndInfoLayout()
         val adapter =
-                ArrayAdapter<String>(
+                GenericSpinnerAdapter<String>(
                         requireContext(),
-                        R.layout.layout_sp_state_dl,
-                        resources.getStringArray(R.array.indian_states)
+                        R.layout.layout_sp_driving_license_state,
+                        resources.getStringArray(R.array.indian_states).toList()
                 )
         stateSpinner.adapter = adapter
 

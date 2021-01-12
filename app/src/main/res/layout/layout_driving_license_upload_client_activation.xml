@@ -231,9 +231,15 @@
                 style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_9"
+                android:background="@drawable/border_26_979797_rad_2"
+                android:minHeight="@dimen/size_48"
+                android:paddingStart="@dimen/size_9"
+                android:paddingEnd="@dimen/size_11"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="@color/black"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
@@ -267,16 +273,23 @@
                 android:id="@+id/drivingLicenseEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/size_9"
+                android:background="@drawable/border_27979797_rad_4"
                 android:imeActionLabel="Done"
                 android:imeOptions="actionGo"
                 android:inputType="textNoSuggestions"
                 android:letterSpacing="0"
+                android:paddingTop="@dimen/size_10"
+                android:paddingBottom="@dimen/size_9"
+                android:paddingStart="@dimen/size_9"
+                android:paddingEnd="@dimen/size_16"
+                android:hint="@string/enter_driving_license_number"
+
                 android:maxLength="25"
                 android:maxLines="1"
                 android:textAllCaps="true"
-                android:textSize="@dimen/font_14"
-                app:backgroundTint="@color/colorPrimary" />
+                android:textColorHint="@color/warm_grey_two"
+                android:textSize="@dimen/font_14" />
 
             <TextView
                 android:id="@+id/dlNoEditErrorMessage_client_act"

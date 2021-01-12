@@ -1311,4 +1311,5 @@
     <string name="send_invite_link">Send Invite Link</string>
     <string name="chat">Chat</string>
     <string name="call">Call</string>
+    <string name="enter_driving_license_number">Enter Driving License Number</string>
 </resources>
