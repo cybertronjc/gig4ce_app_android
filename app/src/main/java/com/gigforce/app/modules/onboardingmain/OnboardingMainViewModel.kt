@@ -202,10 +202,11 @@ class OnboardingMainViewModel : ViewModel() {
                                         "mobileNumber" to getNumberWithoutNineone(FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()),
                                         "locationLogs" to FieldValue.arrayUnion(
                                             mapOf(
-                                                "enrollmentStepsCompleted.userDetailsUploaded" to true,
-                                                "enrolledFromLocation.latitude" to ambassadorLatitude,
-                                                "enrolledFromLocation.longitude" to ambassadorLongitude,
-                                                "entryType" to "create_by_user"
+                                                "userDetailsUploaded" to true,
+                                                "latitude" to ambassadorLatitude,
+                                                "longitude" to ambassadorLongitude,
+                                                "entryType" to "create_by_user",
+                                                "addedOn" to Timestamp.now()
                                             )
                                         )
                                     )
