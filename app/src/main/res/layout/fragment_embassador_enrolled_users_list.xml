@@ -252,7 +252,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_24"
                 android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginBottom="@dimen/size_32"
+                android:layout_marginBottom="@dimen/size_12"
                 android:background="@drawable/gradient_onboarding_progressbar_gradient"
                 android:letterSpacing="0"
                 android:minHeight="@dimen/size_48"
@@ -262,6 +262,43 @@
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/share_link_cl"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_4"
+                android:background="@drawable/rect_lipstick">
+
+                <ImageView
+                    android:id="@+id/share_icon_"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_icon_share"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/share_link_text"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/share_link_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size_8"
+                    android:fontFamily="@font/lato"
+                    android:text="@string/send_invite_link"
+                    android:textColor="@color/lipstick_two"
+                    android:textSize="@dimen/font_14"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/share_icon_"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </FrameLayout>

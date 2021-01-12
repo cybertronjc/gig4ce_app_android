@@ -10,6 +10,7 @@ import com.gigforce.app.modules.profile.models.ErrorWhileSettingUserAsAmbassador
 import com.gigforce.app.modules.profile.models.Invites
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*
@@ -138,6 +139,8 @@ class OnboardingMainViewModel : ViewModel() {
     fun setOnboardingCompleted(
         invite: String?,
         inviteByAmbassador: String,
+        ambassadorLatitude:Double,
+        ambassadorLongitude:Double,
         roleID: String,
         jobProfileId: String
     ) {
@@ -194,7 +197,17 @@ class OnboardingMainViewModel : ViewModel() {
                                         "uid" to profileFirebaseRepository.uid,
                                         "enrolledBy" to invite,
                                         "enrolledOn" to Timestamp.now(),
-                                        "enrolledByLink" to true
+                                        "enrolledByLink" to true,
+                                        "name" to userProfileData.value?.name,
+                                        "mobileNumber" to getNumberWithoutNineone(FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()),
+                                        "locationLogs" to FieldValue.arrayUnion(
+                                            mapOf(
+                                                "enrollmentStepsCompleted.userDetailsUploaded" to true,
+                                                "enrolledFromLocation.latitude" to ambassadorLatitude,
+                                                "enrolledFromLocation.longitude" to ambassadorLongitude,
+                                                "entryType" to "create_by_user"
+                                            )
+                                        )
                                     )
                                 )
                         }
@@ -206,6 +219,13 @@ class OnboardingMainViewModel : ViewModel() {
         }
 
         profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
+    }
+
+    fun getNumberWithoutNineone(mobileNumber:String):String{
+        if(mobileNumber.contains("+91")){
+            return mobileNumber.takeLast(10)
+        }
+        return mobileNumber
     }
 
 
