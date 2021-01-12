@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.RequestManager
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
@@ -23,20 +22,20 @@ import java.text.SimpleDateFormat
 
 
 class ChatListRecyclerAdapter(
-    private val context: Context,
-    private val requestManager: RequestManager,
-    private val onChatItemClickListener: OnChatItemClickListener
+        private val context: Context,
+        private val requestManager: RequestManager,
+        private val onChatItemClickListener: OnChatItemClickListener
 ) : RecyclerView.Adapter<ChatListRecyclerAdapter.ContactViewHolder>() {
 
     private var chatList: ArrayList<ChatHeader> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.chat_header_item, parent, false)
+                .inflate(R.layout.chat_header_item, parent, false)
 
         return ContactViewHolder(
-            view,
-            requestManager
+                view,
+                requestManager
         )
     }
 
@@ -54,10 +53,10 @@ class ChatListRecyclerAdapter(
     }
 
     inner class ContactViewHolder(
-        itemView: View,
-        private val requestManager: RequestManager
+            itemView: View,
+            private val requestManager: RequestManager
     ) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+            RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private var circleImageView: ImageView = itemView.findViewById(R.id.contact_image_view)
         private var textViewName: TextView = itemView.findViewById(R.id.tv_nameValue)
         private var txtSubtitle: TextView = itemView.findViewById(R.id.tv_subtitle)
@@ -65,7 +64,7 @@ class ChatListRecyclerAdapter(
         private var viewPinkCircle: View = itemView.findViewById(R.id.online_pink_circle)
         private var lastMessageType: ImageView = itemView.findViewById(R.id.last_mesage_type)
         private var unseenMessageCountIV: ImageView =
-            itemView.findViewById(R.id.unseen_msg_count_iv)
+                itemView.findViewById(R.id.unseen_msg_count_iv)
 
         init {
             itemView.setOnClickListener(this)
@@ -75,8 +74,8 @@ class ChatListRecyclerAdapter(
 
             if (chatHeader.unseenCount != 0) {
                 val drawable = TextDrawable.builder().buildRound(
-                    chatHeader.unseenCount.toString(),
-                    ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+                        chatHeader.unseenCount.toString(),
+                        ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                 )
                 unseenMessageCountIV.setImageDrawable(drawable)
             } else {
@@ -91,7 +90,7 @@ class ChatListRecyclerAdapter(
                     //Show Default User avatar
                     requestManager.load(R.drawable.ic_user).into(circleImageView)
                 } else {
-                    requestManager.load(userAvatarUrl).placeholder(getCircularProgressDrawable()).into(circleImageView)
+                    requestManager.load(userAvatarUrl).placeholder(R.drawable.ic_user).into(circleImageView)
                 }
 
             } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {
@@ -156,13 +155,6 @@ class ChatListRecyclerAdapter(
         }
     }
 
-    fun getCircularProgressDrawable(): CircularProgressDrawable {
-        val circularProgressDrawable = CircularProgressDrawable(context)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 20f
-        circularProgressDrawable.start()
-        return circularProgressDrawable
-    }
 
     interface OnChatItemClickListener {
 
