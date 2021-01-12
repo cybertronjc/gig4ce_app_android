@@ -303,6 +303,18 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName).document(uid).update("address", address)
     }
 
+    fun updateCurrentAddress(address : AddressModel){
+        firebaseDB.collection(profileCollectionName)
+                .document(uid)
+                .update(mapOf(
+                        "address.current.firstLine" to address.firstLine,
+                        "address.current.secondLine" to address.secondLine,
+                        "address.current.area" to address.area,
+                        "address.current.city" to address.city,
+                        "address.current.state" to address.state
+                ) )
+    }
+
     suspend fun setUserAsAmbassador() {
         firebaseDB
                 .collection(profileCollectionName)

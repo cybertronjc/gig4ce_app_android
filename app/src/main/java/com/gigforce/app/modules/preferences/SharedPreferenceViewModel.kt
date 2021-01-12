@@ -276,9 +276,7 @@ class SharedPreferenceViewModel : ViewModel {
 
 
     fun setCurrentAddress(address: AddressModel) {
-        var addressMap: AddressFirestoreModel = profileDataModelObj.address
-        addressMap.current = address
-        profileFirebaseRepository.setAddress(addressMap)
+        profileFirebaseRepository.updateCurrentAddress(address)
     }
 
     fun setCurrentAddressPrferredDistanceData(
