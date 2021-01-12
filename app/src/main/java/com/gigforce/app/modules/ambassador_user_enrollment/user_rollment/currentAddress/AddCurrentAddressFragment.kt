@@ -19,12 +19,16 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.app.modules.ambassador_user_enrollment.models.PostalOffice
 import com.gigforce.app.modules.ambassador_user_enrollment.models.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
+import java.util.*
+import kotlin.concurrent.schedule
 
 class AddCurrentAddressFragment : BaseFragment() {
 
@@ -57,7 +61,7 @@ class AddCurrentAddressFragment : BaseFragment() {
             seekbardependent.gone()
             maxDistanceTV.gone()
             minDistanceTV.gone()
-            toolbar_text.text = "Add Current Address"
+            toolbar_text.text = getString(R.string.add_current_address)
         } else {
             breifing_layout.visible()
             ready_to_change_location_chipgroup.visible()
@@ -67,7 +71,7 @@ class AddCurrentAddressFragment : BaseFragment() {
             seekbardependent.visible()
             maxDistanceTV.visible()
             minDistanceTV.visible()
-            toolbar_text.text = "User Local Address"
+            toolbar_text.text = getString(R.string.user_local_address)
         }
     }
 
@@ -95,6 +99,12 @@ class AddCurrentAddressFragment : BaseFragment() {
     private fun initListeners() {
         pin_code_et.textChanged {
             pin_code_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
+            if (pin_code_okay_iv.isVisible) {
+                state_spinner.setSelection(0)
+                city_spinner.setSelection(0)
+                viewModel.loadCityAndStateUsingPincode(it.toString())
+            }
+
         }
 
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
@@ -138,6 +148,15 @@ class AddCurrentAddressFragment : BaseFragment() {
                 if (state_spinner.childCount != 0 && state_spinner.selectedItemPosition != 0) {
                     val state = state_spinner.selectedItem as State
                     filterCitiesByStateAndSetOnCities(state.id)
+                    for (index in 0..city_spinner.adapter.count - 1) {
+                        val item = city_spinner.adapter.getItem(index)
+                        allPostoffices.mapIndexed { index1, postalOffice ->
+                            if (item.toString().equals(postalOffice.district)) {
+                                city_spinner.setSelection(index)
+                                return
+                            }
+                        }
+                    }
                 }
             }
 
@@ -145,7 +164,7 @@ class AddCurrentAddressFragment : BaseFragment() {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
                 }.toMutableList().apply {
-                    add(0, City(name = "Select District"))
+                    add(0, City(name = getString(R.string.select_district)))
                 }
 
                 val cityAdapter: ArrayAdapter<City> =
@@ -163,35 +182,50 @@ class AddCurrentAddressFragment : BaseFragment() {
     }
 
     private fun validateDataAndSubmit() {
-        if (pin_code_et.text.isNotBlank() &&  pin_code_et.text.toString().toInt() < 10_00_00) {
-            showAlertDialog("Invalid Pincode", "Provide a valid Pin Code")
+        if (pin_code_et.text.isNotBlank() && pin_code_et.text.toString().toInt() < 10_00_00) {
+            showAlertDialog(
+                getString(R.string.invalid_pincode),
+                getString(R.string.provide_valid_pincode)
+            )
             return
         }
 
         if (address_line_1_et.text.isBlank()) {
-            showAlertDialog("Provide Address Line 1", "Please provide address line 1")
+            showAlertDialog(
+                getString(R.string.provide_address_line_1),
+                getString(R.string.please_provide_address_line_1)
+            )
             return
         }
 
         if (address_line_2_et.text.isBlank()) {
-            showAlertDialog("Provide Address Line 2", "Please provide address line 2")
+            showAlertDialog(
+                getString(R.string.provide_address_line_2),
+                getString(R.string.please_provide_address_line)
+            )
             return
         }
 
         if (state_spinner.childCount == 0 || state_spinner.selectedItemPosition == 0) {
-            showAlertDialog("Provide State", "Please select state name")
+            showAlertDialog(
+                getString(R.string.provide_state),
+                getString(R.string.please_select_state_name)
+            )
             return
         }
 
         if (city_spinner.childCount == 0 || city_spinner.selectedItemPosition == 0) {
-            showAlertDialog("Provide City", "Please select district name")
+            showAlertDialog(
+                getString(R.string.provide_city),
+                getString(R.string.please_select_district_name)
+            )
             return
         }
 
         if (userId != null) {
 
             if (ready_to_change_location_chipgroup.checkedChipId == -1) {
-                showAlertDialog("", "Select if you want to change your location")
+                showAlertDialog("", getString(R.string.change_your_location))
                 return
             }
         }
@@ -214,6 +248,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         )
     }
 
+    var allPostoffices = ArrayList<PostalOffice>()
     private fun initViewModel() {
         viewModel.submitUserDetailsState
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -226,10 +261,10 @@ class AddCurrentAddressFragment : BaseFragment() {
                         // UtilMethods.hideLoading()
 
                         if (userId == null) {
-                            showToast("Current Address Details submitted")
+                            showToast(getString(R.string.current_address_details_sub))
                             activity?.onBackPressed()
                         } else {
-                            showToast("User Current Address Details submitted")
+                            showToast(getString(R.string.user_current_address_details_sub))
                             navigate(
                                 R.id.addUserBankDetailsInfoFragment, bundleOf(
                                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
@@ -240,7 +275,8 @@ class AddCurrentAddressFragment : BaseFragment() {
                     }
                     is Lse.Error -> {
                         //  UtilMethods.hideLoading()
-                        showAlertDialog("Could not submit address info", it.error)
+                        showAlertDialog(getString(R.string.could_not_submit_address_info), it.error)
+
                     }
                 }
             })
@@ -259,18 +295,52 @@ class AddCurrentAddressFragment : BaseFragment() {
                     }
                     is Lse.Error -> {
                         UtilMethods.hideLoading()
-                        showToast("Unable to load cities and states")
+                        showToast(getString(R.string.unable_to_load_cities_and_states))
                     }
                 }
             }
         )
         viewModel.loadCityAndStates()
 
+        viewModel.pincodeResponse
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
+//                        allPostoffices.clear()
+                    }
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+                        if(it.content.status.equals("Success")) {
+                            allPostoffices = it.content.postOffice
+                            for (index in 0..state_spinner.adapter.count - 1) {
+                                val item = state_spinner.adapter.getItem(index)
+                                allPostoffices.mapIndexed { index1, postalOffice ->
+                                    if (item.toString().equals(postalOffice.state)) {
+                                        state_spinner.setSelection(index)
+                                        return@Observer
+                                    }
+                                }
+                            }
+                        }else{
+                            state_spinner.setSelection(0)
+                            city_spinner.setSelection(0)
+                        }
+                    }
+                    is Lce.Error -> {
+                        UtilMethods.hideLoading()
+                        showAlertDialog("", it.error)
+//                        allPostoffices.clear()
+                    }
+                }
+            })
+
     }
 
     private fun populateStateAndCitySpinner() {
         val states = viewModel.states.toMutableList().apply {
-            add(0, State(name = "Select State"))
+            add(0, State(name = getString(R.string.select_state)))
         }
 
         val adapter: ArrayAdapter<State> =
@@ -279,7 +349,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         state_spinner.adapter = adapter
 
         val cities = viewModel.cities.toMutableList().apply {
-            add(0, City(name = "Select district"))
+            add(0, City(name = getString(R.string.select_district)))
         }
         val cityAdapter: ArrayAdapter<City> =
             ArrayAdapter<City>(requireContext(), android.R.layout.simple_spinner_item, cities)
@@ -299,10 +369,10 @@ class AddCurrentAddressFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-            .setNegativeButton("No") { _, _ -> }
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 
@@ -314,7 +384,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
             .show()
     }
 }

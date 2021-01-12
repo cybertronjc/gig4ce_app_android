@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -537,7 +538,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     override fun onResume() {
         super.onResume()
-        locationUpdates!!.startUpdates(requireActivity())
+        locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates!!.setLocationUpdateCallbacks(this)
     }
 

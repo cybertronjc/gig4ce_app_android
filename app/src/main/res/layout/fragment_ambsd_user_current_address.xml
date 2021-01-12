@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
@@ -47,7 +46,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
-                    android:text="User Current Address"
+                    android:text="@string/user_current_address"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -90,7 +89,7 @@
                 android:maxLength="6"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="Pin Code"
+                android:hint="@string/pin_code"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
                 android:inputType="number"
@@ -119,7 +118,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
-                android:hint="Address Line 1"
+                android:hint="@string/address_line_1"
                 android:paddingStart="10dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:lineSpacingExtra="3sp"
@@ -139,7 +138,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="Address Line 2"
+                android:hint="@string/address_line_2"
                 android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
@@ -155,7 +154,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
-                android:hint="State"
+                android:hint="@string/state"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
                 android:textColor="#333333"
@@ -195,7 +194,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Preferred distance from current address"
+                android:text="@string/preferred_distance_from_current_address"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -220,7 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.05"
-                android:text="5 KM"
+                android:text="@string/_5_km"
                 android:textColor="#787993"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
@@ -231,7 +230,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.05"
-                android:text="60 KM"
+                android:text="@string/_60_km"
                 android:textColor="#787993"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
@@ -257,7 +256,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Are you ready to change location for work?"
+                android:text="@string/are_you_ready_to_change_location_for_work"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -281,7 +280,7 @@
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yes, I am ready"
+                    android:text="@string/yes_i_am_ready"
                     app:chipStrokeWidth="1dp"/>
 
                 <com.google.android.material.chip.Chip
@@ -290,7 +289,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipStrokeWidth="1dp"
-                    android:text="No, I am not" />
+                    android:text="@string/no_i_am_not" />
 
             </com.google.android.material.chip.ChipGroup>
 

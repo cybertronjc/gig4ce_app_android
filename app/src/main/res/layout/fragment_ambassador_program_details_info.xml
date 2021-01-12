@@ -20,15 +20,17 @@
 
     <TextView
         android:id="@+id/address_label"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0.02"
-        android:text="What does a Ambassador do ?"
+        android:text="@string/what_does_a_ambassador_do"
         android:textColor="@color/black_85"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/location_iv"
+
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -39,7 +41,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="14dp"
         android:fontFamily="@font/lato"
-        android:text="You have to onboard potential Gigers on Gigforce app by creating their app. You will be paid based on the number of Profiles created"
+        android:text="@string/you_have_to_onboard_potential_gigers_on_gigforce_app_by_creating_their_app_you_will_be_paid_based_on_the_number_of_profiles_created"
         android:textColor="@color/black_85"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

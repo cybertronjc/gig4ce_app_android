@@ -128,7 +128,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         holder.itemView.tv_completed_gig_hist.text =
                                 holder.itemView.context.getString(R.string.completed)
                         holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.bg_circle_468800,
+                                R.drawable.ic_applied,
                                 0,
                                 0,
                                 0
@@ -137,7 +137,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         holder.itemView.tv_completed_gig_hist.text =
                                 holder.itemView.context.getString(R.string.pending)
                         holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.bg_circle_yellow,
+                                R.drawable.ic_status_pending,
                                 0,
                                 0,
                                 0

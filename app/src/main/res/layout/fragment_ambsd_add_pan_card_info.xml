@@ -34,7 +34,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="Upload PAN Details"
+            android:text="@string/upload_pan_details"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -52,7 +52,7 @@
         <include
             android:id="@+id/panViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_pan_card_info_view"/>
+            layout="@layout/fragment_ambsd_add_pan_card_info_view"/>
 
 
         <ProgressBar

@@ -40,7 +40,7 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private val viewModel: ChatHeadersViewModel by viewModels()
     private val mAdapter: ChatListRecyclerAdapter by lazy {
-        ChatListRecyclerAdapter(requireContext(), initGlide()!!, this)
+        ChatListRecyclerAdapter(requireContext(), initGlide(R.drawable.ic_user,R.drawable.ic_user)!!, this)
     }
 
     private val syncPref: SyncPref by lazy {

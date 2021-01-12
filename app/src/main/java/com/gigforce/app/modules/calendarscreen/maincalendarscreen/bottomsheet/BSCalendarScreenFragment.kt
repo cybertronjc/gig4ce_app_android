@@ -106,17 +106,17 @@ class BSCalendarScreenFragment : BaseFragment() {
 
             ambassador_layout.visible()
             if (profile.isUserAmbassador) {
-                join_as_amb_label.text = "Ambassador Program"
-                amb_join_open_btn.text = "Open"
+                join_as_amb_label.text = getString(R.string.ambassador_program)
+                amb_join_open_btn.text = getString(R.string.open)
             } else {
-                join_as_amb_label.text = "Join Us as an Ambassador"
-                amb_join_open_btn.text = "Join Now"
+                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
+                amb_join_open_btn.text = getString(R.string.join_now)
             }
         })
 
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text == "Open") {
+            if (amb_join_open_btn.text ==  getString(R.string.open)) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
             } else {
                 navigate(R.id.ambassadorProgramDetailsFragment)
@@ -480,7 +480,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
 
                         val callView = getView(viewHolder, R.id.callCardView)
-                        if (obj.gigContactDetails?.contactNumber != 0L) {
+                        if (!obj.gigContactDetails?.contactNumberString.isNullOrEmpty()) {
 
 
                             callView.visible()
@@ -572,7 +572,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if (gig.gigContactDetails?.contactNumber == 0L) return
+            if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
             val intent = Intent(
                 Intent.ACTION_DIAL,
                 Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)

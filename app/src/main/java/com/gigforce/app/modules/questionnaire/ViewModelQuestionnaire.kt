@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.QuestionnaireResponse
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.google.firebase.firestore.ListenerRegistration
@@ -21,7 +22,7 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     private val _observableQuestionnaireResponse = MutableLiveData<QuestionnaireResponse>()
 
     val observableQuestionnaireResponse: MutableLiveData<QuestionnaireResponse> =
-        _observableQuestionnaireResponse
+            _observableQuestionnaireResponse
 
     private val _observableAddApplicationSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val observableAddApplicationSuccess: MutableLiveData<Boolean> = _observableAddApplicationSuccess
@@ -31,13 +32,18 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     private val _observableStates = MutableLiveData<MutableList<States>>()
 
     val observableStates: MutableLiveData<MutableList<States>> =
-        _observableStates
+            _observableStates
 
 
     private val _observableCities = MutableLiveData<MutableList<Cities>>()
 
     val observableCities: MutableLiveData<MutableList<Cities>> =
-        _observableCities
+            _observableCities
+
+    private val _observableAllCities = MutableLiveData<MutableList<GfUsers>>()
+
+    val observableAllCities: MutableLiveData<MutableList<GfUsers>> =
+            _observableAllCities
 
 
     fun getQuestionnaire(jobProfileID: String) {
@@ -48,10 +54,10 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
                         val toObject = success?.toObjects(QuestionnaireResponse::class.java)?.get(0)
                         _observableQuestionnaireResponse.value = toObject
 //                        savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
-                    }
+                        }
 
+                    }
                 }
-            }
     }
 
     fun addQuestionnaire(
@@ -62,87 +68,109 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     ) {
         var listener: ListenerRegistration? = null
         listener = questionnaireRepository.db.collection("JP_Applications")
-            .whereEqualTo("jpid", mJobProfileId)
-            .whereEqualTo("gigerId", questionnaireRepository.getUID())
-            .addSnapshotListener { jp_application, _ ->
-                listener?.remove()
+                .whereEqualTo("jpid", mJobProfileId)
+                .whereEqualTo("gigerId", questionnaireRepository.getUID())
+                .addSnapshotListener { jp_application, _ ->
+                    listener?.remove()
 
-                listener = questionnaireRepository.db.collection("JP_Applications")
-                    .document(jp_application?.documents!![0].id).collection("Submissions")
-                    .whereEqualTo("stepId", mJobProfileId).whereEqualTo("title", title)
-                    .whereEqualTo("type", type).addSnapshotListener { questionnaire, err_ ->
-                        listener?.remove()
-                        if (questionnaire?.documents.isNullOrEmpty()) {
-                            questionnaireRepository.db.collection("JP_Applications")
-                                .document(jp_application.documents[0].id).collection("Submissions")
-                                .document().set(
-                                    mapOf(
-                                        "title" to title,
-                                        "type" to type,
-                                        "stepId" to mJobProfileId,
-                                        "answers" to questions,
-                                        "submissionDate" to Date()
+                    listener = questionnaireRepository.db.collection("JP_Applications")
+                            .document(jp_application?.documents!![0].id).collection("Submissions")
+                            .whereEqualTo("stepId", mJobProfileId).whereEqualTo("title", title)
+                            .whereEqualTo("type", type).addSnapshotListener { questionnaire, err_ ->
+                                listener?.remove()
+                                if (questionnaire?.documents.isNullOrEmpty()) {
+                                    questionnaireRepository.db.collection("JP_Applications")
+                                            .document(jp_application.documents[0].id).collection("Submissions")
+                                            .document().set(
+                                                    mapOf(
+                                                            "title" to title,
+                                                            "type" to type,
+                                                            "stepId" to mJobProfileId,
+                                                            "answers" to questions?.map {
+                                                                mapOf(
+                                                                        "question" to it.question,
+                                                                        "selectedAnswer" to it.selectedAnswer,
+                                                                        "selectedDate" to it.selectedDate,
+                                                                        "selectedState" to it.selectedState,
+                                                                        "selectedCity" to it.selectedCity,
+                                                                        "answer" to it.answer,
+                                                                        "type" to it.type
 
-                                    )
-                                ).addOnCompleteListener { complete ->
-                                    run {
+                                                                )
+                                                            },
+                                                            "submissionDate" to Date()
 
-                                        if (complete.isSuccessful) {
-                                            val jpApplication =
-                                                jp_application.toObjects(JpApplication::class.java)[0]
-                                            jpApplication.application.forEach { draft ->
-                                                if (draft.title == title) {
-                                                    draft.isDone = true
-                                                }
-                                            }
-                                            questionnaireRepository.db.collection("JP_Applications")
-                                                .document(jp_application.documents[0].id)
-                                                .update("application", jpApplication.application)
-                                                .addOnCompleteListener {
-                                                    if (it.isSuccessful) {
-                                                        _observableAddApplicationSuccess.value =
-                                                            true
+                                                    )
+                                            ).addOnCompleteListener { complete ->
+                                                run {
+
+                                                    if (complete.isSuccessful) {
+                                                        val jpApplication =
+                                                                jp_application.toObjects(JpApplication::class.java)[0]
+                                                        jpApplication.application.forEach { draft ->
+                                                            if (draft.title == title) {
+                                                                draft.isDone = true
+                                                            }
+                                                        }
+                                                        questionnaireRepository.db.collection("JP_Applications")
+                                                                .document(jp_application.documents[0].id)
+                                                                .update("application", jpApplication.application)
+                                                                .addOnCompleteListener {
+                                                                    if (it.isSuccessful) {
+                                                                        _observableAddApplicationSuccess.value =
+                                                                                true
+                                                                    }
+                                                                }
                                                     }
                                                 }
-                                        }
-                                    }
-                                }
-                        } else {
-                            questionnaireRepository.db.collection("JP_Applications")
-                                .document(jp_application.documents[0].id)
-                                .collection("Submissions")
-                                .document(questionnaire?.documents?.get(0)?.id!!)
-                                .update(
-                                    mapOf(
-                                        "answers" to questions,
-                                        "submissionDate" to Date()
-                                    )
-                                )
-                                .addOnCompleteListener { complete ->
-                                    if (complete.isSuccessful) {
-                                        val jpApplication =
-                                            jp_application.toObjects(JpApplication::class.java)[0]
-                                        jpApplication.application.forEach { draft ->
-                                            if (draft.title == title) {
-                                                draft.isDone = true
                                             }
-                                        }
-                                        questionnaireRepository.db.collection("JP_Applications")
+                                } else {
+                                    questionnaireRepository.db.collection("JP_Applications")
                                             .document(jp_application.documents[0].id)
-                                            .update("application", jpApplication.application)
-                                            .addOnCompleteListener {
-                                                if (it.isSuccessful) {
-                                                    _observableAddApplicationSuccess.value =
-                                                        true
+                                            .collection("Submissions")
+                                            .document(questionnaire?.documents?.get(0)?.id!!)
+                                            .update(
+                                                    mapOf(
+                                                            "answers" to questions?.map {
+                                                                mapOf(
+                                                                        "question" to it.question,
+                                                                        "selectedAnswer" to it.selectedAnswer,
+                                                                        "selectedDate" to it.selectedDate,
+                                                                        "selectedState" to it.selectedState,
+                                                                        "selectedCity" to it.selectedCity,
+                                                                        "answer" to it.answer,
+                                                                        "type" to it.type
+
+                                                                )
+                                                            },
+                                                            "submissionDate" to Date()
+                                                    )
+                                            )
+                                            .addOnCompleteListener { complete ->
+                                                if (complete.isSuccessful) {
+                                                    val jpApplication =
+                                                            jp_application.toObjects(JpApplication::class.java)[0]
+                                                    jpApplication.application.forEach { draft ->
+                                                        if (draft.title == title) {
+                                                            draft.isDone = true
+                                                        }
+                                                    }
+                                                    questionnaireRepository.db.collection("JP_Applications")
+                                                            .document(jp_application.documents[0].id)
+                                                            .update("application", jpApplication.application)
+                                                            .addOnCompleteListener {
+                                                                if (it.isSuccessful) {
+                                                                    _observableAddApplicationSuccess.value =
+                                                                            true
+                                                                }
+                                                            }
                                                 }
                                             }
-                                    }
                                 }
-                        }
-                    }
+                            }
 
 
-            }
+                }
 
 
     }
@@ -153,17 +181,21 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getStatesFromDb(): MutableList<States> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_States").get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+            val toObjects = await.toObjects(States::class.java)
+            for (i in 0 until await.documents.size) {
+                toObjects[i].id = await.documents[i].id
 
-        val await = questionnaireRepository.db.collection("Mst_States").get().await()
-        if (await.documents.isNullOrEmpty()) {
+            }
+            return toObjects
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
-        val toObjects = await.toObjects(States::class.java)
-        for (i in 0 until await.documents.size) {
-            toObjects[i].id = await.documents[i].id
-
-        }
-        return toObjects
 
     }
 
@@ -174,14 +206,42 @@ class ViewModelQuestionnaire(private val savedStateHandle: SavedStateHandle) : V
     }
 
     suspend fun getCitiesFromDb(states: States): MutableList<Cities> {
+        try {
+            val await = questionnaireRepository.db.collection("Mst_Cities")
+                    .whereEqualTo("state_code", states.id).get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
 
-        val await = questionnaireRepository.db.collection("Mst_Cities")
-            .whereEqualTo("state_code", states.id).get().await()
-        if (await.documents.isNullOrEmpty()) {
+            return await.toObjects(Cities::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
             return mutableListOf()
         }
 
-        return await.toObjects(Cities::class.java)
+
+    }
+
+    fun getAllCities() = viewModelScope.launch {
+        _observableAllCities.value = getAllCitiesFromDb()
+
+    }
+
+
+    suspend fun getAllCitiesFromDb(): MutableList<GfUsers> {
+        try {
+            val await = questionnaireRepository.db.collection("GF_Users")
+                    .get().await()
+            if (await.documents.isNullOrEmpty()) {
+                return mutableListOf()
+            }
+
+            return await.toObjects(GfUsers::class.java)
+        } catch (e: Exception) {
+            _observableError.value = e.message
+            return mutableListOf()
+        }
+
 
     }
 

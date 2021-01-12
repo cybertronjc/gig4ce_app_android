@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
+import com.gigforce.app.core.capitalizeWords
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
@@ -39,11 +40,7 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
     companion object {
         const val TAG = "AmbassadorEnrolledSuccessfullyDialogFragment"
 
-        private val guidelines = listOf(
-            "Be nice to your customers and colleagues",
-            "Be punctual for Job",
-            "Work more to earn more"
-        )
+        private lateinit var guidelines: List<String>
 
         fun launch(
             fragmentManager: FragmentManager,
@@ -69,6 +66,7 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        guidelines = resources.getStringArray(R.array.ambassador_guidelines).toList()
         initView()
         initViewModel()
 
@@ -84,24 +82,28 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
         profileViewModel.viewState
             .observe(viewLifecycleOwner, Observer {
 
-            when (it) {
-                SettingUserAsAmbassador -> {
-                    appliedSuccessfullyLayout.invisible()
-                    progressBar.visible()
+                when (it) {
+                    SettingUserAsAmbassador -> {
+                        appliedSuccessfullyLayout.invisible()
+                        progressBar.visible()
+                    }
+                    UserSetAsAmbassadorSuccessfully -> {
+                        appliedSuccessfullyLayout.visible()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.ambassador_now),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    is ErrorWhileSettingUserAsAmbassador -> {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.unable_to_apply_for_ambassador) + " " + it.error)
+                            .setPositiveButton(getString(R.string.okay).capitalizeWords()) { _, _ -> }
+                            .show()
+                    }
                 }
-                UserSetAsAmbassadorSuccessfully -> {
-                    appliedSuccessfullyLayout.visible()
-                    Toast.makeText(requireContext(), "You are an Ambassador now", Toast.LENGTH_LONG).show()
-                }
-                is ErrorWhileSettingUserAsAmbassador -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to apply for ambassador, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
-                        .show()
-                }
-            }
-        })
+            })
     }
 
     override fun onStart() {
@@ -132,7 +134,9 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
         if (it.contains(":")) {
             ambsd_guildliness_on_success_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                ambsd_guildliness_on_success_container.getChildAt(ambsd_guildliness_on_success_container.childCount - 1) as LinearLayout
+                ambsd_guildliness_on_success_container.getChildAt(
+                    ambsd_guildliness_on_success_container.childCount - 1
+                ) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -144,7 +148,9 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
         } else {
             ambsd_guildliness_on_success_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                ambsd_guildliness_on_success_container.getChildAt(ambsd_guildliness_on_success_container.childCount - 1) as LinearLayout
+                ambsd_guildliness_on_success_container.getChildAt(
+                    ambsd_guildliness_on_success_container.childCount - 1
+                ) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }

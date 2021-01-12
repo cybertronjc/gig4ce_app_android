@@ -38,12 +38,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_wrong_questions_rejection_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_sub_one_rejection_dialog"
@@ -72,6 +66,13 @@
             android:textColor="@color/black_85"
             android:textSize="14sp"
             android:textStyle="normal" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_wrong_questions_rejection_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_refer_rejection_dialog"

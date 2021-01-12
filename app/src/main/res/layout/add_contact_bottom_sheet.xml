@@ -54,8 +54,8 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_weight="1"
             android:src="@drawable/ic_delete" />
 
@@ -105,13 +105,9 @@
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cb_is_whatsapp_number_add_contact"
-        style="@style/LatoRegularCardText12"
+        style="@style/check_box_style_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-5dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginBottom="-10dp"
-        android:buttonTint="@color/warm_grey_two"
         android:text="@string/is_whats_app_number"
         android:textSize="@dimen/font_12"
         app:layout_constraintEnd_toEndOf="parent"

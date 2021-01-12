@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,7 +51,21 @@ class OnboardingMainFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(OnboardingMainViewModel::class.java)
         initializeViews()
+        checkForDeepLink()
     }
+
+    private fun checkForDeepLink() {
+        if (navFragmentsData?.getData()
+                ?.getBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)!!
+        ) {
+
+
+            navFragmentsData?.getData()?.putBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)
+
+
+        }
+    }
+
 
     var originalLocation = intArrayOf(0, 0);
     private fun initializeViews() {
@@ -239,8 +254,10 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
+        val invite_by_ambassador =
         viewModel.setOnboardingCompleted(
             inviteId,
+            sharedDataInterface.getData(StringConstants.INVITE_BY_AMBASSADOR.value)?:"",
             navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
             navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
         )

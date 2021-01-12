@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <ScrollView
@@ -61,8 +62,7 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="7sp"
-                android:text="Enter User’s
-mobile number"
+                android:text="@string/enter_user_s_mobile_number"
                 android:textColor="#131415"
                 android:textSize="32sp"
                 android:textStyle="bold"
@@ -84,7 +84,7 @@ mobile number"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/enter_mobile_label"
-                android:text="We will send an OTP on this number."
+                android:text="@string/we_will_send_an_otp_on_this_number"
                 />
 
             <TextView
@@ -96,7 +96,7 @@ mobile number"
                 android:textSize="20sp"
                 android:textColor="#2e2f30"
                 android:lineSpacingExtra="4sp"
-                android:text="+91- "
+                android:text="@string/country_code"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:layout_marginStart="24dp"

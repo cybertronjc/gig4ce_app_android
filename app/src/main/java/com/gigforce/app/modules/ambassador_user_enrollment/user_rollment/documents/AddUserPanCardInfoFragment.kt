@@ -28,10 +28,32 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panEditLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panViewLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.doYouHavePanCardLabel
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.helpIconIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardEditText
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panDataCorrectCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panSubmitSliderBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panYesRB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.editLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewImageErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewNoErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.panViewNoTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.statusTV
 import java.util.*
 
 class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
@@ -47,6 +69,9 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private var clickedImagePath: Uri? = null
     private lateinit var userId : String
     private lateinit var userName : String
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
+    private var panCardDataModel: PanCardDataModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +83,11 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         getDataFromIntents(arguments,savedInstanceState)
         initViews()
         initViewModel()
+        getExistingDocumentsDetails()
+    }
+
+    private fun getExistingDocumentsDetails() {
+        viewModel.getVerificationStatus(userId)
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -146,6 +176,35 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 disableSubmitButton()
         }
 
+        ambsd_pan_skip_btn.setOnClickListener {
+
+            navigate(
+                    R.id.addUserAadharCardInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+            )
+        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.you_are_reuploading_pan_card))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+
+                        panViewLayout.gone()
+                        panEditLayout.visible()
+
+                        setDataOnEditLayout(panCardDataModel)
+                        panCardAvailaibilityOptionRG.check(R.id.panYesRB)
+                        panSubmitSliderBtn.isEnabled = true
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
+        }
+
+
 
         panSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
@@ -197,6 +256,35 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
     private fun initViewModel() {
 
+        viewModel.gigerVerificationStatus
+                .observe(viewLifecycleOwner, Observer {
+                    this.gigerVerificationStatus = it
+                    this.panCardDataModel = it.panCardDetails
+                    progressBar.gone()
+
+                    if (it.panCardDetailsUploaded && it.panCardDetails != null) {
+
+                        if (it.panCardDetails.userHasPanCard != null) {
+                            if (it.panCardDetails.userHasPanCard) {
+                                setDataOnViewLayout(it)
+                            } else {
+                                setDataOnEditLayout(null)
+                                panCardAvailaibilityOptionRG.check(R.id.panNoRB)
+                            }
+                        } else {
+                            //Uncheck both and hide capture layout
+                            setDataOnEditLayout(null)
+                            panCardAvailaibilityOptionRG.clearCheck()
+                            hidePanImageAndInfoLayout()
+                        }
+                    } else {
+                        setDataOnEditLayout(null)
+                        panCardAvailaibilityOptionRG.clearCheck()
+                        hidePanImageAndInfoLayout()
+                    }
+
+                })
+
         viewModel.documentUploadState
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -232,12 +320,12 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         )
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
-            .setNegativeButton("No"){_,_ ->}
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 
@@ -346,5 +434,84 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             .into(panImageHolder.uploadImageLayout.clickedImageIV)
     }
 
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        panEditLayout.gone()
+        panViewLayout.visible()
+
+        val panDetails = gigVerificationStatus.panCardDetails ?: return
+
+        statusTV.text = panDetails.verifiedString
+        statusTV.setTextColor(
+                ResourcesCompat.getColor(
+                        resources,
+                        gigVerificationStatus.getColorCodeForStatus(panDetails.state),
+                        null
+                )
+        )
+
+        if (panDetails.panCardImagePath != null) {
+
+            if (panDetails.panCardImagePath.startsWith("http", true)) {
+                Glide.with(requireContext()).load(panDetails.panCardImagePath).placeholder(getCircularProgressDrawable()).into(panViewImageIV)
+            } else {
+                val storageRef = firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(panDetails.panCardImagePath)
+
+                Glide.with(requireContext())
+                        .load(storageRef)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(panViewImageIV)
+
+            }
+        }
+        panViewImageErrorMessage.gone()
+
+        panViewNoTV.text = panDetails.panCardNo
+        panViewNoErrorMessage.gone()
+    }
+
+    private fun setDataOnEditLayout(it: PanCardDataModel?) {
+        panViewLayout.gone()
+        panEditLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            panCardAvailaibilityOptionRG.gone()
+            doYouHavePanCardLabel.gone()
+        } else {
+            panCardAvailaibilityOptionRG.visible()
+            doYouHavePanCardLabel.visible()
+
+            panEditOverallErrorMessage.gone()
+            panNoEditErrorMessage.gone()
+            panImageEditErrorMessage.gone()
+        }
+
+        panInfoLayout.visible()
+        panImageHolder.visible()
+
+        val panData = it ?: return
+        panSubmitSliderBtn.text = getString(R.string.update)
+
+        panCardEditText.setText(panData.panCardNo)
+
+        if (panData.panCardImagePath != null) {
+            if (panData.panCardImagePath.startsWith("http", true)) {
+                showPanInfoCard(Uri.parse(panData.panCardImagePath))
+            } else {
+                firebaseStorage
+                        .reference
+                        .child("verification")
+                        .child(panData.panCardImagePath)
+                        .downloadUrl.addOnSuccessListener {
+                            showPanInfoCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
+            }
+        }
+    }
 
 }

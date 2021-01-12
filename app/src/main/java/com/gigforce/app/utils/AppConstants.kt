@@ -10,6 +10,8 @@ object AppConstants {
     const val  INTRO_COMPLETE = "intro_complete"
     const val  ALL_MOBILE_NUMBERS_USED = "all_mobile_no_used"
 
+    const val PINCODE_URL = "https://api.postalpincode.in/pincode/"
+
 
 
     // Temporary For Chat

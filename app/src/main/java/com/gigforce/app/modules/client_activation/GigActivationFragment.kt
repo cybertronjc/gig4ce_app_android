@@ -146,9 +146,10 @@ class GigActivationFragment : BaseFragment(),
                 Glide.with(this).load(gigAcivation.coverImg).placeholder(
                     com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
                 ).into(iv_gig_activation)
-                tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
+//                tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title
                 tv_complete_gig_activation.text = gigAcivation.instruction
+
                 val videoUri = Uri.parse(gigAcivation.videoUrl)
                 initializePlayer(videoUri)
                 viewModel.updateDraftJpApplication(mJobProfileId, gigAcivation.requiredFeatures)
@@ -159,8 +160,23 @@ class GigActivationFragment : BaseFragment(),
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 pb_gig_activation.gone()
+                val jpSettings = viewModel.observableJpApplication.value
                 tv_verification_gig_activation.text =
-                    viewModel.observableJpApplication.value?.status
+                    jpSettings?.status
+                rl_thanks_gig_activation.setBackgroundResource(
+                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                        R.drawable.bg_status_pending else if (jpSettings?.status == "Activated") R.drawable.bg_thanks_for_applying else R.drawable.bg_status_rejected
+                )
+                ic_applied_gig_activation.setImageResource(
+                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                        R.drawable.ic_status_pending else if (jpSettings?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending
+                )
+                tv_application_gig_activation.text = Html.fromHtml(
+                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                        viewModel.observableGigActivation.value?.subTitle + getString(R.string.pending_bold) else if (jpSettings?.status == "Activated") viewModel.observableGigActivation.value?.subTitle + getString(
+                        R.string.approved_bold
+                    ) else viewModel.observableGigActivation.value?.subTitle + getString(R.string.rejected_bold)
+                )
                 tv_verification_gig_activation.setCompoundDrawablesWithIntrinsicBounds(
                     if (viewModel.observableJpApplication.value?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending,
                     0,

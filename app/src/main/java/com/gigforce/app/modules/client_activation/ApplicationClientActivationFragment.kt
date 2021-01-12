@@ -60,6 +60,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
+
         viewModel.draftApplication(mJobProfileId)
 
     }
@@ -120,6 +121,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             Glide.with(this).load(it?.coverImg).placeholder(
                 com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)
+
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
             tv_completion_application.text = it?.subTitle ?: ""
             tv_title_application_client_activation.text = it?.businessTitle ?: ""
@@ -130,7 +132,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         })
 
-        viewModel.getJonProfileDependency(mJobProfileId)
+        viewModel.getJobProfileDependency(mJobProfileId)
 
 
     }

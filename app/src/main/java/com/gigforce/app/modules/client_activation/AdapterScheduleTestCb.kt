@@ -12,7 +12,7 @@ class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHol
 
     private lateinit var callbacks: AdapterScheduleTestCbCallbacks
     var items: List<CheckItem> = listOf()
-
+    var disableItems = false
     var selectedItems: MutableList<CheckItem> = mutableListOf()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -24,6 +24,7 @@ class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHol
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.itemView.cb_schedule_test.text = item.content
+        if(disableItems)holder.itemView.cb_schedule_test.isEnabled = false
         holder.itemView.cb_schedule_test.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
             items[holder.adapterPosition].isCheckedBoolean = holder.itemView.cb_schedule_test.isChecked
@@ -45,7 +46,10 @@ class AdapterScheduleTestCb : RecyclerView.Adapter<AdapterScheduleTestCb.ViewHol
         this.items = items;
         notifyDataSetChanged()
     }
-
+    fun disableAllItems(){
+        disableItems = true
+        notifyDataSetChanged()
+    }
     fun setCallbacks(callbacks: AdapterScheduleTestCbCallbacks) {
         this.callbacks = callbacks
     }

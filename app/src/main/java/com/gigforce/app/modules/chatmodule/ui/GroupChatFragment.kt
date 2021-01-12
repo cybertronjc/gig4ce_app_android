@@ -98,7 +98,7 @@ class GroupChatFragment : BaseFragment(),
         GroupChatRecyclerAdapter(
             requireContext(),
             appDirectoryFileRef,
-            initGlide()!!,
+            initGlide(R.drawable.ic_user,R.drawable.ic_user)!!,
             this
         )
     }
@@ -230,7 +230,7 @@ class GroupChatFragment : BaseFragment(),
 
     private fun showGroupDetails(content: ChatGroup) {
 
-        val req = initGlide()
+        val req = initGlide(R.drawable.ic_group,R.drawable.ic_group)
 
         if (content.groupAvatar.isNotBlank()) {
             val uri = Uri.parse(content.groupAvatar)

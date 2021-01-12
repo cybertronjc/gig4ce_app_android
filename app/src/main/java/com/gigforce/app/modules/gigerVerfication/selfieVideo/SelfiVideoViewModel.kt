@@ -9,6 +9,7 @@ import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.SingleLiveEvent2
 import com.gigforce.app.utils.setOrThrow
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -42,6 +43,7 @@ class SelfiVideoViewModel constructor(
         val transcodeVideo = try {
             transcodeVideo(videoPath, transcodedFile)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             _uploadSelfieState.value = Lse.error(e.localizedMessage)
             return@launch
         }
@@ -56,6 +58,7 @@ class SelfiVideoViewModel constructor(
             val fileName = taskSnapshot.metadata?.reference?.name.toString()
             setCompleteSelfieInfo(fileName, videoPath, transcodedFile)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             _uploadSelfieState.value = Lse.error(e.localizedMessage)
         }
     }
@@ -134,6 +137,7 @@ class SelfiVideoViewModel constructor(
             )
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
             _uploadSelfieState.value = Lse.error(e.localizedMessage)
             return
         }

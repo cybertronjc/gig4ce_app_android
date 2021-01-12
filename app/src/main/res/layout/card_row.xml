@@ -40,17 +40,15 @@
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb_is_whatsapp_number_card_row"
-            style="@style/LatoRegularCardText12"
+            style="@style/check_box_style_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-5dp"
             android:layout_marginTop="-10dp"
             android:layout_marginBottom="-10dp"
             android:text="@string/is_whats_app_number"
             android:textSize="@dimen/font_12"
             android:visibility="gone" />
     </LinearLayout>
-
 
 
     <ImageButton

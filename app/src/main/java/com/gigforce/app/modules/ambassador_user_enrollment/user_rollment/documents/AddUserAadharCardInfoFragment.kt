@@ -23,16 +23,44 @@ import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharEditLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharViewLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharCardET
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharSubmitSliderBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.doYouHaveAadharLabel
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.helpIconViewIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.topSeaparator
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNoTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNumberViewErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackErrorMessageTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontImageIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.editLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.statusTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -47,13 +75,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     }
 
     private val viewModel: GigVerificationViewModel by viewModels()
-    private lateinit var userId : String
-    private lateinit var userName : String
+    private lateinit var userId: String
+    private lateinit var userName: String
 
     private var aadharFrontImagePath: Uri? = null
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
+    private var gigerVerificationStatus: GigerVerificationStatus? = null
+    private var aadharCardDataModel: AadharCardDataModel? = null
 
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,10 +94,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(arguments,savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         initViews()
         initViewModel()
+        getUserDetails()
     }
+
+    private fun getUserDetails() {
+        viewModel.getVerificationStatus(userId)
+    }
+
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
@@ -176,6 +213,34 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             openCameraAndGalleryOptionForBackSideImage()
         }
 
+        ambsd_aadhar_skip_btn.setOnClickListener {
+
+            navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            )
+            )
+        }
+
+        editLayout.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.you_are_reuploading_aadhar))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+
+                        aadharViewLayout.gone()
+                        aadharEditLayout.visible()
+
+                        setDataOnEditLayout(aadharCardDataModel)
+                        aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
+                        aadharSubmitSliderBtn.isEnabled = true
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
+        }
+
+
 
         aadharSubmitSliderBtn.onSlideCompleteListener =
             object : SlideToActView.OnSlideCompleteListener {
@@ -221,7 +286,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
                         )
 
                     } else if (aadharNoRB.isChecked) {
-                        viewModel.updateAadharData(false, null, null, null,userId)
+                        viewModel.updateAadharData(false, null, null, null, userId)
                     }
                 }
             }
@@ -238,6 +303,34 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     }
 
     private fun initViewModel() {
+        viewModel.gigerVerificationStatus
+            .observe(viewLifecycleOwner, Observer {
+                this.gigerVerificationStatus = it
+                this.aadharCardDataModel = it.aadharCardDataModel
+                progressBar.gone()
+
+                if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
+
+                    if (it.aadharCardDataModel.userHasAadharCard != null) {
+                        if (it.aadharCardDataModel.userHasAadharCard) {
+                            setDataOnViewLayout(it)
+                        } else {
+                            setDataOnEditLayout(null)
+                            aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
+                        }
+
+                    } else {
+                        //Uncheck both and hide capture layout
+                        setDataOnEditLayout(null)
+                        aadharAvailaibilityOptionRG.clearCheck()
+                        hideAadharImageAndInfoLayout()
+                    }
+                } else {
+                    setDataOnEditLayout(null)
+                    aadharAvailaibilityOptionRG.clearCheck()
+                    hideAadharImageAndInfoLayout()
+                }
+            })
 
         viewModel.documentUploadState
             .observe(viewLifecycleOwner, Observer {
@@ -265,9 +358,10 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     private fun documentUploaded() {
         showToast(getString(R.string.aadhar_card_details_uploaded))
 
-        navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+        navigate(
+            R.id.addUserDrivingLicenseInfoFragment, bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
         )
     }
@@ -278,16 +372,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Are you sure you want to go back")
-            .setPositiveButton("Yes"){_,_ -> goBackToUsersList()}
-            .setNegativeButton("No"){_,_ ->}
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .show()
     }
 
-    private fun goBackToUsersList(){
+    private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
@@ -426,5 +520,117 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
+    private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
+        aadharEditLayout.gone()
+        aadharViewLayout.visible()
+
+        val aadharDetails = gigVerificationStatus.aadharCardDataModel ?: return
+
+        statusTV.text = aadharDetails.verifiedString
+        statusTV.setTextColor(
+            ResourcesCompat.getColor(
+                resources,
+                gigVerificationStatus.getColorCodeForStatus(aadharDetails.state),
+                null
+            )
+        )
+
+        if (aadharDetails.frontImage != null) {
+            if (aadharDetails.frontImage.startsWith("http", true)) {
+                Glide.with(requireContext()).load(aadharDetails.frontImage)
+                    .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
+            } else {
+                val storageRef= firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharDetails.frontImage)
+
+                Glide.with(requireContext())
+                    .load(storageRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(aadharViewFrontImageIV)
+            }
+        }
+        aadharViewFrontErrorMessage.gone()
+
+        if (aadharDetails.backImage != null) {
+            if (aadharDetails.backImage.startsWith("http", true)) {
+                Glide.with(requireContext()).load(aadharDetails.backImage)
+                    .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
+            } else {
+                val imageRef = firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharDetails.backImage)
+
+                Glide
+                    .with(requireContext())
+                    .load(imageRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(aadharViewBackImageIV)
+            }
+        }
+        aadharViewBackErrorMessageTV.gone()
+
+        aadharNoTV.text = aadharDetails.aadharCardNo
+        aadharNumberViewErrorMessage.gone()
+    }
+
+    private fun setDataOnEditLayout(it: AadharCardDataModel?) {
+        aadharViewLayout.gone()
+        aadharEditLayout.visible()
+
+        if (it != null) {
+            //Fill previous data
+            aadharAvailaibilityOptionRG.gone()
+            doYouHaveAadharLabel.gone()
+        } else {
+            aadharAvailaibilityOptionRG.visible()
+            doYouHaveAadharLabel.visible()
+
+            aadharEditOverallErrorMessage.gone()
+            aadharNoEditErrorMessage.gone()
+            aadharFrontImageEditErrorMessage.gone()
+            aadharBackImageEditErrorMessage.gone()
+        }
+
+        val aadharData = it ?: return
+        aadharSubmitSliderBtn.text = getString(R.string.update)
+
+        aadharCardET.setText(aadharData.aadharCardNo)
+
+
+        if (aadharData.frontImage != null) {
+            if (aadharData.frontImage.startsWith("http", true)) {
+                showFrontAadharCard(Uri.parse(aadharData.frontImage))
+            } else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharData.frontImage)
+                    .downloadUrl.addOnSuccessListener {
+                        showFrontAadharCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
+        }
+
+        if (aadharData.backImage != null) {
+            if (aadharData.backImage.startsWith("http", true)) {
+                showBackAadharCard(Uri.parse(aadharData.backImage))
+            } else {
+                firebaseStorage
+                    .reference
+                    .child("verification")
+                    .child(aadharData.backImage)
+                    .downloadUrl.addOnSuccessListener {
+                        showBackAadharCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
+            }
+        }
+    }
 
 }

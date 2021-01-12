@@ -76,7 +76,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
         aadharSubmitSliderBtn.isEnabled = false
 
-        toolbar.setNavigationOnClickListener {
+        iv_back_add_aadhar_card_info.setOnClickListener {
             findNavController().popBackStack(R.id.gigerVerificationFragment, false)
         }
 

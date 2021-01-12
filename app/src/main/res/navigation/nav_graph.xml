@@ -876,6 +876,10 @@
         android:id="@+id/addUserExperienceFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserExperienceFragment"
         android:label="AddUserExperienceFragment" />
+    <fragment
+        android:id="@+id/addUserCurrentAddressFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
+        android:label="AddUserCurrentAddressFragment" />
 
 
 </navigation>

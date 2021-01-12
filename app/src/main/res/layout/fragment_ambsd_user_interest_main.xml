@@ -33,7 +33,7 @@
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
-            android:text="Add Interest"
+            android:text="@string/add_interest"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -58,7 +58,7 @@
             android:textColor="#333333"
             android:lineHeight="17sp"
             android:lineSpacingExtra="3sp"
-            android:text="Let us know your interest so that we can show the best jobs for you"
+            android:text="@string/let_us_know_your_interest_so_that_we_can_show_the_best_jobs_for_you"
             />
 
     </LinearLayout>
@@ -70,10 +70,24 @@
         android:layout_marginStart="16dp"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
-        android:text="Select Jobs you are interested in "
+        android:text="@string/select_jobs_you_are_interested_in"
         android:textColor="#333333"
         android:textSize="14sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:lineHeight="17sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:lineSpacingExtra="3sp"
+        android:text="( Select Max 3 )"
+        />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/interest_chipgroup"
@@ -91,7 +105,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Driving" />
+            android:text="@string/driving" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_bike_rider"
@@ -99,7 +113,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bike Rider" />
+            android:text="@string/bike_rider" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_executive"
@@ -107,7 +121,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delivery Executive" />
+            android:text="@string/delivery_executive" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_warehouse_helper"
@@ -115,7 +129,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Warehouse Helper" />
+            android:text="@string/warehouse_helper" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_operator"
@@ -123,7 +137,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Operator" />
+            android:text="@string/operator" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_technician"
@@ -131,7 +145,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Technician" />
+            android:text="@string/technician" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_supervisor"
@@ -139,7 +153,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Supervisor/Manager" />
+            android:text="@string/supervisor_manager" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_Inspector"
@@ -147,7 +161,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inspector" />
+            android:text="@string/inspector" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_tele_calling"
@@ -155,7 +169,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tele calling" />
+            android:text="@string/tele_calling_" />
 
 
         <com.google.android.material.chip.Chip
@@ -164,7 +178,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Factory Worker" />
+            android:text="@string/factory_worker" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_security"
@@ -172,7 +186,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Security" />
+            android:text="@string/security" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_cleaning"
@@ -180,7 +194,7 @@
             app:chipStrokeWidth="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cleaner" />
+            android:text="@string/cleaner" />
 
 
 
@@ -201,8 +215,25 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:text="@string/next"
-        android:textColor="@color/white"
+        android:textColor="@color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="14dp"
+        android:enabled="true"
+        android:visibility="gone"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/skip"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
+
 
 
 </LinearLayout>

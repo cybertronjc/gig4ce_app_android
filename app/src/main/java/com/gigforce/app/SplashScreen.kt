@@ -35,6 +35,7 @@ class SplashScreen : AppCompatActivity() {
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                     val inviteID = deepLink?.getQueryParameter("invite")
+                    val isAmbassador = deepLink?.getQueryParameter("is_ambassador")
                     val roleID = deepLink?.getQueryParameter("role_id")
                     val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
                     val sp = SharedDataImp(this)
@@ -57,6 +58,16 @@ class SplashScreen : AppCompatActivity() {
                         intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
                         intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         intent.putExtra(StringConstants.ROLE_ID.value, roleID)
+                        initApp(intent)
+                        return@addOnSuccessListener
+                    }else if(!isAmbassador.isNullOrEmpty()){
+                        sp.saveData(
+                            StringConstants.INVITE_BY_AMBASSADOR.value,
+                            "true"
+                        )
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
+                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
                         initApp(intent)
                         return@addOnSuccessListener
                     }

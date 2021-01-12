@@ -112,12 +112,12 @@ class DrivingCertSuccessDialog : DialogFragment() {
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mDocURL = it.getString(StringConstants.DOC_URL.value) ?: return@let
+            mDocURL = it.getString(StringConstants.DOC_URL.value,"") ?: ""
 
         }
 
         arguments?.let {
-            mDocURL = it.getString(StringConstants.DOC_URL.value) ?: return@let
+            mDocURL = it.getString(StringConstants.DOC_URL.value,"") ?: ""
 
         }
     }
