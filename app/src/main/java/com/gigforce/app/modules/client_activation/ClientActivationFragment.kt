@@ -147,10 +147,9 @@ class ClientActivationFragment : BaseFragment(),
                     .build()
             customPowerMenu.showAsDropDown(
                 it,
-                -((customPowerMenu.contentViewWidth - resources.getDimensionPixelSize(
-                    R.dimen.size_24
+                -((customPowerMenu.contentViewWidth- (it.resources.getDimensionPixelSize(R.dimen.size_32))
                 )
-                        )),
+                        ),
                 -(resources.getDimensionPixelSize(
                     R.dimen.size_24
                 )

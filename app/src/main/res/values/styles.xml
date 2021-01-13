@@ -540,6 +540,7 @@
         <item name="android:textColor">@color/app_chip_text_colors_2</item>
         <item name="chipStrokeColor">@color/app_chip_stroke_colors_2</item>
         <item name="chipBackgroundColor">@color/app_chip_bck_colors_2</item>
+        <item name="rippleColor">@android:color/transparent</item>
         <item name="strokeWidth">1dp</item>
     </style>
 
