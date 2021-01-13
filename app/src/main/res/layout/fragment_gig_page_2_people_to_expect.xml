@@ -14,7 +14,7 @@
         android:id="@+id/gig_people_to_expect_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_location"
+        app:srcCompat="@drawable/ic_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
