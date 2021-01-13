@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.StringConstants
@@ -55,6 +56,7 @@ class AssessmentDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initClicks()
+        pb_assessment_dialog.visible()
 
         arguments?.let {
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
@@ -72,6 +74,7 @@ class AssessmentDialog : DialogFragment() {
                 when (it) {
                     Lce.Loading -> {
 
+
                     }
                     is Lce.Content -> {
                         assessmentResultWithNextDest = it.content
@@ -79,6 +82,7 @@ class AssessmentDialog : DialogFragment() {
                             STATE_PASS -> statePass()
                             STATE_REAPPEAR -> stateReappear()
                         }
+
                     }
                     is Lce.Error -> {
                         MaterialAlertDialogBuilder(requireContext())
@@ -86,6 +90,8 @@ class AssessmentDialog : DialogFragment() {
                             .setMessage("Unable to mark assessment as complete")
                             .setPositiveButton("Okay") { _, _ -> }
                             .show()
+                        pb_assessment_dialog.gone()
+
                     }
                 }
             })
@@ -99,12 +105,19 @@ class AssessmentDialog : DialogFragment() {
 
                 isCancelable = true
                 iv_bg_top_assess_dialog.gone()
+                parent_assessment_dialog.visible()
+                pb_assessment_dialog.gone()
                 tv_message_assess_dialog.setTextColor(resources.getColor(R.color.white))
                 tv_message_assess_dialog.setBackgroundColor(resources.getColor(R.color.lipstick))
                 val lp: ConstraintLayout.LayoutParams =
                     tv_message_assess_dialog.layoutParams as ConstraintLayout.LayoutParams
                 lp.setMargins(0, 0, 0, 0)
-                tv_message_assess_dialog.setPadding(0,resources.getDimensionPixelSize(R.dimen.size_15),0,resources.getDimensionPixelSize(R.dimen.size_15))
+                tv_message_assess_dialog.setPadding(
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.size_15),
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.size_15)
+                )
                 tv_message_assess_dialog.layoutParams = lp
                 tv_do_it_later_assess_dialog.visibility = View.VISIBLE
                 tv_message_assess_dialog.text = getString(R.string.good_luck)
@@ -156,6 +169,9 @@ class AssessmentDialog : DialogFragment() {
 
     private fun stateReappear() {
         isCancelable = false
+        iv_bg_top_assess_dialog.gone()
+        parent_assessment_dialog.visible()
+        pb_assessment_dialog.gone()
         tv_ques_count_assess_dialog.visibility = View.GONE
         tv_time_assess_dialog.visibility = View.GONE
         tv_assessment_result__assess_dialog.visibility = View.VISIBLE
@@ -208,6 +224,8 @@ class AssessmentDialog : DialogFragment() {
     }
 
     private fun statePass() {
+        parent_assessment_dialog.visible()
+        pb_assessment_dialog.gone()
         isCancelable = false
         tv_ques_count_assess_dialog.visibility = View.GONE
         tv_time_assess_dialog.visibility = View.GONE
@@ -323,7 +341,7 @@ class AssessmentDialog : DialogFragment() {
     }
 
     interface AssessmentDialogCallbacks {
-        fun assessmentState(state: Int, nextLesson : String?)
+        fun assessmentState(state: Int, nextLesson: String?)
         fun doItLaterPressed()
 
 

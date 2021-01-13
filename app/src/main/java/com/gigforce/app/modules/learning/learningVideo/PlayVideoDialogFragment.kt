@@ -4,14 +4,13 @@ package com.gigforce.app.modules.learning.learningVideo
 import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -29,7 +28,6 @@ import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -38,9 +36,10 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import kotlinx.android.synthetic.main.fragment_play_video.*
 import kotlinx.android.synthetic.main.fragment_play_video_main.*
+import kotlinx.android.synthetic.main.layout_learning_lesson_complete.*
 
 
-class PlayVideoDialogFragment : DialogFragment() {
+class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosingListener {
 
     private var playWhenReady = true
     private var currentWindow = 0
@@ -53,8 +52,10 @@ class PlayVideoDialogFragment : DialogFragment() {
     private var player: SimpleExoPlayer? = null
     private val viewModel: CourseVideoViewModel by viewModels()
     private var videoStateSaved: Boolean = false
+    private var nextLessonContent: CourseContent? = null
+    private var shouldShowFeedbackDialog : Boolean = false
 
-    private val navigationController : NavController by lazy {
+    private val navigationController: NavController by lazy {
         requireActivity().findNavController(R.id.nav_fragment)
     }
 
@@ -71,12 +72,16 @@ class PlayVideoDialogFragment : DialogFragment() {
 
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            shouldShowFeedbackDialog = it.getBoolean(
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION)
         }
 
         arguments?.let {
 
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            shouldShowFeedbackDialog = it.getBoolean(
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION)
         }
 
         return inflater.inflate(R.layout.fragment_play_video, container, false)
@@ -91,6 +96,7 @@ class PlayVideoDialogFragment : DialogFragment() {
         outState.putLong("key_play_back_position", playbackPosition)
         outState.putString(INTENT_EXTRA_LESSON_ID, mLessonId)
         outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
+        outState.putBoolean(INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION, shouldShowFeedbackDialog)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,9 +138,9 @@ class PlayVideoDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : Dialog(requireContext(),theme){
+        return object : Dialog(requireContext(), theme) {
             override fun onBackPressed() {
-               backPressed()
+                backPressed()
             }
         }
     }
@@ -181,65 +187,72 @@ class PlayVideoDialogFragment : DialogFragment() {
             })
 
         viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
+            showLessonCompleteDialog()
+            nextLessonContent = cc
+        })
 
+        viewModel.getVideoDetails(mModuleId, mLessonId)
+    }
 
-            val view = layoutInflater.inflate(R.layout.layout_video_completed, null)
+    private var lessonCompleteDialog: AlertDialog? = null
+    private var lessonCompleteDialogView: View? = null
 
-            val dialog = AlertDialog.Builder(requireContext())
-                .setView(view)
+    private fun showLessonCompleteDialog() {
+
+        if (lessonCompleteDialogView == null) {
+
+            lessonCompleteDialogView = layoutInflater.inflate(R.layout.layout_learning_lesson_complete, null)
+            lessonCompleteDialog = AlertDialog.Builder(requireContext())
+                .setView(lessonCompleteDialogView)
                 .show()
 
-            val submitTV = view.findViewById<TextView>(R.id.tv_action_assess_dialog)
-            submitTV.text = when (cc?.type) {
-                CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
-                CourseContent.TYPE_VIDEO -> "Next Lesson"
-                CourseContent.TYPE_SLIDE -> "Next Slide"
-                else -> "Okay"
-            }
+            lessonCompleteDialogView?.findViewById<View>(R.id.tv_action_next_lesson)
+                ?.setOnClickListener {
+                    lessonCompleteDialog?.dismiss()
+                    backPressed()
 
-            submitTV.setOnClickListener {
-                    dialog.dismiss()
-                    dismiss()
-
-
-                    when (cc?.type) {
+                    when (nextLessonContent?.type) {
                         CourseContent.TYPE_VIDEO -> {
                             PlayVideoDialogFragment.launch(
                                 childFragmentManager = childFragmentManager,
-                                moduleId = cc.moduleId,
-                                lessonId = cc.id
+                                moduleId = nextLessonContent!!.moduleId,
+                                lessonId = nextLessonContent!!.id,
+                                shouldShowFeedbackDialog = nextLessonContent!!.shouldShowFeedbackDialog
                             )
                         }
                         CourseContent.TYPE_ASSESSMENT -> {
                             navigationController.navigate(
                                 R.id.assessment_fragment, bundleOf(
-                                    AssessmentFragment.INTENT_LESSON_ID to cc.id,
-                                    AssessmentFragment.INTENT_MODULE_ID to cc.moduleId
+                                    AssessmentFragment.INTENT_LESSON_ID to nextLessonContent!!.id,
+                                    AssessmentFragment.INTENT_MODULE_ID to nextLessonContent!!.moduleId
                                 )
                             )
                         }
                         CourseContent.TYPE_SLIDE -> {
                             navigationController.navigate(
-                                R.id.slidesFragment,
-                                bundleOf(
-                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to cc.title,
-                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to cc.moduleId,
-                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to cc.id
+                                R.id.slidesFragment, bundleOf(
+                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to nextLessonContent!!.title,
+                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to nextLessonContent!!.moduleId,
+                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to nextLessonContent!!.id
                                 )
                             )
                         }
-                        else ->{
+                        else -> {
                             clearBackStackToContentList()
                             dismiss()
                         }
                     }
-
                 }
+        } else {
+            if (lessonCompleteDialog!!.isShowing.not()) {
+                lessonCompleteDialog!!.show()
+            }
 
-        })
-
-        viewModel.getVideoDetails(mModuleId, mLessonId)
+            lessonCompleteDialog?.pb_lesson_complete_dialog?.gone()
+            lessonCompleteDialog?.parent_assessment_dialog?.visible()
+        }
     }
+
 
     private fun clearBackStackToContentList() {
         try {
@@ -285,7 +298,7 @@ class PlayVideoDialogFragment : DialogFragment() {
         initializePlayer(videoUri, content.completionProgress)
         changeOrientation()
 
-        if(!content.canUserFastForward){
+        if (!content.canUserFastForward) {
             playerView.setControlDispatcher(PositionLimitingControlDispatcher())
         }
     }
@@ -331,7 +344,7 @@ class PlayVideoDialogFragment : DialogFragment() {
             currentOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             adjustUiforOrientation()
         } else {
-            if (player == null || videoStateSaved){
+            if (player == null || videoStateSaved) {
                 clearBackStackToContentList()
                 dismiss()
             }
@@ -363,8 +376,7 @@ class PlayVideoDialogFragment : DialogFragment() {
         if (playbackPosition != 0L) {
             player?.seekTo(currentWindow, playbackPosition)
             player?.playWhenReady = true
-        }
-        else {
+        } else {
             player?.seekTo(currentWindow, lastTimePlayBackPosition)
             player?.playWhenReady = playWhenReady
         }
@@ -402,26 +414,7 @@ class PlayVideoDialogFragment : DialogFragment() {
         return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
     }
 
-    companion object {
-        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
-        const val INTENT_EXTRA_MODULE_ID = "module_id"
-        const val TAG = "PlayVideoDialogFragment"
 
-        fun launch(
-            childFragmentManager: FragmentManager,
-            moduleId: String,
-            lessonId: String
-        ) {
-            val frag = PlayVideoDialogFragment()
-            val bundle = bundleOf(
-                INTENT_EXTRA_MODULE_ID to moduleId,
-                INTENT_EXTRA_LESSON_ID to lessonId
-            )
-
-            frag.arguments = bundle
-            frag.show(childFragmentManager, TAG)
-        }
-    }
 
     inner class PlayerEventListener : Player.EventListener {
 
@@ -431,13 +424,64 @@ class PlayVideoDialogFragment : DialogFragment() {
 
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
-            }else if (playbackState == Player.STATE_ENDED) {
+            } else if (playbackState == Player.STATE_ENDED) {
                 playerView.keepScreenOn = false
-                viewModel.markVideoAsComplete(mModuleId, mLessonId)
-            }else { // STATE_IDLE, STATE_ENDED
+
+                //Open Complete dialog
+                changeOrientation()
+
+                viewModel.currentVideoLesson?.let {
+                    Log.d(TAG, mLessonId)
+
+                    Handler().postDelayed({
+                        if (shouldShowFeedbackDialog) {
+                            RateLessonDialogFragment.launch(
+                                    childFragmentManager,
+                                    this@PlayVideoDialogFragment,
+                                    mModuleId,
+                                    mLessonId
+                            )
+                        } else {
+                            showLessonCompleteDialog()
+                            viewModel.markVideoAsComplete(
+                                    moduleId = mModuleId,
+                                    lessonId = mLessonId
+                            )
+                        }
+                    },300)
+                }
+            } else { // STATE_IDLE, STATE_ENDED
                 // This prevents the screen from getting dim/lock
                 playerView.keepScreenOn = true
             }
+        }
+    }
+
+    override fun rateLessonDialogDismissed() {
+        dismiss()
+    }
+
+    companion object {
+        const val INTENT_EXTRA_LESSON_ID = "lesson_id"
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
+        const val INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION = "show_feedback_dialog_on_completion"
+        const val TAG = "PlayVideoDialogFragment"
+
+        fun launch(
+            childFragmentManager: FragmentManager,
+            moduleId: String,
+            lessonId: String,
+            shouldShowFeedbackDialog : Boolean
+        ) {
+            val frag = PlayVideoDialogFragment()
+            val bundle = bundleOf(
+                INTENT_EXTRA_MODULE_ID to moduleId,
+                INTENT_EXTRA_LESSON_ID to lessonId,
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog
+            )
+
+            frag.arguments = bundle
+            frag.show(childFragmentManager, TAG)
         }
     }
 }

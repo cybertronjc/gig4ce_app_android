@@ -10,12 +10,9 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
+import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.getOrThrow
-import com.gigforce.app.utils.setOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -23,6 +20,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -33,8 +31,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
-    private val gigsRepository: GigsRepository = GigsRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+        private val gigsRepository: GigsRepository = GigsRepository(),
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : ViewModel() {
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -49,15 +47,15 @@ class GigViewModel constructor(
     fun watchUpcomingGigs() {
         _upcomingGigs.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-            .getCurrentUserGigs()
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                .getCurrentUserGigs()
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-                if (querySnapshot != null) {
-                    extractUpcomingGigs(querySnapshot)
-                } else {
-                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    if (querySnapshot != null) {
+                        extractUpcomingGigs(querySnapshot)
+                    } else {
+                        _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    }
                 }
-            }
     }
 
 
@@ -104,16 +102,16 @@ class GigViewModel constructor(
     fun watchGig(gigId: String, shouldConvertToDownloadLink: Boolean = false) {
         _gigDetails.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
-            .getCollectionReference()
-            .document(gigId)
-            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                .getCollectionReference()
+                .document(gigId)
+                .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
-                if (documentSnapshot != null) {
-                    extractGigData(documentSnapshot)
-                } else {
-                    _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    if (documentSnapshot != null) {
+                        extractGigData(documentSnapshot)
+                    } else {
+                        _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
+                    }
                 }
-            }
     }
 
     private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
@@ -135,67 +133,67 @@ class GigViewModel constructor(
     }
 
     suspend fun getDownloadLinkFor(folder: String, file: String) =
-        suspendCoroutine<String> { cont ->
-            firebaseStorage
-                .getReference(folder)
-                .child(file)
-                .downloadUrl
-                .addOnSuccessListener {
-                    cont.resume(it.toString())
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
-        }
+            suspendCoroutine<String> { cont ->
+                firebaseStorage
+                        .getReference(folder)
+                        .child(file)
+                        .downloadUrl
+                        .addOnSuccessListener {
+                            cont.resume(it.toString())
+                        }
+                        .addOnFailureListener {
+                            cont.resumeWithException(it)
+                        }
+            }
 
 
     fun getGig(gigId: String) {
         _gigDetails.value = Lce.loading()
         gigsRepository
-            .getCollectionReference()
-            .document(gigId)
-            .get()
-            .addOnSuccessListener { snap ->
+                .getCollectionReference()
+                .document(gigId)
+                .get()
+                .addOnSuccessListener { snap ->
 
-                if (snap != null) {
-                    extractGigData(snap)
+                    if (snap != null) {
+                        extractGigData(snap)
+                    }
                 }
-            }
-            .addOnFailureListener {
-                _gigDetails.value = Lce.error(it.message!!)
-            }
+                .addOnFailureListener {
+                    _gigDetails.value = Lce.error(it.message!!)
+                }
 
     }
 
     suspend fun getGigNow(gigId: String) = suspendCoroutine<Gig> { cont ->
         gigsRepository
-            .getCollectionReference()
-            .document(gigId)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
+                .getCollectionReference()
+                .document(gigId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
 
-                if (documentSnapshot != null) {
-                    val gig = documentSnapshot.toObject(Gig::class.java)
-                        ?: throw IllegalArgumentException()
-                    gig.gigId = documentSnapshot.id
-                    cont.resume(gig)
+                    if (documentSnapshot != null) {
+                        val gig = documentSnapshot.toObject(Gig::class.java)
+                                ?: throw IllegalArgumentException()
+                        gig.gigId = documentSnapshot.id
+                        cont.resume(gig)
+                    }
                 }
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
     }
 
     fun favoriteGig(gigId: String) {
         gigsRepository.getCollectionReference()
-            .document(gigId)
-            .update("isFavourite", true)
+                .document(gigId)
+                .update("isFavourite", true)
     }
 
     fun unFavoriteGig(gigId: String) {
         gigsRepository.getCollectionReference()
-            .document(gigId)
-            .update("isFavourite", false)
+                .document(gigId)
+                .update("isFavourite", false)
 
     }
 
@@ -211,10 +209,10 @@ class GigViewModel constructor(
     val submitGigRatingState: LiveData<Lse> get() = _submitGigRatingState
 
     fun submitGigFeedback(
-        gigId: String,
-        rating: Float,
-        feedback: String,
-        files: List<Uri>
+            gigId: String,
+            rating: Float,
+            feedback: String,
+            files: List<Uri>
     ) = viewModelScope.launch {
         _submitGigRatingState.value = Lse.loading()
 
@@ -225,8 +223,8 @@ class GigViewModel constructor(
 
             gig.gigUserFeedbackAttachments = uploadFilesAndReturnNamesOnServer(files)
             gigsRepository.getCollectionReference()
-                .document(gigId)
-                .setOrThrow(gig)
+                    .document(gigId)
+                    .setOrThrow(gig)
 
             _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {
@@ -248,45 +246,45 @@ class GigViewModel constructor(
 
     private fun prepareUniqueImageName(): String {
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         return gigsRepository.getUID() + timeStamp + ".jpg"
     }
 
     private suspend fun uploadImage(image: Uri) =
-        suspendCoroutine<String> { continuation ->
-            val fileNameAtServer = prepareUniqueImageName()
-            firebaseStorage.reference
-                .child("gig_feedback_images")
-                .child(fileNameAtServer)
-                .putFile(image)
-                .addOnSuccessListener {
-                    continuation.resume(fileNameAtServer)
-                }
-                .addOnFailureListener {
-                    continuation.resumeWithException(it)
-                }
-        }
+            suspendCoroutine<String> { continuation ->
+                val fileNameAtServer = prepareUniqueImageName()
+                firebaseStorage.reference
+                        .child("gig_feedback_images")
+                        .child(fileNameAtServer)
+                        .putFile(image)
+                        .addOnSuccessListener {
+                            continuation.resume(fileNameAtServer)
+                        }
+                        .addOnFailureListener {
+                            continuation.resumeWithException(it)
+                        }
+            }
 
     fun deleteUserFeedbackAttachment(
-        gigId: String,
-        attachmentToDeleteName: String
+            gigId: String,
+            attachmentToDeleteName: String
     ) {
 
         gigsRepository.getCollectionReference()
-            .document(gigId)
-            .update("gigUserFeedbackAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
+                .document(gigId)
+                .update("gigUserFeedbackAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
     }
 
     fun deleteUserReceivedFeedbackAttachment(
-        gigId: String,
-        attachmentToDeleteName: String
+            gigId: String,
+            attachmentToDeleteName: String
     ) {
 
         gigsRepository.getCollectionReference()
-            .document(gigId)
-            .update("ratingUserReceivedAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
+                .document(gigId)
+                .update("ratingUserReceivedAttachments", FieldValue.arrayRemove(attachmentToDeleteName))
     }
 
 
@@ -348,25 +346,25 @@ class GigViewModel constructor(
 
         _todaysGigs.value = Lce.loading()
         mWatchTodaysGigRegistration = gigsRepository
-            .getCurrentUserGigs()
-            .whereGreaterThan("startDateTime", dateFull)
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                .getCurrentUserGigs()
+                .whereGreaterThan("startDateTime", dateFull)
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-                val tomorrow = date.plusDays(1)
+                    val tomorrow = date.plusDays(1)
 
-                if (querySnapshot != null) {
-                    val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                        it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                            .isBefore(tomorrow))
+                    if (querySnapshot != null) {
+                        val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
+                            it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
+                                    .isBefore(tomorrow))
+                        }
+                        _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+                    } else {
+                        _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                     }
-                    _todaysGigs.value = Lce.content(todaysUpcomingGigs)
-                } else {
-                    _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
-            }
     }
 
-    fun getTodaysUpcomingGig(date: LocalDate) = viewModelScope.launch{
+    fun getTodaysUpcomingGig(date: LocalDate) = viewModelScope.launch {
         Log.d("GigViewModel", "getting gigs for $date")
 
         val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -374,14 +372,14 @@ class GigViewModel constructor(
         _todaysGigs.value = Lce.loading()
         try {
             val querySnapshot = gigsRepository
-               .getCurrentUserGigs()
-               .whereGreaterThan("startDateTime", dateFull)
-               .getOrThrow()
+                    .getCurrentUserGigs()
+                    .whereGreaterThan("startDateTime", dateFull)
+                    .getOrThrow()
 
             val tomorrow = date.plusDays(1)
             val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
                 it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                    .isBefore(tomorrow))
+                        .isBefore(tomorrow))
             }
             _todaysGigs.value = Lce.content(todaysUpcomingGigs)
             _todaysGigs.value = null
@@ -403,11 +401,11 @@ class GigViewModel constructor(
         try {
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
-                .getCurrentUserGigs()
+                    .getCurrentUserGigs()
 //                .whereGreaterThan("startDateTime", monthStart)
 //                .whereLessThan("startDateTime", monthEnd)
-                .whereEqualTo("companyName", companyName)
-                .getOrThrow()
+                    .whereEqualTo("companyName", companyName)
+                    .getOrThrow()
 
             val gigs = extractGigs(querySnap)
             _monthlyGigs.value = Lce.content(gigs)
@@ -420,9 +418,9 @@ class GigViewModel constructor(
     val requestAttendanceRegularisation: LiveData<Lse> get() = _requestAttendanceRegularisation
 
     fun requestRegularisation(
-        gigId: String,
-        punchInTime: Timestamp,
-        punchOutTime: Timestamp
+            gigId: String,
+            punchInTime: Timestamp,
+            punchOutTime: Timestamp
     ) = viewModelScope.launch {
         _requestAttendanceRegularisation.value = Lse.loading()
 
@@ -434,15 +432,40 @@ class GigViewModel constructor(
             }
 
             gigsRepository.getCollectionReference()
-                .document(gigId)
-                .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+                    .document(gigId)
+                    .updateOrThrow("regularisationRequest", gigRegularisationRequest)
 
             _requestAttendanceRegularisation.value = Lse.success()
         } catch (e: Exception) {
-            _requestAttendanceRegularisation.value = Lse.error(e.message ?: "Unable to submit regularisation attendance")
+            _requestAttendanceRegularisation.value = Lse.error(e.message
+                    ?: "Unable to submit regularisation attendance")
         }
     }
 
+    private val _observableProfile: MutableLiveData<ProfileData> = MutableLiveData()
+    val observableProfile: MutableLiveData<ProfileData> = _observableProfile
+
+    fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
+        checkForChatProfile(loginMobile)
+    }
+    suspend fun checkForChatProfile(loginMobile: String) {
+        try {
+
+            val profiles = gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile).get().await()
+            if (!profiles.documents.isNullOrEmpty()) {
+                val toObject = profiles.documents[0].toObject(ProfileData::class.java)
+                toObject?.id = profiles.documents[0].id
+                _observableProfile.value = toObject
+            }
+
+        } catch (e: Exception) {
+
+        }
+    }
+
+    fun getUid(): String {
+        return gigsRepository.getUID()
+    }
 
 
 }

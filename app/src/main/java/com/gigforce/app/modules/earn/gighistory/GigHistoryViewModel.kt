@@ -48,22 +48,32 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     val observableDocChange: SingleLiveEvent<DocChange> get() = _observableDocChange
 
     fun getData() {
-        if (isInitialDataLoaded) return
-        showProgress(true)
-        repositoryCallbacks.checkGigsCount(this)
-        repositoryCallbacks.getOnGoingGigs(this)
-        repositoryCallbacks.getPastGigs(this, null, limit)
-        isInitialDataLoaded = true
+        repositoryCallbacks.getOnGoingGigs(
+            this,
+            observableOnGoingGigs.value == null || observableOnGoingGigs.value!!.data == null || observableOnGoingGigs.value?.data?.isEmpty()!!
+        )
+        if (!isInitialDataLoaded) {
+            showProgress(true)
+            repositoryCallbacks.checkGigsCount(this)
+            repositoryCallbacks.getPastGigs(this, null, limit)
+            isInitialDataLoaded = true
+        }
+
     }
 
     override fun onGoingGigsResponse(
         querySnapshot: QuerySnapshot?,
-        error: FirebaseFirestoreException?
+        error: FirebaseFirestoreException?,
+        initialLoading: Boolean
     ) {
         if (querySnapshot != null) observableOnGoingGigs.value = GigsResponse(
             true,
             "On Going Gigs Loaded Successfully",
-            getGigsWithId(querySnapshot)
+            getGigsWithId(
+                querySnapshot,
+                checkForCompletedGigs = false,
+                fetchOnGoing = initialLoading
+            )
         ) else
             error?.message?.let {
                 observableError.value = it
@@ -79,16 +89,18 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             if (querySnapshot.documents.isNotEmpty())
                 lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
             isLastPage = querySnapshot.documents.size < limit
+
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Past Gigs Loaded Successfully",
-                getGigsWithId(querySnapshot)
+                getGigsWithId(querySnapshot, true, fetchOnGoing = false)
             )
             repositoryCallbacks.removeListener()
         } else
             error?.message?.let {
                 observableError.value = it
             }
+
 
     }
 
@@ -103,7 +115,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             observableScheduledGigs.value = GigsResponse(
                 true,
                 "Upcoming Gigs Loaded Successfully",
-                getGigsWithId(querySnapshot)
+                getGigsWithId(querySnapshot, false, fetchOnGoing = false)
             )
             repositoryCallbacks.removeListener()
         } else
@@ -132,7 +144,6 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         val obj = change.document.toObject(Gig::class.java)
         obj.gigId = change.document.id
         observableDocChange.value = DocChange(docChangeType, obj)
-
     }
 
 
@@ -152,22 +163,33 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         }
 
 
-
     }
 
     fun showProgress(show: Boolean) {
         observerShowProgress.value = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun getGigsWithId(querySnapshot: QuerySnapshot): List<Gig> {
-        val userGigs: MutableList<Gig> = mutableListOf()
+    private fun getGigsWithId(
+        querySnapshot: QuerySnapshot,
+        checkForCompletedGigs: Boolean, fetchOnGoing: Boolean
+    ): ArrayList<Gig> {
+        var userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
             t.toObject(Gig::class.java)?.let {
                 it.gigId = t.id
                 userGigs.add(it)
             }
         }
-        return userGigs
+        if (checkForCompletedGigs) {
+            userGigs.retainAll { element ->
+                element.isGigOfPastDay() || element.isGigOfToday() && element.isCheckInAndCheckOutMarked()
+            }
+        } else if (fetchOnGoing) {
+            userGigs.retainAll { element ->
+                !element.isCheckInAndCheckOutMarked()
+            }
+        }
+        return userGigs as ArrayList<Gig>
     }
 
     fun observeDocChanges() {

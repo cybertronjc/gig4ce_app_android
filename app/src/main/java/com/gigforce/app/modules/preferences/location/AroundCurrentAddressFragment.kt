@@ -39,8 +39,7 @@ class AroundCurrentAddressFragment : BaseFragment() {
         arround_current_add_seekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val value =
-                    (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
+                val value = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
                 seekbardependent.text = progress.toString() + " " + getString(R.string.km)
                 seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
                 //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar

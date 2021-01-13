@@ -2,6 +2,9 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.explore_by_role.models.ContactModel
+import com.gigforce.app.modules.profile.models.Contact
+import com.gigforce.app.modules.profile.models.ContactEmail
+import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
 
@@ -15,6 +18,13 @@ class AddContactViewmodel : ViewModel() {
         SingleLiveEvent<String>();
     }
     val observableSetContacts: SingleLiveEvent<String> get() = _observableSetContacts
+
+
+    private val _observableUpdateContact: SingleLiveEvent<String> by lazy {
+        SingleLiveEvent<String>();
+    }
+    val observableUpdateContact: SingleLiveEvent<String> get() = _observableUpdateContact
+
 
     fun getPrimaryContact() {
         repositoryAddContact.getCollectionReference().document(repositoryAddContact.getUID())
@@ -34,7 +44,7 @@ class AddContactViewmodel : ViewModel() {
                     "contactEmail" to items.map { it.contactEmail }
 
 
-                    )
+                )
             ).addOnCompleteListener {
                 if (it.isSuccessful) {
                     _observableSetContacts.value = "true"
@@ -44,6 +54,37 @@ class AddContactViewmodel : ViewModel() {
                 }
             }
 
+    }
+
+    fun updateContactAndEmailSeparately(
+        contactList: ArrayList<Contact>
+    ) {
+        val contact = ArrayList<ContactPhone>()
+        val email = ArrayList<ContactEmail>()
+        contactList.forEachIndexed { index, element ->
+            if (index == 0) {
+                contact.add(ContactPhone(element.phone, true, isWhatsapp = false))
+                email.add(ContactEmail(element.email))
+            } else {
+                contact.add(ContactPhone(element.phone, false, isWhatsapp = false))
+                email.add(ContactEmail(element.email))
+            }
+        }
+        val updateMap = mapOf(
+            "contactPhone" to contact,
+            "contactEmail" to email
+        )
+        repositoryAddContact.getCollectionReference().document(repositoryAddContact.getUID())
+            .update(updateMap)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    observableUpdateContact.value = "true"
+                } else {
+                    if (it.exception != null) {
+                        observableUpdateContact.value = it.exception?.message
+                    }
+                }
+            }
     }
 
 

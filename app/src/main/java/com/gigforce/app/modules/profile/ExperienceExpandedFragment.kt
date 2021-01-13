@@ -39,12 +39,12 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
 
     private var cameFromLandingPage = false
     private var action: Int = -1
-    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         arguments?.let {
@@ -91,21 +91,21 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
             if (requiredDocsVerified) {
                 experience_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.verified_text)
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
-                    ResourcesCompat.getColor(resources,R.color.green,null))
+                        ResourcesCompat.getColor(resources, R.color.green, null))
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
-                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.green,null)
-            } else if (requiredDocsUploaded){
+                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources, R.color.green, null)
+            } else if (requiredDocsUploaded) {
                 experience_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.under_verification)
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
-                    ResourcesCompat.getColor(resources,R.color.app_orange,null))
+                        ResourcesCompat.getColor(resources, R.color.app_orange, null))
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_clock_orange)
-                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.app_orange,null)
-            } else{
+                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources, R.color.app_orange, null)
+            } else {
                 experience_top_profile.about_me_verification_layout.verification_status_tv.text = "Not Verified"
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
-                    ResourcesCompat.getColor(resources,R.color.red,null))
+                        ResourcesCompat.getColor(resources, R.color.red, null))
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_cross_red)
-                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources,R.color.red,null)
+                experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources, R.color.red, null)
             }
         })
 
@@ -117,15 +117,18 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
             var experienceString = ""
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             profile.experiences?.let {
-                val experiences = it.sortedByDescending { experience -> experience.startDate  }
+                val experiences = it.sortedByDescending { experience -> experience.startDate }
                 for (exp in experiences) {
                     experienceString += exp.title + "\n"
                     experienceString += exp.company + "\n"
                     experienceString += exp.employmentType + "\n"
                     experienceString += exp.location + "\n"
-                    experienceString += format.format(exp.startDate!!) + "-"
-                    experienceString += if(exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
-                    else "current" + "\n\n"
+
+                    if (exp.startDate != null) {
+                        experienceString += format.format(exp.startDate!!) + "-"
+                        experienceString += if (exp.endDate != null) format.format(exp.endDate!!) + "\n\n"
+                        else "current" + "\n\n"
+                    }
                 }
             }
             experience_card.nextDestination = R.id.editExperienceBottomSheet
@@ -137,7 +140,7 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
             experience_top_profile.userName = profile.name
         })
 
-        if(cameFromLandingPage)
+        if (cameFromLandingPage)
             profileViewModel.getProfileData()
 
         when (action) {

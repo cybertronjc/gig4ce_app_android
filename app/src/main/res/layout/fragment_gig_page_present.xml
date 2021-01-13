@@ -25,16 +25,57 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
 
+
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/tb_gig_details"
                     android:layout_width="match_parent"
-                    android:layout_height="?android:attr/actionBarSize"
+                    android:layout_height="wrap_content"
+
                     android:background="@color/white"
-                    app:navigationIcon="@drawable/ic_arrow_back_black"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:title="Retail Sales Executive"
-                    app:menu="@menu/menu_gig_attendance"
-                    app:titleTextColor="@color/black" />
+                    android:minHeight="@dimen/size_47"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/iv_back_gig_page"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/size_18"
+                            android:layout_marginTop="@dimen/size_16"
+                            android:layout_marginBottom="@dimen/size_14"
+                            app:srcCompat="@drawable/ic_arrow_back_black" />
+
+                        <TextView
+                            android:id="@+id/tv_title_gig_page"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/size_19"
+                            android:layout_marginTop="@dimen/size_14"
+                            android:layout_marginBottom="@dimen/size_9"
+                            android:layout_toStartOf="@+id/iv_options_gig_page"
+                            android:layout_toEndOf="@+id/iv_back_gig_page"
+                            android:letterSpacing="0"
+                            android:textColor="#080808"
+                            android:textSize="@dimen/font_20"
+                            tools:text="Retail Sales Excetive" />
+
+                        <ImageView
+                            android:id="@+id/iv_options_gig_page"
+                            android:layout_width="@dimen/size_24"
+                            android:layout_height="@dimen/size_24"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="@dimen/size_15"
+                            android:layout_marginEnd="@dimen/size_16"
+                            android:layout_marginBottom="@dimen/size_8"
+
+                            app:srcCompat="@drawable/ic_three_dots"
+                            app:tint="@color/black" />
+                    </RelativeLayout>
+                </androidx.appcompat.widget.Toolbar>
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -650,6 +691,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="19dp"
                             android:layout_marginTop="12dp"
+
                             android:progressTint="#ffc107"
                             android:secondaryProgressTint="@android:color/transparent"
                             android:visibility="visible"
@@ -662,9 +704,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="23dp"
+                            android:background="@color/black"
                             android:layout_marginTop="12dp"
                             android:layout_marginEnd="16dp"
                             android:fontFamily="@font/lato_italic"
+                            android:visibility="gone"
                             android:letterSpacing="0"
                             android:textColor="@color/warm_grey"
                             android:textSize="14sp"
@@ -689,6 +733,7 @@
                         android:id="@+id/userReceviedFeedbackRatingLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/size_11"
                         android:paddingBottom="10dp"
                         android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingLayout">
@@ -740,6 +785,7 @@
                             android:layout_marginEnd="16dp"
                             android:fontFamily="@font/lato_italic"
                             android:letterSpacing="0"
+                            android:visibility="gone"
                             android:textColor="@color/warm_grey"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -766,6 +812,7 @@
                 android:id="@+id/separator31"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/size_11"
                 android:background="#c0c0c0"
                 app:layout_constraintTop_toBottomOf="@id/completedGigControlsLayout" />
 
@@ -871,6 +918,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="1dp"
+                    android:visibility="gone"
                     android:scaleX="0.9"
                     android:scaleY="0.9"
                     app:cardBackgroundColor="@color/light_pink"

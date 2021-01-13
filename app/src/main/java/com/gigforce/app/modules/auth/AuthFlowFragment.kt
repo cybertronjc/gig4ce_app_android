@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 
 class AuthFlowFragment : BaseFragment() {
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,7 +51,6 @@ class AuthFlowFragment : BaseFragment() {
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +82,7 @@ class AuthFlowFragment : BaseFragment() {
                 navigateWithAllPopupStack(R.id.loginSuccessfulFragment)
             }
         }
+
     }
 
 }

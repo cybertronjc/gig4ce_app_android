@@ -90,10 +90,10 @@ class WeekEndFragment : BaseFragment() {
     }
 
     private fun listener() {
-        textView60.setOnClickListener(View.OnClickListener {
+        rl_days.setOnClickListener(View.OnClickListener {
             showDaysAlert()
         })
-        textView64.setOnClickListener(View.OnClickListener {
+        rl_slots.setOnClickListener(View.OnClickListener {
             showSlotsAlert()
         })
         switch3.setOnClickListener { view ->

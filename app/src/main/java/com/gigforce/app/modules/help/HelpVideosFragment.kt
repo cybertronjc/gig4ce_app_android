@@ -67,7 +67,7 @@ class HelpVideosFragment : BaseFragment() {
                         requireContext().startActivity(webIntent)
                     }
                 },
-                RecyclerGenericAdapter.ItemInterface<HelpVideo?> { obj, viewHolder, position ->
+                RecyclerGenericAdapter.ItemInterface<HelpVideo> { obj, viewHolder, position ->
 
                     var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
                     Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)

@@ -1,11 +1,15 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.profile.models.*
+import com.gigforce.app.utils.getOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
 
@@ -49,6 +53,7 @@ class ProfileViewModel : ViewModel() {
 
         return userProfileData
     }
+
 
     fun getAllTags() {
         FirebaseFirestore.getInstance().collection("Tags").limit(1).get()
@@ -159,4 +164,26 @@ class ProfileViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
     }
+
+    private val _viewState = MutableLiveData<ProfileViewStates>()
+    val viewState: LiveData<ProfileViewStates> = _viewState
+
+    fun setUserAsAmbassador() = viewModelScope.launch {
+
+        try {
+            _viewState.postValue(SettingUserAsAmbassador)
+
+            profileFirebaseRepository.setUserAsAmbassador()
+            _viewState.postValue(UserSetAsAmbassadorSuccessfully)
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            _viewState.postValue(
+                ErrorWhileSettingUserAsAmbassador(
+                    e.message ?: "Error while setting user as Ambassador"
+                )
+            )
+        }
+    }
+
 }

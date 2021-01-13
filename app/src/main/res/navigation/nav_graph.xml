@@ -59,7 +59,7 @@
         tools:layout="@layout/onboarding_loader_fragment" />
     <fragment
         android:id="@+id/chatScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatFragment"
         tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/contactScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ContactScreenFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ChatListFragment"
         tools:layout="@layout/contact_screen_fragment" />
 
     <fragment
@@ -103,6 +103,14 @@
             android:id="@+id/action_homeFragment_to_homeScreenIcons"
             app:destination="@id/loginSuccessfulFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/tempFragment"
+        android:name="com.gigforce.app.TempFragment"
+        android:label="TempFragment"
+        tools:layout="@layout/calendar_dialog">
+    </fragment>
+
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.gigforce.app.modules.profile.ProfileFragment"
@@ -665,6 +673,10 @@
             android:name="ROLE_ID"
             android:defaultValue='""'
             app:argType="string" />
+        <argument
+            android:name="ROLE_VIA_DEEPLINK"
+            android:defaultValue='false'
+            app:argType="boolean" />
     </fragment>
 
 
@@ -731,6 +743,143 @@
         android:name="com.gigforce.app.modules.explore_by_role.AddEducationFragment"
         android:label="fragment_new_education"
         tools:layout="@layout/layout_add_education_fragment" />
+    <fragment
+        android:id="@+id/fragment_add_experience"
+        android:name="com.gigforce.app.modules.explore_by_role.AddExperienceFragment"
+        android:label="fragment_add_experience"
+        tools:layout="@layout/layout_add_experience_fragment" />
+    <fragment
+        android:id="@+id/fragment_questionnaire"
+        android:name="com.gigforce.app.modules.explore_by_role.QuestionaireFragment"
+        android:label="fragment_questionnaire"
+        tools:layout="@layout/layout_questionaire_fragment" />
+    <fragment
+        android:id="@+id/fragment_client_activation"
+        android:name="com.gigforce.app.modules.client_activation.ClientActivationFragment"
+        android:label="fragment_client_activation"
+        tools:layout="@layout/layout_fragment_client_activation" />
+
+    <fragment
+        android:id="@+id/fragment_application_client_activation"
+        android:name="com.gigforce.app.modules.client_activation.ApplicationClientActivationFragment"
+        android:label="fragment_application_client_activation"
+        tools:layout="@layout/layout_application_client_activation_fragment" />
+    <fragment
+        android:id="@+id/payslipMonthlyFragment"
+        android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
+        android:label="PayslipMonthlyFragment" />
+    <fragment
+        android:id="@+id/chatNewContactFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"
+        android:label="ChatNewContactFragment" />
+    <fragment
+        android:id="@+id/groupChatFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupChatFragment"
+        android:label="GroupChatFragment" />
+    <fragment
+        android:id="@+id/groupDetailsFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupDetailsFragment"
+        android:label="GroupDetailsFragment" />
+    <fragment
+        android:id="@+id/groupMediaListFragment"
+        android:name="com.gigforce.app.modules.chatmodule.ui.GroupMediaListFragment"
+        android:label="GroupMediaListFragment" />
+
+    <fragment
+        android:id="@+id/application_questionnaire"
+        android:name="com.gigforce.app.modules.questionnaire.QuestionnaireFragment"
+        android:label="application_questionnaire"
+        tools:layout="@layout/layout_questionnaire_fragment" />
+    <fragment
+        android:id="@+id/fragment_upload_dl_cl_act"
+        android:name="com.gigforce.app.modules.client_activation.UploadDrivingLicense"
+        android:label="fragment_upload_dl_cl_act"
+        tools:layout="@layout/layout_fragment_client_activation" />
+
+    <fragment
+        android:id="@+id/fragment_gig_activation"
+        android:name="com.gigforce.app.modules.client_activation.GigActivationFragment"
+        android:label="fragment_gig_activation"
+        tools:layout="@layout/layout_fragment_activation_gig" />
+
+    <fragment
+        android:id="@+id/fragment_upload_cert"
+        android:name="com.gigforce.app.modules.client_activation.UploadDrivingCertificate"
+        android:label="fragment_upload_cert"
+        tools:layout="@layout/layout_fragment_upload_driving_certificate" />
+
+
+    <fragment
+        android:id="@+id/fragment_doc_sub"
+        android:name="com.gigforce.app.modules.client_activation.DocsSubSchedulerFragment"
+        android:label="fragment_doc_sub"
+        tools:layout="@layout/fragment_docs_sub_scheduler" />
+
+    <fragment
+        android:id="@+id/fragment_schedule_test"
+        android:name="com.gigforce.app.modules.client_activation.ScheduleDrivingTestFragment"
+        android:label="fragment_schedule_test"
+        tools:layout="@layout/layout_fragment_schedule_driving_test" />
+    <fragment
+        android:id="@+id/ambassadorProgramDetailsFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramDetailsFragment"
+        android:label="AmbassadorProgramDetailsFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrollmentRequirementFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
+        android:label="AmbassadorEnrollmentRequirementFragment" />
+    <fragment
+        android:id="@+id/ambassadorEnrolledUsersListFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrolledUsersListFragment"
+        android:label="AmbassadorEnrolledUsersListFragment" />
+    <fragment
+        android:id="@+id/checkMobileFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.CheckMobileFragment"
+        android:label="CheckMobileFragment" />
+    <fragment
+        android:id="@+id/confirmOtpFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment"
+        android:label="ConfirmOtpFragment" />
+    <fragment
+        android:id="@+id/addUserDetailsFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.AddUserDetailsFragment"
+        android:label="AddUserDetailsFragment" />
+    <fragment
+        android:id="@+id/addProfilePictureFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.AddProfilePictureFragment"
+        android:label="AddProfilePictureFragment" />
+    <fragment
+        android:id="@+id/addCurrentAddressFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddCurrentAddressFragment"
+        android:label="AddCurrentAddressFragment" />
+    <fragment
+        android:id="@+id/addUserPanCardInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserPanCardInfoFragment"
+        android:label="AddUserPanCardInfoFragment" />
+    <fragment
+        android:id="@+id/addUserBankDetailsInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserBankDetailsInfoFragment"
+        android:label="AddUserBankDetailsInfoFragment" />
+    <fragment
+        android:id="@+id/addUserAadharCardInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserAadharCardInfoFragment"
+        android:label="AddUserAadharCardInfoFragment" />
+    <fragment
+        android:id="@+id/addUserDrivingLicenseInfoFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserDrivingLicenseInfoFragment"
+        android:label="AddUserDrivingLicenseInfoFragment" />
+    <fragment
+        android:id="@+id/addUserInterestFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserInterestFragment"
+        android:label="AddUserInterestFragment" />
+    <fragment
+        android:id="@+id/addUserExperienceFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserExperienceFragment"
+        android:label="AddUserExperienceFragment" />
+    <fragment
+        android:id="@+id/addUserCurrentAddressFragment"
+        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
+        android:label="AddUserCurrentAddressFragment" />
     <dialog
         android:id="@+id/gigContactPersonBottomSheet"
         android:name="com.gigforce.app.modules.gigPage2.GigContactPersonBottomSheet"

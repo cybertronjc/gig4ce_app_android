@@ -6,9 +6,10 @@
         android:orderInCategory="100"
         android:title="@string/action_block"
         app:showAsAction="collapseActionView" />
+
     <item
         android:id="@+id/action_report"
         android:orderInCategory="100"
-        android:title="@string/action_report"
+        android:title="Report and Block"
         app:showAsAction="collapseActionView" />
 </menu>

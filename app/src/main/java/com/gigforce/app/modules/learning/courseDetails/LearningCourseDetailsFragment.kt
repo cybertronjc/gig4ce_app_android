@@ -9,11 +9,11 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +35,7 @@ import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.StringConstants
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
 import kotlinx.android.synthetic.main.fragment_learning_course_details_main.*
@@ -44,6 +45,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
     private var mCurrentModuleNo: Int = -1
     private lateinit var mCourseId: String
     private var mModuleId: String? = null
+    private var FROM_CLIENT_ACTIVATION = false
+
 
     private val viewModel: CourseDetailsViewModel by viewModels()
 
@@ -52,22 +55,29 @@ class LearningCourseDetailsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_learning_course_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         savedInstanceState?.let {
+            FROM_CLIENT_ACTIVATION =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+
         }
 
         arguments?.let {
+            FROM_CLIENT_ACTIVATION =
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+
+
         }
 
         initView()
@@ -89,6 +99,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_COURSE_ID, mCourseId)
         outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
+        outState.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, FROM_CLIENT_ACTIVATION)
     }
 
     private fun initView() {
@@ -125,7 +136,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
                     PlayVideoDialogFragment.launch(
                         childFragmentManager = childFragmentManager,
                         moduleId = it.moduleId,
-                        lessonId = it.id
+                        lessonId = it.id,
+                        shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
                     )
 
 //                    navigate(
@@ -144,7 +156,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
         learningBackButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            onBackPressed()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -244,8 +256,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
             }
         } else {
             GlideApp.with(requireContext())
-                .load(R.drawable.ic_learning_default_back)
-                .into(videoThumnailIV)
+                    .load(R.drawable.ic_learning_default_back)
+                    .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -362,17 +374,17 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         viewModel.mCurrentModulesProgressData?.forEach { moduleProg ->
 
-            moduleProg.lessonsProgress.filter { it.isActive }.forEach {lessonProg ->
+            moduleProg.lessonsProgress.filter { it.isActive }.forEach { lessonProg ->
 
-                if(lessonProg.lessonType == CourseContent.TYPE_VIDEO){
+                if (lessonProg.lessonType == CourseContent.TYPE_VIDEO) {
                     totalLessons++
 
-                    if(lessonProg.completed)
+                    if (lessonProg.completed)
                         lessonsCompleted++
-                } else if(lessonProg.lessonType == CourseContent.TYPE_ASSESSMENT){
+                } else if (lessonProg.lessonType == CourseContent.TYPE_ASSESSMENT) {
                     totalAssignments++
 
-                    if(lessonProg.completed)
+                    if (lessonProg.completed)
                         assignmentsCompleted++
                 }
             }
@@ -381,7 +393,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
         complitionStatusTv.text =
             "$lessonsCompleted/$totalLessons Lessons Completed"
         assessmentCountTv.text =
-            if (viewModel.currentAssessments?.size == null || totalAssignments==0)
+            if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
                 "0 Assessments"
             else if (assignmentsCompleted == 1)
                 "$assignmentsCompleted/$totalAssignments Assessment Completed"
@@ -482,8 +494,35 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                     var img = getImageView(viewHolder, R.id.learning_img)
 
+
                     var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
-                    completedIV.isVisible = obj?.completed ?: false
+                    var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
+
+                    if (obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons) {
+                        completedPercTV.text = "100%"
+                        completedPercTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.green,
+                                null
+                            )
+                        )
+                        completedIV.setImageResource(R.drawable.ic_successful_green_tick)
+                    } else {
+                        val completedPercentage =
+                            if (obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
+
+                        completedPercTV.setTextColor(
+                            ResourcesCompat.getColor(
+                                resources,
+                                R.color.app_orange,
+                                null
+                            )
+                        )
+                        completedPercTV.text = "$completedPercentage%"
+                        completedIV.setImageResource(R.drawable.ic_clock_orange)
+                    }
+
 
                     var borderView = getView(viewHolder, R.id.borderFrameLayout)
                     if (viewModel.currentlySelectedModulePosition == position) {
@@ -498,7 +537,9 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                             GlideApp.with(requireContext())
                                 .load(obj.coverPicture)
-                                .placeholder(getCircularProgressDrawable())
+                                .thumbnail(
+                                    GlideApp.with(requireContext()).load(R.drawable.ic_loading)
+                                )
                                 .error(R.drawable.ic_learning_default_back)
                                 .into(img)
                         } else {
@@ -510,7 +551,10 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
                                     GlideApp.with(requireContext())
                                         .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
+                                        .thumbnail(
+                                            GlideApp.with(requireContext())
+                                                .load(R.drawable.ic_loading)
+                                        )
                                         .error(R.drawable.ic_learning_default_back)
                                         .into(img)
                                 }
@@ -612,7 +656,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_completed))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
                     } else {
 
                         getTextView(viewHolder, R.id.status).text = "PENDING"
@@ -623,7 +667,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
                         (getView(
                             viewHolder,
                             R.id.side_bar_status
-                        ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
                     }
 
                 })
@@ -637,6 +681,15 @@ class LearningCourseDetailsFragment : BaseFragment() {
         learning_details_assessments_rv.adapter = recyclerGenericAdapter
 
 
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (FROM_CLIENT_ACTIVATION) {
+            navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+            popBackState()
+            return true
+        }
+        return super.onBackPressed()
     }
 
 

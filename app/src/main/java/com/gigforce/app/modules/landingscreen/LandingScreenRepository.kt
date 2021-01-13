@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.landingscreen
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.landingscreen.models.Role
 import com.google.firebase.firestore.ListenerRegistration
 
 class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallbacks {
@@ -24,12 +23,16 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
 //            listener?.remove()
             run {
                 responseCallbacks.getRolesResponse(success, error)
-//                val role: Role =
-//                    success?.toObjects(Role::class.java)?.get(0)!!
-//                role.role_title="DELIVERY EXECUTIVE"
-//                db.collection("Roles").document().set(role)
+
             }
         }
 
+    }
+
+    override fun getJobProfile(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
+        db.collection("Job_Profiles").whereEqualTo("isActive", true).limit(1)
+            .addSnapshotListener { success, error ->
+                responseCallbacks.getJobProfileResponse(success, error)
+            }
     }
 }

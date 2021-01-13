@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/size_8"
-                android:src="@drawable/ic_home_chat"
+                android:src="@drawable/ic_homescreen_chat"
                 app:layout_constraintBottom_toBottomOf="@+id/cv_profile_image_gig_his"
                 app:layout_constraintEnd_toStartOf="@+id/cv_profile_image_gig_his"
                 app:layout_constraintTop_toTopOf="@+id/cv_profile_image_gig_his" />

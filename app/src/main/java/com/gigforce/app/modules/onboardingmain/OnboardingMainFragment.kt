@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,7 +51,21 @@ class OnboardingMainFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(OnboardingMainViewModel::class.java)
         initializeViews()
+        checkForDeepLink()
     }
+
+    private fun checkForDeepLink() {
+        if (navFragmentsData?.getData()
+                ?.getBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)!!
+        ) {
+
+
+            navFragmentsData?.getData()?.putBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)
+
+
+        }
+    }
+
 
     var originalLocation = intArrayOf(0, 0);
     private fun initializeViews() {
@@ -181,32 +196,32 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun initializeTitleAsName() {
         setProgressBarWeight(20f)
-        progress_completion_tv.text = "1/5"
-        title_onboarding.text = "What's your name?"
+        progress_completion_tv.text = getString(R.string.one_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_name)
     }
 
     private fun initializeTitleAsAge() {
         setProgressBarWeight(40f)
-        progress_completion_tv.text = "2/5"
-        title_onboarding.text = "What's your age group?"
+        progress_completion_tv.text = getString(R.string.two_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_age)
     }
 
     private fun initializeTitleAsGender() {
         setProgressBarWeight(60f)
-        progress_completion_tv.text = "3/5"
-        title_onboarding.text = "Select your gender."
+        progress_completion_tv.text = getString(R.string.three_of_five)
+        title_onboarding.text = getString(R.string.select_gender)
     }
 
     private fun initializeTitleAsEducation() {
         setProgressBarWeight(80f)
-        progress_completion_tv.text = "4/5"
-        title_onboarding.text = "What's your highest qualification?"
+        progress_completion_tv.text = getString(R.string.four_of_five)
+        title_onboarding.text = getString(R.string.highest_qualification)
     }
 
     private fun initializeTitleAsWorkStatus() {
         setProgressBarWeight(100f)
-        progress_completion_tv.text = "5/5"
-        title_onboarding.text = "What's your work status?"
+        progress_completion_tv.text = getString(R.string.five_of_five)
+        title_onboarding.text = getString(R.string.whats_ur_work)
     }
 
     private fun nextPage(): Boolean {
@@ -239,8 +254,31 @@ class OnboardingMainFragment : BaseFragment() {
 
     private fun setOnboardingCompleteAndNavigate() {
         val inviteId = sharedDataInterface.getData(StringConstants.INVITE_USER_ID.value)
-        viewModel.setOnboardingCompleted(inviteId)
+        var ambassadorLatitude = 0.0
+        var ambassadorLongitude = 0.0
+        try{
+        sharedDataInterface.getData(StringConstants.AMBASSADOR_LATITUDE.value)?.let {
+            if(it.isNotBlank())ambassadorLatitude = it.toDouble()
+        }
+        sharedDataInterface.getData(StringConstants.AMBASSADOR_LONGITUDE.value)?.let {
+            if(it.isNotBlank())
+            ambassadorLongitude = it.toDouble()
+        }}
+        catch (e:Exception){
+
+        }
+        viewModel.setOnboardingCompleted(
+            inviteId,
+            sharedDataInterface.getData(StringConstants.INVITE_BY_AMBASSADOR.value)?:"",
+            ambassadorLatitude,
+            ambassadorLongitude,
+            navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
+            navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
+        )
         sharedDataInterface.remove(StringConstants.INVITE_USER_ID.value)
+        sharedDataInterface.remove(StringConstants.INVITE_BY_AMBASSADOR.value)
+        sharedDataInterface.remove(StringConstants.AMBASSADOR_LATITUDE.value)
+        sharedDataInterface.remove(StringConstants.AMBASSADOR_LONGITUDE.value)
         saveOnBoardingCompleted()
         navigateToLoaderScreen()
     }
@@ -627,7 +665,8 @@ class OnboardingMainFragment : BaseFragment() {
     private val keyboardLayoutListener = OnGlobalLayoutListener {
         try {
             val heightDiff: Int =
-                onboarding_root_layout.getRootView().getHeight() - onboarding_root_layout.getHeight()
+                onboarding_root_layout.getRootView()
+                    .getHeight() - onboarding_root_layout.getHeight()
 //        val contentViewTop: Int = activity?.getWindow()?.findViewById<View>(Window.ID_ANDROID_CONTENT)?.getTop()!!
 //        val broadcastManager =
 //            LocalBroadcastManager.getInstance(requireContext())

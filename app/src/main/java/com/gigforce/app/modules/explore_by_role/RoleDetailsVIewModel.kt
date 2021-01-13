@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.landingscreen.models.Role
+import com.gigforce.app.modules.client_activation.models.Role
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
 import com.google.android.gms.tasks.Task
@@ -10,6 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 
 class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewModel(),
     RoleDetailsCallbacks.ResponseCallbacks {
+    private var newUser: Boolean = false
+    var openQuestionnaire: Boolean = false
+    var emailValidated = false
     private val _observerRole: SingleLiveEvent<Role> by lazy {
         SingleLiveEvent<Role>();
     }
@@ -59,11 +62,37 @@ class RoleDetailsVIewModel(private val callbacks: RoleDetailsCallbacks) : ViewMo
         callbacks.checkForProfileCompletionAndVerification(this)
     }
 
-    override fun <T> getProfileSuccess(data: T) {
+    fun getUID(): String {
+        return callbacks.getUID()
+    }
+
+    override fun <T> checkDataResponse(data: T) {
+
         if (data is ProfileData) {
-            observerDataToCheck.value = mutableListOf(data)
+            dataCheckList.clear()
+            dataCheckList.add(data)
+        } else {
+            dataCheckList.add(data!!)
+        }
+        if (dataCheckList.size == 2) {
+            observerDataToCheck.value = dataCheckList
+
         }
 
 
+    }
+
+    val dataCheckList = mutableListOf<Any>()
+
+    fun openQuestionnaireLandingAgain() {
+        this.openQuestionnaire = true
+    }
+
+    fun setNewUser(b: Boolean) {
+        this.newUser = b;
+    }
+
+    fun isNewUser(): Boolean {
+        return newUser
     }
 }

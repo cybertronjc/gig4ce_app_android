@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
@@ -34,6 +35,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
@@ -47,6 +49,7 @@ import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -60,7 +63,6 @@ import kotlinx.android.synthetic.main.calendar_home_screen.cardView
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
 import kotlinx.android.synthetic.main.calendar_home_screen.oval_gradient_iv
 import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -83,6 +85,7 @@ class CalendarHomeScreen : BaseFragment(),
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
     private val gigViewModel : GigViewModel by viewModels()
+    private val chatHeadersViewModel : ChatHeadersViewModel by viewModels()
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
@@ -209,7 +212,7 @@ class CalendarHomeScreen : BaseFragment(),
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
         chat_icon_iv.setOnClickListener {
-//            navigate(R.id.contactScreenFragment)
+            navigate(R.id.contactScreenFragment)
         }
         month_year.setOnClickListener(View.OnClickListener {
             changeVisibilityCalendarView()
@@ -339,6 +342,21 @@ class CalendarHomeScreen : BaseFragment(),
                 calendarView.setGigData(viewModel.arrMainHomeDataModel!!)
             }
         })
+
+        chatHeadersViewModel.unreadMessageCount
+            .observe(viewLifecycleOwner, Observer {
+
+                if (it == 0) {
+                    unread_message_count_tv.setImageDrawable(null)
+                } else {
+                    val drawable = TextDrawable.builder().buildRound(
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                    )
+                    unread_message_count_tv.setImageDrawable(drawable)
+                }
+            })
+        chatHeadersViewModel.startWatchingChatHeaders()
 
 
         // load user data
@@ -917,5 +935,7 @@ class CalendarHomeScreen : BaseFragment(),
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
         }
     }
+
+
 
 }

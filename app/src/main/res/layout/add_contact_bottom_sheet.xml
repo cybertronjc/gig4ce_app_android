@@ -7,41 +7,59 @@
     android:background="@drawable/bottom_up_sheet"
     android:clipToPadding="false">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ll_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="26dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/form_error"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/bs_top_margin"
-            android:letterSpacing="0.05"
-            android:text="@string/error_empty_mandatory_fields"
-            android:textColor="#d4e02020"
-            android:textSize="14sp"
-            android:visibility="gone" />
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/delete"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_heading_add_contact_bts"
-            style="@style/BsHeadingBold12"
+            <TextView
+                android:id="@+id/form_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bs_top_margin"
+                android:letterSpacing="0.05"
+                android:text="@string/error_empty_mandatory_fields"
+                android:textColor="#d4e02020"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_heading_add_contact_bts"
+                style="@style/BsHeadingBold12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/add_contact_new_contact" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/delete"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/add_contact_new_contact" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_delete" />
 
-    </LinearLayout>
-
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/add_contact_phone"
@@ -87,13 +105,9 @@
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cb_is_whatsapp_number_add_contact"
-        style="@style/LatoRegularCardText12"
+        style="@style/check_box_style_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-5dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginBottom="-10dp"
-        android:buttonTint="@color/warm_grey_two"
         android:text="@string/is_whats_app_number"
         android:textSize="@dimen/font_12"
         app:layout_constraintEnd_toEndOf="parent"

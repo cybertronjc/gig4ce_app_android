@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -85,7 +86,7 @@ class MyAssessmentsInnerFragment : BaseFragment() {
                             (getView(
                                     viewHolder,
                                     R.id.side_bar_status
-                            ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                            ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
 
 
                         })!!
@@ -147,9 +148,9 @@ class MyAssessmentsInnerFragment : BaseFragment() {
                             R.id.status
                     ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
                     (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                    ) as CardView).setCardBackgroundColor(resources.getColor(R.color.status_bg_pending))
+                        viewHolder,
+                        R.id.side_bar_status
+                    ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
 
 
                 })!!

@@ -146,7 +146,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                 }
                 is Lce.Content -> {
                     nextLesson = it.content
-                    next_lesson_btn.isVisible = it.content != null
+                    val isContentPresent = it.content != null
+                    next_lesson_btn.isVisible = isContentPresent
 
                     next_lesson_btn.text = when (nextLesson?.type) {
                         CourseContent.TYPE_ASSESSMENT -> "Next Assessment"
@@ -181,6 +182,14 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
             if (nextLessonId != null)
                 learningViewModel.getLessonDetails(nextLessonId!!)
+            else {
+                rl_new_certificate_assess_result.isVisible = true
+                tv_sug_learnings_label_assess_frag.isVisible = true
+                rv_sug_learnings_assess_result.isVisible = true
+                tv_new_cert_asses_frag.text =
+                    getString(R.string.you_will_be_soon_sent_an_invite)
+                learningViewModel.getAllCourses()
+            }
         } else {
 
             if (moduleId != null && currentLessonId != null)
@@ -420,7 +429,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                         PlayVideoDialogFragment.launch(
                             childFragmentManager = childFragmentManager,
                             moduleId = cc.moduleId,
-                            lessonId = cc.id
+                            lessonId = cc.id,
+                            shouldShowFeedbackDialog = cc.shouldShowFeedbackDialog
                         )
                     }
                     CourseContent.TYPE_ASSESSMENT -> {
@@ -463,7 +473,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                     PlayVideoDialogFragment.launch(
                         childFragmentManager = childFragmentManager,
                         moduleId = cc.moduleId,
-                        lessonId = cc.id
+                        lessonId = cc.id,
+                        shouldShowFeedbackDialog = cc.shouldShowFeedbackDialog
                     )
                 }
                 CourseContent.TYPE_ASSESSMENT -> {
@@ -507,7 +518,8 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
     private fun initUI() {
         userPassed = arguments?.getBoolean(StringConstants.ASSESSMENT_PASSED.value) ?: false
         tv_title_toolbar.text = getString(R.string.assessment)
-        tv_kp_it_up_assess_result.text=if(userPassed) getString(R.string.keep_it_up) else getString(R.string.watch_lesson_again)
+        tv_kp_it_up_assess_result.text =
+            if (userPassed) getString(R.string.keep_it_up) else getString(R.string.watch_lesson_again)
         iv_options_menu_tb.visibility = View.VISIBLE
         var correctAns = 0
         arguments?.getBooleanArray(StringConstants.ANSWERS_ARR.value)?.forEach { item ->

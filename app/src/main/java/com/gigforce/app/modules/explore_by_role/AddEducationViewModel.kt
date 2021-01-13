@@ -2,7 +2,6 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.Education
-import com.gigforce.app.modules.profile.models.Language
 import com.gigforce.app.utils.SingleLiveEvent
 
 class AddEducationViewModel : ViewModel() {
@@ -23,6 +22,10 @@ class AddEducationViewModel : ViewModel() {
                     observableSuccess.value = it.exception?.message
                 }
             }
+    }
+
+    fun getUid(): String {
+        return educationRepository.getUID()
     }
 
 }

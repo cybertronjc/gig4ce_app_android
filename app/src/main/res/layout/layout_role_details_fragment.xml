@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true">
 
+
             <ImageView
                 android:id="@+id/iv_gig_bg_role_details"
                 android:layout_width="0dp"
@@ -28,6 +29,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_options_role_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_three_dots"
+                app:tint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/tv_role_role_details"
@@ -254,7 +265,7 @@
         android:gravity="center_horizontal"
         android:paddingTop="@dimen/size_14"
         android:paddingBottom="@dimen/size_12"
-        android:text="@string/mark_as_interest"
+        android:text="@string/apply_now"
         android:textColor="#ffffff"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent" />

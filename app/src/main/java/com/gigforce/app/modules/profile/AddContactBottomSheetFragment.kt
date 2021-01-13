@@ -7,8 +7,11 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone
@@ -68,6 +71,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
             if (!contactOperationInit()) return
             dismiss()
         })
+
     }
 
     private fun contactOperationInit(): Boolean {
@@ -91,7 +95,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         false,
                         cb_is_whatsapp_number_add_contact.isChecked
                     ), true
-                , delete = false
+                    , delete = false
                 )
             }
             STATE_EDIT_EMAIL -> {
@@ -101,7 +105,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         add_contact_phone.text.toString(),
                         false
                     ), false
-                , delete = false
+                    , delete = false
                 )
             }
             STATE_ADD_EMAIL -> {
@@ -111,7 +115,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                         add_contact_phone.text.toString(),
                         false
                     ), true
-                , delete = false
+                    , delete = false
                 )
             }
 
@@ -171,7 +175,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                 cb_is_whatsapp_number_add_contact.visibility = View.VISIBLE
                 add_contact_add_more.visibility = View.VISIBLE
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(13))
-
+                delete.gone()
 
             }
             STATE_ADD_EMAIL -> {
@@ -181,6 +185,7 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                 add_contact_phone.hint = getString(R.string.email_madatory)
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
+                delete.gone()
 
 
             }
@@ -195,6 +200,19 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)
                 add_contact_phone.isEnabled =
                     !arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!
+                delete.isVisible =
+                    !arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!
+                delete.setOnClickListener {
+                    dismiss()
+                    callbacks?.editNumber(
+                        arguments?.getString(
+                            StringConstants.CONTACT_TO_EDIT.value
+                        )!!,
+                        arguments?.getBoolean(StringConstants.IS_WHATSAPP_NUMBER.value, false)!!,
+                        arguments?.getBoolean(StringConstants.IS_REGISTERED_NUMBER.value, false)!!,
+                        delete = true
+                    )
+                }
 
 
             }
@@ -207,6 +225,14 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
                 add_contact_phone.inputType = InputType.TYPE_CLASS_TEXT
                 add_contact_phone.filters = arrayOf<InputFilter>(LengthFilter(255))
                 add_contact_phone.setSelection(add_contact_phone.text.toString().length)
+                delete.setOnClickListener {
+                    dismiss()
+                    callbacks?.editEmail(
+                        arguments?.getString(StringConstants.EMAIL_TO_EDIT.value)!!, true
+                    )
+                }
+
+                delete.visible()
 
 
             }
@@ -235,6 +261,14 @@ class AddContactBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     interface AddContactBottomSheetCallbacks {
         fun contactEdit(oldPhone: String?, contact: ContactPhone?, add: Boolean?, delete: Boolean?)
         fun emailEdit(oldEmail: String?, contact: ContactEmail?, add: Boolean?, delete: Boolean?)
+        fun editNumber(
+            number: String,
+            isWhatsApp: Boolean,
+            isRegistered: Boolean,
+            delete: Boolean
+        )
+
+        fun editEmail(email: String, delete: Boolean)
     }
 
     fun setCallbacks(callbacks: AddContactBottomSheetCallbacks) {

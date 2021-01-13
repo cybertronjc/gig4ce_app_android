@@ -20,7 +20,7 @@
     <color name="red">#FF0000</color>
     <color name="app_red">#E02020</color>
     <color name="app_orange">#fa6400</color>
-
+    <color name="schedule_doc_sub_bg">#f7f7f7</color>
     <color name="setting_bg">#f7f7f7</color>
     <color name="gray_color">#6d7278</color>
     <color name="preferences_item_seprator">#c8c7cc</color>
@@ -66,7 +66,9 @@
     <color name="battle_ship_grey">#6d7278</color>
     <color name="white_two">#f4f4f4</color>
     <color name="lipstick">#d72467</color>
+    <color name="lipstick_two">#e42c64</color>
     <color name="light_pink">#ffd9e6</color>
+    <color name="light_pink_30">#30ffd9e6</color>
     <color name="warm_grey">#888888</color>
     <color name="warm_grey_20">#33888888</color>
 
@@ -101,6 +103,7 @@
     <color name="edit_note_line">#68979797</color>
     <color name="green_dc3ab105">#dc3ab105</color>
     <color name="fa6400">#fa6400</color>
+    <color name="darkinsh_pink_two_op_thirty_seven">#5fe94b81</color>
 
     <color name="black_three">#333333</color>
     <color name="grey_c7">#c7c7c7</color>
@@ -111,6 +114,12 @@
     <color name="gig_pink_light">#e8e8e8</color>
     <color name="gig_orange">#fa6400</color>
     <color name="gig_orange_light">#fee1cd</color>
-
+    <color name="black_two">#313131</color>
+    <color name="battleship_grey">#6d7278</color>
+    <color name="pending_color">#F7B500</color>
+    <color name="activated_color">#4E9405</color>
+    <color name="rejected_color">#FF000F</color>
+    <color name="black_666">#666666</color>
+    <color name="thumbs_down_color">#27979797</color>
 
 </resources>

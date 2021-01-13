@@ -14,7 +14,8 @@ object GigNavigation {
     }
 
     fun openGigAttendancePage(navController: NavController, extras : Bundle?){
-        navController.navigate(R.id.gigPage2Fragment, extras)
+        navController.navigate(R.id.gigAttendancePageFragment, extras)
+        //navController.navigate(R.id.gigPage2Fragment, bundle)
     }
 
     fun openGigMainPage(navController: NavController, gigId : String){
@@ -24,6 +25,7 @@ object GigNavigation {
     }
 
     fun openGigMainPage(navController: NavController, bundle  : Bundle?){
-        navController.navigate(R.id.gigPage2Fragment, bundle)
+        navController.navigate(R.id.presentGigPageFragment, bundle)
+        //navController.navigate(R.id.gigPage2Fragment, bundle)
     }
 }

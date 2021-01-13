@@ -16,13 +16,50 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/white"
-            app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_arrow_back_black"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/giger_verification"
-            app:titleTextColor="@color/black" />
+            app:contentInsetStartWithNavigation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_back_verification_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_18"
+                    app:srcCompat="@drawable/ic_arrow_back_black" />
+
+                <TextView
+                    android:id="@+id/tv_title_verification_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_toStartOf="@+id/iv_options_verification_page"
+                    android:layout_toEndOf="@+id/iv_back_verification_page"
+                    android:letterSpacing="0"
+                    android:text="@string/giger_verification"
+                    android:textColor="#080808"
+                    android:textSize="@dimen/font_20" />
+
+                <ImageView
+                    android:id="@+id/iv_options_verification_page"
+                    android:layout_width="@dimen/size_24"
+                    android:layout_height="@dimen/size_24"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_centerVertical="true"
+
+                    app:srcCompat="@drawable/ic_three_dots"
+                    app:tint="@color/black" />
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
@@ -30,10 +67,10 @@
         layout="@layout/fragment_giger_verification_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingBottom="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

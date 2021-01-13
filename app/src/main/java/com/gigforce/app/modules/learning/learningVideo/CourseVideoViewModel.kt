@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.SingleLiveEvent2
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,8 @@ class CourseVideoViewModel constructor(
     private val learningRepository: LearningRepository = LearningRepository()
 ) : ViewModel() {
 
-    private var mCourseContent: CourseContent? = null
+    private var videoLesson: CourseContent? = null
+    val currentVideoLesson : CourseContent? get() = videoLesson
 
     private val _videoDetails = MutableLiveData<Lce<CourseContent>>()
     val videoDetails: LiveData<Lce<CourseContent>> = _videoDetails
@@ -40,7 +42,7 @@ class CourseVideoViewModel constructor(
                 _videoDetails.postValue(Lce.error("No Video Lesson Found"))
             else {
                 val moduleProgress = learningRepository.getModuleProgress(moduleId)
-                val videoLesson = videoLessons.first()
+                videoLesson = videoLessons.first()
 
                 val videoProgress = moduleProgress?.lessonsProgress?.find {
                     it.lessonId == lessonId
@@ -61,12 +63,12 @@ class CourseVideoViewModel constructor(
                         )
                     }
 
-                    videoLesson.currentlyOnGoing = videoProgress.ongoing
-                    videoLesson.completed = videoProgress.completed
-                    videoLesson.completionProgress = videoProgress.completionProgress
-                    videoLesson.lessonTotalLength = videoProgress.lessonTotalLength
+                    videoLesson?.currentlyOnGoing = videoProgress.ongoing
+                    videoLesson?.completed = videoProgress.completed
+                    videoLesson?.completionProgress = videoProgress.completionProgress
+                    videoLesson?.lessonTotalLength = videoProgress.lessonTotalLength
                 }
-                _videoDetails.postValue(Lce.content(videoLesson))
+                _videoDetails.postValue(Lce.content(videoLesson!!))
 
             }
         } catch (e: Exception) {
@@ -122,6 +124,37 @@ class CourseVideoViewModel constructor(
             _videoSaveState.value = Lce.content(VideoSaveState.VideoStateSaved)
         } catch (e: Exception) {
             _videoSaveState.value = Lce.error(e.message!!)
+        }
+    }
+
+    private val _saveLessonFeedbackState = MutableLiveData<Lse>()
+    val saveLessonFeedbackState: LiveData<Lse> = _saveLessonFeedbackState
+
+    fun saveVideoFeedback(
+        lessonId: String,
+        lessonRating: Float? = null,
+        explanation: Boolean? = null,
+        completeness: Boolean? = null,
+        easyToUnderStand: Boolean? = null,
+        videoQuality: Boolean? = null,
+        soundQuality: Boolean? = null
+    ) = viewModelScope.launch {
+
+        _saveLessonFeedbackState.value = Lse.loading()
+        try {
+
+            learningRepository.recordLessonFeedback(
+                lessonId,
+                lessonRating,
+                explanation,
+                completeness,
+                easyToUnderStand,
+                videoQuality,
+                soundQuality
+            )
+            _saveLessonFeedbackState.value = Lse.success()
+        } catch (e: Exception) {
+            _saveLessonFeedbackState.value = Lse.error(e.message!!)
         }
     }
 }

@@ -1,18 +1,14 @@
 package com.gigforce.app.modules.landingscreen
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.models.Role
+import com.gigforce.app.modules.client_activation.models.Role
 import com.gigforce.app.modules.landingscreen.models.Tip
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.modules.profile.AboutExpandedFragment
-import com.gigforce.app.modules.profile.EducationExpandedFragment
-import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
@@ -20,141 +16,29 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class LandingScreenViewModel constructor(
+
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
     private val preferencesRepository: PreferencesRepository = PreferencesRepository()
 ) : ViewModel(), LandingScreenCallbacks.ResponseCallbacks {
+    private var allTips: List<Tip>? = arrayListOf()
     private var callbacks: LandingScreenCallbacks? = null
-    private val _observerRole: SingleLiveEvent<Role> by lazy {
-        SingleLiveEvent<Role>();
+    private val _observerRole: SingleLiveEvent<List<Role>> by lazy {
+        SingleLiveEvent<List<Role>>();
     }
-    val observerRole: SingleLiveEvent<Role> get() = _observerRole
+    val observerRole: SingleLiveEvent<List<Role>> get() = _observerRole
+
+    private val _observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
+        SingleLiveEvent<ArrayList<JobProfile>>();
+    }
+    val observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> get() = _observableJobProfile
+
 
     companion object {
 
         //TIPS
-        private val ADD_EDUCATION_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Your education details help build your profile.",
-            whereToRedirect = R.id.educationExpandedFragment,
-            tip_id = 1097,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
-            )
-        )
 
-        private val ADD_WORK_EXP_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Your work experience helps find similar gigs for you.",
-            whereToRedirect = R.id.experienceExpandedFragment,
-            tip_id = 1098,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
-            )
-        )
-
-        private val ADD_SKILLS_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Adding your skills helps recommend suitable gigs.",
-            whereToRedirect = R.id.educationExpandedFragment,
-            tip_id = 1099,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
-            )
-        )
-
-        private val ADD_ACHIEVEMENTS_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Sharing your past achievements highlights your profile.",
-            whereToRedirect = R.id.educationExpandedFragment,
-            tip_id = 1100,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
-            )
-        )
-
-
-        private val ADD_PROFILE_PHOTO_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Adding a profile photo shows off your personality.",
-            tip_id = 1101,
-            whereToRedirect = R.id.profileFragment
-        )
-
-        private val ADD_LANGUAGE_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "How many languages can you speak in?",
-            whereToRedirect = R.id.aboutExpandedFragment,
-            tip_id = 1102,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
-            )
-        )
-
-        private val ADD_ABOUT_ME_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Tell me 2 lines that best describe your.",
-            whereToRedirect = R.id.aboutExpandedFragment,
-            tip_id = 1103,
-            intentExtraMap = mapOf(
-                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
-            )
-        )
-
-
-        //Pref Tips from here
-
-        private val ADD_PERMANENT_ADD_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Add your permanent address to complete verification?",
-            tip_id = 1104,
-            whereToRedirect = R.id.permanentAddressViewFragment
-        )
-
-
-        private val ADD_PREFERRED_DISTANCE_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "How far are you willing to travel for work daily?",
-            tip_id = 1105,
-            whereToRedirect = R.id.arrountCurrentAddress
-        )
-
-        private val ADD_DAILY_EARNING_EXPECTATION_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "What is your daily earning expectation?",
-            tip_id = 1106,
-            whereToRedirect = R.id.earningFragment
-        )
-
-
-        private val ADD_WEEKDAY_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "How many days during the week are you willing to work?",
-            tip_id = 1107,
-            whereToRedirect = R.id.weekDayFragment
-        )
-
-        private val ADD_WEEKEND_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Are you willing to work during the weekends?",
-            tip_id = 1108,
-            whereToRedirect = R.id.weekEndFragment
-        )
-
-        private val ADD_WFH_TIP = Tip(
-            title = "Gigforce Tip ",
-            subTitle = "Would you want to work from home?",
-            tip_id = 1109,
-            whereToRedirect = R.id.locationFragment
-        )
     }
 
     private val _tips = MutableLiveData<List<Tip>>()
@@ -184,70 +68,70 @@ class LandingScreenViewModel constructor(
         profileData: ProfileData?
     ) {
         val profileHelpTips: MutableList<Tip> = mutableListOf()
-
+        if (allTips.isNullOrEmpty()) return
         if (profileData == null) {
             //Add All
 
-            profileHelpTips.add(ADD_EDUCATION_TIP)
-            profileHelpTips.add(ADD_WORK_EXP_TIP)
-            profileHelpTips.add(ADD_SKILLS_TIP)
-            profileHelpTips.add(ADD_ACHIEVEMENTS_TIP)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_EDUCATION_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WORK_EXP_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_SKILLS_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_ACHIEVEMENTS_TIP"))!!)!!)
 
-            profileHelpTips.add(ADD_PROFILE_PHOTO_TIP)
-            profileHelpTips.add(ADD_LANGUAGE_TIP)
-            profileHelpTips.add(ADD_ABOUT_ME_TIP)
-            profileHelpTips.add(ADD_PERMANENT_ADD_TIP)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_PROFILE_PHOTO_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_LANGUAGE_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_ABOUT_ME_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_PERMANENT_ADD_TIP"))!!)!!)
         } else {
 
             if (profileData.educations.isNullOrEmpty())
-                profileHelpTips.add(ADD_EDUCATION_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_EDUCATION_TIP"))!!)!!)
 
             if (profileData.experiences.isNullOrEmpty())
-                profileHelpTips.add(ADD_WORK_EXP_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WORK_EXP_TIP"))!!)!!)
 
             if (profileData.skills.isNullOrEmpty())
-                profileHelpTips.add(ADD_SKILLS_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_SKILLS_TIP"))!!)!!)
 
             if (profileData.achievements.isNullOrEmpty())
-                profileHelpTips.add(ADD_ACHIEVEMENTS_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_ACHIEVEMENTS_TIP"))!!)!!)
 
             if (profileData.profileAvatarName == "avatar.jpg")
-                profileHelpTips.add(ADD_PROFILE_PHOTO_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_PROFILE_PHOTO_TIP"))!!)!!)
 
             if (profileData.languages.isNullOrEmpty())
-                profileHelpTips.add(ADD_LANGUAGE_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_LANGUAGE_TIP"))!!)!!)
 
             if (profileData.aboutMe.isBlank())
-                profileHelpTips.add(ADD_ABOUT_ME_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_ABOUT_ME_TIP"))!!)!!)
 
             if (profileData.address.home.isEmpty())
-                profileHelpTips.add(ADD_PERMANENT_ADD_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_PERMANENT_ADD_TIP"))!!)!!)
 
             if (!profileData.address.current.isEmpty() && !profileData.address.current.preferredDistanceActive)
-                profileHelpTips.add(ADD_PREFERRED_DISTANCE_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_PREFERRED_DISTANCE_TIP"))!!)!!)
         }
 
 
         if (preferencesData == null) {
             //Add All
 
-            profileHelpTips.add(ADD_DAILY_EARNING_EXPECTATION_TIP)
-            profileHelpTips.add(ADD_WEEKDAY_TIP)
-            profileHelpTips.add(ADD_WEEKEND_TIP)
-            profileHelpTips.add(ADD_WFH_TIP)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_DAILY_EARNING_EXPECTATION_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WEEKDAY_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WEEKEND_TIP"))!!)!!)
+            profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WFH_TIP"))!!)!!)
         } else {
 
             if (preferencesData.earning.perDayGoal <= 0)
-                profileHelpTips.add(ADD_DAILY_EARNING_EXPECTATION_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_DAILY_EARNING_EXPECTATION_TIP"))!!)!!)
 
             if (!preferencesData.isweekdaysenabled)
-                profileHelpTips.add(ADD_WEEKDAY_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WEEKDAY_TIP"))!!)!!)
 
             if (!preferencesData.isweekendenabled)
-                profileHelpTips.add(ADD_WEEKEND_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WEEKEND_TIP"))!!)!!)
 
             if (!preferencesData.isWorkFromHome)
-                profileHelpTips.add(ADD_WFH_TIP)
+                profileHelpTips.add(allTips?.get(allTips?.indexOf(Tip("ADD_WFH_TIP"))!!)!!)
         }
 
         _tips.value = profileHelpTips
@@ -313,6 +197,10 @@ class LandingScreenViewModel constructor(
 
     }
 
+    fun getJobProfile() {
+        callbacks?.getJobProfile(this)
+    }
+
     override fun onCleared() {
         super.onCleared()
         prefListenerRegistration?.remove()
@@ -323,16 +211,47 @@ class LandingScreenViewModel constructor(
         querySnapshot: QuerySnapshot?,
         error: FirebaseFirestoreException?
     ) {
-        if (error != null) {
-
-        } else {
+        if (error == null) {
             try {
-                val role = querySnapshot?.toObjects(Role::class.java)?.get(0)
-                role?.id = querySnapshot?.documents?.get(0)?.id
-                observerRole.value = role
-            }catch (e:Exception){
+                if (!querySnapshot?.documents.isNullOrEmpty()) {
+                    val role = querySnapshot?.toObjects(Role::class.java)
+                    for (i in 0 until (querySnapshot?.documents?.size ?: 0)) {
+                        role?.get(i)?.id = querySnapshot?.documents?.get(i)?.id
+
+                    }
+                    observerRole.value = role
+                }
+
+            } catch (e: Exception) {
 
             }
         }
+    }
+
+    override fun getJobProfileResponse(
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
+    ) {
+        if (error == null) {
+            if (querySnapshot?.documents?.isNotEmpty() == true) {
+                var allClientActivations = ArrayList<JobProfile>()
+                for (clientActi in querySnapshot.documents) {
+                    val jobProfileData = clientActi.toObject(JobProfile::class.java)
+                    jobProfileData?.let {
+                        jobProfileData.id = clientActi.id
+                        allClientActivations.add(jobProfileData)
+                    }
+                }
+                _observableJobProfile.value = allClientActivations
+
+
+
+            }
+
+        }
+    }
+
+    fun setTips(tipsList: List<Tip>) {
+        this.allTips = tipsList;
     }
 }

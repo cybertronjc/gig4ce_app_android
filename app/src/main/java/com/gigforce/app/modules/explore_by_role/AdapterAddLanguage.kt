@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
+import com.gigforce.app.core.gone
 import com.gigforce.app.modules.profile.models.Language
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.ThumbTextSeekBar
@@ -44,6 +45,7 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface AdapterAddLanguageCallbacks {
         fun submitClicked(items: MutableList<Language>)
+        fun goBack()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -54,6 +56,11 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     View.OnClickListener {
 
                         adapterAddLanguageCallbacks?.submitClicked(items!!)
+                    })
+                PushDownAnim.setPushDownAnimTo(viewholder.itemView.tv_cancel).setOnClickListener(
+                    View.OnClickListener {
+
+                        adapterAddLanguageCallbacks?.goBack()
                     })
             }
             else -> {
@@ -101,18 +108,23 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     SPEAKING_LEVEL,
                     viewHolderAddLanguage
                 )
+                viewHolderAddLanguage.itemView.add_language_speaking_level.post {
+                    viewHolderAddLanguage.itemView.add_language_speaking_level.setProgress(
+                        language?.speakingSkill?.toInt() ?: 0
+                    )
+                }
 
-                viewHolderAddLanguage.itemView.add_language_speaking_level.setProgress(
-                    language?.speakingSkill?.toInt() ?: 0
-                )
                 setSeekBarListener(
                     viewHolderAddLanguage.itemView.arround_current_add_seekbar,
                     WRITING_LEVEL,
                     viewHolderAddLanguage
                 )
-                viewHolderAddLanguage.itemView.arround_current_add_seekbar.setProgress(
-                    language?.writingSkill?.toInt() ?: 0
-                )
+                viewHolderAddLanguage.itemView.arround_current_add_seekbar.post {
+                    viewHolderAddLanguage.itemView.arround_current_add_seekbar.setProgress(
+                        language?.writingSkill?.toInt() ?: 0
+                    )
+                }
+
                 viewHolderAddLanguage.itemView.mother_language.setOnClickListener {
                     if (viewHolderAddLanguage.adapterPosition == -1) return@setOnClickListener
                     items?.get(viewHolderAddLanguage.adapterPosition)?.isMotherLanguage =
@@ -123,8 +135,9 @@ class AdapterAddLanguage() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 viewHolderAddLanguage.itemView.add_language_add_more.setOnClickListener {
                     if (viewHolderAddLanguage.adapterPosition == -1) return@setOnClickListener
                     items?.add(Language())
+                    viewHolderAddLanguage.itemView.add_language_add_more.gone()
                     notifyItemInserted(viewHolderAddLanguage.adapterPosition + 1)
-                    notifyItemChanged(viewHolderAddLanguage.adapterPosition)
+
                 }
                 viewHolderAddLanguage.itemView.remove_language.visibility =
                     if (position != 0) View.VISIBLE else View.GONE

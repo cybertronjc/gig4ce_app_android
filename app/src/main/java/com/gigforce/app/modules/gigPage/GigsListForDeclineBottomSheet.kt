@@ -214,7 +214,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
     }
 
     override fun onCallClicked(gig: Gig) {
-        if (gig.gigContactDetails?.contactNumber == 0L) return
+        if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
         val intent = Intent(
             Intent.ACTION_DIAL,
             Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)

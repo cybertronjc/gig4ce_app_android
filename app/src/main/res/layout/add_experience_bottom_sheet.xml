@@ -124,6 +124,7 @@
                 android:id="@+id/currently_work_here"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/check_box_style_1"
                 android:ems="10"
                 android:text="@string/add_experience_currently_working"
                 android:layout_marginStart="8dp"

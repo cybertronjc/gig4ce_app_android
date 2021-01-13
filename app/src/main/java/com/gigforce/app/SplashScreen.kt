@@ -17,6 +17,16 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //Handling if Firebase Dynamic link is being clicked in any other application
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handleDynamicLink()
+    }
+
+    fun handleDynamicLink() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
@@ -24,25 +34,71 @@ class SplashScreen : AppCompatActivity() {
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
+                    val inviteID = deepLink?.getQueryParameter("invite")
+                    val isAmbassador = deepLink?.getQueryParameter("is_ambassador")
+                    val roleID = deepLink?.getQueryParameter("role_id")
+                    val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
+                    val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
+                    val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
                     val sp = SharedDataImp(this)
                     sp.saveData(
                         StringConstants.INVITE_USER_ID.value,
-                        deepLink?.getQueryParameter("invite")
+                        inviteID
                     )
+                    if (!jobProfileID.isNullOrEmpty()) {
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra(StringConstants.NAV_TO_CLIENT_ACT.value, true)
+                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        intent.putExtra(
+                            StringConstants.JOB_PROFILE_ID.value,
+                            jobProfileID
+                        )
+                        initApp(intent)
+                        return@addOnSuccessListener
+                    } else if (!roleID.isNullOrEmpty()) {
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra(StringConstants.NAV_TO_ROLE.value, true)
+                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        intent.putExtra(StringConstants.ROLE_ID.value, roleID)
+                        initApp(intent)
+                        return@addOnSuccessListener
+                    }else if(!isAmbassador.isNullOrEmpty()){
+                        sp.saveData(
+                            StringConstants.INVITE_BY_AMBASSADOR.value,
+                            "true"
+                        )
+                        sp.saveData(
+                            StringConstants.AMBASSADOR_LATITUDE.value,
+                            ambassadorLatitude?:"0.0"
+                        )
+                        sp.saveData(
+                            StringConstants.AMBASSADOR_LONGITUDE.value,
+                            ambassadorLongitude?:"0.0"
+                        )
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.putExtra(StringConstants.INVITE_BY_AMBASSADOR.value, true)
+                        intent.putExtra(StringConstants.INVITE_USER_ID.value, inviteID)
+                        intent.putExtra(StringConstants.AMBASSADOR_LATITUDE.value,ambassadorLatitude?.toDouble())
+                        intent.putExtra(StringConstants.AMBASSADOR_LONGITUDE.value,ambassadorLongitude?.toDouble())
+                        initApp(intent)
+                        return@addOnSuccessListener
+                    }
                 }
 
+                initApp(Intent(this, MainActivity::class.java))
+
+
             }
-            .addOnFailureListener(this) { e ->
+            .addOnFailureListener(this)
+            { e ->
                 run {
+                    initApp(Intent(this, MainActivity::class.java))
 
                 }
             }
-        initApp()
-
     }
 
-    fun initApp() {
-        val intent = Intent(this, MainActivity::class.java)
+    fun initApp(intent: Intent) {
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null

@@ -1,6 +1,7 @@
 package com.gigforce.app.utils
 
 import android.net.Uri
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -28,6 +29,20 @@ suspend fun StorageReference.putFileOrThrow(file: Uri) =
             .addOnFailureListener { cont.resumeWithException(it) }
     }
 
+suspend fun StorageReference.putBytesOrThrow(bytes: ByteArray) =
+        suspendCancellableCoroutine<UploadTask.TaskSnapshot> { cont ->
+            val putFileTask = putBytes(bytes)
+
+            cont.invokeOnCancellation {
+                if (!putFileTask.isComplete)
+                    putFileTask.cancel()
+            }
+
+            putFileTask
+                    .addOnSuccessListener { cont.resume(it) }
+                    .addOnFailureListener { cont.resumeWithException(it) }
+        }
+
 suspend fun Query.getOrThrow() = suspendCoroutine<QuerySnapshot> { cont ->
     get().addOnSuccessListener {
         cont.resume(it)
@@ -52,8 +67,32 @@ suspend fun DocumentReference.getOrThrow() = suspendCoroutine<DocumentSnapshot> 
     }
 }
 
-suspend fun DocumentReference.updateOrThrow(field : String, obj : Any) = suspendCoroutine<Void> { cont ->
-    update(field, obj).addOnSuccessListener {
+suspend fun WriteBatch.commitOrThrow() = suspendCoroutine<Void?> { cont ->
+    commit().addOnSuccessListener {
+        cont.resume(null)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend fun DocumentReference.updateOrThrow(field : String , value : Any) = suspendCoroutine<Void?> { cont ->
+    update(field,value).addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend fun DocumentReference.updateOrThrow(values : Map<String, Any?>) = suspendCoroutine<Void?> { cont ->
+    update(values).addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resumeWithException(it)
+    }
+}
+
+suspend fun StorageReference.getDownloadUrlOrThrow() = suspendCoroutine<Uri> {cont ->
+    downloadUrl.addOnSuccessListener {
         cont.resume(it)
     }.addOnFailureListener {
         cont.resumeWithException(it)

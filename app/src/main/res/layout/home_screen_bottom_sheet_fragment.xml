@@ -15,6 +15,7 @@
         android:layout_marginTop="17dp"
         android:background="@android:color/darker_gray" />
 
+
     <LinearLayout
         android:id="@+id/kyc_video_resume"
         android:layout_width="match_parent"
@@ -143,6 +144,177 @@
         android:layout_marginTop="9.5dp"
         android:background="#f1f1f1" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/ambassador_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/light_pink">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:padding="16dp">
+
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="90dp"
+                android:layout_height="105dp"
+                android:src="@drawable/banner_ambassador"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <TextView
+                android:id="@+id/join_as_amb_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="4dp"
+                android:text="@string/join_us_as_an_ambassador"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imageView11"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/amb_subtitle_landing_screen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="normal"
+                android:textSize="12sp"
+                android:textColor="#d9000000"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/imageView11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
+                android:text="@string/more_you_create_profiles_more_you_earn"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/amb_join_open_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:text="@string/join_now"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textAllCaps="false"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_group_interest"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView109"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="@string/my_interest"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView33"
+            app:layout_constraintStart_toEndOf="@+id/imageView33"
+            app:layout_constraintTop_toTopOf="@+id/imageView33" />
+
+        <TextView
+            android:id="@+id/textView113"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/explore_gigs_start_earning"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/textView109"
+            app:layout_constraintTop_toBottomOf="@+id/textView109" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/rl_cient_activation_bs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_215">
+
+        <TextView
+            android:id="@+id/tv_title_client_activation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="17dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="@string/explore_gigs"
+            android:textColor="#080808"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/client_activation_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_client_activation"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginBottom="@dimen/size_16"
+            android:minHeight="170dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/client_activation_rv_bs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/size_4"
+                android:paddingLeft="@dimen/size_16"
+                android:nestedScrollingEnabled="false"
+                android:paddingRight="20dp"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/client_activation_progress_bar_bs"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/client_activation_error_bs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/learning_tv"
         android:layout_width="wrap_content"
@@ -189,101 +361,8 @@
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>
-
-
-    <TextView
-        android:id="@+id/assessment_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
-        android:text="@string/assessment_"
-        android:textColor="#686868"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
-
-    <FrameLayout
-        android:id="@+id/assessment_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:minHeight="170dp"
-        android:visibility="gone">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assessment_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/learning_assessment_progress_bar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/learning_assessment_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_cross_grey"
-            android:drawablePadding="10dp"
-            tools:text="Unable to load your stuff" />
-
-    </FrameLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="@color/colorPrimary">
-
-        <ImageView
-            android:id="@+id/imageView33"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_group_interest"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView109"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/lato_bold"
-            android:letterSpacing="0"
-            android:text="@string/my_interest"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView33"
-            app:layout_constraintStart_toEndOf="@+id/imageView33"
-            app:layout_constraintTop_toTopOf="@+id/imageView33" />
-
-        <TextView
-            android:id="@+id/textView113"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="@string/explore_gigs_start_earning"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/textView109"
-            app:layout_constraintTop_toBottomOf="@+id/textView109" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <RelativeLayout
+        android:id="@+id/explore_by_role_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/size_215">
@@ -334,7 +413,7 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_role"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/size_237"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView114"
             android:layout_alignParentStart="true"
@@ -435,6 +514,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/industry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/assessment_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:text="@string/assessment_"
+        android:textColor="#686868"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+
+    <FrameLayout
+        android:id="@+id/assessment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="170dp"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/assessment_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/learning_assessment_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/learning_assessment_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            tools:text="Unable to load your stuff" />
+
+    </FrameLayout>
+
+
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
