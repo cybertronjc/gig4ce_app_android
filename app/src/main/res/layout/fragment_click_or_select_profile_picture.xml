@@ -38,7 +38,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_camera_round"/>
+            app:srcCompat="@drawable/ic_camera_round"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_gallery_round"/>
+            app:srcCompat="@drawable/ic_gallery_round"/>
 
         <TextView
             android:layout_width="wrap_content"
