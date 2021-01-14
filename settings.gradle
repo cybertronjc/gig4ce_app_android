@@ -1,2 +1,4 @@
+include ':modules:core'
+include ':modules:feature-chat'
 include ':app'
 rootProject.name = "Gigforce1"

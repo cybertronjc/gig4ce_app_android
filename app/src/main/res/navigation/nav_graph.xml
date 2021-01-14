@@ -880,6 +880,10 @@
         android:id="@+id/addUserCurrentAddressFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatListFragment"
+        android:label="ChatListFragment" />
 
 
 </navigation>

@@ -111,6 +111,7 @@ class FetchContactsService : Service(), LoaderManager.LoaderCallbacks<Cursor> {
 
         val contacts: ArrayList<ContactModel> = ArrayList<ContactModel>()
 
+        //todo: Crash Error: CursorIndexOutOfBoundsException (If no Contacts)
         while (!cursor.isLast) {
             val name =
                 cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))

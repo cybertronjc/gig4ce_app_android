@@ -1,30 +1,31 @@
-package com.gigforce.app.modules.chatmodule.viewModels
+package com.gigforce.modules.feature_chat.screens
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.chatmodule.models.ChatHeader
-import com.gigforce.app.modules.chatmodule.models.UserInfo
+import com.gigforce.modules.feature_chat.models.ChatHeader
+import com.gigforce.modules.feature_chat.models.UserInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-class ChatHeadersViewModel : ViewModel() {
+class ChatListFragmentViewModel: ViewModel() {
 
-    private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-    private var firebaseDB = FirebaseFirestore.getInstance()
-
-    // private var chatHeaderRepository = ChatHeaderFirebaseRepository()
-    private var chatHeadersSnapshotListener: ListenerRegistration? = null
-
-    private val _chatHeaders: MutableLiveData<ArrayList<ChatHeader>> =
-        MutableLiveData(ArrayList<ChatHeader>())
-    val chatHeaders: LiveData<ArrayList<ChatHeader>> get() = _chatHeaders
+    private var _chatHeaders: MutableLiveData<ArrayList<ChatHeader>> = MutableLiveData()
+    val chatHeaders: LiveData<ArrayList<ChatHeader>> = _chatHeaders
 
     private val _unreadMessageCount: MutableLiveData<Int> = MutableLiveData()
     val unreadMessageCount: LiveData<Int> = _unreadMessageCount
+
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
+    private var firebaseDB = FirebaseFirestore.getInstance()
+    private var chatHeadersSnapshotListener: ListenerRegistration? = null
+
+    init {
+        startWatchingChatHeaders()
+    }
 
     fun startWatchingChatHeaders() {
         val reference = firebaseDB
@@ -75,10 +76,5 @@ class ChatHeadersViewModel : ViewModel() {
                     _unreadMessageCount.postValue(unreadMessageCount)
                 }
             }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        chatHeadersSnapshotListener?.remove()
     }
 }
