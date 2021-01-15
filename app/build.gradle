@@ -307,6 +307,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
+    implementation 'com.google.dagger:dagger:2.31'
+    kapt 'com.google.dagger:dagger-compiler:2.31'
 
     // Rx
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

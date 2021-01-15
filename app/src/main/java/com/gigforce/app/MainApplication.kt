@@ -3,9 +3,15 @@ package com.gigforce.app
 import android.app.Application
 import android.app.NotificationManager
 import com.clevertap.android.sdk.CleverTapAPI
+import com.gigforce.app.di.AppComponent
+import com.gigforce.app.di.DaggerAppComponent
 
 
 class MainApplication: Application() {
+
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(applicationContext)
+    }
 
     override fun onCreate() {
         super.onCreate()

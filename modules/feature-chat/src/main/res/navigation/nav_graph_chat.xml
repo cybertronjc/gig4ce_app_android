@@ -10,23 +10,14 @@
         android:name="com.gigforce.modules.feature_chat.screens.ChatListFragment"
         android:label="fragment_chat_list"
         tools:layout="@layout/fragment_chat_list">
-
         <action
-            android:id="@+id/action_global_chatFragment"
-            app:destination="@id/chatFragment"
-            app:enterAnim="@anim/fragment_close_enter"
-            app:exitAnim="@anim/fragment_close_exit"
-            app:launchSingleTop="true"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
+            android:id="@+id/action_chatListFragment_to_chatPageFragment"
+            app:destination="@id/chatPageFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ChatFragment"
-        android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
-
+        android:id="@+id/chatPageFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatPageFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_page" />
 
 </navigation>

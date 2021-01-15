@@ -8,13 +8,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.findNavController
 import com.gigforce.core.IViewHolder
+import com.gigforce.modules.feature_chat.IChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
+import dagger.internal.InjectedFieldSignature
+import javax.inject.Inject
 
 class ChatListItem(context: Context?) :
     RelativeLayout(context),
     IViewHolder,
     View.OnClickListener {
+
+    @Inject
+    lateinit var navigation:IChatNavigation
 
     init {
         LayoutInflater.from(context)
@@ -42,7 +48,7 @@ class ChatListItem(context: Context?) :
     override fun onClick(v: View?) {
         dObj.let {
             Toast.makeText(this.context, "Tapped", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_global_chatFragment)
+            navigation.navigateToChatPage("test")
         }
     }
 }

@@ -42,7 +42,6 @@ class ChatItemOut(context: Context?) :
     override fun onClick(v: View?) {
         dObj.let {
             Toast.makeText(this.context, "Tapped", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_global_chatFragment)
         }
     }
 }
