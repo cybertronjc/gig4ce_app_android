@@ -11,23 +11,23 @@ import com.gigforce.core.IViewHolder
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 
-class ChatListItem(context: Context?) :
-    RelativeLayout(context),
-    IViewHolder,
-    View.OnClickListener {
+class ChatItemOut(context: Context?) :
+        RelativeLayout(context),
+        IViewHolder,
+        View.OnClickListener
+{
 
     init {
-        LayoutInflater.from(context)
-            .inflate(R.layout.chat_list_item, this, true)
+        LayoutInflater.from(context).inflate(R.layout.chat_item_out, this, true)
         this.setOnClickListener(this)
     }
 
-    private var dObj: ChatListItemDataObject? = null
+    private var dObj:ChatListItemDataObject? = null
 
-    override fun bind(data: Any?) {
+    override fun bind(data:Any?){
         // title:String, subtitle:String, timeDisplay:String, profilePath:String, unreadCount:Int, id:String, type: String
         dObj = null
-        data?.let {
+        data?.let{
             dObj = data as ChatListItemDataObject
             val isUnread = dObj?.unreadCount!! > 0;
 

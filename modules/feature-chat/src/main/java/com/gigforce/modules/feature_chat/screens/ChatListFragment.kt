@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
+import com.gigforce.modules.feature_chat.ui.ChatListView
 
 /**
  * A simple [Fragment] subclass.
@@ -14,8 +19,27 @@ import com.gigforce.modules.feature_chat.R
  */
 class ChatListFragment : Fragment() {
 
+    val viewModel:ChatListFragmentViewModel by viewModels<ChatListFragmentViewModel>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.chatHeaders.observe(this, Observer {
+            ChatListFragment@this.view?.findViewById<ChatListView>(R.id.rv_chat_headers)?.headers =
+                ArrayList(it.map {
+                    ChatListItemDataObject(
+                        id = it.id,
+                        title = it.otherUser?.name ?: "",
+                        subtitle = it.lastMsgText,
+                        timeDisplay = "2 min",
+                        type = it.chatType,
+                        profilePath = "",
+                        unreadCount = it.unseenCount
+                    )
+                })
+        })
+
         arguments?.let {
 
         }

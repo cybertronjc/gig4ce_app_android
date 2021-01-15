@@ -9,26 +9,27 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import com.gigforce.core.IViewHolder
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatItemDataObject
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 
-class ChatListItem(context: Context?) :
-    RelativeLayout(context),
-    IViewHolder,
-    View.OnClickListener {
+class ChatItemIn(context: Context?) :
+        RelativeLayout(context),
+        IViewHolder,
+        View.OnClickListener
+{
 
     init {
-        LayoutInflater.from(context)
-            .inflate(R.layout.chat_list_item, this, true)
+        LayoutInflater.from(context).inflate(R.layout.chat_item_in, this, true)
         this.setOnClickListener(this)
     }
 
-    private var dObj: ChatListItemDataObject? = null
+    private var dObj:ChatItemDataObject? = null
 
-    override fun bind(data: Any?) {
+    override fun bind(data:Any?){
         // title:String, subtitle:String, timeDisplay:String, profilePath:String, unreadCount:Int, id:String, type: String
         dObj = null
-        data?.let {
-            dObj = data as ChatListItemDataObject
+        data?.let{
+            dObj = data as ChatItemDataObject
             val isUnread = dObj?.unreadCount!! > 0;
 
             this.findViewById<TextView>(R.id.txt_title).text = dObj?.title;
@@ -42,7 +43,7 @@ class ChatListItem(context: Context?) :
     override fun onClick(v: View?) {
         dObj.let {
             Toast.makeText(this.context, "Tapped", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_global_chatFragment)
+//findNavController().navigate()
         }
     }
 }

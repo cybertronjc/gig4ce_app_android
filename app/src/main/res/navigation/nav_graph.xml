@@ -702,7 +702,13 @@
         android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
         android:label="fragment_home_bottom_sheet"
 
-        tools:layout="@layout/home_screen_bottom_sheet_fragment" />
+        tools:layout="@layout/home_screen_bottom_sheet_fragment" >
+
+        <action
+            android:id="@+id/action_fragment_to_second_graph"
+            app:destination="@id/nav_graph_chat" />
+        
+    </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
@@ -880,10 +886,10 @@
         android:id="@+id/addUserCurrentAddressFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
-    <fragment
-        android:id="@+id/chatListFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ChatListFragment"
-        android:label="ChatListFragment" />
+
+
+    <include app:graph="@navigation/nav_graph_chat" />
+
 
 
 </navigation>
