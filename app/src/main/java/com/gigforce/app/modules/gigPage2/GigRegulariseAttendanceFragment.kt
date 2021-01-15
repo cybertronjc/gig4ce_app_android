@@ -205,6 +205,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
     private fun errorInSubmittingRegularisationRequest(error: String) {
         regularise_details_progress_bar.gone()
         regularise_main_layout.visible()
+        regularise_slider_btn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Alert")
@@ -222,6 +223,8 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
                 .setPositiveButton(R.string.okay_text){_,_ ->
 
                 }.show()
+
+            regularise_slider_btn.resetSlider()
             return
         }
 
@@ -232,6 +235,8 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
                 .setPositiveButton(R.string.okay_text){_,_ ->
 
                 }.show()
+
+            regularise_slider_btn.resetSlider()
             return
         }
 
@@ -244,6 +249,8 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
                 .setMessage("Punch-out time should be greater than punch-in time")
                 .setPositiveButton(R.string.okay_text){_,_ ->
                 }.show()
+
+            regularise_slider_btn.resetSlider()
             return
         }
 

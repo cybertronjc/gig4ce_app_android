@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         app:strokeColor="@color/colorPrimary"
         android:layout_marginTop="12dp"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintTop_toBottomOf="@id/gig_people_to_expect_label"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -292,6 +292,24 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 }
     }
 
+    suspend fun getFirstProfileWithPhoneNumber(
+            phoneNumber: String? = null
+    ): ProfileData? {
+
+        val querySnap = getCollectionReference()
+                .whereEqualTo("loginMobile", phoneNumber)
+                .getOrThrow()
+
+        if (querySnap.isEmpty)
+            return null
+
+        val docSnap = querySnap.documents.first()
+        val profileData = docSnap.toObject(ProfileData::class.java)
+                ?: throw  IllegalStateException("unable to parse profile object")
+        profileData.id = docSnap.id
+        return profileData
+    }
+
     fun getProfileRef(userId: String?) = getCollectionReference().document(userId ?: getUID())
 
     /**
@@ -303,7 +321,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName).document(uid).update("address", address)
     }
 
-    fun updateCurrentAddress(address : AddressModel){
+    fun updateCurrentAddress(address: AddressModel) {
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .update(mapOf(
@@ -312,7 +330,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         "address.current.area" to address.area,
                         "address.current.city" to address.city,
                         "address.current.state" to address.state
-                ) )
+                ))
     }
 
     suspend fun setUserAsAmbassador() {
@@ -373,8 +391,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     }
 
     private fun getNumberWithNineone(phoneNumber: String): String {
-        if(!phoneNumber.contains("+91"))
-            return "+91"+phoneNumber
+        if (!phoneNumber.contains("+91"))
+            return "+91" + phoneNumber
         return phoneNumber
     }
 
