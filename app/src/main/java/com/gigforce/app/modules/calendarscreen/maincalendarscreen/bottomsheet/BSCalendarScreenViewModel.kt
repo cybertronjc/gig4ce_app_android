@@ -67,7 +67,10 @@ class BSCalendarScreenViewModel : ViewModel() {
         }?.flatMap { checkForChatProfile(it) }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ success ->
             _observableChatInfo.value = success
 
-        }, { err -> })
+        }, { err ->
+
+
+        })
         !!)
 
 
