@@ -11,7 +11,7 @@ import com.gigforce.core.IViewHolder
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 
-class ChatItemOut(context: Context?) :
+class ChatItem(context: Context?) :
         RelativeLayout(context),
         IViewHolder,
         View.OnClickListener

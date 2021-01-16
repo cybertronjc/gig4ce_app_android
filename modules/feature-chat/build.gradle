@@ -72,4 +72,13 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.31'
     kapt 'com.google.dagger:dagger-compiler:2.31'
 
+    //Transcoder for compressing video files
+    implementation 'com.otaliastudios:transcoder:0.9.1'
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+
+
+
+
+
 }

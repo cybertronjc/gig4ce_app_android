@@ -52,15 +52,4 @@ class ChatListFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
-
-    companion object {
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance() =
-            ChatListFragment().apply {
-                arguments = Bundle().apply {
-                    // putString(ARG_PARAM1, param1)
-                }
-            }
-    }
 }

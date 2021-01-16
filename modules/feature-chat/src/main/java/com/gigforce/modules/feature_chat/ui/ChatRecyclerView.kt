@@ -7,15 +7,15 @@ import com.gigforce.modules.feature_chat.models.ChatItemDataObject
 
 class ChatRecyclerView(context: Context, attrs: AttributeSet) : CoreRecyclerView(context, attrs) {
 
-    private var _chatItems:ArrayList<ChatItemDataObject> = ArrayList()
-    var headers:ArrayList<ChatItemDataObject>
-        get() = _chatItems
+    private var _messages:ArrayList<ChatItemDataObject> = ArrayList()
+    var messages:ArrayList<ChatItemDataObject>
+        get() = _messages
         set(value){
-            _chatItems = value
-            this.coreAdapter.collection = _chatItems
+            _messages = value
+            this.coreAdapter.collection = _messages
         }
 
     init {
-        this.setDefaultAdapter(headers, ::ChatItemIn)
+        this.setDefaultAdapter(messages, ::ChatItem)
     }
 }
