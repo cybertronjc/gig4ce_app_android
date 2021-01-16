@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -23,18 +23,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="How are you my brother"
+                android:text="How are you my brother"
                 android:textSize="16sp"
-
+                android:fontFamily="@font/lato"
                 android:id="@+id/tv_msgValue"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="NA"
-                android:textSize="8sp"
-                android:textColor="#979797"
-
+                android:text="NA"
+                android:textSize="10sp"
+                android:textColor="@color/gray_chat_module"
+                android:fontFamily="@font/lato"
                 android:layout_gravity="end"
                 android:layout_marginTop="5dp"
                 android:id="@+id/tv_msgTimeValue"

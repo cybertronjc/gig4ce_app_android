@@ -68,6 +68,70 @@ class ChatPageViewModel constructor(
     private var messagesListener: ListenerRegistration? = null
     private var headerInfoChangeListener: ListenerRegistration? = null
 
+    init {
+
+        val messages = listOf(
+            Message(
+                id = "X12",
+                headerId = "Header1",
+                forUserId = "User1",
+                otherUserId = "other-user",
+                flowType = "in",
+                timestamp = Timestamp.now(),
+                status = 0,
+                type = ChatConstants.MESSAGE_TYPE_TEXT,
+                content = "Hi",
+                videoLength = 0L,
+                thumbnail = null
+            ),
+            Message(
+                id = "X12",
+                headerId = "Header1",
+                forUserId = "User1",
+                otherUserId = "other-user",
+                flowType = "out",
+                timestamp = Timestamp.now(),
+                status = 0,
+                type = ChatConstants.MESSAGE_TYPE_TEXT,
+                content = "Hi",
+                videoLength = 0L,
+                thumbnail = null
+            ),
+            Message(
+                id = "X12",
+                headerId = "Header1",
+                forUserId = "User1",
+                otherUserId = "other-user",
+                flowType = "in",
+                timestamp = Timestamp.now(),
+                status = 0,
+                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
+                content = "Hi",
+                videoLength = 0L,
+                thumbnail = null,
+                attachmentName = "Some Attac",
+                attachmentPath = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg"
+            ),
+            Message(
+                id = "X12",
+                headerId = "Header1",
+                forUserId = "User1",
+                otherUserId = "other-user",
+                flowType = "out",
+                timestamp = Timestamp.now(),
+                status = 0,
+                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
+                content = "Hi",
+                videoLength = 0L,
+                thumbnail = null,
+                attachmentName = "Some Attac",
+                attachmentPath = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg"
+            )
+        )
+
+        _messages.postValue(messages)
+    }
+
     fun startListeningForNewMessages() {
 
         if (!headerId.isBlank()) {
