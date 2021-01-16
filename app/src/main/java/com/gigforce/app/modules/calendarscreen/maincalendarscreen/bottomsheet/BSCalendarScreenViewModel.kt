@@ -72,4 +72,9 @@ class BSCalendarScreenViewModel : ViewModel() {
 
 
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
+    }
 }
