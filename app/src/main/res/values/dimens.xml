@@ -135,4 +135,10 @@
     <dimen name="size_3">3dp</dimen>
     <dimen name="size_191">191dp</dimen>
     <dimen name="size_69">69dp</dimen>
+    <dimen name="activityPadding">16dp</dimen>
+    <dimen name="placeholderImage">60dp</dimen>
+    <dimen name="placeholderTextHeight">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="size_170">170dp</dimen>
+    <dimen name="size_148">148dp</dimen>
 </resources>

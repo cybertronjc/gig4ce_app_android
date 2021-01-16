@@ -155,24 +155,24 @@ class GigDetailsFragment : BaseFragment(),
     private fun showRoleBasedLearningError(error: String) {
 
         learning_based_role_rv.gone()
-        role_based_learning_progress_bar.gone()
+        learning_based_horizontal_progress.gone()
         role_based_learning_error.visible()
-
         role_based_learning_error.text = error
+//        shimmer_learning_based_controller.stopShimmerAnimation()
     }
 
     private fun showRoleBasedLearningProgress() {
-
+//        shimmer_learning_based_controller.startShimmerAnimation()
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
-        role_based_learning_progress_bar.visible()
+        learning_based_horizontal_progress.visible()
     }
-
-    var width = 0
+    var width: Int = 0
     private fun showRoleBasedLearnings(content: List<Course>) {
-        role_based_learning_progress_bar.gone()
+        learning_based_horizontal_progress.gone()
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
+//        shimmer_learning_based_controller.stopShimmerAnimation()
 
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)

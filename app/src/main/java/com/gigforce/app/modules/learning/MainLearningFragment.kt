@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -25,8 +26,6 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
-import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.shape.CornerFamily
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
@@ -37,7 +36,6 @@ import kotlinx.android.synthetic.main.fragment_main_learning_most_popular_learni
 import kotlinx.android.synthetic.main.fragment_main_learning_recommended_learnings.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import kotlinx.android.synthetic.main.fragment_main_learning_toolbar.*
-import kotlinx.android.synthetic.main.most_popular_item.view.*
 import java.util.*
 
 
@@ -204,23 +202,24 @@ class MainLearningFragment : BaseFragment() {
     private fun showRoleBasedLearningError(error: String) {
 
         learning_based_role_rv.gone()
-        role_based_learning_progress_bar.gone()
+        stopShimmer(learning_based_horizontal_progress as LinearLayout)
         role_based_learning_error.visible()
-
         role_based_learning_error.text = error
+
     }
 
     private fun showRoleBasedLearningProgress() {
-
+        startShimmer(learning_based_horizontal_progress as LinearLayout, R.dimen.size_148)
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
-        role_based_learning_progress_bar.visible()
+
     }
 
     private fun showRoleBasedLearnings(content: List<Course>) {
-        role_based_learning_progress_bar.gone()
+        learning_based_horizontal_progress.gone()
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
+        stopShimmer(learning_based_horizontal_progress as LinearLayout)
 
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -255,7 +254,7 @@ class MainLearningFragment : BaseFragment() {
                     var comImg = getImageView(viewHolder, R.id.completed_iv)
                     comImg.isVisible = obj?.completed ?: false
 
-                    var img = getImageView(viewHolder,R.id.learning_img)
+                    var img = getImageView(viewHolder, R.id.learning_img)
 
                     if (!obj!!.coverPicture.isNullOrBlank()) {
                         if (obj.coverPicture!!.startsWith("http", true)) {

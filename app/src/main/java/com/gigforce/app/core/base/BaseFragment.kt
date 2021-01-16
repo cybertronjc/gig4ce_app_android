@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.DimenRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -19,6 +21,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.AppDialogsImp
 import com.gigforce.app.core.base.dialog.AppDialogsInterface
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
@@ -34,6 +38,8 @@ import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
@@ -45,7 +51,7 @@ import com.gigforce.app.utils.configrepository.ConfigRepository
  * create an instance of this fragment.
  */
 open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-        SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
@@ -68,14 +74,14 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     open fun inflateView(
-            resource: Int, inflater: LayoutInflater,
-            container: ViewGroup?
+        resource: Int, inflater: LayoutInflater,
+        container: ViewGroup?
     ): View? {
         navFragmentsData = activity as NavFragmentsData
         baseFragment = this
         mView = inflater.inflate(resource, container, false)
         getActivity()?.setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         );
         initializeDI()
         init()
@@ -115,10 +121,10 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     private fun configObserver() {
         this.configrepositoryObj = ConfigRepository()//ConfigRepository.getInstance()
         this.configrepositoryObj?.configLiveDataModel?.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer { configDataModel1 ->
-                    configDataModel = configDataModel1
-                })
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { configDataModel1 ->
+                configDataModel = configDataModel1
+            })
         this.configrepositoryObj?.configCollectionListener()
     }
 
@@ -128,7 +134,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
 
     override fun onDetach() {
         if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!
-                .dismiss()
+            .dismiss()
         super.onDetach()
     }
 
@@ -136,7 +142,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     fun initGlide(placeHolder: Int, errorImg: Int): RequestManager? {
         if (requestOptions == null) {
             requestOptions = RequestOptions().placeholder(placeHolder)
-                    .error(errorImg)
+                .error(errorImg)
         }
         return Glide.with(this).setDefaultRequestOptions(requestOptions!!)
     }
@@ -163,8 +169,8 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun getRecyclerView(
-            view: PFRecyclerViewAdapter<Any?>.ViewHolder,
-            id: Int
+        view: PFRecyclerViewAdapter<Any?>.ViewHolder,
+        id: Int
     ): RecyclerView {
         return viewsFromViewsInterface.getRecyclerView(view, id)
     }
@@ -310,12 +316,12 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun confirmDialogForDeviceLanguageChanged(
-            currentDeviceLanguageCode: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        currentDeviceLanguageCode: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         languageUtilInterface.confirmDialogForDeviceLanguageChanged(
-                currentDeviceLanguageCode,
-                buttonClickListener
+            currentDeviceLanguageCode,
+            buttonClickListener
         )
     }
 
@@ -328,53 +334,53 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
     }
 
     override fun showConfirmationDialogType1(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType1(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType2(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType2(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType3(
-            title: String,
-            subTitle: String,
-            yesButtonText: String,
-            noButtonText: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        subTitle: String,
+        yesButtonText: String,
+        noButtonText: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType3(
-                title,
-                subTitle,
-                yesButtonText,
-                noButtonText,
-                buttonClickListener
+            title,
+            subTitle,
+            yesButtonText,
+            noButtonText,
+            buttonClickListener
         )
     }
 
     override fun showConfirmationDialogType5(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType5(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType4(
-            title: String,
-            subTitle: String,
-            optionSelected: OptionSelected
+        title: String,
+        subTitle: String,
+        optionSelected: OptionSelected
     ) {
         appDialogsInterface.showConfirmationDialogType4(title, subTitle, optionSelected)
     }
 
     override fun showConfirmationDialogType7(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType7(title, buttonClickListener)
     }
@@ -415,8 +421,35 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
 
         val activity = activity ?: return
 
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+    }
+
+    fun startShimmer(view: LinearLayout, @DimenRes minHeight: Int) {
+        view.visible()
+        for (i in 0 until view.childCount) {
+            val nestedView = view.getChildAt(i)
+            val layoutParams: LinearLayout.LayoutParams =
+                nestedView.layoutParams as LinearLayout.LayoutParams
+            layoutParams.height = resources.getDimensionPixelSize(minHeight)
+            nestedView.layoutParams = layoutParams
+
+            val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+            shimmerLayout.startShimmerAnimation()
+        }
+
+
+    }
+
+    fun stopShimmer(view: LinearLayout) {
+        for (i in 0 until view.childCount) {
+            val nestedView = view.getChildAt(i)
+            val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+            shimmerLayout.stopShimmerAnimation()
+        }
+        view.gone()
+
     }
 
 }

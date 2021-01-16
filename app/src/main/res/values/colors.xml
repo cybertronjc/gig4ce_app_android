@@ -6,7 +6,7 @@
     <color name="colorAccent">#930077</color>
     <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
-    <color name="background">#FFFFFF</color>
+    <color name="bg">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="black_42">#6B000000</color>
     <color name="black_20">#20000000</color>
@@ -121,5 +121,8 @@
     <color name="rejected_color">#FF000F</color>
     <color name="black_666">#666666</color>
     <color name="thumbs_down_color">#27979797</color>
+
+    <color name="background">#dddddd</color>
+
 
 </resources>
