@@ -60,7 +60,7 @@ class BSCalendarScreenViewModel : ViewModel() {
 
     }
 
-    fun getTeamLeadInfo(upcomingGigs: List<Gig>) = viewModelScope.launch {
+    fun getTeamLeadInfo(upcomingGigs: List<Gig>) {
         val observable: Observable<List<Gig>>? = Observable.just(upcomingGigs)
         disposable?.add(observable?.flatMap {
             Observable.fromIterable(it)
