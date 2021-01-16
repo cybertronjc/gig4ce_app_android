@@ -20,22 +20,23 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnContactC
 import com.gigforce.app.modules.chatmodule.ui.adapters.diffUtils.ContactsDiffUtilCallback
 
 class ContactsRecyclerAdapter(
-        private val context: Context,
-        private val requestManager: RequestManager,
-        private val onContactClickListener: OnContactClickListener
+    private val context: Context,
+    private val requestManager: RequestManager,
+    private val onContactClickListener: OnContactClickListener
 ) : RecyclerView.Adapter<ContactsRecyclerAdapter.ContactViewHolder>(),
-        Filterable {
+    Filterable {
 
     private var originalContactsList: List<ContactModel> = emptyList()
     private var filteredContactsList: List<ContactModel> = emptyList()
 
     private var selectedContacts: MutableList<ContactModel> = mutableListOf()
+    private var createNewGroup: Boolean = false
     private val contactsFilter = ContactsFilter()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_item_chat_contact, parent, false)
+            .inflate(R.layout.recycler_item_chat_contact, parent, false)
         return ContactViewHolder(view)
     }
 
@@ -57,10 +58,10 @@ class ContactsRecyclerAdapter(
             notifyDataSetChanged()
         } else {
             val result = DiffUtil.calculateDiff(
-                    ContactsDiffUtilCallback(
-                            originalContactsList,
-                            contacts
-                    )
+                ContactsDiffUtilCallback(
+                    originalContactsList,
+                    contacts
+                )
             )
             this.originalContactsList = contacts
             this.filteredContactsList = contacts
@@ -70,10 +71,10 @@ class ContactsRecyclerAdapter(
 
 
     inner class ContactViewHolder(
-            itemView: View
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener,
-            View.OnLongClickListener {
+        View.OnClickListener,
+        View.OnLongClickListener {
         private var contactAvatarIV: ImageView = itemView.findViewById(R.id.user_image_iv)
         private var contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
         private var contactLastLiveTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
@@ -90,13 +91,13 @@ class ContactsRecyclerAdapter(
 
             if (contact.imageUrl != null) {
                 requestManager
-                        .load(contact.imageUrl!!)
-                        .placeholder(R.drawable.ic_user).error(R.drawable.ic_user)
-                        .into(contactAvatarIV)
+                    .load(contact.imageUrl!!)
+                    .placeholder(R.drawable.ic_user).error(R.drawable.ic_user)
+                    .into(contactAvatarIV)
             } else {
                 requestManager
-                        .load(R.drawable.ic_user).placeholder(R.drawable.ic_user)
-                        .into(contactAvatarIV)
+                    .load(R.drawable.ic_user).placeholder(R.drawable.ic_user)
+                    .into(contactAvatarIV)
             }
 
             if (selectedContacts.contains(contact)) {
@@ -108,7 +109,7 @@ class ContactsRecyclerAdapter(
 
         override fun onClick(v: View?) {
 
-            if (selectedContacts.isNotEmpty()) {
+            if (selectedContacts.isNotEmpty() || createNewGroup) {
                 val pos = adapterPosition
                 val contact = filteredContactsList[pos]
                 if (selectedContacts.contains(contact)) {
@@ -167,9 +168,9 @@ class ContactsRecyclerAdapter(
                 val filteredList: MutableList<ContactModel> = mutableListOf()
                 for (contact in originalContactsList) {
                     if (contact.name?.contains(
-                                    charString,
-                                    true
-                            ) == true || contact.mobile.contains(charString, true)
+                            charString,
+                            true
+                        ) == true || contact.mobile.contains(charString, true)
                     )
                         filteredList.add(contact)
                 }
@@ -187,13 +188,25 @@ class ContactsRecyclerAdapter(
         }
     }
 
+    fun getSelectedItems(): MutableList<ContactModel> {
+        return selectedContacts
+    }
+
+    fun stateCreateGroup(createGroup: Boolean) {
+        createNewGroup = createGroup
+    }
+
+    fun isStateCreateGroup(): Boolean {
+        return createNewGroup
+    }
+
     companion object {
 
         private const val HELP_CHAT_ENABLED = false
         private val HELP_CHAT = ContactModel(
-                id = "help_chat",
-                name = "Help",
-                mobile = ""
+            id = "help_chat",
+            name = "Help",
+            mobile = ""
         )
     }
 }

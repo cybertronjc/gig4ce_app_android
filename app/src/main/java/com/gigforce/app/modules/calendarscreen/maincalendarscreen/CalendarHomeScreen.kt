@@ -149,8 +149,8 @@ class CalendarHomeScreen : BaseFragment(),
             if(currentAppVersion.contains("Dev")){
                 currentAppVersion = currentAppVersion?.split("-")[0]
             }
-            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
-            var serverAPPVersion =
+            val appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            val serverAPPVersion =
                 latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
                 FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
