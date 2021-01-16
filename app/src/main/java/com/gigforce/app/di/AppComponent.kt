@@ -1,11 +1,11 @@
 package com.gigforce.app.di
 
 import android.content.Context
-import com.gigforce.modules.feature_chat.ui.ChatListItem
+import com.gigforce.modules.feature_chat.di.IChatComponent
 import dagger.BindsInstance
 import dagger.Component
 
-@Component(modules = [ChatModule::class])
+@Component(modules = [ChatModule::class, AppSubcomponents::class])
 interface AppComponent {
 
     // Factory to create instances of the AppComponent
@@ -15,6 +15,5 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    // Classes that can be injected by this Component
-    fun inject(item: ChatListItem)
+    fun createChatComponent(): IChatComponent.Factory
 }

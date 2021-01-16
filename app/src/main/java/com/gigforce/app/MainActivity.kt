@@ -34,6 +34,10 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
 
+    fun getNavController():NavController{
+        return this.navController
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
                 navController.popBackStack()
