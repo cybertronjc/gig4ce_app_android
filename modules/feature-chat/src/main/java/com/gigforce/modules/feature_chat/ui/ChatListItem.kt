@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import com.gigforce.core.IViewHolder
 import com.gigforce.modules.feature_chat.IChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import dagger.internal.InjectedFieldSignature
 import javax.inject.Inject
@@ -23,6 +24,9 @@ class ChatListItem(context: Context?) :
     lateinit var navigation:IChatNavigation
 
     init {
+
+        (this.context.applicationContext as ChatModuleProvider).provideChatModule().inject(this)
+
         LayoutInflater.from(context)
             .inflate(R.layout.chat_list_item, this, true)
         this.setOnClickListener(this)
