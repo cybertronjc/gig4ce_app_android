@@ -105,7 +105,6 @@
                 android:dropDownVerticalOffset="0dp"
                 android:ems="10"
                 android:gravity="start"
-                android:hint="@string/_0000000000"
                 android:inputType="phone"
                 android:letterSpacing="0.2"
                 android:maxLength="10"

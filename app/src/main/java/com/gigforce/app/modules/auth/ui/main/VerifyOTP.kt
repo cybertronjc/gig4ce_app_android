@@ -152,9 +152,9 @@ class VerifyOTP : BaseFragment() {
             }
         }
         reenter_mobile.setOnClickListener {
-            if (!timerStarted) {
+//            if (!timerStarted) {
                 navigateToLoginScreen()
-            }
+//            }
         }
         txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
         iv_back_otp_fragment.setOnClickListener {
