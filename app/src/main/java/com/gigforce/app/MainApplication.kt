@@ -5,12 +5,15 @@ import android.app.NotificationManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.di.AppComponent
 import com.gigforce.app.di.DaggerAppComponent
+import com.gigforce.core.di.CoreComponentProvider
+import com.gigforce.core.di.ICoreComponent
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.di.IChatComponent
 
 
 class MainApplication: Application(),
-        ChatModuleProvider
+        ChatModuleProvider,
+        CoreComponentProvider
 {
 
     val appComponent: AppComponent by lazy {
@@ -19,6 +22,10 @@ class MainApplication: Application(),
 
     override fun provideChatModule(): IChatComponent {
         return appComponent.createChatComponent().create()
+    }
+
+    override fun provide(): ICoreComponent {
+        return appComponent.createCoreComponent().create()
     }
 
     override fun onCreate() {

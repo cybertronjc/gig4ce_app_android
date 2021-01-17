@@ -30,15 +30,15 @@ import com.gigforce.core.StringConstants
 import com.gigforce.core.ViewFullScreenImageDialogFragment
 import com.gigforce.core.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.date.DateHelper
+import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.adapters.ChatAdapter
 import com.gigforce.modules.feature_chat.adapters.OnChatMessageClickListener
 import com.gigforce.modules.feature_chat.models.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.gigforce.modules.feature_chat.models.MessageType
 import com.gigforce.modules.feature_chat.models.VideoInfo
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.ui.ChatFooter
-import com.gigforce.modules.feature_chat.ui.ChatRecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.time.LocalDateTime
@@ -48,7 +48,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
 
     //Views
-    private lateinit var chatRecyclerView: ChatRecyclerView
+    private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
     private lateinit var toolbarTitle : TextView
     private lateinit var toolbarOverflowBtn : ImageView
@@ -188,7 +188,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
         viewModel.messages
             .observe(viewLifecycleOwner, Observer {
-                chatRecyclerView.messages = it
+                chatRecyclerView.collection = it
             })
     }
 

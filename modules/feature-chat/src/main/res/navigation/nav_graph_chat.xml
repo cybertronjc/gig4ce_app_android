@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatListFragment"
-        android:name="com.gigforce.modules.feature_chat.screens.ChatListFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
         android:label="fragment_chat_list"
         tools:layout="@layout/fragment_chat_list">
         <action

@@ -1,4 +1,4 @@
-package com.gigforce.modules.feature_chat.screens
+package com.gigforce.modules.feature_chat.screens.vm
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-class ChatListFragmentViewModel: ViewModel() {
+class ChatHeadersViewModel: ViewModel() {
 
     private var _chatHeaders: MutableLiveData<ArrayList<ChatHeader>> = MutableLiveData()
     val chatHeaders: LiveData<ArrayList<ChatHeader>> = _chatHeaders

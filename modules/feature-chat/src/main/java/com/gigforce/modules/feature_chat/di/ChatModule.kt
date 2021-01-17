@@ -4,10 +4,8 @@ import com.gigforce.core.IViewTypeFinder
 import com.gigforce.modules.feature_chat.adapters.ViewTypeFinder
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 
 @Module
-abstract class ChatModule {
-
-    @Binds
-    abstract fun test(iViewTypeFinder: ViewTypeFinder):IViewTypeFinder
+class ChatModule {
 }

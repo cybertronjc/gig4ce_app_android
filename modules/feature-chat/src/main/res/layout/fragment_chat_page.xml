@@ -65,17 +65,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <com.gigforce.modules.feature_chat.ui.ChatRecyclerView
+    <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/rv_chat_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </com.gigforce.modules.feature_chat.ui.ChatRecyclerView>
+        android:layout_weight="1" />
 
     <com.gigforce.modules.feature_chat.ui.ChatFooter
         android:id="@+id/chat_footer"
         android:layout_width="match_parent"
         android:layout_height="56dp" />
+
+
 
 </LinearLayout>

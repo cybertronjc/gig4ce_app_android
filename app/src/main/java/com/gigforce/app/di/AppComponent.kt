@@ -1,10 +1,13 @@
 package com.gigforce.app.di
 
 import android.content.Context
+import com.gigforce.core.di.ICoreComponent
 import com.gigforce.modules.feature_chat.di.IChatComponent
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(modules = [ChatModule::class, AppSubcomponents::class])
 interface AppComponent {
 
@@ -16,4 +19,5 @@ interface AppComponent {
     }
 
     fun createChatComponent(): IChatComponent.Factory
+    fun createCoreComponent(): ICoreComponent.Factory
 }

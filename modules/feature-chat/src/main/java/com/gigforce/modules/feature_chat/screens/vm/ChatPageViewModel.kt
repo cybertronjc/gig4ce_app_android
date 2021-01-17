@@ -1,4 +1,4 @@
-package com.gigforce.modules.feature_chat.screens
+package com.gigforce.modules.feature_chat.screens.vm
 
 import android.annotation.SuppressLint
 import android.content.Context

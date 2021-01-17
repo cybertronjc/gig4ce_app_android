@@ -18,15 +18,6 @@ import javax.inject.Inject
 
 class ViewTypeFinder @Inject constructor(): IViewTypeFinder {
 
-    override fun getViewType(data:Any):Int{
-
-        if(data is IDataViewTypeGetter){
-            return data.getViewType()
-        }
-
-        throw IllegalArgumentException()
-    }
-
     private fun getView(context: Context, viewType: Int): View {
         return when(viewType){
             ViewTypes.CHAT_HEADER -> ChatListItem(context)
