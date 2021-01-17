@@ -202,7 +202,7 @@
                 android:textColor="#d9000000"
                 android:textSize="12sp"
                 android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/amb_join_open_btn"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
                 app:layout_constraintTop_toBottomOf="@id/join_as_amb_label" />
 
@@ -211,6 +211,12 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/lipstick"
+                android:lineSpacingExtra="3sp"
+                android:gravity="center_horizontal"
                 android:text="@string/join_now"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"

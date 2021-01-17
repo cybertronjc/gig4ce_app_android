@@ -578,4 +578,9 @@
         <item name="android:popupBackground">@drawable/bg_pop_up_menu_enrolled_users</item>
     </style>
 
+    <style name="PopUpMenuWithOffset" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:dropDownHorizontalOffset">-16dp</item>
+
+    </style>
+
 </resources>

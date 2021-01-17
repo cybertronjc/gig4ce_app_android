@@ -21,24 +21,24 @@
             <ImageView
                 android:id="@+id/back_arrow"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:padding="4dp"
+                android:layout_height="@dimen/size_16"
+                android:layout_marginStart="@dimen/size_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_arrow_back_black" />
 
             <TextView
                 android:id="@+id/textView101"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="@dimen/size_16"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
                 android:text="Chat"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/back_arrow"
                 app:layout_constraintStart_toEndOf="@+id/back_arrow"
                 app:layout_constraintTop_toTopOf="@+id/back_arrow" />
@@ -48,11 +48,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="23dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView41"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_search_calendar"
-                android:visibility="gone"
                 app:tint="@color/black" />
 
             <ImageView
@@ -60,11 +60,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="@dimen/size_16"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_three_dots"
-                android:visibility="gone"
                 app:tint="@color/black" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,10 +130,10 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16px"
                     android:padding="@dimen/size_16"
-                    app:tint="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_three_dots" />
+                    app:srcCompat="@drawable/ic_three_dots"
+                    app:tint="@color/black" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -144,8 +144,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar_contact" />
 
 
@@ -153,58 +153,54 @@
         android:id="@+id/no_chat_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_contact"
         android:background="@color/mdtp_white"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_contact">
 
         <ImageView
             android:layout_width="226dp"
             android:layout_height="189dp"
-            android:src="@drawable/bg_no_chat"/>
+            android:src="@drawable/bg_no_chat" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:textStyle="bold"
-            android:textSize="24sp"
             android:layout_marginTop="38dp"
-            android:textColor="@color/lipstick"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:text="No Chat …"
-            />
+            android:textColor="@color/lipstick"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:textStyle="normal"
-            android:textSize="16sp"
             android:layout_marginTop="24dp"
-            android:textColor="@color/warm_grey"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
             android:text="Oops…it looks like you have not started chat with anyone."
-            />
+            android:textColor="@color/warm_grey"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/contacts_btn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contacts"
-            android:layout_marginTop="38dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="38dp"
             android:layout_marginRight="16dp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:strokeColor="@color/colorPrimary"/>
+            android:text="Contacts"
+            app:strokeColor="@color/colorPrimary" />
 
 
     </LinearLayout>
-
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -275,6 +275,7 @@
                     app:layout_constraintStart_toStartOf="@+id/textView109"
                     app:layout_constraintTop_toBottomOf="@+id/textView109" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ambassador_layout"
                 android:layout_width="match_parent"
@@ -295,22 +296,22 @@
                         android:layout_height="105dp"
                         android:src="@drawable/banner_ambassador"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/join_as_amb_label" />
 
 
                     <TextView
                         android:id="@+id/join_as_amb_label"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginStart="4dp"
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
-                        android:layout_marginStart="4dp"
                         android:text="@string/join_us_as_an_ambassador"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView11"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -318,31 +319,38 @@
                         android:id="@+id/amb_subtitle_landing_screen"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato"
-                        android:textStyle="normal"
-                        android:textSize="12sp"
-                        android:textColor="#d9000000"
-                        android:layout_marginTop="12dp"
-                        android:lineSpacingExtra="3sp"
                         android:layout_marginStart="4dp"
-                        app:layout_constraintStart_toEndOf="@+id/imageView11"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
                         android:text="@string/more_you_create_profiles_more_you_earn"
-                        />
+                        android:textColor="#d9000000"
+                        android:textSize="12sp"
+
+                        android:textStyle="normal"
+                        app:layout_constraintEnd_toEndOf="@+id/amb_join_open_btn"
+                        app:layout_constraintStart_toEndOf="@+id/imageView11"
+                        app:layout_constraintTop_toBottomOf="@id/join_as_amb_label" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/amb_join_open_btn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:fontFamily="@font/lato"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="@color/lipstick"
+                        android:lineSpacingExtra="3sp"
+                        android:gravity="center_horizontal"
                         android:text="@string/join_now"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:textAllCaps="false"/>
+                        app:layout_constraintEnd_toEndOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
             <RelativeLayout
                 android:id="@+id/rl_cient_activation"
                 android:layout_width="match_parent"
@@ -620,7 +628,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="129dp"
@@ -733,10 +740,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/cv_role"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="vertical"
                     android:paddingStart="@dimen/size_41"
-                    android:paddingEnd="@dimen/size_24">
+                    android:paddingEnd="@dimen/size_24"
+                    android:visibility="gone">
 
 
                     <ImageView
