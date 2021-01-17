@@ -21,19 +21,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.core.PermissionUtils
 import com.gigforce.core.StringConstants
 import com.gigforce.core.ViewFullScreenImageDialogFragment
 import com.gigforce.core.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.date.DateHelper
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.adapters.ChatRecyclerAdapter
+import com.gigforce.modules.feature_chat.adapters.ChatAdapter
 import com.gigforce.modules.feature_chat.adapters.OnChatMessageClickListener
 import com.gigforce.modules.feature_chat.models.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
@@ -41,7 +39,6 @@ import com.gigforce.modules.feature_chat.models.MessageType
 import com.gigforce.modules.feature_chat.models.VideoInfo
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.gigforce.modules.feature_chat.ui.ChatRecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.time.LocalDateTime
@@ -59,6 +56,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
     private val viewModel: ChatPageViewModel by viewModels()
 
     private val appDirectoryFileRef: File by lazy {
+        //todo: look after this
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
 
@@ -130,10 +128,10 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
     }
 
     private fun findViews(view : View) {
-
         toolbarTitle = view.findViewById(R.id.tv_nameValueInChat)
-        chatFooter = view.findViewById(R.id.chat_footer)
         toolbarOverflowBtn = view.findViewById(R.id.iv_verticalDots)
+
+        chatFooter = view.findViewById(R.id.chat_footer)
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
     }
 
@@ -169,6 +167,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.apply {
+            /*
             putString(INTENT_EXTRA_OTHER_USER_IMAGE, imageUrl)
             putString(INTENT_EXTRA_OTHER_USER_NAME, username)
             putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderId)
@@ -176,6 +175,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
             putString(INTENT_EXTRA_OTHER_USER_ID, otherUserId)
             putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, fromClientActivation)
             putString(StringConstants.MOBILE_NUMBER.value, mobileNumber)
+             */
         }
     }
 
@@ -189,7 +189,9 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
         viewModel.messages
             .observe(viewLifecycleOwner, Observer {
-                chatRecyclerView.messages = ArrayList(it)
+
+                chatRecyclerView.adapter = ChatAdapter(it)
+//                chatRecyclerView.messages = ArrayList(it)
             })
 
 

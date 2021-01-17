@@ -27,7 +27,7 @@ import com.gigforce.modules.feature_chat.models.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class ChatRecyclerAdapter constructor(
+class OldChatRecyclerAdapter constructor(
     private val context: Context,
     private val refToGigForceAttachmentDirectory: File,
     private val requestManager: RequestManager,
