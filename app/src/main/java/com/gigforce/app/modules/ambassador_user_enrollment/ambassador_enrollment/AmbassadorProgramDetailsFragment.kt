@@ -33,6 +33,7 @@ import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
+import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
@@ -102,27 +103,30 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         learningViewModel.getRoleBasedCourses()
     }
 
+    var width = 0
     private fun showRoleBasedLearningError(error: String) {
 
         learning_based_role_rv.gone()
-        learning_based_horizontal_progress.gone()
+        stopShimmer(learning_based_horizontal_progress as LinearLayout)
         role_based_learning_error.visible()
         role_based_learning_error.text = error
-//        shimmer_learning_based_controller.stopShimmerAnimation()
+
     }
 
     private fun showRoleBasedLearningProgress() {
-//        shimmer_learning_based_controller.startShimmerAnimation()
+        startShimmer(learning_based_horizontal_progress as LinearLayout,
+                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
+                        orientation = LinearLayout.HORIZONTAL))
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
-        learning_based_horizontal_progress.visible()
+
     }
-    var width: Int = 0
+
     private fun showRoleBasedLearnings(content: List<Course>) {
         learning_based_horizontal_progress.gone()
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
-//        shimmer_learning_based_controller.stopShimmerAnimation()
+        stopShimmer(learning_based_horizontal_progress as LinearLayout)
 
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)

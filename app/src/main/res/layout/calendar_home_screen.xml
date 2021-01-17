@@ -28,15 +28,16 @@
             android:id="@+id/date_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:clickable="true"
             android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingEnd="10dp"
-            android:paddingBottom="10dp"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv1HS1"
-            android:gravity="center">
+            app:layout_constraintTop_toBottomOf="@+id/tv1HS1">
+
             <TextView
                 android:id="@+id/month_year"
                 android:layout_width="wrap_content"
@@ -64,14 +65,13 @@
         </LinearLayout>
 
 
-
         <ImageView
             android:id="@+id/chat_icon_iv"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginRight="16dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
-            android:layout_marginRight="16dp"
             android:src="@drawable/ic_homescreen_chat"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
@@ -81,8 +81,8 @@
             android:id="@+id/unread_message_count_tv"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="2dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintEnd_toStartOf="@id/cardView"
             app:layout_constraintTop_toTopOf="@id/cardView" />
 
@@ -124,12 +124,14 @@
             android:id="@+id/rv_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="@dimen/size_19"
+            android:fillViewport="false"
+            android:requiresFadingEdge="vertical"
+            android:theme="@style/CalendarRvStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/date_container" />
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -141,8 +143,8 @@
         android:background="@drawable/bottom_up_sheet"
         android:clipToPadding="true"
         android:elevation="20dp"
-        app:allowDragging="true"
         android:scrollbars="none"
+        app:allowDragging="true"
         app:halfOffset="350dp"
         app:hideable="false"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"

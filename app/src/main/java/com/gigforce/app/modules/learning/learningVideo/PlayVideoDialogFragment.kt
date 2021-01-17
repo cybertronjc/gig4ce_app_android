@@ -108,9 +108,9 @@ class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosin
 
         initViewModel()
 
-        close_click_layout.setOnClickListener {
-            backPressed()
-        }
+//        close_click_layout.setOnClickListener {
+//            backPressed()
+//        }
 
         playerView
                 .findViewById<View>(R.id.toggle_full_screen)

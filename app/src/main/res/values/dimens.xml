@@ -141,4 +141,11 @@
     <dimen name="padding_10">10dp</dimen>
     <dimen name="size_170">170dp</dimen>
     <dimen name="size_148">148dp</dimen>
+    <dimen name="size_200">200dp</dimen>
+    <dimen name="size_300">300dp</dimen>
+    <dimen name="size_160">160dp</dimen>
+    <dimen name="size_327">327dp</dimen>
+    <dimen name="size_78">78dp</dimen>
+    <dimen name="size_147">147dp</dimen>
+    <dimen name="size_227">227dp</dimen>
 </resources>

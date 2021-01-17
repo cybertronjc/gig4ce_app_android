@@ -13,10 +13,7 @@
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
         <item name="android:letterSpacing">0.0</item>
-<!--        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>-->
-<!--        <item name="android:scrollbars">vertical</item>-->
-<!--        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>-->
-<!--        <item name="android:scrollbarStyle">outsideOverlay</item>-->
+
         <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
         <item name="android:windowBackground">@color/bg</item>
         <!--        <item name="android:popupMenuStyle">@style/PopupMenu</item>-->
@@ -555,10 +552,22 @@
         <item name="cornerSize">10%</item>
     </style>
 
+    <style name="CalendarRvStyle">
+        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="colorAccent">#80FFFFFF</item>
+        <item name="android:color">#80FFFFFF</item>
+        <item name="colorPrimary">#80FFFFFF</item>
+        <item name="colorPrimaryDark">#80FFFFFF</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.MyApp.Button.RoundEdged" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
     <style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
         <!-- if using android.widget.PopupMenu -->
         <item name="android:popupMenuStyle">@style/PopupMenuTheme</item>
