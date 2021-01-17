@@ -5,17 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class CoreRecyclerAdapter(private val context: Context,
-                          private var _collection: List<Any>,
-                          private val viewHolderFn: (parent:ViewGroup, viewType: Int) -> CoreViewHolder
+abstract class CoreRecyclerAdapter(
+    private var _collection: List<Any>
+    // private val viewHolderFn: (parent:ViewGroup, viewType: Int) -> CoreViewHolder?
 )
     : RecyclerView.Adapter<CoreViewHolder>(){
 
     companion object {
 
+        /*
         fun <T: View> default(context:Context, _collection: List<Any>, factory: (context:Context)->T):CoreRecyclerAdapter{
             return CoreRecyclerAdapter(context, _collection, CoreViewHolder.default<T>(context, factory))
-        }
+        }*/
     }
 
     var collection:List<Any>
@@ -25,12 +26,13 @@ class CoreRecyclerAdapter(private val context: Context,
             this.notifyDataSetChanged();
         }
 
+        /*
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): CoreViewHolder {
         return viewHolderFn(parent, viewType);
-    }
+    }*/
 
     override fun getItemCount(): Int {
         return collection.count()

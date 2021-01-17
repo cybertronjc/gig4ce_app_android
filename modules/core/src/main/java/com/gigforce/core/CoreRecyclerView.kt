@@ -14,6 +14,7 @@ open class CoreRecyclerView(context: Context,
     }
 
     init {
+        //todo: handle for horizontal as well
         this.layoutManager = LinearLayoutManager(context)
     }
 
@@ -27,7 +28,7 @@ open class CoreRecyclerView(context: Context,
     fun <T: View> setDefaultAdapter(collection: List<Any>, factory: (context:Context)->T)
         :CoreRecyclerAdapter
     {
-        this.adapter = CoreRecyclerAdapter.default(context, collection, factory)
+        // this.adapter = CoreRecyclerAdapter.default(context, collection, factory)
         return this.adapter as CoreRecyclerAdapter
     }
 }

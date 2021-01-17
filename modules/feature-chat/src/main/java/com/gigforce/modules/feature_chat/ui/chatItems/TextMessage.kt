@@ -12,7 +12,9 @@ import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.Message
 
-abstract class TextMessage(val type:String, context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs), IViewHolder {
+abstract class TextMessage(val type:String, context: Context, attrs: AttributeSet?)
+    :   RelativeLayout(context, attrs),
+        IViewHolder {
 
     private lateinit var msgView:TextView
     private lateinit var timeView:TextView
@@ -36,7 +38,7 @@ abstract class TextMessage(val type:String, context: Context, attrs: AttributeSe
     }
 
     fun loadViews(){
-       msgView = this.findViewById(R.id.tv_msgValue)
+        msgView = this.findViewById(R.id.tv_msgValue)
         timeView = this.findViewById(R.id.tv_msgTimeValue)
     }
 

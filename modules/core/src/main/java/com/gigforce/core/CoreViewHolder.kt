@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.Exception
 
-class CoreViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+open class CoreViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     companion object{
         fun <T:View> default(context: Context, factory: (context:Context)->T): (parent: ViewGroup, viewType: Int) -> CoreViewHolder {
@@ -18,6 +18,7 @@ class CoreViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     init {
+        // view passed must implement IViewHolder
         if(view !is IViewHolder){
             throw Exception("View must extend IViewHolder");
         }

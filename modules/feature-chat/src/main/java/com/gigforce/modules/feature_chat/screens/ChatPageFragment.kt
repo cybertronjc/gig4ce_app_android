@@ -186,15 +186,10 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
     private fun subscribeViewModel() {
 
-
         viewModel.messages
             .observe(viewLifecycleOwner, Observer {
-
-                chatRecyclerView.adapter = ChatAdapter(it)
-//                chatRecyclerView.messages = ArrayList(it)
+                chatRecyclerView.messages = it
             })
-
-
     }
 
     private fun openDocument(file: File) {

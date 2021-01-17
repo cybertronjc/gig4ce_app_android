@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.core.CoreViewHolder
+import com.gigforce.core.IViewTypeFinder
 import com.gigforce.modules.feature_chat.models.ChatConstants
 import com.gigforce.modules.feature_chat.models.Message
 import com.gigforce.modules.feature_chat.ui.chatItems.InTextMessage
@@ -39,15 +40,16 @@ class ChatViewTypes{
     }
 }
 
-interface IViewTypeFinder{
-    fun getViewType(data:Any):Int
-    fun getViewHolder(context: Context, viewType:Int):CoreViewHolder
-}
-
 class ViewTypeFinder: IViewTypeFinder {
 
     override fun getViewType(data:Any):Int{
         val msg = data as Message
+
+        /*
+                ChatMessage:
+                    type: text/image/doc
+                    flowType: in/out
+         */
 
         return when(msg.type){
             ChatConstants.MESSAGE_TYPE_TEXT -> if(msg.flowType == "in") ChatViewTypes.IN_TEXT else ChatViewTypes.OUT_TEXT
