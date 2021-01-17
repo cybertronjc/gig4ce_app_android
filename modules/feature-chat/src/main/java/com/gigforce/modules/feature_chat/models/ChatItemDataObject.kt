@@ -1,5 +1,8 @@
 package com.gigforce.modules.feature_chat.models
 
+import com.gigforce.core.SimpleDataViewObject
+import com.gigforce.modules.feature_chat.ViewTypes
+
 data class ChatItemDataObject(
     val title:String,
     val subtitle:String,
@@ -8,4 +11,4 @@ data class ChatItemDataObject(
     val unreadCount:Int,
     val id:String,
     val type: String
-) {}
+): SimpleDataViewObject(ViewTypes.CHAT_HEADER) {}

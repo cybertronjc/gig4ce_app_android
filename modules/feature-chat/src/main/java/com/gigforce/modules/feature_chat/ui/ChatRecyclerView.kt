@@ -18,6 +18,6 @@ class ChatRecyclerView(context: Context, attrs: AttributeSet) : CoreRecyclerView
         }
 
     init {
-        this.adapter = ChatAdapter(messages)
+        this.adapter = ChatAdapter(context, messages)
     }
 }

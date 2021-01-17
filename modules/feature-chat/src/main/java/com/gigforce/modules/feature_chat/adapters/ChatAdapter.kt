@@ -1,21 +1,26 @@
 package com.gigforce.modules.feature_chat.adapters
 
+import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreRecyclerAdapter
 import com.gigforce.core.CoreViewHolder
+import com.gigforce.core.IViewTypeFinder
+import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import javax.inject.Inject
 
 class ChatAdapter(
+    context: Context,
     var _collection: List<Any>
 ): CoreRecyclerAdapter(_collection) {
 
-    // @Inject
+    @Inject
     lateinit var iViewTypeFinder: IViewTypeFinder
 
     init {
+        (context.applicationContext as ChatModuleProvider).provideChatModule().inject(this)
         //todo: Remove and inject via dagger
-        iViewTypeFinder = ViewTypeFinder()
+        // iViewTypeFinder = ViewTypeFinder()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoreViewHolder {

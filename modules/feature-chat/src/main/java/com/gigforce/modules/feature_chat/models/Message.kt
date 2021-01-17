@@ -1,6 +1,8 @@
 package com.gigforce.modules.feature_chat.models
 
 import android.graphics.Bitmap
+import com.gigforce.core.DataViewObject
+import com.gigforce.modules.feature_chat.ViewTypes
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -94,7 +96,7 @@ class Message(
     @get:Exclude
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
-) {
+) : DataViewObject(){
 
     companion object {
 
@@ -105,5 +107,14 @@ class Message(
         const val MESSAGE_TYPE_TEXT_WITH_VIDEO = "text_video"
         const val MESSAGE_TYPE_TEXT_WITH_AUDIO = "text_audio"
         const val MESSAGE_TYPE_TEXT_WITH_CONTACT = "text_contact"
+    }
+
+    override fun getViewType(): Int {
+
+        return when(this.type){
+            ChatConstants.MESSAGE_TYPE_TEXT -> if(this.flowType == "in") ViewTypes.IN_TEXT else ViewTypes.OUT_TEXT
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if(this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
+            else -> -1
+        }
     }
 }
