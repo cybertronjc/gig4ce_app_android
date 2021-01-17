@@ -10,6 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/oval_gradient_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/date_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_oval_top_landingscreen" />
+<!--        <View-->
+<!--            android:id="@+id/below_oval"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="40dp"-->
+<!--            android:elevation="5dp"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/margin_40"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:background="@color/white"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />-->
+
         <TextView
             android:id="@+id/tv1HS1"
             android:layout_width="wrap_content"
@@ -124,8 +150,9 @@
             android:id="@+id/rv_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:cacheColorHint="#80e9e9e9"
             android:fadingEdge="horizontal"
-            android:fadingEdgeLength="@dimen/size_19"
+            android:fadingEdgeLength="@dimen/size_56"
             android:fillViewport="false"
             android:requiresFadingEdge="vertical"
             android:theme="@style/CalendarRvStyle"
@@ -188,31 +215,8 @@
         app:layout_anchor="@+id/constraintLayout2"
         app:layout_anchorGravity="center">
 
-        <ImageView
-            android:id="@+id/oval_gradient_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_oval_top_landingscreen" />
 
-        <View
-            android:id="@+id/below_oval"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:elevation="5dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />
 
-        <View
-            android:id="@+id/margin_40"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />
 
         <LinearLayout
             android:id="@+id/calendar_cv"
@@ -222,7 +226,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/below_oval">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.gigforce.app.core.base.components.CalendarView
                 android:id="@+id/calendarView"
