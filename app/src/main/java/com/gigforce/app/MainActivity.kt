@@ -19,7 +19,8 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+// import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.NavFragmentsData

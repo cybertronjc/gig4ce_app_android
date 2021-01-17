@@ -73,6 +73,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
+import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
