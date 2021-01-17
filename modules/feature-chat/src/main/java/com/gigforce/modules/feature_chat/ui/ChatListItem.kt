@@ -6,13 +6,11 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.navigation.findNavController
 import com.gigforce.core.IViewHolder
-import com.gigforce.modules.feature_chat.IChatNavigation
+import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
-import dagger.internal.InjectedFieldSignature
 import javax.inject.Inject
 
 class ChatListItem(context: Context?) :
@@ -21,7 +19,7 @@ class ChatListItem(context: Context?) :
     View.OnClickListener {
 
     @Inject
-    lateinit var navigation:IChatNavigation
+    lateinit var navigation: IChatNavigation
 
     init {
 

@@ -2,7 +2,8 @@ package com.gigforce.modules.feature_chat.models
 
 import android.graphics.Bitmap
 import com.gigforce.core.DataViewObject
-import com.gigforce.modules.feature_chat.ViewTypes
+import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude

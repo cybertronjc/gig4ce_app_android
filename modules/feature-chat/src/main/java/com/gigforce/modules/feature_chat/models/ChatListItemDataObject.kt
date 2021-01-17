@@ -1,7 +1,7 @@
 package com.gigforce.modules.feature_chat.models
 
 import com.gigforce.core.SimpleDataViewObject
-import com.gigforce.modules.feature_chat.ViewTypes
+import com.gigforce.modules.feature_chat.core.ViewTypes
 
 data class ChatListItemDataObject(
     val title:String,

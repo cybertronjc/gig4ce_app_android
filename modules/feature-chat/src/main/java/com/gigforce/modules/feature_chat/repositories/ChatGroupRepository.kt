@@ -7,8 +7,8 @@ import androidx.core.net.toUri
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.*
 import com.gigforce.core.file.FileUtils
-import com.gigforce.core.file.FileUtils.copyFile
 import com.gigforce.core.image.ImageUtils
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

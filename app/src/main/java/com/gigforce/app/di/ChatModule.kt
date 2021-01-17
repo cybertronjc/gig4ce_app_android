@@ -1,10 +1,9 @@
 package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.ChatNavigationImpl
-import com.gigforce.core.IViewTypeFinder
-import com.gigforce.modules.feature_chat.IChatNavigation
-import com.gigforce.modules.feature_chat.adapters.ViewTypeFinder
-import dagger.Binds
+import com.gigforce.app.di.implementations.MyViewHolderFactory
+import com.gigforce.core.ICoreViewHolderFactory
+import com.gigforce.modules.feature_chat.core.IChatNavigation
 import dagger.Module
 import dagger.Provides
 
@@ -15,5 +14,5 @@ class ChatModule {
     fun provideNavigation(): IChatNavigation = ChatNavigationImpl()
 
     @Provides
-    fun iViewTypeFinderProvider(): IViewTypeFinder = ViewTypeFinder()
+    fun iViewTypeFinderProvider(): ICoreViewHolderFactory = MyViewHolderFactory()
 }

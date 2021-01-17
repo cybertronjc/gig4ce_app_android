@@ -33,7 +33,7 @@ import com.gigforce.core.date.DateHelper
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.adapters.OnChatMessageClickListener
-import com.gigforce.modules.feature_chat.models.ChatConstants
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.gigforce.modules.feature_chat.models.MessageType
 import com.gigforce.modules.feature_chat.models.VideoInfo

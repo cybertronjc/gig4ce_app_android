@@ -23,6 +23,7 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService

@@ -1,4 +1,4 @@
-package com.gigforce.modules.feature_chat.models
+package com.gigforce.modules.feature_chat.core
 
 object ChatConstants {
     const val CHAT_TYPE_USER = "user"
@@ -10,6 +10,9 @@ object ChatConstants {
     const val MESSAGE_TYPE_TEXT_WITH_VIDEO = "text_video"
     const val MESSAGE_TYPE_TEXT_WITH_AUDIO = "text_audio"
     const val MESSAGE_TYPE_TEXT_WITH_CONTACT = "text_contact"
+
+    const val FLOW_TYPE_IN = "in"
+    const val FLOW_TYPE_OUT = "out"
 
     const val ATTACHMENT_TYPE_DOCUMENT = "document"
     const val ATTACHMENT_TYPE_IMAGE = "image"

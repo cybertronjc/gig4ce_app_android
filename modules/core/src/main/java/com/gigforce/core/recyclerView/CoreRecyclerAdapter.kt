@@ -6,11 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
 import com.gigforce.core.IDataViewTypeGetter
-import com.gigforce.core.IViewTypeFinder
+import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.di.CoreComponentProvider
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
-import kotlin.reflect.typeOf
 
 open class CoreRecyclerAdapter(
     context: Context
@@ -25,7 +24,7 @@ open class CoreRecyclerAdapter(
     }
 
     @Inject
-    lateinit var iViewTypeFinder: IViewTypeFinder
+    lateinit var iViewTypeFinder: ICoreViewHolderFactory
 
     private var _collection: List<Any> = ArrayList()
     var collection:List<Any>

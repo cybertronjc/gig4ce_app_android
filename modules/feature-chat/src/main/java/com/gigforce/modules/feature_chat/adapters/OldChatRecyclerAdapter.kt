@@ -23,6 +23,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.adapters.diffutils.ChatDiffUtilCallback
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import java.io.File
 import java.util.concurrent.TimeUnit

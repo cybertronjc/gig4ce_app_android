@@ -1,17 +1,16 @@
 package com.gigforce.app.di.implementations
 
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.navigation.findNavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.core.navigation.BaseNavigationImpl
-import com.gigforce.modules.feature_chat.IChatNavigation
+import com.gigforce.modules.feature_chat.core.IChatNavigation
 import javax.inject.Inject
 
 class ChatNavigationImpl @Inject constructor()
-    : BaseNavigationImpl(), IChatNavigation {
+    : BaseNavigationImpl(),
+    IChatNavigation {
 
     override fun navigateToChatList() {
 
