@@ -42,6 +42,7 @@ import kotlinx.android.synthetic.main.layout_learning_lesson_complete.*
 
 class PlayVideoDialogFragment : DialogFragment(), RateLessonDialogFragmentClosingListener {
 
+    private var showLessonCompletedDialog: Boolean=false
     private var playWhenReady = true
     private var currentWindow = 0
     private var playbackPosition: Long = 0
