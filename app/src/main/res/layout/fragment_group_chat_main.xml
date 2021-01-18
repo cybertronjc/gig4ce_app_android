@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/iv_verticalDots"
-                android:layout_width="30dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/size_16"
                 android:scaleX="0.8"
                 android:scaleY="0.8"

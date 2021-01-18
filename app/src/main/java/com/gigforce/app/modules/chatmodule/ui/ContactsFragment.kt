@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.PopupMenu
@@ -50,28 +47,29 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.vinners.cmi.ui.activity.ContactsViewModelFactory
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 
 /*
     /////////////////////////////////////////////////////////////////////////////////
  */
 class ContactsFragment : DialogFragment(),
-    OnContactClickListener,
-    LoaderManager.LoaderCallbacks<Cursor>,
-    PopupMenu.OnMenuItemClickListener {
+        OnContactClickListener,
+        LoaderManager.LoaderCallbacks<Cursor>,
+        PopupMenu.OnMenuItemClickListener {
 
     private val viewModel: ContactsViewModel by lazy {
         ViewModelProvider(
-            this,
-            ContactsViewModelFactory(requireContext())
+                this,
+                ContactsViewModelFactory(requireContext())
         ).get(ContactsViewModel::class.java)
     }
 
 
     private val chatGroupViewModel: GroupChatViewModel by lazy {
         ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
+                this,
+                GroupChatViewModelFactory(requireContext())
         ).get(GroupChatViewModel::class.java)
     }
     private var onContactSelectedListener: OnContactsSelectedListener? = null
@@ -101,8 +99,8 @@ class ContactsFragment : DialogFragment(),
     private var permissionSnackBar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_chat_new_contact, container, false)
 
 
@@ -137,16 +135,16 @@ class ContactsFragment : DialogFragment(),
         contactsPermissionLayout.gone()
 
         LoaderManager
-            .getInstance(this@ContactsFragment)
-            .initLoader(CONTACTS_LOADER_ID, null, this@ContactsFragment)
+                .getInstance(this@ContactsFragment)
+                .initLoader(CONTACTS_LOADER_ID, null, this@ContactsFragment)
     }
 
     private fun findViews(view: View) {
         contactRecyclerView = view.findViewById(R.id.rv_contactsList)
         contactRecyclerView.layoutManager = LinearLayoutManager(
-            requireContext(),
-            RecyclerView.VERTICAL,
-            false
+                requireContext(),
+                RecyclerView.VERTICAL,
+                false
         )
         contactRecyclerView.adapter = contactsAdapter
 
@@ -182,31 +180,33 @@ class ContactsFragment : DialogFragment(),
                 layout.addView(groupNameEt)
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a group name")
-                    .setTitle("Group name")
-                    .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
+                        .setMessage("Enter a group name")
+                        .setTitle("Group name")
+                        .setView(layout)
+                        .setPositiveButton("Okay") { _, _ ->
 
-                        if (groupNameEt.length() == 0) {
-                            showToast("Please enter a group name")
-                        } else {
-                            chatGroupViewModel.createGroup(
-                                groupName = groupNameEt.text.toString().capitalize(),
-                                groupMembers = contactsAdapter.getSelectedContact()
-                            )
+                            if (groupNameEt.length() == 0) {
+                                showToast("Please enter a group name")
+                            } else {
+                                chatGroupViewModel.createGroup(
+                                        groupName = groupNameEt.text.toString().capitalize(),
+                                        groupMembers = contactsAdapter.getSelectedContact()
+                                )
+                            }
                         }
-                    }
-                    .setNegativeButton("Cancel") { _, _ ->
+                        .setNegativeButton("Cancel") { _, _ ->
 
-                    }.show()
+                        }.show()
             }
         }
 
         imageView41.setOnClickListener {
-
-            val popUp = PopupMenu(activity?.applicationContext, it)
+            val themeWrapper = ContextThemeWrapper(requireContext(), R.style.PopUpMenuWithOffset)
+            val popUp = PopupMenu(themeWrapper, it)
+            popUp.gravity = Gravity.END
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_contact)
+
             popUp.show()
         }
     }
@@ -259,31 +259,33 @@ class ContactsFragment : DialogFragment(),
                 layout.addView(groupNameEt)
 
                 MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a group name")
-                    .setTitle("Group name")
-                    .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
+                        .setMessage("Enter a group name")
+                        .setTitle("Group name")
+                        .setView(layout)
+                        .setPositiveButton("Okay") { _, _ ->
 
-                        if (groupNameEt.length() == 0) {
-                            showToast("Please enter a group name")
-                        } else {
-                            chatGroupViewModel.createGroup(
-                                groupName = groupNameEt.text.toString().capitalize(),
-                                groupMembers = contactsAdapter.getSelectedContact()
-                            )
+                            if (groupNameEt.length() == 0) {
+                                showToast("Please enter a group name")
+                            } else {
+                                chatGroupViewModel.createGroup(
+                                        groupName = groupNameEt.text.toString().capitalize(),
+                                        groupMembers = contactsAdapter.getSelectedContact()
+                                )
+                            }
                         }
-                    }
-                    .setNegativeButton("Cancel") { _, _ ->
+                        .setNegativeButton("Cancel") { _, _ ->
 
-                    }.show()
+                        }.show()
             }
         }
 
         imageView41.setOnClickListener {
-
-            val popUp = PopupMenu(activity?.applicationContext, it)
+            val themeWrapper = ContextThemeWrapper(requireContext(), R.style.PopUpMenuWithOffset)
+            val popUp = PopupMenu(themeWrapper, it)
+            popUp.gravity = Gravity.END
             popUp.setOnMenuItemClickListener(this)
             popUp.inflate(R.menu.menu_chat_contact)
+
             popUp.show()
         }
     }
@@ -299,48 +301,48 @@ class ContactsFragment : DialogFragment(),
 
     private fun initViewModel() {
         viewModel.contacts
-            .observe(viewLifecycleOwner, Observer {
-                showContactsOnView(it)
-            })
+                .observe(viewLifecycleOwner, Observer {
+                    showContactsOnView(it)
+                })
 
         viewModel.syncContacts
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lse.Loading -> showContactsAsSyncing()
-                    Lse.Success -> showContactsAsSynced()
-                    is Lse.Error -> errorInSyncingContacts(it.error)
-                }
-            })
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lse.Loading -> showContactsAsSyncing()
+                        Lse.Success -> showContactsAsSynced()
+                        is Lse.Error -> errorInSyncingContacts(it.error)
+                    }
+                })
 
         chatGroupViewModel
-            .createGroup
-            .observe(viewLifecycleOwner, Observer {
-                it ?: return@Observer
+                .createGroup
+                .observe(viewLifecycleOwner, Observer {
+                    it ?: return@Observer
 
-                when (it) {
-                    Lce.Loading -> UtilMethods.showLoading(requireContext())
-                    is Lce.Content -> {
-                        UtilMethods.hideLoading()
-                        showToast("Group created")
+                    when (it) {
+                        Lce.Loading -> UtilMethods.showLoading(requireContext())
+                        is Lce.Content -> {
+                            UtilMethods.hideLoading()
+                            showToast("Group created")
 
-                        findNavController()
-                            .navigate(
-                                R.id.groupChatFragment, bundleOf(
-                                    GroupChatFragment.INTENT_EXTRA_GROUP_ID to it.content
-                                )
-                            )
+                            findNavController()
+                                    .navigate(
+                                            R.id.groupChatFragment, bundleOf(
+                                            GroupChatFragment.INTENT_EXTRA_GROUP_ID to it.content
+                                    )
+                                    )
+                        }
+                        is Lce.Error -> {
+                            UtilMethods.hideLoading()
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Error while creating group")
+                                    .setMessage(it.error)
+                                    .setPositiveButton("okay") { _, _ -> }
+                                    .show()
+                        }
                     }
-                    is Lce.Error -> {
-                        UtilMethods.hideLoading()
-
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error while creating group")
-                            .setMessage(it.error)
-                            .setPositiveButton("okay") { _, _ -> }
-                            .show()
-                    }
-                }
-            })
+                })
     }
 
     private fun showContactsAsSyncing() {
@@ -367,10 +369,10 @@ class ContactsFragment : DialogFragment(),
         processing_contacts_progressbar.gone()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(error)
-            .setTitle("Unable to sync contacts")
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setMessage(error)
+                .setTitle("Unable to sync contacts")
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
     }
 
     private fun showContactsOnView(it: List<ContactModel>?) {
@@ -385,15 +387,15 @@ class ContactsFragment : DialogFragment(),
         // check for permissions
 
         if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.READ_CONTACTS
-            )
-            != PackageManager.PERMISSION_GRANTED
+                        requireContext(),
+                        android.Manifest.permission.READ_CONTACTS
+                )
+                != PackageManager.PERMISSION_GRANTED
         ) {
             Log.v(TAG, "Permission Required. Requesting Permission")
             requestPermissions(
-                arrayOf(android.Manifest.permission.READ_CONTACTS),
-                REQUEST_CONTACTS_PERMISSION
+                    arrayOf(android.Manifest.permission.READ_CONTACTS),
+                    REQUEST_CONTACTS_PERMISSION
             )
             showPermissionLayout()
         } else {
@@ -402,9 +404,9 @@ class ContactsFragment : DialogFragment(),
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -427,9 +429,9 @@ class ContactsFragment : DialogFragment(),
 
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
-                    contacts_root_layout,
-                    "Grant contacts permission to sync contacts",
-                    Snackbar.LENGTH_INDEFINITE
+                        contacts_root_layout,
+                        "Grant contacts permission to sync contacts",
+                        Snackbar.LENGTH_INDEFINITE
                 )
                 permissionSnackBar?.setAction("Okay") {
                     startAppSettingsPage()
@@ -451,8 +453,8 @@ class ContactsFragment : DialogFragment(),
 
             val bundle = Bundle()
             bundle.putString(
-                AppConstants.IMAGE_URL,
-                contact.imageUrl
+                    AppConstants.IMAGE_URL,
+                    contact.imageUrl
             )
             bundle.putString(AppConstants.CONTACT_NAME, contact.name)
             bundle.putString("chatHeaderId", contact.headerId)
@@ -470,8 +472,8 @@ class ContactsFragment : DialogFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(
-            STYLE_NORMAL,
-            android.R.style.Theme_Light_NoTitleBar_Fullscreen
+                STYLE_NORMAL,
+                android.R.style.Theme_Light_NoTitleBar_Fullscreen
         )
     }
 
@@ -498,13 +500,13 @@ class ContactsFragment : DialogFragment(),
 
     private fun createContactsLoader(): Loader<Cursor> {
         return CursorLoader(
-            requireContext(),
-            // Contacts.CONTENT_URI,
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            PROJECTION,
-            SELECTION,
-            selectionArgs,
-            null
+                requireContext(),
+                // Contacts.CONTENT_URI,
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                PROJECTION,
+                SELECTION,
+                selectionArgs,
+                null
         )
     }
 
@@ -528,22 +530,22 @@ class ContactsFragment : DialogFragment(),
         cursor.moveToFirst()
         while (!cursor.isLast) {
             val name = cursor.getString(
-                cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
+                    cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
             )
             val phone = cursor.getString(
-                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                    cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
             )
             val contactId = cursor.getString(
-                cursor.getColumnIndex((ContactsContract.Contacts._ID))
+                    cursor.getColumnIndex((ContactsContract.Contacts._ID))
             )
 
             contacts.add(
-                ContactModel(
-                    id = null,
-                    mobile = cleanPhoneNo(phone),
-                    name = name,
-                    contactId = contactId
-                )
+                    ContactModel(
+                            id = null,
+                            mobile = cleanPhoneNo(phone),
+                            name = name,
+                            contactId = contactId
+                    )
             )
 
             // Move Cursor to Next Position
@@ -572,24 +574,24 @@ class ContactsFragment : DialogFragment(),
         private const val CONTACTS_LOADER_ID = 1
 
         private val PROJECTION: Array<out String> = arrayOf(
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.LOOKUP_KEY,
-            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
-            ContactsContract.Contacts.HAS_PHONE_NUMBER,
-            ContactsContract.CommonDataKinds.Phone.NUMBER
+                ContactsContract.Contacts._ID,
+                ContactsContract.Contacts.LOOKUP_KEY,
+                ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+                ContactsContract.Contacts.HAS_PHONE_NUMBER,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
         )
 
         private val SELECTION: String =
-            "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
+                "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0 and ${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} LIKE ?"
 
 
         fun launchForSelectingContact(
-            fm: FragmentManager,
-            onContactsSelectedListener: OnContactsSelectedListener
+                fm: FragmentManager,
+                onContactsSelectedListener: OnContactsSelectedListener
         ) {
             ContactsFragment().apply {
                 arguments = bundleOf(
-                    INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+                        INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
                 )
                 this.onContactSelectedListener = onContactsSelectedListener
                 show(fm, TAG)

@@ -66,9 +66,12 @@
 
             <ImageView
                 android:id="@+id/iv_verticalDots"
-                android:layout_width="30dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/size_16"
+                android:paddingStart="@dimen/size_16"
+                android:paddingTop="@dimen/size_8"
+                android:paddingBottom="@dimen/size_8"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 android:src="@drawable/ic_three_dots"
