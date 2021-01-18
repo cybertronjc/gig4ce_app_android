@@ -647,6 +647,38 @@ class ContactsFragment : DialogFragment(),
             }
         }
     }
+    private fun createNewGroup() {
+        if (shouldReturnToPreviousScreen) {
+            onContactSelectedListener?.onContactsSelected(contactsAdapter.getSelectedContact())
+            dismiss()
+        } else {
+
+            val groupNameEt = EditText(requireContext())
+
+            val layout = FrameLayout(requireContext())
+            layout.setPaddingRelative(45, 15, 45, 0)
+            layout.addView(groupNameEt)
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Enter a group name")
+                    .setTitle("Group name")
+                    .setView(layout)
+                    .setPositiveButton("Okay") { _, _ ->
+
+                        if (groupNameEt.length() == 0) {
+                            showToast("Please enter a group name")
+                        } else {
+                            chatGroupViewModel.createGroup(
+                                    groupName = groupNameEt.text.toString().capitalize(),
+                                    groupMembers = contactsAdapter.getSelectedContact()
+                            )
+                        }
+                    }
+                    .setNegativeButton("Cancel") { _, _ ->
+
+                    }.show()
+        }
+    }
 
 
 }
