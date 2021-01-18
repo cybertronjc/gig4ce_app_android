@@ -1311,4 +1311,9 @@
     <string name="send_invite_link">Send Invite Link</string>
     <string name="chat">Chat</string>
     <string name="call">Call</string>
+    <string name="enter_driving_license_number">Enter Driving License Number</string>
+    <string name="keep_learning">Keep Learning !!!</string>
+    <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>
+    <string name="next_lesson">Next Lesson</string>
+    <string name="skip_underline"><u>Skip</u></string>
 </resources>

@@ -136,7 +136,9 @@ class CalendarHomeScreen : BaseFragment(),
             }
         })
         arrCalendarDependent =
-            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+        arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()

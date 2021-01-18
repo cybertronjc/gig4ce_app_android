@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -19,6 +20,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.AppDialogsImp
 import com.gigforce.app.core.base.dialog.AppDialogsInterface
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
@@ -34,9 +37,12 @@ import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.app.utils.ui_models.ShimmerModel
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -415,8 +421,40 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
 
         val activity = activity ?: return
 
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+    }
+
+    fun startShimmer(ll_shimmer: LinearLayout, shimmerModel: ShimmerModel) {
+        ll_shimmer.removeAllViews()
+        ll_shimmer.visible()
+        ll_shimmer.orientation = shimmerModel.orientation
+        for (i in 0 until shimmerModel.itemsToBeDrawn) {
+            val view = LayoutInflater.from(requireContext()).inflate(shimmerModel.cardRes, null)
+            ll_shimmer.addView(view)
+            val layoutParams: LinearLayout.LayoutParams =
+                    view.layoutParams as LinearLayout.LayoutParams
+            layoutParams.height = resources.getDimensionPixelSize(shimmerModel.minHeight)
+            layoutParams.width = resources.getDimensionPixelSize(shimmerModel.minWidth)
+            layoutParams.setMargins(resources.getDimensionPixelSize(shimmerModel.marginLeft),
+                    resources.getDimensionPixelSize(shimmerModel.marginTop), resources.getDimensionPixelSize(shimmerModel.marginRight),
+                    resources.getDimensionPixelSize(shimmerModel.marginBottom))
+            view.layoutParams = layoutParams
+            val shimmerLayout = view.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+            shimmerLayout.startShimmerAnimation()
+        }
+    }
+
+    fun stopShimmer(view: LinearLayout) {
+        for (i in 0 until view.childCount) {
+            val nestedView = view.getChildAt(i)
+            val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+            shimmerLayout.stopShimmerAnimation()
+
+        }
+        view.removeAllViews()
+        view.gone()
     }
 
 }

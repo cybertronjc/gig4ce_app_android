@@ -134,4 +134,18 @@
     <dimen name="size_83">83dp</dimen>
     <dimen name="size_3">3dp</dimen>
     <dimen name="size_191">191dp</dimen>
+    <dimen name="size_69">69dp</dimen>
+    <dimen name="activityPadding">16dp</dimen>
+    <dimen name="placeholderImage">60dp</dimen>
+    <dimen name="placeholderTextHeight">8dp</dimen>
+    <dimen name="padding_10">10dp</dimen>
+    <dimen name="size_170">170dp</dimen>
+    <dimen name="size_148">148dp</dimen>
+    <dimen name="size_200">200dp</dimen>
+    <dimen name="size_300">300dp</dimen>
+    <dimen name="size_160">160dp</dimen>
+    <dimen name="size_327">327dp</dimen>
+    <dimen name="size_78">78dp</dimen>
+    <dimen name="size_147">147dp</dimen>
+    <dimen name="size_227">227dp</dimen>
 </resources>

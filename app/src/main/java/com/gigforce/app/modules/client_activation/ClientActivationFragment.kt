@@ -45,13 +45,15 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.skydoves.powermenu.CustomPowerMenu
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
-import kotlinx.android.synthetic.main.layout_fragment_client_activation.tv_mark_as_interest_role_details
 import kotlinx.android.synthetic.main.layout_role_description.view.*
 import java.io.File
 import java.io.FileOutputStream
 
-class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
+class ClientActivationFragment : BaseFragment(),
     LocationUpdates.LocationUpdateCallbacks {
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
@@ -82,6 +84,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         setupBulletPontsRv()
         initClicks()
         initObservers()
+
     }
 
 
@@ -102,7 +105,56 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
         }
 
         iv_options_client_activation.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+            var customPowerMenu: CustomPowerMenu<*, *>? = null
+            customPowerMenu =
+                CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
+                    .addItem(
+                        MenuItem(getString(R.string.share))
+                    )
+
+                    .setShowBackground(false)
+                    .setOnMenuItemClickListener(object :
+                        OnMenuItemClickListener<com.gigforce.app.utils.MenuItem> {
+                        override fun onItemClick(
+                            position: Int,
+                            item: com.gigforce.app.utils.MenuItem?
+                        ) {
+                            pb_client_activation.visible()
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                val shortLink = result.shortLink
+                                shareToAnyApp(shortLink.toString())
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                showToast(it.message!!);
+                            }
+                            customPowerMenu?.dismiss()
+                        }
+
+                    })
+                    .setAnimation(MenuAnimation.DROP_DOWN)
+                    .setMenuRadius(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+                    .setMenuShadow(
+                       resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+
+                    .build()
+            customPowerMenu.showAsDropDown(
+                it,
+                -((customPowerMenu.contentViewWidth- (it.resources.getDimensionPixelSize(R.dimen.size_32))
+                )
+                        ),
+                -(resources.getDimensionPixelSize(
+                    R.dimen.size_24
+                )
+                        )
+            )
         }
 
     }
@@ -452,27 +504,7 @@ class ClientActivationFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_share -> {
-                pb_client_activation.visible()
-                Firebase.dynamicLinks.shortLinkAsync {
-                    longLink =
-                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
-                }.addOnSuccessListener { result ->
-                    // Short link created
-                    val shortLink = result.shortLink
-                    shareToAnyApp(shortLink.toString())
-                }.addOnFailureListener {
-                    // Error
-                    // ...
-                    showToast(it.message!!);
-                }
-                return true
-            }
-        }
-        return false;
-    }
+
 
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_layout"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical">
 
     <View
@@ -13,6 +16,7 @@
         android:layout_height="3dp"
         android:layout_gravity="center"
         android:layout_marginTop="17dp"
+        android:layout_marginBottom="@dimen/size_16"
         android:background="@android:color/darker_gray" />
 
 
@@ -103,11 +107,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="20dp"
         android:letterSpacing="0"
         android:text="@string/upcoming_gig_"
         android:textColor="#080808"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/upcoming_gig_rv"
@@ -117,7 +120,8 @@
         android:nestedScrollingEnabled="false"
         android:paddingTop="14dp"
         android:paddingRight="20dp"
-        android:paddingBottom="15dp" />
+        android:paddingBottom="15dp"
+        android:scrollbars="none" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -148,7 +152,10 @@
         android:id="@+id/ambassador_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_22"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_16"
         app:cardBackgroundColor="@color/light_pink">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -164,22 +171,22 @@
                 android:layout_height="105dp"
                 android:src="@drawable/banner_ambassador"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label" />
 
 
             <TextView
                 android:id="@+id/join_as_amb_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:layout_marginStart="4dp"
                 android:text="@string/join_us_as_an_ambassador"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -187,28 +194,33 @@
                 android:id="@+id/amb_subtitle_landing_screen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
-                android:textStyle="normal"
-                android:textSize="12sp"
-                android:textColor="#d9000000"
-                android:layout_marginTop="12dp"
-                android:lineSpacingExtra="3sp"
                 android:layout_marginStart="4dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView11"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
                 android:text="@string/more_you_create_profiles_more_you_earn"
-                />
+                android:textColor="#d9000000"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="@+id/amb_join_open_btn"
+                app:layout_constraintStart_toEndOf="@+id/imageView11"
+                app:layout_constraintTop_toBottomOf="@id/join_as_amb_label" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/amb_join_open_btn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:fontFamily="@font/lato"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/lipstick"
+                android:lineSpacingExtra="3sp"
+                android:gravity="center_horizontal"
                 android:text="@string/join_now"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textAllCaps="false"/>
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
@@ -228,6 +240,7 @@
             android:src="@drawable/ic_group_interest"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView109"
             android:layout_width="wrap_content"
@@ -255,23 +268,23 @@
             app:layout_constraintStart_toStartOf="@+id/textView109"
             app:layout_constraintTop_toBottomOf="@+id/textView109" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <RelativeLayout
         android:id="@+id/rl_cient_activation_bs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/size_215">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_title_client_activation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="17dp"
-            android:fontFamily="@font/lato"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_bold"
             android:letterSpacing="0"
             android:text="@string/explore_gigs"
             android:textColor="#080808"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -281,8 +294,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_title_client_activation"
             android:layout_marginTop="@dimen/size_16"
-            android:layout_marginBottom="@dimen/size_16"
-            android:minHeight="170dp">
+
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/client_activation_rv_bs"
@@ -290,11 +303,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/size_4"
-                android:paddingLeft="@dimen/size_16"
                 android:nestedScrollingEnabled="false"
+                android:paddingLeft="@dimen/size_16"
                 android:paddingRight="20dp"
-                android:visibility="gone"/>
+                android:paddingBottom="@dimen/size_4"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/client_activation_progress_bar_bs"
@@ -320,7 +333,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
         android:text="@string/learning"
@@ -331,8 +344,7 @@
         android:id="@+id/learning_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:minHeight="170dp">
+        android:layout_marginTop="16dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/learning_rv"
@@ -361,23 +373,23 @@
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>
+
     <RelativeLayout
         android:id="@+id/explore_by_role_rl"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/size_215">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView114"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="22dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
             android:text="@string/explore_by_role_"
             android:textColor="#080808"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -493,12 +505,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="@dimen/size_24"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
             android:text="@string/explore_by_industry"
             android:textColor="#080808"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -521,12 +533,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
         android:text="@string/assessment_"
         android:textColor="#686868"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="gone" />
 
 
@@ -564,9 +576,6 @@
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>
-
-
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
