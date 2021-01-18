@@ -167,6 +167,17 @@ class ContactsFragment : DialogFragment(),
         }
 
         create_group_layout.setOnClickListener {
+            createNewGroup()
+        }
+        fab_create_group_contacts.setOnClickListener {
+            if (contactsAdapter.getSelectedContact().isEmpty()) {
+                showToast(getString(R.string.select_at_least_one_contact))
+                return@setOnClickListener
+            }
+            createNewGroup()
+        }
+
+        imageView41.setOnClickListener {
 
             if (shouldReturnToPreviousScreen) {
                 onContactSelectedListener?.onContactsSelected(contactsAdapter.getSelectedContact())
@@ -196,7 +207,7 @@ class ContactsFragment : DialogFragment(),
                         }
                         .setNegativeButton("Cancel") { _, _ ->
 
-                        }.show()
+                    }.show()
             }
         }
 
@@ -231,12 +242,17 @@ class ContactsFragment : DialogFragment(),
 
                 textView101.visible()
                 back_arrow.visible()
+                if (contactsAdapter.isStateCreateGroup()) {
+                    tv_sub_heading_contacts_list.visible()
+                }
             } else {
                 search_gigers_layout.visible()
 
                 textView101.gone()
                 back_arrow.gone()
-
+                if (contactsAdapter.isStateCreateGroup()) {
+                    tv_sub_heading_contacts_list.gone()
+                }
                 search_textview.requestFocus()
             }
         }
@@ -464,9 +480,14 @@ class ContactsFragment : DialogFragment(),
         }
     }
 
-    override fun onContactSelected(selectedContactsCount: Int) {
+    override fun onContactSelected(
+        selectedContactsCount: Int
+    ) {
         user_selected_layout.isVisible = selectedContactsCount != 0
-        selected_user_count_tv.text = "$selectedContactsCount Contacts ( selected )"
+        create_group_layout.isVisible =
+            selectedContactsCount != 0 && !contactsAdapter.isStateCreateGroup()
+        selected_user_count_tv.text =
+            "$selectedContactsCount ${getString(R.string.contacts_selected)}"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -477,8 +498,36 @@ class ContactsFragment : DialogFragment(),
         )
     }
 
+    fun stateCreateNewGroup() {
+        tv_sub_heading_contacts_list.visible()
+        textView101.text = getString(R.string.select_members)
+        user_selected_layout.visible()
+        create_group_layout.gone()
+        contactsAdapter.getSelectedItems().clear()
+        contactsAdapter.notifyDataSetChanged()
+        fab_create_group_contacts.show()
+        contactsAdapter.stateCreateGroup(true)
+        selected_user_count_tv.text =
+            "0 ${getString(R.string.contacts_selected)}"
+    }
+
+//    fun stateContactsList() {
+//        tv_sub_heading_contacts_list.gone()
+//        textView101.text = getString(R.string.contacts)
+//        user_selected_layout.gone()
+//        create_group_layout.visible()
+//        contactsAdapter.getSelectedItems().clear()
+//        contactsAdapter.notifyDataSetChanged()
+//        contactsAdapter.stateCreateGroup(false)
+//        selected_user_count_tv.text = ""
+//    }
+
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         return when (item?.itemId) {
+            R.id.action_new_group -> {
+                stateCreateNewGroup()
+                true
+            }
             R.id.action_referesh -> {
                 checkForPermissionElseSyncContacts()
                 true
@@ -598,4 +647,6 @@ class ContactsFragment : DialogFragment(),
             }
         }
     }
+
+
 }

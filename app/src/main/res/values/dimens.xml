@@ -148,4 +148,7 @@
     <dimen name="size_78">78dp</dimen>
     <dimen name="size_147">147dp</dimen>
     <dimen name="size_227">227dp</dimen>
+    <dimen name="size_67">67dp</dimen>
+    <dimen name="size_85">85dp</dimen>
+    <dimen name="size_121">121dp</dimen>
 </resources>

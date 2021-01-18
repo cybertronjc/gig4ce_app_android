@@ -72,8 +72,8 @@ class Login : BaseFragment() {
             getAllEarlierMobileNumbers()
             listeners()
             observer()
-            if (mobile_number.equals(""))
-                showComfortDialog()
+//            if (mobile_number.equals(""))
+//                showComfortDialog()
         }
     }
     fun hideKeyboard() {
@@ -146,7 +146,7 @@ class Login : BaseFragment() {
         }
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = INVISIBLE
-            textView23.visibility = VISIBLE
+//            textView23.visibility = VISIBLE
 
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
@@ -174,10 +174,10 @@ class Login : BaseFragment() {
     private fun showWrongMobileNoLayout(show: Boolean) {
         if (show) {
             cvloginwrong.visibility = VISIBLE
-            textView23.visibility = INVISIBLE
+//            textView23.visibility = INVISIBLE
         } else {
             cvloginwrong.visibility = INVISIBLE
-            textView23.visibility = VISIBLE
+//            textView23.visibility = VISIBLE
 
         }
     }
@@ -187,7 +187,7 @@ class Login : BaseFragment() {
         if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
             cvloginwrong.visibility = VISIBLE
-            textView23.visibility = INVISIBLE
+//            textView23.visibility = INVISIBLE
             login_button.isEnabled = true;
         } else {
             viewModel.sendVerificationCode(phoneNumber)

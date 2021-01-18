@@ -121,6 +121,7 @@
     <color name="rejected_color">#FF000F</color>
     <color name="black_666">#666666</color>
     <color name="thumbs_down_color">#27979797</color>
+    <color name="otp_underline_color">#f5f6f8</color>
 
     <color name="background">#dddddd</color>
 

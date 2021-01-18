@@ -1316,4 +1316,24 @@
     <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>
     <string name="next_lesson">Next Lesson</string>
     <string name="skip_underline"><u>Skip</u></string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="select_members">Select Members</string>
+    <string name="contacts_selected">Contacts ( selected )</string>
+    <string name="select_at_least_one_contact">Select at least one contact</string>
+    <string name="no_more_gig">No more Gig !</string>
+    <string name="no_scheduled_gig_on_this_day">No scheduled Gig on this Day.</string>
+    <string name="enter_your_mobile_number">Enter your mobile number</string>
+    <string name="we_will_send_an_b_otp_b_on_this_number">We will send an <b>OTP</b> on this number.</string>
+    <string name="_91">+91-</string>
+    <string name="_0000000000">0000000000</string>
+    <string name="you_have_entered_invalid_mobile_number_please_re_enter_valid_mobile_number">You have entered invalid Mobile Number. Please re-enter valid Mobile Number.</string>
+    <string name="note">Note :</string>
+    <string name="this_mobile_no_will_be_used_to_call_you_for_various_job_opportunities">This mobile no. will be used to call you for various job opportunities.</string>
+    <string name="this_overrides_any_dnd_requests_with_your_operator">This overrides any DND requests with your operator.</string>
+    <string name="verify_account">Verify Account</string>
+    <string name="you_have_entered_invalid_otp_n_please_re_enter_otp">You have entered invalid OTP.
+        Please re-enter OTP.</string>
+    <string name="we_have_sent_otp">We have sent an OTP on</string>
+    <string name="please_enter_it_below">Please enter it below.</string>
+    <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
 </resources>
