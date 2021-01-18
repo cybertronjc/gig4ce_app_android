@@ -1,6 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels
 
-import com.gigforce.common_ui.CommonViewTypes
+import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.core.SimpleDataViewObject
 
 class TipActionCardDVM(

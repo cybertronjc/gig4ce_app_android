@@ -1,4 +1,4 @@
-package com.gigforce.common_ui
+package com.gigforce.common_ui.core
 
 class CommonViewTypes {
 

@@ -9,5 +9,6 @@ class LandingView(context: Context?, attrs: AttributeSet?) :
 
     init {
         this.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+
     }
 }
