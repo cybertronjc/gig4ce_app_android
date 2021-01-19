@@ -29,4 +29,13 @@ open class CoreRecyclerView(context: Context,
     var collection:List<Any>
         get() = this.coreAdapter.collection
         set(value) {this.coreAdapter.collection = value}
+
+
+    fun filter(predicate: (Any) -> Boolean){
+        this.coreAdapter.filter(predicate)
+    }
+
+    fun resetFilter(){
+        this.coreAdapter.resetFilter()
+    }
 }
