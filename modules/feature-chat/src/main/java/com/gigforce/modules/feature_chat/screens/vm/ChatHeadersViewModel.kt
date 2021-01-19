@@ -43,6 +43,7 @@ class ChatHeadersViewModel: ViewModel() {
 
                 // extract chatHeaders from querySnapshot
                 querySnapshot?.let {
+                    Log.e("chat/header/viewmodel", "Data Loaded from Server")
                     val tempChatHeaders: ArrayList<ChatHeader> = ArrayList<ChatHeader>()
                     for (doc in querySnapshot.documents) {
                         tempChatHeaders.add(
