@@ -8,11 +8,12 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ChatModule {
+class AppBindingsModule {
 
     @Provides
     fun provideNavigation(): IChatNavigation = ChatNavigationImpl()
 
     @Provides
     fun iViewTypeFinderProvider(): ICoreViewHolderFactory = MyViewHolderFactory()
+
 }

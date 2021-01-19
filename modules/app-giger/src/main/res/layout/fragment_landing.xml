@@ -9,11 +9,15 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="Welcome to Landing Fragment" />
 
-    <com.gigforce.giger_app.ui.LandingView
+<!--    <com.gigforce.giger_app.ui.LandingView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
+    <com.gigforce.core.recyclerView.CoreRecyclerView
+        android:id="@+id/landing_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

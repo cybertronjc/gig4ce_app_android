@@ -17,18 +17,20 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Card Title"
+        app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintTop_toTopOf="@+id/iv_icon" />
 
     <TextView
         android:id="@+id/tv_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Description here"
+        app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -43,5 +45,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+    <TextView
+        android:id="@+id/cta1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone"
+        android:layout_marginRight="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cta"
+        app:layout_constraintEnd_toStartOf="@+id/cta"
+        app:layout_constraintTop_toTopOf="@+id/cta" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ChatModule::class, AppSubcomponents::class])
+@Component(modules = [AppBindingsModule::class, AppSubcomponents::class])
 interface AppComponent {
 
     // Factory to create instances of the AppComponent
