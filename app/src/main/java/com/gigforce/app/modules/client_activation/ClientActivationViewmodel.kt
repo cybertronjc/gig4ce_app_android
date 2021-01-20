@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.Media
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.SingleLiveEvent
@@ -13,10 +14,9 @@ import com.gigforce.app.utils.StringConstants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import java.lang.Exception
 
 class ClientActivationViewmodel(
-    private val savedStateHandle: SavedStateHandle
+        private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), ClientActivationNavCallbacks.ClientActivationResponseCallbacks {
 
     private lateinit var clientActivationNavCallbacks: ClientActivationNavCallbacks
@@ -27,8 +27,8 @@ class ClientActivationViewmodel(
     var initialized: Boolean = false
     private val _observableJobProfile: MutableLiveData<JobProfile>
         get() = savedStateHandle.getLiveData(
-            StringConstants.SAVED_STATE.value,
-            JobProfile()
+                StringConstants.SAVED_STATE.value,
+                JobProfile()
         )
     val observableJobProfile: MutableLiveData<JobProfile> = _observableJobProfile
 
@@ -58,7 +58,7 @@ class ClientActivationViewmodel(
 
     }
 
-    fun getCoursesList(lessons: List<String>) {
+    fun getCoursesList(lessons: List<Media>) {
         if (!lessons.isNullOrEmpty()) {
             _observableCourses.value = Lce.loading()
             clientActivationNavCallbacks.getCoursesList(lessons, this)
@@ -75,16 +75,17 @@ class ClientActivationViewmodel(
         return clientActivationNavCallbacks.getUserID()
     }
 
-    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?) {
+    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?, lessonsToFilter: List<String>) {
         if (exception != null) {
             _observableCourses.value = Lce.error(exception.message.toString())
         } else {
             if (!snapShot?.documentChanges.isNullOrEmpty()) {
-                val toObjects = snapShot?.toObjects(LessonModel::class.java)
+                var toObjects = snapShot?.toObjects(LessonModel::class.java)
+                toObjects = toObjects?.filter { lessonsToFilter.contains(it.lesson_id) }
                 _observableCourses.value = Lce.content(toObjects!!);
                 savedStateHandle.set(
-                    StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
-                    toObjects
+                        StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
+                        toObjects
                 )
             } else {
                 _observableCourses.value = Lce.error("No Videos Found!!!")
@@ -110,7 +111,7 @@ class ClientActivationViewmodel(
         if (exception == null) {
             if (!snapShot?.documents.isNullOrEmpty()) {
                 observableJpApplication.value =
-                    snapShot?.toObjects(JpApplication::class.java)?.get(0)
+                        snapShot?.toObjects(JpApplication::class.java)?.get(0)
             } else {
                 observableJpApplication.value = null
 
