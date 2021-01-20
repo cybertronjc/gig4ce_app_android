@@ -44,7 +44,7 @@ abstract class TextMessageView(val type:String, context: Context, attrs: Attribu
         data?.let {
             val msg = it as ChatMessage
 
-         //   msgView.setText(msg.content)
+           msgView.setText(msg.content)
             timeView.setText(msg.timestamp?.toDisplayText())
         }
     }

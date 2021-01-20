@@ -37,6 +37,7 @@ import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.OldChatMessage
 import com.gigforce.modules.feature_chat.models.MessageType
 import com.gigforce.modules.feature_chat.models.VideoInfo
+import com.gigforce.modules.feature_chat.screens.vm.ChatPage2ViewModel
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.google.firebase.auth.FirebaseAuth
@@ -54,6 +55,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
     private lateinit var toolbarOverflowBtn : ImageView
 
     private val viewModel: ChatPageViewModel by viewModels()
+    private val viewModel2: ChatPage2ViewModel by viewModels()
 
     private val uid: String by lazy {
         FirebaseAuth.getInstance().currentUser!!.uid
@@ -147,7 +149,11 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
 
     private fun subscribeViewModel() {
 
-        viewModel.messages
+        viewModel2.headerId = "c1Cg7bSGoLtkaYL4XvIG"
+        viewModel2.uid = "0L38Y3wy8fWVBh2FIrTNq4yde7g1"
+        viewModel2.startObservingMessages()
+
+        viewModel2.messages
             .observe(viewLifecycleOwner, Observer {
                 chatRecyclerView.collection = it
             })

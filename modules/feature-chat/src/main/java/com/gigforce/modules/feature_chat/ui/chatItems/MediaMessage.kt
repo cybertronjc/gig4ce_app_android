@@ -6,9 +6,13 @@ import android.util.AttributeSet
 import android.widget.RelativeLayout
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.fb.FirebaseUtils
+import com.gigforce.core.file.FileUtils
+import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.gigforce.modules.feature_chat.models.IMediaMessage
+import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import java.io.File
 import java.lang.Exception
 import java.lang.NullPointerException
@@ -28,8 +32,34 @@ abstract class MediaMessage(
 
     var iMediaMessage:IMediaMessage? = null
 
-    fun downloadMediaFile(){
-        //todo: implement
+    private var downloadAttachmentService: DownloadChatAttachmentService = RetrofitFactory.createService(DownloadChatAttachmentService::class.java)
+
+   /* suspend fun downloadMediaFile(){
+        iMediaMessage?.attachmentPath ?. let {
+
+            val downloadLink = it
+
+            val dirRef = getFilePathRef()
+            if(!dirRef.exists()) dirRef.mkdirs()
+
+            val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
+            val fileRef = File(dirRef, fileName)
+
+            // download file from Server
+            val response = downloadAttachmentService.downloadAttachment(downloadLink)
+
+            if(response.isSuccessful){
+                val body = response.body()!!
+                FileUtils.writeResponseBodyToDisk(body, fileRef)
+                // download completed, change the state
+            }else{
+                throw Exception("Unable to download attachment")
+            }
+        }
+    }*/
+
+    fun downloadMediaFileUsingFirebase(){
+
     }
 
     override fun bind(data: Any?) {
