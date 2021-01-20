@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxWidth="180dp"
+    android:maxWidth="@dimen/chat_item_max_length"
     android:gravity="end"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_msgContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/chat_item_max_length"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
+        app:cardBackgroundColor="#E91E63"
         app:cardCornerRadius="10dp">
 
 
@@ -24,14 +25,16 @@
             android:padding="2dp">
 
             <FrameLayout
-                android:layout_width="180dp"
-                android:layout_height="180dp">
+                android:layout_width="@dimen/chat_item_max_length"
+                android:layout_height="180dp"
+                android:background="@drawable/chat_message_frame_background">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_image"
-                    android:layout_width="180dp"
+                    android:layout_width="@dimen/chat_item_max_length"
                     android:layout_height="180dp"
                     android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/chatImageView" />
@@ -88,6 +91,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
+                            tools:text="3:90"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -107,6 +111,7 @@
                 android:ellipsize="end"
                 android:maxWidth="178dp"
                 android:maxLines="1"
+                android:textColor="@android:color/white"
                 android:scrollHorizontally="true"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/document_type_iv"
@@ -121,8 +126,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="NA"
-                android:textColor="@color/dust_grey"
+                tools:text="NA"
+                android:textColor="@android:color/white"
                 android:textSize="8sp" />
         </LinearLayout>
 

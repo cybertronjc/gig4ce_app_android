@@ -2,17 +2,15 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.Message
+import com.gigforce.modules.feature_chat.models.ChatMessage
 
-abstract class TextMessage(val type:String, context: Context, attrs: AttributeSet?)
+abstract class TextMessageView(val type:String, context: Context, attrs: AttributeSet?)
     :   RelativeLayout(context, attrs),
         IViewHolder {
 
@@ -44,7 +42,7 @@ abstract class TextMessage(val type:String, context: Context, attrs: AttributeSe
 
     override fun bind(data: Any?) {
         data?.let {
-            val msg = it as Message
+            val msg = it as ChatMessage
 
          //   msgView.setText(msg.content)
             timeView.setText(msg.timestamp?.toDisplayText())
@@ -52,5 +50,5 @@ abstract class TextMessage(val type:String, context: Context, attrs: AttributeSe
     }
 }
 
-class InTextMessage(context: Context, attrs: AttributeSet?): TextMessage("in", context, attrs)
-class OutTextMessage(context: Context, attrs: AttributeSet?): TextMessage("out", context, attrs)
+class InTextMessageView(context: Context, attrs: AttributeSet?): TextMessageView("in", context, attrs)
+class OutTextMessageView(context: Context, attrs: AttributeSet?): TextMessageView("out", context, attrs)

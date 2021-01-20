@@ -10,12 +10,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.navigation.findNavController
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
-import com.gigforce.modules.feature_chat.models.Message
+import com.gigforce.modules.feature_chat.models.ChatMessage
 
 class ChatItem(context: Context?) :
     RelativeLayout(context),
@@ -27,13 +25,13 @@ class ChatItem(context: Context?) :
         this.setOnClickListener(this)
     }
 
-    private var msg: Message? = null
+    private var msg: ChatMessage? = null
 
     override fun bind(data: Any?) {
         // title:String, subtitle:String, timeDisplay:String, profilePath:String, unreadCount:Int, id:String, type: String
         msg = null
         data?.let {
-            msg = data as Message
+            msg = data as ChatMessage
 
             val linearLayout: LinearLayout = this.findViewById(R.id.ll_msgContainer)
             val textView: TextView = this.findViewById(R.id.tv_msgValue)

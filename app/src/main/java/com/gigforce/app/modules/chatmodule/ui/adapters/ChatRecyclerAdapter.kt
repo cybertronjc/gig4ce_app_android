@@ -59,7 +59,7 @@ class ChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_CHAT_IMAGE -> ImageMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_image, parent, false)
+                    .inflate(R.layout.item_chat_text_with_image_in, parent, false)
             )
             VIEW_TYPE_CHAT_VIDEO -> VideoMessageViewHolder(
                 LayoutInflater.from(parent.context)
@@ -541,7 +541,7 @@ class ChatRecyclerAdapter constructor(
             when (msg.flowType) {
                 "in" -> {
                     textViewTime.text = msg.timestamp?.toDisplayText()
-                    textViewTime.setTextColor(Color.parseColor("#979797"))
+                    textViewTime.setTextColor(Color.parseColor("#E91E63"))
                     linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
                     textViewTime.setTextColor(Color.parseColor("#000000"))
                     attachmentNameTV.setTextColor(Color.parseColor("#E91E63"))

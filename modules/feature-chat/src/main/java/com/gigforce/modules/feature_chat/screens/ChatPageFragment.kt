@@ -34,7 +34,7 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.adapters.OnChatMessageClickListener
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.models.OldChatMessage
 import com.gigforce.modules.feature_chat.models.MessageType
 import com.gigforce.modules.feature_chat.models.VideoInfo
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -44,7 +44,7 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMessageClickListener {
+class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMessageClickListener*/ {
 
 
     //Views
@@ -55,47 +55,9 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
     private val viewModel: ChatPageViewModel by viewModels()
 
-    private val appDirectoryFileRef: File by lazy {
-        //todo: look after this
-        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
-    }
-
-    private val imagesDirectoryFileRef: File by lazy {
-        if (!appDirectoryFileRef.exists()) {
-            appDirectoryFileRef.mkdirs()
-        }
-
-        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
-    }
-
-    private val videosDirectoryFileRef: File by lazy {
-        if (!appDirectoryFileRef.exists()) {
-            appDirectoryFileRef.mkdirs()
-        }
-
-        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
-    }
-
-    private val documentDirectoryFileRef: File by lazy {
-        if (!appDirectoryFileRef.exists()) {
-            appDirectoryFileRef.mkdirs()
-        }
-
-        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
-    }
-
     private val uid: String by lazy {
         FirebaseAuth.getInstance().currentUser!!.uid
     }
-
-//    private val mAdapter: ChatRecyclerAdapter by lazy {
-//        ChatRecyclerAdapter(
-//            requireContext(),
-//            appDirectoryFileRef,
-//            //initGlide(R.drawable.ic_user, R.drawable.ic_user)!!,
-//            this
-//        )
-//    }
 
     private var imageUrl: String? = null
     private lateinit var username: String
@@ -106,7 +68,6 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
     private lateinit var mobileNumber: String
 
     private var selectedOperation = -1
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -288,35 +249,35 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
             )
             true
         }
-        R.id.action_document -> {
-
-            if (isStoragePermissionGranted())
-                pickDocument()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
-                askForStoragePermission()
-            }
-            true
-        }
-        R.id.action_pick_image -> {
-            if (isStoragePermissionGranted())
-                pickImage()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
-                askForStoragePermission()
-            }
-            true
-        }
-        R.id.action_video -> {
-            if (isStoragePermissionGranted())
-                pickVideo()
-            else {
-                selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
-                askForStoragePermission()
-            }
-
-            true
-        }
+//        R.id.action_document -> {
+//
+//            if (isStoragePermissionGranted())
+//                pickDocument()
+//            else {
+//                selectedOperation = ChatConstants.OPERATION_PICK_DOCUMENT
+//                askForStoragePermission()
+//            }
+//            true
+//        }
+//        R.id.action_pick_image -> {
+//            if (isStoragePermissionGranted())
+//                pickImage()
+//            else {
+//                selectedOperation = ChatConstants.OPERATION_PICK_IMAGE
+//                askForStoragePermission()
+//            }
+//            true
+//        }
+//        R.id.action_video -> {
+//            if (isStoragePermissionGranted())
+//                pickVideo()
+//            else {
+//                selectedOperation = ChatConstants.OPERATION_PICK_VIDEO
+//                askForStoragePermission()
+//            }
+//
+//            true
+//        }
         else -> {
             false
         }
@@ -334,49 +295,49 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
         )
     }
 
-    private fun pickVideo() = Intent(Intent.ACTION_GET_CONTENT).apply {
+/*    private fun pickVideo() = Intent(Intent.ACTION_GET_CONTENT).apply {
 
         if (!videosDirectoryFileRef.exists())
             videosDirectoryFileRef.mkdirs()
 
-        type = "video/*"
+        type = "video" // /.*
         startActivityForResult(this, REQUEST_PICK_VIDEO)
-    }
+    }*/
 
-    private fun pickImage() {
+//    private fun pickImage() {
+//
+//        if (!imagesDirectoryFileRef.exists())
+//            imagesDirectoryFileRef.mkdirs()
+//
+//        val newFileName = "$uid-${DateHelper.getFullDateTimeStamp()}.png"
+//        val imagefile = File(imagesDirectoryFileRef, newFileName)
+//
+////        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+////        photoCropIntent.putExtra(
+////            PhotoCrop.INTENT_EXTRA_PURPOSE,
+////            PhotoCrop.PURPOSE_VERIFICATION
+////        )
+////        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+////        photoCropIntent.putExtra("folder", "verification")
+////        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
+////        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_OUTPUT_FILE, imagefile)
+////        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
+////        startActivityForResult(
+////            photoCropIntent,
+////            REQUEST_PICK_IMAGE
+////        )
+//    }
 
-        if (!imagesDirectoryFileRef.exists())
-            imagesDirectoryFileRef.mkdirs()
-
-        val newFileName = "$uid-${DateHelper.getFullDateTimeStamp()}.png"
-        val imagefile = File(imagesDirectoryFileRef, newFileName)
-
-//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-//        photoCropIntent.putExtra(
-//            PhotoCrop.INTENT_EXTRA_PURPOSE,
-//            PhotoCrop.PURPOSE_VERIFICATION
-//        )
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
-//        photoCropIntent.putExtra("folder", "verification")
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_OUTPUT_FILE, imagefile)
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
-//        startActivityForResult(
-//            photoCropIntent,
-//            REQUEST_PICK_IMAGE
-//        )
-    }
-
-    private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-
-        if (!documentDirectoryFileRef.exists())
-            documentDirectoryFileRef.mkdirs()
-
-        addCategory(Intent.CATEGORY_OPENABLE)
-        type = "*/*"
-        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(DOC, DOCX, XLS, PDF))
-        startActivityForResult(this, REQUEST_PICK_DOCUMENT)
-    }
+//    private fun pickDocument() = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+//
+//        if (!documentDirectoryFileRef.exists())
+//            documentDirectoryFileRef.mkdirs()
+//
+//        addCategory(Intent.CATEGORY_OPENABLE)
+//        type = "*/*"
+//        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(DOC, DOCX, XLS, PDF))
+//        startActivityForResult(this, REQUEST_PICK_DOCUMENT)
+//    }
 
 
     private fun manageNewMessageToContact() {
@@ -424,65 +385,65 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 //    }
 
 
-    override fun chatMessageClicked(
-        messageType: MessageType,
-        position: Int,
-        message: ChatMessage,
-        fileDownloaded: Boolean,
-        downloadedFile: File?
+  /*  override fun chatMessageClicked(
+            messageType: MessageType,
+            position: Int,
+            messageOld: OldChatMessage,
+            fileDownloaded: Boolean,
+            downloadedFile: File?
     ) {
         when (messageType) {
             MessageType.TEXT_WITH_IMAGE -> {
 
-                if (fileDownloaded) {
-                    ViewFullScreenImageDialogFragment.showImage(
-                        childFragmentManager,
-                        downloadedFile!!.toUri()
-                    )
-                } else {
-                    if (message.toMessage().attachmentPath != null) {
-                        viewModel.downloadAndSaveFile(
-                            appDirectoryFileRef,
-                            position,
-                            message.toMessage()
-                        )
-                    } else {
-
-                    }
-                }
+//                if (fileDownloaded) {
+//                    ViewFullScreenImageDialogFragment.showImage(
+//                        childFragmentManager,
+//                        downloadedFile!!.toUri()
+//                    )
+//                } else {
+//                    if (messageOld.toMessage().attachmentPath != null) {
+//                        viewModel.downloadAndSaveFile(
+//                            appDirectoryFileRef,
+//                            position,
+//                            messageOld.toMessage()
+//                        )
+//                    } else {
+//
+//                    }
+//                }
             }
             MessageType.TEXT_WITH_VIDEO -> {
 
-                if (fileDownloaded) {
-                    ViewFullScreenVideoDialogFragment.launch(
-                        childFragmentManager,
-                        downloadedFile!!.toUri()
-                    )
-                } else {
-                    if (message.toMessage().attachmentPath != null) {
-                        viewModel.downloadAndSaveFile(
-                            appDirectoryFileRef,
-                            position,
-                            message.toMessage()
-                        )
-                    } else {
-
-                    }
-                }
+//                if (fileDownloaded) {
+//                    ViewFullScreenVideoDialogFragment.launch(
+//                        childFragmentManager,
+//                        downloadedFile!!.toUri()
+//                    )
+//                } else {
+//                    if (messageOld.toMessage().attachmentPath != null) {
+//                        viewModel.downloadAndSaveFile(
+//                            appDirectoryFileRef,
+//                            position,
+//                            messageOld.toMessage()
+//                        )
+//                    } else {
+//
+//                    }
+//                }
             }
             MessageType.TEXT_WITH_DOCUMENT -> {
 
-                if (fileDownloaded) {
-                    openDocument(downloadedFile!!)
-                } else {
-                    if (message.toMessage().attachmentPath != null) {
-                        viewModel.downloadAndSaveFile(
-                            appDirectoryFileRef,
-                            position,
-                            message.toMessage()
-                        )
-                    }
-                }
+//                if (fileDownloaded) {
+//                    openDocument(downloadedFile!!)
+//                } else {
+//                    if (messageOld.toMessage().attachmentPath != null) {
+//                        viewModel.downloadAndSaveFile(
+//                            appDirectoryFileRef,
+//                            position,
+//                            messageOld.toMessage()
+//                        )
+//                    }
+//                }
             }
             MessageType.NOT_SUPPORTED -> TODO()
             MessageType.DATE -> TODO()
@@ -491,7 +452,7 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
             MessageType.TEXT_WITH_CONTACT -> TODO()
             MessageType.TEXT_WITH_AUDIO -> TODO()
         }
-    }
+    }*/
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -518,13 +479,13 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
             if (allPermsGranted) {
                 if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
-                    pickImage()
+//                    pickImage()
                     selectedOperation = -1
                 } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
-                    pickVideo()
+//                    pickVideo()
                     selectedOperation = -1
                 } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
-                    pickDocument()
+//                    pickDocument()
                     selectedOperation = -1
                 }
             } else
@@ -535,60 +496,60 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener, OnChatMes
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            PermissionUtils.reqCodePerm ->
-                toolbarTitle.text = checkForContact(mobileNumber, username)
-            REQUEST_PICK_DOCUMENT -> if (resultCode == Activity.RESULT_OK) {
-                // Get the Uri of the selected file
-                val uri = data?.data ?: return
-                val uriString = uri.toString()
-                val myFile = File(uriString)
-
-                val displayName: String? = getDisplayName(uriString, uri, myFile)
-
-                if (!documentDirectoryFileRef.exists())
-                    documentDirectoryFileRef.mkdirs()
-
-                viewModel.sendNewDocumentMessage(
-                    requireContext(),
-                    "",
-                    documentDirectoryFileRef,
-                    displayName,
-                    uri
-                )
-
-                Log.d(TAG, displayName + "")
-                Log.d(TAG, uriString)
-            }
-            REQUEST_PICK_IMAGE -> {
-
-                if (!imagesDirectoryFileRef.exists())
-                    imagesDirectoryFileRef.mkdirs()
-
-//                val clickedImageUri: Uri =
-//                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
-//                        ?: return
-//                viewModel.sendNewImageMessage(
-//                    text = "",
-//                    uri = clickedImageUri
+//        when (requestCode) {
+//            PermissionUtils.reqCodePerm ->
+//                toolbarTitle.text = checkForContact(mobileNumber, username)
+//            REQUEST_PICK_DOCUMENT -> if (resultCode == Activity.RESULT_OK) {
+//                // Get the Uri of the selected file
+//                val uri = data?.data ?: return
+//                val uriString = uri.toString()
+//                val myFile = File(uriString)
+//
+//                val displayName: String? = getDisplayName(uriString, uri, myFile)
+//
+////                if (!documentDirectoryFileRef.exists())
+////                    documentDirectoryFileRef.mkdirs()
+//
+//                viewModel.sendNewDocumentMessage(
+//                    requireContext(),
+//                    "",
+////                    documentDirectoryFileRef,
+//                    displayName,
+//                    uri
 //                )
-            }
-            REQUEST_PICK_VIDEO -> {
-                val uri = data?.data ?: return
-
-                val uriString = uri.toString()
-                val myFile = File(uri.path)
-
-                val videoInfo = getVideoInfo(uriString, uri, myFile)
-                viewModel.sendNewVideoMessage(
-                    requireContext(),
-                    videosDirectoryFileRef,
-                    "",
-                    videoInfo,
-                    uri
-                )
-            }
-        }
+//
+//                Log.d(TAG, displayName + "")
+//                Log.d(TAG, uriString)
+//            }
+//            REQUEST_PICK_IMAGE -> {
+//
+////                if (!imagesDirectoryFileRef.exists())
+////                    imagesDirectoryFileRef.mkdirs()
+//
+////                val clickedImageUri: Uri =
+////                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+////                        ?: return
+////                viewModel.sendNewImageMessage(
+////                    text = "",
+////                    uri = clickedImageUri
+////                )
+//            }
+//            REQUEST_PICK_VIDEO -> {
+//                val uri = data?.data ?: return
+//
+//                val uriString = uri.toString()
+//                val myFile = File(uri.path)
+//
+//                val videoInfo = getVideoInfo(uriString, uri, myFile)
+//                viewModel.sendNewVideoMessage(
+//                    requireContext(),
+////                    videosDirectoryFileRef,
+//                    "",
+//                    videoInfo,
+//                    uri
+//                )
+//            }
+//        }
     }
 
     private fun getDisplayName(

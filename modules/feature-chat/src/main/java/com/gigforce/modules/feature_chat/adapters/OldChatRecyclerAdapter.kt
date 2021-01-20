@@ -35,8 +35,8 @@ class OldChatRecyclerAdapter constructor(
     private val onMessageClickListener: OnChatMessageClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var chatMessages: MutableList<ChatMessage> = mutableListOf()
-    private var itemsDownloading: MutableList<ChatMessage> = mutableListOf()
+    private var oldChatMessages: MutableList<OldChatMessage> = mutableListOf()
+    private var itemsDownloading: MutableList<OldChatMessage> = mutableListOf()
 
     private var imagesDirectoryRef: File =
         File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
@@ -56,7 +56,7 @@ class OldChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_CHAT_IMAGE -> ImageMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_image, parent, false)
+                    .inflate(R.layout.item_chat_text_with_image_in, parent, false)
             )
             VIEW_TYPE_CHAT_VIDEO -> VideoMessageViewHolder(
                 LayoutInflater.from(parent.context)
@@ -89,47 +89,47 @@ class OldChatRecyclerAdapter constructor(
     }
 
     fun setItemAsDownloading(index: Int) {
-        if (chatMessages.size > index) {
-            itemsDownloading.add(chatMessages[index])
+        if (oldChatMessages.size > index) {
+            itemsDownloading.add(oldChatMessages[index])
             notifyDataSetChanged()
         }
     }
 
     fun setItemAsNotDownloading(index: Int) {
-        if (chatMessages.size > index) {
-            itemsDownloading.remove(chatMessages[index])
+        if (oldChatMessages.size > index) {
+            itemsDownloading.remove(oldChatMessages[index])
             notifyDataSetChanged()
         }
     }
 
-    fun addItem(message: ChatMessage) {
-        chatMessages.add(message)
-        notifyItemInserted(chatMessages.size - 1)
+    fun addItem(messageOld: OldChatMessage) {
+        oldChatMessages.add(messageOld)
+        notifyItemInserted(oldChatMessages.size - 1)
     }
 
     override fun getItemCount(): Int {
-        return chatMessages.size
+        return oldChatMessages.size
     }
 
-    fun updateChatMessages(newMessages: List<ChatMessage>) {
+    fun updateChatMessages(newMessageOlds: List<OldChatMessage>) {
 
-        if (chatMessages.isEmpty()) {
-            this.chatMessages = newMessages.toMutableList()
+        if (oldChatMessages.isEmpty()) {
+            this.oldChatMessages = newMessageOlds.toMutableList()
             notifyDataSetChanged()
         } else {
             val result = DiffUtil.calculateDiff(
                 ChatDiffUtilCallback(
-                    chatMessages,
-                    newMessages
+                    oldChatMessages,
+                    newMessageOlds
                 )
             )
-            this.chatMessages = newMessages.toMutableList()
+            this.oldChatMessages = newMessageOlds.toMutableList()
             result.dispatchUpdatesTo(this)
         }
     }
 
     override fun getItemViewType(position: Int): Int =
-        when (chatMessages[position].getMessageType()) {
+        when (oldChatMessages[position].getMessageType()) {
             MessageType.DATE -> VIEW_TYPE_DATE
             MessageType.TEXT -> VIEW_TYPE_CHAT_TEXT
             MessageType.TEXT_WITH_IMAGE -> VIEW_TYPE_CHAT_IMAGE
@@ -145,7 +145,7 @@ class OldChatRecyclerAdapter constructor(
         when (holder.itemViewType) {
             VIEW_TYPE_DATE -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val chatDateItem = chatMessage as ChatDateItem
 
                 val viewHolder = holder as DateItemViewHolder
@@ -153,7 +153,7 @@ class OldChatRecyclerAdapter constructor(
             }
             VIEW_TYPE_CHAT_TEXT -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val textMessage = chatMessage as TextChatMessage
 
                 val viewHolder = holder as TextMessageViewHolder
@@ -161,7 +161,7 @@ class OldChatRecyclerAdapter constructor(
             }
             VIEW_TYPE_CHAT_IMAGE -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val imageWithTextMessage = chatMessage as ImageChatMessage
 
                 val viewHolder = holder as ImageMessageViewHolder
@@ -172,7 +172,7 @@ class OldChatRecyclerAdapter constructor(
             }
             VIEW_TYPE_CHAT_VIDEO -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val videoWithTextMessage = chatMessage as VideoChatMessage
 
                 val viewHolder = holder as VideoMessageViewHolder
@@ -180,7 +180,7 @@ class OldChatRecyclerAdapter constructor(
             }
             VIEW_TYPE_CHAT_LOCATION -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val locationWithTextMessage = chatMessage as LocationChatMessage
 
                 val viewHolder = holder as LocationMessageViewHolder
@@ -189,7 +189,7 @@ class OldChatRecyclerAdapter constructor(
 
             VIEW_TYPE_CHAT_CONTACT -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val contactWithTextMessage = chatMessage as ContactChatMessage
 
                 val viewHolder = holder as ContactMessageViewHolder
@@ -197,14 +197,14 @@ class OldChatRecyclerAdapter constructor(
             }
             VIEW_TYPE_CHAT_AUDIO -> {
 
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val audioChatMessage = chatMessage as AudioChatMessage
 
                 val viewHolder = holder as AudioMessageViewHolder
                 // viewHolder.bindValues(audioChatMessage.toMessage())
             }
             VIEW_TYPE_CHAT_DOCUMENT -> {
-                val chatMessage = chatMessages[position]
+                val chatMessage = oldChatMessages[position]
                 val documentChatMessage = chatMessage as DocumentChatMessage
 
                 val viewHolder = holder as DocumentMessageViewHolder
@@ -248,7 +248,7 @@ class OldChatRecyclerAdapter constructor(
         private val textViewTime: TextView = itemView.findViewById(R.id.tv_msgTimeValue)
         private val cardView: CardView = itemView.findViewById(R.id.cv_msgContainer)
 
-        fun bindValues(msg: Message) {
+        fun bindValues(msg: ChatMessage) {
             when (msg.flowType) {
                 "in" -> {
                     textView.text = msg.content
@@ -293,7 +293,7 @@ class OldChatRecyclerAdapter constructor(
             onMessageClickListener.chatMessageClicked(
                 MessageType.TEXT_WITH_VIDEO,
                 currentPos,
-                chatMessages[currentPos],
+                oldChatMessages[currentPos],
                 false,
                 null
             )
@@ -316,7 +316,7 @@ class OldChatRecyclerAdapter constructor(
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(chatMessage: ChatMessage, msg: Message) {
+        fun bindValues(oldChatMessage: OldChatMessage, msg: ChatMessage) {
 
             if (msg.attachmentPath.isNullOrBlank()) {
                 imageView.setImageDrawable(null)
@@ -355,7 +355,7 @@ class OldChatRecyclerAdapter constructor(
                 val fileHasBeenDownloaded = downloadedFile != null
 
                 if (fileHasBeenDownloaded) {
-                    itemsDownloading.remove(chatMessage)
+                    itemsDownloading.remove(oldChatMessage)
                     attachmentDownloadingProgressBar.gone()
                     downloadOverlayIV.gone()
 
@@ -365,7 +365,7 @@ class OldChatRecyclerAdapter constructor(
                         .placeholder(getCircularProgressDrawable())
                         .into(imageView)
                 } else {
-                    val isFileDownloading = itemsDownloading.contains(chatMessage)
+                    val isFileDownloading = itemsDownloading.contains(oldChatMessage)
                     requestManager
                         .load(msg.thumbnail)
                         .placeholder(getCircularProgressDrawable())
@@ -418,7 +418,7 @@ class OldChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val pos = adapterPosition
-            val message = chatMessages[pos].toMessage()
+            val message = oldChatMessages[pos].toMessage()
 
             val attachmentPath = message.attachmentPath ?: return
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
@@ -429,7 +429,7 @@ class OldChatRecyclerAdapter constructor(
             onMessageClickListener.chatMessageClicked(
                 messageType = MessageType.TEXT_WITH_IMAGE,
                 position = pos,
-                message = chatMessages[pos],
+                messageOld = oldChatMessages[pos],
                 fileDownloaded = downloadedFile != null,
                 downloadedFile = downloadedFile
             )
@@ -457,8 +457,8 @@ class OldChatRecyclerAdapter constructor(
         }
 
         fun bindValues(
-            chatMessage: ChatMessage,
-            msg: Message
+                oldChatMessage: OldChatMessage,
+                msg: ChatMessage
         ) {
 
             attachmentNameTV.text = msg.attachmentName
@@ -494,7 +494,7 @@ class OldChatRecyclerAdapter constructor(
                 val fileHasBeenDownloaded = downloadedFile != null
 
                 if (fileHasBeenDownloaded) {
-                    itemsDownloading.remove(chatMessage)
+                    itemsDownloading.remove(oldChatMessage)
                     attachmentUploadingDownloadingProgressBar.gone()
 
                     playDownloadOverlayIV.visible()
@@ -503,7 +503,7 @@ class OldChatRecyclerAdapter constructor(
                     requestManager.load(downloadedFile).placeholder(getCircularProgressDrawable())
                         .into(imageView)
                 } else {
-                    val isFileDownloading = itemsDownloading.contains(chatMessage)
+                    val isFileDownloading = itemsDownloading.contains(oldChatMessage)
                     requestManager.load(msg.thumbnail).placeholder(getCircularProgressDrawable())
                         .into(imageView)
 
@@ -569,7 +569,7 @@ class OldChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val pos = adapterPosition
-            val message = chatMessages[pos].toMessage()
+            val message = oldChatMessages[pos].toMessage()
 
             val attachmentPath = message.attachmentPath ?: return
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
@@ -580,7 +580,7 @@ class OldChatRecyclerAdapter constructor(
             onMessageClickListener.chatMessageClicked(
                 messageType = MessageType.TEXT_WITH_VIDEO,
                 position = pos,
-                message = chatMessages[pos],
+                messageOld = oldChatMessages[pos],
                 fileDownloaded = downloadedFile != null,
                 downloadedFile = downloadedFile
             )
@@ -599,7 +599,7 @@ class OldChatRecyclerAdapter constructor(
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(chatMessage: ChatMessage, msg: Message) {
+        fun bindValues(oldChatMessage: OldChatMessage, msg: ChatMessage) {
 
 
             if (msg.attachmentPath.isNullOrBlank()) {
@@ -616,10 +616,10 @@ class OldChatRecyclerAdapter constructor(
                 val fileHasBeenDownloaded = downloadedFile != null
 
                 if (fileHasBeenDownloaded) {
-                    itemsDownloading.remove(chatMessage)
+                    itemsDownloading.remove(oldChatMessage)
                     progressbar.gone()
                 } else {
-                    val isFileDownloading = itemsDownloading.contains(chatMessage)
+                    val isFileDownloading = itemsDownloading.contains(oldChatMessage)
 
                     if (isFileDownloading) {
                         progressbar.visible()
@@ -663,7 +663,7 @@ class OldChatRecyclerAdapter constructor(
 
         override fun onClick(v: View?) {
             val pos = adapterPosition
-            val message = chatMessages[pos].toMessage()
+            val message = oldChatMessages[pos].toMessage()
 
             val attachmentPath = message.attachmentPath ?: return
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
@@ -677,7 +677,7 @@ class OldChatRecyclerAdapter constructor(
             onMessageClickListener.chatMessageClicked(
                 messageType = MessageType.TEXT_WITH_DOCUMENT,
                 position = pos,
-                message = chatMessages[pos],
+                messageOld = oldChatMessages[pos],
                 fileDownloaded = downloadedFile != null,
                 downloadedFile = downloadedFile
             )

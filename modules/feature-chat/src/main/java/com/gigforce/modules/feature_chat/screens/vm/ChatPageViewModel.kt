@@ -60,8 +60,8 @@ class ChatPageViewModel constructor(
     lateinit var forUserId: String
     lateinit var otherUserId: String
 
-    private var _messages = MutableLiveData<List<Message>>()
-    val messages: LiveData<List<Message>> = _messages
+    private var _messages = MutableLiveData<List<ChatMessage>>()
+    val messages: LiveData<List<ChatMessage>> = _messages
 
     private var _headerInfo = MutableLiveData<ChatHeader>()
     val headerInfo: LiveData<ChatHeader> = _headerInfo
@@ -72,7 +72,7 @@ class ChatPageViewModel constructor(
     init {
 
         val messages = listOf(
-            Message(
+            ChatMessage(
                 id = "X12",
                 headerId = "Header1",
                 forUserId = "User1",
@@ -85,7 +85,7 @@ class ChatPageViewModel constructor(
                 videoLength = 0L,
                 thumbnail = null
             ),
-            Message(
+            ChatMessage(
                 id = "X12",
                 headerId = "Header1",
                 forUserId = "User1",
@@ -98,7 +98,7 @@ class ChatPageViewModel constructor(
                 videoLength = 0L,
                 thumbnail = null
             ),
-            Message(
+            ChatMessage(
                 id = "X12",
                 headerId = "Header1",
                 forUserId = "User1",
@@ -109,11 +109,11 @@ class ChatPageViewModel constructor(
                 type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
                 content = "Hi 3",
                 videoLength = 0L,
-                thumbnail = null,
+                    thumbnail = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg",
                 attachmentName = "Some Attac",
                 attachmentPath = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg"
             ),
-            Message(
+            ChatMessage(
                 id = "X12",
                 headerId = "Header1",
                 forUserId = "User1",
@@ -124,7 +124,7 @@ class ChatPageViewModel constructor(
                 type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
                 content = "Hi 4",
                 videoLength = 0L,
-                thumbnail = null,
+                thumbnail = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg",
                 attachmentName = "Some Attac",
                 attachmentPath = "https://cache.lovethispic.com/uploaded_images/219055-Some-Memories-Never-Fade.jpg"
             )
@@ -202,7 +202,7 @@ class ChatPageViewModel constructor(
 
                 snapshot?.let {
                     val messages = it.documents.map {
-                        it.toObject(Message::class.java)!!.apply {
+                        it.toObject(ChatMessage::class.java)!!.apply {
                             this.id = it.id
                         }
                     }
@@ -211,8 +211,8 @@ class ChatPageViewModel constructor(
             }
     }
 
-    private var _sendingMessage = MutableLiveData<ChatMessage>()
-    val sendingMessage: LiveData<ChatMessage> = _sendingMessage
+    private var _sendingMessage = MutableLiveData<OldChatMessage>()
+    val sendingMessageOld: LiveData<OldChatMessage> = _sendingMessage
 
     fun sendNewText(
         text: String
@@ -225,13 +225,13 @@ class ChatPageViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val message = Message(
+            val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
                 flowType = "out",
-                type = Message.MESSAGE_TYPE_TEXT,
+                type = ChatMessage.MESSAGE_TYPE_TEXT,
                 content = text,
                 timestamp = Timestamp.now()
             )
@@ -245,7 +245,7 @@ class ChatPageViewModel constructor(
                 .document(headerId)
                 .updateOrThrow(
                     mapOf(
-                        "lastMessageType" to Message.MESSAGE_TYPE_TEXT,
+                        "lastMessageType" to ChatMessage.MESSAGE_TYPE_TEXT,
                         "lastMsgText" to text,
                         "lastMsgTimestamp" to Timestamp.now(),
                         "unseenCount" to 0
@@ -365,19 +365,19 @@ class ChatPageViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val message = Message(
+            val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
                 flowType = "out",
-                type = Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
+                type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
                 content = text,
                 timestamp = Timestamp.now(),
                 attachmentPath = null,
                 attachmentName = fileName
             )
-            _sendingMessage.postValue(ChatMessage.fromMessage(message))
+            _sendingMessage.postValue(OldChatMessage.fromMessage(message))
 
             val newFileName = if (fileName.isNullOrBlank()) {
                 "$uid-${DateHelper.getFullDateTimeStamp()}.mp4"//Fix it
@@ -418,19 +418,19 @@ class ChatPageViewModel constructor(
                 }
 
             val file = uri.toFile()
-            val message = Message(
+            val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
                 flowType = "out",
-                type = Message.MESSAGE_TYPE_TEXT_WITH_IMAGE,
+                type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_IMAGE,
                 content = text,
                 timestamp = Timestamp.now(),
                 attachmentPath = null,
                 thumbnailBitmap = thumbnail?.copy(thumbnail.config, true)
             )
-            _sendingMessage.postValue(ChatMessage.fromMessage(message))
+            _sendingMessage.postValue(OldChatMessage.fromMessage(message))
 
             val thumbnailPathOnServer = if (thumbnail != null) {
                 val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
@@ -465,13 +465,13 @@ class ChatPageViewModel constructor(
             }
 
             val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config,videoInfo.thumbnail.isMutable)
-            val message = Message(
+            val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
                 forUserId = forUserId,
                 otherUserId = otherUserId,
                 flowType = "out",
-                type = Message.MESSAGE_TYPE_TEXT_WITH_VIDEO,
+                type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_VIDEO,
                 content = text,
                 timestamp = Timestamp.now(),
                 attachmentPath = null,
@@ -480,7 +480,7 @@ class ChatPageViewModel constructor(
                 thumbnailBitmap = thumbnailForUi
             )
 
-            _sendingMessage.postValue(ChatMessage.fromMessage(message))
+            _sendingMessage.postValue(OldChatMessage.fromMessage(message))
 
             if (!videosDirectoryRef.exists())
                 videosDirectoryRef.mkdirs()
@@ -703,9 +703,9 @@ class ChatPageViewModel constructor(
     val chatAttachmentDownloadState: LiveData<ChatAttachmentDownloadState> =
         _chatAttachmentDownloadState
 
-    fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, message: Message) =
+    fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, chatMessage: ChatMessage) =
         viewModelScope.launch {
-            val downloadLink = message.attachmentPath ?: return@launch
+            val downloadLink = chatMessage.attachmentPath ?: return@launch
             if (!appDirectoryFileRef.exists())
                 appDirectoryFileRef.mkdirs()
 
@@ -714,7 +714,7 @@ class ChatPageViewModel constructor(
             try {
 
                 val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
-                val fileRef = if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
+                val fileRef = if (chatMessage.type == ChatMessage.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
                     val imagesDirectoryRef =
                         File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
 
@@ -722,14 +722,14 @@ class ChatPageViewModel constructor(
                         imagesDirectoryRef.mkdirs()
 
                     File(imagesDirectoryRef, fileName)
-                } else if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
+                } else if (chatMessage.type == ChatMessage.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
                     val videosDirectoryRef =
                         File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
                     if (!videosDirectoryRef.exists())
                         videosDirectoryRef.mkdirs()
 
                     File(videosDirectoryRef, fileName)
-                } else if (message.type == Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
+                } else if (chatMessage.type == ChatMessage.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
                     val imagesDirectoryRef =
                         File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
                     File(imagesDirectoryRef, fileName)

@@ -17,11 +17,10 @@ import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.Message
+import com.gigforce.modules.feature_chat.models.ChatMessage
 
 
-abstract class DocumentMessage(
+abstract class DocumentMessageView(
         private val flowType: MessageFlowType,
         private val messageType: MessageType,
         context: Context,
@@ -63,7 +62,7 @@ abstract class DocumentMessage(
     }
 
     override fun bind(data: Any?) {
-        val msg = data as Message? ?: return
+        val msg = data as ChatMessage? ?: return
 
         if (msg.attachmentPath.isNullOrBlank()) {
             progressbar.visible()
@@ -124,40 +123,40 @@ abstract class DocumentMessage(
     }
 }
 
-class GroupOneToOneDocumentMessage(
+class GroupOneToOneDocumentMessageView(
         context: Context,
         attrs: AttributeSet?
-) : DocumentMessage(
+) : DocumentMessageView(
         flowType = MessageFlowType.IN,
         messageType = MessageType.GROUP_MESSAGE,
         context = context,
         attrs = attrs
 )
 
-class InOneToOneDocumentMessage(
+class InOneToOneDocumentMessageView(
         context: Context,
         attrs: AttributeSet?
-) : DocumentMessage(
+) : DocumentMessageView(
         flowType = MessageFlowType.IN,
         messageType = MessageType.ONE_TO_ONE_MESSAGE,
         context = context,
         attrs = attrs
 )
 
-class OutOneToOneDocumentMessage(
+class OutOneToOneDocumentMessageView(
         context: Context,
         attrs: AttributeSet?
-) : DocumentMessage(
+) : DocumentMessageView(
         flowType = MessageFlowType.OUT,
         messageType = MessageType.ONE_TO_ONE_MESSAGE,
         context = context,
         attrs = attrs
 )
 
-class OutGroupDocumentMessage(
+class OutGroupDocumentMessageView(
         context: Context,
         attrs: AttributeSet?
-) : DocumentMessage(
+) : DocumentMessageView(
         flowType = MessageFlowType.OUT,
         messageType = MessageType.GROUP_MESSAGE,
         context = context,

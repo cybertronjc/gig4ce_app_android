@@ -24,12 +24,12 @@ open class GroupChatMessage(
     companion object {
 
         fun fromMessage(message: GroupMessage) : GroupChatMessage = when(message.type){
-            Message.MESSAGE_TYPE_TEXT -> GroupTextChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_IMAGE -> GroupImageChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_VIDEO -> GroupVideoChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_AUDIO -> GroupAudioChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> GroupDocumentChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_CONTACT -> GroupContactChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT -> GroupTextChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT_WITH_IMAGE -> GroupImageChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT_WITH_VIDEO -> GroupVideoChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT_WITH_AUDIO -> GroupAudioChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> GroupDocumentChatMessage(message)
+            ChatMessage.MESSAGE_TYPE_TEXT_WITH_CONTACT -> GroupContactChatMessage(message)
             else -> GroupUnsupportedChatMessage()
         }
     }

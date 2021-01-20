@@ -1,27 +1,27 @@
 package com.gigforce.modules.feature_chat.adapters.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.models.OldChatMessage
 
 class ChatDiffUtilCallback(
-    private val oldChatList: List<ChatMessage>,
-    private val newChatList: List<ChatMessage>
+        private val oldOldChatList: List<OldChatMessage>,
+        private val newOldChatList: List<OldChatMessage>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
-        return oldChatList.size
+        return oldOldChatList.size
     }
 
     override fun getNewListSize(): Int {
-        return newChatList.size
+        return newOldChatList.size
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldChatList[oldItemPosition].toMessage().id == newChatList[newItemPosition].toMessage().id
+        return oldOldChatList[oldItemPosition].toMessage().id == newOldChatList[newItemPosition].toMessage().id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldMessage = oldChatList[oldItemPosition].toMessage()
-        val newMessage = newChatList[newItemPosition].toMessage()
+        val oldMessage = oldOldChatList[oldItemPosition].toMessage()
+        val newMessage = newOldChatList[newItemPosition].toMessage()
 
         return oldMessage.id == newMessage.id &&
                 oldMessage.attachmentPath == newMessage.attachmentPath &&

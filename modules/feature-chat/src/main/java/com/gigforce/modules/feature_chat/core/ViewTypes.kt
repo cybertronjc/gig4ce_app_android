@@ -25,14 +25,7 @@ class ViewTypes {
         const val IN_DOCUMENT = 10104
         const val OUT_DOCUMENT = 10204
 
-        private const val VIEW_TYPE_DATE = 0
-
-        private const val VIEW_TYPE_CHAT_IMAGE = 2
-        private const val VIEW_TYPE_CHAT_VIDEO = 3
-        private const val VIEW_TYPE_CHAT_LOCATION = 4
-        private const val VIEW_TYPE_CHAT_CONTACT = 5
-        private const val VIEW_TYPE_CHAT_AUDIO = 6
-        private const val VIEW_TYPE_CHAT_DOCUMENT = 7
-        private const val VIEW_TYPE_MESSAGE_TYPE_NOT_SUPPORTED = 8
+        const val IN_LOCATION = 10105
+        const val OUT_LOCATION = 10205
     }
 }

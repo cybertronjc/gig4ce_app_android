@@ -10,24 +10,21 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.Message
+import com.gigforce.modules.feature_chat.models.ChatMessage
 import java.util.concurrent.TimeUnit
 
-abstract class VideoMessage(
+abstract class VideoMessageView(
         val type: String,
         context: Context,
         attrs: AttributeSet?
 ) : MediaMessage(
         context,
         attrs
-), IViewHolder {
+) {
 
     //View
     private lateinit var linearLayout: LinearLayout
@@ -70,8 +67,7 @@ abstract class VideoMessage(
         videoLength = this.findViewById(R.id.video_length_tv)
     }
 
-    override fun bind(data: Any?) {
-        val msg = data as Message? ?: return
+    override fun onBind(msg: ChatMessage) {
 
         attachmentNameTV.text = msg.attachmentName
         videoLength.text = convertMicroSecondsToNormalFormat(msg.videoLength)
@@ -97,10 +93,7 @@ abstract class VideoMessage(
         } else {
             attachmentUploadingDownloadingProgressBar.gone()
 
-            val downloadedFile = returnFileIfAlreadyDownloadedElseNull(
-                    ChatConstants.ATTACHMENT_TYPE_VIDEO,
-                    msg.attachmentPath!!
-            )
+            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
             val fileHasBeenDownloaded = downloadedFile != null
 
             if (fileHasBeenDownloaded) {
@@ -222,5 +215,5 @@ abstract class VideoMessage(
 
 }
 
-class InVideoMessage(context: Context, attrs: AttributeSet?) : VideoMessage("in", context, attrs)
-class OutVideoMessage(context: Context, attrs: AttributeSet?) : VideoMessage("out", context, attrs)
+class InVideoMessageView(context: Context, attrs: AttributeSet?) : VideoMessageView("in", context, attrs)
+class OutVideoMessageView(context: Context, attrs: AttributeSet?) : VideoMessageView("out", context, attrs)
