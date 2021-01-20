@@ -93,6 +93,7 @@
             android:layout_marginEnd="@dimen/size_16"
             android:layout_marginBottom="@dimen/size_26"
             android:gravity="center"
+            android:minHeight="@dimen/size_36"
             android:text="@string/skip_underline"
             android:textColor="@color/warm_grey"
             android:textSize="@dimen/font_16"

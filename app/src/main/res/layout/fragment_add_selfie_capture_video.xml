@@ -8,8 +8,8 @@
     <RelativeLayout
         android:id="@+id/cameraMainLayout"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <com.otaliastudios.cameraview.CameraView
             android:id="@+id/cameraView"
@@ -97,18 +97,18 @@
         android:layout_height="match_parent"
         android:background="@android:color/black"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:gravity="center"
             android:text="@string/camera_and_audtio_permission_required_to_access_camera"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:gravity="center"
             android:textStyle="bold" />
 
 
@@ -116,7 +116,8 @@
             android:id="@+id/askCameraPermission"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
             android:text="@string/go_to_settings"
             android:textColor="@android:color/white"
             app:strokeColor="@android:color/white" />

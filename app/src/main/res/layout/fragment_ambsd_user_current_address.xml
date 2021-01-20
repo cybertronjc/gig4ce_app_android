@@ -32,10 +32,10 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
-                    android:scaleX="0.6"
-                    android:scaleY="0.6"
                     android:clickable="true"
                     android:focusable="true"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
                     android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
@@ -61,8 +61,8 @@
 
                 <ImageView
                     android:layout_width="80dp"
-                    android:src="@drawable/banner_users_grid"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:src="@drawable/banner_users_grid" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,14 +85,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="38dp"
                 android:layout_marginEnd="16dp"
-                android:paddingStart="10dp"
-                android:maxLength="6"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:hint="@string/pin_code"
-                android:lineSpacingExtra="3sp"
-                android:minHeight="36dp"
                 android:inputType="number"
+                android:lineSpacingExtra="3sp"
+                android:maxLength="6"
+                android:minHeight="36dp"
+                android:paddingStart="10dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -117,12 +117,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
+                android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:hint="@string/address_line_1"
-                android:paddingStart="10dp"
-                android:background="@drawable/rectangle_round_grey"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
+                android:paddingStart="10dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -139,9 +139,9 @@
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:hint="@string/address_line_2"
-                android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
+                android:paddingStart="10dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -153,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
+                android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:hint="@string/state"
                 android:lineSpacingExtra="3sp"
@@ -160,7 +161,6 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                android:background="@drawable/rectangle_round_grey"
                 app:layout_constraintEnd_toStartOf="@+id/city_spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_2_et" />
@@ -175,9 +175,9 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
+                android:paddingStart="10dp"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -281,15 +281,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/yes_i_am_ready"
-                    app:chipStrokeWidth="1dp"/>
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_location_change_no"
                     style="@style/AppSingleChoiceChip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="@string/no_i_am_not" />
+                    android:text="@string/no_i_am_not"
+                    app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -309,6 +309,7 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
+        android:minHeight="@dimen/size_36"
         android:text="@string/next"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />

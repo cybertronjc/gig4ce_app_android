@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginTop="14dp"
+        android:fontFamily="@font/lato"
         android:text="Last time watching"
         android:textColor="#3e3e47"
         android:textSize="18sp"
-        android:fontFamily="@font/lato"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,12 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
+        android:minHeight="@dimen/size_36"
         android:text="Resume"
         app:icon="@drawable/ic_play"
         app:iconPadding="8dp"
-        app:strokeColor="@color/lipstick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/lipstick" />
 
     <ImageView
         android:id="@+id/videoThumbnailIV"
@@ -50,10 +51,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="19dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
         android:text="Introduction to Retail Market ?"
         android:textColor="@color/black"
-        android:letterSpacing="0"
-        android:fontFamily="@font/lato"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
         app:layout_constraintTop_toBottomOf="@+id/resumeButton" />
@@ -64,11 +65,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
         android:text="Industry based "
         android:textColor="@color/battle_ship_grey"
-        android:fontFamily="@font/lato"
         android:textSize="12sp"
-        android:letterSpacing="0"
         app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
         app:layout_constraintTop_toBottomOf="@+id/videoTitleTV" />
 
@@ -78,11 +79,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="12dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
         android:text="20 min learning pending "
         android:textColor="@color/warm_grey"
         android:textSize="14sp"
-        android:fontFamily="@font/lato"
-        android:letterSpacing="0"
         app:layout_constraintStart_toEndOf="@+id/videoThumbnailIV"
         app:layout_constraintTop_toBottomOf="@+id/textView107" />
 

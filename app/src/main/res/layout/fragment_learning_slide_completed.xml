@@ -12,8 +12,8 @@
         android:id="@+id/slideProgressSavingPB"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="gone"
         android:indeterminateTint="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,13 +54,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:minHeight="@dimen/size_36"
             android:text="Mark Slides As Complete"
             android:textColor="@color/white"
             app:rippleColor="@color/white"
             app:strokeColor="@color/white" />
 
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

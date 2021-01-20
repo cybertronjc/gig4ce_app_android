@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_up_sheet">
@@ -10,45 +8,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:layout_marginTop="@dimen/bs_top_margin"
-            android:textColor="#d4e02020"
             android:letterSpacing="0.05"
-            android:visibility="gone"
-            android:text="@string/error_empty_mandatory_fields" />
+            android:text="@string/error_empty_mandatory_fields"
+            android:textColor="#d4e02020"
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bs_top_margin"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/textView28"
+                style="@style/BsHeadingBold12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                style="@style/BsHeadingBold12"
+                android:layout_weight="1"
                 android:text="@string/edit_achievement" />
+
             <ImageButton
                 android:id="@+id/delete"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_delete"
-                style="@style/Widget.MaterialComponents.Button.TextButton" />
+                android:src="@drawable/ic_delete" />
 
         </LinearLayout>
 
@@ -69,83 +69,86 @@
             android:inputType="textPersonName" />
 
 
-            <TextView
-                android:id="@+id/textView35"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/authority"
-                android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/textView35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/authority" />
 
-            <EditText
-                android:id="@+id/authority"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/add_achievement_sheet_issuing_authority"
-                android:inputType="textPersonName"
-                android:layout_marginTop="8dp"/>
+        <EditText
+            android:id="@+id/authority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/add_achievement_sheet_issuing_authority"
+            android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView36"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/location" />
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/location" />
 
-            <EditText
-                android:id="@+id/location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/location"
-                android:inputType="textPersonName"
-                android:layout_marginTop="8dp"/>
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/location"
+            android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView37"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/year_text" />
+        <TextView
+            android:id="@+id/textView37"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/year_text" />
 
         <EditText
             android:id="@+id/year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/add_achievement_sheet_year"
-            android:focusable="false"
+            android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="date"
-            android:layout_marginTop="8dp"/>
+            android:focusable="false"
+            android:hint="@string/add_achievement_sheet_year"
+            android:inputType="date" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel_text"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
+                android:text="@string/cancel_text"
                 android:textColor="@color/gray_color"
-                app:strokeColor="@color/gray_color"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                app:strokeColor="@color/gray_color" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                app:strokeColor="@color/colorPrimary"
+                android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
+                android:text="@string/save_text"
                 android:textColor="@color/colorPrimary"
-                style="?attr/materialButtonOutlinedStyle"  />
+                app:strokeColor="@color/colorPrimary" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

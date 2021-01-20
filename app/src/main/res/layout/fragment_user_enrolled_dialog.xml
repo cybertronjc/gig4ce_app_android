@@ -81,6 +81,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
+            android:minHeight="@dimen/size_36"
             android:text="@string/okay_text"
             android:textAllCaps="false"
             android:textColor="@color/white"

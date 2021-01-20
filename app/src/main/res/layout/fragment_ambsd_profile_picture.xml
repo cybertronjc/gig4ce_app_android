@@ -24,10 +24,10 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
             android:clickable="true"
             android:focusable="true"
+            android:scaleX="0.6"
+            android:scaleY="0.6"
             android:src="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
@@ -48,27 +48,26 @@
         android:id="@+id/profile_picture_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:lineSpacingExtra="3sp"
-        android:text="@string/profile_picture"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        />
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:text="@string/profile_picture"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
 
     <ImageView
         android:id="@+id/imageView13"
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_margin="16dp"
-        android:src="@drawable/avatar"
         android:clickable="true"
         android:focusable="true"
         android:scaleType="fitXY"
+        android:src="@drawable/avatar"
         app:layout_constraintTop_toBottomOf="@id/profile_picture_tv"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -81,15 +80,15 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/imageView13"
-        app:layout_constraintBottom_toTopOf="@id/imageView13">
+        app:layout_constraintBottom_toTopOf="@id/imageView13"
+        app:layout_constraintEnd_toEndOf="@id/imageView13">
 
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:tint="@color/colorPrimary"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            app:tint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -125,11 +124,11 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
+        android:minHeight="@dimen/size_36"
         android:text="@string/next"
-        android:visibility="visible"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/skipButton"
-    />
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/skipButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skipButton"
@@ -146,7 +145,6 @@
         android:gravity="center"
         android:text="@string/skip"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

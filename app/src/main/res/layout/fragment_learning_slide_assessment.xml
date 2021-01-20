@@ -37,12 +37,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:clickable="true"
-            android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/assessment_title_tv"
             tools:text="@string/sample_info" />
@@ -82,15 +82,15 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
-            app:rippleColor="@color/white"
             android:layout_marginTop="20dp"
+            android:minHeight="@dimen/size_36"
+            android:text="Start"
             android:textColor="@color/white"
+            app:rippleColor="@color/white"
             app:strokeColor="@color/white" />
 
 
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

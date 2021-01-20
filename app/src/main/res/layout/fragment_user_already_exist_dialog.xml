@@ -25,14 +25,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-
             <TextView
                 android:id="@+id/tv_user_already_exists_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
                 android:fontFamily="@font/lato_bold"
                 android:letterSpacing="0"
-                android:layout_marginStart="22dp"
                 android:text="Oops !!"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -42,9 +41,9 @@
             android:id="@+id/congrats_image"
             android:layout_width="130dp"
             android:layout_height="130dp"
+            android:layout_gravity="center"
             android:layout_marginTop="22dp"
             android:src="@drawable/banner_sign"
-            android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />
@@ -53,21 +52,20 @@
             android:id="@+id/congrats_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:textStyle="normal"
-            android:textSize="16sp"
-            android:textColor="#262626"
-            android:layout_marginTop="32dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:lineSpacingExtra="3sp"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
             android:text="This mobile number is already registered\nwith Gig4ce."
+            android:textColor="#262626"
+            android:textSize="16sp"
+            android:textStyle="normal"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/congrats_image"
-            />
+            app:layout_constraintTop_toBottomOf="@id/congrats_image" />
 
 
         <androidx.appcompat.widget.AppCompatButton
@@ -79,11 +77,12 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
-            app:layout_goneMarginTop="56dp"
-            android:textAllCaps="false"
+            android:minHeight="@dimen/size_36"
             android:text="@string/okay_text"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/congrats_text" />
+            app:layout_constraintTop_toBottomOf="@id/congrats_text"
+            app:layout_goneMarginTop="56dp" />
 
 
     </LinearLayout>

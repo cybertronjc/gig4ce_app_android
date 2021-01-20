@@ -47,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="18dp"
+            android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
             android:text="Please let us know your reason to report the user"
@@ -70,32 +70,32 @@
 
             <RadioButton
                 android:id="@+id/reason_sick_leave"
-                android:layout_width="match_parent"
-                android:minHeight="0dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
                 style="@style/Theme.RadioButtonLipstickPink"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="Person is abusive in nature" />
 
             <RadioButton
                 android:id="@+id/reason_on_leave"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
-                android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                style="@style/Theme.RadioButtonLipstickPink"
-                android:text="Person is sharing inappropriate content "  />
+                android:paddingBottom="8dp"
+                android:text="Person is sharing inappropriate content " />
 
             <RadioButton
                 android:id="@+id/reason_others"
+                style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
                 android:minHeight="0dp"
-                style="@style/Theme.RadioButtonLipstickPink"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/others_camel_case" />
 
         </RadioGroup>
@@ -140,8 +140,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="18dp"
+            android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
 
@@ -159,9 +159,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/gradient_button"
+            android:enabled="false"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:enabled="false"
+            android:minHeight="@dimen/size_36"
             android:text="@string/submit_all_caps"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/confirm_decline_cb" />
