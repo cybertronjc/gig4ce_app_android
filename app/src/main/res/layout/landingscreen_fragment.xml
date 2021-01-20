@@ -338,13 +338,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/lipstick"
-                        android:lineSpacingExtra="3sp"
                         android:gravity="center_horizontal"
+                        android:lineSpacingExtra="3sp"
                         android:text="@string/join_now"
                         android:textAllCaps="false"
+                        android:textColor="@color/lipstick"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -392,11 +392,9 @@
                         android:paddingBottom="@dimen/size_4"
                         android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/client_activation_progress_bar"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
+                    <include
+                        android:id="@+id/loader_explore_gigs"
+                        layout="@layout/horizontal_place_holders"
                         android:visibility="gone" />
 
                     <TextView
@@ -404,8 +402,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:drawableTop="@drawable/ic_cross_grey"
                         android:drawablePadding="10dp"
+                        android:visibility="gone"
+                        app:drawableTopCompat="@drawable/ic_cross_grey"
                         tools:text="Unable to load your stuff" />
 
                 </FrameLayout>
@@ -599,11 +598,10 @@
                         android:paddingRight="20dp"
                         android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/learning_progress_bar"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
+
+                    <include
+                        android:id="@+id/loader_learning_home"
+                        layout="@layout/horizontal_place_holders"
                         android:visibility="gone" />
 
                     <TextView
@@ -611,8 +609,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:drawableTop="@drawable/ic_cross_grey"
                         android:drawablePadding="10dp"
+                        app:drawableTopCompat="@drawable/ic_cross_grey"
                         tools:text="Unable to load your stuff" />
 
                 </FrameLayout>

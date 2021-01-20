@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -33,8 +34,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -51,29 +52,12 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
-import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
-import com.gigforce.app.views.MonthYearPickerDialog
+import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
-import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
-import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
-import kotlin.collections.ArrayList
-import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -192,26 +176,26 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-            ConfigRepository.LatestAPPUpdateListener {
+                ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
-                        getString(R.string.new_version_available),
-                        getString(R.string.new_version_available_detail),
-                        getString(R.string.update_now),
-                        getString(R.string.cancel_update),
-                        object : ConfirmationDialogOnClickListener {
-                            override fun clickedOnYes(dialog: Dialog?) {
-                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                            }
+                            getString(R.string.new_version_available),
+                            getString(R.string.new_version_available_detail),
+                            getString(R.string.update_now),
+                            getString(R.string.cancel_update),
+                            object : ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                                }
 
-                            override fun clickedOnNo(dialog: Dialog?) {
-                                if (latestAPPUpdateModel?.force_update_required)
-                                    activity?.finish()
-                                dialog?.dismiss()
-                            }
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    if (latestAPPUpdateModel?.force_update_required)
+                                        activity?.finish()
+                                    dialog?.dismiss()
+                                }
 
-                        })
+                            })
             }
         })
     }
@@ -256,8 +240,8 @@ class LandingScreenFragment : BaseFragment() {
 
         try {
             result = context?.getPackageManager()
-                ?.getPackageInfo(context?.getPackageName(), 0)
-                ?.versionName ?: "";
+                    ?.getPackageInfo(context?.getPackageName(), 0)
+                    ?.versionName ?: "";
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -786,7 +770,7 @@ class LandingScreenFragment : BaseFragment() {
         }
         amb_join_open_btn.setOnClickListener {
 
-            if(profile == null)
+            if (profile == null)
                 return@setOnClickListener
 
             if (profile!!.isUserAmbassador) {
@@ -815,26 +799,25 @@ class LandingScreenFragment : BaseFragment() {
     }
 
     private fun showLearningAsLoading() {
-
         learning_cl.visible()
         learning_rv.gone()
         learning_learning_error.gone()
-        learning_progress_bar.visible()
+        startShimmer(loader_learning_home as LinearLayout,
+                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
+                        marginTop = R.dimen.size_1,
+                        orientation = LinearLayout.HORIZONTAL))
     }
 
     private fun showErrorWhileLoadingCourse(error: String) {
-
+        stopShimmer(loader_learning_home as LinearLayout)
         learning_cl.visible()
-        learning_progress_bar.gone()
         learning_rv.gone()
         learning_learning_error.visible()
-
         learning_learning_error.text = error
     }
 
     private fun showUserLearningCourses(content: List<Course>) {
-
-        learning_progress_bar.gone()
+        stopShimmer(loader_learning_home as LinearLayout)
         learning_learning_error.gone()
         learning_rv.visible()
 
@@ -1028,20 +1011,22 @@ class LandingScreenFragment : BaseFragment() {
 
             }
         })
+        startShimmer(loader_explore_gigs as LinearLayout, ShimmerModel(marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL))
         landingScreenViewModel.getJobProfile()
     }
 
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
 
-        client_activation_progress_bar.gone()
-        client_activation_error.gone()
+        stopShimmer(loader_explore_gigs as LinearLayout)
         client_activation_rv.visible()
 
-        if (jobProfiles.isEmpty()) {
+        if (jobProfiles.isNullOrEmpty()) {
             rl_cient_activation.gone()
+            client_activation_error.visible()
         } else {
             rl_cient_activation.visible()
-
+            client_activation_error.gone()
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
