@@ -60,12 +60,14 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
     }
 
     private var imageUrl: String? = null
-    private lateinit var username: String
-    private lateinit var forUserId: String
+
+    //Other User Info
     private lateinit var chatHeaderId: String
     private lateinit var otherUserId: String
-    private var fromClientActivation: Boolean = false
+    private lateinit var username: String
     private lateinit var mobileNumber: String
+
+    private var fromClientActivation: Boolean = false
 
     private var selectedOperation = -1
 

@@ -29,6 +29,7 @@ import com.gigforce.modules.feature_chat.repositories.ChatRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.otaliastudios.transcoder.Transcoder
@@ -52,13 +53,15 @@ class ChatPageViewModel constructor(
     private val TAG: String = "chats/viewmodel"
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
     private var firebaseDB = FirebaseFirestore.getInstance()
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val currentUser : FirebaseUser by lazy {
+        FirebaseAuth.getInstance().currentUser!!
+    }
 
-    var headerId: String = ""
-    var otherUserName: String? = null
-    var otherUserProfilePicture: String? = null
-    lateinit var forUserId: String
-    lateinit var otherUserId: String
+    private var headerId: String = ""
+    private lateinit var otherUserId: String
+
+    private var otherUserName: String? = null
+    private var otherUserProfilePicture: String? = null
 
     private var _messages = MutableLiveData<List<ChatMessage>>()
     val messages: LiveData<List<ChatMessage>> = _messages
@@ -228,7 +231,7 @@ class ChatPageViewModel constructor(
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
-                forUserId = forUserId,
+                forUserId = currentUser.uid,
                 otherUserId = otherUserId,
                 flowType = "out",
                 type = ChatMessage.MESSAGE_TYPE_TEXT,
@@ -258,13 +261,16 @@ class ChatPageViewModel constructor(
     }
 
     private suspend fun createHeaderForBothUsers() {
-        val headerIdFromChat = checkAndReturnIfHeaderIsPresentInchat(forUserId, otherUserId)
+        val headerIdFromChat = checkAndReturnIfHeaderIsPresentInchat(
+                forUserId = currentUser.uid,
+                otherUserId = otherUserId
+        )
 
         if (headerIdFromChat != null) {
             headerId = headerIdFromChat
         } else {
             headerId = createHeader(
-                forUserId,
+                currentUser.uid,
                 otherUserId,
                 otherUserName,
                 otherUserProfilePicture
@@ -368,7 +374,7 @@ class ChatPageViewModel constructor(
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
-                forUserId = forUserId,
+                forUserId = currentUser.uid,
                 otherUserId = otherUserId,
                 flowType = "out",
                 type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
@@ -421,7 +427,7 @@ class ChatPageViewModel constructor(
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
-                forUserId = forUserId,
+                forUserId = currentUser.uid,
                 otherUserId = otherUserId,
                 flowType = "out",
                 type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_IMAGE,
@@ -468,7 +474,7 @@ class ChatPageViewModel constructor(
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
-                forUserId = forUserId,
+                forUserId = currentUser.uid,
                 otherUserId = otherUserId,
                 flowType = "out",
                 type = ChatMessage.MESSAGE_TYPE_TEXT_WITH_VIDEO,
@@ -624,7 +630,7 @@ class ChatPageViewModel constructor(
             "yyyyMMdd_HHmmss",
             Locale.getDefault()
         ).format(Date())
-        return "$forUserId$timeStamp$extension"
+        return "${currentUser.uid}$timeStamp$extension"
     }
 
     private suspend fun createHeader(
