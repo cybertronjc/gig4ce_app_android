@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxWidth="180dp"
+    android:gravity="end"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -87,8 +88,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
-                            android:fontFamily="@font/lato"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
                     </LinearLayout>
@@ -105,7 +105,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="2dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/lato"
                 android:maxWidth="178dp"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
@@ -122,9 +121,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/lato"
                 android:text="NA"
-                android:textColor="@color/gray_chat_module"
+                android:textColor="@color/dust_grey"
                 android:textSize="8sp" />
         </LinearLayout>
 

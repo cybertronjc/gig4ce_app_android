@@ -19,6 +19,12 @@ class ViewTypes {
         const val IN_IMAGE = 10102
         const val OUT_IMAGE = 10202
 
+        const val IN_VIDEO = 10103
+        const val OUT_VIDEO = 10203
+
+        const val IN_DOCUMENT = 10104
+        const val OUT_DOCUMENT = 10204
+
         private const val VIEW_TYPE_DATE = 0
 
         private const val VIEW_TYPE_CHAT_IMAGE = 2
