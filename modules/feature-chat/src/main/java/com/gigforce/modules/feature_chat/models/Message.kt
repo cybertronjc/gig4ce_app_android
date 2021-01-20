@@ -96,7 +96,11 @@ class Message(
 
     @get:Exclude
     @set:Exclude
-    var thumbnailBitmap: Bitmap? = null
+    var thumbnailBitmap: Bitmap? = null,
+
+        @get:Exclude
+@set:Exclude
+var attachmentCurrentlyBeingDownloaded: Boolean= false
 ) : DataViewObject(){
 
     companion object {
@@ -115,6 +119,8 @@ class Message(
         return when(this.type){
             ChatConstants.MESSAGE_TYPE_TEXT -> if(this.flowType == "in") ViewTypes.IN_TEXT else ViewTypes.OUT_TEXT
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if(this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT-> if(this.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if(this.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
             else -> -1
         }
     }

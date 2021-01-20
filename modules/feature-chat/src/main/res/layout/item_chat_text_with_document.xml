@@ -20,27 +20,39 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingBottom="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/document_type_iv"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"
+                tools:text="Himanshu" />
+
             <ImageView
                 android:id="@+id/document_type_iv"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/ic_document_gradient" />
+                app:srcCompat="@drawable/ic_document_gradient" />
 
             <TextView
                 android:id="@+id/tv_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="160dp"
-                android:fontFamily="@font/lato"
                 android:layout_marginStart="14dp"
                 android:scrollHorizontally="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
                 app:layout_constraintStart_toEndOf="@id/document_type_iv"
-                tools:text="How are you my brother"
+                tools:text="How are yoedededotsdsdher"
                 android:textSize="16sp" />
 
             <TextView
@@ -49,11 +61,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="5dp"
-                android:fontFamily="@font/lato"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="NA"
-                android:textColor="@color/gray_chat_module"
+                android:textColor="@color/dust_grey"
                 android:textSize="8sp" />
 
             <ProgressBar
@@ -61,6 +72,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/progress"
+                android:visibility="gone"
                 android:indeterminate="true"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="10dp"
@@ -68,7 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_msgTimeValue"
 
-               />
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

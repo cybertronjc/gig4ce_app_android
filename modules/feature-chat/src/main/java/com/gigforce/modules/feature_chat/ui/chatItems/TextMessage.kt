@@ -52,5 +52,5 @@ abstract class TextMessage(val type:String, context: Context, attrs: AttributeSe
     }
 }
 
-class InTextMessage(context: Context, attrs: AttributeSet?): TextMessage("in", context, attrs){}
-class OutTextMessage(context: Context, attrs: AttributeSet?): TextMessage("out", context, attrs){}
+class InTextMessage(context: Context, attrs: AttributeSet?): TextMessage("in", context, attrs)
+class OutTextMessage(context: Context, attrs: AttributeSet?): TextMessage("out", context, attrs)

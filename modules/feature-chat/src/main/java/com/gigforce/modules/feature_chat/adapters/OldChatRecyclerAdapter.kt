@@ -60,7 +60,7 @@ class OldChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_CHAT_VIDEO -> VideoMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_video, parent, false)
+                    .inflate(R.layout.item_chat_text_with_video_in, parent, false)
             )
             VIEW_TYPE_CHAT_LOCATION -> LocationMessageViewHolder(
                 LayoutInflater.from(parent.context)
