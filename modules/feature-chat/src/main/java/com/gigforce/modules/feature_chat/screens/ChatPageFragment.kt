@@ -106,7 +106,6 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
         }
@@ -116,7 +115,6 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
 
@@ -250,11 +248,11 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
             true
         }
         R.id.action_report -> {
-            ReportUserDialogFragment.launch(
-                viewModel.headerId,
-                viewModel.otherUserId,
-                childFragmentManager
-            )
+//            ReportUserDialogFragment.launch(
+//                viewModel.headerId,
+//                viewModel.otherUserId,
+//                childFragmentManager
+//            )
             true
         }
 //        R.id.action_document -> {
