@@ -2,6 +2,11 @@ package com.gigforce.app
 
 import android.app.Application
 import android.app.NotificationManager
+import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.di.AppComponent
 import com.gigforce.app.di.DaggerAppComponent
@@ -9,6 +14,12 @@ import com.gigforce.core.di.CoreComponentProvider
 import com.gigforce.core.di.ICoreComponent
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.di.IChatComponent
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 
 class MainApplication: Application(),
@@ -31,6 +42,7 @@ class MainApplication: Application(),
     override fun onCreate() {
         super.onCreate()
         setupCleverTap()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
     }
 
     private fun setupCleverTap(){
