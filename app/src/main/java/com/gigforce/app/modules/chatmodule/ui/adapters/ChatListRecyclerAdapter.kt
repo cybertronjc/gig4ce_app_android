@@ -31,7 +31,7 @@ class ChatListRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.chat_header_item, parent, false)
+                .inflate(R.layout.chat_header_item, parent, true)
 
         return ContactViewHolder(
                 view,

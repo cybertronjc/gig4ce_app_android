@@ -19,6 +19,8 @@
         android:theme="?attr/actionBarTheme" />
 
 
+
+
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/rv_chat_headers"
         android:layout_width="match_parent"

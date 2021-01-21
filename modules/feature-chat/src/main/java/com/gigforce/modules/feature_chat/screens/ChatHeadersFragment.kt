@@ -54,9 +54,11 @@ class ChatHeadersFragment : Fragment() {
                             timeDisplay = "2 min",
                             type = it.chatType,
                             profilePath = "",
-                            unreadCount = it.unseenCount
+                            unreadCount = it.unseenCount,
+                            profileId = it.otherUserId
                     )
                 })
+
     }
 
     override fun onCreateView(

@@ -6,5 +6,11 @@ import com.gigforce.core.navigation.INavigation
 interface IChatNavigation: INavigation {
 
     fun navigateToChatList()
-    fun navigateToChatPage(id:String)
+
+    fun navigateToChatPage(
+            otherUserId : String,
+            headerId:String ="",
+            otherUserName : String = "",
+            otherUserProfilePicture : String = ""
+    )
 }

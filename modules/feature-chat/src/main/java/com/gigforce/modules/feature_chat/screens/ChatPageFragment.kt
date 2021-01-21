@@ -714,7 +714,6 @@ class ChatPageFragment : Fragment(),PopupMenu.OnMenuItemClickListener /*OnChatMe
         const val TAG = "ChatFragment"
 
         const val INTENT_EXTRA_CHAT_HEADER_ID = "chatHeaderId"
-        const val INTENT_EXTRA_FOR_USER_ID = "forUserId"
         const val INTENT_EXTRA_OTHER_USER_ID = "otherUserId"
         const val INTENT_EXTRA_OTHER_USER_NAME = "contactName"
         const val INTENT_EXTRA_OTHER_USER_IMAGE = "imageUrl"

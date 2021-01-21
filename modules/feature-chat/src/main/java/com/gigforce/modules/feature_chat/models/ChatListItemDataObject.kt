@@ -7,7 +7,10 @@ data class ChatListItemDataObject(
     val title:String,
     val subtitle:String,
     val timeDisplay:String,
+
+    val profileId:String,
     val profilePath:String,
+
     val unreadCount:Int,
     val id:String,
     val type: String

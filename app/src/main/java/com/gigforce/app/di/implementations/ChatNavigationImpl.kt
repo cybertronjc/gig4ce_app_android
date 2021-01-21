@@ -2,6 +2,7 @@ package com.gigforce.app.di.implementations
 
 import android.util.Log
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.core.navigation.BaseNavigationImpl
@@ -16,9 +17,17 @@ class ChatNavigationImpl @Inject constructor()
 
     }
 
-    override fun navigateToChatPage(id: String) {
+    override fun navigateToChatPage(
+            otherUserId: String,
+            headerId: String,
+            otherUserName: String,
+            otherUserProfilePicture: String
+    ) {
+
         Log.i("Chat/Nav/Impl","Navigate to Chat Page Tapped")
         Toast.makeText(context, "Navigate to Chat Page Tapped", Toast.LENGTH_LONG).show()
-        (this.context as MainActivity).getNavController().navigate(R.id.chatPageFragment)
+        (this.context as MainActivity).getNavController().navigate(R.id.chatPageFragment, bundleOf(
+
+        ))
     }
 }

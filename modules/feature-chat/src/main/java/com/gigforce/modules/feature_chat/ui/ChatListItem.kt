@@ -38,20 +38,25 @@ class ChatListItem(context: Context?) :
         dObj = null
         data?.let {
             dObj = data as ChatListItemDataObject
-            val isUnread = dObj?.unreadCount!! > 0;
+            val isUnread = dObj!!.unreadCount!! > 0;
 
-            this.findViewById<TextView>(R.id.txt_title).text = dObj?.title;
-            this.findViewById<TextView>(R.id.txt_subtitle).text = dObj?.subtitle;
-            this.findViewById<TextView>(R.id.txt_time).text = dObj?.timeDisplay;
+            this.findViewById<TextView>(R.id.txt_title).text = dObj?.title
+            this.findViewById<TextView>(R.id.txt_subtitle).text = dObj?.subtitle
+            this.findViewById<TextView>(R.id.txt_time).text = dObj?.timeDisplay
 
             //todo: Profile, unreadCount
         }
     }
 
     override fun onClick(v: View?) {
-        dObj.let {
-            Toast.makeText(this.context, "Tapped", Toast.LENGTH_SHORT).show()
-            navigation.navigateToChatPage("test")
+        dObj?.let {
+
+            navigation.navigateToChatPage(
+                    otherUserId = it.profileId,
+                    headerId = it.id,
+                    otherUserName = it.title,
+                    otherUserProfilePicture = it.profilePath
+            )
         }
     }
 }

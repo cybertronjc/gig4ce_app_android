@@ -4,29 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp"
-    >
+    android:padding="12dp">
 
-    <ImageView
-        android:id="@+id/iv_profile"
+    <FrameLayout
+        android:id="@+id/image_online_framelayout"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_alignParentTop="true">
 
-    <!-- todo: Long Text should be trimmed with ... -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/user_online_iv"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            tools:srcCompat="@drawable/ic_online"
+            android:layout_gravity="end|bottom" />
+
+    </FrameLayout>
+
+
     <TextView
         android:id="@+id/txt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/iv_profile"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:layout_toRightOf="@id/image_online_framelayout"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
         tools:text="Contact Name" />
 
-    <!-- todo: Long Text should be trimmed with ... -->
     <TextView
         android:id="@+id/txt_subtitle"
         android:layout_width="wrap_content"
@@ -35,16 +50,17 @@
         android:layout_alignStart="@id/txt_title"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
-        android:text="TextView"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
         tools:text="How are you?" />
 
     <TextView
         android:id="@+id/txt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignBottom="@id/txt_title"
-        android:text="TextView"
+        android:layout_alignParentEnd="true"
         android:textAlignment="textEnd"
-        tools:text="5:00pm"/>
+        tools:text="5:00pm" />
 </RelativeLayout>
