@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StandardCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">@dimen/font16</item>
+    </style>
+
+    <style name="StandardCardDescription" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black_42</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font14</item>
+    </style>
+
+    <style name="StandardCardAction" parent="Widget.MaterialComponents.Button.TextButton">
+<!--        <item name="android:textColor">@color/colorPrimary</item>-->
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">@dimen/font14</item>
+
+    </style>
+
+    <style name="StandardCardActionTwo" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="colorPrimary">@color/greyish_brown</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">@dimen/font14</item>
+    </style>
+
+    <style name="FetureCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font18</item>
+    </style>
+
+    <style name="FetureItemCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/d9_black</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font14</item>
+    </style>
+
+    <style name="FetureItemCardSubtitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font10</item>
+    </style>
+
+    <style name="VideoInfoCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">@dimen/font16</item>
+    </style>
+
+    <style name="VideoInfoItemCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/greyish_brown</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font14</item>
+    </style>
+
+    <style name="VideoInfoItemTimeCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/font12</item>
+    </style>
+
+</resources>

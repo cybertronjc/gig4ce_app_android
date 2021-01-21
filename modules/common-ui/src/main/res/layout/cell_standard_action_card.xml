@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cv_top"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Card Title"
+        android:theme="@style/StandardCardTitle"
         app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintTop_toTopOf="@+id/iv_icon" />
@@ -29,30 +30,31 @@
         android:id="@+id/tv_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:theme="@style/StandardCardDescription"
         android:text="Description here"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-    <TextView
+    <com.gigforce.common_ui.cells.StandardTextActionButton
         android:id="@+id/cta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
+        android:layout_marginTop="8dp"
+        android:text="Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cta1"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:visibility="gone"
-        android:layout_marginRight="24dp"
+        android:theme="@style/StandardCardActionTwo"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/cta"
         app:layout_constraintEnd_toStartOf="@+id/cta"
         app:layout_constraintTop_toTopOf="@+id/cta" />

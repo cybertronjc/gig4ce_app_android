@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="OutlineTextButton">
+        <attr name="android:textAllCaps" format="boolean"></attr>
+        <attr name="android:text" format="string"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="CoreRecyclerView">
+        <attr name="android:orientation" format="integer"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="StandardTextActionButton">
+        <attr name="android:textAllCaps" format="boolean"></attr>
+        <attr name="android:text" format="string"></attr>
+    </declare-styleable>
+
+</resources>

@@ -12,7 +12,6 @@
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:letterSpacing="0"
-        android:text="testing"
         android:textColor="@color/colorLightAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
