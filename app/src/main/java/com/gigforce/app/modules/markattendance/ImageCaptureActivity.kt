@@ -38,7 +38,7 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun listener() {
         capture_icon.setOnClickListener {
 
-            if(!show_img_cl.isVisible) {
+            if (!show_img_cl.isVisible) {
                 cameraView.takePicture()
             }
         }
@@ -61,11 +61,11 @@ class ImageCaptureActivity : AppCompatActivity() {
         showToast("Uploading Image")
         progress_circular.visible()
         var compressByteArray =
-            bitmapToByteArray(getResizedBitmap(byteArrayToBitmap(pictureResult!!.data), 750))
+                bitmapToByteArray(getResizedBitmap(byteArrayToBitmap(pictureResult!!.data), 750))
         var selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
         var mReference = FirebaseStorage.getInstance().reference
-            .child("attendance")
-            .child(selfieImg)
+                .child("attendance")
+                .child(selfieImg)
         lateinit var uploadTask: UploadTask
 //            if (uriImg != null)
 //                uploadTask = mReference.putFile(uriImg)
@@ -127,10 +127,10 @@ class ImageCaptureActivity : AppCompatActivity() {
 
 
                 result.toBitmap(BitmapCallback {
-                    it?.let {it1->
+                    it?.let { it1 ->
                         show_pic.scaleType =
-                            if (it1.width > it1.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
-                                show_pic.setImageBitmap(it1)
+                                if (it1.width > it1.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
+                        show_pic.setImageBitmap(it1)
                     }
 
 //                    show_pic_bg.setImageBitmap(it)
@@ -149,8 +149,8 @@ class ImageCaptureActivity : AppCompatActivity() {
 
     private fun getTimeStampAsName(): String {
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         return timeStamp
     }
@@ -170,13 +170,12 @@ class ImageCaptureActivity : AppCompatActivity() {
     }
 
     fun byteArrayToBitmap(byteArray: ByteArray): Bitmap {
-        var options = BitmapFactory.Options();
-        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options);
+        return decodeSampledBitmapFromResource(byteArray, 1080, 1920)
     }
 
     fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         var stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
         return stream.toByteArray();
     }
 
@@ -195,4 +194,40 @@ class ImageCaptureActivity : AppCompatActivity() {
 //        img.recycle()
 //        return rotatedImg
 //    }
+
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        // Raw height and width of image
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
+    }
+
+    fun decodeSampledBitmapFromResource(
+            byteArray: ByteArray,
+            reqWidth: Int,
+            reqHeight: Int
+    ): Bitmap {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        return BitmapFactory.Options().run {
+            inJustDecodeBounds = true
+            // Calculate inSampleSize
+            inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
+            // Decode bitmap with inSampleSize set
+            inJustDecodeBounds = false
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this);
+        }
+    }
 }

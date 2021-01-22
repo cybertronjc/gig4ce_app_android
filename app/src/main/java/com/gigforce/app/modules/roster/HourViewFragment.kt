@@ -149,7 +149,10 @@ class HourViewFragment: RosterBaseFragment() {
         rosterViewModel.completedGigs = completedGigs
         rosterViewModel.currentGigs = currentGigs
         rosterViewModel.fulldayGigs = fullDayGigs
-        rosterViewModel.topBar.fullDayGigCard = null
+        if(rosterViewModel.topBar!=null){
+            rosterViewModel.topBar?.fullDayGigCard = null
+        }
+
 
 //        loadFirstTime()
 
