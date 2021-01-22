@@ -25,7 +25,7 @@
             android:layout_marginStart="16dp"
             android:scaleX="0.6"
             android:scaleY="0.6"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:layout_width="wrap_content"

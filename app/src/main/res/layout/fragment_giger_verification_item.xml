@@ -48,7 +48,7 @@
         android:layout_height="47dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="15dp"
-        android:src="@drawable/ic_next_screen" />
+          app:srcCompat="@drawable/ic_next_screen" />
 
 
 </RelativeLayout>

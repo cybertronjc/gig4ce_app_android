@@ -83,7 +83,7 @@
         <service
             android:name=".modules.chatmodule.service.FetchContactsService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
 
         <meta-data
@@ -113,7 +113,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".utils.DocViewerActivity"

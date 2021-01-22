@@ -172,7 +172,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:src="@drawable/ic_quiz"/>
+                          app:srcCompat="@drawable/ic_quiz"/>
 
 
                     <TextView
@@ -229,7 +229,7 @@
                         android:layout_marginBottom="2dp"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintEnd_toStartOf="@+id/time"
-                        android:src="@drawable/ic_clock_assessment" />
+                          app:srcCompat="@drawable/ic_clock_assessment" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>

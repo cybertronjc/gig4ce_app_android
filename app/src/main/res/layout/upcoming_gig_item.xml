@@ -116,7 +116,7 @@
                 android:layout_height="36dp"
                 android:scaleY="0.4"
                 android:scaleX="0.4"
-                android:src="@drawable/ic_chat"
+                  app:srcCompat="@drawable/ic_chat"
             />
 
         </androidx.cardview.widget.CardView>
@@ -144,7 +144,7 @@
                 android:scaleY="0.4"
                 android:scaleX="0.4"
                 android:tint="@color/lipstick"
-                android:src="@drawable/fui_ic_phone_white_24dp"
+                  app:srcCompat="@drawable/fui_ic_phone_white_24dp"
                 />
 
         </androidx.cardview.widget.CardView>

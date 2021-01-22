@@ -367,16 +367,17 @@ class ProfileFragment : BaseFragment() {
                 findNavController().navigate(R.id.educationExpandedFragment)
             }
 
+
             var mainExperienceString = ""
             profile.experiences?.let {
                 val experiences = it.sortedByDescending { experience -> experience.startDate }
                 if (experiences.isNotEmpty()) {
-                    mainExperienceString += experiences[0].title + "\n"
-                    mainExperienceString += experiences[0].employmentType + "\n"
-                    mainExperienceString += experiences[0].location + "\n"
-                    mainExperienceString += format.format(experiences[0].startDate!!) + "-"
-                    mainExperienceString += if (experiences[0].endDate != null) format.format(
-                            experiences[0].endDate!!
+                    mainExperienceString += (experiences[0]?.title ?: "") + "\n"
+                    mainExperienceString += experiences[0]?.employmentType ?: "" + "\n"
+                    mainExperienceString += experiences[0]?.location ?: "" + "\n"
+                    mainExperienceString += format.format(experiences[0]?.startDate ?: "") + "-"
+                    mainExperienceString += if (experiences[0]?.endDate != null) format.format(
+                            experiences[0]?.endDate ?: ""
                     ) + "\n"
                     else "current" + "\n"
                 }

@@ -25,7 +25,7 @@
                 android:layout_marginStart="@dimen/size_16"
                 android:scaleType="centerCrop"
 
-                android:src="@drawable/ic_arrow_back_black"
+                  app:srcCompat="@drawable/ic_arrow_back_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -74,7 +74,7 @@
                 android:paddingBottom="@dimen/size_8"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
-                android:src="@drawable/ic_three_dots"
+                  app:srcCompat="@drawable/ic_three_dots"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -136,7 +136,7 @@
             android:layout_marginStart="14dp"
             android:scaleX="0.7"
             android:scaleY="0.7"
-            android:src="@drawable/ic_attachment_grey" />
+              app:srcCompat="@drawable/ic_attachment_grey" />
 
         <EditText
             android:id="@+id/et_typedMessageValue"
@@ -160,7 +160,7 @@
             android:layout_marginEnd="10dp"
             android:scaleX="0.7"
             android:scaleY="0.7"
-            android:src="@drawable/ic_baseline_send_24" />
+              app:srcCompat="@drawable/ic_baseline_send_24" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -35,7 +35,7 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/ic_cross_grey"
+                  app:srcCompat="@drawable/ic_cross_grey"
                 app:tint="@color/white" />
 
             <TextView

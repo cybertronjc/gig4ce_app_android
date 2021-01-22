@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:src="@drawable/ic_arrow_back_black"
+                      app:srcCompat="@drawable/ic_arrow_back_black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -164,7 +164,7 @@
         <ImageView
             android:layout_width="226dp"
             android:layout_height="189dp"
-            android:src="@drawable/bg_no_chat" />
+              app:srcCompat="@drawable/bg_no_chat" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -209,7 +209,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_homescreen_chat"
+          app:srcCompat="@drawable/ic_homescreen_chat"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

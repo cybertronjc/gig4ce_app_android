@@ -28,7 +28,7 @@
             android:scaleY="0.6"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_margin="16dp"
-        android:src="@drawable/avatar"
+          app:srcCompat="@drawable/avatar"
         android:clickable="true"
         android:focusable="true"
         android:scaleType="fitXY"
@@ -89,7 +89,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:tint="@color/colorPrimary"
-            android:src="@drawable/ic_edit" />
+              app:srcCompat="@drawable/ic_edit" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -19,7 +19,7 @@
         android:layout_marginEnd="22dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_cross_grey" />
+          app:srcCompat="@drawable/ic_cross_grey" />
 
     <TextView
         android:id="@+id/gig_message_tv"

@@ -29,7 +29,7 @@
         <!--        android:layout_width="match_parent"-->
         <!--        android:layout_height="45dp"-->
         <!--        android:alpha="0.25"-->
-        <!--        android:src="@drawable/translucent_bar_grey"-->
+        <!--          app:srcCompat="@drawable/translucent_bar_grey"-->
         <!--        app:layout_constraintTop_toTopOf="parent"-->
         <!--        />-->
 

@@ -26,7 +26,7 @@
             android:layout_marginStart="16dp"
             android:scaleX="0.6"
             android:scaleY="0.6"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:id="@+id/tv_tb_title_amb_appl"
@@ -62,7 +62,7 @@
                 android:layout_height="96dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_apply_ambassador"
+                  app:srcCompat="@drawable/ic_apply_ambassador"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +200,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -280,7 +280,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

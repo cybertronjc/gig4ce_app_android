@@ -57,7 +57,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_weight="1"
-            android:src="@drawable/ic_delete" />
+              app:srcCompat="@drawable/ic_delete" />
 
     </RelativeLayout>
 

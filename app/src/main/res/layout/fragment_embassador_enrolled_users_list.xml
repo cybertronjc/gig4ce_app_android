@@ -35,7 +35,7 @@
                     android:layout_marginStart="16dp"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
-                    android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+                      app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
                     android:id="@+id/tb_title_enrollment"
@@ -132,7 +132,7 @@
             android:id="@+id/share_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_icon_share"
+              app:srcCompat="@drawable/ic_icon_share"
             app:layout_constraintEnd_toStartOf="@+id/textView22"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -216,7 +216,7 @@
                 android:layout_width="230dp"
                 android:layout_height="180dp"
                 android:layout_gravity="center"
-                android:src="@drawable/banner_users_grid" />
+                  app:srcCompat="@drawable/banner_users_grid" />
 
             <TextView
                 android:id="@+id/tv_no_profiles_title"
@@ -275,7 +275,7 @@
                     android:id="@+id/share_icon_"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_icon_share"
+                      app:srcCompat="@drawable/ic_icon_share"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/share_link_text"
                     app:layout_constraintHorizontal_bias="0.5"

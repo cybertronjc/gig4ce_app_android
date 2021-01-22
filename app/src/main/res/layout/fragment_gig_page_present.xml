@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_gig_type"
+                      app:srcCompat="@drawable/bg_gig_type"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -233,7 +233,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="18dp"
-                            android:src="@drawable/ic_check_in_green"
+                              app:srcCompat="@drawable/ic_check_in_green"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -270,7 +270,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginEnd="18dp"
-                            android:src="@drawable/ic_checkout"
+                              app:srcCompat="@drawable/ic_checkout"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -370,7 +370,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_calendar"
+                      app:srcCompat="@drawable/ic_calendar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -440,7 +440,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="18dp"
-                            android:src="@drawable/ic_check_in_green"
+                              app:srcCompat="@drawable/ic_check_in_green"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -477,7 +477,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginEnd="18dp"
-                            android:src="@drawable/ic_checkout"
+                              app:srcCompat="@drawable/ic_checkout"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -904,7 +904,7 @@
                         android:layout_height="36dp"
                         android:scaleX="0.4"
                         android:scaleY="0.4"
-                        android:src="@drawable/fui_ic_phone_white_24dp"
+                          app:srcCompat="@drawable/fui_ic_phone_white_24dp"
                         android:tint="@color/lipstick" />
 
                 </androidx.cardview.widget.CardView>
@@ -931,7 +931,7 @@
                         android:layout_height="36dp"
                         android:scaleX="0.4"
                         android:scaleY="0.4"
-                        android:src="@drawable/ic_chat" />
+                          app:srcCompat="@drawable/ic_chat" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -975,7 +975,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_calendar"
+                      app:srcCompat="@drawable/ic_calendar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
 
@@ -1335,7 +1335,7 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_contact_us"
+                      app:srcCompat="@drawable/ic_contact_us"
                     app:layout_constraintLeft_toLeftOf="@id/contactUsLayout"
                     app:layout_constraintTop_toTopOf="@id/contactUsLayout" />
 
@@ -1357,7 +1357,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@id/contactUsLayout"
                     app:layout_constraintEnd_toEndOf="@id/contactUsLayout"
                     app:layout_constraintTop_toTopOf="@id/contactUsLayout" />
@@ -1387,7 +1387,7 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_referal"
+                      app:srcCompat="@drawable/ic_referal"
                     app:layout_constraintLeft_toLeftOf="@id/provide_feedback"
                     app:layout_constraintTop_toTopOf="@id/provide_feedback" />
 
@@ -1409,7 +1409,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@id/provide_feedback"
                     app:layout_constraintEnd_toEndOf="@id/provide_feedback"
                     app:layout_constraintTop_toTopOf="@id/provide_feedback" />

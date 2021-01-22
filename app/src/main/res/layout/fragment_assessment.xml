@@ -283,7 +283,7 @@
         android:layout_width="@dimen/size_24"
         android:layout_height="@dimen/size_24"
         android:alpha="0.6"
-        android:src="@drawable/ic_baseline_arrow_downward_24"
+          app:srcCompat="@drawable/ic_baseline_arrow_downward_24"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"

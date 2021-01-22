@@ -98,7 +98,7 @@
             android:layout_marginRight="16dp"
             android:scaleX="0.8"
             android:scaleY="0.8"
-            android:src="@drawable/ic_homescreen_chat"
+              app:srcCompat="@drawable/ic_homescreen_chat"
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toStartOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/cardView" />
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_landinghome_search"
+              app:srcCompat="@drawable/ic_landinghome_search"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
             app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
@@ -140,7 +140,7 @@
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/placeholder_user"
+                  app:srcCompat="@drawable/placeholder_user"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.cardview.widget.CardView>

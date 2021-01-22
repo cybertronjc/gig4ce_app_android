@@ -18,7 +18,7 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_arrow_back_24"
+          app:srcCompat="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintTop_toTopOf="@+id/cardView3"
         app:layout_constraintStart_toStartOf="@+id/cardView3"
         android:layout_marginLeft="16dp"
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:src="@drawable/jd_screen"/>
+              app:srcCompat="@drawable/jd_screen"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="60dp"/>

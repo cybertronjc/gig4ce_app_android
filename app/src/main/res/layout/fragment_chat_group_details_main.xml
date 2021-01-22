@@ -31,7 +31,7 @@
                     android:layout_marginTop="16dp"
                     android:scaleX="0.7"
                     android:scaleY="0.7"
-                    android:src="@drawable/ic_arrow_back_black"
+                      app:srcCompat="@drawable/ic_arrow_back_black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,14 +44,14 @@
                     android:scaleX="0.7"
                     android:scaleY="0.7"
                     android:visibility="gone"
-                    android:src="@drawable/ic_ellipses"
+                      app:srcCompat="@drawable/ic_ellipses"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="226dp"
-                    android:src="@drawable/ic_group"
+                      app:srcCompat="@drawable/ic_group"
                     app:layout_constraintTop_toBottomOf="@id/back_btn" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -104,7 +104,7 @@
                     android:scaleY="0.8"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_edit"
+                      app:srcCompat="@drawable/ic_edit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/black" />
@@ -163,7 +163,7 @@
                     android:layout_marginEnd="16dp"
                     android:scaleY="0.75"
                     android:scaleX="0.75"
-                    android:src="@drawable/ic_forward"
+                      app:srcCompat="@drawable/ic_forward"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/group_details_divider_1" />
 
@@ -222,7 +222,7 @@
                     android:layout_height="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_forward"
+                      app:srcCompat="@drawable/ic_forward"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/group_details_divider_2" />
 
@@ -266,7 +266,7 @@
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/ic_search_calendar"
+                          app:srcCompat="@drawable/ic_search_calendar"
                         app:tint="@color/colorPrimary" />
 
                 </LinearLayout>
@@ -295,7 +295,7 @@
                         app:elevation="0dp"
                         app:borderWidth="0dp"
                         android:id="@+id/add_contact_fab"
-                        android:src="@drawable/ic_plus_icon"
+                          app:srcCompat="@drawable/ic_plus_icon"
                         android:textSize="20sp"
                         app:tint="@color/white"
                         android:backgroundTint="@color/colorPrimary"

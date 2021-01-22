@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="47dp"
-        android:src="@drawable/ic_arrow_back_black"
+          app:srcCompat="@drawable/ic_arrow_back_black"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

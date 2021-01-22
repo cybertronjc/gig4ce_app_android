@@ -5,9 +5,11 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -43,6 +45,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PhotoCrop : AppCompatActivity() {
+
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -107,6 +110,9 @@ class PhotoCrop : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
+        if(android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        }
 
         this.setContentView(R.layout.activity_photo_crop)
         storage = FirebaseStorage.getInstance()
@@ -198,6 +204,7 @@ class PhotoCrop : AppCompatActivity() {
         super.finish()
 
     }
+
 
 
     override fun onActivityResult(

@@ -16,7 +16,7 @@
         android:scaleX="0.9"
         android:scaleY="0.9"
         app:tint="@color/white"
-        android:src="@drawable/ic_cross_grey"
+          app:srcCompat="@drawable/ic_cross_grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -27,7 +27,7 @@
         android:layout_height="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:src="@drawable/ic_ellipses"
+          app:srcCompat="@drawable/ic_ellipses"
         app:tint="@color/white"
         android:clickable="true"
         android:focusable="true"
@@ -82,7 +82,7 @@
         android:textSize="12sp"
         android:textColor="#ffffff"
         android:layout_marginTop="4dp"
-        android:src="@drawable/ic_star"
+          app:srcCompat="@drawable/ic_star"
         app:layout_constraintTop_toBottomOf="@id/gig_company_name_tv"
         app:layout_constraintStart_toStartOf="@id/gig_title_tv"
         tools:text="\ufeff@ Procter &amp; Gamble" />
@@ -95,7 +95,7 @@
         android:textColor="#ffffff"
         android:layout_marginTop="6dp"
         android:layout_marginStart="4dp"
-        android:src="@drawable/ic_star"
+          app:srcCompat="@drawable/ic_star"
         app:layout_constraintTop_toBottomOf="@id/gig_company_name_tv"
         app:layout_constraintStart_toEndOf="@id/company_star_logo_tv"
         tools:text="4.3" />

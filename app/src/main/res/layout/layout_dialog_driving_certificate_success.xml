@@ -13,7 +13,7 @@
         android:layout_marginStart="@dimen/size_29"
         android:layout_marginTop="@dimen/size_47"
         android:layout_marginEnd="@dimen/size_34"
-        android:src="@drawable/ic_image_driving_cert"
+          app:srcCompat="@drawable/ic_image_driving_cert"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

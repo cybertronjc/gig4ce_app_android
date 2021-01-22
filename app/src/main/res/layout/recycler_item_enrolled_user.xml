@@ -49,7 +49,7 @@
         android:layout_width="12dp"
         android:layout_height="12dp"
         android:layout_toLeftOf="@id/user_name_tv"
-        android:src="@drawable/ic_done" />
+          app:srcCompat="@drawable/ic_done" />
 
     <TextView
         android:id="@+id/user_added_time"

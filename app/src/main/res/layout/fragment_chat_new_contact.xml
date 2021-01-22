@@ -166,7 +166,7 @@
                 android:layout_height="26dp"
                 android:scaleX="0.6"
                 android:scaleY="0.6"
-                android:src="@drawable/ic_plus_icon"
+                  app:srcCompat="@drawable/ic_plus_icon"
                 app:tint="@color/colorPrimary" />
 
             <TextView
@@ -230,7 +230,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_settings" />
+                  app:srcCompat="@drawable/ic_settings" />
 
             <TextView
                 android:layout_width="match_parent"

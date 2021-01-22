@@ -51,27 +51,13 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_attendance.*
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.addressTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.attendanceCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.callCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyLogoIV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.companyNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.contactPersonTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.durationTextTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.favoriteCB
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigIdTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.gigTypeTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.messageCardView
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.roleNameTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.shiftTV
-import kotlinx.android.synthetic.main.fragment_gig_page_attendance.wageTV
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
 
 class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
-    DeclineGigDialogFragmentResultListener {
+        DeclineGigDialogFragmentResultListener {
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
@@ -230,7 +216,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
         callCardView.setOnClickListener {
 
-            if (gig?.gigContactDetails?.contactNumberString.isNullOrEmpty()==false) {
+            if (gig?.gigContactDetails?.contactNumberString.isNullOrEmpty() == false) {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", gig!!.gigContactDetails?.contactNumber?.toString(), null))
                 startActivity(intent)
             }
@@ -339,7 +325,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         contactPersonTV.text = gig.gigContactDetails?.contactName
-        callCardView.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty()==false
+        callCardView.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty() == false
 
         addressTV.setOnClickListener {
 
@@ -584,7 +570,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             PERMISSION_FINE_LOCATION -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults != null && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
                 } else {
@@ -606,23 +592,23 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
             R.id.action_share -> {
                 true
             }
-            R.id.action_decline_gig ->{
-                if(gig == null)
+            R.id.action_decline_gig -> {
+                if (gig == null)
                     return true
 
-                if(gig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()){
+                if (gig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()) {
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Cannot decline past or ongoing gig")
-                        .setPositiveButton(getString(R.string.okay_text)){_,_ -> }
-                        .show()
+                            .setTitle("Alert")
+                            .setMessage("Cannot decline past or ongoing gig")
+                            .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
+                            .show()
 
                     return true
                 }
 
-                if(gig != null ) {
+                if (gig != null) {
                     declineGigDialog()
                 }
                 true

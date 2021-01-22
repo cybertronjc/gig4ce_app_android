@@ -26,15 +26,15 @@ class Login : BaseFragment() {
         fun newInstance() = Login()
         val PERMISSION_REQ_CODE = 100
         val permissionsRequired = arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_PHONE_NUMBERS
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
         )
         var MOBILENO_INPUT_CHANGED = false
     }
 
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
-        Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
+            Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
 
     //        private val INDIAN_MOBILE_NUMBER =
 //        Pattern.compile("^[+][0-9]{12}\$")
@@ -53,9 +53,9 @@ class Login : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
@@ -76,18 +76,20 @@ class Login : BaseFragment() {
 //                showComfortDialog()
         }
     }
+
     fun hideKeyboard() {
         val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         //Find the currently focused view, so we can grab the correct window token from it.
         var view = activity?.getCurrentFocus()
         //If no view currently has focus, create a new one, just so we can grab a window token from it
-        view?:run {
+        view ?: run {
             view = View(activity)
         }
         view?.let {
-        imm?.hideSoftInputFromWindow(it.getWindowToken(), 0)
+            imm?.hideSoftInputFromWindow(it.getWindowToken(), 0)
         }
     }
+
     private fun showComfortDialog() {
         val dialog = activity?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -102,7 +104,7 @@ class Login : BaseFragment() {
             removeIntroComplete()
             popFragmentFromStack(R.id.Login)
             navigate(
-                R.id.authFlowFragment
+                    R.id.authFlowFragment
             )
             dialog?.dismiss()
         }
@@ -126,10 +128,10 @@ class Login : BaseFragment() {
         if (getNavigationController().currentDestination?.id == R.id.Login) {
             try {
                 findNavController().navigate(
-                    LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
-                        otp_mobile_number.text.toString()
-                    )
+                        LoginDirections.actionLogin2ToVerifyOTP(
+                                viewModel.verificationId!!,
+                                otp_mobile_number.text.toString()
+                        )
                 )
             } catch (e: Exception) {
             }
@@ -140,7 +142,7 @@ class Login : BaseFragment() {
         cvloginwrong.visibility = INVISIBLE
         otp_mobile_number.doAfterTextChanged {
             showWrongMobileNoLayout(false)
-            if(otp_mobile_number.text.toString().length==10){
+            if (otp_mobile_number.text.toString().length == 10) {
                 hideKeyboard()
             }
         }
@@ -215,13 +217,13 @@ class Login : BaseFragment() {
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                requireActivity(),
-                android.R.layout.select_dialog_item,
-                deviceMobileNos
+                    requireActivity(),
+                    android.R.layout.select_dialog_item,
+                    deviceMobileNos
             )
             otp_mobile_number.threshold = 1
             otp_mobile_number.setAdapter(
-                adapter
+                    adapter
             )
         }
     }

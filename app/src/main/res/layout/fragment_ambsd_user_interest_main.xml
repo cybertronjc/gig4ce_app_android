@@ -24,7 +24,7 @@
             android:scaleY="0.6"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
 
         <ImageView
             android:layout_width="80dp"
-            android:src="@drawable/banner_users_grid"
+              app:srcCompat="@drawable/banner_users_grid"
             android:layout_height="match_parent"/>
 
         <TextView

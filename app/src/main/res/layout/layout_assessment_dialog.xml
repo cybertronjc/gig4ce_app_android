@@ -34,7 +34,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/assessment_dialog_background"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/bg_dialog_top"
+                      app:srcCompat="@drawable/bg_dialog_top"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

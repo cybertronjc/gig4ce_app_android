@@ -80,7 +80,7 @@
                     android:focusable="true"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
-                    android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+                      app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/banner_users_grid" />
+                      app:srcCompat="@drawable/banner_users_grid" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -158,7 +158,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/ic_done"
+                  app:srcCompat="@drawable/ic_done"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/user_name_et"
                 app:layout_constraintEnd_toEndOf="@id/user_name_et"
@@ -220,7 +220,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/ic_done"
+                  app:srcCompat="@drawable/ic_done"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/date_of_birth_et"
                 app:layout_constraintEnd_toEndOf="@id/date_of_birth_et"
@@ -352,7 +352,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/ic_done"
+                  app:srcCompat="@drawable/ic_done"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/pin_code_et"
                 app:layout_constraintEnd_toEndOf="@id/pin_code_et"

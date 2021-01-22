@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp"
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/size_16"
                         android:layout_marginTop="@dimen/size_16"
-                        android:src="@drawable/pending_icon"
+                          app:srcCompat="@drawable/pending_icon"
                         app:layout_constraintEnd_toStartOf="@+id/alert_message"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -167,7 +167,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/font_16"
                             android:layout_marginTop="@dimen/font_16"
-                            android:src="@drawable/contact_avatar"
+                              app:srcCompat="@drawable/contact_avatar"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -188,7 +188,7 @@
                             android:id="@+id/imageView47"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/call_primary"
+                              app:srcCompat="@drawable/call_primary"
                             app:layout_constraintBottom_toBottomOf="@+id/textView145"
                             app:layout_constraintStart_toStartOf="@+id/textView144"
                             app:layout_constraintTop_toTopOf="@+id/textView145" />
@@ -211,7 +211,7 @@
                             android:id="@+id/imageView49"
                             android:layout_width="12dp"
                             android:layout_height="12dp"
-                            android:src="@drawable/location_primary"
+                              app:srcCompat="@drawable/location_primary"
                             app:layout_constraintBottom_toBottomOf="@+id/textView146"
                             app:layout_constraintStart_toStartOf="@+id/imageView47"
                             app:layout_constraintTop_toTopOf="@+id/textView146" />
@@ -270,7 +270,7 @@
                                 android:id="@+id/imageView50"
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
-                                android:src="@drawable/chat_primary"
+                                  app:srcCompat="@drawable/chat_primary"
                                 app:layout_constraintBottom_toBottomOf="@+id/textView147"
                                 app:layout_constraintEnd_toStartOf="@+id/textView149"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -315,7 +315,7 @@
                                 android:id="@+id/imageView152"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/call_white"
+                                  app:srcCompat="@drawable/call_white"
                                 app:layout_constraintBottom_toBottomOf="@+id/call"
                                 app:layout_constraintEnd_toStartOf="@+id/textView151"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -396,7 +396,7 @@
                     android:layout_marginEnd="13dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:src="@drawable/ic_time"
+                      app:srcCompat="@drawable/ic_time"
                     android:visibility="gone"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -575,7 +575,7 @@
                     android:layout_width="@dimen/size_24"
                     android:layout_height="@dimen/size_24"
                     android:layout_marginEnd="@dimen/size_24"
-                    android:src="@drawable/ic_call_drawable"
+                      app:srcCompat="@drawable/ic_call_drawable"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/textView137"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -585,7 +585,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@+id/textView137"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView136" />
@@ -644,7 +644,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@+id/textView139"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView138" />
@@ -695,7 +695,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@+id/textView143"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView142" />

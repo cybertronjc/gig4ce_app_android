@@ -46,7 +46,7 @@
                 android:focusable="true"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
-                android:src="@drawable/ic_record" />
+                  app:srcCompat="@drawable/ic_record" />
 
         </LinearLayout>
 
@@ -73,7 +73,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
 
-                    android:src="@drawable/ic_record" />
+                      app:srcCompat="@drawable/ic_record" />
 
                 <TextView
                     android:id="@+id/countDownTimerTV"

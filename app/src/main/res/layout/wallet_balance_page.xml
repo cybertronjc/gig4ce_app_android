@@ -97,7 +97,7 @@
                     android:id="@+id/zero_balance_transaction_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_zero_balance_transaction"
+                      app:srcCompat="@drawable/ic_zero_balance_transaction"
                     android:layout_marginTop="28dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

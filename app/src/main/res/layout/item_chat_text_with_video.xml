@@ -50,7 +50,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_play_2" />
+                      app:srcCompat="@drawable/ic_play_2" />
 
                 <ProgressBar
                     android:id="@+id/attachment_downloading_pb"
@@ -80,7 +80,7 @@
                             android:layout_height="10dp"
                             android:scaleX="0.7"
                             android:scaleY="0.7"
-                            android:src="@drawable/ic_play" />
+                              app:srcCompat="@drawable/ic_play" />
 
                         <TextView
                             android:id="@+id/video_length_tv"

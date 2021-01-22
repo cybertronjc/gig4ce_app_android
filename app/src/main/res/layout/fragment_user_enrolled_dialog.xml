@@ -46,7 +46,7 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginTop="22dp"
-            android:src="@drawable/banner_happy_feeling"
+              app:srcCompat="@drawable/banner_happy_feeling"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />
@@ -127,7 +127,7 @@ Soon gigs will assign to him, and you will receive your incentive." />
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginTop="22dp"
-            android:src="@drawable/bg_undraw_filing_system_b_5_d_2"
+              app:srcCompat="@drawable/bg_undraw_filing_system_b_5_d_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />

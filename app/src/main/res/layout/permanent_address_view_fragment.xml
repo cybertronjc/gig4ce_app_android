@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:src="@drawable/ic_baseline_arrow_back_24"
+          app:srcCompat="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/textView100"
         app:layout_constraintBottom_toBottomOf="@id/textView100"/>
@@ -58,7 +58,7 @@
             android:layout_height="16dp"
             android:layout_marginTop="19dp"
             android:layout_marginEnd="23dp"
-            android:src="@drawable/ic_pencil_edit"
+              app:srcCompat="@drawable/ic_pencil_edit"
             app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
             app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
 
@@ -207,7 +207,7 @@
         android:layout_width="22dp"
         android:layout_height="19dp"
         android:layout_marginEnd="23dp"
-        android:src="@drawable/ic_warning"
+          app:srcCompat="@drawable/ic_warning"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/textView110"
         app:layout_constraintTop_toTopOf="@+id/textView110"

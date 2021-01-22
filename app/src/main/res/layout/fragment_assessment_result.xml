@@ -46,7 +46,7 @@
                     android:layout_marginBottom="@dimen/size_5"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_remarks_assess_result" />
+                      app:srcCompat="@drawable/ic_remarks_assess_result" />
 
                 <View
                     android:id="@+id/v_c_v_res_remarks_assess_result"
