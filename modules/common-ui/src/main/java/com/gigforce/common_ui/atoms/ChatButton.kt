@@ -20,7 +20,7 @@ class ChatButton(context: Context, attrs: AttributeSet?):
 class IconButton(context: Context, attrs: AttributeSet?) : AppCompatImageButton(context, attrs) {
 
     companion object{
-        fun d
+//        fun d
     }
 
 }
