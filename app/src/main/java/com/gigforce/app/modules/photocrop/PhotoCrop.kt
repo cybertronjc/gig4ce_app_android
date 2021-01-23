@@ -200,9 +200,7 @@ class PhotoCrop : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         super.finish()
-
     }
 
 
