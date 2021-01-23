@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Environment
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,13 +15,17 @@ import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.utils.getScreenWidth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.size.AspectRatio
+import com.otaliastudios.cameraview.size.Size
+import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_picture_preview.*
-import java.io.ByteArrayOutputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,6 +45,7 @@ class ImageCaptureActivity : AppCompatActivity() {
 
             if (!show_img_cl.isVisible) {
                 cameraView.takePicture()
+
             }
         }
 
@@ -60,10 +66,16 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun uploadImage() {
         showToast("Uploading Image")
         progress_circular.visible()
-        var compressByteArray =
-                bitmapToByteArray(getResizedBitmap(byteArrayToBitmap(pictureResult!!.data), 750))
-        var selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
-        var mReference = FirebaseStorage.getInstance().reference
+        val sd = Environment.getExternalStorageDirectory();
+        val image = File(filesDir, "capture.jpg")
+        val bos =  BufferedOutputStream( FileOutputStream(image));
+        bos.write(pictureResult?.data);
+        bos.flush();
+        bos.close()
+        val bitmap = getBitmap(image.absolutePath)!!
+        val compressByteArray = bitmapToByteArray(getResizedBitmap(bitmap, 750))
+        val selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
+        val mReference = FirebaseStorage.getInstance().reference
                 .child("attendance")
                 .child(selfieImg)
         lateinit var uploadTask: UploadTask
@@ -104,6 +116,18 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun initCamera() {
 
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
+        val size = getScreenWidth(this)
+        val width = SizeSelectors.minWidth(size.width)
+        val height = SizeSelectors.minHeight(size.height)
+        val dimensions = SizeSelectors.and(width, height) // Matches sizes bigger than 1000x2000.
+        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(Size(size.width, size.height)), 0f) // Matches 1:1 sizes.
+        val result = SizeSelectors.or(
+                SizeSelectors.and(ratio, dimensions),  // Try to match both constraints
+                ratio,  // If none is found, at least try to match the aspect ratio
+                SizeSelectors.biggest() // If none is found, take the biggest
+        )
+        cameraView.setPictureSize(result)
+        cameraView.setVideoSize(result)
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
     }
@@ -170,7 +194,7 @@ class ImageCaptureActivity : AppCompatActivity() {
     }
 
     fun byteArrayToBitmap(byteArray: ByteArray): Bitmap {
-        return decodeSampledBitmapFromResource(byteArray, 1080, 1920)
+        return decodeSampledBitmapFromResource(byteArray, 720, 1280)
     }
 
     fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
@@ -229,5 +253,18 @@ class ImageCaptureActivity : AppCompatActivity() {
             inJustDecodeBounds = false
             return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this);
         }
+    }
+
+    fun getBitmap(path: String?): Bitmap? {
+        var bitmap: Bitmap? = null
+        try {
+            val f = File(path)
+            val options = BitmapFactory.Options()
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            bitmap = BitmapFactory.decodeStream(FileInputStream(f), null, options)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return bitmap
     }
 }
