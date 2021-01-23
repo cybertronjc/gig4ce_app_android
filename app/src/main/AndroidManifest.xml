@@ -30,7 +30,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/GigforceTheme"
         android:name=".MainApplication"
         tools:replace="android:allowBackup">
         <!--

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,11 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="19dp"
         android:layout_marginTop="40dp"
-        android:fontFamily="@font/lato_bold"
-        android:letterSpacing="0"
         android:text="Hello"
-        android:textColor="#cd000000"
-        android:textSize="22sp"
+        style="@style/AppBarTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,16 +29,11 @@
         android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/lato"
-        android:letterSpacing="0.02"
         android:text="Amit Dhiman"
-        android:textColor="#000000"
-        android:textSize="16sp"
+        style="@style/AppBarSubTitle"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-
 
     <com.gigforce.common_ui.cells.AppChatComponent
         android:id="@+id/chat_fragment"
@@ -51,13 +45,22 @@
         app:layout_constraintTop_toTopOf="@+id/appProfileComponent" />
 
 
-    <com.gigforce.common_ui.cells.AppProfileComponent
+    <com.gigforce.common_ui.cells.AppProfilePicComponent
         android:id="@+id/appProfileComponent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/size16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </com.gigforce.common_ui.cells.AppProfilePicComponent>
+
+    <com.gigforce.common_ui.atoms.ChatButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

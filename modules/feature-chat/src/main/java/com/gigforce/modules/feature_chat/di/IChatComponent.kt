@@ -1,5 +1,6 @@
 package com.gigforce.modules.feature_chat.di
 
+import com.gigforce.modules.feature_chat.ui.ChatButton
 import com.gigforce.modules.feature_chat.ui.ChatListItem
 import dagger.Subcomponent
 
@@ -13,4 +14,5 @@ interface IChatComponent {
 
     // Classes that can be injected by this Component
     fun inject(item: ChatListItem)
+    fun inject(item: ChatButton)
 }

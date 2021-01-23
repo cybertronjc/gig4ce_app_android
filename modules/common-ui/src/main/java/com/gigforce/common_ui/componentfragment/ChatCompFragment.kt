@@ -24,7 +24,7 @@ class ChatCompFragment : Fragment(),View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        chat_component.chatImage.setOnClickListener(this)
+        // todo: chat_component.chatImage.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {

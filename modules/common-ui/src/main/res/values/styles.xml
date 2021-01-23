@@ -3,62 +3,177 @@
     <style name="StandardCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/lato_bold</item>
-        <item name="android:textSize">@dimen/font16</item>
+        <item name="android:textSize">@dimen/sp_large</item>
     </style>
 
     <style name="StandardCardDescription" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black_42</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font14</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
     <style name="StandardCardAction" parent="Widget.MaterialComponents.Button.TextButton">
 <!--        <item name="android:textColor">@color/colorPrimary</item>-->
         <item name="fontFamily">@font/lato_bold</item>
-        <item name="android:textSize">@dimen/font14</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
 
     </style>
 
     <style name="StandardCardActionTwo" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="colorPrimary">@color/greyish_brown</item>
         <item name="fontFamily">@font/lato_bold</item>
-        <item name="android:textSize">@dimen/font14</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
     <style name="FetureCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font18</item>
+        <item name="android:textSize">@dimen/sp_large</item>
     </style>
 
     <style name="FetureItemCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/d9_black</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font14</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
     <style name="FetureItemCardSubtitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font10</item>
+        <item name="android:textSize">@dimen/sp_sm2</item>
     </style>
 
     <style name="VideoInfoCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/lato_bold</item>
-        <item name="android:textSize">@dimen/font16</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
     <style name="VideoInfoItemCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/greyish_brown</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font14</item>
+        <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
     <style name="VideoInfoItemTimeCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/font12</item>
+        <item name="android:textSize">@dimen/sp_sm1</item>
+    </style>
+
+    <!--<style name="Gigforce.TextView">
+
+    </style>-->
+
+    <style name="TextAppearance.GigforceStyles.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">101sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">63sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">50sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="TextAppearance.GigforceStyles.Overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+
+    <style name="GigforceTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="textAppearanceBody1">@style/TextAppearance.GigforceStyles.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.GigforceStyles.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.GigforceStyles.Button</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.GigforceStyles.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.GigforceStyles.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.GigforceStyles.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.GigforceStyles.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.GigforceStyles.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.GigforceStyles.Headline6</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.GigforceStyles.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.GigforceStyles.Overline</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.GigforceStyles.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.GigforceStyles.Subtitle2</item>
+        <item name="testButtonStyle">@style/MyTestButtonStyle</item>
+    </style>
+
+    <style name="AppBarTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceHeadline5</item>
+    </style>
+
+    <style name="AppBarSubTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+    </style>
+
+    <style name="ChatButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:src">@drawable/ic_tip</item>
+    </style>
+
+    <style name="MyTestButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:src">@drawable/ic_set_preference</item>
+        <item name="backgroundTint">@color/colorError</item>
+        <item name="color">@color/white</item>
     </style>
 
 </resources>

@@ -3,11 +3,21 @@
 <!--    font data/-->
     <dimen name="font16">16sp</dimen>
     <dimen name="font14">14sp</dimen>
-    <dimen name="font18">18dp</dimen>
+    <dimen name="font18">18sp</dimen>
     <dimen name="font10">10sp</dimen>
     <dimen name="font12">12sp</dimen>
-    <!--    size -->
 
+
+    <dimen name="sp_sm3">12sp</dimen>
+    <dimen name="sp_sm2">14sp</dimen>
+    <dimen name="sp_sm1">16sp</dimen>
+    <dimen name="sp_normal">18sp</dimen>
+    <dimen name="sp_large">22sp</dimen>
+    <dimen name="sp_xl1">26sp</dimen>
+    <dimen name="sp_xl2">30sp</dimen>
+    <dimen name="sp_xl3">34sp</dimen>
+
+    <!--    size -->
     <dimen name="size16">16dp</dimen>
     <dimen name="size8">8dp</dimen>
     <dimen name="size4">4dp</dimen>

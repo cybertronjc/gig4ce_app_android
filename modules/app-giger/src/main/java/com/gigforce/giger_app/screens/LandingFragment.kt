@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.core.ILoginInfoProvider
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
 import kotlinx.android.synthetic.main.fragment_landing.*
@@ -36,8 +37,18 @@ class LandingFragment : Fragment() {
             help_layout.bind(it.get(8))
             landing_rv.collection = it
         })
-
+        initViews()
         listeners()
+    }
+
+    private fun initViews() {
+        (this.context?.applicationContext as? ILoginInfoProvider)?.provideLoginInfo() ?. let {
+
+        } ?: let {
+
+        }
+//        set profile name profile_name
+//        set profile image
     }
 
     private fun listeners() {
@@ -51,6 +62,10 @@ class LandingFragment : Fragment() {
 //                navigate(R.id.ambassadorProgramDetailsFragment)
 //            }
         })
+
+        /*app_bar.chat_fragment.setOnClickListener{
+            //call chat header fragment
+        }*/
 
     }
 

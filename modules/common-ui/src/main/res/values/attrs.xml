@@ -15,4 +15,8 @@
         <attr name="android:text" format="string"></attr>
     </declare-styleable>
 
+    <declare-styleable name="TestButton">
+        <attr name="testButtonStyle" format="reference" />
+    </declare-styleable>
+
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileCompoFragment">
 
-    <com.gigforce.common_ui.cells.AppProfileComponent
+    <com.gigforce.common_ui.cells.AppProfilePicComponent
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

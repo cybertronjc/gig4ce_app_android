@@ -26,8 +26,12 @@ class CommonViewTypes {
 
         const val VIEW_VIDEOS_LAYOUT = 20101
         const val VIEW_VIDEOS_ITEM_CARD = 20102
+
         const val VIEW_FEATURE_LAYOUT = 20201
         const val VIEW_FEATURE_ITEM_CARD = 20202
+
         const val VIEW_TEXT_OUTLINE_BUTTON = 20301
+
+        const val VIEW_PROFILE_PIC = 20401
     }
 }
