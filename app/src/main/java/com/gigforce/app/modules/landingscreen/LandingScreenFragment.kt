@@ -33,8 +33,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -51,29 +51,11 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
-import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
-import com.gigforce.app.views.MonthYearPickerDialog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
-import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
-import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
-import kotlin.collections.ArrayList
-import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -194,26 +176,26 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-            ConfigRepository.LatestAPPUpdateListener {
+                ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                     showConfirmationDialogType3(
-                        getString(R.string.new_version_available),
-                        getString(R.string.new_version_available_detail),
-                        getString(R.string.update_now),
-                        getString(R.string.cancel_update),
-                        object : ConfirmationDialogOnClickListener {
-                            override fun clickedOnYes(dialog: Dialog?) {
-                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                            }
+                            getString(R.string.new_version_available),
+                            getString(R.string.new_version_available_detail),
+                            getString(R.string.update_now),
+                            getString(R.string.cancel_update),
+                            object : ConfirmationDialogOnClickListener {
+                                override fun clickedOnYes(dialog: Dialog?) {
+                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                                }
 
-                            override fun clickedOnNo(dialog: Dialog?) {
-                                if (latestAPPUpdateModel?.force_update_required)
-                                    activity?.finish()
-                                dialog?.dismiss()
-                            }
+                                override fun clickedOnNo(dialog: Dialog?) {
+                                    if (latestAPPUpdateModel?.force_update_required)
+                                        activity?.finish()
+                                    dialog?.dismiss()
+                                }
 
-                        })
+                            })
             }
         })
     }
@@ -258,8 +240,8 @@ class LandingScreenFragment : BaseFragment() {
 
         try {
             result = context?.getPackageManager()
-                ?.getPackageInfo(context?.getPackageName(), 0)
-                ?.versionName ?: "";
+                    ?.getPackageInfo(context?.getPackageName(), 0)
+                    ?.versionName ?: "";
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
@@ -616,6 +598,7 @@ class LandingScreenFragment : BaseFragment() {
             )
             gigforce_tip.adapter = recyclerGenericAdapter
             var pagerHelper = PagerSnapHelper()
+            gigforce_tip.onFlingListener = null
             pagerHelper.attachToRecyclerView(gigforce_tip)
             var handler = Handler()
 //        val runnable = Runnable {
@@ -788,7 +771,7 @@ class LandingScreenFragment : BaseFragment() {
         }
         amb_join_open_btn.setOnClickListener {
 
-            if(profile == null)
+            if (profile == null)
                 return@setOnClickListener
 
             if (profile!!.isUserAmbassador) {
