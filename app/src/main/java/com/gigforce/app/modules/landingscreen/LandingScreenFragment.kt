@@ -120,6 +120,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+//        checkForDeepLink()
         setTipsInViewModel()
         initUI()
         initializeExploreByRole()
@@ -130,7 +131,7 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
-        checkForDeepLink()
+
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {
@@ -173,6 +174,7 @@ class LandingScreenFragment : BaseFragment() {
         } else if (navFragmentsData?.getData()
                         ?.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)!!
         ) {
+            popBackState()
             navigate(
                     R.id.fragment_client_activation, bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to navFragmentsData?.getData()
