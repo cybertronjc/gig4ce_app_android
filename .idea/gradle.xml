@@ -13,9 +13,12 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/modules" />
             <option value="$PROJECT_DIR$/modules/app-giger" />
+            <option value="$PROJECT_DIR$/modules/client-activation" />
             <option value="$PROJECT_DIR$/modules/common-ui" />
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/feature-chat" />
+            <option value="$PROJECT_DIR$/modules/learning" />
+            <option value="$PROJECT_DIR$/modules/profile" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

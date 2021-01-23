@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/size16"
     android:paddingTop="@dimen/size16">
+
     <View
         android:id="@+id/left_aligned"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_img"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/left_aligned"
         app:layout_constraintTop_toTopOf="@id/left_aligned">
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginRight="@dimen/size8"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            android:visibility="gone"/>
+            tools:srcCompat="@tools:sample/avatars" />
+
         <View
             android:id="@+id/margin_8"
             android:layout_width="@dimen/size8"
             android:layout_height="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/layout_img"
             app:layout_constraintStart_toEndOf="@+id/layout_img"
-            app:layout_constraintTop_toTopOf="@+id/layout_img"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="@+id/layout_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/layout_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Learning"
+        android:text="Learning"
         android:theme="@style/FetureCardTitle"
         app:layout_constraintBottom_toBottomOf="@id/left_aligned"
         app:layout_constraintStart_toEndOf="@+id/layout_img"
-        app:layout_constraintTop_toTopOf="@id/left_aligned"/>
+        app:layout_constraintTop_toTopOf="@id/left_aligned" />
 
     <com.gigforce.core.recyclerView.CoreRecyclerView
         android:id="@+id/featured_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size16"
+        android:layout_marginBottom="@dimen/size16"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/size16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_title"
-        android:layout_marginTop="@dimen/size16"
-        android:layout_marginBottom="@dimen/size16"
-        android:paddingRight="@dimen/size16"
-        android:clipToPadding="false"
-        android:orientation="horizontal"/>
+        app:layout_constraintTop_toBottomOf="@+id/layout_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

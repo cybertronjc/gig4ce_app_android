@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -38,7 +39,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -46,6 +46,9 @@ dependencies {
 
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:learning')
+    implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:profile')
 
     implementation 'com.google.dagger:dagger:2.31'
     kapt 'com.google.dagger:dagger-compiler:2.31'

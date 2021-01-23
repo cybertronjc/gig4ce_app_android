@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="OutlineTextButton">
+    <declare-styleable name="OutlineTextButtonComponent">
         <attr name="android:textAllCaps" format="boolean"></attr>
         <attr name="android:text" format="string"></attr>
     </declare-styleable>
@@ -10,7 +10,7 @@
         <attr name="android:orientation" format="integer"></attr>
     </declare-styleable>
 
-    <declare-styleable name="StandardTextActionButton">
+    <declare-styleable name="StandardTextActionButtonComponent">
         <attr name="android:textAllCaps" format="boolean"></attr>
         <attr name="android:text" format="string"></attr>
     </declare-styleable>

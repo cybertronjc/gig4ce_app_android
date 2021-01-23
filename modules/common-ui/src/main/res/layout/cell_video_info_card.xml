@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <com.gigforce.common_ui.cells.OutlineTextButton
+    <com.gigforce.common_ui.cells.OutlineTextButtonComponent
         android:id="@+id/load_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
