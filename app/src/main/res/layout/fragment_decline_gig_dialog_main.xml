@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
                 android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
                 android:paddingTop="8dp"
+                android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
                 android:text="@string/i_m_on_sick_leave_today" />
 
@@ -86,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="0dp"
-                android:paddingTop="8dp"
                 android:paddingStart="@dimen/size_8"
+                android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
                 android:text="@string/i_am_on_leave_today" />
@@ -97,10 +97,10 @@
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
                 android:minHeight="0dp"
+                android:paddingStart="@dimen/size_8"
                 android:paddingTop="8dp"
+                android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
                 android:text="@string/i_can_t_reach_the_location_today" />
 
@@ -109,10 +109,10 @@
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
                 android:minHeight="0dp"
+                android:paddingStart="@dimen/size_8"
                 android:paddingTop="8dp"
+                android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
                 android:text="@string/this_gig_is_unsuitable_for_me" />
 
@@ -121,10 +121,10 @@
                 style="@style/Theme.RadioButtonLipstickPink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_8"
                 android:minHeight="0dp"
+                android:paddingStart="@dimen/size_8"
                 android:paddingTop="8dp"
+                android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
                 android:text="@string/others_camel_case" />
 
@@ -192,6 +192,7 @@
             android:enabled="false"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
+            android:minHeight="@dimen/size_36"
             android:text="@string/submit_all_caps"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/confirm_decline_cb" />

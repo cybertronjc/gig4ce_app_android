@@ -146,10 +146,10 @@
                     android:layout_height="@dimen/size_252"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    app:sriv_right_bottom_corner_radius="@dimen/size_4"
-                    app:sriv_left_top_corner_radius="@dimen/size_4"
                     app:sriv_left_bottom_corner_radius="@dimen/size_4"
-                    app:sriv_right_top_corner_radius="@dimen/size_4"/>
+                    app:sriv_left_top_corner_radius="@dimen/size_4"
+                    app:sriv_right_bottom_corner_radius="@dimen/size_4"
+                    app:sriv_right_top_corner_radius="@dimen/size_4" />
 
                 <ImageView
                     android:id="@+id/scenrio_placeholder"
@@ -233,7 +233,7 @@
         android:layout_marginBottom="@dimen/size_32"
         android:background="@drawable/bg_next_assess_frag"
         android:letterSpacing="0"
-        android:minHeight="@dimen/size_48"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_15"
         android:paddingBottom="@dimen/size_16"
         android:text="@string/next"

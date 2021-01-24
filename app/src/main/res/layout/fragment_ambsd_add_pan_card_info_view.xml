@@ -80,8 +80,8 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/panViewImageIV">
+            app:layout_constraintBottom_toTopOf="@+id/panViewImageIV"
+            app:layout_constraintEnd_toEndOf="parent">
 
 
             <ImageView
@@ -120,7 +120,7 @@
             android:layout_marginTop="8dp"
             android:scaleType="fitXY"
             app:layout_constraintTop_toBottomOf="@id/imageLabelTV" />
-<!--            tools:src="@drawable/bg_square_pos"-->
+        <!--            tools:src="@drawable/bg_square_pos"-->
 
         <TextView
             android:id="@+id/panViewImageErrorMessage"
@@ -185,13 +185,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/ambsd_pan_skip_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
             android:text="@string/skip"
             app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/colorPrimary"/>
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

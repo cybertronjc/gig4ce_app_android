@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="18dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="18dp">
 
     <TextView
         android:id="@+id/dialog_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/colorText"
         android:fontFamily="@font/lato"
         android:letterSpacing="0"
-        android:text="Are sure you want to decline this gig ?" />
+        android:text="Are sure you want to decline this gig ?"
+        android:textColor="@color/colorText"
+        android:textSize="16sp" />
 
 
     <TextView
         android:id="@+id/dialog_message_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@color/battle_ship_grey"
-        android:fontFamily="@font/lato"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
         android:letterSpacing="0"
+        android:textColor="@color/battle_ship_grey"
+        android:textSize="12sp"
         tools:text=" Are sure you want to decline this gig ?" />
 
 
@@ -37,39 +37,39 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/noBtn"
-            android:layout_width="0dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_weight="1"
-            android:layout_height="57dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="7dp"
-            android:text="No"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:minHeight="@dimen/size_36"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="No"
             android:textAlignment="center"
-            app:strokeColor="@color/colorPrimary"
-            android:layout_marginBottom="5dp" />
+            app:strokeColor="@color/colorPrimary" />
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/yesBtn"
             android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="5dp"
-            android:text="Yes"
+            android:layout_weight="1"
             android:background="@drawable/gradient_button"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginStart="7dp"
             android:letterSpacing="0"
-            android:layout_marginTop="25dp"
+            android:minHeight="@dimen/size_36"
+            android:text="Yes"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

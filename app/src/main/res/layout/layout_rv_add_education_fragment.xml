@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:isScrollContainer="true"
     android:orientation="vertical"
     app:layout_constraintEnd_toEndOf="parent"
@@ -49,9 +49,9 @@
         android:layout_marginTop="@dimen/size_23"
         android:background="@null"
         android:drawableEnd="@drawable/ic_down"
-        android:fontFamily="@font/lato"
-
         android:focusable="false"
+
+        android:fontFamily="@font/lato"
         android:hint="@string/degree_star"
         android:longClickable="false"
         android:paddingStart="3dp" />
@@ -143,13 +143,13 @@
 
     <LinearLayout
         android:id="@+id/ll_upload_education_cert"
-        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_23"
         android:animateLayoutChanges="true"
         android:background="@drawable/dashed_border_979797_1dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
 
 
         <RelativeLayout
@@ -200,29 +200,29 @@
 
             <TextView
                 android:id="@+id/imageLabelTV"
-                tools:text="Image Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.01"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                tools:text="Image Label" />
 
 
             <TextView
                 android:id="@+id/reuploadBtn"
-                tools:ignore="RelativeOverlap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="-0.07"
                 android:padding="10dp"
-                android:visibility="gone"
                 android:text="@string/reupload"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/font_14"
-                app:strokeColor="@color/lipstick" />
+                android:visibility="gone"
+                app:strokeColor="@color/lipstick"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/clickedImageIV_education"
@@ -247,7 +247,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/lato"
-
+            android:minHeight="@dimen/size_36"
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
@@ -261,10 +261,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/ic_delete"
-
             android:drawablePadding="@dimen/size_8"
             android:drawableTint="@color/colorPrimary"
             android:fontFamily="@font/lato"
+            android:minHeight="@dimen/size_36"
             android:text="@string/remove_caps"
             android:textAlignment="textEnd"
             android:textColor="@color/colorPrimary" />

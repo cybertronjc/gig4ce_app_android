@@ -60,7 +60,8 @@
         <Button
             android:id="@+id/onboarding_chat_send_btn"
             android:layout_width="125dp"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
             android:layout_marginStart="280dp"
             android:layout_marginTop="100dp"
             android:text=">>">

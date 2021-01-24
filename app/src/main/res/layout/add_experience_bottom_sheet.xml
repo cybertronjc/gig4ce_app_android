@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_up_sheet">
@@ -14,23 +12,25 @@
         android:layout_marginEnd="32dp"
         android:isScrollContainer="true"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/form_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:layout_marginTop="@dimen/bs_top_margin"
-            android:textColor="#d4e02020"
             android:letterSpacing="0.05"
-            android:visibility="gone"
-            android:text="@string/error_empty_mandatory_fields" />
+            android:text="@string/error_empty_mandatory_fields"
+            android:textColor="#d4e02020"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/textView24"
+            style="@style/BsHeadingBold12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bs_top_margin"
-            android:text="@string/add_experience_new_experience"
-            style="@style/BsHeadingBold12"/>
+            android:text="@string/add_experience_new_experience" />
 
         <EditText
             android:id="@+id/title"
@@ -39,7 +39,7 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/add_experience_title"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/company"
@@ -55,19 +55,19 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:endIconDrawable="@drawable/ic_down"
-            app:boxBackgroundColor="@color/white"
+            android:clickable="false"
             android:focusable="false"
-            android:clickable="false">
+            app:boxBackgroundColor="@color/white"
+            app:endIconDrawable="@drawable/ic_down">
 
             <AutoCompleteTextView
                 android:id="@+id/employment_type"
-                android:paddingStart="3dp"
-                android:focusable="false"
-                android:longClickable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_experience_employment_type"/>
+                android:focusable="false"
+                android:hint="@string/add_experience_employment_type"
+                android:longClickable="false"
+                android:paddingStart="3dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,98 +78,104 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/add_experience_location"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/add_experience_start_date"
-                android:focusable="false"
-                android:inputType="date"
-                android:drawableEnd="@drawable/ic_calendar_small"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_calendar_small"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/add_experience_start_date"
+                android:inputType="date" />
 
             <EditText
                 android:id="@+id/end_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/add_experience_end_date"
-                android:focusable="false"
-                android:inputType="date"
-                android:drawableEnd="@drawable/ic_calendar_small"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:drawableEnd="@drawable/ic_calendar_small"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/add_experience_end_date"
+                android:inputType="date" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:ems="10" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/currently_work_here"
+                style="@style/check_box_style_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/check_box_style_1"
-                android:ems="10"
-                android:text="@string/add_experience_currently_working"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:ems="10"
+                android:text="@string/add_experience_currently_working" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_more"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/add_more_text"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"
-            app:iconTint="@color/colorPrimary"
             app:icon="@drawable/ic_add"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
+            app:iconTint="@color/colorPrimary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel_button"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel_text"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@color/gray_color"
-                style="?attr/materialButtonOutlinedStyle"/>
+                android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
+                android:text="@string/cancel_text"
+                android:textColor="@color/gray_color" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_button"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save_text"
-                android:textColor="@color/colorPrimary"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                app:strokeColor="@color/colorPrimary"
-                style="?attr/materialButtonOutlinedStyle"  />
+                android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
+                android:text="@string/save_text"
+                android:textColor="@color/colorPrimary"
+                app:strokeColor="@color/colorPrimary" />
         </LinearLayout>
 
     </LinearLayout>

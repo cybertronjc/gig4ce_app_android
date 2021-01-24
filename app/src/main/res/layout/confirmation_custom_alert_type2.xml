@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/parent_cl"
+    android:layout_width="match_parent"
 
     android:layout_height="wrap_content">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/dialog_title"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="left|center_vertical"
+            android:letterSpacing="0"
+            android:text="dkfjdkfjdljfdf dkfjdlfj "
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/colorPrimary"
-            android:visibility="gone">
-                <TextView
-                    android:id="@+id/dialog_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:textColor="@color/white"
-                    android:text="dkfjdkfjdljfdf dkfjdlfj "
-                    android:gravity="left|center_vertical"
-                    android:textSize="18sp"
-                    android:letterSpacing="0"
-                    android:fontFamily="@font/lato_bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -46,11 +47,11 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato_bold"
             android:gravity="center_horizontal"
+            android:letterSpacing="0"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="#313131"
             android:textSize="17sp"
-            android:letterSpacing="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,14 +59,15 @@
         <TextView
             android:id="@+id/yes"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rect_button_gradient"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="Yes"
             android:letterSpacing="0"
+            android:minHeight="@dimen/size_36"
+            android:text="Yes"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,14 +79,15 @@
         <TextView
             android:id="@+id/cancel"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rect_button_outline"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
-            android:text="No"
             android:letterSpacing="0"
+            android:minHeight="@dimen/size_36"
+            android:text="No"
             android:textColor="@color/colorLightAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/yes"
