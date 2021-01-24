@@ -11,5 +11,6 @@ object EnrollmentConstants {
 
     const val MODE_EDIT = 1
     const val MODE_ADD = 2
+    const val MODE_ENROLLMENT_REQUIREMENT = 4
     const val MODE_UNSPECIFIED = 3
 }

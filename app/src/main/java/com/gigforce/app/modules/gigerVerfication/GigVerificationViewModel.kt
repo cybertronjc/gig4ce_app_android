@@ -62,6 +62,7 @@ open class GigVerificationViewModel constructor(
         private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
         private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
+    var redirectToNextStep: Boolean = false
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
     val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
