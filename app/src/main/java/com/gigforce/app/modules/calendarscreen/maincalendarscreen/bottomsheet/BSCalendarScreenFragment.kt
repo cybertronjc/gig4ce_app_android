@@ -124,19 +124,19 @@ class BSCalendarScreenFragment : BaseFragment() {
                     }
                 })
 
-        mainLearningViewModel
-                .allAssessments
-                .observe(viewLifecycleOwner, Observer {
-
-                    when (it) {
-                        Lce.Loading -> showAssessmentProgress()
-                        is Lce.Content -> showAssessments(it.content)
-                        is Lce.Error -> showAssessmentError(it.error)
-                    }
-                })
-
-
-        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+//        mainLearningViewModel
+//                .allAssessments
+//                .observe(viewLifecycleOwner, Observer {
+//
+//                    when (it) {
+//                        Lce.Loading -> showAssessmentProgress()
+//                        is Lce.Content -> showAssessments(it.content)
+//                        is Lce.Error -> showAssessmentError(it.error)
+//                    }
+//                })
+//
+//
+//        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
 
     }
@@ -416,6 +416,13 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 val lp = getView(viewHolder, R.id.card_view).layoutParams
                                 lp.height = lp.height
                                 lp.width = itemWidth
+                                var ivContact = getImageView(viewHolder, R.id.iv_call) as ImageView
+
+                                ivContact.setImageResource(R.drawable.fui_ic_phone_white_24dp)
+                                ivContact.setColorFilter(ContextCompat.getColor(viewHolder.itemView.context, R.color.lipstick), android.graphics.PorterDuff.Mode.SRC_IN);
+
+                                getImageView(viewHolder,R.id.iv_message).setImageResource(R.drawable.ic_chat)
+
                                 if (obj?.gigContactDetails != null && obj?.gigContactDetails?.contactNumber != null) {
                                     if (obj?.chatInfo?.isNullOrEmpty() == false) {
                                         getView(viewHolder, R.id.messageCardView).visible()

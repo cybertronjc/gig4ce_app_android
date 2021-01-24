@@ -154,7 +154,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 }
             } else {
 
-                if (submitBtn.text == "Back" || mode == EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT&&submitBtn.text=="Next") {
+                if (mode == EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT&&submitBtn.text=="Next") {
                     popBackState()
                 } else {
                     checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -266,12 +266,12 @@ class AddProfilePictureFragment : BaseFragment(),
                             profile_pic_Uploading.gone()
                             viewModel.getProfileForUser(userId)
 
-                            if (userId == null) {
-                                //Normal User login
-                                submitBtn.text = "Back"
-                            } else {
+//                            if (userId == null) {
+//                                //Normal User login
+//                                submitBtn.text = "Back"
+//                            } else {
                                 submitBtn.text = "Next"
-                            }
+//                            }
 
                             showToast(getString(R.string.profile_pic_uploaded))
                         }

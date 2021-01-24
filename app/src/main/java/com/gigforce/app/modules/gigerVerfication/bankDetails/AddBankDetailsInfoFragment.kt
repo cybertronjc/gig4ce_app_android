@@ -460,7 +460,8 @@ class AddBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun documentsUploaded() {
-        showToast(getString(R.string.bank_details_uploaded))
+        showToast(getString(R.string.bank_details_updated))
+
 
         if (didUserCameFromAmbassadorScreen) {
             activity?.onBackPressed()

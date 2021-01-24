@@ -116,7 +116,7 @@ class MainLearningFragment : BaseFragment() {
 
         learningViewModel.getRoleBasedCourses()
         learningViewModel.getAllCourses()
-        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+//        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
     }
 
     private fun showAssessmentProgress() {

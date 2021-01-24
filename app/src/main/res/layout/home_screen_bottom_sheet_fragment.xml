@@ -535,6 +535,7 @@
         android:layout_marginLeft="18dp"
         android:layout_marginTop="@dimen/size_24"
         android:fontFamily="@font/lato_bold"
+
         android:letterSpacing="0"
         android:text="@string/assessment_"
         android:textColor="#686868"

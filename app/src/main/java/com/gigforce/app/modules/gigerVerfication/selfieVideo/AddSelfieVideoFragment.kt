@@ -150,8 +150,10 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
                             .child(it.selfieVideoDataModel!!.videoPath)
 
                         videoRef.downloadUrl.addOnSuccessListener {
+                            if (context == null) return@addOnSuccessListener
                             addPlayVideoFragment(it)
                         }.addOnFailureListener {
+                            if (context == null) return@addOnFailureListener
                             it.printStackTrace()
                         }
 

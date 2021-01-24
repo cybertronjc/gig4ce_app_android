@@ -82,10 +82,10 @@ class ClientActivationViewmodel(
             if (!snapShot?.documentChanges.isNullOrEmpty()) {
                 val toObjects = snapShot?.toObjects(LessonModel::class.java)
                 _observableCourses.value = Lce.content(toObjects!!);
-                savedStateHandle.set(
-                    StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
-                    toObjects
-                )
+//                savedStateHandle.set(
+//                    StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
+//                    toObjects
+//                )
             } else {
                 _observableCourses.value = Lce.error("No Videos Found!!!")
 
@@ -99,8 +99,8 @@ class ClientActivationViewmodel(
             _observableError.value = exception.message
         } else {
             val toObject = snapShot?.toObject(JobProfile::class.java)
-            savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
-            _observableJobProfile.value = toObject
+//            savedStateHandle.set(StringConstants.SAVED_STATE.value, toObject)
+//            _observableJobProfile.value = toObject
         }
         initialized = true
     }

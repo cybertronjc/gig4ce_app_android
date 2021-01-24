@@ -9,10 +9,8 @@ import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
@@ -73,13 +71,13 @@ class ClientActivationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(savedInstanceState)
         viewModel =
             ViewModelProvider(
                 this,
                 SavedStateViewModelFactory(requireActivity().application, this)
             ).get(ClientActivationViewmodel::class.java)
         viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
+        getDataFromIntents(savedInstanceState)
         setupPreferredLocationRv()
         setupBulletPontsRv()
         initClicks()
@@ -98,6 +96,8 @@ class ClientActivationFragment : BaseFragment(),
 
     }
 
+    var customPowerMenu: CustomPowerMenu<*, *>? = null
+
     private fun initClicks() {
 
         iv_back_client_activation.setOnClickListener {
@@ -105,7 +105,7 @@ class ClientActivationFragment : BaseFragment(),
         }
 
         iv_options_client_activation.setOnClickListener {
-            var customPowerMenu: CustomPowerMenu<*, *>? = null
+
             customPowerMenu =
                 CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
                     .addItem(
@@ -141,14 +141,15 @@ class ClientActivationFragment : BaseFragment(),
                         resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
                     )
                     .setMenuShadow(
-                       resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
                     )
 
                     .build()
-            customPowerMenu.showAsDropDown(
+            customPowerMenu?.showAsDropDown(
                 it,
-                -((customPowerMenu.contentViewWidth- (it.resources.getDimensionPixelSize(R.dimen.size_32))
-                )
+                -(((customPowerMenu?.getContentViewWidth()
+                    ?: 0) - (it.resources.getDimensionPixelSize(R.dimen.size_32))
+                        )
                         ),
                 -(resources.getDimensionPixelSize(
                     R.dimen.size_24
@@ -161,7 +162,7 @@ class ClientActivationFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mClientViaDeeplink =
                 it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
@@ -170,7 +171,7 @@ class ClientActivationFragment : BaseFragment(),
         }
 
         arguments?.let {
-            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
+            mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mClientViaDeeplink =
                 it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
@@ -183,6 +184,7 @@ class ClientActivationFragment : BaseFragment(),
             pb_client_activation.gone()
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { it ->
+            if (it == null) return@Observer
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
@@ -505,7 +507,6 @@ class ClientActivationFragment : BaseFragment(),
     }
 
 
-
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
@@ -584,5 +585,11 @@ class ClientActivationFragment : BaseFragment(),
     override fun lastLocationReceiver(location: Location?) {
     }
 
+    override fun onBackPressed(): Boolean {
+        if (customPowerMenu != null && customPowerMenu?.isShowing() == true) {
+            customPowerMenu?.dismiss()
+        }
+        return super.onBackPressed()
+    }
 
 }
