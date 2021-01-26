@@ -10,10 +10,6 @@ class LandingViewTypeLoader : IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {
         return when (viewType) {
             CommonViewTypes.VIEW_STANDARD_ACTION_CARD -> StandardActionCardComponent(context, null)
-            CommonViewTypes.VIEW_STANDARD_LIGHT_PINK -> StandardActionLightPinkCardComponent(context, null)
-            CommonViewTypes.VIEW_STANDARD_LIPSTICK -> StandardActionLipstickCardComponent(context, null)
-            CommonViewTypes.VIEW_STANDARD_GREY -> StandardActionGreyCardComponent(context, null)
-            CommonViewTypes.VIEW_STANDARD_LIGHT_BLUE_WITH_MARGIN-> StandardMarginLightblueCardComponent(context,null)
             CommonViewTypes.VIEW_VIDEOS_LAYOUT -> VideoInfoLayoutComponent(context, null)
             CommonViewTypes.VIEW_VIDEOS_ITEM_CARD -> VideoItemCardComponent(context, null)
             CommonViewTypes.VIEW_FEATURE_LAYOUT -> FeatureLayoutComponent(context, null)

@@ -26,5 +26,17 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="StandardActionCardComponent">
+        <attr name="colorOptions" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+<!--        <attr name="titleTextColor" format="color"/>-->
+<!--        <attr name="subtitleTextColor" format="color"/>-->
+    </declare-styleable>
+
 
 </resources>

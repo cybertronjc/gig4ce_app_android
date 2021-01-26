@@ -76,7 +76,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/cta"
+        android:id="@+id/action"
         android:text="CLICK HERE"
         android:gravity="center"
         android:layout_marginTop="100dp"

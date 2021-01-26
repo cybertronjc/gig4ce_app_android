@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".screens.LandingFragment">
 
@@ -23,32 +24,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.gigforce.common_ui.cells.StandardActionLightPinkCardComponent
+            <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/gig_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:colorOptions="LIGHT_PINK"/>
             <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/gigforce_tip"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <com.gigforce.common_ui.atoms.GrayLine
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <com.gigforce.common_ui.cells.StandardMarginLightblueCardComponent
+            <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/join_ambassador"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:colorOptions="LIGHT_BLUE"
                 android:layout_margin="@dimen/size16"/>
-            <com.gigforce.common_ui.cells.StandardActionLipstickCardComponent
+
+            <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/my_interest"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:colorOptions="LIPSTICK"/>
             <fragment
                 android:id="@+id/client_activation"
                 android:name="com.gigforce.client_activation.fragment.ClientActivationSectionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <com.gigforce.common_ui.cells.StandardActionGreyCardComponent
+            <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/set_preference"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:colorOptions="GRAY"/>
 
             <fragment
                 android:id="@+id/learning_section"
@@ -56,19 +66,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.gigforce.common_ui.cells.StandardActionGreyCardComponent
+            <com.gigforce.common_ui.cells.StandardActionCardComponent
                 android:id="@+id/complete_verification"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:colorOptions="GRAY"/>
             <com.gigforce.common_ui.cells.VideoInfoLayoutComponent
                 android:id="@+id/help_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <com.gigforce.core.recyclerView.CoreRecyclerView
-                android:id="@+id/landing_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <com.gigforce.core.recyclerView.CoreRecyclerView-->
+<!--                android:id="@+id/landing_rv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -11,13 +11,14 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.VideoInfoLayoutDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.recyclerView.CoreRecyclerView
+import com.google.android.material.button.MaterialButton
 
 class VideoInfoLayoutComponent (context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
     private val image : ImageView
     private val title : TextView
     private val coreRecyclerView : CoreRecyclerView
-    private val loadMore : OutlineTextButtonComponent
+    private val loadMore : MaterialButton
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)

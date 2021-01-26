@@ -38,16 +38,14 @@
         app:layout_constraintStart_toStartOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <com.gigforce.common_ui.cells.OutlineTextButtonComponent
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/load_more"
+        style="@style/ActionOutlineButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videos_list"
         android:textAllCaps="false"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_margin="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,7 +35,7 @@ class LandingFragment : Fragment() {
             set_preference.bind(it.get(5))
             complete_verification.bind(it.get(7))
             help_layout.bind(it.get(8))
-            landing_rv.collection = it
+//            landing_rv.collection = it
         })
         initViews()
         listeners()
@@ -43,7 +43,7 @@ class LandingFragment : Fragment() {
 
     private fun initViews() {
         (this.context?.applicationContext as? ILoginInfoProvider)?.provideLoginInfo() ?. let {
-
+//        app_bar.profile_name.text = it.profileName
         } ?: let {
 
         }
@@ -52,20 +52,11 @@ class LandingFragment : Fragment() {
     }
 
     private fun listeners() {
-        join_ambassador.setButtonClick(View.OnClickListener {
-//            if(profile == null)
-//                return@setOnClickListener
-//
-//            if (profile!!.isUserAmbassador) {
-//                navigate(R.id.ambassadorEnrolledUsersListFragment)
-//            } else {
-//                navigate(R.id.ambassadorProgramDetailsFragment)
-//            }
-        })
+        join_ambassador.setPrimaryActionClick(View.OnClickListener {
 
-        /*app_bar.chat_fragment.setOnClickListener{
-            //call chat header fragment
-        }*/
+        })
+//                navigate(R.id.ambassadorEnrolledUsersListFragment)
+//                navigate(R.id.ambassadorProgramDetailsFragment)
 
     }
 

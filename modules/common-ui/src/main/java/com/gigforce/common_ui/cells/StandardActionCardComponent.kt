@@ -1,117 +1,111 @@
 package com.gigforce.common_ui.cells
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.google.android.material.button.MaterialButton
+import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
+import kotlinx.android.synthetic.main.feature_item_card.view.*
 
+enum class ColorOptions(val value: Int) {
+
+    Default(0),
+    LightPink(201),
+    LightBlue(202),
+    Lipstick(203),
+    GRAY(204);
+
+
+    companion object {
+        private val VALUES = values()
+        fun getByValue(value: Int) = VALUES.first { it.value == value }
+    }
+}
 
 open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
-    FrameLayout(context, attrs),
-    IViewHolder {
-    private var cv_top: ConstraintLayout
-    private var tv_title: TextView
-    private var tv_subtitle: TextView
-    private var tv_cta: MaterialButton
-    private var tv_cta1: MaterialButton
-    private val img: ImageView
+        FrameLayout(context, attrs),
+        IViewHolder {
+
     private var buttonClickListener: OnClickListener? = null
     private var secondButtonClickListener: OnClickListener? = null
+    private var colorOption: ColorOptions = ColorOptions.Default
 
     init {
         this.layoutParams =
-            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.cell_standard_action_card, this, true)
-        cv_top = this.findViewById(R.id.cv_top)
-        img = this.findViewById(R.id.iv_icon)
-        tv_title = this.findViewById(R.id.tv_title)
-        tv_subtitle = this.findViewById(R.id.tv_desc)
-        tv_cta = this.findViewById(R.id.cta)
-        tv_cta1 = this.findViewById(R.id.cta1)
 
+        attrs?.let {
+            val styledAttributeSet = context.obtainStyledAttributes(it, R.styleable.StandardActionCardComponent, 0, 0)
+            this.colorOption = ColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_colorOptions, 0))
+//            var titleColor = styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_titleTextColor, 0)
+//            if(titleColor!=0){
+//                tv_title.setTextColor(titleColor)
+//            }
+//            subtitle.setTextColor(styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_subtitleTextColor, 0))
+            backgroundColor = this.colorOption
+        }
 
-        tv_cta.setOnClickListener {
+        primary_action.setOnClickListener {
             buttonClickListener?.onClick(it)
         }
-        tv_cta1.setOnClickListener {
+        secondary_action.setOnClickListener {
             secondButtonClickListener?.onClick(it)
         }
     }
 
-    fun setButtonClick(buttonClickListener: OnClickListener) {
+    var backgroundColor: ColorOptions
+        get() = backgroundColor
+        set(value) {
+            val selectedColor = when (value) {
+                ColorOptions.LightPink -> R.color.light_pink
+                ColorOptions.LightBlue -> R.color.light_blue
+                ColorOptions.Lipstick -> R.color.lipstick
+                ColorOptions.GRAY -> R.color.grey
+                else -> R.color.white
+            }
+            setBackgroundColor(ContextCompat.getColor(context, selectedColor))
+        }
+
+    fun setPrimaryActionClick(buttonClickListener: OnClickListener) {
         this.buttonClickListener = buttonClickListener
+        primary_action.visible()
     }
 
-    fun secondButtonClick(secondButtonClickListener: OnClickListener) {
+    fun setSecondryActionClick(secondButtonClickListener: OnClickListener) {
         this.secondButtonClickListener = secondButtonClickListener
+        secondary_action.visible()
     }
-
-    var titleColor: Int
-        get() = titleColor
-        set(value) {
-            tv_title.setTextColor(value)
-        }
-
-    var subtitleColor: Int
-        get() = subtitleColor
-        set(value) {
-            tv_subtitle.setTextColor(value)
-        }
-
-    var applyMargin: Boolean
-        get() = applyMargin
-        set(value) {
-            val params =
-                LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT
-                )
-            val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
-            val top: Int = getPixelValue(0)
-            val right: Int = getPixelValue(16)
-            val bottom: Int = getPixelValue(0)
-            params.setMargins(left, top, right, bottom)
-            layoutParams = params
-        }
-
-    fun getPixelValue(value: Int): Int {
-        return (value * Resources.getSystem().displayMetrics.density).toInt()
-    }
-
 
     override fun bind(data: Any?) {
         if (data is StandardActionCardDVM) {
             if (data.image is String && (data.image as String).contains("http")) {
                 Glide.with(context)
-                    .load(data.image as String)
-                    .into(img)
+                        .load(data.image as String)
+                        .into(image)
             } else if (data.image is Int) {
-                img.setImageResource(data.image as Int)
+                image.setImageResource(data.image as Int)
             } else {
             }
             tv_title.text = data.title
-            tv_subtitle.text = data.subtitle
+            subtitle.text = data.subtitle
 
             if (data.action.isNotBlank()) {
-                tv_cta.text = data.action
-            } else tv_cta.gone()
+                primary_action.text = data.action
+            } else primary_action.gone()
 
             if (data.secondAction.isNotBlank()) {
-                tv_cta1.visible()
-                tv_cta1.text = data.secondAction
-            } else tv_cta1.gone()
+                secondary_action.visible()
+                secondary_action.text = data.secondAction
+            } else secondary_action.gone()
         }
     }
 

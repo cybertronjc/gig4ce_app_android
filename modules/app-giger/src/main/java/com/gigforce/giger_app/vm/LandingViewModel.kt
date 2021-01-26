@@ -12,7 +12,7 @@ class LandingViewModel : ViewModel() {
     private fun getAllItems(): ArrayList<Any> {
         var arrayList = ArrayList<Any>()
         arrayList.add(
-            StandardActionLightPinkCardDVM(
+                StandardActionCardDVM(
                 R.drawable.ic_happy_announcement,
                 "What we do ?",
                 "Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
@@ -32,7 +32,7 @@ class LandingViewModel : ViewModel() {
 
 
         arrayList.add(
-            StandardActionLblueDVM(
+                StandardActionCardDVM(
                 R.drawable.ic_ambassador_icon,
                 "Join Us as Ambassador",
                 "More you create profiles , more you earn .",
@@ -41,7 +41,7 @@ class LandingViewModel : ViewModel() {
             )
         )
         arrayList.add(
-            StandardActionLipstickCardDVM(
+                StandardActionCardDVM(
                 R.drawable.my_interest_icon,
                 "My Interest",
                 "Explore Interesting Gigs to start Earning ",
@@ -51,7 +51,7 @@ class LandingViewModel : ViewModel() {
         )
         arrayList.add(FeatureLayoutDVM("", "Explore Gig", getExploreGig()))
         arrayList.add(
-            StandardActionGreyCardDVM(
+                StandardActionCardDVM(
                 R.drawable.ic_set_preference,
                 "Set Your Preferences",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
@@ -61,7 +61,7 @@ class LandingViewModel : ViewModel() {
         )
         arrayList.add(FeatureLayoutDVM(R.drawable.learning_icon, "Learning", getFeaturedItems()))
         arrayList.add(
-            StandardActionGreyCardDVM(
+                StandardActionCardDVM(
                 R.drawable.ic_complete_verification_icon,
                 "Complete your Verfication",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
