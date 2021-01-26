@@ -9,10 +9,8 @@ import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
@@ -110,54 +108,54 @@ class ClientActivationFragment : BaseFragment(),
         iv_options_client_activation.setOnClickListener {
 
             customPowerMenu =
-                CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
-                    .addItem(
-                        MenuItem(getString(R.string.share))
-                    )
+                    CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
+                            .addItem(
+                                    MenuItem(getString(R.string.share))
+                            )
 
-                    .setShowBackground(false)
-                    .setOnMenuItemClickListener(object :
-                        OnMenuItemClickListener<com.gigforce.app.utils.MenuItem> {
-                        override fun onItemClick(
-                            position: Int,
-                            item: com.gigforce.app.utils.MenuItem?
-                        ) {
-                            pb_client_activation.visible()
-                            Firebase.dynamicLinks.shortLinkAsync {
-                                longLink =
-                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
-                            }.addOnSuccessListener { result ->
-                                // Short link created
-                                val shortLink = result.shortLink
-                                shareToAnyApp(shortLink.toString())
-                            }.addOnFailureListener {
-                                // Error
-                                // ...
-                                showToast(it.message!!);
-                            }
-                            customPowerMenu?.dismiss()
-                        }
+                            .setShowBackground(false)
+                            .setOnMenuItemClickListener(object :
+                                    OnMenuItemClickListener<com.gigforce.app.utils.MenuItem> {
+                                override fun onItemClick(
+                                        position: Int,
+                                        item: com.gigforce.app.utils.MenuItem?
+                                ) {
+                                    pb_client_activation.visible()
+                                    Firebase.dynamicLinks.shortLinkAsync {
+                                        longLink =
+                                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+                                    }.addOnSuccessListener { result ->
+                                        // Short link created
+                                        val shortLink = result.shortLink
+                                        shareToAnyApp(shortLink.toString())
+                                    }.addOnFailureListener {
+                                        // Error
+                                        // ...
+                                        showToast(it.message!!);
+                                    }
+                                    customPowerMenu?.dismiss()
+                                }
 
-                    })
-                    .setAnimation(MenuAnimation.DROP_DOWN)
-                    .setMenuRadius(
-                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                    )
-                    .setMenuShadow(
-                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                    )
+                            })
+                            .setAnimation(MenuAnimation.DROP_DOWN)
+                            .setMenuRadius(
+                                    resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                            )
+                            .setMenuShadow(
+                                    resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                            )
 
-                    .build()
+                            .build()
             customPowerMenu?.showAsDropDown(
-                it,
-                -(((customPowerMenu?.getContentViewWidth()
-                    ?: 0) - (it.resources.getDimensionPixelSize(R.dimen.size_32))
-                        )
-                        ),
-                -(resources.getDimensionPixelSize(
-                    R.dimen.size_24
-                )
-                        )
+                    it,
+                    -(((customPowerMenu?.getContentViewWidth()
+                            ?: 0) - (it.resources.getDimensionPixelSize(R.dimen.size_32))
+                            )
+                            ),
+                    -(resources.getDimensionPixelSize(
+                            R.dimen.size_24
+                    )
+                            )
             )
         }
 
@@ -167,7 +165,7 @@ class ClientActivationFragment : BaseFragment(),
         savedInstanceState?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mClientViaDeeplink =
-                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+                    it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
 
 
@@ -176,7 +174,7 @@ class ClientActivationFragment : BaseFragment(),
         arguments?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mClientViaDeeplink =
-                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+                    it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
         }
     }
@@ -191,7 +189,7 @@ class ClientActivationFragment : BaseFragment(),
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
-                getCircularProgressDrawable(requireContext())
+                    getCircularProgressDrawable(requireContext())
             ).into(iv_main_client_activation)
             tv_businessname_client_activation.text = (it?.title ?: "")
             tv_role_client_activation.text = (it?.subTitle ?: "")
@@ -425,14 +423,27 @@ class ClientActivationFragment : BaseFragment(),
                                     )
                                     startActivity(docIntent)
                                 } else {
-                                    PlayVideoDialogFragment.launch(
-                                            childFragmentManager = childFragmentManager,
-                                            lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
-                                                    position
-                                            )?.lessonId ?: "",
-                                            moduleId = "",
-                                            shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
-                                    )
+                                    if (FirebaseAuth.getInstance().currentUser?.uid == null) {
+                                        PlayVideoDialogWithUrl.launch(
+                                                childFragmentManager = childFragmentManager,
+                                                lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+                                                        position
+                                                )?.lessonId ?: "",
+                                                moduleId = "",
+                                                shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
+                                        )
+                                    } else {
+                                        PlayVideoDialogFragment.launch(
+                                                childFragmentManager = childFragmentManager,
+                                                lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+                                                        position
+                                                )?.lessonId ?: "",
+                                                moduleId = "",
+                                                shouldShowFeedbackDialog = item.shouldShowFeedbackDialog,
+                                                disableLessonCompleteAction = true
+                                        )
+                                    }
+
 
                                 }
 

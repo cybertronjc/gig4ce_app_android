@@ -18,24 +18,24 @@ sealed class VideoSaveState {
 }
 
 class CourseVideoViewModel constructor(
-    private val learningRepository: LearningRepository = LearningRepository()
+        private val learningRepository: LearningRepository = LearningRepository()
 ) : ViewModel() {
 
     private var videoLesson: CourseContent? = null
-    val currentVideoLesson : CourseContent? get() = videoLesson
+    val currentVideoLesson: CourseContent? get() = videoLesson
 
     private val _videoDetails = MutableLiveData<Lce<CourseContent>>()
     val videoDetails: LiveData<Lce<CourseContent>> = _videoDetails
 
     fun getVideoDetails(
-        moduleId: String,
-        lessonId: String
+            moduleId: String,
+            lessonId: String
     ) = viewModelScope.launch {
         _videoDetails.postValue(Lce.loading())
 
         try {
             val videoLessons = learningRepository.getVideoDetails(
-                lessonId = lessonId
+                    lessonId = lessonId
             )
 
             if (videoLessons.isEmpty())
@@ -58,8 +58,8 @@ class CourseVideoViewModel constructor(
                         }
 
                         learningRepository.updateModuleProgress(
-                            moduleProgress.progressId,
-                            moduleProgress
+                                moduleProgress.progressId,
+                                moduleProgress
                         )
                     }
 
@@ -88,7 +88,7 @@ class CourseVideoViewModel constructor(
         try {
 
             val nextLesson =
-                learningRepository.markCurrentLessonAsComplete(moduleId, lessonId)
+                    learningRepository.markCurrentLessonAsComplete(moduleId, lessonId)
             _videoSaveState.value = Lce.content(VideoSaveState.VideoMarkedComplete)
 
             _openNextDestination.value = nextLesson
@@ -98,10 +98,10 @@ class CourseVideoViewModel constructor(
     }
 
     fun savedVideoState(
-        moduleId: String,
-        lessonId: String,
-        playBackPosition: Long,
-        fullVideoLength: Long
+            moduleId: String,
+            lessonId: String,
+            playBackPosition: Long,
+            fullVideoLength: Long
     ) = viewModelScope.launch {
 
         _videoSaveState.value = Lce.loading()
@@ -113,7 +113,7 @@ class CourseVideoViewModel constructor(
                     if (it.lessonId == lessonId && playBackPosition > it.completionProgress) {
                         it.ongoing = true
                         it.completed = it.completed
-                        it.completionProgress = playBackPosition
+                        it.completionProgress = if (playBackPosition >= fullVideoLength) 0L else playBackPosition
                         it.lessonTotalLength = fullVideoLength
                         it.lessonCompletionDate = null
                     }
@@ -131,26 +131,26 @@ class CourseVideoViewModel constructor(
     val saveLessonFeedbackState: LiveData<Lse> = _saveLessonFeedbackState
 
     fun saveVideoFeedback(
-        lessonId: String,
-        lessonRating: Float? = null,
-        explanation: Boolean? = null,
-        completeness: Boolean? = null,
-        easyToUnderStand: Boolean? = null,
-        videoQuality: Boolean? = null,
-        soundQuality: Boolean? = null
+            lessonId: String,
+            lessonRating: Float? = null,
+            explanation: Boolean? = null,
+            completeness: Boolean? = null,
+            easyToUnderStand: Boolean? = null,
+            videoQuality: Boolean? = null,
+            soundQuality: Boolean? = null
     ) = viewModelScope.launch {
 
         _saveLessonFeedbackState.value = Lse.loading()
         try {
 
             learningRepository.recordLessonFeedback(
-                lessonId,
-                lessonRating,
-                explanation,
-                completeness,
-                easyToUnderStand,
-                videoQuality,
-                soundQuality
+                    lessonId,
+                    lessonRating,
+                    explanation,
+                    completeness,
+                    easyToUnderStand,
+                    videoQuality,
+                    soundQuality
             )
             _saveLessonFeedbackState.value = Lse.success()
         } catch (e: Exception) {
