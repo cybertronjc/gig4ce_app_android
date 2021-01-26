@@ -5,12 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:paddingTop="22dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="16dp">
 
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="100dp"
+        app:layout_constraintWidth_max="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
@@ -19,9 +24,9 @@
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:text="Card Title"
-        android:theme="@style/StandardCardTitle"
+        android:textAppearance="?attr/textAppearanceHeadline6"
         app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintTop_toTopOf="@+id/iv_icon" />
@@ -30,8 +35,8 @@
         android:id="@+id/tv_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:theme="@style/StandardCardDescription"
         android:text="Description here"
+        android:textAppearance="?attr/textAppearanceBody2"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/cta"
         app:layout_constraintStart_toStartOf="@+id/tv_title"

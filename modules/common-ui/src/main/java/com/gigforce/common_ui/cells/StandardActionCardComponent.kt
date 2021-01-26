@@ -82,9 +82,9 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                     LayoutParams.WRAP_CONTENT
                 )
             val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
-            val top: Int = getPixelValue(16)
+            val top: Int = getPixelValue(0)
             val right: Int = getPixelValue(16)
-            val bottom: Int = getPixelValue(16)
+            val bottom: Int = getPixelValue(0)
             params.setMargins(left, top, right, bottom)
             layoutParams = params
         }

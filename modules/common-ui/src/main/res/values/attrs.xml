@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <declare-styleable name="OutlineTextButtonComponent">
-        <attr name="android:textAllCaps" format="boolean"></attr>
-        <attr name="android:text" format="string"></attr>
+        <attr name="android:textAllCaps" format="boolean"/>
+        <attr name="android:text" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="CoreRecyclerView">
-        <attr name="android:orientation" format="integer"></attr>
+        <attr name="android:orientation" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="StandardTextActionButtonComponent">
-        <attr name="android:textAllCaps" format="boolean"></attr>
-        <attr name="android:text" format="string"></attr>
+        <attr name="android:textAllCaps" format="boolean"/>
+        <attr name="android:text" format="string" />
     </declare-styleable>
 
     <declare-styleable name="TestButton">
         <attr name="testButtonStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="IconButton">
+        <attr name="iconButtonStyle" format="reference"/>
+        <attr name="iconType" format="enum">
+            <enum name="Chat" value="101"/>
+            <enum name="Profile" value="104"/>
+        </attr>
     </declare-styleable>
 
 </resources>

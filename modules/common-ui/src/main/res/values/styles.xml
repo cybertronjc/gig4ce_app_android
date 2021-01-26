@@ -155,7 +155,7 @@
         <item name="textAppearanceOverline">@style/TextAppearance.GigforceStyles.Overline</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.GigforceStyles.Subtitle1</item>
         <item name="textAppearanceSubtitle2">@style/TextAppearance.GigforceStyles.Subtitle2</item>
-        <item name="testButtonStyle">@style/MyTestButtonStyle</item>
+        <item name="iconButtonStyle">@style/IconButtonStyle</item>
     </style>
 
     <style name="AppBarTitle" parent="Widget.MaterialComponents.TextView">
@@ -166,14 +166,14 @@
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
-    <style name="ChatButton" parent="Widget.AppCompat.ImageButton">
-        <item name="android:src">@drawable/ic_tip</item>
+    <style name="IconButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:background">@color/white</item>
     </style>
 
-    <style name="MyTestButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:src">@drawable/ic_set_preference</item>
-        <item name="backgroundTint">@color/colorError</item>
-        <item name="color">@color/white</item>
+    <style name="GigforceTheme.Option2">
+        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorOnPrimary">@color/blackLight</item>
     </style>
 
 </resources>

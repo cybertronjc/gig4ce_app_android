@@ -2,12 +2,14 @@ package com.gigforce.modules.feature_chat.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.ImageButton
+import com.gigforce.common_ui.atoms.IconButton
+import com.gigforce.common_ui.atoms.IconType
 import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import javax.inject.Inject
 
-class ChatButton(context: Context, attrs: AttributeSet?) : androidx.appcompat.widget.AppCompatImageButton(context, attrs) {
+class ChatButton(context: Context, attrs: AttributeSet?) :
+        IconButton(IconType.Chat, context, attrs) {
 
     @Inject
     lateinit var iChatNavigation: IChatNavigation

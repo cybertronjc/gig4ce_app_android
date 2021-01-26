@@ -35,11 +35,12 @@
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <com.gigforce.common_ui.cells.AppChatComponent
+    <com.gigforce.common_ui.atoms.IconButton
         android:id="@+id/chat_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/size8"
+        app:iconType="Chat"
         app:layout_constraintBottom_toBottomOf="@+id/appProfileComponent"
         app:layout_constraintEnd_toStartOf="@+id/appProfileComponent"
         app:layout_constraintTop_toTopOf="@+id/appProfileComponent" />
@@ -55,12 +56,5 @@
         app:layout_constraintTop_toTopOf="parent" >
 
     </com.gigforce.common_ui.cells.AppProfilePicComponent>
-
-    <com.gigforce.common_ui.atoms.ChatButton
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
