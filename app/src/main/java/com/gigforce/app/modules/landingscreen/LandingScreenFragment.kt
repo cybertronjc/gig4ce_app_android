@@ -66,13 +66,11 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
 import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-//import kotlinx.android.synthetic.main.landingscreen_fragment.learning_progress_bar
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
 import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
-import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
