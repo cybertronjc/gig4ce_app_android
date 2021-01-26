@@ -27,11 +27,9 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
             lessons: List<Media>,
             responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        firebaseDB.collection("Course_blocks").whereIn("course_id", lessons.map { it.courseId }).whereIn("lesson_id", lessons.map { it.lessonId })
+        firebaseDB.collection("Course_blocks").whereIn("id",lessons.map { it.lessonId })//.whereIn("course_id", lessons.map { it.courseId }).whereIn("lesson_id", lessons.map { it.lessonId })
                 .addSnapshotListener { success, error ->
                     responseCallbacks.lessonResponse(success, error, lessons.map { it.lessonId })
-
-
                 }
     }
 

@@ -31,11 +31,10 @@ class ClientActivationRepository : BaseFirestoreDBRepository(), ClientActivation
             lessons: List<Media>,
             responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
-        db.collection("Course_blocks").whereIn("course_id", lessons.map { it.courseId })
+
+        db.collection("Course_blocks").whereIn("id",lessons.map { it.lessonId })//.whereIn("course_id", lessons.map { it.courseId }).whereEqualTo("type","lesson")
                 .addSnapshotListener { success, error ->
                     responseCallbacks.lessonResponse(success, error, lessons.map { it.lessonId })
-
-
                 }
     }
 

@@ -81,7 +81,7 @@ class ClientActivationViewmodel(
         } else {
             if (!snapShot?.documentChanges.isNullOrEmpty()) {
                 var toObjects = snapShot?.toObjects(LessonModel::class.java)
-                toObjects = toObjects?.filter { lessonsToFilter.contains(it.lesson_id) }
+                toObjects = toObjects?.filter { lessonsToFilter.contains(it.id) }
                 _observableCourses.value = Lce.content(toObjects!!);
                 savedStateHandle.set(
                         StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
