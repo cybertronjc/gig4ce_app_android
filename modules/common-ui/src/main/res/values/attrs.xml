@@ -26,4 +26,8 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="StdActionButton">
+        <attr name="stdActionButtonStyle" format="reference"/>
+    </declare-styleable>
+
 </resources>

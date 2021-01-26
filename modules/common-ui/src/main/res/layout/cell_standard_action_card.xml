@@ -43,22 +43,33 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <com.gigforce.common_ui.cells.StandardTextActionButtonComponent
+        android:id="@+id/ctax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Now"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/cta"
+        style="@style/ActionButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cta1"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/ActionButtonStyle.Plain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:theme="@style/StandardCardActionTwo"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/cta"
         app:layout_constraintEnd_toStartOf="@+id/cta"

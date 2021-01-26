@@ -120,6 +120,11 @@
         <item name="android:fontFamily">@font/lato</item>
         <item name="android:textSize">15sp</item>
     </style>
+    <style name="TextAppearance.GigforceStyles.ActionButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">17sp</item>
+    </style>
     <style name="TextAppearance.GigforceStyles.Caption" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/lato</item>
         <item name="android:fontFamily">@font/lato</item>
@@ -156,6 +161,7 @@
         <item name="textAppearanceSubtitle1">@style/TextAppearance.GigforceStyles.Subtitle1</item>
         <item name="textAppearanceSubtitle2">@style/TextAppearance.GigforceStyles.Subtitle2</item>
         <item name="iconButtonStyle">@style/IconButtonStyle</item>
+        <item name="stdActionButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
     </style>
 
     <style name="AppBarTitle" parent="Widget.MaterialComponents.TextView">
@@ -169,6 +175,14 @@
     <style name="IconButtonStyle" parent="Widget.AppCompat.ImageButton">
         <item name="backgroundTint">@color/white</item>
         <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ActionButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAppearance">@style/TextAppearance.GigforceStyles.ActionButton</item>
+    </style>
+
+    <style name="ActionButtonStyle.Plain">
+        <item name="android:textColor">@color/greyish_brown</item>
     </style>
 
     <style name="GigforceTheme.Option2">
