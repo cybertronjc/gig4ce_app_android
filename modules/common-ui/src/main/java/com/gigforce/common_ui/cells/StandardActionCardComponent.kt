@@ -3,9 +3,7 @@ package com.gigforce.common_ui.cells
 import android.content.Context
 import android.content.res.Resources
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -18,7 +16,6 @@ import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.google.android.material.button.MaterialButton
-import kotlin.math.roundToInt
 
 
 open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
@@ -27,11 +24,11 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     private var cv_top: ConstraintLayout
     private var tv_title: TextView
     private var tv_subtitle: TextView
-    private var tv_cta: StandardTextActionButtonComponent
+    private var tv_cta: MaterialButton
     private var tv_cta1: MaterialButton
     private val img: ImageView
-    private var buttonClickListener : OnClickListener? = null
-    private var secondButtonClickListener : OnClickListener? = null
+    private var buttonClickListener: OnClickListener? = null
+    private var secondButtonClickListener: OnClickListener? = null
 
     init {
         this.layoutParams =
@@ -45,19 +42,19 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         tv_cta1 = this.findViewById(R.id.cta1)
 
 
-        tv_cta.setOnClickListener{
+        tv_cta.setOnClickListener {
             buttonClickListener?.onClick(it)
         }
-        tv_cta1.setOnClickListener{
+        tv_cta1.setOnClickListener {
             secondButtonClickListener?.onClick(it)
         }
     }
 
-    fun setButtonClick(buttonClickListener: OnClickListener){
+    fun setButtonClick(buttonClickListener: OnClickListener) {
         this.buttonClickListener = buttonClickListener
     }
 
-    fun secondButtonClick(secondButtonClickListener: OnClickListener){
+    fun secondButtonClick(secondButtonClickListener: OnClickListener) {
         this.secondButtonClickListener = secondButtonClickListener
     }
 
