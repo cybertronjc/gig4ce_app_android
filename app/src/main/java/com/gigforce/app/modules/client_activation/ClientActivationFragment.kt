@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.BuildConfig
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -53,7 +54,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ClientActivationFragment : BaseFragment(),
-        LocationUpdates.LocationUpdateCallbacks {
+    LocationUpdates.LocationUpdateCallbacks {
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
@@ -63,9 +64,9 @@ class ClientActivationFragment : BaseFragment(),
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_client_activation, inflater, container)
     }
@@ -73,10 +74,10 @@ class ClientActivationFragment : BaseFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(ClientActivationViewmodel::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(ClientActivationViewmodel::class.java)
         viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
         getDataFromIntents(savedInstanceState)
         setupPreferredLocationRv()
@@ -92,7 +93,7 @@ class ClientActivationFragment : BaseFragment(),
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 
 
     }
@@ -197,7 +198,6 @@ class ClientActivationFragment : BaseFragment(),
                 adapterPreferredLocation?.addData(locations)
             }
             tv_earning_client_activation.text = Html.fromHtml(it?.payoutNote)
-            val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
             ll_role_desc.removeAllViews()
             it?.queries?.forEach { element ->
                 val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
@@ -360,8 +360,8 @@ class ClientActivationFragment : BaseFragment(),
     }
 
 
-    private fun initializeLearningModule(lessons: List<Media>) {
-        viewModel.observableCourses.observe(viewLifecycleOwner, Observer {
+    private fun initializeLearningModule(lessons: List<String>) {
+        viewModel.observableCoursesLce.observe(viewLifecycleOwner, Observer {
             when (it) {
                 Lce.Loading -> showLearningAsLoading()
                 is Lce.Content -> showUserLearningCourses(it.content)
