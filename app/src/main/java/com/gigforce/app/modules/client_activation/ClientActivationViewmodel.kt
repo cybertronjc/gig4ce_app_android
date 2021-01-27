@@ -78,7 +78,7 @@ class ClientActivationViewmodel(
         return clientActivationNavCallbacks.getUserID()
     }
 
-    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?) {
+    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?, lessonsToFilter: List<String>) {
         if (exception != null) {
             _observableCoursesLce.value = Lce.error(exception.message.toString())
         } else {

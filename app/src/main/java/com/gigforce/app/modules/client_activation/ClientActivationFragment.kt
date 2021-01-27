@@ -360,7 +360,7 @@ class ClientActivationFragment : BaseFragment(),
     }
 
 
-    private fun initializeLearningModule(lessons: List<String>) {
+    private fun initializeLearningModule(lessons: List<Media>) {
         viewModel.observableCoursesLce.observe(viewLifecycleOwner, Observer {
             when (it) {
                 Lce.Loading -> showLearningAsLoading()
