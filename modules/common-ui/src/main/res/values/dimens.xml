@@ -22,4 +22,14 @@
     <dimen name="size8">8dp</dimen>
     <dimen name="size4">4dp</dimen>
 
+    <dimen name="dp_sm3">12sp</dimen>
+    <dimen name="dp_sm2">14sp</dimen>
+    <dimen name="dp_sm1">16sp</dimen>
+    <dimen name="dp_normal">18sp</dimen>
+    <dimen name="dp_large">22sp</dimen>
+    <dimen name="dp_xl1">26sp</dimen>
+    <dimen name="dp_xl2">30sp</dimen>
+    <dimen name="dp_xl3">34sp</dimen>
+    <dimen name="dp_xl4">40sp</dimen>
+    <dimen name="dp_xl5">50sp</dimen>
 </resources>

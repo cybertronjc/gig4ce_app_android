@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/StdCardTitle"
+        style="@style/CardTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/tv_desc"
-        style="@style/StdCardSubtitle"
+        style="@style/CardSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Description here"

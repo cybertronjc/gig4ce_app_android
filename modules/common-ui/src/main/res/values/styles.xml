@@ -191,11 +191,11 @@
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
-    <style name="StdCardTitle" parent="Widget.MaterialComponents.TextView">
+    <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
-    <style name="StdCardSubtitle" parent="Widget.MaterialComponents.TextView">
+    <style name="CardSubtitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
     </style>
 
@@ -219,6 +219,12 @@
         </item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="strokeColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="CardStyle2" parent="Widget.MaterialComponents.CardView">
+        <item name="elevation">@dimen/dp_sm3</item>
+        <item name="android:fadingEdgeLength">@dimen/dp_sm3</item>
+        <item name="android:dividerHeight">@dimen/dp_xl5</item>
     </style>
 
     <style name="GigforceTheme.Option2">
