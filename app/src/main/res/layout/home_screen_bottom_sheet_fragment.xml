@@ -344,6 +344,7 @@
         android:id="@+id/learning_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_16"
         android:layout_marginTop="16dp">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -376,6 +377,7 @@
 
     <RelativeLayout
         android:id="@+id/explore_by_role_rl"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
