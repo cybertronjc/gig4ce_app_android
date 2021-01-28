@@ -24,7 +24,7 @@ class CommonViewTypes {
 
         const val VIEW_FEATURE_LAYOUT = 20201
         const val VIEW_FEATURE_ITEM_CARD = 20202
-
+        const val VIEW_FEATURE_ITEM_CARD2 = 20203
 
         const val VIEW_PROFILE_PIC = 20401
     }

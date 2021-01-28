@@ -147,8 +147,9 @@
     <style name="TextAppearance.GigforceStyles.Caption" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/lato</item>
         <item name="android:fontFamily">@font/lato</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
+
 
     <style name="TextAppearance.GigforceStyles.Overline" parent="TextAppearance.MaterialComponents.Overline">
         <item name="fontFamily">@font/lato</item>
@@ -166,6 +167,8 @@
 
         <item name="colorError">@color/colorError</item>
         <item name="colorOnError">@color/white</item>
+
+        <item name="android:letterSpacing">0</item>
 
         <item name="textAppearanceBody1">@style/TextAppearance.GigforceStyles.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.GigforceStyles.Body2</item>
@@ -199,6 +202,11 @@
         <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
     </style>
 
+    <style name="CardCaptionTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceCaption</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="IconButtonStyle" parent="Widget.AppCompat.ImageButton">
         <item name="backgroundTint">@color/white</item>
         <item name="android:background">@color/white</item>
@@ -221,10 +229,24 @@
         <item name="strokeColor">@color/colorPrimary</item>
     </style>
 
-    <style name="CardStyle2" parent="Widget.MaterialComponents.CardView">
+    <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
         <item name="elevation">@dimen/dp_sm3</item>
+        <item name="cardElevation">@dimen/dp_xsm2</item>
         <item name="android:fadingEdgeLength">@dimen/dp_sm3</item>
         <item name="android:dividerHeight">@dimen/dp_xl5</item>
+        <item name="cornerRadius">@dimen/dp_xsm2</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
+    <style name="CardStyle.ItemStyle">
+        <item name="divider">@android:color/holo_blue_light</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="android:layout_marginLeft">@dimen/dp_xsm1</item>
+        <item name="android:layout_marginTop">@dimen/dp_sm3</item>
+        <item name="android:layout_marginBottom">@dimen/dp_sm3</item>
+        <item name="android:layout_marginRight">@dimen/dp_xsm1</item>
     </style>
 
     <style name="GigforceTheme.Option2">

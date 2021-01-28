@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.cells
+package com.gigforce.common_ui.molecules
 
 import android.content.Context
 import android.util.AttributeSet

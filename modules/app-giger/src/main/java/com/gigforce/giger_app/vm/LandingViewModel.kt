@@ -12,7 +12,7 @@ class LandingViewModel : ViewModel() {
     private fun getAllItems(): ArrayList<Any> {
         var arrayList = ArrayList<Any>()
         arrayList.add(
-                StandardActionCardDVM(
+            StandardActionCardDVM(
                 R.drawable.ic_happy_announcement,
                 "What we do ?",
                 "Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
@@ -32,7 +32,7 @@ class LandingViewModel : ViewModel() {
 
 
         arrayList.add(
-                StandardActionCardDVM(
+            StandardActionCardDVM(
                 R.drawable.ic_ambassador_icon,
                 "Join Us as Ambassador",
                 "More you create profiles , more you earn .",
@@ -41,7 +41,7 @@ class LandingViewModel : ViewModel() {
             )
         )
         arrayList.add(
-                StandardActionCardDVM(
+            StandardActionCardDVM(
                 R.drawable.my_interest_icon,
                 "My Interest",
                 "Explore Interesting Gigs to start Earning ",
@@ -51,7 +51,7 @@ class LandingViewModel : ViewModel() {
         )
         arrayList.add(FeatureLayoutDVM("", "Explore Gig", getExploreGig()))
         arrayList.add(
-                StandardActionCardDVM(
+            StandardActionCardDVM(
                 R.drawable.ic_set_preference,
                 "Set Your Preferences",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
@@ -61,7 +61,7 @@ class LandingViewModel : ViewModel() {
         )
         arrayList.add(FeatureLayoutDVM(R.drawable.learning_icon, "Learning", getFeaturedItems()))
         arrayList.add(
-                StandardActionCardDVM(
+            StandardActionCardDVM(
                 R.drawable.ic_complete_verification_icon,
                 "Complete your Verfication",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
@@ -72,39 +72,63 @@ class LandingViewModel : ViewModel() {
 
 
         arrayList.add(
-            VideoInfoLayoutDVM(
+            FeatureLayoutDVM(
                 R.drawable.ic_help_icon,
                 "Help",
-                getVideoItems(),
-                "Load more"
+                getVideoItems()
             )
         )
+
+        arrayList.add(FeatureLayoutDVM("", "Feature", getFeatureItems1()))
+
         return arrayList
+    }
+
+    private fun getFeatureItems1(): List<Any> {
+        var featureItems = ArrayList<Any>()
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "My Gig"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Wallet"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Learning"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Chat"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Explore"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Profile"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Verification"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Settings"))
+        return featureItems
     }
 
     private fun getExploreGig(): List<Any> {
         var exploreGigItems = ArrayList<Any>()
         exploreGigItems.add(
-            FeatureItemDVM(
+            FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/client_activation%2F21North%2F21N_cover_pic.jpg?alt=media&token=52dc3fbd-22e4-4ffa-a2d3-2e61915e0291",
                 "21North",
                 ""
             )
         )
+
+        exploreGigItems.add(
+            FeatureItemCardDVM(
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/client_activation%2F21North%2F21N_cover_pic.jpg?alt=media&token=52dc3fbd-22e4-4ffa-a2d3-2e61915e0291",
+                "21North",
+                ""
+            )
+        )
+
         return exploreGigItems
     }
 
     private fun getFeaturedItems(): List<Any> {
         var featureItems = ArrayList<Any>()
         featureItems.add(
-            FeatureItemDVM(
+            FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/gig4ce-files-bucket%2Fbehavioral_skills%2Fcourse_behavioural_skills.jpg?alt=media&token=b6d54c0a-0e9a-4f0d-8134-83b96c8aa64a",
                 "Behavioral Skills",
                 "Level 1"
             )
         )
         featureItems.add(
-            FeatureItemDVM(
+            FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/gig4ce-files-bucket%2Fbehavioral_skills%2Fbehave_2a.jpg?alt=media&token=6022178a-87c5-4b18-8091-76b5889ed79f",
                 "Behavioral Skills",
                 "Level 2"

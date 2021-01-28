@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.cells
+package com.gigforce.common_ui.molecules
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.viewdatamodels.FeatureItemDVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 
@@ -29,7 +29,7 @@ class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) : FrameLa
     }
 
     override fun bind(data: Any?) {
-        if (data is FeatureItemDVM) {
+        if (data is FeatureItemCardDVM) {
             if (data.image is String) {
                 if(data.image.contains("http")) {
                     Glide.with(context)

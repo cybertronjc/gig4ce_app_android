@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.learning.R
-import com.gigforce.common_ui.viewdatamodels.FeatureItemDVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.learning.viewmodel.LearningSectionFragmentViewModel
 import kotlinx.android.synthetic.main.learning_section_fragment_fragment.*
@@ -32,17 +32,10 @@ class LearningSectionFragment : Fragment() {
     private fun getFeaturedItems(): List<Any> {
         var featureItems = ArrayList<Any>()
         featureItems.add(
-            FeatureItemDVM(
+            FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/gig4ce-files-bucket%2Fbehavioral_skills%2Fcourse_behavioural_skills.jpg?alt=media&token=b6d54c0a-0e9a-4f0d-8134-83b96c8aa64a",
                 "Behavioral Skills",
                 "Level 1"
-            )
-        )
-        featureItems.add(
-            FeatureItemDVM(
-                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/gig4ce-files-bucket%2Fbehavioral_skills%2Fbehave_2a.jpg?alt=media&token=6022178a-87c5-4b18-8091-76b5889ed79f",
-                "Behavioral Skills",
-                "Level 2"
             )
         )
         return featureItems

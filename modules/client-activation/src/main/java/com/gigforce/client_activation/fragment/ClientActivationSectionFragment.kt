@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.client_activation.viewmodel.ClientActivationSectionViewModel
 import com.gigforce.client_activation.R
-import com.gigforce.common_ui.viewdatamodels.FeatureItemDVM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import kotlinx.android.synthetic.main.client_activation_section_fragment.*
 
@@ -32,7 +32,14 @@ class ClientActivationSectionFragment : Fragment() {
     private fun getExploreGig(): List<Any> {
         var exploreGigItems = ArrayList<Any>()
         exploreGigItems.add(
-            FeatureItemDVM(
+            FeatureItemCardDVM(
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/client_activation%2F21North%2F21N_cover_pic.jpg?alt=media&token=52dc3fbd-22e4-4ffa-a2d3-2e61915e0291",
+                "21North",
+                ""
+            )
+        )
+        exploreGigItems.add(
+            FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/client_activation%2F21North%2F21N_cover_pic.jpg?alt=media&token=52dc3fbd-22e4-4ffa-a2d3-2e61915e0291",
                 "21North",
                 ""

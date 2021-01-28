@@ -13,7 +13,6 @@ import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
-import kotlinx.android.synthetic.main.feature_item_card.view.*
 
 enum class ColorOptions(val value: Int) {
 
@@ -77,12 +76,10 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 
     fun setPrimaryActionClick(buttonClickListener: OnClickListener) {
         this.buttonClickListener = buttonClickListener
-        primary_action.visible()
     }
 
     fun setSecondryActionClick(secondButtonClickListener: OnClickListener) {
         this.secondButtonClickListener = secondButtonClickListener
-        secondary_action.visible()
     }
 
     override fun bind(data: Any?) {
@@ -96,7 +93,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             } else {
             }
             tv_title.text = data.title
-            subtitle.text = data.subtitle
+            tv_desc.text = data.subtitle
 
             if (data.action.isNotBlank()) {
                 primary_action.text = data.action
