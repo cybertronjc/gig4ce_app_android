@@ -50,6 +50,7 @@
         android:layout_marginBottom="13dp"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="0"
+
         android:minHeight="@dimen/size_36"
         android:padding="8dp"
         android:text="@string/update_now"

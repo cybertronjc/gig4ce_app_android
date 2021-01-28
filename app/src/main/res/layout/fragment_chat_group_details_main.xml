@@ -332,6 +332,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
+                    android:minHeight="@dimen/size_36"
                     android:layout_marginEnd="16dp"
                     app:strokeColor="@color/colorPrimary"
                     android:padding="8dp"

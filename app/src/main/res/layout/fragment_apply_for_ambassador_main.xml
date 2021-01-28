@@ -78,6 +78,7 @@
             android:enabled="true"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
+            android:minHeight="@dimen/size_36"
             android:text="@string/start_onboarding_gigers"
             android:textAllCaps="false"
             android:textColor="@color/white"

@@ -333,7 +333,7 @@
             android:layout_marginBottom="@dimen/size_32"
             android:background="@drawable/gradient_button"
             android:letterSpacing="0"
-            android:minHeight="@dimen/size_48"
+            android:minHeight="@dimen/size_36"
             android:paddingTop="@dimen/size_8"
             android:paddingBottom="@dimen/size_8"
             android:text="@string/apply_now"

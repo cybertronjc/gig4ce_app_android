@@ -205,6 +205,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/gradient_button"
             android:clickable="true"
+            android:minHeight="@dimen/size_36"
             android:focusable="true"
             android:letterSpacing="0"
             android:padding="10dp"

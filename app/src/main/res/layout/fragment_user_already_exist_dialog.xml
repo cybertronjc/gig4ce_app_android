@@ -77,6 +77,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="60dp"
             android:layout_marginEnd="24dp"
+            android:minHeight="@dimen/size_36"
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
             app:layout_goneMarginTop="56dp"
