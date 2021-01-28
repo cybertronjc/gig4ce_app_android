@@ -49,7 +49,7 @@ class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : FrameLayo
             } else {
                 layout_img.gone()
             }
-            featured_rv.collection = data.featuredData
+            featured_rv.collection = data.collection
         }
     }
 }

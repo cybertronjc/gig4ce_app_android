@@ -2,6 +2,7 @@ package com.gigforce.app.di
 
 import android.content.Context
 import com.gigforce.core.di.ICoreComponent
+import com.gigforce.learning.di.ILearningModuleComponent
 import com.gigforce.modules.feature_chat.di.IChatComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -20,4 +21,5 @@ interface AppComponent {
 
     fun createChatComponent(): IChatComponent.Factory
     fun createCoreComponent(): ICoreComponent.Factory
+    fun createLearningComponent(): ILearningModuleComponent.Factory
 }

@@ -125,7 +125,8 @@ dependencies {
     implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:feature-chat')
     implementation project(path: ':modules:app-giger')
-    
+    implementation project(path: ':modules:learning')
+
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 

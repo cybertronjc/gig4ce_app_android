@@ -10,6 +10,8 @@ import com.gigforce.core.ILoginInfoProvider
 import com.gigforce.core.LoginInfo
 import com.gigforce.core.di.CoreComponentProvider
 import com.gigforce.core.di.ICoreComponent
+import com.gigforce.learning.di.ILearningModuleComponent
+import com.gigforce.learning.di.ILearningModuleComponentProvider
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.di.IChatComponent
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainApplication : Application(),
     ChatModuleProvider,
     CoreComponentProvider,
-    ILoginInfoProvider {
+    ILoginInfoProvider,
+    ILearningModuleComponentProvider
+{
 
 
     val appComponent: AppComponent by lazy {
@@ -33,7 +37,11 @@ class MainApplication : Application(),
     }
 
     override fun provide(): ICoreComponent {
-        return appComponent.createCoreComponent().create()
+        return appComponent.createCoreComponent().create(applicationContext)
+    }
+
+    override fun provideLearningModuleComponent(): ILearningModuleComponent {
+        return appComponent.createLearningComponent().create()
     }
 
     override fun onCreate() {
