@@ -1337,4 +1337,6 @@
     <string name="please_enter_it_below">Please enter it below.</string>
     <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
     <string name="bank_details_updated">Bank Details Updated</string>
+    <string name="add_now">Add Now</string>
+
 </resources>

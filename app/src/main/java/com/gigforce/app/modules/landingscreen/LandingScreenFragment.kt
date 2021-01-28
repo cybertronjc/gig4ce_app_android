@@ -34,8 +34,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -58,19 +58,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
-import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
-import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
-import kotlin.collections.ArrayList
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -764,7 +751,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         profile_image.setOnClickListener {
-            navigate(R.id.profileFragment)
+            navigate(R.id.fragment_profile_v2)
         }
 
         textView119.setOnClickListener {
