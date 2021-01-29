@@ -23,13 +23,20 @@ import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
+import com.gigforce.app.utils.MyAppGlideModule
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.INavigationProvider
+import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), NavFragmentsData {
+class MainActivity : AppCompatActivity(),
+    NavFragmentsData,
+    INavigationProvider
+{
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -37,6 +44,13 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
 
     fun getNavController():NavController{
         return this.navController
+    }
+
+    @Inject
+    lateinit var navigation:INavigation
+
+    override fun getINavigation(): INavigation {
+        return navigation
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +63,9 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
             return;
         }
         super.onCreate(savedInstanceState)
+
+        (applicationContext as MainApplication).appComponent.inject(this)
+
         this.setContentView(R.layout.activity_main)
 
         navController = this.findNavController(R.id.nav_fragment)

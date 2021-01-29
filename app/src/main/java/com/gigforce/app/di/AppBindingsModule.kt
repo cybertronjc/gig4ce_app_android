@@ -6,19 +6,20 @@ import com.gigforce.app.di.implementations.NavManagerImpl
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.core.IChatNavigation
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
 @Module
-class AppBindingsModule {
+abstract class AppBindingsModule {
 
-    @Provides
-    fun provideNavigation(): IChatNavigation = ChatNavigationImpl()
+    @Binds
+    abstract fun provideNavigation(impl:ChatNavigationImpl): IChatNavigation
 
-    @Provides
-    fun provideNavigationBinding(): INavigation = NavManagerImpl()
+    @Binds
+    abstract fun provideNavigationBinding(impl:NavManagerImpl): INavigation
 
-    @Provides
-    fun iViewTypeFinderProvider(): ICoreViewHolderFactory = MyViewHolderFactory()
+    @Binds
+    abstract fun iViewTypeFinderProvider(impl: MyViewHolderFactory): ICoreViewHolderFactory
 
 }

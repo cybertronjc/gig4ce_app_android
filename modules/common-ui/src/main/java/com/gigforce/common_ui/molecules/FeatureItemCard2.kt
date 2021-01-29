@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
+import com.gigforce.core.INavigationProvider
 import com.gigforce.core.IViewHolder
 import kotlinx.android.synthetic.main.feature_item_card2.view.*
 
@@ -18,6 +19,11 @@ class FeatureItemCard2(context: Context, attrs: AttributeSet?) : FrameLayout(con
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.feature_item_card2, this, true)
+
+        this.setOnClickListener {
+            (context as INavigationProvider).getINavigation().NavigateTo(context,"setting")
+        }
+
     }
 
     override fun bind(data: Any?) {

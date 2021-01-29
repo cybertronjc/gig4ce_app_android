@@ -9,14 +9,9 @@ interface IDataViewTypeGetter{
     fun getViewType():Int
 }
 
-abstract class DataViewObject @Inject constructor(context: Context) :IDataViewTypeGetter
+abstract class DataViewObject() :IDataViewTypeGetter
 {
-    @Inject
-    lateinit var navigation:INavigation
 
-    init {
-        (context as CoreComponentProvider).provide().inject(this)
-    }
 }
 
 abstract class SimpleDataViewObject(private val defaultViewType:Int):DataViewObject()
@@ -24,4 +19,8 @@ abstract class SimpleDataViewObject(private val defaultViewType:Int):DataViewObj
     override fun getViewType(): Int {
         return defaultViewType
     }
+}
+
+interface INavigationProvider{
+    fun getINavigation():INavigation
 }

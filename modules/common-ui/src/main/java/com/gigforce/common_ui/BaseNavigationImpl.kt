@@ -10,25 +10,18 @@ import java.lang.Exception
 
 abstract class BaseNavigationImpl(): INavigation {
 
+    abstract fun getNavController(context: Context):NavController
+    abstract fun RegisterAllRoutes()
+
+    private val navMap: HashMap<String, Int> = HashMap()
+
     init {
         RegisterAllRoutes()
     }
 
-    abstract val navController:NavController
-    abstract fun RegisterAllRoutes()
-
-    private lateinit var _context:Context
-
-    private val navMap: HashMap<String, Int> = HashMap()
-
-    override var context: Context
-         get() = _context
-         set(value) {_context = value}
-
-
-
-    override fun NavigateTo(dest:String, args: Bundle?, navOptions:NavOptions?){
-         if(this.navMap.containsKey(dest))
+    override fun NavigateTo(context: Context, dest:String, args: Bundle?, navOptions:NavOptions?){
+        val navController = getNavController(context)
+        if(this.navMap.containsKey(dest))
              navController.navigate(this.navMap[dest]!!, args, navOptions)
     }
 
