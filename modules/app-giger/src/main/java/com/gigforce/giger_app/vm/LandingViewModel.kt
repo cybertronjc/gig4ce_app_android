@@ -91,9 +91,9 @@ class LandingViewModel : ViewModel() {
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Learning"))
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Chat"))
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Explore"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Profile"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Profile", navPath = "profile"))
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Verification"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Settings"))
+        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Settings", "setting"))
         return featureItems
     }
 

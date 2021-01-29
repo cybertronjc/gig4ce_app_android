@@ -20,6 +20,7 @@ class NavManagerImpl @Inject constructor(
     override fun RegisterAllRoutes() {
 
         this.RegisterRoute("setting", R.id.settingFragment)
+        this.RegisterRoute("profile", R.id.profileFragment)
 
         this.registerForChatModule()
         this.registerForLearningModule()
@@ -32,8 +33,4 @@ class NavManagerImpl @Inject constructor(
     private fun registerForLearningModule(){
 
     }
-}
-
-interface INavAction {
-
 }
