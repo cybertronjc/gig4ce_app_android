@@ -11,8 +11,12 @@ import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.INavArgsProvider
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.feature_item_card2.view.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
@@ -22,6 +26,8 @@ class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
             LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.feature_item_card2, this, true)
     }
+
+    @Inject lateinit var navigation:INavigation
 
     override fun bind(data: Any?) {
 
@@ -33,7 +39,7 @@ class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
 
             data.getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
-                    (context as INavigationProvider).getINavigation().NavigateTo(context,it.path, it.args)
+                    navigation.NavigateTo(it.path, it.args)
                 }
             }
 

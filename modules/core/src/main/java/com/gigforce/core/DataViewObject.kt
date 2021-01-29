@@ -2,7 +2,6 @@ package com.gigforce.core
 
 import android.content.Context
 import android.os.Bundle
-import com.gigforce.core.di.CoreComponentProvider
 import com.gigforce.core.navigation.INavigation
 import javax.inject.Inject
 

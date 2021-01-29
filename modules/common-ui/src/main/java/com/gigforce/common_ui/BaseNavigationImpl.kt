@@ -10,7 +10,7 @@ import java.lang.Exception
 
 abstract class BaseNavigationImpl(): INavigation {
 
-    abstract fun getNavController(context: Context):NavController
+    abstract fun getNavController():NavController
     abstract fun RegisterAllRoutes()
 
     private val navMap: HashMap<String, Int> = HashMap()
@@ -19,8 +19,8 @@ abstract class BaseNavigationImpl(): INavigation {
         RegisterAllRoutes()
     }
 
-    override fun NavigateTo(context: Context, dest:String, args: Bundle?, navOptions:NavOptions?){
-        val navController = getNavController(context)
+    override fun NavigateTo(dest:String, args: Bundle?, navOptions:NavOptions?){
+        val navController = getNavController()
         if(this.navMap.containsKey(dest))
              navController.navigate(this.navMap[dest]!!, args, navOptions)
     }

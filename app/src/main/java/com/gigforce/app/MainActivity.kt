@@ -30,9 +30,10 @@ import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     NavFragmentsData,
     INavigationProvider
@@ -63,8 +64,6 @@ class MainActivity : AppCompatActivity(),
             return;
         }
         super.onCreate(savedInstanceState)
-
-        (applicationContext as MainApplication).appComponent.inject(this)
 
         this.setContentView(R.layout.activity_main)
 

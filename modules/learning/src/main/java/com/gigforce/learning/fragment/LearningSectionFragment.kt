@@ -10,14 +10,12 @@ import androidx.fragment.app.viewModels
 import com.example.learning.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
-import com.gigforce.core.MyFragment
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.learning.di.ILearningModuleComponentProvider
 import com.gigforce.learning.viewmodel.LearningSectionFragmentViewModel
 import kotlinx.android.synthetic.main.learning_section_fragment_fragment.*
 import javax.inject.Inject
 
-class LearningSectionFragment : MyFragment() {
+class LearningSectionFragment : Fragment() {
 
     private val viewModel: LearningSectionFragmentViewModel by viewModels()
 

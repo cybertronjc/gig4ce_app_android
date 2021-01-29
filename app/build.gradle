@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     signingConfigs {
@@ -313,8 +314,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
-    implementation 'com.google.dagger:dagger:2.31'
-    kapt 'com.google.dagger:dagger-compiler:2.31'
+    //implementation 'com.google.dagger:dagger:2.31'
+    //kapt 'com.google.dagger:dagger-compiler:2.31'
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Rx
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

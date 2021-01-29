@@ -7,23 +7,16 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.gigforce.core.IViewHolder
-import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
-import javax.inject.Inject
 
 class ChatListItem(context: Context?) :
     RelativeLayout(context),
     IViewHolder,
     View.OnClickListener {
 
-    @Inject
-    lateinit var navigation: IChatNavigation
-
     init {
 
-        (this.context.applicationContext as ChatModuleProvider).provideChatModule().inject(this)
         // this.navigation.context = this.context          //todo: set context through injection only
 
         LayoutInflater.from(context)
@@ -51,7 +44,7 @@ class ChatListItem(context: Context?) :
     override fun onClick(v: View?) {
         dObj.let {
             Toast.makeText(this.context, "Tapped", Toast.LENGTH_SHORT).show()
-            navigation.navigateToChatPage("test")
+            // navigation.navigateToChatPage("test") todo: Change to New Navigation
         }
     }
 }

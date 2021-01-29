@@ -1,25 +1,23 @@
 package com.gigforce.app.di
 
-import com.gigforce.app.di.implementations.ChatNavigationImpl
 import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.di.implementations.NavManagerImpl
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.modules.feature_chat.core.IChatNavigation
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.components.FragmentComponent
 
+@InstallIn(ActivityComponent::class)
 @Module
-abstract class AppBindingsModule {
+interface AppBindingsModule {
 
     @Binds
-    abstract fun provideNavigation(impl:ChatNavigationImpl): IChatNavigation
+    fun iViewTypeFinderProvider(impl: MyViewHolderFactory): ICoreViewHolderFactory
 
     @Binds
-    abstract fun provideNavigationBinding(impl:NavManagerImpl): INavigation
-
-    @Binds
-    abstract fun iViewTypeFinderProvider(impl: MyViewHolderFactory): ICoreViewHolderFactory
-
+    fun provideNavigationBinding(impl:NavManagerImpl): INavigation
 }

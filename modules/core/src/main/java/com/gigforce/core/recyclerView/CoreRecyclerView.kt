@@ -5,8 +5,12 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.R
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 open class CoreRecyclerView(
     context: Context,
     attrs: AttributeSet
@@ -18,6 +22,9 @@ open class CoreRecyclerView(
     ) {
         this.layoutManager = layoutManager
     }
+
+    @Inject
+    lateinit var iViewTypeFinder: ICoreViewHolderFactory
 
     init {
         //todo: handle for horizontal as well
@@ -43,7 +50,7 @@ open class CoreRecyclerView(
 
     }
     open fun setDefaultAdapter(context: Context) {
-        this.adapter = CoreRecyclerAdapter(context)
+        this.adapter = CoreRecyclerAdapter(context, iViewTypeFinder)
     }
 
     val coreAdapter: CoreRecyclerAdapter

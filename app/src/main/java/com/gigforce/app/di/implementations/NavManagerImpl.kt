@@ -6,14 +6,16 @@ import com.gigforce.app.MainActivity
 import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 class NavManagerImpl @Inject constructor(
+    @ActivityContext val context: Context
 ) :
         BaseNavigationImpl()
 {
 
-    override fun getNavController(context: Context): NavController {
+    override fun getNavController(): NavController {
         return (context as MainActivity).getNavController()
     }
 
