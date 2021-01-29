@@ -60,6 +60,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         ),
                         loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
                         createdOn = Timestamp.now(),
+                        enrolledByLink = false,
+                        firstLogin = Timestamp.now(),
                         lastLoginDetails = LastLoginDetails(
                                 lastLoginTime = Timestamp.now(),
                                 lastLoginLocationLatitude = latitude,
@@ -85,6 +87,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         )
                 ),
                 createdOn = Timestamp.now(),
+                enrolledByLink =  false,
                 firstLogin = Timestamp.now(),
                 lastLoginDetails = LastLoginDetails(
                         lastLoginTime = Timestamp.now(),
@@ -234,6 +237,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     fun setProfileAvatarName(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
                 .document(uid).update("profileAvatarName", profileAvatarName)
+
     }
 
     fun setProfileAvatarName(

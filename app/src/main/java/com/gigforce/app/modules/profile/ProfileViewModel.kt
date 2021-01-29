@@ -47,6 +47,12 @@ class ProfileViewModel : ViewModel() {
                     obj?.id = value.id;
                     userProfileData.value = obj
                     Log.d("ProfileViewModel", userProfileData.toString())
+
+                    // if user logged in via link
+//                    isonboardingdone
+//                    profileAvatarName
+//                    isProfileUpdatedtoAmbassador
+
                 }
             }))
 
