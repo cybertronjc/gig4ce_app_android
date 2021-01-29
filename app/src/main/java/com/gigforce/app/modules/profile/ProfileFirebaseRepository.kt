@@ -86,6 +86,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 ),
                 createdOn = Timestamp.now(),
                 firstLogin = Timestamp.now(),
+                loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
                 lastLoginDetails = LastLoginDetails(
                         lastLoginTime = Timestamp.now(),
                         lastLoginLocationLatitude = latitude,
