@@ -24,7 +24,7 @@ class ChatListItem(context: Context?) :
     init {
 
         (this.context.applicationContext as ChatModuleProvider).provideChatModule().inject(this)
-        this.navigation.context = this.context          //todo: set context through injection only
+        // this.navigation.context = this.context          //todo: set context through injection only
 
         LayoutInflater.from(context)
             .inflate(R.layout.chat_list_item, this, true)
