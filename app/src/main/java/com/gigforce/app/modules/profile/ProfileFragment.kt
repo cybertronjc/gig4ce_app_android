@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
@@ -239,6 +240,13 @@ class ProfileFragment : BaseFragment() {
             showToast("This is work in progress. Please check again in a few days")
         }
         // load user data
+        viewModel.ambassadorProfilePicUpdate.observe(viewLifecycleOwner, Observer {
+            loader_progress.gone()
+            loadImage(it)
+        })
+        viewModel.errorObs.observe(viewLifecycleOwner, Observer {
+            showToast(it)
+        })
         viewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
             val profile: ProfileData = profileObs!!
             viewModel.profileID = profile?.id ?: ""
@@ -581,10 +589,12 @@ class ProfileFragment : BaseFragment() {
         photo is loaded in the view
         */
         if (requestCode == PHOTO_CROP && resultCode == Activity.RESULT_OK) {
-            var imageName: String? = data?.getStringExtra("filename")
+            val imageName: String? = data?.getStringExtra("filename")
+            val thumbNailName = data?.getStringExtra("thumbnail_name")
             Log.v("PROFILE_FRAG_OAR", "filename is:" + imageName)
-            if (null != imageName) {
-                loadImage(imageName)
+            if (null != imageName && null != thumbNailName) {
+                viewModel.updateInAmbassadorEnrollment(imageName, thumbNailName)
+                loader_progress.visibility = View.VISIBLE
             }
             if (ACTION_TO_PERFORM != -1) {
                 when (ACTION_TO_PERFORM) {

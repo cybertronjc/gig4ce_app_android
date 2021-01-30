@@ -39,10 +39,6 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
     }
 
-//    fun getProfile(): DocumentReference {
-//        return firebaseDB.collection(profileCollectionName).document(uid)
-//    }
-
     fun createEmptyProfile(
             latitude: Double = 0.0,
             longitude: Double = 0.0,
@@ -87,7 +83,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         )
                 ),
                 createdOn = Timestamp.now(),
-                enrolledByLink =  false,
+                enrolledByLink = false,
                 firstLogin = Timestamp.now(),
                 loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
                 lastLoginDetails = LastLoginDetails(
@@ -240,6 +236,11 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 .document(uid).update("profileAvatarName", profileAvatarName)
 
     }
+    fun setProfileThumbNail(profileAvatarName: String) {
+        firebaseDB.collection(profileCollectionName)
+            .document(uid).update("profilePicThumbnail", profileAvatarName)
+
+    }
 
     fun setProfileAvatarName(
             userId: String?,
@@ -308,7 +309,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         firebaseDB.collection(profileCollectionName).document(uid).update("address", address)
     }
 
-    fun updateCurrentAddress(address : AddressModel){
+    fun updateCurrentAddress(address: AddressModel) {
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .update(mapOf(
@@ -317,7 +318,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         "address.current.area" to address.area,
                         "address.current.city" to address.city,
                         "address.current.state" to address.state
-                ) )
+                ))
     }
 
     suspend fun setUserAsAmbassador() {
@@ -378,8 +379,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     }
 
     private fun getNumberWithNineone(phoneNumber: String): String {
-        if(!phoneNumber.contains("+91"))
-            return "+91"+phoneNumber
+        if (!phoneNumber.contains("+91"))
+            return "+91" + phoneNumber
         return phoneNumber
     }
 
