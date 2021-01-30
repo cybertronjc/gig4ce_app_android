@@ -10,7 +10,7 @@ import com.gigforce.giger_app.R
 class LandingViewModel(
     private val state: SavedStateHandle
 ) : ViewModel() {
-
+    var isInitialized = false
     val allLandingData: MutableLiveData<ArrayList<Any>>
         get() {return state.getLiveData("allLandingData",ArrayList<Any>())}
 
@@ -172,8 +172,12 @@ class LandingViewModel(
 
     init {
         // _allLandingData.postValue(getAllItems())
-        setLandingData(getAllItems())
-        this.allLandingData.postValue(getAllItems())
+        if(!isInitialized) {
+            setLandingData(getAllItems())
+            this.allLandingData.postValue(getAllItems())
+            isInitialized = true
+        }
+
     }
 
 }

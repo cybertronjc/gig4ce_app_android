@@ -43,6 +43,7 @@ class LandingFragment : Fragment() {
             complete_verification.bind(it.get(7))
             help_layout.bind(it.get(8))
             features_list.bind(it.get(9))
+
 //            landing_rv.collection = it
         })
         initViews()
