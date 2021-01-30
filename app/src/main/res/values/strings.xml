@@ -1338,5 +1338,8 @@
     <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
     <string name="bank_details_updated">Bank Details Updated</string>
     <string name="add_now">Add Now</string>
+    <string name="add_lang_known">Add Languages Known</string>
+    <string name="add_language">Add Language</string>
+    <string name="select_languages">Select Languages</string>
 
 </resources>

@@ -107,8 +107,7 @@
         android:id="@+id/tempFragment"
         android:name="com.gigforce.app.TempFragment"
         android:label="TempFragment"
-        tools:layout="@layout/calendar_dialog">
-    </fragment>
+        tools:layout="@layout/calendar_dialog"></fragment>
 
 
     <fragment
@@ -884,6 +883,10 @@
         android:id="@+id/fragment_profile_v2"
         android:name="com.gigforce.app.modules.profile_.ProfileFragmentv2"
         android:label="fragment_profile_v2" />
+    <fragment
+        android:id="@+id/fragment_add_lang_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddLanguageProfileV2"
+        android:label="fragment_add_lang_profile_v2" />
 
 
 </navigation>
