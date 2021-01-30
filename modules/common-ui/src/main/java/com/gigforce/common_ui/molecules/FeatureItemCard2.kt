@@ -46,14 +46,14 @@ class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
             if(data.image is Int){
                 feature_icon.setImageResource(data.image)
             }
-            else if(data.image is String){
-                if(data.image.contains("http")){
+            else if(data.image is Int){
+                /*if(data.image.contains("http")){
                     Glide.with(context)
                         .load(data.image)
                         .into(feature_icon)
                 }else{
 //                    imgLayout.gone()
-                }
+                }*/
             }
             else{
             }

@@ -1,40 +1,17 @@
 package com.gigforce.common_ui.viewdatamodels
 
+import android.os.Parcelable
 import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.core.SimpleDataViewObject
+import kotlinx.android.parcel.Parcelize
 
-open class StandardActionCardDVM : SimpleDataViewObject {
-    var image: Any? = null
-    var title: String = ""
-    var subtitle: String = ""
-    var action: String = ""
-    var secondAction: String = ""
-    constructor(
-        image: Any?,
-        title: String,
-        subtitle: String,
-        action: String,
-        secondAction: String
-    ) : super(CommonViewTypes.VIEW_STANDARD_ACTION_CARD) {
-        this.image = image
-        this.title = title
-        this.subtitle = subtitle
-        this.action = action
-        this.secondAction = secondAction
-    }
-
-    constructor(
-        image: Any?,
-        title: String,
-        subtitle: String,
-        action: String,
-        secondAction: String,
-        viewType: Int
-    ) : super(viewType) {
-        this.image = image
-        this.title = title
-        this.subtitle = subtitle
-        this.action = action
-        this.secondAction = secondAction
-    }
-}
+@Parcelize
+open class StandardActionCardDVM(var image: Int?,
+                                 var title: String,
+                                 var subtitle: String,
+                                 var action: String,
+                                 var secondAction: String,
+                                 val defaultViewType:Int = CommonViewTypes.VIEW_STANDARD_ACTION_CARD
+) :
+    SimpleDataViewObject(defaultViewType),
+    Parcelable {}

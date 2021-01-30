@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.ILoginInfoProvider
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.vm.LandingViewModel
@@ -15,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_landing.*
 
 class LandingFragment : Fragment() {
 
-    val viewModel: LandingViewModel by viewModels<LandingViewModel>()
+    lateinit var viewModel: LandingViewModel //by viewModels<LandingViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +27,13 @@ class LandingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
+        super.onViewCreated(view, savedInstanceState)
+        viewModel =
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(LandingViewModel::class.java)
         viewModel.allLandingData.observe(viewLifecycleOwner, Observer {
             gig_info.bind(it.get(0))
             gigforce_tip.bind(it.get(1))

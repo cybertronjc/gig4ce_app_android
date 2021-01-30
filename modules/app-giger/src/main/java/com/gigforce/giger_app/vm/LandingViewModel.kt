@@ -2,15 +2,27 @@ package com.gigforce.giger_app.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.common_ui.viewdatamodels.*
 import com.gigforce.giger_app.R
 
-class LandingViewModel : ViewModel() {
-    private var _allLandingData: MutableLiveData<ArrayList<Any>> = MutableLiveData()
-    val allLandingData: LiveData<ArrayList<Any>> = _allLandingData
+class LandingViewModel(
+    private val state: SavedStateHandle
+) : ViewModel() {
+
+    val allLandingData: MutableLiveData<ArrayList<Any>>
+        get() {return state.getLiveData("allLandingData",ArrayList<Any>())}
+
+    private fun setLandingData(data:ArrayList<Any>){
+        state.set("allLandingData", data)
+    }
+
+    //    val allLandingData: LiveData<ArrayList<Any>> = _allLandingData
+    private var _allLandingData: LiveData<ArrayList<Any>> = allLandingData
+
     private fun getAllItems(): ArrayList<Any> {
-        var arrayList = ArrayList<Any>()
+        val arrayList = ArrayList<Any>()
         arrayList.add(
             StandardActionCardDVM(
                 R.drawable.ic_happy_announcement,
@@ -85,7 +97,7 @@ class LandingViewModel : ViewModel() {
     }
 
     private fun getFeatureItems1(): List<Any> {
-        var featureItems = ArrayList<Any>()
+        val featureItems = ArrayList<Any>()
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "My Gig"))
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Wallet"))
         featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Learning"))
@@ -98,7 +110,7 @@ class LandingViewModel : ViewModel() {
     }
 
     private fun getExploreGig(): List<Any> {
-        var exploreGigItems = ArrayList<Any>()
+        val exploreGigItems = ArrayList<Any>()
         exploreGigItems.add(
             FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/client_activation%2F21North%2F21N_cover_pic.jpg?alt=media&token=52dc3fbd-22e4-4ffa-a2d3-2e61915e0291",
@@ -119,7 +131,7 @@ class LandingViewModel : ViewModel() {
     }
 
     private fun getFeaturedItems(): List<Any> {
-        var featureItems = ArrayList<Any>()
+        val featureItems = ArrayList<Any>()
         featureItems.add(
             FeatureItemCardDVM(
                 "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/gig4ce-files-bucket%2Fbehavioral_skills%2Fcourse_behavioural_skills.jpg?alt=media&token=b6d54c0a-0e9a-4f0d-8134-83b96c8aa64a",
@@ -138,7 +150,7 @@ class LandingViewModel : ViewModel() {
     }
 
     private fun getVideoItems(): ArrayList<Any> {
-        var videoItemsList = ArrayList<Any>()
+        val videoItemsList = ArrayList<Any>()
         videoItemsList.add(
             VideoItemCardDVM(
                 "https://i3.ytimg.com/vi/FbiyRe49wjY/hqdefault.jpg",
@@ -159,7 +171,9 @@ class LandingViewModel : ViewModel() {
     }
 
     init {
-        _allLandingData.postValue(getAllItems())
+        // _allLandingData.postValue(getAllItems())
+        setLandingData(getAllItems())
+        this.allLandingData.postValue(getAllItems())
     }
 
 }

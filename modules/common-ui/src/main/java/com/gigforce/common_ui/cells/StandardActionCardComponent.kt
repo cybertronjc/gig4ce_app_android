@@ -84,11 +84,11 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 
     override fun bind(data: Any?) {
         if (data is StandardActionCardDVM) {
-            if (data.image is String && (data.image as String).contains("http")) {
+            /*if (data.image is String && (data.image as String).contains("http")) {
                 Glide.with(context)
                         .load(data.image as String)
                         .into(image)
-            } else if (data.image is Int) {
+            } else */if (data.image is Int) {
                 image.setImageResource(data.image as Int)
             } else {
             }
