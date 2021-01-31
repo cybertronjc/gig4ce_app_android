@@ -20,74 +20,75 @@
         <!--        android:layout_width="match_parent"-->
         <!--        android:layout_height="match_parent" />-->
         <LinearLayout
+            android:id="@+id/sectionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/gig_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:colorOptions="LIGHT_PINK" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/gig_info"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:colorOptions="LIGHT_PINK" />-->
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/gigforce_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/gigforce_tip"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <com.gigforce.common_ui.atoms.GrayLine
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <com.gigforce.common_ui.atoms.GrayLine-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/join_ambassador"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size16"
-                app:colorOptions="LIGHT_BLUE" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/join_ambassador"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="@dimen/size16"-->
+<!--                app:colorOptions="LIGHT_BLUE" />-->
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/my_interest"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:colorOptions="LIPSTICK" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/my_interest"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:colorOptions="LIPSTICK" />-->
 
-            <fragment
-                android:id="@+id/client_activation"
-                android:name="com.gigforce.client_activation.fragment.ClientActivationSectionFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <fragment-->
+<!--                android:id="@+id/client_activation"-->
+<!--                android:name="com.gigforce.client_activation.fragment.ClientActivationSectionFragment"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/set_preference"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:colorOptions="GRAY" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/set_preference"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:colorOptions="GRAY" />-->
 
-            <fragment
-                android:id="@+id/learning_section"
-                android:name="com.gigforce.learning.fragment.LearningSectionFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <fragment-->
+<!--                android:id="@+id/learning_section"-->
+<!--                android:name="com.gigforce.learning.fragment.LearningSectionFragment"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <com.gigforce.common_ui.cells.StandardActionCardComponent
-                android:id="@+id/complete_verification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:colorOptions="GRAY" />
+<!--            <com.gigforce.common_ui.cells.StandardActionCardComponent-->
+<!--                android:id="@+id/complete_verification"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:colorOptions="GRAY" />-->
 
-            <com.gigforce.common_ui.cells.FeatureLayoutComponent
-                android:id="@+id/help_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+<!--            <com.gigforce.common_ui.cells.FeatureLayoutComponent-->
+<!--                android:id="@+id/help_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical" />-->
 
-            <com.gigforce.common_ui.cells.FeatureLayoutComponent
-                android:id="@+id/features_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:rows="2" />
+<!--            <com.gigforce.common_ui.cells.FeatureLayoutComponent-->
+<!--                android:id="@+id/features_list"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:rows="2" />-->
 
             <!--            <com.gigforce.common_ui.cells.VideoInfoLayoutComponent-->
             <!--                android:id="@+id/help_layout"-->
@@ -100,10 +101,11 @@
             <!--                android:orientation="horizontal"-->
             <!--                app:rows="2"/>-->
 
-            <!--            <com.gigforce.core.recyclerView.CoreRecyclerView-->
-            <!--                android:id="@+id/landing_rv"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/landing_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

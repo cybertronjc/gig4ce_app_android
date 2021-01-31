@@ -35,6 +35,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.fragment_assessment_result.view.*

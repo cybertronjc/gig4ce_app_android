@@ -1,6 +1,5 @@
 package com.gigforce.common_ui
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.navigation.NavController
@@ -11,21 +10,21 @@ import java.lang.Exception
 abstract class BaseNavigationImpl(): INavigation {
 
     abstract fun getNavController():NavController
-    abstract fun RegisterAllRoutes()
+    abstract fun registerAllRoutes()
 
     private val navMap: HashMap<String, Int> = HashMap()
 
     init {
-        RegisterAllRoutes()
+        registerAllRoutes()
     }
 
-    override fun NavigateTo(dest:String, args: Bundle?, navOptions:NavOptions?){
+    override fun navigateTo(dest:String, args: Bundle?, navOptions:NavOptions?){
         val navController = getNavController()
         if(this.navMap.containsKey(dest))
              navController.navigate(this.navMap[dest]!!, args, navOptions)
     }
 
-    fun RegisterRoute(dest:String, destResId:Int){
+    fun registerRoute(dest:String, destResId:Int){
         if(this.navMap.containsKey(dest)){
             Log.w("Base/Nav", "Overriding existing nav key registration")
             throw Exception("Nav Key Already Exists") // Comment if not required

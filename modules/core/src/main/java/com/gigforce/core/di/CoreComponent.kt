@@ -1,11 +1,5 @@
 package com.gigforce.core.di
 
-import android.content.Context
-import com.gigforce.core.DataViewObject
-import com.gigforce.core.recyclerView.CoreRecyclerAdapter
-import dagger.BindsInstance
-import dagger.Subcomponent
-
 /*
 @Subcomponent
 interface ICoreComponent {

@@ -5,5 +5,5 @@ import android.os.Bundle
 import androidx.navigation.NavOptions
 
 interface INavigation {
-    fun NavigateTo(dest:String, args: Bundle? = null, navOptions: NavOptions? = null)
+    fun navigateTo(dest:String, args: Bundle? = null, navOptions: NavOptions? = null)
 }

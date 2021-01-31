@@ -1,15 +1,13 @@
 package com.gigforce.core
 
-import android.content.Context
 import android.os.Bundle
 import com.gigforce.core.navigation.INavigation
-import javax.inject.Inject
 
 interface IDataViewTypeGetter{
     fun getViewType():Int
 }
 
-abstract class DataViewObject() :
+abstract class BaseDVM() :
     IDataViewTypeGetter,
     INavArgsProvider
 {
@@ -18,10 +16,10 @@ abstract class DataViewObject() :
     }
 }
 
-abstract class SimpleDataViewObject(
+abstract class SimpleDVM(
     private val defaultViewType:Int,
     private val onClickNavPath:String? = null
-):DataViewObject()
+):BaseDVM()
 {
     override fun getViewType(): Int {
         return defaultViewType

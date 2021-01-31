@@ -14,7 +14,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView
 import com.google.firebase.storage.FirebaseStorage

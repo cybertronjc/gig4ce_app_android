@@ -10,9 +10,10 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.feature_layout.view.*
 
-class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
+open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
     init {
         this.layoutParams =
@@ -33,23 +34,41 @@ class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : FrameLayo
         featured_rv.setOrientationAndRows(orientation, noOfRows)
     }
 
+    open fun setSectionTitle(title:String){
+        layout_title.text = title
+    }
+
+    open fun setSectionIcon(){
+        layout_img.gone()
+    }
+
+    open fun setSectionIcon(imageResource:Int){
+        layout_img.visible()
+        image.setImageResource(imageResource)
+    }
+
+    open fun setSectionIcon(iconUrl:String){
+        layout_img.visible()
+        Glide.with(context)
+            .load(iconUrl)
+            .into(image)
+    }
+
+    open fun setSectionIcon(imageData:Any){
+        if(imageData is Int) setSectionIcon(imageData)
+        else if (imageData is String) setSectionIcon(imageData)
+        else setSectionIcon()
+    }
+
+    open fun setCollection(data: List<Any>){
+        featured_rv.collection = data
+    }
+
     override fun bind(data: Any?) {
         if (data is FeatureLayoutDVM) {
-            layout_title.text = data.title
-            if (data.image is Int) {
-                image.setImageResource(data.image)
-            } else if (data.image is String) {
-                if (data.image.contains("http")) {
-                    Glide.with(context)
-                        .load(data.image)
-                        .into(image)
-                } else {
-//                    imgLayout.gone()
-                }
-            } else {
-                layout_img.gone()
-            }
-            featured_rv.collection = data.collection
+            this.setSectionTitle(data.title)
+            this.setSectionIcon(data.image)
+            this.setCollection(data.collection)
         }
     }
 }

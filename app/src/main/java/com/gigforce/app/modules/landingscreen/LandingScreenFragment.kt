@@ -53,6 +53,7 @@ import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
 import com.gigforce.app.views.MonthYearPickerDialog
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage

@@ -47,7 +47,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.configrepository.ConfigRepository

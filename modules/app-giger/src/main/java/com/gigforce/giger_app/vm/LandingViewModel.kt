@@ -2,34 +2,38 @@ package com.gigforce.giger_app.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.common_ui.viewdatamodels.*
+import com.gigforce.giger_app.MainSectionDVM
 import com.gigforce.giger_app.R
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LandingViewModel(
-    private val state: SavedStateHandle
+@HiltViewModel
+class LandingViewModel @Inject constructor(
+    private val homeCardsFBRepository: IHomeCardsFBRepository
 ) : ViewModel() {
     var isInitialized = false
-    val allLandingData: MutableLiveData<ArrayList<Any>>
-        get() {return state.getLiveData("allLandingData",ArrayList<Any>())}
-
-    private fun setLandingData(data:ArrayList<Any>){
-        state.set("allLandingData", data)
-    }
+    var allLandingData: MutableLiveData<List<Any>> = MutableLiveData<List<Any>>()
+//        get() {return state.getLiveData("allLandingData",ArrayList<Any>())}
+//
+//    private fun setLandingData(data:ArrayList<Any>){
+//        state.set("allLandingData", data)
+//    }
 
     //    val allLandingData: LiveData<ArrayList<Any>> = _allLandingData
-    private var _allLandingData: LiveData<ArrayList<Any>> = allLandingData
+    private var _allLandingData: LiveData<List<Any>> = allLandingData
 
-    private fun getAllItems(): ArrayList<Any> {
+    fun getAllItems(): ArrayList<Any> {
         val arrayList = ArrayList<Any>()
         arrayList.add(
             StandardActionCardDVM(
                 R.drawable.ic_happy_announcement,
                 "What we do ?",
                 "Let's talk about what's a gig and how do you start working as a giger at Gigforce.",
-                "Play Now",
-                "Skip"
+                "Play Now"
             )
         )
         arrayList.add(
@@ -37,8 +41,7 @@ class LandingViewModel(
                 R.drawable.ic_tip,
                 "Gigforce Tip",
                 "Having  an experience can help you start earning fast",
-                "Update Now",
-                "No Experience"
+                "Update Now"
             )
         )
 
@@ -48,8 +51,7 @@ class LandingViewModel(
                 R.drawable.ic_ambassador_icon,
                 "Join Us as Ambassador",
                 "More you create profiles , more you earn .",
-                "Join Now",
-                ""
+                "Join Now"
             )
         )
         arrayList.add(
@@ -57,7 +59,6 @@ class LandingViewModel(
                 R.drawable.my_interest_icon,
                 "My Interest",
                 "Explore Interesting Gigs to start Earning ",
-                "",
                 ""
             )
         )
@@ -67,8 +68,7 @@ class LandingViewModel(
                 R.drawable.ic_set_preference,
                 "Set Your Preferences",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
-                "Complete Now",
-                ""
+                "Complete Now"
             )
         )
         arrayList.add(FeatureLayoutDVM(R.drawable.learning_icon, "Learning", getFeaturedItems()))
@@ -77,8 +77,7 @@ class LandingViewModel(
                 R.drawable.ic_complete_verification_icon,
                 "Complete your Verfication",
                 "Becoming a verified Giger for higher chances of getting recruited faster",
-                "Complete Now",
-                ""
+                "Complete Now"
             )
         )
 
@@ -93,19 +92,21 @@ class LandingViewModel(
 
         arrayList.add(FeatureLayoutDVM("", "Feature", getFeatureItems1()))
 
+        arrayList.add(MainSectionDVM("sec_main_nav"))
+
         return arrayList
     }
 
     private fun getFeatureItems1(): List<Any> {
         val featureItems = ArrayList<Any>()
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "My Gig"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Wallet"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Learning"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Chat"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Explore"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Profile", navPath = "profile"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Verification"))
-        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Settings", "setting"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "My Gig"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Wallet"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Learning"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Chat"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Explore"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Profile", navPath = "profile"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Verification"))
+//        featureItems.add(FeatureItemCard2DVM(R.drawable.ic_tip, "Settings", "setting"))
         return featureItems
     }
 
@@ -172,12 +173,76 @@ class LandingViewModel(
 
     init {
         // _allLandingData.postValue(getAllItems())
-        if(!isInitialized) {
-            setLandingData(getAllItems())
-            this.allLandingData.postValue(getAllItems())
-            isInitialized = true
-        }
+//        if(!isInitialized) {
+//            setLandingData(getAllItems())
+//            this.allLandingData.postValue(getAllItems())
+//            isInitialized = true
+//        }
+        homeCardsFBRepository.getData().observeForever{
+            it?.let {
 
+                this.allLandingData.value = it
+            }
+        }
+    }
+
+
+}
+interface IHomeCardsFBRepository{
+    fun getData():LiveData<List<Any>>
+    fun loadData()
+}
+
+
+class HomeCardsFBRepository @Inject constructor() :IHomeCardsFBRepository{
+    private var data:MutableLiveData<List<Any>> = MutableLiveData()
+    val collectionName = "AppConfigs_Home"
+    init {
+        loadData()
+    }
+    fun getFirebaseReference(){
+        FirebaseFirestore.getInstance()
+            .collection(collectionName)
+            .addSnapshotListener { value, error ->
+                value ?.documents ?. let {
+                    var allData  = ArrayList<Any>()
+                    for(item in it) {
+                        handleDataSnapshot(item)?.let { allData.add(it) }
+                    }
+                    data.value = allData
+                }
+            }
+    }
+
+    fun handleDataSnapshot(snapshot: DocumentSnapshot):Any?{
+        val type = snapshot.get("type") as? String ?: ""
+        when(type) {
+            "sec_action" -> {
+                val title:String = snapshot.get("title") as? String ?: "-"
+                val desc:String = snapshot.get("desc") as? String ?: "-"
+                val imageUrl:String? = snapshot.get("imageUrl") as? String
+                val actionP:Map<String,String>? = snapshot.get("action1") as? Map<String,String> ?:null
+
+                val action1 = ActionButton(title = actionP?.get("title"),navPath = actionP?.get("navPath"))
+                return StandardActionCardDVM(null,
+                    title = title,
+                    subtitle = desc,
+                    action = action1
+                )
+            }
+            "sec_main_nav" -> {
+               return MainSectionDVM(type = type)
+            }
+            else -> return null
+        }
+    }
+
+    override fun getData(): LiveData<List<Any>> {
+        return data
+    }
+
+    override fun loadData() {
+        getFirebaseReference()
     }
 
 }

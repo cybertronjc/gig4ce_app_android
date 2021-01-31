@@ -10,11 +10,19 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
+import com.gigforce.core.INavArgsProvider
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.NavArgs
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
-    IViewHolder {
+@AndroidEntryPoint
+open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs),
+    IViewHolder, INavArgsProvider
+{
     val title: TextView
     val subtitle: TextView
     val image: ImageView
@@ -28,8 +36,29 @@ class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) : FrameLa
         image = this.findViewById(R.id.imgage)
     }
 
+    @Inject
+    lateinit var navigation: INavigation
+
+    var data:Any? = null
+
+    override fun getNavArgs():NavArgs? {
+        val data = this.data
+        if(data is INavArgsProvider)
+            return data.getNavArgs()
+        return null
+    }
+
     override fun bind(data: Any?) {
+        this.data = data
+        this.setOnClickListener(null)
         if (data is FeatureItemCardDVM) {
+
+            getNavArgs() ?. let {
+                this.setOnClickListener{ view ->
+                    navigation.navigateTo(it.path, it.args)
+                }
+            }
+
             if (data.image is String) {
                 if(data.image.contains("http")) {
                     Glide.with(context)

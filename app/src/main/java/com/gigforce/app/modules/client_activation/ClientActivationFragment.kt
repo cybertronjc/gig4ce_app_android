@@ -34,6 +34,7 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager

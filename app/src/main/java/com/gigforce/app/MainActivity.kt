@@ -23,7 +23,7 @@ import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.app.utils.MyAppGlideModule
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.core.INavigationProvider

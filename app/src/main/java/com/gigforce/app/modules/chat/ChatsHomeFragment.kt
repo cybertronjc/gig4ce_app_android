@@ -10,7 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import kotlinx.android.synthetic.main.fragment_chats_home.*
 
 class ChatsHomeFragment : Fragment() {

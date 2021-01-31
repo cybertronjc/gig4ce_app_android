@@ -47,6 +47,7 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory

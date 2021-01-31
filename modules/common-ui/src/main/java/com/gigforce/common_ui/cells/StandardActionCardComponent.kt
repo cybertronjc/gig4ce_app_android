@@ -8,11 +8,16 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
+import kotlinx.android.synthetic.main.feature_item_card2.view.*
 
 enum class ColorOptions(val value: Int) {
 
@@ -82,6 +87,36 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         this.secondButtonClickListener = secondButtonClickListener
     }
 
+    fun setImageFromUrl(url:String){
+        GlideApp.with(context)
+            .load(url)
+            .into(feature_icon)
+    }
+
+    fun setImageFromUrl(storageReference: StorageReference){
+        GlideApp.with(context)
+            .load(storageReference)
+            .into(feature_icon)
+    }
+
+    fun setImage(data: StandardActionCardDVM){
+        data.imageUrl?.let {
+            setImageFromUrl(it)
+            return
+        }
+
+//        data.imageRes ?. let {
+//            feature_icon.setImageResource(data.imageRes)
+//        }
+//
+//        data.image_type ?. let{
+//            val firebaseStoragePath = "gs://gigforce-dev.appspot.com/pub/app_icons/ic_${data.image_type}.png"
+//            val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
+//            setImageFromUrl(gsReference)
+//        }
+    }
+
+
     override fun bind(data: Any?) {
         if (data is StandardActionCardDVM) {
             /*if (data.image is String && (data.image as String).contains("http")) {
@@ -95,14 +130,15 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             tv_title.text = data.title
             tv_desc.text = data.subtitle
 
-            if (data.action.isNotBlank()) {
-                primary_action.text = data.action
-            } else primary_action.gone()
-
-            if (data.secondAction.isNotBlank()) {
-                secondary_action.visible()
-                secondary_action.text = data.secondAction
-            } else secondary_action.gone()
+            setImage(data)
+//            if (data.action.isNotBlank()) {
+//                primary_action.text = data.action
+//            } else primary_action.gone()
+//
+//            if (data.secondAction.isNotBlank()) {
+//                secondary_action.visible()
+//                secondary_action.text = data.secondAction
+//            } else secondary_action.gone()
         }
     }
 

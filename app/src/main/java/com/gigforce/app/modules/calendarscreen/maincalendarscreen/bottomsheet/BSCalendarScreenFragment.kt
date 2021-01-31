@@ -53,6 +53,7 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.amb_join_open_btn

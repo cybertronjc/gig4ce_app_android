@@ -2,16 +2,18 @@ package com.gigforce.common_ui.viewdatamodels
 
 import android.os.Parcelable
 import com.gigforce.common_ui.core.CommonViewTypes
-import com.gigforce.core.SimpleDataViewObject
+import com.gigforce.core.SimpleDVM
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-open class StandardActionCardDVM(var image: Int?,
-                                 var title: String,
+
+open class StandardActionCardDVM(val image: Int?,
+                                 val imageUrl:String?=null,
+                                 val title: String,
                                  var subtitle: String,
-                                 var action: String,
-                                 var secondAction: String,
+                                 var action: ActionButton?=null,
+                                 var secondAction: String? = null,
                                  val defaultViewType:Int = CommonViewTypes.VIEW_STANDARD_ACTION_CARD
-) :
-    SimpleDataViewObject(defaultViewType),
-    Parcelable {}
+) :SimpleDVM(defaultViewType){}
+
+
+open class ActionButton(val title: String? = "",navPath : String? = ""){}

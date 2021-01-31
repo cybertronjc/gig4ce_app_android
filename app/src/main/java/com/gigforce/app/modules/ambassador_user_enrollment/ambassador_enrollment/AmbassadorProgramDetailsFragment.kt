@@ -30,7 +30,7 @@ import com.gigforce.app.modules.learning.LearningViewModel
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
 import com.google.firebase.storage.FirebaseStorage

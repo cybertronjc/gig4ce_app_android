@@ -23,7 +23,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily

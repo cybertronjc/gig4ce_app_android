@@ -1,9 +1,8 @@
-package com.gigforce.app.di.implementations
+package com.gigforce.app.nav
 
 import android.content.Context
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
-import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
 import dagger.hilt.android.qualifiers.ActivityContext
@@ -11,28 +10,26 @@ import javax.inject.Inject
 
 class NavManagerImpl @Inject constructor(
     @ActivityContext val context: Context
-) :
-        BaseNavigationImpl()
+    ) : BaseNavigationImpl()
 {
 
     override fun getNavController(): NavController {
         return (context as MainActivity).getNavController()
     }
 
-    override fun RegisterAllRoutes() {
+    override fun registerAllRoutes() {
 
-        this.RegisterRoute("setting", R.id.settingFragment)
-        this.RegisterRoute("profile", R.id.profileFragment)
+        this.registerRoute("setting", R.id.settingFragment)
+        this.registerRoute("profile", R.id.profileFragment)
 
-        this.registerForChatModule()
-        this.registerForLearningModule()
+        this.registerForWalletAndPayouts()
+
+        NavForLearningModule(this)
+        NavForChatModule(this)
     }
 
-    private fun registerForChatModule(){
-
-    }
-
-    private fun registerForLearningModule(){
-
+    private fun registerForWalletAndPayouts(){
+        val moduleName:String = "wallet"
+        this.registerRoute("${moduleName}/main", R.id.walletBalancePage)
     }
 }

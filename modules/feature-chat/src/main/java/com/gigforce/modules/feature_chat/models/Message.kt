@@ -1,7 +1,7 @@
 package com.gigforce.modules.feature_chat.models
 
 import android.graphics.Bitmap
-import com.gigforce.core.DataViewObject
+import com.gigforce.core.BaseDVM
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
@@ -97,7 +97,7 @@ class Message(
     @get:Exclude
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
-) : DataViewObject(){
+) : BaseDVM(){
 
     companion object {
 

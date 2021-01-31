@@ -33,7 +33,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.modules.learning.slides.SlidesFragment
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
 import com.google.firebase.storage.FirebaseStorage
