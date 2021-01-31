@@ -177,6 +177,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onBackPressed(): Boolean {
 
+
         try {
             findNavController().getBackStackEntry(R.id.mainHomeScreen)
             findNavController().popBackStack(R.id.mainHomeScreen, false)

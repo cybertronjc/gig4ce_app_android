@@ -120,6 +120,8 @@ android {
 }
 
 dependencies {
+    implementation project(':user_profile')
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
@@ -322,5 +324,7 @@ dependencies {
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
     implementation "com.github.skydoves:powermenu:2.1.9"
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+
 
 }
