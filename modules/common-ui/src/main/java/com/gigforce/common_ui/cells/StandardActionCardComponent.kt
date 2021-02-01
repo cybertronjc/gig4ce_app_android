@@ -115,16 +115,24 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     var applyMargin: Boolean
         get() = applyMargin
         set(value) {
+            val params =
+                LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT
+                )
             if(value) {
-                val params =
-                        LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.WRAP_CONTENT
-                        )
                 val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
                 val top: Int = getPixelValue(16)
                 val right: Int = getPixelValue(16)
                 val bottom: Int = getPixelValue(16)
+                params.setMargins(left, top, right, bottom)
+                layoutParams = params
+            }
+            else{
+                val left: Int = getPixelValue(0)//context.resources.getDimension(R.dimen.size4))
+                val top: Int = getPixelValue(0)
+                val right: Int = getPixelValue(0)
+                val bottom: Int = getPixelValue(0)
                 params.setMargins(left, top, right, bottom)
                 layoutParams = params
             }
@@ -137,6 +145,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     override fun bind(data: Any?) {
         primary_action.gone()
         secondary_action.gone()
+        applyMargin = false
         if (data is StandardActionCardDVM) {
             /*if (data.image is String && (data.image as String).contains("http")) {
                 Glide.with(context)
