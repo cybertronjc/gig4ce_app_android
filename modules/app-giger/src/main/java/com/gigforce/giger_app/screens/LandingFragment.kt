@@ -51,11 +51,11 @@ class LandingFragment : Fragment() {
     }
 
     private fun initViews() {
-        (this.context?.applicationContext as? ILoginInfoProvider)?.provideLoginInfo() ?. let {
-//        app_bar.profile_name.text = it.profileName
-        } ?: let {
-
-        }
+//        (this.context?.applicationContext as? ILoginInfoProvider)?.provideLoginInfo() ?. let {
+////        app_bar.profile_name.text = it.profileName
+//        } ?: let {
+//
+//        }
 //        set profile name profile_name
 //        set profile image
     }

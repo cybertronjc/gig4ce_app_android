@@ -12,6 +12,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ViewModelComponent
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -25,6 +26,11 @@ interface AppBindingsModule {
 
     @Binds
     fun provideManNavRepo(imp:MainNavDataRepository):IMainNavDataRepository
+}
+
+@InstallIn(ViewModelComponent::class)
+@Module
+interface ViewModelBindings {
 
     @Binds
     fun provideHomeMenusRepo(imp: HomeCardsFBRepository): IHomeCardsFBRepository

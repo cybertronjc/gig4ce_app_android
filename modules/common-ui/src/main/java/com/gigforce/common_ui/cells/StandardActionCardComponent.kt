@@ -1,23 +1,20 @@
 package com.gigforce.common_ui.cells
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
-import kotlinx.android.synthetic.main.feature_item_card2.view.*
 
 enum class ColorOptions(val value: Int) {
 
@@ -87,19 +84,19 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         this.secondButtonClickListener = secondButtonClickListener
     }
 
-    fun setImageFromUrl(url:String){
+    fun setImageFromUrl(url: String) {
         GlideApp.with(context)
-            .load(url)
-            .into(feature_icon)
+                .load(url)
+                .into(image)
     }
 
-    fun setImageFromUrl(storageReference: StorageReference){
+    fun setImageFromUrl(storageReference: StorageReference) {
         GlideApp.with(context)
-            .load(storageReference)
-            .into(feature_icon)
+                .load(storageReference)
+                .into(image)
     }
 
-    fun setImage(data: StandardActionCardDVM){
+    fun setImage(data: StandardActionCardDVM) {
         data.imageUrl?.let {
             setImageFromUrl(it)
             return
@@ -115,22 +112,56 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 //            setImageFromUrl(gsReference)
 //        }
     }
+    var applyMargin: Boolean
+        get() = applyMargin
+        set(value) {
+            if(value) {
+                val params =
+                        LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.WRAP_CONTENT
+                        )
+                val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
+                val top: Int = getPixelValue(16)
+                val right: Int = getPixelValue(16)
+                val bottom: Int = getPixelValue(16)
+                params.setMargins(left, top, right, bottom)
+                layoutParams = params
+            }
+        }
 
+    fun getPixelValue(value: Int): Int {
+        return (value * Resources.getSystem().displayMetrics.density).toInt()
+    }
 
     override fun bind(data: Any?) {
+        primary_action.gone()
+        secondary_action.gone()
         if (data is StandardActionCardDVM) {
             /*if (data.image is String && (data.image as String).contains("http")) {
                 Glide.with(context)
                         .load(data.image as String)
                         .into(image)
             } else */if (data.image is Int) {
-                image.setImageResource(data.image as Int)
+                image.setImageResource(data.image)
             } else {
             }
             tv_title.text = data.title
             tv_desc.text = data.subtitle
 
             setImage(data)
+            data.action1?.let {
+                primary_action.visible()
+                primary_action.text = it.title?:""
+            }?:primary_action.gone()
+
+            data.action2?.let {
+                secondary_action.visible()
+                secondary_action.text = it.title?:""
+            }?:secondary_action.gone()
+
+            backgroundColor = ColorOptions.getByValue(data.bgcolor)
+            applyMargin = data.marginRequired
 //            if (data.action.isNotBlank()) {
 //                primary_action.text = data.action
 //            } else primary_action.gone()
