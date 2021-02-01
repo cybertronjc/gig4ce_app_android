@@ -189,7 +189,12 @@ class OnboardingMainViewModel : ViewModel() {
                                     EnrollmentInfo(id = invite, enrolledOn = Timestamp.now())
 
                                 )
+                            profileFirebaseRepository.getDBCollection()
+                                .update(
+                                    "enrolledByLink",
+                                    true
 
+                                )
                             profileFirebaseRepository.db.collection("Ambassador_Enrolled_User")
                                 .document(invite).collection("Enrolled_Users")
                                 .document(profileFirebaseRepository.uid).set(

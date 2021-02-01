@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +27,7 @@ import com.gigforce.app.core.ImagePicker
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.GlideApp
+import com.gigforce.app.utils.ImageUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -110,7 +112,7 @@ class PhotoCrop : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?): Unit {
         super.onCreate(savedInstanceState)
-        if(android.os.Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
 
@@ -202,7 +204,6 @@ class PhotoCrop : AppCompatActivity() {
     override fun onBackPressed() {
         super.finish()
     }
-
 
 
     override fun onActivityResult(
@@ -346,7 +347,7 @@ class PhotoCrop : AppCompatActivity() {
         } else {
             resultIntent.putExtra("filename", imageFileName + EXTENSION)
         }
-        val size=getImageDimensions(uri)
+        val size = getImageDimensions(uri)
         uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
 //        uCrop.withMaxResultSize(size.width, size.height)
         uCrop.withOptions(getCropOptions())
@@ -409,22 +410,76 @@ class PhotoCrop : AppCompatActivity() {
          */
         try {
             uploadTask.addOnSuccessListener { taskSnapshot: TaskSnapshot ->
-                taskSnapshot.storage.downloadUrl.addOnSuccessListener {
-                    resultIntent.putExtra("image_url", it.toString())
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    onBackPressed()
+                val fname: String = taskSnapshot.metadata?.reference?.name.toString()
+                if (purpose == profilePictureCrop) {
+                    taskSnapshot.storage.downloadUrl.addOnSuccessListener { parentSnapShot ->
+
+                        try {
+
+                            val thumbnail =
+                                try {
+                                    if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                                        ThumbnailUtils.createImageThumbnail(
+                                            File(uri.path),
+                                            Size(156, 156),
+                                            null
+                                        )
+                                    } else {
+                                        ImageUtils.resizeBitmap(uri.path!!, 156, 156)
+                                    }
+                                } catch (e: Exception) {
+                                    null
+                                }
+                            if (thumbnail != null) {
+                                val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
+
+                                val thumbnailName = fname
+                                    .substringBeforeLast(".") + "_thumbnail." + fname
+                                    .substringAfterLast(".")
+                                val mReference =
+                                    storage.reference.child("profile_pics").child(thumbnailName)
+                                val putBytes = mReference.putBytes(imageInBytes)
+                                putBytes.addOnSuccessListener {
+                                    progress_circular.visibility = View.GONE
+                                    val thumbNail: String = it.metadata?.reference?.name.toString()
+                                    updateViewModel(purpose, thumbNail, true)
+                                    //loadImage(folder, fname)
+                                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG)
+                                        .show()
+                                    resultIntent.putExtra(
+                                        "image_url",
+                                        parentSnapShot.toString()
+                                    )
+                                    resultIntent.putExtra("thumbnail_name", thumbnailName)
+                                    setResult(Activity.RESULT_OK, resultIntent)
+                                    onBackPressed()
+
+                                }
+
+                            } else {
+                                Toast.makeText(this, "Some Seems Off", Toast.LENGTH_LONG).show()
+
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+
+                        }
+
+                    }
+
+
+                } else {
+                    taskSnapshot.storage.downloadUrl.addOnSuccessListener {
+                        resultIntent.putExtra("image_url", it.toString())
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        onBackPressed()
+                    }
+                    progress_circular.visibility = View.GONE
+                    //loadImage(folder, fname)
+                    Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
                 }
 
-                progress_circular.visibility = View.GONE
-                val fname: String = taskSnapshot.metadata?.reference?.name.toString()
-                updateViewModel(purpose, fname)
-                //loadImage(folder, fname)
-                Toast.makeText(this, "Successfully Uploaded", Toast.LENGTH_LONG).show()
-                Log.v(
-                    "PHOTO_CROP",
-                    "uploaded file in foldername" + CLOUD_OUTPUT_FOLDER + " file: " + fname
-                )
-
+                updateViewModel(purpose, fname, false)
 
             }
         } catch (e: Exception) {
@@ -438,9 +493,11 @@ class PhotoCrop : AppCompatActivity() {
      * @param purpose - to define the logic that should be followed in update
      * @param name - required for updating profile picture value ( alternate constructors can be made for different arguments )
      */
-    private fun updateViewModel(purpose: String, name: String) {
+    private fun updateViewModel(purpose: String, name: String, thumbnail: Boolean) {
         when (purpose) {
-            profilePictureCrop -> viewModel.setProfileAvatarName(name)
+            profilePictureCrop -> if (thumbnail) viewModel.setProfileThumbnailName(name) else viewModel.setProfileAvatarName(
+                name
+            )
         }
     }
 
