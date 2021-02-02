@@ -10,6 +10,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.profile_.models.ContentCardData
+import com.gigforce.user_profile.components.AddContentCard
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.content_scrolling.*
 import kotlinx.android.synthetic.main.fragment_profile_v2.*
@@ -64,26 +66,38 @@ class ProfileFragmentv2 : BaseFragment() {
 
     }
 
+
     private fun initViews() {
-        initAddressCard()
-
-    }
-
-    private fun initAddressCard() {
-        add_address_profile_v2.topLabel = R.string.current_address
-        add_address_profile_v2.topIcon = R.drawable.ic_address_illustration
-        add_address_profile_v2.contentIllustration = R.drawable.ic_address_illustration
-        add_address_profile_v2.contentHeading = R.string.add_contact_address
-        add_address_profile_v2.rightActionText = R.string.add_now
-//        add_address_profile_v2.contentText = R.string.large_text
-        add_address_profile_v2.setRightClickAction {
+        updateContentCardUI(add_address_profile_v2, ContentCardData(topLabel = R.string.current_address, topIcon = R.drawable.ic_location_black, contentIllustration = R.drawable.ic_address_illustration,
+                contentTitle = R.string.add_contact_address, actionText = R.string.add_now))
+        updateContentCardUI(add_education_profile_v2, ContentCardData(topLabel = R.string.education, topIcon = R.drawable.ic_education_top_profile_v2, contentIllustration = R.drawable.ic_education_profile_v2,
+                contentTitle = R.string.education, actionText = R.string.update_now, contentText = R.string.let_people_education))
+        updateContentCardUI(add_experience_profile_fragment_v2, ContentCardData(topLabel = R.string.experience, topIcon = R.drawable.ic_experience_top_label_profile_v2, contentIllustration = R.drawable.ic_experience_illustration_profile_v2,
+                contentTitle = R.string.exp_matters, actionText = R.string.update_now, contentText = R.string.exp_matters))
+        updateContentCardUI(add_skills_profile_v2, ContentCardData(topLabel = R.string.skills_known, topIcon = R.drawable.ic_skills_top_icon_profile_v2, contentIllustration = R.drawable.ic_skills_profile_v2,
+                contentTitle = R.string.skills, actionText = R.string.add_now, contentText = R.string.let_people_skills))
+        updateContentCardUI(add_documents_profile_v2, ContentCardData(topLabel = R.string.documents, topIcon = R.drawable.ic_documents_top_icon_profile_v2,
+                contentIllustration = R.drawable.ic_documents_profile_v2,
+                contentTitle = R.string.upload_your_documents, actionText = R.string.upload_now))
+        updateContentCardUI(add_language_profile_v2, ContentCardData(topLabel = R.string.lang_known, topIcon = R.drawable.ic_language_title,
+                contentIllustration = R.drawable.ic_add_language_illustration, contentText = R.string.add_lang_known,
+                contentTitle = R.string.language, actionText = R.string.add_now, clickHandler = {
             this@ProfileFragmentv2.navigate(R.id.fragment_add_lang_profile_v2)
-        }
-//        PushDownAnim.setPushDownAnimTo(card_language_profile_v2.tv_add_now_profile_v2)
-//            .setOnClickListener(
-//                View.OnClickListener {
-//                    navigate(R.id.fragment_add_lang_profile_v2)
-//                })
+        }))
 
     }
+
+    private fun updateContentCardUI(contentCard: AddContentCard, contentData: ContentCardData) {
+        contentCard.topLabel = contentData.topLabel ?: R.string.empty_dash_string
+        contentCard.topIcon = contentData.topIcon ?: R.drawable.ic_circle_empty
+        contentCard.contentIllustration = contentData.contentIllustration
+                ?: R.drawable.ic_circle_empty
+        contentCard.contentHeading = contentData.contentTitle ?: R.string.empty_dash_string
+        contentCard.rightActionText = contentData.actionText ?: R.string.empty_dash_string
+        contentCard.contentText = contentData.contentText ?: R.string.empty_dash_string
+        contentCard.setRightClickAction(contentData.clickHandler)
+
+    }
+
+
 }

@@ -1365,6 +1365,15 @@
     <string name="record_now">Record Now</string>
     <string name="contact_info">Contact Info</string>
     <string name="social_media">Social Media</string>
+    <string name="exp_matters">Let people know what you have done so \n far in your career</string>
+    <string name="skills_known">Skills Known</string>
+    <string name="let_people_skills">Let People know about your skills</string>
+    <string name="documents">Documents</string>
+    <string name="upload_your_documents">Upload your documents</string>
+    <string name="upload_now">Upload Now</string>
+    <string name="let_people_education">Let people know what you have studied so far in your career</string>
+    <string name="lang_known">Languages Known</string>
+    <string name="add_lang_known">Add Languages Known</string>
 
 
 </resources>

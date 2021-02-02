@@ -444,9 +444,8 @@ Profile "
             android:layout_marginTop="@dimen/size_24"
             android:background="#f5f7ff" />
 
-        <include
+        <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_experience_profile_fragment_v2"
-            layout="@layout/add_content_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_5"
@@ -460,9 +459,8 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#979797" />
 
-        <include
+        <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_skills_profile_v2"
-            layout="@layout/add_content_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_6"
@@ -476,9 +474,8 @@ Profile "
             android:layout_marginTop="@dimen/size_24"
             android:background="#f5f7ff" />
 
-        <include
+        <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_documents_profile_v2"
-            layout="@layout/add_content_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_7"
@@ -492,9 +489,8 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#979797" />
 
-        <include
+        <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_education_profile_v2"
-            layout="@layout/add_content_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_8"
@@ -599,9 +595,8 @@ Profile "
             android:layout_marginTop="@dimen/size_24"
             android:background="#979797" />
 
-        <include
+        <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_language_profile_v2"
-            layout="@layout/add_content_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_12"

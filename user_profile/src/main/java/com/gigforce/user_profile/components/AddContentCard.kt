@@ -58,9 +58,11 @@ class AddContentCard @JvmOverloads constructor(
             findViewById<TextView>(R.id.tv_add_now_profile_v2).text = resources.getString(value!!)
         }
 
-    fun setRightClickAction(clickHandler: ClickHandler) {
+    fun setRightClickAction(clickHandler: ClickHandler?) {
         findViewById<TextView>(R.id.tv_add_now_profile_v2).setOnClickListener {
-            clickHandler(this)
+            clickHandler?.let {
+                clickHandler(this)
+            }
         }
     }
 
