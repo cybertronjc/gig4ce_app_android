@@ -21,13 +21,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.BuildConfig
-import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.Media
 import com.gigforce.app.modules.explore_by_role.AdapterPreferredLocation
 import com.gigforce.app.modules.learning.LearningConstants
@@ -54,7 +54,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 class ClientActivationFragment : BaseFragment(),
-    LocationUpdates.LocationUpdateCallbacks {
+        LocationUpdates.LocationUpdateCallbacks {
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
@@ -64,9 +64,9 @@ class ClientActivationFragment : BaseFragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_fragment_client_activation, inflater, container)
     }
@@ -74,10 +74,10 @@ class ClientActivationFragment : BaseFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel =
-            ViewModelProvider(
-                this,
-                SavedStateViewModelFactory(requireActivity().application, this)
-            ).get(ClientActivationViewmodel::class.java)
+                ViewModelProvider(
+                        this,
+                        SavedStateViewModelFactory(requireActivity().application, this)
+                ).get(ClientActivationViewmodel::class.java)
         viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
         getDataFromIntents(savedInstanceState)
         setupPreferredLocationRv()
@@ -93,7 +93,7 @@ class ClientActivationFragment : BaseFragment(),
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 
 
     }
@@ -251,7 +251,6 @@ class ClientActivationFragment : BaseFragment(),
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
             pb_client_activation.gone()
             tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
-
             run {
                 if (FirebaseAuth.getInstance().currentUser?.uid == null) {
                     iv_options_client_activation.gone()
@@ -267,41 +266,10 @@ class ClientActivationFragment : BaseFragment(),
                     }
                 } else {
                     tv_mark_as_interest_role_details.setOnClickListener {
-
 //                    if (jpApplication == null || jpApplication.stepDone == 1) {
-                        if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft") {
-                            if (mClientViaDeeplink == true) {
-                                if (location == null) {
-                                    showToast(getString(R.string.set_location_to_high_accuracy))
-                                    return@setOnClickListener
-
-                                }
-                                pb_client_activation.visible()
-                                viewModel.addInviteUserId(
-                                        mInviteUserID ?: "",
-                                        mJobProfileId,
-                                        location!!
-                                )
-
-
-                            } else {
-                                navigate(
-                                        R.id.fragment_application_client_activation, bundleOf(
-                                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
-                                )
-                                )
-                                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
-                            }
-
-                        } else if (jpApplication.status == "Applied") {
-                            navigate(
-                                    R.id.fragment_gig_activation, bundleOf(
-                                    StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
-                                    StringConstants.NEXT_DEP.value to viewModel.observableJobProfile.value?.nextDependency
-                            )
-                            )
-                        }
+                        markAsInterestClick(jpApplication)
                     }
+
                     if (jpApplication == null) return@Observer
                     if (jpApplication.status == "")
                         tv_applied_client_activation.gone()
@@ -327,6 +295,7 @@ class ClientActivationFragment : BaseFragment(),
                         tv_mark_as_interest_role_details.gone()
                     else
                         tv_mark_as_interest_role_details.text = actionButtonText
+
                 }
 
             }
@@ -581,23 +550,68 @@ class ClientActivationFragment : BaseFragment(),
     var location: Location? = null
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates!!.stopLocationUpdates(requireActivity())
+        locationUpdates?.stopLocationUpdates(requireActivity())
     }
 
     override fun onResume() {
         super.onResume()
-        locationUpdates!!.startUpdates(requireActivity() as AppCompatActivity)
-        locationUpdates!!.setLocationUpdateCallbacks(this)
+        locationUpdates?.startUpdates(requireActivity() as AppCompatActivity)
+        locationUpdates?.setLocationUpdateCallbacks(this)
+
     }
 
 
     override fun locationReceiver(location: Location?) {
         this.location = location
+        if (mClientViaDeeplink == true) {
+            if (FirebaseAuth.getInstance().currentUser?.uid != null) {
+                tv_mark_as_interest_role_details
+                        ?.let {
+                            popAllBackStates()
+                            it.performClick()
+                            locationUpdates?.stopLocationUpdates(requireActivity())
+                        }
 
-
+            }
+        }
     }
 
     override fun lastLocationReceiver(location: Location?) {
+    }
+
+    fun markAsInterestClick(jpApplication: JpApplication?) {
+        if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft") {
+            if (mClientViaDeeplink == true) {
+                if (location == null) {
+                    showToast(getString(R.string.set_location_to_high_accuracy))
+                    return
+
+                }
+                pb_client_activation.visible()
+                viewModel.addInviteUserId(
+                        mInviteUserID ?: "",
+                        mJobProfileId,
+                        location!!
+                )
+
+
+            } else {
+                navigate(
+                        R.id.fragment_application_client_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
+                )
+                )
+                viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
+            }
+
+        } else if (jpApplication.status == "Applied") {
+            navigate(
+                    R.id.fragment_gig_activation, bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
+                    StringConstants.NEXT_DEP.value to viewModel.observableJobProfile.value?.nextDependency
+            )
+            )
+        }
     }
 
     override fun onBackPressed(): Boolean {
@@ -606,5 +620,6 @@ class ClientActivationFragment : BaseFragment(),
         }
         return super.onBackPressed()
     }
+
 
 }

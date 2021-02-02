@@ -612,9 +612,11 @@ class LandingScreenFragment : BaseFragment() {
                     false
             )
             gigforce_tip.adapter = recyclerGenericAdapter
-            var pagerHelper = PagerSnapHelper()
-            gigforce_tip.onFlingListener = null
-            pagerHelper.attachToRecyclerView(gigforce_tip)
+            if(gigforce_tip.onFlingListener==null){
+                var pagerHelper = PagerSnapHelper()
+                pagerHelper.attachToRecyclerView(gigforce_tip)
+            }
+
             var handler = Handler()
 //        val runnable = Runnable {
 //            var currentVisiblePosition = (gigforce_tip.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
