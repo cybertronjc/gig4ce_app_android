@@ -34,6 +34,10 @@
         android:label="AddLanguageBottomSheetFragment" />
 
     <fragment
+        android:id="@+id/bsFragment"
+        android:name="com.gigforce.giger_app.screens.FeaturesBSFragment" />
+
+    <fragment
         android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 

@@ -21,7 +21,7 @@ class NavManagerImpl @Inject constructor(
 
         this.registerRoute("setting", R.id.settingFragment)
         this.registerRoute("profile", R.id.profileFragment)
-
+        this.registerRoute("bottom_sheet",R.id.bsFragment)
         this.registerForWalletAndPayouts()
 
         NavForLearningModule(this)

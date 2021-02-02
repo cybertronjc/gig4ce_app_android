@@ -8,6 +8,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+
     signingConfigs {
         debug {
             storeFile file('../keystore/gigforceapp.jks')
@@ -127,6 +128,7 @@ dependencies {
     implementation project(path: ':modules:feature-chat')
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')
+    implementation project(path: ':modules:client-activation')
 
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'

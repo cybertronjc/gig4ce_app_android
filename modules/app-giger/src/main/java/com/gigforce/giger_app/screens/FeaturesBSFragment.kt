@@ -1,20 +1,20 @@
 package com.gigforce.giger_app.screens
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.gigforce.giger_app.R
+import com.gigforce.giger_app.vm.FeaturesBSViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.features_bs_fragment.*
 
+@AndroidEntryPoint
 class FeaturesBSFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = FeaturesBSFragment()
-    }
-
-    private lateinit var viewModel: FeaturesBViewModel
+    val viewModel: FeaturesBSViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +25,20 @@ class FeaturesBSFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FeaturesBViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel._allBSData.observe(viewLifecycleOwner, Observer {
+            bs_rv.collection = it
+
+        })
+        initViews()
+        listeners()
+    }
+
+    private fun initViews() {
+        //Todo initialize profile views
+    }
+
+    private fun listeners() {
+
     }
 
 }

@@ -13,26 +13,40 @@ interface ILearningDataRepository {
 
 class LearningDataRepository @Inject constructor() : ILearningDataRepository {
     private var data: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
+
+    init {
+        loadData()
+    }
+
     override fun loadData() {
-        FirebaseFirestore.getInstance().collection("Course_blocks").whereEqualTo("type", "course").addSnapshotListener { value, error ->
+        FirebaseFirestore.getInstance().collection("Course_blocks").orderBy("priority")
+            .whereEqualTo("type", "course").whereEqualTo("isopened", true)
+            .addSnapshotListener { value, error ->
 
-            val doc = value?.documents
-            doc?.let {
-                val _data = ArrayList<FeatureItemCardDVM>()
-                for (item in it) {
-                    val mapItem = item as? Map<String, Any>
-                    val name = mapItem?.get("Name") as? String ?: "-"
-                    val level = mapItem?.get("Level") as? String ?: "-"
-                    val title = name + level
-                    val priority = (mapItem?.get("priority") as? Int) ?: 500
-                    val coverPic = mapItem?.get("cover_pic") as? String
-                    val nav_path = mapItem?.get("nav_path") as? String
-                    _data.add(FeatureItemCardDVM(title = title, image = coverPic, navPath = nav_path))
+                val doc = value?.documents
+                doc?.let {
+                    val _data = ArrayList<FeatureItemCardDVM>()
+                    for (item in it) {
+                        val title = item?.get("Name") as? String ?: "-"
+                        val subtitle = item?.get("Level") as? String ?: "-"
+//                    val title = name + level
+//                        val priority = (item?.get("priority") as? Int) ?: 500
+                        val coverPic = item?.get("cover_pic") as? String
+                        val nav_path = item?.get("nav_path") as? String
+                        _data.add(
+                            FeatureItemCardDVM(
+                                id = item.id,
+                                title = title,
+                                subtitle = subtitle,
+                                image = coverPic,
+                                navPath = nav_path
+                            )
+                        )
+                    }
+                    data.value = _data
                 }
-                data.value = _data
-            }
 
-        }
+            }
     }
 
     override fun getData(): LiveData<List<FeatureItemCardDVM>> {
