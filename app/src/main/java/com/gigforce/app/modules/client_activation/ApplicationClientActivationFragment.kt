@@ -25,8 +25,8 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
 class ApplicationClientActivationFragment : BaseFragment(),
-    AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
-    ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
+        AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
+        ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
     private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
 
@@ -38,22 +38,22 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflateView(
-            R.layout.layout_application_client_activation_fragment,
-            inflater,
-            container
+                R.layout.layout_application_client_activation_fragment,
+                inflater,
+                container
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
+                this,
+                ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(ApplicationClientActivationViewModel::class.java)
         getDataFromIntents(savedInstanceState)
         checkForBackPress()
@@ -70,7 +70,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         if (navFragmentsData?.getData() != null) {
             if (navFragmentsData?.getData()
-                    ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+                            ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
                 viewModel.redirectToNextStep = false
                 navFragmentsData?.setData(bundleOf())
@@ -81,7 +81,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     private fun initClicks() {
         iv_back_application_client_activation.setOnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
 
         tv_action_application_client_activation.setOnClickListener {
@@ -104,10 +104,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
             pb_application_client_activation.gone()
             popBackState()
             navigate(
-                R.id.fragment_gig_activation, bundleOf(
+                    R.id.fragment_gig_activation, bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to mJobProfileId
 
-                )
+            )
             )
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
@@ -119,15 +119,15 @@ class ApplicationClientActivationFragment : BaseFragment(),
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             Glide.with(this).load(it?.coverImg).placeholder(
-                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)
 
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
             tv_completion_application.text = it?.subTitle ?: ""
             tv_title_application_client_activation.text = it?.businessTitle ?: ""
             viewModel.updateDraftJpApplication(
-                mJobProfileId,
-                it?.requiredFeatures ?: listOf()
+                    mJobProfileId,
+                    it?.requiredFeatures ?: listOf()
             )
 
         })
@@ -143,16 +143,16 @@ class ApplicationClientActivationFragment : BaseFragment(),
         for (i in 0 until jpApplication.application.size) {
             if (!jpApplication.application[i].isDone) {
                 adapter.setImageDrawable(
-                    jpApplication.application[i].type!!,
-                    resources.getDrawable(R.drawable.ic_status_pending),
-                    false
+                        jpApplication.application[i].type!!,
+                        resources.getDrawable(R.drawable.ic_status_pending),
+                        false
                 )
 //               viewModel.setData(jpApplication.application[i].feature)
             } else {
                 adapter.setImageDrawable(
-                    jpApplication.application[i].type!!,
-                    resources.getDrawable(R.drawable.ic_applied),
-                    true
+                        jpApplication.application[i].type!!,
+                        resources.getDrawable(R.drawable.ic_applied),
+                        true
                 )
             }
         }
@@ -177,38 +177,38 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
                         navigate(
-                            R.id.profileFragment, bundleOf(
+                                R.id.profileFragment, bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true,
                                 StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
 
-                            )
+                        )
                         )
                     }
                     "about_me" -> {
                         navigate(
-                            R.id.fragment_add_bio, bundleOf(
+                                R.id.fragment_add_bio, bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                            )
+                        )
                         )
                     }
                     "questionnaire" -> navigate(
-                        R.id.application_questionnaire, bundleOf(
+                            R.id.application_questionnaire, bundleOf(
                             StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                             StringConstants.TITLE.value to adapter.items[i].title,
                             StringConstants.TYPE.value to adapter.items[i].type,
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                        )
+                    )
                     )
                     "driving_licence" -> navigate(
-                        R.id.fragment_upload_dl_cl_act,
-                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                            R.id.fragment_upload_dl_cl_act,
+                            bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                     "learning" -> navigate(
-                        R.id.learningCourseDetails,
-                        bundleOf(
-                            LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
-                            StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                        )
+                            R.id.learningCourseDetails,
+                            bundleOf(
+                                    LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                                    StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                            )
                     )
                 }
                 break
@@ -226,17 +226,17 @@ class ApplicationClientActivationFragment : BaseFragment(),
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
         Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
-            .subscribe({ success ->
-                run {
-                    h_pb_application_frag.progress = adapter.items.size - success.size
-                    tv_steps_pending_application_value.text =
-                        "" + success.size + "/" + adapter.items.size
-                    h_pb_application_frag.visible()
-                }
-            }, { _ ->
+                .subscribe({ success ->
+                    run {
+                        h_pb_application_frag.progress = adapter.items.size - success.size
+                        tv_steps_pending_application_value.text =
+                                "" + success.size + "/" + adapter.items.size
+                        h_pb_application_frag.visible()
+                    }
+                }, { _ ->
 
-                h_pb_application_frag.visible()
-            })
+                    h_pb_application_frag.visible()
+                })
 
     }
 
@@ -263,7 +263,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun setupRecycler() {
         rv_status_pending.adapter = adapter
         rv_status_pending.layoutManager =
-            LinearLayoutManager(requireContext())
+                LinearLayoutManager(requireContext())
 
 
     }
@@ -274,51 +274,48 @@ class ApplicationClientActivationFragment : BaseFragment(),
         when (dependency.type) {
             "profile_pic" -> {
                 navigate(
-                    R.id.profileFragment, bundleOf(
+                        R.id.profileFragment, bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true,
                         StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
 
-                    )
+                )
                 )
 
             }
             "about_me" -> {
                 navigate(
-                    R.id.fragment_add_bio, bundleOf(
+                        R.id.fragment_add_bio, bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                    )
+                )
                 )
             }
             "questionnaire" -> navigate(
-                R.id.application_questionnaire, bundleOf(
+                    R.id.application_questionnaire, bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                     StringConstants.TITLE.value to dependency.title,
                     StringConstants.TYPE.value to dependency.type,
                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                )
+            )
             )
             "driving_licence" -> navigate(
-                R.id.fragment_upload_dl_cl_act,
-                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    R.id.fragment_upload_dl_cl_act,
+                    bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
             "learning" ->
 
                 navigate(
-                    R.id.learningCourseDetails,
-                    bundleOf(
-                        LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
-                        StringConstants.FROM_CLIENT_ACTIVATON.value to true
-                    )
+                        R.id.learningCourseDetails,
+                        bundleOf(
+                                LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
+                                StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                        )
                 )
         }
     }
 
     private var PHOTO_CROP: Int = 45
     private var PROFILE_PICTURE_FOLDER: String = "profile_pics"
-    override fun onBackPressed(): Boolean {
-        popBackState()
-        return true
-    }
+
 
     override fun onClickSubmit() {
         viewModel.apply(mJobProfileId)

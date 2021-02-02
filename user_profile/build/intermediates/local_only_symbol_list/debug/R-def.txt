@@ -1,0 +1,12 @@
+R_DEF: Internal format may change without notice
+local
+drawable bg_c6ddf3_rad_2
+id br_1
+id br_2
+id iv_content_illustration_profile_v2
+id iv_content_top_icon_profile_v2
+id tv_add_now_profile_v2
+id tv_content_heading_profile_v2
+id tv_content_text_profile_v2
+id tv_content_top_profile_v2
+layout layout_add_content
