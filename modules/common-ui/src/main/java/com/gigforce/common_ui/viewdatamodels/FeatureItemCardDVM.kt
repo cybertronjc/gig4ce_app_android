@@ -6,7 +6,7 @@ import com.gigforce.core.SimpleDVM
 class FeatureItemCardDVM(
     val image : Any?,
     val title:String,
-    val subtitle:String,
-    val onClickNavPath:String? = null
-): SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD, onClickNavPath) {
+    val subtitle:String? = null,
+    val navPath:String? = null
+): SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD, navPath) {
 }

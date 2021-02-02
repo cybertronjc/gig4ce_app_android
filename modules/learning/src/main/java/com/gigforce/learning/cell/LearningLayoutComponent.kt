@@ -9,8 +9,13 @@ import javax.inject.Inject
 class LearningLayoutComponent(context: Context, attrs: AttributeSet?) :
         FeatureLayoutComponent(context, attrs)
 {
-    @Inject lateinit var respository : ILearningDataRepository
+    @Inject lateinit var repository : ILearningDataRepository
     init {
+        this.setSectionTitle("Learning")
+        this.setSectionIcon()
 
+        repository.getData().observeForever {
+            this.setCollection(it)
+        }
     }
 }

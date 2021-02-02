@@ -8,6 +8,8 @@ import com.gigforce.giger_app.IMainNavDataRepository
 import com.gigforce.giger_app.MainNavDataRepository
 import com.gigforce.giger_app.vm.HomeCardsFBRepository
 import com.gigforce.giger_app.vm.IHomeCardsFBRepository
+import com.gigforce.learning.ILearningDataRepository
+import com.gigforce.learning.LearningDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,7 +27,10 @@ interface AppBindingsModule {
     fun provideNavigationBinding(impl: NavManagerImpl): INavigation
 
     @Binds
-    fun provideManNavRepo(imp:MainNavDataRepository):IMainNavDataRepository
+    fun provideManNavRepo(imp: MainNavDataRepository): IMainNavDataRepository
+
+    @Binds
+    fun provideManNavRepo(imp: LearningDataRepository): ILearningDataRepository
 }
 
 @InstallIn(ViewModelComponent::class)

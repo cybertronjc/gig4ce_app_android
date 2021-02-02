@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.common_ui.viewdatamodels.*
+import com.gigforce.giger_app.LearningLayoutDVM
 import com.gigforce.giger_app.MainSectionDVM
 import com.gigforce.giger_app.R
+import com.gigforce.learning.cell.LearningLayoutComponent
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,14 +32,14 @@ class LandingViewModel @Inject constructor(
                         "Play Now"
                 )
         )
-        arrayList.add(
-                StandardActionCardDVM(
-                        R.drawable.ic_tip,
-                        "Gigforce Tip",
-                        "Having  an experience can help you start earning fast",
-                        "Update Now"
-                )
-        )
+//        arrayList.add(
+//                StandardActionCardDVM(
+//                        R.drawable.ic_tip,
+//                        "Gigforce Tip",
+//                        "Having  an experience can help you start earning fast",
+//                        "Update Now"
+//                )
+//        )
 
 
         arrayList.add(
@@ -57,14 +59,14 @@ class LandingViewModel @Inject constructor(
                 )
         )
         arrayList.add(FeatureLayoutDVM("", "Explore Gig", getExploreGig()))
-        arrayList.add(
-                StandardActionCardDVM(
-                        R.drawable.ic_set_preference,
-                        "Set Your Preferences",
-                        "Becoming a verified Giger for higher chances of getting recruited faster",
-                        "Complete Now"
-                )
-        )
+//        arrayList.add(
+//                StandardActionCardDVM(
+//                        R.drawable.ic_set_preference,
+//                        "Set Your Preferences",
+//                        "Becoming a verified Giger for higher chances of getting recruited faster",
+//                        "Complete Now"
+//                )
+//        )
         arrayList.add(FeatureLayoutDVM(R.drawable.learning_icon, "Learning", getFeaturedItems()))
         arrayList.add(
                 StandardActionCardDVM(
@@ -84,6 +86,7 @@ class LandingViewModel @Inject constructor(
         )
 
         arrayList.add(MainSectionDVM("sec_main_nav"))
+
 
         return arrayList
     }
@@ -213,6 +216,9 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
                         textColor = textColor,
                         marginRequired = marginRequired
                 )
+            }
+            "sec_learning" ->{
+                return LearningLayoutDVM(type = type)
             }
             "sec_main_nav" -> {
                 return MainSectionDVM(type = type)
