@@ -4,13 +4,13 @@ import android.content.Context
 import android.view.View
 import com.gigforce.common_ui.molecules.FeatureItemCard2
 import com.gigforce.core.IViewTypeLoader
-import com.gigforce.giger_app.ui.MainNavigationSection
+import com.gigforce.giger_app.ui.MainNavigationComponent
 
 class AppModuleLevelViewTypeLoader: IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {
         return when(viewType){
             AppModuleLevelViewTypes.VIEW_MAIN_NAV_CTA -> FeatureItemCard2(context, null)
-            AppModuleLevelViewTypes.VIEW_MAIN_NAV_SECTION -> MainNavigationSection(context, null)
+            AppModuleLevelViewTypes.VIEW_MAIN_NAV_SECTION -> MainNavigationComponent(context, null)
             else -> null
         }
     }

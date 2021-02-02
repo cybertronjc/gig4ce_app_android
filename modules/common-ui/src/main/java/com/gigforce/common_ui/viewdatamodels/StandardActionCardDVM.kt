@@ -14,6 +14,7 @@ open class StandardActionCardDVM(val image: Int?,
                                  var action1: ActionButton?=null,
                                  var action2:ActionButton?=null,
                                  val bgcolor:Int=0,
+                                 val textColor:Int = 0,
                                  val marginRequired:Boolean = false,
                                  val defaultViewType:Int = CommonViewTypes.VIEW_STANDARD_ACTION_CARD
 ) :SimpleDVM(defaultViewType){}

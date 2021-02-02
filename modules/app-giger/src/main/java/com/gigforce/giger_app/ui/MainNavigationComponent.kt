@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainNavigationSection(context: Context, attrs: AttributeSet?) :
+class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     FeatureLayoutComponent(context, attrs)
 {
 

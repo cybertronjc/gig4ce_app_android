@@ -202,6 +202,7 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
 
                 val action1 = ActionButton(title = actionP?.get("title"), navPath = actionP?.get("navPath"))
                 val bgcolor = Integer.valueOf(snapshot.get("bgcolor")?.toString()?:"0") //Todo Integer value issue
+                val textColor = Integer.valueOf(snapshot.get("textcolor")?.toString()?:"0") //Todo Integer value issue
                 val marginRequired = snapshot.get("marginRequired") as? Boolean?:false
                 return StandardActionCardDVM(null,
                         title = title,
@@ -209,6 +210,7 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
                         imageUrl = imageUrl,
                         action1 = action1,
                         bgcolor = bgcolor,
+                        textColor = textColor,
                         marginRequired = marginRequired
                 )
             }

@@ -19,6 +19,22 @@ import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
 enum class ColorOptions(val value: Int) {
 
     Default(0),
+    White(200),
+    LightPink(201),
+    LightBlue(202),
+    Lipstick(203),
+    GRAY(204);
+
+    companion object {
+        private val VALUES = values()
+        fun getByValue(value: Int) = VALUES.first { it.value == value }
+    }
+}
+
+enum class TextColorOptions(val value: Int) {
+
+    Default(0),
+    White(200),
     LightPink(201),
     LightBlue(202),
     Lipstick(203),
@@ -37,7 +53,8 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 
     private var buttonClickListener: OnClickListener? = null
     private var secondButtonClickListener: OnClickListener? = null
-    private var colorOption: ColorOptions = ColorOptions.Default
+    private var bgColorOption: ColorOptions = ColorOptions.Default
+    private var textColorOption: TextColorOptions = TextColorOptions.Default
 
     init {
         this.layoutParams =
@@ -46,13 +63,16 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 
         attrs?.let {
             val styledAttributeSet = context.obtainStyledAttributes(it, R.styleable.StandardActionCardComponent, 0, 0)
-            this.colorOption = ColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_colorOptions, 0))
+            this.bgColorOption = ColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_bgcolor, 0))
+            this.textColorOption = TextColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_textcolor, 0))
 //            var titleColor = styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_titleTextColor, 0)
 //            if(titleColor!=0){
 //                tv_title.setTextColor(titleColor)
 //            }
 //            subtitle.setTextColor(styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_subtitleTextColor, 0))
-            backgroundColor = this.colorOption
+            backgroundColor = this.bgColorOption
+            textColor = this.textColorOption
+
         }
 
         primary_action.setOnClickListener {
@@ -67,6 +87,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         get() = backgroundColor
         set(value) {
             val selectedColor = when (value) {
+                ColorOptions.White -> R.color.white
                 ColorOptions.LightPink -> R.color.light_pink
                 ColorOptions.LightBlue -> R.color.light_blue
                 ColorOptions.Lipstick -> R.color.lipstick
@@ -74,6 +95,23 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 else -> R.color.white
             }
             setBackgroundColor(ContextCompat.getColor(context, selectedColor))
+        }
+
+    var textColor: TextColorOptions
+        get() = textColor
+        set(value) {
+            val selectedColor = when (value) {
+                TextColorOptions.White -> R.color.white
+                TextColorOptions.LightPink -> R.color.light_pink
+                TextColorOptions.LightBlue -> R.color.light_blue
+                TextColorOptions.Lipstick -> R.color.lipstick
+                TextColorOptions.GRAY -> R.color.grey
+                else -> 0
+            }
+            if (selectedColor != 0) {
+                tv_title.setTextColor(ContextCompat.getColor(context, selectedColor))
+                tv_desc.setTextColor(ContextCompat.getColor(context, selectedColor))
+            }
         }
 
     fun setPrimaryActionClick(buttonClickListener: OnClickListener) {
@@ -112,23 +150,23 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 //            setImageFromUrl(gsReference)
 //        }
     }
+
     var applyMargin: Boolean
         get() = applyMargin
         set(value) {
             val params =
-                LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT
-                )
-            if(value) {
+                    LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT
+                    )
+            if (value) {
                 val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
                 val top: Int = getPixelValue(16)
                 val right: Int = getPixelValue(16)
                 val bottom: Int = getPixelValue(16)
                 params.setMargins(left, top, right, bottom)
                 layoutParams = params
-            }
-            else{
+            } else {
                 val left: Int = getPixelValue(0)//context.resources.getDimension(R.dimen.size4))
                 val top: Int = getPixelValue(0)
                 val right: Int = getPixelValue(0)
@@ -161,15 +199,16 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             setImage(data)
             data.action1?.let {
                 primary_action.visible()
-                primary_action.text = it.title?:""
-            }?:primary_action.gone()
+                primary_action.text = it.title ?: ""
+            } ?: primary_action.gone()
 
             data.action2?.let {
                 secondary_action.visible()
-                secondary_action.text = it.title?:""
-            }?:secondary_action.gone()
+                secondary_action.text = it.title ?: ""
+            } ?: secondary_action.gone()
 
             backgroundColor = ColorOptions.getByValue(data.bgcolor)
+            textColor = TextColorOptions.getByValue(data.textColor)
             applyMargin = data.marginRequired
 //            if (data.action.isNotBlank()) {
 //                primary_action.text = data.action
