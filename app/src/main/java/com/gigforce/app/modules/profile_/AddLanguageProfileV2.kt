@@ -1,10 +1,14 @@
 package com.gigforce.app.modules.profile_
 
-import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Editable
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.MultiAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -30,10 +34,26 @@ class AddLanguageProfileV2 : BaseFragment() {
 
     private fun initViews() {
         intLangChipGroup()
+        initSearchAutoComplete()
+    }
+
+    private fun initSearchAutoComplete() {
+        val langAdapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.lang_array)
+        )
+        act_langs_add_lang_profile_v2.setAdapter(langAdapter)
+        act_langs_add_lang_profile_v2.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+        act_langs_add_lang_profile_v2.threshold = 1
+        act_langs_add_lang_profile_v2.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                createRecipientChip(langAdapter.getItem(position).toString());
+
+            }
     }
 
     private fun intLangChipGroup() {
-
         listOf("English", "Hindi", "Marathi", "Punjabi").forEach { element ->
             val chip = Chip(requireContext())
             val drawable = ChipDrawable.createFromAttributes(
@@ -47,6 +67,35 @@ class AddLanguageProfileV2 : BaseFragment() {
             chip.chipStrokeWidth = 1f
             language_chip_group_add_language.addView(chip, 0)
         }
+
+    }
+
+    private fun createRecipientChip(lang: String) {
+        val chip = ChipDrawable.createFromResource(requireContext(), R.xml.standalone_chip)
+        val span = VerticalImageSpan(chip)
+        val cursorPosition: Int = act_langs_add_lang_profile_v2.selectionStart
+        val spanLength: Int = lang.length + 2
+        val text: Editable = act_langs_add_lang_profile_v2.text
+
+        chip.closeIcon = ContextCompat.getDrawable(
+            requireContext(),
+            R.drawable.ic_close
+        )
+
+        chip.isCloseIconVisible = true
+        chip.text = lang
+
+        chip.setBounds(0, 0, chip.intrinsicWidth, chip.intrinsicHeight)
+
+
+        text.setSpan(
+            span,
+            cursorPosition - spanLength,
+            cursorPosition,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+
+
 
     }
 }

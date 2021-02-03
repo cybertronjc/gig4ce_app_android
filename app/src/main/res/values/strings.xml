@@ -1374,6 +1374,18 @@
     <string name="let_people_education">Let people know what you have studied so far in your career</string>
     <string name="lang_known">Languages Known</string>
     <string name="add_lang_known">Add Languages Known</string>
+    <string name="others_">Others</string>
+    <string name="search_language">Search Language</string>
+    <string-array name="lang_array">
+        <item>Ahirani</item>
+        <item>Awadhi</item>
+        <item>Assamese</item>
+        <item>Bagheli</item>
+        <item>Bagri</item>
+        <item>Banjari</item>
+        <item>Bhili</item>
+        <item>Bodo</item>
+    </string-array>
 
 
 </resources>

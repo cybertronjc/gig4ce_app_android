@@ -545,6 +545,7 @@
         <item name="chipStrokeColor">#d72467</item>
         <item name="chipBackgroundColor">#f9e8f1</item>
         <item name="rippleColor">@android:color/transparent</item>
+
         <item name="strokeWidth">1dp</item>
     </style>
 
