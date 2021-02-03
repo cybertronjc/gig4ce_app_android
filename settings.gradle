@@ -1,2 +1,3 @@
 include ':app'
+include ':user_profile'
 //rootProject.name = "Gigforce1"
