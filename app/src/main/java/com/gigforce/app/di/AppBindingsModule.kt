@@ -2,8 +2,8 @@ package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.nav.NavManagerImpl
-import com.gigforce.client_activation.ClientActivationDataRepository
-import com.gigforce.client_activation.IClientActivationDataRepository
+import com.gigforce.client_activation.repo.ClientActivationDataRepository
+import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.IMainNavDataRepository
@@ -12,8 +12,8 @@ import com.gigforce.giger_app.repo.BSDataRepository
 import com.gigforce.giger_app.repo.HomeCardsFBRepository
 import com.gigforce.giger_app.repo.IBSDataRepository
 import com.gigforce.giger_app.repo.IHomeCardsFBRepository
-import com.gigforce.learning.ILearningDataRepository
-import com.gigforce.learning.LearningDataRepository
+import com.gigforce.learning.repo.ILearningDataRepository
+import com.gigforce.learning.repo.LearningDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

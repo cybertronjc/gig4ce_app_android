@@ -2,11 +2,11 @@ package com.gigforce.giger_app
 
 import android.content.Context
 import android.view.View
-import com.gigforce.client_activation.cell.ClientActivationLayoutComponent
+import com.gigforce.client_activation.ui.ClientActivationLayoutComponent
 import com.gigforce.common_ui.molecules.FeatureItemCard2
 import com.gigforce.core.IViewTypeLoader
 import com.gigforce.giger_app.ui.MainNavigationComponent
-import com.gigforce.learning.cell.LearningLayoutComponent
+import com.gigforce.learning.ui.LearningLayoutComponent
 
 class AppModuleLevelViewTypeLoader: IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {

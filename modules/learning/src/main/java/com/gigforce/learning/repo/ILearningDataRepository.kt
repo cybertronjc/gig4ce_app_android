@@ -1,4 +1,4 @@
-package com.gigforce.learning
+package com.gigforce.learning.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,8 @@ interface ILearningDataRepository {
     fun getData(): LiveData<List<FeatureItemCardDVM>>
 }
 
-class LearningDataRepository @Inject constructor() : ILearningDataRepository {
+class LearningDataRepository @Inject constructor() :
+    ILearningDataRepository {
     private var data: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
 
     init {

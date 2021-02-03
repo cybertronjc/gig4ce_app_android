@@ -1,8 +1,8 @@
-package com.gigforce.client_activation.cell
+package com.gigforce.client_activation.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import com.gigforce.client_activation.IClientActivationDataRepository
+import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.cells.FeatureLayoutComponent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -1,9 +1,9 @@
-package com.gigforce.learning.cell
+package com.gigforce.learning.ui
 
 import android.content.Context
 import android.util.AttributeSet
 import com.gigforce.common_ui.cells.FeatureLayoutComponent
-import com.gigforce.learning.ILearningDataRepository
+import com.gigforce.learning.repo.ILearningDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.gigforce.client_activation
+package com.gigforce.client_activation.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,8 @@ interface IClientActivationDataRepository {
     fun getData(): LiveData<List<FeatureItemCardDVM>>
 }
 
-class ClientActivationDataRepository @Inject constructor(): IClientActivationDataRepository{
+class ClientActivationDataRepository @Inject constructor():
+    IClientActivationDataRepository {
 
     private var data: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
 
