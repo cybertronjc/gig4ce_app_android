@@ -26,6 +26,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
+import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.Media
@@ -58,6 +59,7 @@ class ClientActivationFragment : BaseFragment(),
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
+    private var mRedirectToApplication: Boolean? = null
     private lateinit var viewModel: ClientActivationViewmodel
     private var adapterPreferredLocation: AdapterPreferredLocation? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
@@ -80,11 +82,21 @@ class ClientActivationFragment : BaseFragment(),
                 ).get(ClientActivationViewmodel::class.java)
         viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
         getDataFromIntents(savedInstanceState)
+        checkForApplicationRedirection()
         setupPreferredLocationRv()
         setupBulletPontsRv()
         initClicks()
         initObservers()
 
+    }
+
+    private fun checkForApplicationRedirection() {
+        if (mRedirectToApplication == true) {
+            sv_client_activation.invisible()
+            tv_mark_as_interest_role_details.invisible()
+            tb_overlay_cl_act.invisible()
+            pb_client_activation.visible()
+        }
     }
 
 
@@ -164,6 +176,7 @@ class ClientActivationFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
+            mRedirectToApplication = it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mClientViaDeeplink =
                     it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
@@ -173,6 +186,7 @@ class ClientActivationFragment : BaseFragment(),
         }
 
         arguments?.let {
+            mRedirectToApplication = it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mClientViaDeeplink =
                     it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
@@ -259,14 +273,15 @@ class ClientActivationFragment : BaseFragment(),
                                 bundleOf(
                                         StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                                         StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to mClientViaDeeplink,
-                                        StringConstants.INVITE_USER_ID.value to mInviteUserID
+                                        StringConstants.INVITE_USER_ID.value to mInviteUserID,
+                                        StringConstants.AUTO_REDIRECT_TO_APPL.value to true
                                 )
                         )
                         navigate(R.id.Login)
                     }
                 } else {
                     tv_mark_as_interest_role_details.setOnClickListener {
-//                    if (jpApplication == null || jpApplication.stepDone == 1) {
+
                         markAsInterestClick(jpApplication)
                     }
 
@@ -486,6 +501,10 @@ class ClientActivationFragment : BaseFragment(),
                 mClientViaDeeplink ?: false
         )
         outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
+        outState.putBoolean(
+                StringConstants.AUTO_REDIRECT_TO_APPL.value,
+                mRedirectToApplication ?: false
+        )
 
 
     }
@@ -557,22 +576,28 @@ class ClientActivationFragment : BaseFragment(),
         super.onResume()
         locationUpdates?.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates?.setLocationUpdateCallbacks(this)
+        updateLocationCallbackIntervalIfIsInvited()
 
+    }
+
+    private fun updateLocationCallbackIntervalIfIsInvited() {
+        if (mRedirectToApplication == true) {
+            locationUpdates?.setIntervalInMillis(100)
+        }
     }
 
 
     override fun locationReceiver(location: Location?) {
         this.location = location
-        if (mClientViaDeeplink == true) {
-            if (FirebaseAuth.getInstance().currentUser?.uid != null) {
-                tv_mark_as_interest_role_details
-                        ?.let {
-                            popAllBackStates()
-                            it.performClick()
-                            locationUpdates?.stopLocationUpdates(requireActivity())
-                        }
+        if (mRedirectToApplication == true) {
+            tv_mark_as_interest_role_details
+                    ?.let {
+                        popAllBackStates()
+                        it.performClick()
+                        locationUpdates?.stopLocationUpdates(requireActivity())
+                    }
 
-            }
+
         }
     }
 

@@ -107,7 +107,8 @@ class OnboardingLoaderFragment : BaseFragment() {
                             ?.getString(StringConstants.JOB_PROFILE_ID.value),
                     StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true,
                     StringConstants.INVITE_USER_ID.value to navFragmentsData?.getData()
-                            ?.getString(StringConstants.INVITE_USER_ID.value)
+                            ?.getString(StringConstants.INVITE_USER_ID.value),
+                    StringConstants.AUTO_REDIRECT_TO_APPL.value to navFragmentsData?.getData()?.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value ,false)
             )
 
             )
