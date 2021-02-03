@@ -2,14 +2,15 @@ package com.gigforce.app.modules.profile_
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.MultiAutoCompleteTextView
-import androidx.core.content.ContextCompat
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.google.android.material.chip.Chip
@@ -44,11 +45,12 @@ class AddLanguageProfileV2 : BaseFragment() {
             resources.getStringArray(R.array.lang_array)
         )
         act_langs_add_lang_profile_v2.setAdapter(langAdapter)
-        act_langs_add_lang_profile_v2.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+        act_langs_add_lang_profile_v2.setTokenizer(CommaTokenizer())
         act_langs_add_lang_profile_v2.threshold = 1
         act_langs_add_lang_profile_v2.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 createRecipientChip(langAdapter.getItem(position).toString());
+                act_langs_add_lang_profile_v2.append(" ")
 
             }
     }
@@ -77,12 +79,6 @@ class AddLanguageProfileV2 : BaseFragment() {
         val spanLength: Int = lang.length + 2
         val text: Editable = act_langs_add_lang_profile_v2.text
 
-        chip.closeIcon = ContextCompat.getDrawable(
-            requireContext(),
-            R.drawable.ic_close
-        )
-
-        chip.isCloseIconVisible = true
         chip.text = lang
 
         chip.setBounds(0, 0, chip.intrinsicWidth, chip.intrinsicHeight)
@@ -96,6 +92,52 @@ class AddLanguageProfileV2 : BaseFragment() {
         )
 
 
+    }
 
+    class CommaTokenizer : MultiAutoCompleteTextView.Tokenizer {
+        override fun findTokenStart(text: CharSequence, cursor: Int): Int {
+            var i = cursor
+            while (i > 0 && text[i - 1] != ',') {
+                i--
+            }
+            while (i < cursor && text[i] == ' ') {
+                i++
+            }
+            return i
+        }
+
+        override fun findTokenEnd(text: CharSequence, cursor: Int): Int {
+            var i = cursor
+            val len = text.length
+            while (i < len) {
+                if (text[i] == ',') {
+                    return i
+                } else {
+                    i++
+                }
+            }
+            return len
+        }
+
+        override fun terminateToken(text: CharSequence): CharSequence {
+            var i = text.length
+            while (i > 0 && text[i - 1] == ' ') {
+                i--
+            }
+            return if (i > 0 && text[i - 1] == ',') {
+                text
+            } else {
+                if (text is Spanned) {
+                    val sp = SpannableString("$text, ")
+                    TextUtils.copySpansFrom(
+                        text, 0, text.length,
+                        Any::class.java, sp, 0
+                    )
+                    sp
+                } else {
+                    "$text, "
+                }
+            }
+        }
     }
 }
