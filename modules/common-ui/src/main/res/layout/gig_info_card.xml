@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="18dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/textView21"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="@color/lipstick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/companyLogoIV"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="17dp"
+            tools:src="@drawable/ic_homescreen_chat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:id="@+id/textView41"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:paddingEnd="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0.02"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Urgent Unloading"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/textView67"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:letterSpacing="0.03"
+            android:text="10:00 AM — 10:30 AM"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/textView41" />
+
+        <View
+            android:id="@+id/seaprator1"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="#c0c0c0"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/textView67"
+            />
+
+        <TextView
+            android:id="@+id/contactPersonLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@+id/seaprator1"
+            android:text="Contact Person" />
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/messageCardView"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="8dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:visibility="invisible"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintRight_toLeftOf="@id/callCardView"
+            app:cardBackgroundColor="@color/light_pink"
+            app:layout_constraintTop_toBottomOf="@id/seaprator1">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleY="0.4"
+                android:scaleX="0.4"
+                android:src="@drawable/abc_vector_test"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/callCardView"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="12dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:layout_marginEnd="17dp"
+            app:cardCornerRadius="20dp"
+            android:clickable="true"
+            android:focusable="true"
+
+            app:cardBackgroundColor="@color/light_pink"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seaprator1">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:scaleY="0.4"
+                android:scaleX="0.4"
+                android:src="@drawable/ic_homescreen_chat"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/contactPersonTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:letterSpacing="0"
+            android:text="Contact Person"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/callCardView"
+            app:layout_constraintStart_toStartOf="@id/textView41"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonLabel" />
+
+
+        <Space
+            android:id="@+id/buttonSpace"
+            android:layout_width="13dp"
+            android:layout_height="10dp"
+            app:layout_constraintStart_toStartOf="@id/textView41"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+        <TextView
+            android:id="@+id/navigateTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/ic_time_help_"
+            android:letterSpacing="0"
+            android:padding="10dp"
+            android:text="Navigate"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonSpace"
+            app:layout_constraintStart_toStartOf="@+id/textView41"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/checkInTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/buttonSpace"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="15dp"
+            android:text="Check-In"
+            android:background="@drawable/ic_time_help_"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="7dp"
+            android:letterSpacing="0"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
