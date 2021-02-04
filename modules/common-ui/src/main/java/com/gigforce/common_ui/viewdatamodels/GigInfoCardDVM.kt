@@ -3,6 +3,7 @@ package com.gigforce.common_ui.viewdatamodels
 import androidx.annotation.Keep
 import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.core.SimpleDVM
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
@@ -10,6 +11,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @Keep
 class GigInfoCardDVM(
@@ -90,12 +92,12 @@ class GigInfoCardDVM(
     @get:Exclude
     @set:Exclude
     var startHour: Int = 0
-        get() = startDateTime!!.toLocalDateTime().hour
+        get() = startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().hour
 
     @get:Exclude
     @set:Exclude
     var startMinute: Int = 0
-        get() = startDateTime!!.toLocalDateTime().minute
+        get() = startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().minute
 
     @get:Exclude
     @set:Exclude
@@ -111,7 +113,7 @@ class GigInfoCardDVM(
     @Exclude
     fun isGigOfToday(): Boolean {
         val gigDate =
-            startDateTime!!.toLocalDate()
+            startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isEqual(currentDate)
     }

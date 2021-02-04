@@ -16,6 +16,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.util.TextDrawable
+import com.gigforce.common_ui.viewdatamodels.GigContactDetails
+import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.visible
@@ -64,28 +67,28 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
                 "${DateHelper.getHourMinutes(data.startDateTime!!.toDate())}"
             this.findViewById<TextView>(R.id.textView67).text = gigTiming
             this.findViewById<View>(R.id.checkInTV).setOnClickListener {
-                navigation.navigateTo(
-                    "attendance",
-                    Bundle().apply {
-                        this.putString(INTENT_EXTRA_GIG_ID, data.gigId)
-                    }
-                )
+//                navigation.navigateTo(
+//                    "attendance",
+//                    Bundle().apply {
+//                        this.putString(INTENT_EXTRA_GIG_ID, data.gigId)
+//                    }
+//                )
             }
             if (!data.isPresentGig()) {
-                this.findViewById<View>(R.id.checkInTV).disabled()
+                this.findViewById<View>(R.id.checkInTV).isEnabled = false
             } else if (data.isCheckInAndCheckOutMarked()) {
-                this.findViewById<View>(R.id.checkInTV).disabled()
+                this.findViewById<View>(R.id.checkInTV).isEnabled = false
                 this.findViewById<Button>(R.id.checkInTV).text = "Checked Out"
             } else if (data.isCheckInMarked()) {
-                this.findViewById<Button>(R.id.checkInTV).enabled()
+                this.findViewById<Button>(R.id.checkInTV).isEnabled = true
                 this.findViewById<Button>(R.id.checkInTV).text = "Checked Out"
             } else {
-                this.findViewById<Button>(R.id.checkInTV).enabled()
+                this.findViewById<Button>(R.id.checkInTV).isEnabled = true
                 this.findViewById<Button>(R.id.checkInTV).text = "Checked In"
             }
 
         } else {
-            findViewById<View>(R.id.checkInTV).disabled()
+            findViewById<View>(R.id.checkInTV).isEnabled = false
             findViewById<TextView>(R.id.textView67).text =
                 DateHelper.getDateInDDMMYYYY(data.startDateTime!!.toDate())
         }
@@ -101,7 +104,7 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
     private fun setContactPerson(gigContactDetails: GigContactDetails?) {
         gigContactDetails?.let {
             if (it.contactNumberString.isNullOrBlank()) {
-                findViewById<View>(R.id.callCardView).gone()
+                findViewById<View>(R.id.callCardView).visibility = View.GONE
             } else {
                 findViewById<View>(R.id.callCardView).visible()
                 findViewById<View>(R.id.callCardView).setOnClickListener { _ ->
@@ -109,10 +112,10 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
                 }
                 this.findViewById<TextView>(R.id.contactPersonTV).text = it.toString()
             }
-        } ?: let { findViewById<View>(R.id.callCardView).gone() }
+        } ?: let { findViewById<View>(R.id.callCardView).visibility = View.GONE }
     }
-    @Inject
-    lateinit var navigation: INavigation
+//    @Inject
+//    lateinit var navigation: INavigation
 
     override fun bind(data: Any?) {
         if (data is GigInfoCardDVM) {

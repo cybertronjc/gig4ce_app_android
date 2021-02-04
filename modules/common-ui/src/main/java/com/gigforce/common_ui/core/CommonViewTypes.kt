@@ -16,7 +16,7 @@ class CommonViewTypes {
                     {FEATURE: 2} {component-ITEM: 02}
 
      */
-    companion object{
+    companion object {
         const val VIEW_STANDARD_ACTION_CARD = 20001
 
         const val VIEW_VIDEOS_LAYOUT = 20101
@@ -25,6 +25,7 @@ class CommonViewTypes {
         const val VIEW_FEATURE_LAYOUT = 20201
         const val VIEW_FEATURE_ITEM_CARD = 20202
         const val VIEW_FEATURE_ITEM_CARD2 = 20203
+        const val VIEW_GIG_ITEM_CARD = 20204
 
         const val VIEW_PROFILE_PIC = 20401
     }
