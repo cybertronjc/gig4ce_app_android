@@ -79,6 +79,9 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
             "sec_main_nav" -> {
                 return MainSectionDVM(type = type)
             }
+            "sec_help_videos" -> {
+                return HelpVideosSectionDVM(type = type)
+            }
             else -> return null
         }
     }
