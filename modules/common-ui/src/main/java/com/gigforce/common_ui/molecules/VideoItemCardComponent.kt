@@ -18,6 +18,9 @@ class VideoItemCardComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     var title: TextView
     var mainImg: ImageView
 
+
+
+
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -25,23 +28,22 @@ class VideoItemCardComponent(context: Context, attrs: AttributeSet?) : FrameLayo
         timeText = findViewById(R.id.time_text)
         title = findViewById(R.id.title)
         mainImg = findViewById(R.id.main_img)
-
     }
 
     override fun bind(data: Any?) {
         if (data is VideoItemCardDVM) {
             title.text = data.title
-            timeText.text = data.time
-            if (data.image is String) {
-                if(data.image.contains("http")) {
-                    Glide.with(context)
-                        .load(data.image)
-                        .into(mainImg)
-                }
-            } else if (data.image is Int) {
-                mainImg.setImageResource(data.image as Int)
-            } else {
-            }
+            timeText.text = data.getVideoLength()
+//            if (data.image is String) {
+//                if(data.image.contains("http")) {
+            Glide.with(context)
+                .load(data.getYoutubeThumbNailUrl())
+                .into(mainImg)
+//                }
+//            } else if (data.image is Int) {
+//                mainImg.setImageResource(data.image as Int)
+//            } else {
+//            }
 
         }
     }

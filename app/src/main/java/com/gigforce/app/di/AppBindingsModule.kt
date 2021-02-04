@@ -8,10 +8,7 @@ import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.IMainNavDataRepository
 import com.gigforce.giger_app.MainNavDataRepository
-import com.gigforce.giger_app.repo.BSDataRepository
-import com.gigforce.giger_app.repo.HomeCardsFBRepository
-import com.gigforce.giger_app.repo.IBSDataRepository
-import com.gigforce.giger_app.repo.IHomeCardsFBRepository
+import com.gigforce.giger_app.repo.*
 import com.gigforce.learning.repo.ILearningDataRepository
 import com.gigforce.learning.repo.LearningDataRepository
 import dagger.Binds
@@ -38,6 +35,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideClientActivationRepo(imp: ClientActivationDataRepository): IClientActivationDataRepository
+
+    @Binds
+    fun provideHelpVideosRepo(imp: HelpVideosDataRepository): IHelpVideosDataRepository
 }
 
 @InstallIn(ViewModelComponent::class)
