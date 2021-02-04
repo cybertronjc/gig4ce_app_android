@@ -132,7 +132,7 @@
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_13"
             android:layout_marginEnd="@dimen/size_16"
-            android:background="@drawable/gradient_button">
+            android:background="@drawable/ic_oval_oval_oval_mask">
 
             <ImageView
                 android:id="@+id/ic_thumbs_up_profile_v2"

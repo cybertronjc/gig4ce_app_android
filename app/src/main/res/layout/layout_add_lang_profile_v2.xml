@@ -112,6 +112,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:visibility="visible"
@@ -133,24 +134,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <MultiAutoCompleteTextView
+            <com.gigforce.user_profile.components.ChipCollectionView
                 android:id="@+id/act_langs_add_lang_profile_v2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_32"
-
                 android:backgroundTint="#68979797"
+                android:focusableInTouchMode="true"
                 android:fontFamily="@font/lato"
                 android:hint="@string/search_language"
-                android:lineSpacingExtra="3sp"
+                android:inputType="text|textNoSuggestions|textMultiLine"
+                android:lineSpacingExtra="1dp"
                 android:paddingTop="@dimen/size_7"
+
                 android:paddingBottom="@dimen/size_17"
                 android:textColor="#333333"
                 android:textColorHint="#68979797"
                 android:textSize="14sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -175,6 +179,7 @@
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_lang" />
 
@@ -196,6 +201,7 @@
         android:textColor="@color/lipstick"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_save_add_lang"
         app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_lang" />
