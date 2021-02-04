@@ -12,4 +12,8 @@ object DateHelper {
     fun getFullDateTimeStamp() : String{
         return SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     }
+
+    fun getHourMinutes(date : Date):String {
+        return SimpleDateFormat("hh.mm aa").format(date)
+    }
 }
