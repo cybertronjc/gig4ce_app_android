@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.ActionButton
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.ClientActivationLayoutDVM
+import com.gigforce.giger_app.HelpVideosSectionDVM
 import com.gigforce.giger_app.LearningLayoutDVM
 import com.gigforce.giger_app.MainSectionDVM
 import com.google.firebase.firestore.DocumentSnapshot
