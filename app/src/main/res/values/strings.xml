@@ -1376,6 +1376,9 @@
     <string name="add_lang_known">Add Languages Known</string>
     <string name="others_">Others</string>
     <string name="search_language">Search Language</string>
+    <string name="let_people_lang">Let people Know what all language you know</string>
+    <string name="add_education_tag_line">Adding Education will make profile stronger by 25 %.</string>
+    <string name="select_level_education">Select Level of Education</string>
     <string-array name="lang_array">
         <item>Ahirani</item>
         <item>Awadhi</item>
@@ -1385,6 +1388,94 @@
         <item>Banjari</item>
         <item>Bhili</item>
         <item>Bodo</item>
+
+        <item>  Brajbhasha</item>
+
+        <item>  Bundel</item>
+
+        <item>   Chhattisgarhi</item>
+
+        <item>  Dhundhari</item>
+
+        <item>   Dogri</item>
+
+        <item>   Garhwali</item>
+
+        <item>   Garo</item>
+
+        <item>  Gondi</item>
+
+        <item>  Gujarati</item>
+
+        <item>   Gujjari</item>
+
+        <item>  Hara</item>
+
+        <item>    Haryanvi</item>
+
+        <item>   Kachchhi</item>
+
+        <item>   Kangri</item>
+
+        <item>   Kashmiri</item>
+
+        <item>    Khasi</item>
+
+        <item>   Khortha</item>
+
+        <item>   Konkani</item>
+
+        <item>    Kumauni</item>
+
+        <item>   Kurukh</item>
+
+        <item>   Lamani</item>
+
+        <item>  Magadhi</item>
+
+        <item>    Maithili</item>
+
+        <item>   Malayalam</item>
+
+        <item>  Malvi</item>
+
+        <item>   Manipuri</item>
+
+        <item>   Marwari</item>
+
+        <item>  Mewari</item>
+
+        <item>  Mundari</item>
+
+        <item>  Nepali</item>
+
+        <item>  Nimadi</item>
+
+        <item>  Odia</item>
+
+        <item>  Pahari</item>
+
+        <item> Punjabi</item>
+
+        <item>  Rajasthani</item>
+
+        <item>  Sadan</item>
+
+        <item>  Sambalpuri</item>
+
+        <item>  Santali</item>
+
+        <item>  Sindhi</item>
+
+        <item> Surgujia</item>
+
+        <item>  Surjapuri</item>
+
+        <item>   Tulu</item>
+
+        <item>  Urdu</item>
+
+        <item>  Wagdi</item>
     </string-array>
 
 

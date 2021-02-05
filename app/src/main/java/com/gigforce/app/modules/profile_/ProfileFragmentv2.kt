@@ -71,7 +71,9 @@ class ProfileFragmentv2 : BaseFragment() {
         updateContentCardUI(add_address_profile_v2, ContentCardData(topLabel = R.string.current_address, topIcon = R.drawable.ic_location_black, contentIllustration = R.drawable.ic_address_illustration,
                 contentTitle = R.string.add_contact_address, actionText = R.string.add_now))
         updateContentCardUI(add_education_profile_v2, ContentCardData(topLabel = R.string.education, topIcon = R.drawable.ic_education_top_profile_v2, contentIllustration = R.drawable.ic_education_profile_v2,
-                contentTitle = R.string.education, actionText = R.string.update_now, contentText = R.string.let_people_education))
+                contentTitle = R.string.education, actionText = R.string.update_now, contentText = R.string.let_people_education, clickHandler = {
+                this@ProfileFragmentv2.navigate(R.id.fragment_add_education_v2)
+            }))
         updateContentCardUI(add_experience_profile_fragment_v2, ContentCardData(topLabel = R.string.experience, topIcon = R.drawable.ic_experience_top_label_profile_v2, contentIllustration = R.drawable.ic_experience_illustration_profile_v2,
                 contentTitle = R.string.exp_matters, actionText = R.string.update_now, contentText = R.string.exp_matters))
         updateContentCardUI(add_skills_profile_v2, ContentCardData(topLabel = R.string.skills_known, topIcon = R.drawable.ic_skills_top_icon_profile_v2, contentIllustration = R.drawable.ic_skills_profile_v2,

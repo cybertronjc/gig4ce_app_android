@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_add_lang_profile_v2"
+        android:id="@+id/tb_add_education_profile_v2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_bg_client_activation"
@@ -23,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/iv_back_application_add_language_v2"
+                android:id="@+id/iv_back_application_add_education_v2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -37,13 +36,13 @@
                 app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/tv_title_application_add_language_v2"
+                android:id="@+id/tv_title_application_add_education_v2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/iv_back_application_add_language_v2"
+                android:layout_toEndOf="@+id/iv_back_application_add_education_v2"
                 android:fontFamily="@font/lato"
-                android:text="@string/add_language"
+                android:text="@string/add_education"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_20"
                 android:textStyle="normal" />
@@ -54,17 +53,17 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ImageView
-        android:id="@+id/iv_content_illustration_add_language"
+        android:id="@+id/iv_content_illustration_add_education"
         android:layout_width="@dimen/size_53"
         android:layout_height="@dimen/size_40"
         android:layout_marginStart="@dimen/size_32"
         android:layout_marginTop="@dimen/size_36"
-        android:src="@drawable/ic_add_language_illustration"
+        android:src="@drawable/ic_education_profile_v2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_add_lang_profile_v2" />
+        app:layout_constraintTop_toBottomOf="@+id/tb_add_education_profile_v2" />
 
     <TextView
-        android:id="@+id/tv_content_text_add_language"
+        android:id="@+id/tv_content_text_add_education"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_15"
@@ -74,15 +73,15 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_add_language"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_add_education"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_language"
-        app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_language"
-        android:text="@string/let_people_lang" />
+        app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_education"
+        app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_education"
+        android:text="@string/add_education_tag_line" />
 
 
     <LinearLayout
-        android:id="@+id/ll_select_lang_add_lang"
+        android:id="@+id/ll_select_lang_add_education"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_16"
@@ -93,7 +92,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content_text_add_language">
+        app:layout_constraintTop_toBottomOf="@+id/tv_content_text_add_education">
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,34 +100,34 @@
             android:layout_margin="@dimen/size_16"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
-            android:text="@string/select_languages"
+            android:text="@string/select_level_education"
             android:textColor="#333333"
             android:textSize="14sp"
 
             android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/language_chip_group_add_language"
+            android:id="@+id/chip_group_add_education"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-
+android:animateLayoutChanges="true"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:visibility="visible"
             app:chipSpacingHorizontal="14dp">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_search_add_language"
-                style="@style/AppSingleChoiceChip2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/others_"
-                app:chipIcon="@drawable/ic_landinghome_search"
-                app:chipIconEnabled="true"
-                app:chipStrokeWidth="1dp"
-                app:drawableTint="@color/app_chip_bck_colors" />
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/chip_search_add_education"-->
+<!--                style="@style/AppSingleChoiceChip2"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/others_"-->
+<!--                app:chipIcon="@drawable/ic_landinghome_search"-->
+<!--                app:chipIconEnabled="true"-->
+<!--                app:chipStrokeWidth="1dp"-->
+<!--                app:drawableTint="@color/app_chip_bck_colors" />-->
         </com.google.android.material.chip.ChipGroup>
 
         <RelativeLayout
@@ -136,7 +135,7 @@
             android:layout_height="wrap_content">
 
             <com.gigforce.user_profile.components.ChipsEditText
-                android:id="@+id/act_langs_add_lang_profile_v2"
+                android:id="@+id/act_langs_add_education_profile_v2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
@@ -162,7 +161,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_save_add_lang"
+        android:id="@+id/tv_save_add_education"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_26"
@@ -181,10 +180,10 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_lang" />
+        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_education" />
 
     <TextView
-        android:id="@+id/tv_cancel_add_lang"
+        android:id="@+id/tv_cancel_add_education"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_26"
@@ -202,7 +201,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_save_add_lang"
-        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_lang" />
+        app:layout_constraintEnd_toStartOf="@+id/tv_save_add_education"
+        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_education" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

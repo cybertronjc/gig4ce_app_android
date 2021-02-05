@@ -4,6 +4,22 @@
     android:height="96dp"
     android:viewportWidth="328"
     android:viewportHeight="96">
+  <path
+      android:pathData="M9,0L319,0A9,9 0,0 1,328 9L328,87A9,9 0,0 1,319 96L9,96A9,9 0,0 1,0 87L0,9A9,9 0,0 1,9 0z"
+      android:strokeAlpha="0.5"
+      android:fillAlpha="0.5">
+    <aapt:attr name="android:fillColor">
+      <gradient 
+          android:startY="100.128"
+          android:startX="-16.728"
+          android:endY="0"
+          android:endX="359.816"
+          android:type="linear">
+        <item android:offset="0" android:color="#FFE42C64"/>
+        <item android:offset="1" android:color="#FF990077"/>
+      </gradient>
+    </aapt:attr>
+  </path>
   <group>
     <clip-path
         android:pathData="M9,0L319,0A9,9 0,0 1,328 9L328,87A9,9 0,0 1,319 96L9,96A9,9 0,0 1,0 87L0,9A9,9 0,0 1,9 0z"/>

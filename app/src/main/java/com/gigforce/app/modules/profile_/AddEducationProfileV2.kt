@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import kotlinx.android.synthetic.main.layout_add_lang_profile_v2.*
+import kotlinx.android.synthetic.main.fragment_add_education.*
 
-
-class AddLanguageProfileV2 : BaseFragment() {
+class AddEducationProfileV2 : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_add_lang_profile_v2, inflater, container)
+        return inflateView(R.layout.fragment_add_education, inflater, container)
 
     }
 
@@ -34,15 +32,15 @@ class AddLanguageProfileV2 : BaseFragment() {
     }
 
     private fun initClicks() {
-        iv_back_application_add_language_v2.setOnClickListener { activity?.onBackPressed() }
+        iv_back_application_add_education_v2.setOnClickListener { activity?.onBackPressed() }
     }
 
     private fun initSearchAutoComplete() {
-        act_langs_add_lang_profile_v2.setAdapter(
+        act_langs_add_education_profile_v2.setAdapter(
             resources.getStringArray(R.array.lang_array).toList()
         )
-        act_langs_add_lang_profile_v2.setHint("Search Language")
-        act_langs_add_lang_profile_v2.setContentPadding(
+        act_langs_add_education_profile_v2.setHint("Search Language")
+        act_langs_add_education_profile_v2.setContentPadding(
             paddingTop = resources.getDimensionPixelSize(
                 R.dimen.size_15
             ), paddingBottom = resources.getDimensionPixelSize(R.dimen.size_15),
@@ -51,20 +49,15 @@ class AddLanguageProfileV2 : BaseFragment() {
     }
 
     private fun intLangChipGroup() {
-        chip_search_add_language.setOnCheckedChangeListener { buttonView, isChecked ->
-            act_langs_add_lang_profile_v2.isVisible = isChecked
-            tv_save_add_lang.isVisible = isChecked
-        }
-        listOf(
-            "English",
-            "Hindi",
-            "Telugu",
-            "Kannada",
-            "Bengali",
-            "Bhojpuri",
-            "Tamil",
-            "Marathi"
-        ).forEach { element ->
+        val listOf = listOf(
+            "10th",
+            "12th",
+            "Diploma",
+            "Graduation",
+            "Post Graduation",
+            "<10th"
+        )
+        listOf.forEach { element ->
             val chip = Chip(requireContext())
             val drawable = ChipDrawable.createFromAttributes(
                 requireContext(),
@@ -74,10 +67,27 @@ class AddLanguageProfileV2 : BaseFragment() {
             )
             chip.setChipDrawable(drawable)
             chip.text = element
-            chip.chipStrokeWidth = 1f
-            language_chip_group_add_language.addView(chip, 0)
-        }
+            chip.tag = element
 
+            chip.chipStrokeWidth = 1f
+            chip_group_add_education.addView(chip, 0)
+            chip.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    listOf.forEach {
+                        val nesChip = chip_group_add_education.findViewWithTag<Chip>(it)
+                        if (nesChip.tag != buttonView.tag) {
+                            chip_group_add_education.removeView(nesChip)
+                        }
+                    }
+
+
+                } else {
+                    chip_group_add_education.removeAllViews()
+                    intLangChipGroup()
+                }
+
+            }
+        }
     }
 
 

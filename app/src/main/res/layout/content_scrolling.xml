@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hyderabad"
-                app:chipIcon="@drawable/location_primary"
+                app:chipIcon="@drawable/ic_location_chip_profile_v2"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp" />
 
@@ -96,8 +96,8 @@
                 style="@style/AppProfileChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hyderabad"
-                app:chipIcon="@drawable/ic_education"
+                android:text="Graduate"
+                app:chipIcon="@drawable/ic_graduation_profile_v2"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp" />
 
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Driving"
-                app:chipIcon="@drawable/ic_image_driving_cert"
+                app:chipIcon="@drawable/ic_icon_awesome_car_alt"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp" />
 
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Data Entry"
-                app:chipIcon="@drawable/ic_image_driving_cert"
+                app:chipIcon="@drawable/ic_baseline_library_books_24"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp" />
 
