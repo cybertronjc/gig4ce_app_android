@@ -3,12 +3,6 @@ package com.gigforce.giger_app.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
-import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
-import com.gigforce.common_ui.viewdatamodels.VideoItemCardDVM
-import com.gigforce.giger_app.MainSectionDVM
-import com.gigforce.giger_app.R
 import com.gigforce.giger_app.repo.IHomeCardsFBRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

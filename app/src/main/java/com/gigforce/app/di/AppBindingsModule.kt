@@ -6,8 +6,8 @@ import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.giger_app.IMainNavDataRepository
-import com.gigforce.giger_app.MainNavDataRepository
+import com.gigforce.giger_app.repo.IMainNavDataRepository
+import com.gigforce.giger_app.repo.MainNavDataRepository
 import com.gigforce.giger_app.repo.*
 import com.gigforce.learning.repo.ILearningDataRepository
 import com.gigforce.learning.repo.LearningDataRepository
@@ -38,6 +38,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideHelpVideosRepo(imp: HelpVideosDataRepository): IHelpVideosDataRepository
+
+    @Binds
+    fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 }
 
 @InstallIn(ViewModelComponent::class)

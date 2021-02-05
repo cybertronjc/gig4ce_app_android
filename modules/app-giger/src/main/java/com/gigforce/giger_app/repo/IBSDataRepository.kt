@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.ActionButton
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
-import com.gigforce.giger_app.ClientActivationLayoutDVM
-import com.gigforce.giger_app.LearningLayoutDVM
-import com.gigforce.giger_app.MainSectionDVM
+import com.gigforce.giger_app.dataviewmodel.ClientActivationLayoutDVM
+import com.gigforce.giger_app.dataviewmodel.LearningLayoutDVM
+import com.gigforce.giger_app.dataviewmodel.MainSectionDVM
+import com.gigforce.giger_app.dataviewmodel.UpcomingGigSectionDVM
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -70,14 +71,21 @@ class BSDataRepository @Inject constructor() : IBSDataRepository{
                 )
             }
             "sec_learning" -> {
-                return LearningLayoutDVM(type = type)
+                return LearningLayoutDVM(
+                    type = type
+                )
             }
             "sec_client_activation" -> {
-                return ClientActivationLayoutDVM(type = "sec_client_activation")
+                return ClientActivationLayoutDVM(
+                    type = "sec_client_activation"
+                )
             }
 
             "sec_main_nav" -> {
                 return MainSectionDVM(type = type)
+            }
+            "upcoming_gigs_info" ->{
+                return UpcomingGigSectionDVM(type = type)
             }
             else -> return null
         }

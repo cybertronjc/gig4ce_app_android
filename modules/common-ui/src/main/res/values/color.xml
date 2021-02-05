@@ -51,4 +51,5 @@
 
     <color name="light_blue">#c6ddf3</color>
 
+    <color name="disabled_button_color">#888888</color>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,35 +25,36 @@ import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
-    val itemWidth = ((width / 5) * 4).toInt()
 
+
+    @Inject lateinit var navigation: INavigation
+    companion object {
+        const val INTENT_EXTRA_GIG_ID = "gig_id"
+    }
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.gig_info_card, this, true)
-        val lp = this.findViewById<CardView>(R.id.card_view).layoutParams
-        lp.height = lp.height
-        lp.width = itemWidth
-        this.findViewById<CardView>(R.id.card_view).layoutParams = lp
+//        val lp = this.findViewById<CardView>(R.id.card_view).layoutParams
+//        val displayMetrics = DisplayMetrics()
+//        context.applicationContext?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//        val width = displayMetrics.widthPixels
+//        val itemWidth = ((width / 5) * 4).toInt()
+//        lp.height = lp.height
+//        lp.width = itemWidth
+//        this.findViewById<CardView>(R.id.card_view).layoutParams = lp
     }
 
 
     fun setTitle(title: String) {
         this.findViewById<TextView>(R.id.textView41).text = title
-    }
-
-//    fun setContactPerson() {
-////        getTextView(viewHolder, R.id.contactPersonTV).text =
-////            data?.gigContactDetails?.contactName
-//    }
-
-    companion object {
-        const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
 
     private fun setGigDate(data: GigInfoCardDVM) {
@@ -67,12 +69,6 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
                 "${DateHelper.getHourMinutes(data.startDateTime!!.toDate())}"
             this.findViewById<TextView>(R.id.textView67).text = gigTiming
             this.findViewById<View>(R.id.checkInTV).setOnClickListener {
-//                navigation.navigateTo(
-//                    "attendance",
-//                    Bundle().apply {
-//                        this.putString(INTENT_EXTRA_GIG_ID, data.gigId)
-//                    }
-//                )
             }
             if (!data.isPresentGig()) {
                 this.findViewById<View>(R.id.checkInTV).isEnabled = false
@@ -110,12 +106,11 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
                 findViewById<View>(R.id.callCardView).setOnClickListener { _ ->
                     callManager(it.contactNumberString)
                 }
-                this.findViewById<TextView>(R.id.contactPersonTV).text = it.toString()
+                this.findViewById<TextView>(R.id.contactPersonTV).text = it.contactNumberString
             }
         } ?: let { findViewById<View>(R.id.callCardView).visibility = View.GONE }
     }
-//    @Inject
-//    lateinit var navigation: INavigation
+
 
     override fun bind(data: Any?) {
         if (data is GigInfoCardDVM) {

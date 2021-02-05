@@ -14,7 +14,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Keep
-class GigInfoCardDVM(
+data class GigInfoCardDVM(
+    var type:String = "",
     var tag: String = "",
     @DocumentId var gigId: String = "",
     var gigerId: String = "",

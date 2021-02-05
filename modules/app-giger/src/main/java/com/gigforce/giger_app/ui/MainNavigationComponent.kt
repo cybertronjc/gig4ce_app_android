@@ -3,7 +3,7 @@ package com.gigforce.giger_app.ui
 import android.content.Context
 import android.util.AttributeSet
 import com.gigforce.common_ui.cells.FeatureLayoutComponent
-import com.gigforce.giger_app.IMainNavDataRepository
+import com.gigforce.giger_app.repo.IMainNavDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
     FeatureLayoutComponent(context, attrs)
 {
 
-    @Inject lateinit var repository:IMainNavDataRepository
+    @Inject lateinit var repository: IMainNavDataRepository
 
     init {
         this.setOrientationAndRows(0,2)

@@ -6,6 +6,7 @@ import com.gigforce.common_ui.cells.*
 import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.common_ui.molecules.FeatureItemCard2
 import com.gigforce.common_ui.molecules.FeatureItemCardComponent
+import com.gigforce.common_ui.molecules.GigInfoCardComponent
 import com.gigforce.common_ui.molecules.VideoItemCardComponent
 import com.gigforce.core.IViewTypeLoader
 
@@ -24,6 +25,7 @@ class LandingViewTypeLoader : IViewTypeLoader {
                 null
             )
             CommonViewTypes.VIEW_FEATURE_ITEM_CARD2 -> FeatureItemCard2(context,null)
+            CommonViewTypes.VIEW_GIG_ITEM_CARD -> GigInfoCardComponent(context,null)
             else -> null
         }
     }
