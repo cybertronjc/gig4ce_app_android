@@ -17,7 +17,7 @@ class UpcomingGigsComponent (context: Context, attrs: AttributeSet?) :
     init {
         this.setOrientationAndRows(0,1)
 
-        this.setSectionTitle("Upcoming Gigs")
+        this.setSectionTitle("Scheduled Gigs")
         this.setSectionIcon()
 
         repository.getData().observeForever {

@@ -46,8 +46,6 @@ class UpcomingGigInfoRepository @Inject constructor() : IUpcomingGigInfoReposito
                     }
                     data.value = _data
 
-                } ?: run {
-                    print("working")
                 }
             }
     }
