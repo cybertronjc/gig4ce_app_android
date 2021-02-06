@@ -43,31 +43,33 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
         val type = snapshot.get("type") as? String ?: ""
         when (type) {
             "sec_action" -> {
-                val title: String = snapshot.get("title") as? String ?: "-"
-                val desc: String = snapshot.get("desc") as? String ?: "-"
-                val imageUrl: String? = snapshot.get("imageUrl") as? String
-                val actionP: Map<String, String>? = snapshot.get("action1") as? Map<String, String>
-                    ?: null
-
-                val action1 =
-                    ActionButton(title = actionP?.get("title"), navPath = actionP?.get("navPath"))
-                val bgcolor = Integer.valueOf(
-                    snapshot.get("bgcolor")?.toString() ?: "0"
-                ) //Todo Integer value issue
-                val textColor = Integer.valueOf(
-                    snapshot.get("textcolor")?.toString() ?: "0"
-                ) //Todo Integer value issue
-                val marginRequired = snapshot.get("marginRequired") as? Boolean ?: false
-                return StandardActionCardDVM(
-                    null,
-                    title = title,
-                    subtitle = desc,
-                    imageUrl = imageUrl,
-                    action1 = action1,
-                    bgcolor = bgcolor,
-                    textColor = textColor,
-                    marginRequired = marginRequired
-                )
+                var obj = snapshot.toObject(StandardActionCardDVM::class.java)
+//                val title: String = snapshot.get("title") as? String ?: "-"
+//                val desc: String = snapshot.get("desc") as? String ?: "-"
+//                val imageUrl: String? = snapshot.get("imageUrl") as? String
+//                val actionP: Map<String, String>? = snapshot.get("action1") as? Map<String, String>
+//                    ?: null
+//
+//                val action1 =
+//                    ActionButton(title = actionP?.get("title"), navPath = actionP?.get("navPath"))
+//                val bgcolor = Integer.valueOf(
+//                    snapshot.get("bgcolor")?.toString() ?: "0"
+//                ) //Todo Integer value issue
+//                val textColor = Integer.valueOf(
+//                    snapshot.get("textcolor")?.toString() ?: "0"
+//                ) //Todo Integer value issue
+//                val marginRequired = snapshot.get("marginRequired") as? Boolean ?: false
+//                return StandardActionCardDVM(
+//                    null,
+//                    title = title,
+//                    subtitle = desc,
+//                    imageUrl = imageUrl,
+//                    action1 = action1,
+//                    bgcolor = bgcolor,
+//                    textColor = textColor,
+//                    marginRequired = marginRequired
+//                )
+                return obj
             }
             "sec_learning" -> {
                 return LearningLayoutDVM(

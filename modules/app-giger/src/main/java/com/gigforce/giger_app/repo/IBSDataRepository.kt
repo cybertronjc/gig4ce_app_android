@@ -62,10 +62,10 @@ class BSDataRepository @Inject constructor() : IBSDataRepository{
                 return StandardActionCardDVM(
                     null,
                     title = title,
-                    subtitle = desc,
+                    desc = desc,
                     imageUrl = imageUrl,
                     action1 = action1,
-                    bgcolor = bgcolor,
+//                    bgcolor = bgcolor,
                     textColor = textColor,
                     marginRequired = marginRequired
                 )

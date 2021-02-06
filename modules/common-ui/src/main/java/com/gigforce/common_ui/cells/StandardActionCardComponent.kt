@@ -1,7 +1,10 @@
 package com.gigforce.common_ui.cells
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,9 +15,12 @@ import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
+import javax.inject.Inject
 
 enum class ColorOptions(val value: Int) {
 
@@ -46,7 +52,7 @@ enum class TextColorOptions(val value: Int) {
         fun getByValue(value: Int) = VALUES.first { it.value == value }
     }
 }
-
+@AndroidEntryPoint
 open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         FrameLayout(context, attrs),
         IViewHolder {
@@ -56,6 +62,8 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     private var bgColorOption: ColorOptions = ColorOptions.Default
     private var textColorOption: TextColorOptions = TextColorOptions.Default
 
+    @Inject
+    lateinit var navigation : INavigation
     init {
         this.layoutParams =
                 LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -194,12 +202,21 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             } else {
             }
             tv_title.text = data.title
-            tv_desc.text = data.subtitle
+            tv_desc.text = data.desc
 
             setImage(data)
             data.action1?.let {
                 primary_action.visible()
                 primary_action.text = it.title ?: ""
+                primary_action.setOnClickListener{it2->
+                    it.type?.let {it1->
+                        when(it1){
+                            "youtube_video"->playvideo(it.link)
+                            "navigation" -> navigation.navigateTo(it.navPath?:"")
+                        }
+
+                    }
+                }
             } ?: primary_action.gone()
 
             data.action2?.let {
@@ -207,7 +224,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 secondary_action.text = it.title ?: ""
             } ?: secondary_action.gone()
 
-            backgroundColor = ColorOptions.getByValue(data.bgcolor)
+            backgroundColor = ColorOptions.getByValue(data.bgcolor.toInt())
             textColor = TextColorOptions.getByValue(data.textColor)
             applyMargin = data.marginRequired
 //            if (data.action.isNotBlank()) {
@@ -218,6 +235,20 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
 //                secondary_action.visible()
 //                secondary_action.text = data.secondAction
 //            } else secondary_action.gone()
+        }
+    }
+
+    private fun playvideo(link: String?) {
+        val appIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        val webIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(link)
+        )
+        try {
+            context.startActivity(appIntent)
+        } catch (ex: ActivityNotFoundException) {
+            context.startActivity(webIntent)
         }
     }
 
