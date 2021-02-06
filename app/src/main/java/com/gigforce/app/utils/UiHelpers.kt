@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
 
@@ -112,6 +113,12 @@ fun addAsteriskHint(normalTextColor: String, color: String, vararg ets: EditText
         val hint = et.hint.toString()
         et.hint =
                 Html.fromHtml("<font color=$normalTextColor>$hint </font><font color=$color> *</font>")
+    }
+}
+
+fun showViews(visibility: Boolean, vararg views: View) {
+    views.forEach {
+        it.isVisible = visibility
     }
 }
 

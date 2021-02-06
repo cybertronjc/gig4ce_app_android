@@ -1379,6 +1379,22 @@
     <string name="let_people_lang">Let people Know what all language you know</string>
     <string name="add_education_tag_line">Adding Education will make profile stronger by 25 %.</string>
     <string name="select_level_education">Select Level of Education</string>
+    <string name="institute_name">Institute Name</string>
+    <string name="enter_institute_name">Enter Institute Name</string>
+    <string name="enter_course_name">Enter Course Name</string>
+    <string name="completion_date">Completion date</string>
+    <string name="media_label">Media</string>
+    <string name="add_certificate">Add Certificate</string>
+    <string name="below_10th">&gt;10th</string>
+    <string name="post_grad">Post Graduation</string>
+    <string name="grad">Graduation</string>
+    <string name="pass_12th">12th Pass</string>
+    <string name="pass_10th">10th pass</string>
+    <string name="tenth">10th</string>
+    <string name="select_year">Select Year</string>
+    <string name="select_month">Select Month</string>
+    <string name="delete_media">Delete Media</string>
+    <string name="add_media">Add Media</string>
     <string-array name="lang_array">
         <item>Ahirani</item>
         <item>Awadhi</item>
