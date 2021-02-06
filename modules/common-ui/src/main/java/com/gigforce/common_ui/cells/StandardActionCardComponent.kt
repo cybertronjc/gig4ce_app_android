@@ -214,7 +214,6 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                             "youtube_video"->playvideo(it.link)
                             "navigation" -> navigation.navigateTo(it.navPath?:"")
                         }
-
                     }
                 }
             } ?: primary_action.gone()
