@@ -18,7 +18,6 @@
             android:layout_marginTop="@dimen/size_16"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="5sp"
-            android:text="Manoj Sharma"
             android:textColor="#333333"
             android:textSize="24sp"
             android:textStyle="normal" />
