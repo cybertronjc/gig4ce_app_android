@@ -13,21 +13,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.openPopupMenu
 import com.gigforce.app.utils.showViews
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_add_education.*
-import kotlinx.android.synthetic.main.fragment_profile_v2.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,9 +30,9 @@ import kotlin.collections.ArrayList
 
 class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.fragment_add_education, inflater, container)
 
@@ -47,7 +42,6 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
         super.onViewCreated(view, savedInstanceState)
         initViews()
     }
-
 
 
     private fun initViews() {
@@ -63,10 +57,10 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
             years.add(i.toString())
         }
         val spinnerDialog = SpinnerDialog(
-                requireActivity(),
-                years,
-                getString(R.string.select_year),
-                "close"
+            requireActivity(),
+            years,
+            getString(R.string.select_year),
+            "close"
         ) // With No Animation
         spinnerDialog.setCancellable(true) // for cancellable
         spinnerDialog.setShowKeyboard(false) // for open keyboard by default
@@ -86,10 +80,10 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
             months.add(monthName)
         }
         val spinnerDialog2 = SpinnerDialog(
-                requireActivity(),
-                months,
-                getString(R.string.select_year),
-                "close"
+            requireActivity(),
+            months,
+            getString(R.string.select_year),
+            "close"
         ) // With No Animation
         spinnerDialog2.setCancellable(true) // for cancellable
         spinnerDialog2.setShowKeyboard(false) // for open keyboard by default
@@ -123,15 +117,20 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
     private fun intLangChipGroup() {
         val listOf = listOf(
-                getString(R.string.below_10th), getString(R.string.post_grad), getString(R.string.grad), getString(R.string.diploma), getString(R.string.pass_12th), getString(R.string.pass_10th)
+            getString(R.string.below_10th),
+            getString(R.string.post_grad),
+            getString(R.string.grad),
+            getString(R.string.diploma),
+            getString(R.string.pass_12th),
+            getString(R.string.pass_10th)
         )
         listOf.forEach { element ->
             val chip = Chip(requireContext())
             val drawable = ChipDrawable.createFromAttributes(
-                    requireContext(),
-                    null,
-                    0,
-                    R.style.AppSingleChoiceChip2
+                requireContext(),
+                null,
+                0,
+                R.style.AppSingleChoiceChip2
             )
             chip.setChipDrawable(drawable)
             chip.text = element
@@ -167,14 +166,32 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
             getString(R.string.below_10th) -> rl_education_details_add_education.gone()
             getString(R.string.post_grad), getString(R.string.grad), getString(R.string.diploma) -> {
                 rl_education_details_add_education.visible()
-                showViews(true, et_institute_add_education, et_course_add_education, tv_completion_month_add_education, tv_completion_year_add_education,
-                        tv_label_course_add_education, tv_label_institute_add_education, tv_label_media_add_education, tv_add_certification_add_education, tv_label_completion_date_add_education)
+                showViews(
+                    true,
+                    et_institute_add_education,
+                    et_course_add_education,
+                    tv_completion_month_add_education,
+                    tv_completion_year_add_education,
+                    tv_label_course_add_education,
+                    tv_label_institute_add_education,
+                    tv_label_media_add_education,
+                    tv_add_certification_add_education,
+                    tv_label_completion_date_add_education
+                )
             }
             getString(R.string.pass_10th), getString(R.string.pass_12th) -> {
                 rl_education_details_add_education.visible()
                 showViews(false, et_course_add_education, tv_label_course_add_education)
-                showViews(true, et_institute_add_education, tv_completion_month_add_education, tv_completion_year_add_education,
-                        tv_label_institute_add_education, tv_label_media_add_education, tv_add_certification_add_education, tv_label_completion_date_add_education)
+                showViews(
+                    true,
+                    et_institute_add_education,
+                    tv_completion_month_add_education,
+                    tv_completion_year_add_education,
+                    tv_label_institute_add_education,
+                    tv_label_media_add_education,
+                    tv_add_certification_add_education,
+                    tv_label_completion_date_add_education
+                )
             }
 
         }
@@ -188,7 +205,11 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PermissionUtils.reqCodePerm) {
             pickFile()
@@ -211,11 +232,10 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
     private fun showPdfFromUri(uri: Uri?) {
         ll_pdf_view_add_education.visible()
         pdfView_add_education.fromUri(uri)
-                .defaultPage(0)
-                .spacing(10)
-                .enableDoubletap(false)
-                .enableSwipe(false)
-                .load()
+            .defaultPage(0)
+            .enableDoubletap(false)
+            .enableSwipe(false)
+            .load()
         pdfView_add_education.zoomTo(1.75f)
         tv_file_name_add_education.text = getFileName(uri!!)
         tv_add_certification_add_education.text = getString(R.string.delete_media)
