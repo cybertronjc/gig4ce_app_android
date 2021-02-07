@@ -87,16 +87,14 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun makeStatusBarTransparent() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            win = requireActivity().window
-            win.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            win.setStatusBarColor(requireActivity().getColor(R.color.white))
-        }
+        win = requireActivity().window
+        win.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        win.setStatusBarColor(requireActivity().getColor(R.color.white))
     }
 
 

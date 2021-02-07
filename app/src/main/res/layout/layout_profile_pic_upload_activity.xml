@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="#f2d1db">
+
+    <ImageView
+        android:id="@+id/iv_profile_pic_full_profile_upload"
+        android:layout_width="match_parent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_back_profile_pic_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/size_10"
+        android:paddingStart="@dimen/size_24"
+        android:paddingTop="@dimen/size_24"
+        android:paddingEnd="@dimen/size_24"
+        android:paddingBottom="@dimen/size_24"
+        android:src="@drawable/back_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back_button"
+        app:tint="@color/black" />
+
+    <ImageView
+        android:id="@+id/iv_no_profile_pic_profile_pic_upload"
+        android:layout_width="@dimen/size_221"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/size_65"
+        android:layout_marginBottom="@dimen/size_175"
+        app:layout_constraintBottom_toTopOf="@+id/tv_upload_picture_profile_pic_upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_back_profile_pic_upload"
+        app:srcCompat="@drawable/profile" />
+
+    <TextView
+        android:id="@+id/tv_upload_picture_profile_pic_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_44"
+        android:background="@drawable/bg_white_bor_d72467_rad4"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="3sp"
+        android:paddingTop="@dimen/size_9"
+        android:paddingBottom="@dimen/size_9"
+        android:text="@string/upload_picture"
+        android:textColor="@color/lipstick"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <ProgressBar
+        android:id="@+id/progress_bar_upload"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

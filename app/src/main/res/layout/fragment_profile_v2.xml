@@ -25,7 +25,15 @@
             app:statusBarScrim="@android:color/transparent"
             app:toolbarId="@+id/toolbar">
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_profile_v2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/ll_no_pic_profile_v2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -39,6 +47,7 @@
                     android:src="@drawable/profile" />
 
                 <TextView
+                    android:id="@+id/tv_upload_profile_pic_profile_v2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_52"
@@ -75,8 +84,8 @@
         android:layout_height="@dimen/size_36"
         android:layout_margin="@dimen/size_16"
 
-        android:elevation="@dimen/size_5"
         android:background="@drawable/fab_bg_profile_v2"
+        android:elevation="@dimen/size_5"
         android:padding="@dimen/size_10"
         android:src="@drawable/ic_baseline_share_24"
         app:layout_anchor="@id/app_bar"

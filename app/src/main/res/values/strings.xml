@@ -1395,6 +1395,10 @@
     <string name="select_month">Select Month</string>
     <string name="delete_media">Delete Media</string>
     <string name="add_media">Add Media</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="no_face">No Face Detected!!!!!</string>
     <string-array name="lang_array">
         <item>Ahirani</item>
         <item>Awadhi</item>

@@ -13,16 +13,21 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.openPopupMenu
 import com.gigforce.app.utils.showViews
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_add_education.*
+import kotlinx.android.synthetic.main.fragment_profile_v2.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -42,6 +47,8 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
         super.onViewCreated(view, savedInstanceState)
         initViews()
     }
+
+
 
     private fun initViews() {
         intLangChipGroup()
