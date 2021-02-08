@@ -1399,6 +1399,16 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="no_face">No Face Detected!!!!!</string>
+    <string name="adding_experience_profile_v2">Adding Experience will make profile stronger by 25 %.</string>
+    <string name="search_role">Search Role</string>
+    <string name="search_lang">Search Language</string>
+    <string name="enter_company_name">Enter Company Name</string>
+    <string name="enter_earnings">Enter Earnings</string>
+    <string name="no_of_years">No of Years</string>
+    <string name="no_of_months">No of Months</string>
+    <string name="company_name">Company Name</string>
+    <string name="description_optional">Description (optional)</string>
+
     <string-array name="lang_array">
         <item>Ahirani</item>
         <item>Awadhi</item>

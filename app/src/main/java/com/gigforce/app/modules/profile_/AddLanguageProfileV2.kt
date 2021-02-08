@@ -41,7 +41,7 @@ class AddLanguageProfileV2 : BaseFragment() {
         act_langs_add_lang_profile_v2.setAdapter(
             resources.getStringArray(R.array.lang_array).toList()
         )
-        act_langs_add_lang_profile_v2.setHint("Search Language")
+        act_langs_add_lang_profile_v2.setHint(getString(R.string.search_lang))
         act_langs_add_lang_profile_v2.setContentPadding(
             paddingTop = resources.getDimensionPixelSize(
                 R.dimen.size_15

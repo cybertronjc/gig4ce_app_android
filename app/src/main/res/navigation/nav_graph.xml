@@ -891,6 +891,10 @@
         android:id="@+id/fragment_add_education_v2"
         android:name="com.gigforce.app.modules.profile_.AddEducationProfileV2"
         android:label="fragment_add_education_v2" />
+    <fragment
+        android:id="@+id/fragment_add_experience_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddExperienceProfileV2"
+        android:label="fragment_add_experience_profile_v2" />
 
 
 </navigation>

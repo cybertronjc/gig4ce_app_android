@@ -106,4 +106,8 @@
         <attr name="sriv_oval" format="boolean" />
         <attr name="android:scaleType" />
     </declare-styleable>
+    <declare-styleable name="EditTextWithSuffix">
+        <attr name="suffix" format="string|reference" />
+        <attr name="suffixPadding" format="dimension" />
+    </declare-styleable>
 </resources>
