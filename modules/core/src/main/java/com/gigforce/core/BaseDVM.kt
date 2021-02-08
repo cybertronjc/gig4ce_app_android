@@ -42,7 +42,7 @@ interface INavArgsProvider{
 }
 
 data class NavArgs(
-    val path:String,
+    val navPath:String,
     val args: Bundle?
 ) {
 

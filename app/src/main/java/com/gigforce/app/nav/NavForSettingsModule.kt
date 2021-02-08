@@ -3,11 +3,12 @@ package com.gigforce.app.nav
 import com.gigforce.app.R
 import com.gigforce.common_ui.BaseNavigationImpl
 
-class NavForChatModule(
+class NavForSettingsModule(
     baseImplementation: BaseNavigationImpl
 ){
+
     init {
-        val moduleName:String = "chats"
-        baseImplementation.registerRoute("${moduleName}", R.id.contactScreenFragment)
+        val moduleName = "setting"
+        baseImplementation.registerRoute("${moduleName}", R.id.settingFragment)
     }
 }

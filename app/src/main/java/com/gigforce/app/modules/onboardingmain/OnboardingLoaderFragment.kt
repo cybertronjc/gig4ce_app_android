@@ -34,7 +34,7 @@ class OnboardingLoaderFragment : BaseFragment() {
 //        if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
 //            navigateToHomeScreen()
 //        }
-        (context?.applicationContext as MainApplication).setupLoginInfo()
+//        (context?.applicationContext as MainApplication).setupLoginInfo()
 
         observer()
         Handler().postDelayed({

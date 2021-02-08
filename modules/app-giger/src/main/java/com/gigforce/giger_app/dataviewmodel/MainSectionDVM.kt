@@ -4,7 +4,7 @@ import com.gigforce.core.SimpleDVM
 import com.gigforce.giger_app.AppModuleLevelViewTypes
 
 class MainSectionDVM(
-    val type:String
+    val type:String = ""
 ): SimpleDVM(AppModuleLevelViewTypes.VIEW_MAIN_NAV_SECTION){
 
 //    override fun getViewType(): Int {

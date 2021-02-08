@@ -12,7 +12,7 @@ open class StandardActionCardDVM(
     var desc: String = "",
     var action1: ActionButton? = null,
     var action2: ActionButton? = null,
-    val bgcolor: Long = 0,
+    val bgcolor: Int = 0,
     val textColor: Int = 0,
     val marginRequired: Boolean = false,
     val defaultViewType: Int = CommonViewTypes.VIEW_STANDARD_ACTION_CARD

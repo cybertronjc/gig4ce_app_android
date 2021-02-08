@@ -31,8 +31,6 @@ class ClientActivationDataRepository @Inject constructor():
                 for (item in it) {
                     val title = item?.get("cardTitle") as? String ?: "-"
                     val cardImage = item?.get("cardImage") as? String
-                    var bundle = Bundle()
-                    bundle.putString("JOB_PROFILE_ID",item.getString("profileId"))
                     _data.add(FeatureItemCardDVM(id=item.id,title = title, image = cardImage, navPath = "client_activation",args = bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to item?.id)))
                 }

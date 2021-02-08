@@ -5,22 +5,16 @@ import com.gigforce.core.SimpleDVM
 
 class VideoItemCardDVM(
     val image: Any? = null,
-    val videoYoutubeId: String,
-    val title: String,
-    val clockRequired: Boolean,
+    val link: String? = "",
+    val thumbnail : String? = "",
+    val title: String? = "",
+    val clockRequired: Boolean? = true,
     val timeSeconds: Int = 0,
     val timeStr : String = "",
-    val videoType: String? = null //video type would be youtube or otherlink
+    val type: String? = null, //video type would be youtube or otherlink
+    val navPath:String?=null
 ) :
     SimpleDVM(CommonViewTypes.VIEW_VIDEOS_ITEM_CARD) {
-
-    fun getYoutubeThumbNailUrl(): String {
-        return "https://i3.ytimg.com/vi/$videoYoutubeId/hqdefault.jpg"
-    }
-
-    fun getYoutubeVideoPath(): String {
-        return "https://www.youtube.com/watch?v=$videoYoutubeId"
-    }
 
     fun getVideoLength(): String {
         if (timeStr?.isNotBlank()?:false ) {

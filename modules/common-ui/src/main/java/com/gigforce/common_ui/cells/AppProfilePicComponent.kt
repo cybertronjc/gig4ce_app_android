@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.AppProfilePicDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
 
 class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
@@ -32,9 +34,12 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     }
 
     private fun setImageToProfilePic(image: String) {
-        Glide.with(context)
-            .load(image)
+//        val firebaseStoragePath = "gs://gig4ce-dev.appspot.com/profile_pics/${image}"
+        val firebaseStoragePath = "gs://gigforce-dev.appspot.com/profile_pics/IMG_20200409_235122_.jpg"
+        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
+        GlideApp.with(context)
+            .load(gsReference)
             .into(profileImg)
-    }
+            }
 
 }

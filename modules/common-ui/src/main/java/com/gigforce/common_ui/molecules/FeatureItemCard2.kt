@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.IViewHolder
@@ -69,7 +68,7 @@ class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
 
             data.getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
-                    navigation.navigateTo(it.path, it.args)
+                    navigation.navigateTo(it.navPath, it.args)
                 }
             }
             setImage(data)

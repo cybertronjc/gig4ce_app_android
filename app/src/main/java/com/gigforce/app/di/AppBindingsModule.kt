@@ -6,8 +6,6 @@ import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.giger_app.repo.IMainNavDataRepository
-import com.gigforce.giger_app.repo.MainNavDataRepository
 import com.gigforce.giger_app.repo.*
 import com.gigforce.learning.repo.ILearningDataRepository
 import com.gigforce.learning.repo.LearningDataRepository
@@ -16,6 +14,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
+import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -41,6 +40,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
+
+    @Binds
+    fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
 }
 
 @InstallIn(ViewModelComponent::class)

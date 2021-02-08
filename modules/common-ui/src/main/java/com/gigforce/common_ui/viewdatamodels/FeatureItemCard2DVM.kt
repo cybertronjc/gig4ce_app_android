@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class FeatureItemCard2DVM(
     val title : String,
+    val index:Int = 0,
     val image_type: String?,
     val imageRes:Int? = null,
     val imageUrl:String? = null,

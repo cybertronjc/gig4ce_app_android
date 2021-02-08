@@ -55,7 +55,7 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
 
             getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
-                    navigation.navigateTo(it.path, it.args)
+                    navigation.navigateTo(it.navPath, it.args)
                 }
             }
 

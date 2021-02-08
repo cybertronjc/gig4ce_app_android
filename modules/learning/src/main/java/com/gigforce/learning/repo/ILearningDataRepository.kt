@@ -1,8 +1,10 @@
 package com.gigforce.learning.repo
 
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
+import com.gigforce.core.StringConstants
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
@@ -33,14 +35,17 @@ class LearningDataRepository @Inject constructor() :
 //                    val title = name + level
 //                        val priority = (item?.get("priority") as? Int) ?: 500
                         val coverPic = item?.get("cover_pic") as? String
-                        val nav_path = item?.get("nav_path") as? String
+                        val nav_path = "learning/main"//item?.get("nav_path") as? String
+
                         _data.add(
                             FeatureItemCardDVM(
                                 id = item.id,
                                 title = title,
                                 subtitle = subtitle,
                                 image = coverPic,
-                                navPath = nav_path
+                                navPath = nav_path,
+                                args = bundleOf(
+                                    StringConstants.COURSE_ID.value to item?.id)
                             )
                         )
                     }

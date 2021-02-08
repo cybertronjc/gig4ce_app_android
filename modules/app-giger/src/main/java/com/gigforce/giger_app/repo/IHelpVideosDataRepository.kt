@@ -26,22 +26,10 @@ class HelpVideosDataRepository @Inject constructor() : IHelpVideosDataRepository
                 value?.documents?.let {
                     val _data = ArrayList<VideoItemCardDVM>()
                     for (item in it) {
-                        val videoYoutubeId = item?.get("videoYoutubeId") as? String ?: "-"
-                        val lengthSeconds = item?.get("length",Int::class.java)?:0
-                        val lengthStr = item?.getString("lengthStr")?:""
-                        val title = item?.get("title") as? String ?: ""
-                        val clockRequired = item?.get("clockRequired") as? Boolean?: false
-                        val videoType = item?.get("videoType") as? String
-                        _data.add(
-                            VideoItemCardDVM(
-                                videoYoutubeId = videoYoutubeId,
-                                title = title,
-                                timeSeconds = lengthSeconds,
-                                timeStr = lengthStr,
-                                clockRequired = clockRequired,
-                                videoType = videoType
-                            )
-                        )
+                        val obj = item.toObject(VideoItemCardDVM::class.java)
+                        obj?.let {
+                            _data.add(obj)
+                        }
                     }
                     data.value = _data
                 }

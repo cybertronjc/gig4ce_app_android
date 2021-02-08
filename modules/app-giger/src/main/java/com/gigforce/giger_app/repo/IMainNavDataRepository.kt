@@ -29,11 +29,12 @@ class MainNavDataRepository @Inject constructor() :
                     val _data = ArrayList<FeatureItemCard2DVM>()
                     for(item in list){
                         val title = item.get("title") as? String ?: "-"
-                        val index = (item.get("index") as? Int) ?: 500
+                        val index = (item.get("index") as? Long) ?: 500
                         val icon_type = item.get("icon") as? String
-                        val nav_path = item.get("nav_path") as? String
-                        _data.add(FeatureItemCard2DVM(title = title, image_type = icon_type, navPath = nav_path))
+                        val navPath = item.get("navPath") as? String
+                        _data.add(FeatureItemCard2DVM(title = title, image_type = icon_type, navPath = navPath,index = index.toInt()))
                     }
+                    _data.sortBy { it.index }
                     data.value = _data
                 }
             }
