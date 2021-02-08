@@ -5,10 +5,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -76,6 +79,10 @@ fun Timestamp.toDisplayText(): String {
     return if(DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat("dd MMM, hh:mm a").format(date)
 }
 
+fun Date.toDisplayText(): String {
+    return if(DateUtils.isToday(this.time)) SimpleDateFormat("hh:mm a").format(this) else SimpleDateFormat("dd MMM, hh:mm a").format(this)
+}
+
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
     forEach {
         val k = it.key
@@ -138,4 +145,18 @@ fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
     return map {
         if (block(it)) newValue else it
     }
+}
+
+fun EditText.onTextChanged(onTextChange: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChange.invoke(s.toString())
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+        }
+    })
 }

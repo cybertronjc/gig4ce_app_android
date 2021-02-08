@@ -27,14 +27,14 @@ class ReportUserDialogFragment : DialogFragment() {
         const val TAG = "ReportUserDialogFragment"
 
         fun launch(
-            chatHeaderId: String,
-            userUid: String,
-            fragmentManager: FragmentManager
+                chatHeaderId: String,
+                userUid: String,
+                fragmentManager: FragmentManager
         ) {
             val frag = ReportUserDialogFragment()
             frag.arguments = bundleOf(
-                INTENT_EXTRA_USER_ID to userUid,
-                INTENT_EXTRA_CHAT_HEADER_ID to chatHeaderId
+                    INTENT_EXTRA_USER_ID to userUid,
+                    INTENT_EXTRA_CHAT_HEADER_ID to chatHeaderId
             )
             frag.show(fragmentManager, TAG)
         }
@@ -47,18 +47,18 @@ class ReportUserDialogFragment : DialogFragment() {
     private lateinit var userUid: String
 
     //View
-    private lateinit var reportUserMainLayout : View
-    private lateinit var progressBar : View
-    private lateinit var reason_radio_group : RadioGroup
-    private lateinit var reason_label : TextView
-    private lateinit var reason_et : EditText
-    private lateinit var confirm_decline_cb : CheckBox
-    private lateinit var submitBtn : Button
+    private lateinit var reportUserMainLayout: View
+    private lateinit var progressBar: View
+    private lateinit var reason_radio_group: RadioGroup
+    private lateinit var reason_label: TextView
+    private lateinit var reason_et: EditText
+    private lateinit var confirm_decline_cb: CheckBox
+    private lateinit var submitBtn: Button
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_report_user, container, false)
     }
@@ -74,7 +74,7 @@ class ReportUserDialogFragment : DialogFragment() {
             userUid = it.getString(INTENT_EXTRA_USER_ID)!!
             headerId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID)!!
         }
-        initView()
+        initView(view)
         initViewModel()
     }
 
@@ -95,17 +95,17 @@ class ReportUserDialogFragment : DialogFragment() {
                 }
                 Lse.Success -> {
                     Toast.makeText(requireContext(), "User reported", Toast.LENGTH_LONG)
-                        .show()
+                            .show()
                     dismiss()
                 }
                 is Lse.Error -> {
                     progressBar.gone()
                     reportUserMainLayout.visible()
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to report user, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
-                        .show()
+                            .setTitle("Alert")
+                            .setMessage("Unable to report user, ${it.error}")
+                            .setPositiveButton("Okay") { _, _ -> }
+                            .show()
                 }
             }
         })
@@ -118,14 +118,22 @@ class ReportUserDialogFragment : DialogFragment() {
             //setBackgroundDrawableResource(R.drawable.dialog_round_bg)
 
             setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
 
 
-    private fun initView() {
+    private fun initView(view: View) {
+
+        reportUserMainLayout = view.findViewById(R.id.reportUserMainLayout)
+        progressBar = view.findViewById(R.id.progressBar)
+        reason_radio_group = view.findViewById(R.id.reason_radio_group)
+        reason_label = view.findViewById(R.id.reason_label)
+        reason_et = view.findViewById(R.id.reason_et)
+        confirm_decline_cb = view.findViewById(R.id.confirm_decline_cb)
+        submitBtn = view.findViewById(R.id.submitBtn)
 
         reason_radio_group.setOnCheckedChangeListener { _, checkedId ->
 
@@ -149,22 +157,22 @@ class ReportUserDialogFragment : DialogFragment() {
 
                 confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please select the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
-                    .show()
+                        .setTitle("Alert")
+                        .setMessage("Please select the reason")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
 
                 return@setOnClickListener
             } else if (checkedRadioButtonId == R.id.reason_others
-                && reason_et.text.isNullOrBlank()
+                    && reason_et.text.isNullOrBlank()
             ) {
 
                 confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Alert")
-                    .setMessage("Please type the reason")
-                    .setPositiveButton("Okay") { _, _ -> }
-                    .show()
+                        .setTitle("Alert")
+                        .setMessage("Please type the reason")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
 
                 return@setOnClickListener
             }

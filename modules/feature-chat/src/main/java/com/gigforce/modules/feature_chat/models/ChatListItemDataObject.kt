@@ -13,5 +13,14 @@ data class ChatListItemDataObject(
 
     val unreadCount:Int,
     val id:String,
-    val type: String
+    val type: String,
+
+    val isOtherUserOnline: Boolean,
+
+    val groupName: String,
+    val groupAvatar: String,
+
+    val lastMessage: String,
+    val lastMessageType: String
+
 ): SimpleDataViewObject(ViewTypes.CHAT_HEADER) {}

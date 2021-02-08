@@ -59,11 +59,11 @@ class ChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_CHAT_IMAGE -> ImageMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_image_in, parent, false)
+                    .inflate(R.layout.item_chat_text_with_audio, parent, false)
             )
             VIEW_TYPE_CHAT_VIDEO -> VideoMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_video_in, parent, false)
+                    .inflate(R.layout.item_chat_text_with_audio, parent, false)
             )
             VIEW_TYPE_CHAT_LOCATION -> LocationMessageViewHolder(
                 LayoutInflater.from(parent.context)
@@ -79,11 +79,11 @@ class ChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_CHAT_DOCUMENT -> DocumentMessageViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_text_with_document, parent, false)
+                    .inflate(R.layout.item_chat_text_with_audio, parent, false)
             )
             VIEW_TYPE_MESSAGE_TYPE_NOT_SUPPORTED -> MessageTypeNotSupportedViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_message_not_supported, parent, false)
+                    .inflate(R.layout.item_chat_text_with_audio, parent, false)
             )
             else -> {
                 throw IllegalArgumentException("ChatRecyclerAdapter:onCreateViewHolder() View type $viewType not supported")

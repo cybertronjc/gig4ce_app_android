@@ -5,60 +5,73 @@ import android.os.Environment
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.gigforce.modules.feature_chat.models.IMediaMessage
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
+import com.google.firebase.storage.FirebaseStorage
 import java.io.File
-import java.lang.Exception
-import java.lang.NullPointerException
 
 abstract class MediaMessage(
-        context: Context,
-        attrs: AttributeSet?
+    context: Context,
+    attrs: AttributeSet?
 ) : RelativeLayout(
-        context,
-        attrs
+    context,
+    attrs
 ), IViewHolder {
 
-    private val refToGigForceAttachmentDirectory: File = Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
-    private var imagesDirectoryRef: File = File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
-    private var videosDirectoryRef: File = File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
-    private var documentsDirectoryRef: File = File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
+    private val refToGigForceAttachmentDirectory: File =
+        Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
+    private var imagesDirectoryRef: File =
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
+    private var videosDirectoryRef: File =
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
+    private var documentsDirectoryRef: File =
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
 
-    var iMediaMessage:IMediaMessage? = null
+    var iMediaMessage: IMediaMessage? = null
 
-    private var downloadAttachmentService: DownloadChatAttachmentService = RetrofitFactory.createService(DownloadChatAttachmentService::class.java)
 
-   /* suspend fun downloadMediaFile(){
-        iMediaMessage?.attachmentPath ?. let {
+    val storage: FirebaseStorage by lazy {
+        FirebaseStorage.getInstance()
+    }
+    private var downloadAttachmentService: DownloadChatAttachmentService =
+        RetrofitFactory.createService(DownloadChatAttachmentService::class.java)
 
-            val downloadLink = it
+    suspend fun downloadMediaFile(): File {
+        iMediaMessage?.attachmentPath?.let {
+
+            val downloadLink = storage.reference.child(it).getDownloadUrlOrThrow()
+            val fullDownloadLink = downloadLink.toString()
 
             val dirRef = getFilePathRef()
-            if(!dirRef.exists()) dirRef.mkdirs()
+            if (!dirRef.exists()) dirRef.mkdirs()
 
-            val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
+            val fileName: String = FirebaseUtils.extractFilePath(fullDownloadLink)
             val fileRef = File(dirRef, fileName)
 
             // download file from Server
-            val response = downloadAttachmentService.downloadAttachment(downloadLink)
+            val response = downloadAttachmentService.downloadAttachment(fullDownloadLink)
 
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
                 val body = response.body()!!
                 FileUtils.writeResponseBodyToDisk(body, fileRef)
                 // download completed, change the state
-            }else{
+            } else {
                 throw Exception("Unable to download attachment")
             }
-        }
-    }*/
 
-    fun downloadMediaFileUsingFirebase(){
+            return fileRef
+        }
+
+        throw NullPointerException("No Attachment Path found")
+    }
+
+    fun downloadMediaFileUsingFirebase() {
 
     }
 
@@ -67,10 +80,10 @@ abstract class MediaMessage(
         this.onBind(data as ChatMessage)
     }
 
-    abstract fun onBind(msg:ChatMessage)
+    abstract fun onBind(msg: ChatMessage)
 
-    fun getFilePathRef():File{
-        return when(iMediaMessage?.type){
+    fun getFilePathRef(): File {
+        return when (iMediaMessage?.type) {
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> imagesDirectoryRef
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> videosDirectoryRef
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> documentsDirectoryRef
@@ -78,16 +91,15 @@ abstract class MediaMessage(
         }
     }
 
-    fun returnFileIfAlreadyDownloadedElseNull(): File?
-    {
+    fun returnFileIfAlreadyDownloadedElseNull(): File? {
         iMediaMessage?.let {
             it.attachmentPath?.let {
                 val fileName: String = FirebaseUtils.extractFilePath(it)
                 val file = File(getFilePathRef(), fileName)
-                return if(file.exists()) file else null
+                return if (file.exists()) file else null
             }
             throw NullPointerException("attachment Path can not be null")
         }
-        return  null
+        return null
     }
 }

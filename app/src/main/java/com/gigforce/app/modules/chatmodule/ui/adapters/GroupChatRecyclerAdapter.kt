@@ -89,7 +89,7 @@ class GroupChatRecyclerAdapter constructor(
             )
             VIEW_TYPE_MESSAGE_TYPE_NOT_SUPPORTED -> MessageTypeNotSupportedViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_chat_message_not_supported, parent, false)
+                    .inflate(R.layout.item_chat_text_with_audio, parent, false)
             )
             else -> {
                 throw IllegalArgumentException("ChatRecyclerAdapter:onCreateViewHolder() View type $viewType not supported")

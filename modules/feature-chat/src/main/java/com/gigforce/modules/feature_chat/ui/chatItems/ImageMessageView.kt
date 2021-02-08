@@ -4,8 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
@@ -13,16 +16,22 @@ import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.core.IChatNavigation
+import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
 
 abstract class ImageMessageView(
-        private val type : String,
-        context: Context,
-        attrs: AttributeSet?
+    private val type: String,
+    context: Context,
+    attrs: AttributeSet?
 ) : MediaMessage(context, attrs),
-View.OnClickListener{
+    View.OnClickListener {
 
     private lateinit var imageView: ImageView
     private lateinit var textViewTime: TextView
@@ -30,20 +39,32 @@ View.OnClickListener{
     private lateinit var downloadIconIV: ImageView
     private lateinit var downloadOverlayIV: ImageView
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
+    private lateinit var receivedStatusIV: ImageView
+
+    @Inject
+    lateinit var navigation: IChatNavigation
+
 
     init {
         setDefault()
         inflate()
         findViews()
         setOnClickListeners()
+
+        (this.context.applicationContext as ChatModuleProvider)
+            .provideChatModule()
+            .inject(this)
+        navigation.context = context
     }
 
     private fun findViews() {
+
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         downloadIconIV = this.findViewById(R.id.download_icon_iv)
         downloadOverlayIV = this.findViewById(R.id.download_overlay_iv)
+        receivedStatusIV = this.findViewById(R.id.tv_received_status)
         attachmentDownloadingProgressBar = this.findViewById(R.id.attachment_downloading_pb)
     }
 
@@ -53,7 +74,8 @@ View.OnClickListener{
     }
 
     fun inflate() {
-        val resId = if (type == ChatConstants.FLOW_TYPE_IN) R.layout.item_chat_text_with_image_in else R.layout.item_chat_text_with_image_out
+        val resId =
+            if (type == ChatConstants.FLOW_TYPE_IN) R.layout.recycler_item_chat_text_with_image_in else R.layout.recycler_item_chat_text_with_image_out
         LayoutInflater.from(context).inflate(resId, this, true)
     }
 
@@ -61,43 +83,64 @@ View.OnClickListener{
         cardView.setOnClickListener(this)
     }
 
-    private fun handleImageNotDownloaded(msg: ChatMessage){
+    private fun handleImageNotDownloaded() {
         attachmentDownloadingProgressBar.gone()
         downloadOverlayIV.visible()
         downloadIconIV.visible()
-
-        loadThumbnail(msg)
     }
 
-    private fun loadThumbnail(msg:ChatMessage){
-        Glide.with(context)
-                .load(msg.thumbnail)
+    private fun loadThumbnail(msg: ChatMessage) {
+        if (msg.thumbnailBitmap != null) {
+
+            Glide.with(context)
+                .load(msg.thumbnailBitmap)
                 .placeholder(getCircularProgressDrawable())
                 .into(imageView)
+        } else if (msg.thumbnail != null) {
+
+            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
+            Glide.with(context)
+                .load(thumbnailStorageRef)
+                .placeholder(getCircularProgressDrawable())
+                .into(imageView)
+        }
+
+
     }
 
-    private fun handleDownloadInProgress(msg:ChatMessage){
+    private fun handleDownloadInProgress() {
         downloadOverlayIV.visible()
         downloadIconIV.gone()
         attachmentDownloadingProgressBar.visible()
-
-        this.loadThumbnail(msg)
     }
 
 
-    private fun handleImage(msg:ChatMessage){
+    private fun handleImage(msg: ChatMessage) {
         imageView.setImageDrawable(null)
 
-        val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
+        if (msg.thumbnailBitmap != null) {
+            handleImageUploading()
+        } else {
 
-        if(downloadedFile != null){
-            handleImageDownloaded(downloadedFile)
-        }else if(msg.attachmentCurrentlyBeingDownloaded)
-        {
-            handleDownloadInProgress(msg)
-        }else{
-            handleImageNotDownloaded(msg)
+            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
+            if (downloadedFile != null) {
+                handleImageDownloaded(downloadedFile)
+            } else {
+                loadThumbnail(msg)
+
+                if (msg.attachmentCurrentlyBeingDownloaded) {
+                    handleDownloadInProgress()
+                } else {
+                    handleImageNotDownloaded()
+                }
+            }
         }
+    }
+
+    private fun handleImageUploading() {
+        attachmentDownloadingProgressBar.visible()
+        downloadOverlayIV.visible()
+        downloadIconIV.gone()
     }
 
     private fun handleImageDownloaded(downloadedFile: File) {
@@ -107,14 +150,15 @@ View.OnClickListener{
         downloadIconIV.gone()
 
         Glide.with(context)
-                .load(downloadedFile)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+            .load(downloadedFile)
+            .placeholder(getCircularProgressDrawable())
+            .into(imageView)
     }
 
     override fun onBind(msg: ChatMessage) {
         textViewTime.text = msg.timestamp?.toDisplayText()
         handleImage(msg)
+        setReceivedStatus(msg)
     }
 
     fun getCircularProgressDrawable(): CircularProgressDrawable {
@@ -126,9 +170,63 @@ View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-        //todo
+        val file = returnFileIfAlreadyDownloadedElseNull()
+
+        if (file != null) {
+            navigation.openFullScreenImageViewDialogFragment(file.toUri())
+        } else {
+           downloadAttachment()
+        }
+    }
+
+    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
+        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_sent)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_delivered)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_seen)
+                    .into(receivedStatusIV)
+        }
+        else -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+        }
+    }
+
+
+    private fun downloadAttachment() = GlobalScope.launch{
+
+        this.launch(Dispatchers.Main) {
+            handleDownloadInProgress()
+        }
+
+        try {
+            val file = downloadMediaFile()
+
+            this.launch(Dispatchers.Main) {
+                handleImageDownloaded(file)
+            }
+        } catch (e: Exception) {
+        }
     }
 }
 
-class InImageMessageView(context: Context, attrs: AttributeSet?) : ImageMessageView("in", context, attrs)
-class OutImageMessageView(context: Context, attrs: AttributeSet?) : ImageMessageView("out", context, attrs)
+class InImageMessageView(context: Context, attrs: AttributeSet?) :
+    ImageMessageView("in", context, attrs)
+
+class OutImageMessageView(context: Context, attrs: AttributeSet?) :
+    ImageMessageView("out", context, attrs)

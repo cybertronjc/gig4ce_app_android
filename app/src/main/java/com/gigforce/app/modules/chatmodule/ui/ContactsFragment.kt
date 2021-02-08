@@ -48,7 +48,7 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.ContactsViewModelFactory
+import com.vinners.cmi.ui.activity.NewContactsViewModelFactory
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 
@@ -63,7 +63,7 @@ class ContactsFragment : DialogFragment(),
     private val viewModel: ContactsViewModel by lazy {
         ViewModelProvider(
             this,
-            ContactsViewModelFactory(requireContext())
+            NewContactsViewModelFactory(requireContext())
         ).get(ContactsViewModel::class.java)
     }
 

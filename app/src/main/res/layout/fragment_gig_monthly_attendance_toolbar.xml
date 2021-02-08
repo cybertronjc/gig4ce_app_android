@@ -38,7 +38,7 @@
         android:id="@+id/company_logo_iv"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:src="@drawable/ic_location"
+        android:src="@drawable/ic_location_grey"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"

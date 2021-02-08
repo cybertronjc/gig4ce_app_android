@@ -337,7 +337,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
             Log.d("ImageUri", imageUriResultCrop.toString())
 
             val baos = ByteArrayOutputStream()

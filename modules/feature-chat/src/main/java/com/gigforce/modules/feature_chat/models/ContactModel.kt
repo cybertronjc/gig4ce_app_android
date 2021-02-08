@@ -29,6 +29,11 @@ data class ContactModel(
  @set:PropertyName("headerId")
  var headerId: String? = null,
 
+ @get:PropertyName("imageThumbnailPathInStorage")
+ @set:PropertyName("imageThumbnailPathInStorage")
+ var imageThumbnailPathInStorage: String? = null,
+
+
  @get:PropertyName("imagePathInStorage")
  @set:PropertyName("imagePathInStorage")
  var imagePathInStorage: String? = null,

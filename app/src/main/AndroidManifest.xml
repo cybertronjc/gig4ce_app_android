@@ -50,7 +50,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="your API key" />
+            android:value="AIzaSyCNgKMbX24olXyDp4xSa_UZZET0VPK2ZOE" />
 
         <!--        <meta-data-->
         <!--            android:name="CLEVERTAP_ACCOUNT_ID"-->
@@ -86,6 +86,10 @@
             android:enabled="true"
             android:exported="true"/>
 
+        <service
+            android:name="com.gigforce.modules.feature_chat.service.SyncContactsService"
+            android:enabled="true"
+            android:exported="true"/>
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
@@ -143,9 +147,14 @@
             </intent-filter>
         </activity>
 
+<!--        android:windowSoftInputMode="stateVisible|adjustPan"-->
+
         <activity
             android:name=".MainActivity"
-            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden">
+            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden"
+
+            >
+
             <nav-graph android:value="@navigation/nav_graph" />
 
             <intent-filter>

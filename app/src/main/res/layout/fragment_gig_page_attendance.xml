@@ -173,7 +173,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_location"
+                    app:srcCompat="@drawable/ic_location_grey"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/seaprator1" />
 

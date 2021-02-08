@@ -7,6 +7,7 @@ import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
 
 class ChatMessage(
@@ -15,17 +16,13 @@ class ChatMessage(
         @set:PropertyName("id")
         var id: String = "",
 
+        @get:PropertyName("senderMessageId")
+        @set:PropertyName("senderMessageId")
+        var senderMessageId: String = "",
+
         @get:PropertyName("headerId")
         @set:PropertyName("headerId")
         var headerId: String = "",
-
-        @get:PropertyName("forUserId")
-        @set:PropertyName("forUserId")
-        var forUserId: String = "",
-
-        @get:PropertyName("otherUserId")
-        @set:PropertyName("otherUserId")
-        var otherUserId: String = "",
 
         @get:PropertyName("flowType")
         @set:PropertyName("flowType")
@@ -85,17 +82,22 @@ class ChatMessage(
         /**
          * Location message payload
          */
+
         @get:PropertyName("locationPhysicalAddress")
         @set:PropertyName("locationPhysicalAddress")
         var locationPhysicalAddress: String = "",
 
-        @get:PropertyName("latitude")
-        @set:PropertyName("latitude")
-        var latitude: Double = 0.0,
+        @get:PropertyName("location")
+        @set:PropertyName("location")
+        var location: GeoPoint? = null,
 
-        @get:PropertyName("longitude")
-        @set:PropertyName("longitude")
-        var longitude: Double = 0.0,
+        @get:PropertyName("senderInfo")
+        @set:PropertyName("senderInfo")
+        var senderInfo: UserInfo = UserInfo(),
+
+        @get:PropertyName("receiverInfo")
+        @set:PropertyName("receiverInfo")
+        var receiverInfo: UserInfo = UserInfo(),
 
         @get:Exclude
         @set:Exclude
@@ -105,18 +107,7 @@ class ChatMessage(
         @set:Exclude
         var attachmentCurrentlyBeingDownloaded: Boolean = false
 ) : DataViewObject(),
-        IMediaMessage
-{
-    companion object {
-
-
-        const val MESSAGE_TYPE_TEXT = "text"
-        const val MESSAGE_TYPE_TEXT_WITH_DOCUMENT = "text_document"
-        const val MESSAGE_TYPE_TEXT_WITH_IMAGE = "text_image"
-        const val MESSAGE_TYPE_TEXT_WITH_VIDEO = "text_video"
-        const val MESSAGE_TYPE_TEXT_WITH_AUDIO = "text_audio"
-        const val MESSAGE_TYPE_TEXT_WITH_CONTACT = "text_contact"
-    }
+        IMediaMessage {
 
     override fun getViewType(): Int {
 
@@ -125,6 +116,7 @@ class ChatMessage(
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
             ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.flowType == "in") ViewTypes.IN_LOCATION else ViewTypes.OUT_LOCATION
             else -> -1
         }
     }

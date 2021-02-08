@@ -98,3 +98,11 @@ suspend fun StorageReference.getDownloadUrlOrThrow() = suspendCoroutine<Uri> {co
         cont.resumeWithException(it)
     }
 }
+
+suspend fun StorageReference.getDownloadUrlOrReturnNull() = suspendCoroutine<Uri?> {cont ->
+    downloadUrl.addOnSuccessListener {
+        cont.resume(it)
+    }.addOnFailureListener {
+        cont.resume(null)
+    }
+}

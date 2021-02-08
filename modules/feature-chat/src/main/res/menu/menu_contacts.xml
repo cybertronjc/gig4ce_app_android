@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.abhijai.gigschatdemo.contacts_module.ui.MainActivity">
+    <item
+        android:id="@+id/action_new_group"
+        android:orderInCategory="100"
+        android:title="New Group"
+        android:visible="false"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/action_invite_friends"
+        android:orderInCategory="100"
+        android:title="Invite A Friend"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_referesh"
+        android:orderInCategory="100"
+        android:title="Refresh"
+        app:showAsAction="collapseActionView" />
+
+</menu>

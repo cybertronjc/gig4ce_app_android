@@ -64,6 +64,14 @@ data class ChatHeader(
 
     @get:PropertyName("groupDeactivated")
     @set:PropertyName("groupDeactivated")
-    var groupDeactivated: Boolean = false
+    var groupDeactivated: Boolean = false,
+
+    @get:PropertyName("isOtherUserOnline")
+    @set:PropertyName("isOtherUserOnline")
+    var isOtherUserOnline: Boolean = false,
+
+    @get:PropertyName("lastUserStatusActivityAt")
+    @set:PropertyName("lastUserStatusActivityAt")
+    var lastUserStatusActivityAt: Long = 0L
 
 ) : BaseFirestoreDataModel(tableName = "headers")

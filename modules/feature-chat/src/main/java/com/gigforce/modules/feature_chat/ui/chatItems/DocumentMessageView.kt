@@ -1,23 +1,28 @@
 package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
-import android.graphics.Color
+import android.content.Intent
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
 
 
 abstract class DocumentMessageView(
@@ -25,8 +30,8 @@ abstract class DocumentMessageView(
         private val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
-) : RelativeLayout(context, attrs),
-        IViewHolder {
+) : MediaMessage(context, attrs),
+        IViewHolder, View.OnClickListener {
 
     //Views
     private lateinit var linearLayout: ConstraintLayout
@@ -34,11 +39,13 @@ abstract class DocumentMessageView(
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
     private lateinit var progressbar: View
+    private lateinit var receivedStatusIV: ImageView
 
     init {
         setDefault()
         inflate()
         findViews()
+        cardView.setOnClickListener(this)
     }
 
     private fun findViews() {
@@ -47,6 +54,7 @@ abstract class DocumentMessageView(
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
         progressbar = this.findViewById(R.id.progress)
+        receivedStatusIV = this.findViewById(R.id.tv_received_status)
     }
 
     fun setDefault() {
@@ -54,33 +62,18 @@ abstract class DocumentMessageView(
         this.layoutParams = params
     }
 
-    fun inflate() {
-        if (flowType == MessageFlowType.IN) {
-            LayoutInflater.from(context).inflate(R.layout.item_chat_text_with_document, this, true)
-        } else
-            LayoutInflater.from(context).inflate(R.layout.item_chat_text_with_document, this, true)
-    }
-
-    override fun bind(data: Any?) {
-        val msg = data as ChatMessage? ?: return
+    override fun onBind(msg: ChatMessage) {
 
         if (msg.attachmentPath.isNullOrBlank()) {
-            progressbar.visible()
+            handleDocumentUploading()
         } else {
-            progressbar.gone()
 
-            val fileName: String = FirebaseUtils.extractFilePath(msg.attachmentPath!!)
-            val downloadedFile = null
-//                    returnFileIfAlreadyDownloadedElseNull(
-//                            ChatConstants.ATTACHMENT_TYPE_DOCUMENT,
-//                            fileName
-//                    )
+            val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
             val fileHasBeenDownloaded = downloadedFile != null
 
             if (fileHasBeenDownloaded) {
                 progressbar.gone()
             } else {
-
                 if (msg.attachmentCurrentlyBeingDownloaded) {
                     progressbar.visible()
                 } else {
@@ -89,38 +82,111 @@ abstract class DocumentMessageView(
             }
         }
 
+
+        textViewTime.text = msg.timestamp?.toDisplayText()
         textView.text = msg.attachmentName
+
         when (msg.flowType) {
-            "in" -> {
-                textViewTime.text = msg.timestamp?.toDisplayText()
-                textViewTime.setTextColor(Color.parseColor("#979797"))
-                linearLayout.setBackgroundColor(Color.parseColor("#19eeeeee"))
-                textView.setTextColor(Color.parseColor("#000000"))
-
-                val layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.setMargins(26, 5, 160, 5)
-                cardView.layoutParams = layoutParams
-            }
             "out" -> {
-                textViewTime.text = msg.timestamp?.toDisplayText()
-                linearLayout.setBackgroundColor(Color.parseColor("#E91E63"))
-                textView.setTextColor(Color.parseColor("#ffffff"))
-                textViewTime.setTextColor(Color.parseColor("#ffffff"))
-
-                val layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                layoutParams.gravity = Gravity.END
-                layoutParams.setMargins(160, 5, 26, 5)
-                cardView.layoutParams = layoutParams
+                setReceivedStatus(msg)
             }
         }
+    }
+
+    private fun handleDocumentUploading() {
+        progressbar.gone()
+    }
+
+    fun inflate() {
+        if (flowType == MessageFlowType.IN) {
+            LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_document_in, this, true)
+        } else
+            LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_document_out, this, true)
+    }
+
+    private fun setReceivedStatus(msg: ChatMessage) = when (msg.status) {
+        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_sent)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_delivered)
+                    .into(receivedStatusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_seen)
+                    .into(receivedStatusIV)
+        }
+        else -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(receivedStatusIV)
+        }
+    }
+
+    override fun onClick(v: View?) {
+        val file = returnFileIfAlreadyDownloadedElseNull()
+
+        if (file != null) {
+            openDocument(file)
+        } else {
+            downloadAttachment()
+        }
+    }
+
+
+    private fun openDocument(file: File) {
+        Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(
+                    FileProvider.getUriForFile(
+                            context,
+                            "com.gigforce.app.provider",
+                            file
+                    ), "application/pdf"
+            )
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            try {
+                context.startActivity(this)
+            } catch (e: Exception) {
+                Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun downloadAttachment() = GlobalScope.launch {
+
+        this.launch(Dispatchers.Main) {
+            handleDownloadInProgress()
+        }
+
+        try {
+            val file = downloadMediaFile()
+            this.launch(Dispatchers.Main) {
+                handleDownloadedCompleted()
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun handleDownloadInProgress() {
+        progressbar.visible()
+    }
+
+    private fun handleDownloadedCompleted() {
+
+        progressbar.gone()
 
     }
+
 }
 
 class GroupOneToOneDocumentMessageView(

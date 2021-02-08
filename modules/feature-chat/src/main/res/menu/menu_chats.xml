@@ -18,4 +18,11 @@
         android:icon="@drawable/ic_document_outlined_black"
         app:showAsAction="collapseActionView" />
 
+    <item
+        android:id="@+id/action_location"
+        android:orderInCategory="100"
+        android:title="Location"
+        android:icon="@drawable/ic_location_grey"
+        app:showAsAction="collapseActionView" />
+
 </menu>

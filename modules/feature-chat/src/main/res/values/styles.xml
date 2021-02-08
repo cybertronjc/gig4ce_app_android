@@ -8,6 +8,9 @@
     <style name="chatImageView" parent="">
         <item name="cornerFamilyTopRight">rounded</item>
         <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+
         <item name="cornerSize">5%</item>
     </style>
 </resources>

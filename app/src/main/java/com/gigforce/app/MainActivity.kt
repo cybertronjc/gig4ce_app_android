@@ -108,6 +108,14 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                     intent.extras
                 )
             }
+            NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to Chat verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                        R.id.chatPageFragment,
+                        intent.extras
+                )
+            }
             else -> {
                 navController.popAllBackStates()
                 navController.navigate(

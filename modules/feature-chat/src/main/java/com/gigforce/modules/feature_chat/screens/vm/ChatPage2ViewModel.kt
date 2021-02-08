@@ -14,11 +14,11 @@ class ChatPage2ViewModel: ViewModel() {
     var headerId:String = ""
     var uid:String = ""
 
+
     private val collectionReference = FirebaseFirestore.getInstance().collection("chats")
 
     private var _messages:MutableLiveData<ArrayList<ChatMessage>> = MutableLiveData()
-    val messages: LiveData<ArrayList<ChatMessage>>
-        get() = _messages
+    val messages: LiveData<ArrayList<ChatMessage>> = _messages
 
     var messagesListener:ListenerRegistration? = null
 
@@ -40,6 +40,7 @@ class ChatPage2ViewModel: ViewModel() {
                     }
                 }
     }
+
 
     override fun onCleared() {
         super.onCleared()

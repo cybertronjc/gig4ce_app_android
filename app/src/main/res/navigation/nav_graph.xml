@@ -150,7 +150,7 @@
         android:id="@+id/chatFragment"
         android:name="com.gigforce.app.modules.chat.ChatFragment"
         android:label="chat_fragment"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat_dep" />
 
     <fragment
         android:id="@+id/landinghomefragment"
@@ -704,9 +704,9 @@
 
         tools:layout="@layout/home_screen_bottom_sheet_fragment" >
 
-        <action
-            android:id="@+id/action_fragment_to_second_graph"
-            app:destination="@id/nav_graph_chat" />
+<!--        <action-->
+<!--            android:id="@+id/action_fragment_to_second_graph"-->
+<!--            app:destination="@id/nav_graph_chat" />-->
         
     </fragment>
     <dialog
@@ -887,7 +887,32 @@
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
 
-    <include app:graph="@navigation/nav_graph_chat" />
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list"/>
+
+    <fragment
+        android:id="@+id/chatPageFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatPageFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_old" />
+
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ContactsFragment"
+        android:label="ContactsFragment" />
+
+    <dialog
+        android:id="@+id/viewFullScreenImageDialogFragment"
+        android:name="com.gigforce.app.utils.ViewFullScreenImageDialogFragment"
+        android:label="ViewFullScreenImageDialogFragment" />
+    <dialog
+        android:id="@+id/viewFullScreenVideoDialogFragment"
+        android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
+        android:label="ViewFullScreenVideoDialogFragment" />
+
 
 </navigation>
 
