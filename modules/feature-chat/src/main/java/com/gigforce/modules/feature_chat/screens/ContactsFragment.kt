@@ -31,13 +31,13 @@ import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
-import com.gigforce.modules.feature_chat.screens.vm.ContactsViewModel
+import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.NewContactsViewModelFactory
+import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
 import javax.inject.Inject
 
@@ -49,11 +49,11 @@ class ContactsFragment : DialogFragment(),
     @Inject
     lateinit var navigation: IChatNavigation
 
-    private val viewModel: ContactsViewModel by lazy {
+    private val viewModelNew: NewContactsViewModel by lazy {
         ViewModelProvider(
                 this,
                 NewContactsViewModelFactory(requireContext())
-        ).get(ContactsViewModel::class.java)
+        ).get(NewContactsViewModel::class.java)
     }
 
     private val chatGroupViewModel: GroupChatViewModel by lazy {
@@ -341,7 +341,7 @@ class ContactsFragment : DialogFragment(),
     }
 
     private fun initViewModel() {
-        viewModel.contacts
+        viewModelNew.contacts
                 .observe(viewLifecycleOwner, Observer {
                     showContactsOnView(it)
                 })

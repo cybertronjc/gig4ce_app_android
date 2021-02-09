@@ -9,7 +9,7 @@ import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 
-class ContactsViewModel constructor(
+class NewContactsViewModel constructor(
     private val chatContactsRepository: ChatContactsRepository
 ) : ViewModel() {
 

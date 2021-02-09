@@ -48,7 +48,7 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.NewContactsViewModelFactory
+import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 
