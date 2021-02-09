@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_add_headline_profile_v2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_72"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_back_application_add_headline_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:paddingStart="@dimen/size_16"
+                android:paddingTop="@dimen/size_16"
+                android:paddingEnd="@dimen/size_16"
+                android:paddingBottom="@dimen/size_16"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_title_application_add_headline_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_back_application_add_headline_v2"
+                android:fontFamily="@font/lato"
+                android:text="@string/add_headline"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_add_headline_profile_v2">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:clipToPadding="false"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_content_illustration_add_headline"
+                android:layout_width="@dimen/size_53"
+                android:layout_height="@dimen/size_40"
+                android:layout_marginStart="@dimen/size_32"
+                android:layout_marginTop="@dimen/size_36"
+                android:src="@drawable/ic_experience_illustration_profile_v2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_content_text_add_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_15"
+                android:layout_marginEnd="@dimen/size_18"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Nunc justo eros, vehicula vel vehicula ut,lacinia a erat. Nam fringilla eros."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_add_headline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_headline"
+                app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_headline" />
+
+            <RelativeLayout
+                android:id="@+id/rl_add_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_text_add_headline">
+
+                <com.gigforce.app.utils.LinedEditText
+                    android:id="@+id/et_add_bio_add_headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:fontFamily="@font/lato"
+                    android:gravity="top|center_vertical"
+                    android:hint="@string/add_headline"
+                    android:imeOptions="actionNone"
+                    android:lineSpacingExtra="@dimen/size_38"
+                    android:lines="3"
+                    android:maxLength="60"
+                    android:maxLines="3"
+                    android:paddingTop="@dimen/size_39"
+                    android:textSize="@dimen/font_14" />
+
+                <TextView
+                    android:id="@+id/tv_char_counter_add_headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_add_bio_add_headline"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-26dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="0/0"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_save_add_headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_26"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/gradient_button"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="@dimen/size_40"
+                android:paddingTop="@dimen/size_9"
+                android:paddingEnd="@dimen/size_40"
+                android:paddingBottom="@dimen/size_9"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rl_add_headline" />
+
+            <TextView
+                android:id="@+id/tv_cancel_add_headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_26"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/border_lipstick_rad_4"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="@dimen/size_35"
+                android:paddingTop="@dimen/size_9"
+                android:paddingEnd="@dimen/size_35"
+                android:paddingBottom="@dimen/size_9"
+                android:text="@string/cancel"
+                android:textColor="@color/lipstick"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_save_add_headline"
+                app:layout_constraintTop_toBottomOf="@+id/rl_add_headline" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

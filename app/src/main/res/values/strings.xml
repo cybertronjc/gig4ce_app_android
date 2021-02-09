@@ -1408,6 +1408,10 @@
     <string name="no_of_months">No of Months</string>
     <string name="company_name">Company Name</string>
     <string name="description_optional">Description (optional)</string>
+    <string name="let_people_know_what_all_skills_you_have">Let people Know what all skills you have</string>
+    <string name="select_skills_you_have">Select Skills you have</string>
+    <string name="search_skills">Search Skills</string>
+
 
     <string-array name="lang_array">
         <item>Ahirani</item>

@@ -2,10 +2,9 @@ package com.gigforce.app.modules.profile_
 
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -32,8 +31,11 @@ class ProfileFragmentv2 : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        makeStatusBarTransparent()
         return inflateView(R.layout.fragment_profile_v2, inflater, container)
     }
+    private lateinit var win: Window
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +54,9 @@ class ProfileFragmentv2 : BaseFragment() {
         }
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
+        }
+        iv_edit_profile_v2.setOnClickListener {
+            navigate(R.id.fragment_add_headline_profile_v2)
         }
 
 
@@ -154,7 +159,10 @@ class ProfileFragmentv2 : BaseFragment() {
                 contentIllustration = R.drawable.ic_skills_profile_v2,
                 contentTitle = R.string.skills,
                 actionText = R.string.add_now,
-                contentText = R.string.let_people_skills
+                contentText = R.string.let_people_skills,
+                clickHandler = {
+                    this@ProfileFragmentv2.navigate(R.id.fragment_add_skills_profile_v2)
+                }
         )
         )
         updateContentCardUI(
@@ -191,6 +199,47 @@ class ProfileFragmentv2 : BaseFragment() {
         contentCard.setRightClickAction(contentData.clickHandler)
 
     }
+    private fun makeStatusBarTransparent() {
+        win = requireActivity().window
+        win.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        win.setStatusBarColor(requireActivity().getColor(R.color.white))
+    }
+
+
+    private fun restoreStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            win = requireActivity().window
+            win.clearFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        makeStatusBarTransparent()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        makeStatusBarTransparent()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        restoreStatusBar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        restoreStatusBar()
+    }
+
+
 
 
 }

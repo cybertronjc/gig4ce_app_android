@@ -9,7 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_465"
-        android:background="#f5f5f5"
+        android:background="#f2d1db"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:minHeight="60dp"
-            app:contentScrim="#f5f5f5"
+            app:contentScrim="#f2d1db"
 
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:statusBarScrim="@android:color/transparent"
@@ -65,7 +65,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_marginTop="@dimen/size_24"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:popupTheme="@style/AppTheme.PopupOverlay"

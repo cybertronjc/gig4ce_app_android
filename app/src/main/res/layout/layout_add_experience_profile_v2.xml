@@ -233,8 +233,7 @@
                         android:textColor="#333333"
                         android:textSize="14sp"
                         android:textStyle="normal"
-                        app:suffix=" years"
-                   />
+                        app:suffix=" years" />
 
                     <com.gigforce.app.utils.widgets.EditTextWithSuffix
                         android:id="@+id/et_months_add_experience"
@@ -257,15 +256,34 @@
                         android:textColor="#333333"
                         android:textSize="14sp"
                         android:textStyle="normal"
-                        app:suffix=" months"
-                   />
+                        app:suffix=" months" />
+
+                    <CheckBox
+                        android:id="@+id/cb_currently_work_add_experience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/et_months_add_experience"
+                        android:layout_marginStart="@dimen/size_10"
+                        android:layout_marginTop="@dimen/size_10"
+                        android:layout_marginBottom="@dimen/size_10"
+                        android:button="@drawable/check_box_confirmation_dialog"
+                        android:buttonTint="@color/lipstick"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:paddingStart="@dimen/size_15"
+
+                        android:paddingEnd="@dimen/size_29"
+                        android:text="@string/currently_working_here"
+                        android:textColor="#707070"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_earnings_label_add_experience"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/et_years_add_experience"
-                        android:layout_marginTop="@dimen/size_15"
+                        android:layout_below="@+id/cb_currently_work_add_experience"
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
                         android:text="@string/earnings"
