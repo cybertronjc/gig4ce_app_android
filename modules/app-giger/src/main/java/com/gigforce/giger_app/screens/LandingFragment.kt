@@ -15,11 +15,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class LandingFragment : Fragment() {
     val viewModel: LandingViewModel by viewModels()
+
     @Inject lateinit var loginInfo: ILoginInfoRepo
-    @Inject lateinit var navigation : INavigation
+    @Inject lateinit var navigation: INavigation
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,15 +42,14 @@ class LandingFragment : Fragment() {
 
     private fun initViews() {
         loginInfo.getData().observeForever {
-            app_bar.setProfileName = it.profileName?:""
-            app_bar.setProfilePic(it.profilePicPath?:"")
+            app_bar.setProfileName = it.profileName ?: ""
+            app_bar.setProfilePic(it.profilePicPath ?: "")
         }
 
     }
 
     private fun listeners() {
-
-        app_bar.setOnClickListener{
+        app_bar.setOnClickListener {
             navigation.navigateTo("bottom_sheet")
         }
 
