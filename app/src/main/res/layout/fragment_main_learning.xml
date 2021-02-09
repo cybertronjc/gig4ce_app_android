@@ -76,6 +76,7 @@
             android:id="@+id/learning_based_assessments_layout"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             layout="@layout/fragment_main_learning_assessments" />
 

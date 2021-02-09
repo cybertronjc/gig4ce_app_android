@@ -59,9 +59,11 @@
         <TextView
             android:id="@+id/cancel"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="32dp"
+            android:minHeight="@dimen/size_36"
+
             android:background="@drawable/rect_button_gradient"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
@@ -78,9 +80,11 @@
         <TextView
             android:id="@+id/yes"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="32dp"
+            android:minHeight="@dimen/size_36"
+
             android:background="@drawable/rect_button_outline"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"

@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -30,10 +30,12 @@ import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDa
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.utils.GenericSpinnerAdapter
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
@@ -121,10 +123,10 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
     private fun initViews() {
         hideDLImageAndInfoLayout()
         val adapter =
-                ArrayAdapter<String>(
+                GenericSpinnerAdapter<String>(
                         requireContext(),
-                        R.layout.layout_sp_state_dl,
-                        resources.getStringArray(R.array.indian_states)
+                        R.layout.layout_sp_driving_license_state,
+                        resources.getStringArray(R.array.indian_states).toList()
                 )
         stateSpinner.adapter = adapter
 
@@ -141,7 +143,7 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
                 getString(R.string.upload_driving_license_back_side)
         dlBackImageHolder.documentUploadSubLabelTV.text =
                 getString(R.string.upload_your_driving_license)
-//        dlSubmitSliderBtn.isEnabled = false
+        dlSubmitSliderBtn_client_act.isEnabled = false
 
 //        toolbar.setNavigationOnClickListener {
 //            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
@@ -168,7 +170,10 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
 
-                if ((dlFrontImagePath != null && dlBackImagePath != null)) {
+                if (confirmDLDataCB_client_act.isChecked
+                        && ((dlSubmitSliderBtn_client_act.text == getString(R.string.update)
+                                || (dlFrontImagePath != null && dlBackImagePath != null)))
+                ) {
                     enableSubmitButton()
                 } else
                     disableSubmitButton()
@@ -176,13 +181,13 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
             } else if (checkedId == R.id.dlNoRB) {
                 hideDLImageAndInfoLayout()
 
-//                dlSubmitSliderBtn.visible()
-//                confirmDLDataCB.visible()
+                dlSubmitSliderBtn_client_act.visible()
+                confirmDLDataCB_client_act.visible()
 
-//                if (confirmDLDataCB.isChecked)
-//                    enableSubmitButton()
-//                else
-//                    disableSubmitButton()
+                if (confirmDLDataCB_client_act.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
 
             } else {
                 hideDLImageAndInfoLayout()
@@ -190,83 +195,148 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
             }
         }
 
-//        confirmDLDataCB.setOnCheckedChangeListener { _, isChecked ->
-//
-//            if (isChecked) {
-//
-//                if (dlYesRB.isChecked
-//                        && ((dlSubmitSliderBtn.text == getString(R.string.update)
-//                                || (dlFrontImagePath != null && dlBackImagePath != null)))
-//                )
-//                    enableSubmitButton()
-//                else if (dlNoRB.isChecked)
-//                    enableSubmitButton()
-//                else
-//                    disableSubmitButton()
-//            } else
-//                disableSubmitButton()
-//        }
-        tv_action_upld_dl_cl_act.setOnClickListener {
+        confirmDLDataCB_client_act.setOnCheckedChangeListener { _, isChecked ->
 
-            if (dlYesRB.isChecked) {
+            if (isChecked) {
 
-                if (stateSpinner.selectedItemPosition == 0) {
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.select_dl_state))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-//                    dlSubmitSliderBtn.resetSlider()
-                    return@setOnClickListener
-                }
-
-                val dlNo =
-                        drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                if (!VerificationValidations.isDLNumberValid(dlNo)) {
-
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.enter_valid_dl))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-
-//                    dlSubmitSliderBtn.resetSlider()
-                    return@setOnClickListener
-                }
-
-                if ((dlFrontImagePath == null || dlBackImagePath == null)) {
-
-                    MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(getString(R.string.alert))
-                            .setMessage(getString(R.string.capture_both_sides_dl))
-                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                            .show()
-//                    dlSubmitSliderBtn.resetSlider()
-                    return@setOnClickListener
-                }
-
-                val state = stateSpinner.selectedItem.toString()
-
-                viewModel.updateDLData(
-                        true,
-                        dlFrontImagePath,
-                        dlBackImagePath,
-                        state,
-                        dlNo
+                if (dlYesRB.isChecked
+                        && ((dlSubmitSliderBtn_client_act.text == getString(R.string.update)
+                                || (dlFrontImagePath != null && dlBackImagePath != null)))
                 )
-
-            } else if (dlNoRB.isChecked) {
-                val rejectionDialog = RejectionDialog()
-                rejectionDialog.setCallbacks(this@UploadDrivingLicense)
-                rejectionDialog
-                rejectionDialog.show(
-                        parentFragmentManager,
-                        RejectionDialog::class.java.name
-                )
-            }
+                    enableSubmitButton()
+                else if (dlNoRB.isChecked)
+                    enableSubmitButton()
+                else
+                    disableSubmitButton()
+            } else
+                disableSubmitButton()
         }
+        dlSubmitSliderBtn_client_act.onSlideCompleteListener =
+                object : SlideToActView.OnSlideCompleteListener {
 
-//        dlSubmitSliderBtn.onSlideCompleteListener =
+                    override fun onSlideComplete(view: SlideToActView) {
+
+                        if (dlYesRB.isChecked || dlSubmitSliderBtn_client_act.text == getString(R.string.update)) {
+
+                            if (stateSpinner.selectedItemPosition == 0) {
+                                MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle(getString(R.string.alert))
+                                        .setMessage(getString(R.string.select_dl_state))
+                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                        .show()
+                                dlSubmitSliderBtn_client_act.resetSlider()
+                                return
+                            }
+
+                            val dlNo =
+                                    drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
+
+                                MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle(getString(R.string.alert))
+                                        .setMessage(getString(R.string.enter_valid_dl))
+                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                        .show()
+
+                                dlSubmitSliderBtn_client_act.resetSlider()
+                                return
+                            }
+
+                            if (dlSubmitSliderBtn_client_act.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
+
+                                MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle(getString(R.string.alert))
+                                        .setMessage(getString(R.string.capture_both_sides_dl))
+                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                                        .show()
+                                dlSubmitSliderBtn_client_act.resetSlider()
+                                return
+                            }
+
+                            val state = stateSpinner.selectedItem.toString()
+                            viewModel.updateDLData(
+                                    true,
+                                    dlFrontImagePath,
+                                    dlBackImagePath,
+                                    state,
+                                    dlNo
+                            )
+
+                        } else if (dlNoRB.isChecked) {
+                            val rejectionDialog = RejectionDialog()
+                            rejectionDialog.setCallbacks(this@UploadDrivingLicense)
+                            rejectionDialog
+                            rejectionDialog.show(
+                                    parentFragmentManager,
+                                    RejectionDialog::class.java.name
+                            )
+                        }
+                    }
+                }
+
+
+
+//        tv_action_upld_dl_cl_act.setOnClickListener {
+//
+//            if (dlYesRB.isChecked) {
+//
+//                if (stateSpinner.selectedItemPosition == 0) {
+//                    MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle(getString(R.string.alert))
+//                            .setMessage(getString(R.string.select_dl_state))
+//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                            .show()
+////                    dlSubmitSliderBtn_client_act.resetSlider()
+//                    return@setOnClickListener
+//                }
+//
+//                val dlNo =
+//                        drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+//                if (!VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                    MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle(getString(R.string.alert))
+//                            .setMessage(getString(R.string.enter_valid_dl))
+//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                            .show()
+//
+////                    dlSubmitSliderBtn_client_act.resetSlider()
+//                    return@setOnClickListener
+//                }
+//
+//                if ((dlFrontImagePath == null || dlBackImagePath == null)) {
+//
+//                    MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle(getString(R.string.alert))
+//                            .setMessage(getString(R.string.capture_both_sides_dl))
+//                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                            .show()
+////                    dlSubmitSliderBtn_client_act.resetSlider()
+//                    return@setOnClickListener
+//                }
+//
+//                val state = stateSpinner.selectedItem.toString()
+//
+//                viewModel.updateDLData(
+//                        true,
+//                        dlFrontImagePath,
+//                        dlBackImagePath,
+//                        state,
+//                        dlNo
+//                )
+//
+//            } else if (dlNoRB.isChecked) {
+//                val rejectionDialog = RejectionDialog()
+//                rejectionDialog.setCallbacks(this@UploadDrivingLicense)
+//                rejectionDialog
+//                rejectionDialog.show(
+//                        parentFragmentManager,
+//                        RejectionDialog::class.java.name
+//                )
+//            }
+//        }
+
+//        dlSubmitSliderBtn_client_act.onSlideCompleteListener =
 //                object : SlideToActView.OnSlideCompleteListener {
 //
 //                    override fun onSlideComplete(view: SlideToActView) {
@@ -439,10 +509,16 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
                     showBackDrivingLicense(dlBackImagePath!!)
                 }
 
-                if (dlFrontImagePath != null
+                if (confirmDLDataCB_client_act.isChecked
+                        && dlFrontImagePath != null
                         && dlBackImagePath != null
                 ) {
                     enableSubmitButton()
+                }
+
+                if (dlFrontImagePath != null && dlBackImagePath != null && dlSubmitSliderBtn_client_act.isGone) {
+                    dlSubmitSliderBtn_client_act.visible()
+                    confirmDLDataCB_client_act.visible()
                 }
 
 
@@ -472,16 +548,23 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
     }
 
     private fun enableSubmitButton() {
-//        tv_action_upld_dl_cl_act.isEnabled = true
-//        tv_action_upld_dl_cl_act.alpha = 1f
+        dlSubmitSliderBtn_client_act.isEnabled = true
 
+        dlSubmitSliderBtn_client_act.outerColor =
+                ResourcesCompat.getColor(resources, R.color.light_pink, null)
+        dlSubmitSliderBtn_client_act.innerColor =
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
-//        tv_action_upld_dl_cl_act.isEnabled = false
-//        tv_action_upld_dl_cl_act.alpha = 0.5f
+        dlSubmitSliderBtn_client_act.isEnabled = false
 
+        dlSubmitSliderBtn_client_act.outerColor =
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        dlSubmitSliderBtn_client_act.innerColor =
+                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
+
 
     private fun showImageInfoLayout() {
         dlInfoLayout.visibility = View.VISIBLE
@@ -608,7 +691,7 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
         }
 
         val dlData = it ?: return
-//        dlSubmitSliderBtn.text = getString(R.string.update)
+        dlSubmitSliderBtn_client_act.text = getString(R.string.update)
 
         drivingLicenseEditText.setText(dlData.dlNo)
         if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState)
@@ -658,7 +741,7 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
         dlMainLayout.visibility = View.VISIBLE
-//        dlSubmitSliderBtn.resetSlider()
+        dlSubmitSliderBtn_client_act.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.alert))

@@ -32,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/GigforceTheme"
         android:name=".MainApplication"
+        android:largeHeap="true"
         tools:replace="android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -114,7 +115,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".utils.DocViewerActivity"

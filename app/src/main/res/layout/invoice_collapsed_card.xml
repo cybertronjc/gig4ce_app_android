@@ -13,7 +13,7 @@
             android:id="@+id/icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/wallet"
+              app:srcCompat="@drawable/wallet"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"

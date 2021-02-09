@@ -81,6 +81,7 @@ class ReferralsFragment : BaseFragment() {
                                 Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                         }.addOnSuccessListener { result ->
                             // Short link created
+                            if (context == null) return@addOnSuccessListener
                             val shortLink = result.shortLink
                             showToast(getString(R.string.link_copied));
                             val clipboard: ClipboardManager? =
@@ -95,6 +96,7 @@ class ReferralsFragment : BaseFragment() {
                         }.addOnFailureListener {
                             // Error
                             // ...
+                            if (context == null) return@addOnFailureListener
                             showToast(it.message!!);
                             pb_referrals_frag.gone()
 
@@ -118,12 +120,15 @@ class ReferralsFragment : BaseFragment() {
                             longLink =
                                 Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                         }.addOnSuccessListener { result ->
+                            if (context == null) return@addOnSuccessListener
                             // Short link created
                             val shortLink = result.shortLink
+
                             shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
                             pb_referrals_frag.gone()
 
                         }.addOnFailureListener {
+                            if (context == null) return@addOnFailureListener
                             // Error
                             // ...
                             showToast(it.message!!)
@@ -140,6 +145,8 @@ class ReferralsFragment : BaseFragment() {
                                 Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                         }.addOnSuccessListener { result ->
                             // Short link created
+                            if (context == null) return@addOnSuccessListener
+
                             val shortLink = result.shortLink
                             shareToAnyApp(shortLink.toString())
 
@@ -147,6 +154,7 @@ class ReferralsFragment : BaseFragment() {
                         }.addOnFailureListener {
                             // Error
                             // ...
+                            if (context == null) return@addOnFailureListener
                             showToast(it.message!!);
 
                         }
@@ -162,6 +170,7 @@ class ReferralsFragment : BaseFragment() {
                                     Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                             }.addOnSuccessListener { result ->
                                 // Short link created
+                                if (context == null) return@addOnSuccessListener
                                 val shortLink = result.shortLink
                                 shareToAnyApp(shortLink.toString())
 
@@ -169,6 +178,7 @@ class ReferralsFragment : BaseFragment() {
                             }.addOnFailureListener {
                                 // Error
                                 // ...
+                                if (context == null) return@addOnFailureListener
                                 showToast(it.message!!);
 
                             }
@@ -201,6 +211,12 @@ class ReferralsFragment : BaseFragment() {
                     it?.elementAtOrNull(2)?.let { third ->
                         tv_more_items_referrals_frag.visibility = View.VISIBLE
                         tv_more_items_referrals_frag.text = "+${it.size - 2}"
+                    }
+                    if (iv_two_referrals_frag.visibility == View.GONE) {
+                        val layoutParams: RelativeLayout.LayoutParams =
+                            tv_you_helped_referrals_frag.layoutParams as RelativeLayout.LayoutParams
+                        layoutParams.addRule(RelativeLayout.END_OF, iv_one_referrals_frag.id)
+                        tv_more_items_referrals_frag.layoutParams = layoutParams
                     }
                 })
                 viewModel.getReferredPeople(profileData.invited?.map {
@@ -248,6 +264,7 @@ class ReferralsFragment : BaseFragment() {
     }
 
     fun shareViaWhatsApp(url: String) {
+
         val whatsappIntent = Intent(Intent.ACTION_SEND)
         whatsappIntent.type = "image/png"
         whatsappIntent.setPackage("com.whatsapp")

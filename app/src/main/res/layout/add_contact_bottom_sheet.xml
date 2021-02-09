@@ -57,7 +57,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_weight="1"
-            android:src="@drawable/ic_delete" />
+              app:srcCompat="@drawable/ic_delete" />
 
     </RelativeLayout>
 
@@ -121,6 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/cancel_text"
+        android:minHeight="@dimen/size_36"
         android:textColor="@color/gray_color"
         app:layout_constraintEnd_toStartOf="@+id/add_contact_save"
         app:layout_constraintStart_toStartOf="parent"
@@ -132,6 +133,7 @@
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_36"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/save_text"

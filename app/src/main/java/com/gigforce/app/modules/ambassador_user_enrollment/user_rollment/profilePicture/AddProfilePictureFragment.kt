@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -24,11 +25,13 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
+import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -50,6 +53,7 @@ class AddProfilePictureFragment : BaseFragment(),
     private var userName: String = ""
     private var pincode = ""
     private var mode: Int = EnrollmentConstants.MODE_UNSPECIFIED
+    private var cameFromEnrollment = false
 
     private val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
         setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
@@ -87,15 +91,16 @@ class AddProfilePictureFragment : BaseFragment(),
             submitBtn.text = "Upload Photo"
             editLayout.gone()
         } else {
-            submitBtn.text = "Change Photo"
-            skipButton.visible()
+            val isRequirementMode = mode != EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT
+            submitBtn.text = if (isRequirementMode) "Change Photo" else "Next"
+            skipButton.isVisible = isRequirementMode
             viewModel.getProfileForUser(userId)
         }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
-
+            cameFromEnrollment = it.getBoolean(AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT, false)
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
@@ -103,7 +108,7 @@ class AddProfilePictureFragment : BaseFragment(),
         }
 
         savedInstanceState?.let {
-
+            cameFromEnrollment = it.getBoolean(AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT, false)
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID)
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
@@ -117,6 +122,8 @@ class AddProfilePictureFragment : BaseFragment(),
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
         outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
+        outState.putBoolean(AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT, cameFromEnrollment)
+
     }
 
     private fun initListeners() {
@@ -133,6 +140,7 @@ class AddProfilePictureFragment : BaseFragment(),
 
             if (userId != null) {
 
+
                 if (submitBtn.text == "Next") {
                     navigate(
                             R.id.addUserInterestFragment, bundleOf(
@@ -146,8 +154,8 @@ class AddProfilePictureFragment : BaseFragment(),
                 }
             } else {
 
-                if (submitBtn.text == "Back") {
-                    activity?.onBackPressed()
+                if (mode == EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT&&submitBtn.text=="Next") {
+                    popBackState()
                 } else {
                     checkForPermissionElseShowCameraGalleryBottomSheet()
                 }
@@ -156,6 +164,10 @@ class AddProfilePictureFragment : BaseFragment(),
 
         ic_back_btn.setOnClickListener {
             if (userId == null) {
+                if (cameFromEnrollment) {
+                    onBackPressed()
+                    return@setOnClickListener
+                }
                 activity?.onBackPressed()
             } else {
                 showGoBackConfirmationDialog()
@@ -173,6 +185,7 @@ class AddProfilePictureFragment : BaseFragment(),
             )
         }
     }
+
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
@@ -208,10 +221,10 @@ class AddProfilePictureFragment : BaseFragment(),
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
-            .show()
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                .show()
     }
 
     private fun initViewModel() {
@@ -253,12 +266,12 @@ class AddProfilePictureFragment : BaseFragment(),
                             profile_pic_Uploading.gone()
                             viewModel.getProfileForUser(userId)
 
-                            if (userId == null) {
-                                //Normal User login
-                                submitBtn.text = "Back"
-                            } else {
+//                            if (userId == null) {
+//                                //Normal User login
+//                                submitBtn.text = "Back"
+//                            } else {
                                 submitBtn.text = "Next"
-                            }
+//                            }
 
                             showToast(getString(R.string.profile_pic_uploaded))
                         }
@@ -413,7 +426,11 @@ class AddProfilePictureFragment : BaseFragment(),
     }
 
     override fun onBackPressed(): Boolean {
-
+        if (cameFromEnrollment) {
+            navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+            popBackState()
+            return true
+        }
         return if (userId == null) {
             false
         } else {
@@ -424,14 +441,18 @@ class AddProfilePictureFragment : BaseFragment(),
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
     }
 
     private fun goBackToUsersList() {
+        if (cameFromEnrollment) {
+            onBackPressed()
+            return
+        }
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 

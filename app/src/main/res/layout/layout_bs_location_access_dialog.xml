@@ -54,7 +54,7 @@
         android:layout_marginBottom="@dimen/size_40"
         android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
         android:gravity="center_horizontal"
-        android:minHeight="@dimen/size_44"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_14"
         android:paddingBottom="@dimen/size_13"
         android:text="@string/allow_access_location"

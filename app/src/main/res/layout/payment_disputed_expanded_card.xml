@@ -55,7 +55,7 @@
             android:id="@+id/warning_icon"
             android:layout_width="42dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_warning"
+              app:srcCompat="@drawable/ic_warning"
             android:tint="#e02020"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="@id/top_guide"

@@ -97,7 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
+                android:minHeight="@dimen/size_36"
                 android:text="@string/add_more_text"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorPrimary"
@@ -113,6 +113,7 @@
                 android:drawableEnd="@drawable/ic_delete"
                 android:drawablePadding="@dimen/size_8"
                 android:drawableTint="@color/colorPrimary"
+                android:minHeight="@dimen/size_36"
                 android:text="@string/remove_caps"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorPrimary" />

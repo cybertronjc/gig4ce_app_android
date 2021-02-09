@@ -159,7 +159,6 @@
                 android:text="@string/i_am_fresher" />
 
 
-
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/currently_work_here_add_experience"
                 android:layout_width="0dp"
@@ -184,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/lato"
-
+                android:minHeight="@dimen/size_36"
                 android:text="@string/add_more_text"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorPrimary"
@@ -198,10 +197,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableEnd="@drawable/ic_delete"
-
                 android:drawablePadding="@dimen/size_8"
                 android:drawableTint="@color/colorPrimary"
                 android:fontFamily="@font/lato"
+                android:minHeight="@dimen/size_36"
                 android:text="@string/remove_caps"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorPrimary" />

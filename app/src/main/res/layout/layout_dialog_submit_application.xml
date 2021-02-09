@@ -52,7 +52,7 @@
         <TextView
             android:id="@+id/tv_submit_application"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="@dimen/size_23"
             android:layout_marginTop="@dimen/size_40"
@@ -75,6 +75,7 @@
             android:layout_marginBottom="@dimen/size_26"
             android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
+            android:minHeight="@dimen/size_36"
             android:text="@string/review_your_application"
             android:textColor="@color/lipstick"
             android:textSize="14sp"

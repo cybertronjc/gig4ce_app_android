@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
-<!--    <com.gigforce.app.modules.home.TopProfileBar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        app:subtitle="pending activation"-->
-<!--        app:title="Chirag Mittal" />-->
+    <!--    <com.gigforce.app.modules.home.TopProfileBar-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        app:subtitle="pending activation"-->
+    <!--        app:title="Chirag Mittal" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -44,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="244dp"
             android:backgroundTint="@color/colorAccent"
+            android:minHeight="@dimen/size_36"
             android:outlineAmbientShadowColor="@color/colorAccent"
             android:outlineSpotShadowColor="@color/colorAccent"
             android:shadowColor="@color/colorAccent"
@@ -77,11 +76,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/action"
-        android:text="CLICK HERE"
-        android:gravity="center"
-        android:layout_marginTop="100dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="CLICK HERE" />
 
     <include layout="@layout/bottom_home" />
 

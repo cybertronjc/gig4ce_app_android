@@ -4,14 +4,14 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class JobProfile(
-    var businessId: String? = null,
-    var businessName: String? = null,
-    var requiredMedia: RequiredMedia? = null,
-    var locationList: List<Locations>? = null,
-    var payoutNote: String? = null,
-    var queries: List<Queries>? = null,
-    var id: String? = null,
-    var info: List<BulletPoints>? = null,
+    var businessId: String? = "",
+    var businessName: String? = "",
+    var requiredMedia: RequiredMedia? = RequiredMedia(),
+    var locationList: List<Locations>? = listOf(),
+    var payoutNote: String? = "",
+    var queries: List<Queries>? = listOf(),
+    var id: String? = "",
+    var info: List<BulletPoints>? = listOf(),
     var title: String = "",
     var nextDependency: String = "",
     var coverImg: String = "",

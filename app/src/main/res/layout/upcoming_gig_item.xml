@@ -9,9 +9,9 @@
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="5dp"
-    app:cardElevation="10dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,10 +33,9 @@
             android:layout_height="24dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="17dp"
-            tools:src="@drawable/ic_emoji"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_emoji" />
 
 
         <TextView
@@ -45,18 +44,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="15dp"
-            android:paddingEnd="5dp"
+            android:ellipsize="end"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
             android:maxLines="1"
-            tools:text="Urgent Unloading"
+            android:paddingEnd="5dp"
+            android:scrollHorizontally="true"
             android:textColor="@color/upcoming_gig_title"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/companyLogoIV"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Urgent Unloading" />
 
 
         <TextView
@@ -75,13 +74,12 @@
             android:id="@+id/seaprator1"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:background="#c0c0c0"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="16dp"
+            android:background="#c0c0c0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textView67"
-           />
+            app:layout_constraintTop_toBottomOf="@+id/textView67" />
 
         <TextView
             android:id="@+id/contactPersonLabel"
@@ -89,12 +87,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:letterSpacing="0"
+            android:text="Contact Person"
             android:textColor="@color/upcoming_gig_time"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/seaprator1"
-            android:text="Contact Person" />
-
+            app:layout_constraintTop_toBottomOf="@+id/seaprator1" />
 
 
         <androidx.cardview.widget.CardView
@@ -106,18 +103,20 @@
             android:scaleX="0.9"
             android:scaleY="0.9"
             android:visibility="invisible"
+            app:cardBackgroundColor="@color/light_pink"
             app:cardCornerRadius="20dp"
             app:layout_constraintRight_toLeftOf="@id/callCardView"
-            app:cardBackgroundColor="@color/light_pink"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
+                android:id="@+id/iv_message"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:scaleY="0.4"
                 android:scaleX="0.4"
-                android:src="@drawable/ic_chat"
-            />
+
+                android:scaleY="0.4"
+
+                app:srcCompat="@drawable/ic_chat" />
 
         </androidx.cardview.widget.CardView>
 
@@ -127,25 +126,26 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginTop="12dp"
-            android:scaleX="0.9"
-            android:scaleY="0.9"
             android:layout_marginEnd="17dp"
-            app:cardCornerRadius="20dp"
             android:clickable="true"
             android:focusable="true"
-
+            android:scaleX="0.9"
+            android:scaleY="0.9"
             app:cardBackgroundColor="@color/light_pink"
+
+            app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seaprator1">
 
             <ImageView
+                android:id="@+id/iv_call"
+
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:scaleY="0.4"
                 android:scaleX="0.4"
-                android:tint="@color/lipstick"
-                android:src="@drawable/fui_ic_phone_white_24dp"
-                />
+                android:scaleY="0.4"
+                app:srcCompat="@drawable/fui_ic_phone_white_24dp"
+                app:tint="@color/lipstick" />
 
         </androidx.cardview.widget.CardView>
 
@@ -168,10 +168,9 @@
             android:id="@+id/buttonSpace"
             android:layout_width="13dp"
             android:layout_height="10dp"
-            app:layout_constraintStart_toStartOf="@id/textView41"
-            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="@id/textView41"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV" />
 
 
         <TextView
@@ -180,16 +179,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="7dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/edittext_border_grey"
+            android:clickable="true"
+            android:focusable="true"
             android:letterSpacing="0"
             android:padding="10dp"
             android:text="Navigate"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone"
             android:textAlignment="center"
             android:textColor="@color/disabled_button_color"
-            android:layout_marginBottom="15dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/buttonSpace"
             app:layout_constraintStart_toStartOf="@+id/textView41"
@@ -200,24 +199,23 @@
             android:id="@+id/checkInTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/buttonSpace"
-            app:layout_constraintTop_toBottomOf="@id/contactPersonTV"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="15dp"
-            android:text="Check-In"
-            android:background="@drawable/gradient_button"
-            android:clickable="true"
-            android:focusable="true"
             android:layout_marginStart="7dp"
-            android:letterSpacing="0"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="16dp"
-            android:textAlignment="center"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/gradient_button"
+            android:clickable="true"
+            android:minHeight="@dimen/size_36"
+            android:focusable="true"
+            android:letterSpacing="0"
             android:padding="10dp"
+            android:text="Check-In"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            />
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/buttonSpace"
+            app:layout_constraintTop_toBottomOf="@id/contactPersonTV" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@
                     android:focusable="true"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
-                    android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+                      app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,32 +109,29 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="14dp"
-        app:backgroundTint="@null"
-        android:fontFamily="@font/lato_bold"
         android:background="@drawable/gradient_button"
-        android:minHeight="80dp"
+        android:fontFamily="@font/lato_bold"
         android:gravity="center"
+        android:minHeight="@dimen/size_36"
         android:text="@string/submit_all_caps"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container"
         android:visibility="visible"
-         />
+        app:backgroundTint="@null"
+        app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 
     <ProgressBar
         android:id="@+id/confirming_otp_pb"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="24dp"
-        android:visibility="gone"
         android:layout_gravity="bottom|center_horizontal"
-        />
-
+        android:layout_marginBottom="24dp"
+        android:visibility="gone" />
 
 
 </FrameLayout>

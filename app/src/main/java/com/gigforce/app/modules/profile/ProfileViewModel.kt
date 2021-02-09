@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.profile.models.*
-import com.gigforce.app.utils.getOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
@@ -22,6 +21,11 @@ class ProfileViewModel : ViewModel() {
     var profileID: String = ""
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+    private val _ambassadorProfilePicUpdate: MutableLiveData<String> = MutableLiveData<String>()
+    val ambassadorProfilePicUpdate = _ambassadorProfilePicUpdate;
+    private val _errorObs: MutableLiveData<String> = MutableLiveData<String>()
+    val errorObs = _errorObs;
+
     var Tags: MutableLiveData<TagData> = MutableLiveData<TagData>()
     lateinit var uid: String
     var query: Query? = null
@@ -47,6 +51,12 @@ class ProfileViewModel : ViewModel() {
                     obj?.id = value.id;
                     userProfileData.value = obj
                     Log.d("ProfileViewModel", userProfileData.toString())
+
+                    // if user logged in via link
+//                    isonboardingdone
+//                    profileAvatarName
+//                    isProfileUpdatedtoAmbassador
+
                 }
             }))
 
@@ -144,6 +154,10 @@ class ProfileViewModel : ViewModel() {
         profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
     }
 
+    fun setProfileThumbnailName(thumbnailName: String) {
+        profileFirebaseRepository.setProfileThumbNail(thumbnailName)
+    }
+
     fun removeProfileExperience(experience: Experience) {
         profileFirebaseRepository.removeData(experience)
     }
@@ -184,6 +198,29 @@ class ProfileViewModel : ViewModel() {
                 )
             )
         }
+    }
+
+    fun updateInAmbassadorEnrollment(imageName: String,thumbnailName: String) {
+        if (userProfileData.value?.enrolledBy != null) {
+            val enrolledBy = userProfileData.value?.enrolledBy
+            profileFirebaseRepository.firebaseDB.collection("Ambassador_Enrolled_User").document(
+                enrolledBy?.id
+                    ?: ""
+            ).collection("Enrolled_Users").document(profileFirebaseRepository.getUID()).set(
+                mapOf(
+                    "profilePic" to imageName,
+                    "profilePic_thumbnail" to thumbnailName
+
+                ), SetOptions.merge()
+            ).addOnCompleteListener {
+                _ambassadorProfilePicUpdate.value = if (it.isSuccessful) imageName else "avatar.jpg"
+                if (it.exception != null) {
+                    _errorObs.value = it.exception?.message ?: ""
+                }
+            }
+
+        }
+
     }
 
 }

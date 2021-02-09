@@ -73,7 +73,7 @@
                 android:layout_width="@dimen/size_90"
                 android:layout_height="@dimen/size_91"
                 android:layout_marginTop="@dimen/size_16"
-                android:src="@drawable/ic_application_client_application"
+                  app:srcCompat="@drawable/ic_application_client_application"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -192,7 +192,7 @@ your Application" />
         android:enabled="false"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:minHeight="@dimen/size_44"
+        android:minHeight="@dimen/size_36"
         android:text="@string/submit"
         android:textColor="@color/white"
         android:textSize="16sp"

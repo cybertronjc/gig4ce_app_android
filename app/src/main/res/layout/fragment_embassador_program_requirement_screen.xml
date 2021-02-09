@@ -26,7 +26,7 @@
             android:layout_marginStart="16dp"
             android:scaleX="0.6"
             android:scaleY="0.6"
-            android:src="@drawable/ct_ic_arrow_back_white_24dp" />
+              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:id="@+id/tv_tb_title_amb_appl"
@@ -62,7 +62,7 @@
                 android:layout_height="96dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_apply_ambassador"
+                  app:srcCompat="@drawable/ic_apply_ambassador"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -89,10 +89,10 @@
                 android:id="@+id/company_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/lato"
                 android:text="Gigforce "
-                android:layout_marginStart="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -139,12 +139,12 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                tools:text="2/5"
                 android:textColor="@color/warm_grey"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/complete_form_label" />
+                app:layout_constraintTop_toBottomOf="@id/complete_form_label"
+                tools:text="2/5" />
 
 
             <ProgressBar
@@ -183,24 +183,24 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
-        <TextView
-            android:id="@+id/tv_profile_photo_amb_appl"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/lato"
-            android:lineSpacingExtra="3sp"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:text="@string/profile_photo" />
+                <TextView
+                    android:id="@+id/tv_profile_photo_amb_appl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/profile_photo"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
 
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -280,7 +280,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_forward" />
+                      app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -298,7 +298,7 @@
         android:layout_marginBottom="@dimen/size_32"
         android:background="@drawable/gradient_button"
         android:letterSpacing="0"
-        android:minHeight="@dimen/size_48"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_8"
         android:paddingBottom="@dimen/size_8"
         android:text="@string/submit"

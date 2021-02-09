@@ -49,7 +49,7 @@
             android:id="@+id/module_completed_iv"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:src="@drawable/ic_clock_orange"
+              app:srcCompat="@drawable/ic_clock_orange"
             app:layout_constraintEnd_toStartOf="@id/module_completed_perc_tv"
             app:layout_constraintTop_toBottomOf="@id/learning_img"
             android:layout_marginEnd="4dp"

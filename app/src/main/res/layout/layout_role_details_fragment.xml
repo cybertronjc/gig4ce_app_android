@@ -25,7 +25,7 @@
                 android:layout_height="@dimen/size_316"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bg_gig_type"
+                  app:srcCompat="@drawable/bg_gig_type"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -257,12 +257,13 @@
     <TextView
         android:id="@+id/tv_mark_as_interest_role_details"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_48"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_18"
         android:layout_marginEnd="@dimen/size_14"
         android:layout_marginBottom="@dimen/size_44"
         android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
         android:gravity="center_horizontal"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_14"
         android:paddingBottom="@dimen/size_12"
         android:text="@string/apply_now"

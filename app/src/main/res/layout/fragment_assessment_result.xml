@@ -46,7 +46,7 @@
                     android:layout_marginBottom="@dimen/size_5"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_remarks_assess_result" />
+                      app:srcCompat="@drawable/ic_remarks_assess_result" />
 
                 <View
                     android:id="@+id/v_c_v_res_remarks_assess_result"
@@ -163,6 +163,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:minHeight="@dimen/size_36"
                 android:text="Next Lesson"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/rv_question_wise_sum_assess_frag"
@@ -224,8 +225,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_16"
-                    android:layout_marginEnd="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_24"
+                    android:layout_marginEnd="@dimen/size_16"
                     android:letterSpacing="0"
                     android:text="Lessons to Retake"
                     android:textColor="@color/black"
@@ -236,8 +237,8 @@
                     layout="@layout/fragment_learning_video_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="@dimen/size_16"
                     app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result" />
 
@@ -265,8 +266,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
                 android:nestedScrollingEnabled="true"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_sug_learnings_label_assess_frag" />

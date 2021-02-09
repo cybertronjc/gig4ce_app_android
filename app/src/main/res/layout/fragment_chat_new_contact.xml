@@ -20,36 +20,59 @@
             <ImageView
                 android:id="@+id/back_arrow"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:padding="4dp"
+                android:layout_height="@dimen/size_16"
+                android:layout_marginLeft="@dimen/size_16"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_arrow_back_black" />
 
-            <TextView
-                android:id="@+id/textView101"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="0"
-                android:text="@string/contacts"
-                android:textColor="#000000"
-                android:textSize="24sp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/back_arrow"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:id="@+id/textView101"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/contacts"
+                    android:textColor="#000000"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tv_sub_heading_contacts_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="@dimen/size_4"
+                    android:fontFamily="@font/lato_bold"
+                    android:letterSpacing="0"
+                    android:text="@string/tap_to_select"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/font_14"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageView40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:padding="8dp"
+                android:paddingEnd="@dimen/size_8"
                 android:clickable="true"
                 android:focusable="true"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView41"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,11 +83,10 @@
                 android:id="@+id/imageView41"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
+                android:layout_marginEnd="@dimen/size_16"
+                android:paddingStart="8dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="@dimen/size_16"
                 android:paddingBottom="8dp"
-                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -144,7 +166,7 @@
                 android:layout_height="26dp"
                 android:scaleX="0.6"
                 android:scaleY="0.6"
-                android:src="@drawable/ic_plus_icon"
+                  app:srcCompat="@drawable/ic_plus_icon"
                 app:tint="@color/colorPrimary" />
 
             <TextView
@@ -208,7 +230,7 @@
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_settings" />
+                  app:srcCompat="@drawable/ic_settings" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -232,6 +254,19 @@
                 app:strokeColor="@color/colorPrimary" />
 
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_create_group_contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24_white"
+            app:tint="@color/white" />
     </FrameLayout>
 
 </LinearLayout>

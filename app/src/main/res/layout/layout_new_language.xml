@@ -99,6 +99,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
                 android:text="@string/cancel_text"
                 android:textColor="@color/gray_color" />
 
@@ -110,6 +111,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:minHeight="@dimen/size_36"
                 android:text="@string/save_text"
                 android:textColor="@color/colorPrimary"
                 app:strokeColor="@color/colorPrimary" />

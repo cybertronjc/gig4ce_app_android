@@ -5,6 +5,9 @@ import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
 
 data class LessonModel(
+        @get:PropertyName("id")
+        @set:PropertyName("id")
+        var id : String = "",
         @get:PropertyName("Name")
         @set:PropertyName("Name")
         var name: String = "",
@@ -26,6 +29,7 @@ data class LessonModel(
         var shouldShowFeedbackDialog : Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readString(),
             parcel.readByte() != 0.toByte(),

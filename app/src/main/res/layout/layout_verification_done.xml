@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -38,6 +36,7 @@
             android:layout_marginStart="81dp"
             android:layout_marginTop="375dp"
             android:backgroundTint="@android:color/white"
+            android:minHeight="@dimen/size_36"
             android:text="@string/okay_text_cap"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"

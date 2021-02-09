@@ -167,12 +167,11 @@
                     android:layout_width="@dimen/size_24"
                     android:layout_height="@dimen/size_24"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                   />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView120"
@@ -380,12 +379,13 @@
     <TextView
         android:id="@+id/tv_mark_as_interest_role_details"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_48"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_18"
         android:layout_marginEnd="@dimen/size_14"
         android:layout_marginBottom="@dimen/size_44"
         android:background="@drawable/rect_bg_rad_rad_5_sg_e42c64_eg_990077"
         android:gravity="center_horizontal"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_14"
         android:paddingBottom="@dimen/size_12"
         android:textColor="#ffffff"
@@ -404,6 +404,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tb_overlay_cl_act"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#20000000"
