@@ -32,7 +32,6 @@
             android:layout_toStartOf="@+id/iv_edit_profile_v2"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
-            android:text="Nunc justo eros, vehicula vel vehicula ut, lacinia.  "
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -54,6 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_about_profile_v2"
             android:layout_margin="@dimen/size_16"
+
+            app:chipSpacingVertical="@dimen/size_8"
             app:chipSpacingHorizontal="@dimen/size_12">
 
             <com.google.android.material.chip.Chip
@@ -129,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/summary_chip_group"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_13"
+            android:layout_marginTop="@dimen/size_20"
             android:layout_marginEnd="@dimen/size_16"
             android:background="@drawable/ic_oval_oval_oval_mask">
 
@@ -220,8 +221,8 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_1"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
-            android:drawablePadding="@dimen/size_6"
+            android:layout_marginTop="@dimen/size_19"
+            android:drawablePadding="@dimen/size_10"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="@string/about_me"
@@ -247,7 +248,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_about_me_label_profile_v2"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_16"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="Tell us more about you "
@@ -261,7 +262,7 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/tv_tell_us_profile_v2"
             android:layout_marginTop="@dimen/size_16"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_address_profile_v2"
@@ -277,7 +278,7 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/add_address_profile_v2"
             android:layout_marginTop="@dimen/size_16"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_video_intro_label_profile_v2"
@@ -286,7 +287,7 @@ Profile "
             android:layout_below="@+id/view_3"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_16"
-            android:drawablePadding="@dimen/size_6"
+            android:drawablePadding="@dimen/size_10"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="@string/video_intro"
@@ -301,7 +302,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_video_intro_label_profile_v2"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_12"
             android:layout_marginEnd="@dimen/size_16"
             android:background="@drawable/bg_f8cddb_rad_8"
             android:minHeight="@dimen/size_196">
@@ -356,7 +357,7 @@ Profile "
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_12"
             android:layout_below="@+id/cl_record_video_profile_v2"
-            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginTop="@dimen/size_16"
             android:background="#f5f7ff" />
 
         <TextView
@@ -366,7 +367,7 @@ Profile "
             android:layout_below="@+id/view_4"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_16"
-            android:drawablePadding="@dimen/size_6"
+            android:drawablePadding="@dimen/size_10"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="Whats on your mind?"
@@ -381,7 +382,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_whats_on_your_mind_profile_v2"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_13"
+            android:layout_marginTop="@dimen/size_16"
             android:layout_marginEnd="@dimen/size_16"
             android:background="@drawable/gradient_button">
 
@@ -440,7 +441,7 @@ Profile "
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_12"
             android:layout_below="@+id/cl_whats_on_your_mind"
-            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginTop="@dimen/size_16"
             android:background="#f5f7ff" />
 
         <com.gigforce.user_profile.components.AddContentCard
@@ -456,7 +457,7 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/add_experience_profile_fragment_v2"
             android:layout_marginTop="@dimen/size_16"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_skills_profile_v2"
@@ -470,7 +471,7 @@ Profile "
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_12"
             android:layout_below="@+id/add_skills_profile_v2"
-            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginTop="@dimen/size_16"
             android:background="#f5f7ff" />
 
         <com.gigforce.user_profile.components.AddContentCard
@@ -486,7 +487,7 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/add_documents_profile_v2"
             android:layout_marginTop="@dimen/size_16"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_education_profile_v2"
@@ -501,7 +502,7 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/add_education_profile_v2"
             android:layout_marginTop="@dimen/size_16"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_contact_info_profile_v2"
@@ -526,7 +527,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_contact_info_profile_v2"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_32"
+            android:layout_marginTop="@dimen/size_24"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -543,7 +544,7 @@ Profile "
             android:layout_below="@+id/tv_call_profile_v2"
             android:layout_marginStart="@dimen/size_48"
             android:layout_marginTop="@dimen/size_12"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_whatsapp_profile_v2"
@@ -551,7 +552,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_10"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_14"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -568,7 +569,7 @@ Profile "
             android:layout_below="@+id/tv_whatsapp_profile_v2"
             android:layout_marginStart="@dimen/size_48"
             android:layout_marginTop="@dimen/size_12"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_mail_profile_v2"
@@ -576,7 +577,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_11"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_12"
+            android:layout_marginTop="@dimen/size_14"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -592,22 +593,22 @@ Profile "
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/tv_mail_profile_v2"
             android:layout_marginTop="@dimen/size_24"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <com.gigforce.user_profile.components.AddContentCard
             android:id="@+id/add_language_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_12"
-            android:layout_marginTop="@dimen/size_16" />
+            android:layout_marginTop="@dimen/size_27" />
 
         <View
             android:id="@+id/view_13"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_1"
             android:layout_below="@+id/add_language_profile_v2"
-            android:layout_marginTop="@dimen/size_24"
-            android:background="#979797" />
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_social_media_profile_v2"
@@ -615,7 +616,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_13"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_12"
             android:drawablePadding="@dimen/size_6"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -631,7 +632,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_social_media_profile_v2"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_18"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -648,7 +649,7 @@ Profile "
             android:layout_below="@+id/tv_linked_in_profile_v2"
             android:layout_marginStart="@dimen/size_48"
             android:layout_marginTop="@dimen/size_12"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_facebook_profile_v2"
@@ -656,7 +657,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_14"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_7"
+            android:layout_marginTop="@dimen/size_12"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -673,7 +674,7 @@ Profile "
             android:layout_below="@+id/tv_facebook_profile_v2"
             android:layout_marginStart="@dimen/size_48"
             android:layout_marginTop="@dimen/size_12"
-            android:background="#979797" />
+            android:background="#66979797" />
 
         <TextView
             android:id="@+id/tv_instagram_profile_v2"
@@ -681,7 +682,7 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_15"
             android:layout_marginStart="@dimen/size_19"
-            android:layout_marginTop="@dimen/size_7"
+            android:layout_marginTop="@dimen/size_12"
             android:drawablePadding="@dimen/size_8"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
@@ -706,8 +707,8 @@ Profile "
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_16"
             android:layout_marginStart="@dimen/size_16"
-            android:layout_marginTop="@dimen/size_16"
-            android:drawablePadding="@dimen/size_6"
+            android:layout_marginTop="@dimen/size_26"
+            android:drawablePadding="@dimen/size_9"
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="Preferences"
@@ -726,7 +727,6 @@ Profile "
             android:fontFamily="@font/lato"
             android:lineSpacingExtra="3sp"
             android:text="Public"
-
             android:textColor="#707070"
             android:textSize="12sp"
             android:textStyle="normal" />
@@ -736,8 +736,7 @@ Profile "
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_12"
             android:layout_below="@+id/tv_instagram_profile_v2"
-
-            android:layout_marginTop="@dimen/size_24"
+            android:layout_marginTop="@dimen/size_18"
             android:background="#f5f7ff" />
     </RelativeLayout>
 

@@ -135,12 +135,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.gigforce.user_profile.components.ChipsEditText
+            <AutoCompleteTextView
                 android:id="@+id/act_langs_add_lang_profile_v2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_32"
                 android:backgroundTint="#68979797"
                 android:focusableInTouchMode="true"

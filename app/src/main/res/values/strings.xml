@@ -1411,6 +1411,7 @@
     <string name="let_people_know_what_all_skills_you_have">Let people Know what all skills you have</string>
     <string name="select_skills_you_have">Select Skills you have</string>
     <string name="search_skills">Search Skills</string>
+    <string name="add_about_me">Add About Me</string>
 
 
     <string-array name="lang_array">
