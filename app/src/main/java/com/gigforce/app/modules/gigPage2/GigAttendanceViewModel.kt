@@ -84,17 +84,17 @@ class GigAttendanceViewModel constructor(
         _requestAttendanceRegularisation.value = Lse.loading()
 
         try {
-            val gigRegularisationRequest = GigRegularisationRequest().apply {
-                checkInTime = punchInTime
-                checkOutTime = punchOutTime
-                requestedOn = Timestamp.now()
-            }
-
-            gigsRepository.getCollectionReference()
-                .document(gigId)
-                .updateOrThrow("regularisationRequest", gigRegularisationRequest)
-
-            _requestAttendanceRegularisation.value = Lse.success()
+//            val gigRegularisationRequest = GigRegularisationRequest().apply {
+//                checkInTime = punchInTime
+//                checkOutTime = punchOutTime
+//                requestedOn = Timestamp.now()
+//            }
+//
+//            gigsRepository.getCollectionReference()
+//                .document(gigId)
+//                .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+//
+//            _requestAttendanceRegularisation.value = Lse.success()
         } catch (e: Exception) {
             _requestAttendanceRegularisation.value =
                 Lse.error(e.message ?: "Unable to submit regularisation attendance")

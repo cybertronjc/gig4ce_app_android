@@ -237,12 +237,12 @@ class GigPage2Fragment : BaseFragment(),
             return
         }
 
-        viewModel.markAttendance(
-                latitude = location!!.latitude,
-                longitude = location!!.longitude,
-                image = imageClickedPath!!,
-                checkInTimeAccToUser = checkInTimeAccToUser
-        )
+//        viewModel.markAttendance(
+//                latitude = location!!.latitude,
+//                longitude = location!!.longitude,
+//                image = imageClickedPath!!,
+//                checkInTimeAccToUser = checkInTimeAccToUser
+//        )
     }
 
     private fun showAlertDialog(message: String) {
@@ -738,8 +738,8 @@ class GigPage2Fragment : BaseFragment(),
         when (requestCode) {
             REQUEST_PERMISSIONS -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    isGPSRequestCompleted = true
-                    initializeGPS()
+//                    isGPSRequestCompleted = true
+//                    initializeGPS()
                 } else {
                 }
             }
@@ -749,12 +749,12 @@ class GigPage2Fragment : BaseFragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         checkInCheckOutSliderBtn?.resetSlider()
-        if (resultCode == Activity.RESULT_OK && requestCode == GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE) {
-            if (data != null) {
-                selfieImg = data.getStringExtra("image_name")
-            }
-            checkAndUpdateAttendance()
-        }
+//        if (resultCode == Activity.RESULT_OK && requestCode == GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE) {
+//            if (data != null) {
+//                selfieImg = data.getStringExtra("image_name")
+//            }
+//            checkAndUpdateAttendance()
+//        }
     }
 
 

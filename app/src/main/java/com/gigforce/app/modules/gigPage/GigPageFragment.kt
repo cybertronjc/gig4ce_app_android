@@ -409,7 +409,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                                 selfieImg,
                                 ""
                         )
-                viewModel.markAttendance(markAttendance, gigId)
+//                viewModel.markAttendance(markAttendance, gigId)
 
             } else {
                 gig!!.attendance!!.setCheckout(
@@ -417,7 +417,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         0.0, selfieImg,
                         ""
                 )
-                viewModel.markAttendance(gig!!.attendance!!, gigId)
+//                viewModel.markAttendance(gig!!.attendance!!, gigId)
 
             }
         }
@@ -459,7 +459,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                                 selfieImg,
                                 locationAddress
                         )
-                viewModel.markAttendance(markAttendance, gigId)
+//                viewModel.markAttendance(markAttendance, gigId)
             } else {
                 it.attendance?.setCheckout(
                         true,
@@ -469,7 +469,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         selfieImg,
                         locationAddress
                 )
-                viewModel.markAttendance(it.attendance!!, gigId)
+//                viewModel.markAttendance(it.attendance!!, gigId)
             }
 
         } ?: run {
