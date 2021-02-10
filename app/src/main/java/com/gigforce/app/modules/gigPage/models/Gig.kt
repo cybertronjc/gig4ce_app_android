@@ -28,8 +28,46 @@ data class Gig(
     var invoiceGenerationDate: Timestamp? = null,
     var paymentStatus: String = "Processing",
 
-    var startDateTime: Timestamp? = null,
-    var endDateTime: Timestamp? = null,
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var startDateTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkInBeforeTime : Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkInAfterBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkInAfterTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var endDateTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkOutBeforeTime : Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var checkOutAfterTime: Timestamp = Timestamp.now(),
+
 
     var checkInBeforeTimeBufferInMins: Long = 60,
     var checkInAfterTimeBufferInMins: Long = 60,

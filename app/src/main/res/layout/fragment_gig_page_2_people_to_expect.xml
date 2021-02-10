@@ -31,7 +31,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@id/gig_people_to_expect_iv"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/people_to_except" />
+        android:text="Managers" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/people_to_expect_rv"

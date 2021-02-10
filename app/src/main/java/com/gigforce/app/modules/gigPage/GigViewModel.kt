@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
@@ -58,9 +57,103 @@ class GigViewModel constructor(
                 }
     }
 
+    private val _markingAttendanceState = MutableLiveData<Lse>()
+    val markingAttendanceState: LiveData<Lse> get() = _markingAttendanceState
 
-    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
-        gigsRepository.markAttendance(markAttendance, gigId)
+    fun markAttendance(
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkInTimeAccToUser: Timestamp,
+            remarks: String?
+    ) = viewModelScope.launch {
+        val gig = currentGig ?: return@launch
+
+        if (!gig.isCheckInMarked()) {
+
+            markCheckIn(
+                    gigId = gig.gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkInTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+        } else if (!gig.isCheckOutMarked()) {
+
+            markCheckOut(
+                    gigId = gig.gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkOutTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+        } else {
+            FirebaseCrashlytics.getInstance().apply {
+                log("GigViewModel : Gig Id - ${gig.gigId}")
+                recordException(IllegalStateException("GigViewModel : markAttendance called but check-in and checkout both are marked"))
+            }
+        }
+    }
+
+    private suspend fun markCheckIn(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkInTimeAccToUser: Timestamp,
+            remarks: String?
+    ) {
+        _markingAttendanceState.postValue(Lse.loading())
+
+        try {
+            gigsRepository.markCheckIn(
+                    gigId = gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkInTime = Timestamp.now(),
+                    checkInTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+            _markingAttendanceState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _markingAttendanceState.postValue(Lse.error(e.toString()))
+        }
+    }
+
+    private suspend fun markCheckOut(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkOutTimeAccToUser: Timestamp,
+            remarks: String?
+    ) {
+        _markingAttendanceState.postValue(Lse.loading())
+
+        try {
+            gigsRepository.markCheckOut(
+                    gigId = gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkOutTime = Timestamp.now(),
+                    checkOutTimeAccToUser = checkOutTimeAccToUser,
+                    remarks = remarks
+            )
+            _markingAttendanceState.postValue(Lse.success())
+        } catch (e: Exception) {
+            _markingAttendanceState.postValue(Lse.error(e.toString()))
+        }
     }
 
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
@@ -425,20 +518,22 @@ class GigViewModel constructor(
         _requestAttendanceRegularisation.value = Lse.loading()
 
         try {
-            val gigRegularisationRequest = GigRegularisationRequest().apply {
-                checkInTime = punchInTime
-                checkOutTime = punchOutTime
-                requestedOn = Timestamp.now()
-            }
-
-            gigsRepository.getCollectionReference()
-                    .document(gigId)
-                    .updateOrThrow("regularisationRequest", gigRegularisationRequest)
-
-            _requestAttendanceRegularisation.value = Lse.success()
+//            val gigRegularisationRequest = GigRegularisationRequest().apply {
+//                checkInTime = punchInTime
+//                checkOutTime = punchOutTime
+//                requestedOn = Timestamp.now()
+//            }
+//
+//            gigsRepository.getCollectionReference()
+//                    .document(gigId)
+//                    .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+//
+//            _requestAttendanceRegularisation.value = Lse.success()
         } catch (e: Exception) {
-            _requestAttendanceRegularisation.value = Lse.error(e.message
-                    ?: "Unable to submit regularisation attendance")
+            _requestAttendanceRegularisation.value = Lse.error(
+                    e.message
+                            ?: "Unable to submit regularisation attendance"
+            )
         }
     }
 
@@ -448,10 +543,13 @@ class GigViewModel constructor(
     fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
         checkForChatProfile(loginMobile)
     }
+
     suspend fun checkForChatProfile(loginMobile: String) {
         try {
 
-            val profiles = gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile).get().await()
+            val profiles =
+                    gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile)
+                            .get().await()
             if (!profiles.documents.isNullOrEmpty()) {
                 val toObject = profiles.documents[0].toObject(ProfileData::class.java)
                 toObject?.id = profiles.documents[0].id
