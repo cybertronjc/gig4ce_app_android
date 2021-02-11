@@ -13,8 +13,12 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 
-abstract class TextMessageView(val type:String, context: Context, attrs: AttributeSet?)
-    :   RelativeLayout(context, attrs),
+abstract class TextMessageView(
+        val type: MessageFlowType,
+        val messageType: MessageType,
+        context: Context,
+        attrs: AttributeSet?
+) :  RelativeLayout(context, attrs),
         IViewHolder {
 
     private lateinit var msgView:TextView
@@ -32,7 +36,7 @@ abstract class TextMessageView(val type:String, context: Context, attrs: Attribu
     }
 
     fun inflate(){
-        if(type == "in")
+        if(type == MessageFlowType.IN)
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_in, this, true)
         else
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_out, this, true)
@@ -84,5 +88,42 @@ abstract class TextMessageView(val type:String, context: Context, attrs: Attribu
 
 }
 
-class InTextMessageView(context: Context, attrs: AttributeSet?): TextMessageView("in", context, attrs)
-class OutTextMessageView(context: Context, attrs: AttributeSet?): TextMessageView("out", context, attrs)
+class InTextMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : TextMessageView(
+        MessageFlowType.IN,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
+
+class OutTextMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : TextMessageView(
+        MessageFlowType.OUT,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
+
+class GroupInTextMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.IN,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)
+
+class GroupOutTextMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.OUT,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)

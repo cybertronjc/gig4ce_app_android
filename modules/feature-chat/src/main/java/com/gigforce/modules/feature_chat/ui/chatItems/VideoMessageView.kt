@@ -26,7 +26,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 abstract class VideoMessageView(
-    val type: String,
+    val type: MessageFlowType,
+    val messageType: MessageType,
     context: Context,
     attrs: AttributeSet?
 ) : MediaMessage(
@@ -65,7 +66,7 @@ abstract class VideoMessageView(
     }
 
     fun inflate() {
-        if (type == "in")
+        if (type == MessageFlowType.IN)
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_video_in, this, true)
         else
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_video_out, this, true)
@@ -262,11 +263,44 @@ abstract class VideoMessageView(
         } catch (e: Exception) {
         }
     }
-
 }
 
-class InVideoMessageView(context: Context, attrs: AttributeSet?) :
-    VideoMessageView("in", context, attrs)
+class InVideoMessageView(
+    context: Context,
+    attrs: AttributeSet?
+) : VideoMessageView(
+    MessageFlowType.IN,
+    MessageType.ONE_TO_ONE_MESSAGE,
+    context,
+    attrs
+)
 
-class OutVideoMessageView(context: Context, attrs: AttributeSet?) :
-    VideoMessageView("out", context, attrs)
+class OutVideoMessageView(
+    context: Context,
+    attrs: AttributeSet?
+) : VideoMessageView(
+    MessageFlowType.OUT,
+    MessageType.ONE_TO_ONE_MESSAGE,
+    context,
+    attrs
+)
+
+class GroupInVideoMessageView(
+    context: Context,
+    attrs: AttributeSet?
+) : VideoMessageView(
+    MessageFlowType.IN,
+    MessageType.GROUP_MESSAGE,
+    context,
+    attrs
+)
+
+class GroupOutVideoMessageView(
+    context: Context,
+    attrs: AttributeSet?
+) : VideoMessageView(
+    MessageFlowType.OUT,
+    MessageType.GROUP_MESSAGE,
+    context,
+    attrs
+)

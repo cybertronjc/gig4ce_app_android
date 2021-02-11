@@ -192,8 +192,44 @@ abstract class LocationMessageView(
 
 }
 
-class InLocationMessageView(context: Context, attrs: AttributeSet?) :
-        LocationMessageView("in", context, attrs)
 
-class OutLocationMessageView(context: Context, attrs: AttributeSet?) :
-        LocationMessageView("out", context, attrs)
+class InLocationMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.IN,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
+
+class OutLocationMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.OUT,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
+
+
+class GroupInLocationMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.IN,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)
+
+class GroupOutLocationMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : VideoMessageView(
+        MessageFlowType.OUT,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)
