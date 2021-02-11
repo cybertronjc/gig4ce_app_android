@@ -23,7 +23,8 @@ import com.google.firebase.storage.FirebaseStorage
 
 
 abstract class LocationMessageView(
-        private val type: String,
+        val type: MessageFlowType,
+        val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
 ) : RelativeLayout(context, attrs),
@@ -73,7 +74,7 @@ abstract class LocationMessageView(
     }
 
     fun inflate() {
-        val resId = if (type == ChatConstants.FLOW_TYPE_IN)
+        val resId = if (type == MessageFlowType.IN)
             R.layout.recycler_item_chat_location_in
         else
             R.layout.recycler_item_chat_location_out
@@ -99,7 +100,7 @@ abstract class LocationMessageView(
                     .load(thumbnailStorageRef)
                     .placeholder(getCircularProgressDrawable())
                     .into(imageView)
-        } else if(msg.attachmentPath != null){
+        } else if (msg.attachmentPath != null) {
             val thumbnailStorageRef = firebaseStorage.reference.child(msg.attachmentPath!!)
             Glide.with(context)
                     .load(thumbnailStorageRef)
@@ -176,7 +177,7 @@ abstract class LocationMessageView(
             return
 
         val lat = message?.location?.latitude ?: 0.0
-        val long = message?.location?.longitude?: 0.0
+        val long = message?.location?.longitude ?: 0.0
 
         if (lat != 0.0) {
             val uri = "http://maps.google.com/maps?q=loc:$lat,$long (Location)"
@@ -196,7 +197,7 @@ abstract class LocationMessageView(
 class InLocationMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : LocationMessageView(
         MessageFlowType.IN,
         MessageType.ONE_TO_ONE_MESSAGE,
         context,
@@ -217,7 +218,7 @@ class OutLocationMessageView(
 class GroupInLocationMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : LocationMessageView(
         MessageFlowType.IN,
         MessageType.GROUP_MESSAGE,
         context,
@@ -227,7 +228,7 @@ class GroupInLocationMessageView(
 class GroupOutLocationMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : LocationMessageView(
         MessageFlowType.OUT,
         MessageType.GROUP_MESSAGE,
         context,

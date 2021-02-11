@@ -27,5 +27,20 @@ class ViewTypes {
 
         const val IN_LOCATION = 10105
         const val OUT_LOCATION = 10205
+
+        const val GROUP_IN_TEXT = 10501
+        const val GROUP_OUT_TEXT = 10601
+
+        const val GROUP_IN_IMAGE = 10502
+        const val GROUP_OUT_IMAGE = 10602
+
+        const val GROUP_IN_VIDEO = 10503
+        const val GROUP_OUT_VIDEO = 10603
+
+        const val GROUP_IN_DOCUMENT = 10504
+        const val GROUP_OUT_DOCUMENT = 10604
+
+        const val GROUP_IN_LOCATION = 10505
+        const val GROUP_OUT_LOCATION = 10605
     }
 }

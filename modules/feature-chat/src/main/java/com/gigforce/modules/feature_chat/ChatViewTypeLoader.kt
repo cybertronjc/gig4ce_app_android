@@ -28,6 +28,21 @@ class ChatViewTypeLoader(): IViewTypeLoader {
             ViewTypes.IN_LOCATION -> InLocationMessageView(context, null)
             ViewTypes.OUT_LOCATION -> OutLocationMessageView(context, null)
 
+            ViewTypes.GROUP_IN_TEXT -> GroupInTextMessageView(context, null)
+            ViewTypes.GROUP_OUT_TEXT -> GroupOutTextMessageView(context, null)
+
+            ViewTypes.GROUP_IN_IMAGE -> GroupInImageMessageView(context, null)
+            ViewTypes.GROUP_OUT_IMAGE -> GroupOutImageMessageView(context, null)
+
+            ViewTypes.GROUP_IN_VIDEO -> GroupInVideoMessageView(context, null)
+            ViewTypes.GROUP_OUT_VIDEO -> GroupOutVideoMessageView(context, null)
+
+            ViewTypes.GROUP_IN_DOCUMENT -> GroupInDocumentMessageView(context, null)
+            ViewTypes.GROUP_OUT_DOCUMENT -> GroupOutDocumentMessageView(context, null)
+
+            ViewTypes.GROUP_IN_LOCATION -> GroupInLocationMessageView(context, null)
+            ViewTypes.GROUP_OUT_LOCATION -> GroupOutLocationMessageView(context, null)
+
             else -> null
         }
     }

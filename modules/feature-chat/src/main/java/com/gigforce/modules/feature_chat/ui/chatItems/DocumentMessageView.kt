@@ -189,15 +189,7 @@ abstract class DocumentMessageView(
 
 }
 
-class GroupOneToOneDocumentMessageView(
-        context: Context,
-        attrs: AttributeSet?
-) : DocumentMessageView(
-        flowType = MessageFlowType.IN,
-        messageType = MessageType.GROUP_MESSAGE,
-        context = context,
-        attrs = attrs
-)
+
 
 class InOneToOneDocumentMessageView(
         context: Context,
@@ -219,7 +211,17 @@ class OutOneToOneDocumentMessageView(
         attrs = attrs
 )
 
-class OutGroupDocumentMessageView(
+class GroupInDocumentMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : DocumentMessageView(
+        flowType = MessageFlowType.IN,
+        messageType = MessageType.GROUP_MESSAGE,
+        context = context,
+        attrs = attrs
+)
+
+class GroupOutDocumentMessageView(
         context: Context,
         attrs: AttributeSet?
 ) : DocumentMessageView(

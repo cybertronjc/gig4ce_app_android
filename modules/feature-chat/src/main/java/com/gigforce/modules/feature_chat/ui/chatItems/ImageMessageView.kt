@@ -27,11 +27,14 @@ import javax.inject.Inject
 
 
 abstract class ImageMessageView(
-    private val type: String,
-    context: Context,
-    attrs: AttributeSet?
-) : MediaMessage(context, attrs),
-    View.OnClickListener {
+        val type: MessageFlowType,
+        val messageType: MessageType,
+        context: Context,
+        attrs: AttributeSet?
+) : MediaMessage(
+        context,
+        attrs
+), View.OnClickListener {
 
     private lateinit var imageView: ImageView
     private lateinit var textViewTime: TextView
@@ -52,8 +55,8 @@ abstract class ImageMessageView(
         setOnClickListeners()
 
         (this.context.applicationContext as ChatModuleProvider)
-            .provideChatModule()
-            .inject(this)
+                .provideChatModule()
+                .inject(this)
         navigation.context = context
     }
 
@@ -75,7 +78,7 @@ abstract class ImageMessageView(
 
     fun inflate() {
         val resId =
-            if (type == ChatConstants.FLOW_TYPE_IN) R.layout.recycler_item_chat_text_with_image_in else R.layout.recycler_item_chat_text_with_image_out
+                if (type == MessageFlowType.IN) R.layout.recycler_item_chat_text_with_image_in else R.layout.recycler_item_chat_text_with_image_out
         LayoutInflater.from(context).inflate(resId, this, true)
     }
 
@@ -93,16 +96,16 @@ abstract class ImageMessageView(
         if (msg.thumbnailBitmap != null) {
 
             Glide.with(context)
-                .load(msg.thumbnailBitmap)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+                    .load(msg.thumbnailBitmap)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView)
         } else if (msg.thumbnail != null) {
 
             val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
             Glide.with(context)
-                .load(thumbnailStorageRef)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+                    .load(thumbnailStorageRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView)
         }
 
 
@@ -150,9 +153,9 @@ abstract class ImageMessageView(
         downloadIconIV.gone()
 
         Glide.with(context)
-            .load(downloadedFile)
-            .placeholder(getCircularProgressDrawable())
-            .into(imageView)
+                .load(downloadedFile)
+                .placeholder(getCircularProgressDrawable())
+                .into(imageView)
     }
 
     override fun onBind(msg: ChatMessage) {
@@ -175,7 +178,7 @@ abstract class ImageMessageView(
         if (file != null) {
             navigation.openFullScreenImageViewDialogFragment(file.toUri())
         } else {
-           downloadAttachment()
+            downloadAttachment()
         }
     }
 
@@ -208,7 +211,7 @@ abstract class ImageMessageView(
     }
 
 
-    private fun downloadAttachment() = GlobalScope.launch{
+    private fun downloadAttachment() = GlobalScope.launch {
 
         this.launch(Dispatchers.Main) {
             handleDownloadInProgress()
@@ -225,8 +228,43 @@ abstract class ImageMessageView(
     }
 }
 
-class InImageMessageView(context: Context, attrs: AttributeSet?) :
-    ImageMessageView("in", context, attrs)
+class InImageMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : ImageMessageView(
+        MessageFlowType.IN,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
 
-class OutImageMessageView(context: Context, attrs: AttributeSet?) :
-    ImageMessageView("out", context, attrs)
+class OutImageMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : ImageMessageView(
+        MessageFlowType.OUT,
+        MessageType.ONE_TO_ONE_MESSAGE,
+        context,
+        attrs
+)
+
+
+class GroupInImageMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : ImageMessageView(
+        MessageFlowType.IN,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)
+
+class GroupOutImageMessageView(
+        context: Context,
+        attrs: AttributeSet?
+) : ImageMessageView(
+        MessageFlowType.OUT,
+        MessageType.GROUP_MESSAGE,
+        context,
+        attrs
+)
