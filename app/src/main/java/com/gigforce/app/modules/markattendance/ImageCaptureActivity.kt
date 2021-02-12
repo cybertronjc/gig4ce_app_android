@@ -21,8 +21,6 @@ import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
-import com.otaliastudios.cameraview.size.AspectRatio
-import com.otaliastudios.cameraview.size.Size
 import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_picture_preview.*
 import java.io.*
@@ -68,7 +66,7 @@ class ImageCaptureActivity : AppCompatActivity() {
         progress_circular.visible()
         val sd = Environment.getExternalStorageDirectory();
         val image = File(filesDir, "capture.jpg")
-        val bos =  BufferedOutputStream( FileOutputStream(image));
+        val bos = BufferedOutputStream(FileOutputStream(image));
         bos.write(pictureResult?.data);
         bos.flush();
         bos.close()
@@ -118,16 +116,7 @@ class ImageCaptureActivity : AppCompatActivity() {
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
         val size = getScreenWidth(this)
         val width = SizeSelectors.minWidth(size.width)
-        val height = SizeSelectors.minHeight(size.height)
-        val dimensions = SizeSelectors.and(width, height) // Matches sizes bigger than 1000x2000.
-        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(Size(size.width, size.height)), 0f) // Matches 1:1 sizes.
-        val result = SizeSelectors.or(
-                SizeSelectors.and(ratio, dimensions),  // Try to match both constraints
-                ratio,  // If none is found, at least try to match the aspect ratio
-                SizeSelectors.biggest() // If none is found, take the biggest
-        )
-        cameraView.setPictureSize(result)
-        cameraView.setVideoSize(result)
+        cameraView.setPreviewStreamSize(SizeSelectors.and(width, SizeSelectors.biggest()));
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
     }

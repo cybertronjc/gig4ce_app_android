@@ -751,7 +751,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         profile_image.setOnClickListener {
-            navigate(R.id.fragment_profile_v2)
+            navigate(R.id.profileFragment)
         }
 
         textView119.setOnClickListener {

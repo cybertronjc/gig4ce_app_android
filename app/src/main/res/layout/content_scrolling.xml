@@ -54,8 +54,8 @@
             android:layout_below="@+id/tv_about_profile_v2"
             android:layout_margin="@dimen/size_16"
 
-            app:chipSpacingVertical="@dimen/size_8"
-            app:chipSpacingHorizontal="@dimen/size_12">
+            app:chipSpacingHorizontal="@dimen/size_12"
+            app:chipSpacingVertical="@dimen/size_8">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_verified"
@@ -131,8 +131,15 @@
             android:layout_below="@+id/summary_chip_group"
             android:layout_marginStart="@dimen/size_16"
             android:layout_marginTop="@dimen/size_20"
-            android:layout_marginEnd="@dimen/size_16"
-            android:background="@drawable/ic_oval_oval_oval_mask">
+
+            android:layout_marginEnd="@dimen/size_16">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_oval_oval_oval_mask" />
 
             <ImageView
                 android:id="@+id/ic_thumbs_up_profile_v2"

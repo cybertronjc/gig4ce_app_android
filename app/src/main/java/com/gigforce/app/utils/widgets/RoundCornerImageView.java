@@ -20,14 +20,17 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.gigforce.app.R;
 
-public class RoundCornerImageView extends androidx.appcompat.widget.AppCompatImageView {
+public class RoundCornerImageView extends AppCompatImageView {
 
     public static final String TAG = "RoundCornerImageView";
 
