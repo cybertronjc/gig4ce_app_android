@@ -129,6 +129,7 @@ dependencies {
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:profile')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 

@@ -1,9 +1,11 @@
 package com.gigforce.core.utils
 
+import java.io.Serializable
+
 /**
  * Lce (Loading-Content-Error) Class for sharing state between viewModel & view
  */
-sealed class Lce<out T> {
+sealed class Lce<out T> : Serializable {
 
     object Loading : Lce<Nothing>()
     class Content<out T>(val content: T) : Lce<T>()

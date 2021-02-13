@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.AppProfilePicDVM
 import com.gigforce.core.IViewHolder
