@@ -1,3 +1,0 @@
-package com.gigforce.client_activation.client_activation.models
-
-data class GFMappedUser(var city: String? = null, var email: String? = null, var name: String? = null, var number: String = "", var numberWithoutnineone:String = "") {}
