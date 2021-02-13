@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_white_top_rad_5"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title_partner_bs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_19"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="@dimen/size_19"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:text="@string/choose_address"
+        android:textColor="@color/black_85"
+        android:textSize="@dimen/font_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_sub_title_partner_bs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_19"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_19"
+        android:fontFamily="@font/lato"
+        android:text="@string/select_a_partner_school_address_to_driving_test_certification_and_doc_submission"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_partner_school_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_26"
+        android:minHeight="@dimen/size_48"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pb_select_partner_bottom_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible" />
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/slider_okay_partner_school"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_24"
+        android:layout_marginBottom="@dimen/size_27"
+        app:border_radius="8dp"
+        app:icon_margin="@dimen/size_7"
+        app:inner_color="#d72467"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:outer_color="#ffd9e6"
+        app:slider_height="60dp"
+        app:slider_icon="@drawable/ic_arrow_forward_white"
+        app:slider_icon_color="@color/white"
+        app:slider_locked="true"
+        app:text="@string/okay_lower_case"
+        app:text_size="@dimen/font_16" />
+
+
+</LinearLayout>

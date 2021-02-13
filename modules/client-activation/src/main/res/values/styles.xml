@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App.Dialog.FullScreen" parent="Theme.MaterialComponents.Dialog">
+        <!-- (1)-->
+        <item name="android:windowIsFloating">false</item>
+        <!-- (2) -->
+        <item name="android:windowBackground">@color/black_33</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+</resources>

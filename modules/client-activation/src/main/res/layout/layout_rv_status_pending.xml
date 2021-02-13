@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_status_application"
+        android:layout_width="@dimen/size_24"
+        android:layout_height="@dimen/size_24"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/size_18"
+        android:layout_toStartOf="@+id/iv_next_screen_application"
+        android:layout_toEndOf="@+id/iv_status_application"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_status_application"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="Profile Photo" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            android:textColor="#f7b500"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:visibility="gone"
+            tools:text="Slot booked " />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_next_screen_application"
+        android:layout_width="@dimen/size_24"
+        android:layout_height="@dimen/size_51"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/size_15"
+        app:srcCompat="@drawable/ic_next_screen" />
+
+    <View
+        android:id="@+id/divider_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/iv_next_screen_application"
+        android:layout_marginStart="@dimen/size_53"
+        android:layout_marginTop="@dimen/size_16"
+        android:background="#c8c7cc" />
+
+</RelativeLayout>

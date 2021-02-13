@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/fragment_play_video_main_layout"
+        layout="@layout/fragment_play_video_main"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/fragment_play_video_progress_bar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/fragment_play_video_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="10dp"
+        tools:text="Unable to load your stuff"
+        app:drawableTopCompat="@drawable/ic_cross_grey" />
+
+</FrameLayout>
