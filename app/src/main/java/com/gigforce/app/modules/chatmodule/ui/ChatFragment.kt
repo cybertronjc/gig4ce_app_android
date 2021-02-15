@@ -43,6 +43,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_chat_screen.*
 import java.io.File
 import java.time.LocalDateTime
@@ -54,6 +55,10 @@ class ChatFragment : BaseFragment(),
         OnChatMessageClickListener {
 
     private val viewModel: ChatMessagesViewModel by viewModels()
+
+    private val currentUser : FirebaseUser by lazy {
+        FirebaseAuth.getInstance().currentUser!!
+    }
 
     private val appDirectoryFileRef: File by lazy {
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
@@ -130,7 +135,7 @@ class ChatFragment : BaseFragment(),
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
+            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID) ?: currentUser.uid
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
         }
@@ -140,7 +145,7 @@ class ChatFragment : BaseFragment(),
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID)!!
+            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID) ?: currentUser.uid
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
 
@@ -796,9 +801,9 @@ class ChatFragment : BaseFragment(),
         const val TAG = "ChatFragment"
 
         const val INTENT_EXTRA_CHAT_HEADER_ID = "chatHeaderId"
-        const val INTENT_EXTRA_FOR_USER_ID = "forUserId"
-        const val INTENT_EXTRA_OTHER_USER_ID = "otherUserId"
-        const val INTENT_EXTRA_OTHER_USER_NAME = "contactName"
+        const val INTENT_EXTRA_FOR_USER_ID = "sender_id"
+        const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
+        const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
         const val INTENT_EXTRA_OTHER_USER_IMAGE = "imageUrl"
 
         private const val REQUEST_PICK_DOCUMENT = 102

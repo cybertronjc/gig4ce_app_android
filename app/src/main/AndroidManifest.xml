@@ -161,6 +161,14 @@
                 <action android:name="com.gigforce.app.verification.open_verification_page" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.chats.open_chat" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.chats.open_group_chat" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <meta-data

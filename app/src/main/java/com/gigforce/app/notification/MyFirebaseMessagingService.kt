@@ -18,6 +18,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG: String = "Firebase/FCM"
     var fcmToken: String? = null
 
+    private val chatNotificationHandler: ChatNotificationHandler by lazy {
+        ChatNotificationHandler(applicationContext)
+    }
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.v(TAG, "[On New Token] Firebase Received: " + token)
@@ -28,8 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun registerFirebaseToken(token: String) {
         // doing nothing for now
 
-        RegisterFirebaseTokenIfLoggedIn()
-
+        registerFirebaseTokenIfLoggedIn()
         FirebaseAuth.getInstance().currentUser ?: let {
             Log.v(
                 TAG,
@@ -37,12 +40,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             )
             FirebaseAuth.getInstance().addAuthStateListener {
                 Log.v(TAG, "Firebase Auth State Changed")
-                RegisterFirebaseTokenIfLoggedIn()
+                registerFirebaseTokenIfLoggedIn()
             }
         }
     }
 
-    private fun RegisterFirebaseTokenIfLoggedIn() {
+    private fun registerFirebaseTokenIfLoggedIn() {
         FirebaseAuth.getInstance().currentUser?.let {
             val uid = it.uid
             FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
@@ -65,41 +68,40 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         Log.d(TAG, "From: ${remoteMessage.from}")
 
-        // Check if message contains a data payload.
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                // scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                // handleNow()
-            }
-        }
-
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
 
-            val pendingIntent = if (remoteMessage.data.isNotEmpty()) {
-                if (it.clickAction != null)
-                    createPendingIntentFromData(it.clickAction!!, remoteMessage.data)
-                else
-                    null
-            } else
-                null
+            val isChatMessage = remoteMessage.data.getOrDefault(IS_CHAT_MESSAGE, "false") == "true"
+            if (isChatMessage) {
+                handleChatNotifications(remoteMessage)
+            } else {
 
-            NotificationHelper(applicationContext)
-                .createUrgentPriorityNotification(
-                    title = it.title ?: "Gigforce",
-                    message = it.body ?: "message",
-                    pendingIntent = pendingIntent
-                )
+                val pendingIntent = if (remoteMessage.data.isNotEmpty()) {
+                    if (it.clickAction != null)
+                        createPendingIntentFromData(it.clickAction!!, remoteMessage.data)
+                    else
+                        null
+                } else
+                    null
+
+                NotificationHelper(applicationContext)
+                    .createUrgentPriorityNotification(
+                        title = it.title ?: "Gigforce",
+                        message = it.body ?: "message",
+                        pendingIntent = pendingIntent
+                    )
+
+            }
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
+    }
+
+    private fun handleChatNotifications(remoteMessage: RemoteMessage) {
+        chatNotificationHandler.handleChatNotification(remoteMessage)
+//        NotificationHelper(applicationContext).createUrgentPriorityNotification("s","S")
     }
 
     private fun createPendingIntentFromData(
@@ -107,12 +109,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         data: Map<String, String>
     ): PendingIntent? {
 
-//        return NavDeepLinkBuilder(applicationContext)
-//            .setGraph(R.navigation.nav_graph)
-//            .setDestination(R.id.gigerVerificationFragment)
-//            .setArguments(bundleOf())
-//            .createPendingIntent()
+        val dataBundle = data.toBundle()
+        dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
 
+//        return NavDeepLinkBuilder(applicationContext)
+//                .setGraph(R.navigation.nav_graph)
+//                .setDestination(R.id.gigAttendancePageFragment)
+//                .setGraph(R.navigation.nav_graph)
+//                .setArguments(dataBundle)
+//                .createPendingIntent()
 
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
@@ -122,9 +127,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 ).apply {
                     putExtras(data.toBundle())
                 })
-            val reqCode = Random.nextInt(0,100)
+            val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }
     }
 
+
+    companion object {
+
+        const val IS_CHAT_MESSAGE = "is_chat_message"
+        const val CHANNEL_ID_CHAt = "chat_messages"
+    }
 }
