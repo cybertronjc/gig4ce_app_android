@@ -111,7 +111,7 @@ class OutTextMessageView(
 class GroupInTextMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : TextMessageView(
         MessageFlowType.IN,
         MessageType.GROUP_MESSAGE,
         context,
@@ -121,7 +121,7 @@ class GroupInTextMessageView(
 class GroupOutTextMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : TextMessageView(
         MessageFlowType.OUT,
         MessageType.GROUP_MESSAGE,
         context,

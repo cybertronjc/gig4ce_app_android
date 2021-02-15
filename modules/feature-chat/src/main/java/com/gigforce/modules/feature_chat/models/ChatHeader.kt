@@ -2,6 +2,7 @@ package com.gigforce.modules.feature_chat.models
 
 import com.gigforce.core.fb.BaseFirestoreDataModel
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class ChatHeader(
@@ -74,4 +75,11 @@ data class ChatHeader(
     @set:PropertyName("lastUserStatusActivityAt")
     var lastUserStatusActivityAt: Long = 0L
 
-) : BaseFirestoreDataModel(tableName = "headers")
+) : BaseFirestoreDataModel(tableName = "headers"){
+
+    companion object {
+
+        @Exclude
+        const val KEY_UNSEEN_MESSAGE_COUNT = "unseenCount"
+    }
+}

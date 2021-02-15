@@ -14,9 +14,9 @@ import com.gigforce.modules.feature_chat.R
 class ChatFooter(context: Context,  attrs: AttributeSet) :
     LinearLayout(context,attrs) {
 
-    lateinit var et_message:EditText
-    lateinit var btn_send:AppCompatImageButton
-    lateinit var attachmentOptionButton : ImageView
+     var et_message:EditText
+     var btn_send:AppCompatImageButton
+    var attachmentOptionButton : ImageView
 
     init {
         LayoutInflater.from(context)

@@ -93,7 +93,6 @@ class ChatRepository constructor(
         }
 
         message.attachmentPath = attachmentPathOnServer
-
         getChatMessagesCollectionRef(chatHeaderId)
                 .addOrThrow(message)
     }

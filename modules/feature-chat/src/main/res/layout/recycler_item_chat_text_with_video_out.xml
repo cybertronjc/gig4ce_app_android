@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxWidth="@dimen/chat_item_max_length"
     android:gravity="end"
+    android:maxWidth="@dimen/chat_item_max_length"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_msgContainer"
         android:layout_width="@dimen/chat_item_max_length"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/lipstick_2"
         android:layout_marginEnd="@dimen/chat_item_margin"
-        app:cardElevation="@dimen/chat_item_card_elevation"
-        app:cardCornerRadius="@dimen/chat_item_corner_radius">
+        app:cardBackgroundColor="@color/lipstick_2"
+        app:cardCornerRadius="@dimen/chat_item_corner_radius"
+        app:cardElevation="@dimen/chat_item_card_elevation">
 
 
         <RelativeLayout
@@ -25,21 +25,32 @@
             android:orientation="vertical"
             android:padding="2dp">
 
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:paddingBottom="4dp"
+                android:textColor="@color/lipstick"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
             <FrameLayout
                 android:id="@+id/thumbnail_layout"
                 android:layout_width="@dimen/chat_item_max_length"
                 android:layout_height="180dp"
                 android:background="@drawable/chat_message_frame_background">
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <com.gigforce.common_ui.views.GigforceImageView
                     android:id="@+id/iv_image"
                     android:layout_width="@dimen/chat_item_max_length"
                     android:layout_height="180dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@tools:sample/avatars"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/chatImageView" />
+                    app:shapeAppearanceOverlay="@style/chatImageView"
+                    tools:srcCompat="@tools:sample/avatars" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/play_download_overlay_iv"
@@ -93,9 +104,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
-                            tools:text="3:90"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            tools:text="3:90" />
 
                     </LinearLayout>
 
@@ -107,42 +118,41 @@
                 android:id="@+id/tv_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/thumbnail_layout"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="2dp"
                 android:ellipsize="end"
                 android:maxWidth="178dp"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
                 android:scrollHorizontally="true"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:layout_below="@id/thumbnail_layout"
                 tools:text="How are you my dededbrother" />
 
             <ImageView
                 android:id="@+id/tv_received_status"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
+                android:layout_below="@id/tv_file_name"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="end"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/tv_file_name"
-                android:textColor="@color/dust_grey"
-                />
+                android:textColor="@color/dust_grey" />
 
             <TextView
                 android:id="@+id/tv_msgTimeValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/tv_file_name"
                 android:layout_gravity="end"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="10dp"
-                android:text="NA"
-                android:layout_below="@id/tv_file_name"
                 android:layout_toStartOf="@id/tv_received_status"
+                android:text="NA"
                 android:textColor="@android:color/white"
                 android:textSize="8sp" />
 

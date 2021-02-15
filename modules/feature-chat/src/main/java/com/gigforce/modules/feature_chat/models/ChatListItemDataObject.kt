@@ -4,6 +4,7 @@ import com.gigforce.core.SimpleDataViewObject
 import com.gigforce.modules.feature_chat.core.ViewTypes
 
 data class ChatListItemDataObject(
+    val chatType:String,
     val title:String,
     val subtitle:String,
     val timeDisplay:String,

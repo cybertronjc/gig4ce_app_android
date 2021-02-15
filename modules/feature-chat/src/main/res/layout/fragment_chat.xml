@@ -28,8 +28,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <com.gigforce.common_ui.views.GigforceImageView
                 android:id="@+id/user_image_iv"
+                app:shapeAppearanceOverlay="@style/circleImageView"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"

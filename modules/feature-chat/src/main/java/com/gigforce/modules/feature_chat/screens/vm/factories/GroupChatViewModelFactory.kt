@@ -1,4 +1,4 @@
-package com.vinners.cmi.ui.activity
+package com.gigforce.modules.feature_chat.screens.vm.factories
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.service.SyncPref
-import com.google.firebase.storage.FirebaseStorage
 
 class GroupChatViewModelFactory constructor(context: Context) : ViewModelProvider.Factory {
 

@@ -41,8 +41,8 @@ class ChatHeadersFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         (this.requireContext().applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
+            .provideChatModule()
+            .inject(this)
         navigation.context = requireContext()
     }
 
@@ -60,30 +60,31 @@ class ChatHeadersFragment : Fragment() {
         noChatsLayout.isVisible = list.isEmpty()
 
         ChatListFragment@ this.view?.findViewById<CoreRecyclerView>(R.id.rv_chat_headers)?.collection =
-                ArrayList(list.map {
-                    ChatListItemDataObject(
-                            id = it.id,
-                            title = it.otherUser?.name ?: "",
-                            subtitle = it.lastMsgText,
-                            timeDisplay = "2 min",
-                            type = it.chatType,
-                            profilePath = "",
-                            unreadCount = it.unseenCount,
-                            profileId = it.otherUserId,
-                            isOtherUserOnline = it.isOtherUserOnline,
-                            groupName = it.groupName,
-                            groupAvatar = it.groupAvatar,
-                            lastMessage = it.lastMsgText,
-                            lastMessageType = it.lastMessageType
+            ArrayList(list.map {
+                ChatListItemDataObject(
+                    id = it.id,
+                    title = it.otherUser?.name ?: "",
+                    subtitle = it.lastMsgText,
+                    timeDisplay = "2 min",
+                    type = it.chatType,
+                    profilePath = "",
+                    unreadCount = it.unseenCount,
+                    profileId = it.otherUserId,
+                    isOtherUserOnline = it.isOtherUserOnline,
+                    groupName = it.groupName,
+                    groupAvatar = it.groupAvatar,
+                    lastMessage = it.lastMsgText,
+                    lastMessageType = it.lastMessageType,
+                    chatType = it.chatType
 
-                    )
-                })
+                )
+            })
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }

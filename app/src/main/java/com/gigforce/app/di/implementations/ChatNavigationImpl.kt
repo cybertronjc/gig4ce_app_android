@@ -21,6 +21,7 @@ class ChatNavigationImpl @Inject constructor() : BaseNavigationImpl(),
     }
 
     override fun navigateToChatPage(
+        chatType: String,
         otherUserId: String,
         headerId: String,
         otherUserName: String,
@@ -32,6 +33,7 @@ class ChatNavigationImpl @Inject constructor() : BaseNavigationImpl(),
 
         (this.context as MainActivity).getNavController().navigate(
             R.id.chatPageFragment, bundleOf(
+                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to chatType,
                 ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to headerId,
                 ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to otherUserId,
                 ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to otherUserProfilePicture,

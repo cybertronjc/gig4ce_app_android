@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -46,7 +45,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_group_chat.*
 import kotlinx.android.synthetic.main.fragment_group_chat_main.*
 import java.io.File
@@ -57,7 +56,7 @@ class GroupChatFragment : BaseFragment(),
     OnGroupChatMessageClickListener {
 
     private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(this,GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
+        ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
     }
 
     private val appDirectoryFileRef: File by lazy {

@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
@@ -36,7 +37,8 @@ abstract class VideoMessageView(
 ), View.OnClickListener {
 
     //View
-    private lateinit var imageView: ImageView
+    private lateinit var senderNameTV: TextView
+    private lateinit var imageView: GigforceImageView
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
     private lateinit var attachmentNameTV: TextView
@@ -67,9 +69,12 @@ abstract class VideoMessageView(
 
     fun inflate() {
         if (type == MessageFlowType.IN)
-            LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_video_in, this, true)
+            LayoutInflater.from(context)
+                .inflate(R.layout.recycler_item_chat_text_with_video_in, this, true)
         else
-            LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_with_video_out, this, true)
+            LayoutInflater.from(context)
+                .inflate(R.layout.recycler_item_chat_text_with_video_out, this, true)
+
         loadViews()
     }
 
@@ -78,6 +83,7 @@ abstract class VideoMessageView(
     }
 
     fun loadViews() {
+        senderNameTV = this.findViewById(R.id.user_name_tv)
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
@@ -101,6 +107,7 @@ abstract class VideoMessageView(
         when (msg.flowType) {
             "in" -> {
                 receivedStatusIV.gone()
+                senderNameTV.text = msg.senderInfo.name
             }
             "out" -> {
                 receivedStatusIV.visible()
@@ -115,29 +122,20 @@ abstract class VideoMessageView(
             if (downloadedFile != null) {
                 handleVideoDownloaded()
             } else {
-                if (msg.attachmentCurrentlyBeingDownloaded) {
-                    handleDownloadInProgress()
-                } else {
-                    handleVideoNotDownloaded()
-                }
+//                if (msg.attachmentCurrentlyBeingDownloaded) {
+//                    handleDownloadInProgress()
+//                } else {
+//                    handleVideoNotDownloaded()
+//                }
             }
         }
     }
 
     private fun loadThumbnail(msg: ChatMessage) {
         if (msg.thumbnailBitmap != null) {
-
-            Glide.with(context)
-                .load(msg.thumbnailBitmap)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+            imageView.loadImage(msg.thumbnailBitmap!!)
         } else if (msg.thumbnail != null) {
-
-            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
-            Glide.with(context)
-                .load(thumbnailStorageRef)
-                .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+            imageView.loadImageIfUrlElseTryFirebaseStorage(msg.thumbnail!!)
         }
     }
 
@@ -249,7 +247,7 @@ abstract class VideoMessageView(
         }
     }
 
-    private fun downloadAttachment() = GlobalScope.launch{
+    private fun downloadAttachment() = GlobalScope.launch {
 
         this.launch(Dispatchers.Main) {
             handleDownloadInProgress()

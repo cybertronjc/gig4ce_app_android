@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -23,9 +22,9 @@ import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
 class ChatListItem(context: Context?) :
-        RelativeLayout(context),
-        IViewHolder,
-        View.OnClickListener {
+    RelativeLayout(context),
+    IViewHolder,
+    View.OnClickListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
@@ -76,8 +75,8 @@ class ChatListItem(context: Context?) :
 
                 if (chatHeader.unreadCount != 0) {
                     val drawable = TextDrawable.builder().buildRound(
-                            chatHeader.unreadCount.toString(),
-                            ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+                        chatHeader.unreadCount.toString(),
+                        ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
                     unseenMessageCountIV.setImageDrawable(drawable)
                 } else {
@@ -91,9 +90,9 @@ class ChatListItem(context: Context?) :
                         val profilePathRef = storage.reference.child(chatHeader.profilePath)
 
                         Glide.with(context)
-                                .load(profilePathRef)
-                                .placeholder(R.drawable.ic_user)
-                                .into(contextImageView)
+                            .load(profilePathRef)
+                            .placeholder(R.drawable.ic_user)
+                            .into(contextImageView)
                     } else {
 
                         Glide.with(context).load(R.drawable.ic_user).into(contextImageView)
@@ -110,7 +109,8 @@ class ChatListItem(context: Context?) :
                     } else {
 
                         val profilePathRef = storage.reference.child(chatHeader.profilePath)
-                        Glide.with(context).load(profilePathRef).placeholder(R.drawable.ic_group).into(contextImageView)
+                        Glide.with(context).load(profilePathRef).placeholder(R.drawable.ic_group)
+                            .into(contextImageView)
                     }
                 }
 
@@ -135,7 +135,7 @@ class ChatListItem(context: Context?) :
                         txtSubtitle.text = "Image"
                     }
                     else -> {
-                     //   lastMessageType.gone()
+                        //   lastMessageType.gone()
                         txtSubtitle.text = ""
                     }
                 }
@@ -149,10 +149,11 @@ class ChatListItem(context: Context?) :
         dObj?.let {
 
             navigation.navigateToChatPage(
-                    otherUserId = it.profileId,
-                    headerId = it.id,
-                    otherUserName = it.title,
-                    otherUserProfilePicture = it.profilePath
+                chatType = it.chatType,
+                otherUserId = it.profileId,
+                headerId = it.id,
+                otherUserName = it.title,
+                otherUserProfilePicture = it.profilePath
             )
         }
     }

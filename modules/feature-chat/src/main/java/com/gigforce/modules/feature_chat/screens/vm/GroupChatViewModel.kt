@@ -3,7 +3,7 @@ package com.gigforce.modules.feature_chat.screens.vm
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
+import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.util.Log
@@ -12,49 +12,70 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.extensions.getDownloadUrlOrThrow
-import com.gigforce.core.fb.FirebaseUtils
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
-import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
-import com.gigforce.modules.feature_chat.DownloadStarted
-import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
+import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.gigforce.modules.feature_chat.repositories.ChatGroupRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+
+interface GroupChatViewModelOutputs {
+
+    val groupInfo: LiveData<ChatGroup>
+
+    val messages: LiveData<List<ChatMessage>>
+}
+
+interface GroupChatViewModelInputs {
+
+    fun setGroupId(groupId: String)
+
+    fun getGroupInfoAndStartListeningToMessages()
+}
 
 
 class GroupChatViewModel constructor(
         private val chatContactsRepository: ChatContactsRepository,
         private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
 //        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
 //        private val downloadAttachmentService: GeneratePaySlipService = RetrofitFactory.generatePaySlipService()
-) : ViewModel() {
+) : ViewModel(),
+        GroupChatViewModelInputs,
+        GroupChatViewModelOutputs {
 
-    private val uid by lazy { FirebaseAuth.getInstance().uid!! }
+    val outputs: GroupChatViewModelOutputs = this
+    val inputs: GroupChatViewModelInputs = this
+
     private val currentUser by lazy { FirebaseAuth.getInstance().currentUser!! }
     private lateinit var groupId: String
 
     private var groupMessagesListener: ListenerRegistration? = null
     private var groupDetailsListener: ListenerRegistration? = null
     private var groupContactsListener: ListenerRegistration? = null
+    private var userGroupHeaderChangeListener: ListenerRegistration? = null
+
+    private var groupDetails: ChatGroup? = null
+    private var userContacts: List<ContactModel>? = null
+    private var grpMessages: MutableList<ChatMessage>? = null
 
     //Create group
-    fun setGroupId(groupId: String) {
+    override fun setGroupId(groupId: String) {
         this.groupId = groupId
     }
 
@@ -62,8 +83,8 @@ class GroupChatViewModel constructor(
     val createGroup: LiveData<Lce<String>> = _createGroup
 
     fun createGroup(
-        groupName: String,
-        groupMembers: List<ContactModel>
+            groupName: String,
+            groupMembers: List<ContactModel>
     ) = viewModelScope.launch {
         _createGroup.value = Lce.loading()
 
@@ -82,7 +103,7 @@ class GroupChatViewModel constructor(
     val addUsersGroup: LiveData<Lse> = _addUsersGroup
 
     fun addUsersGroup(
-        groupMembers: List<ContactModel>
+            groupMembers: List<ContactModel>
     ) = GlobalScope.launch {
         _addUsersGroup.postValue(Lse.loading())
 
@@ -98,80 +119,127 @@ class GroupChatViewModel constructor(
 
     // Listening to group messages
 
-    private val _chatGroupDetails: MutableLiveData<Lce<ChatGroup>> = MutableLiveData()
-    val chatGroupDetails: LiveData<Lce<ChatGroup>> = _chatGroupDetails
+    /**
+     * -----------------------------------
+     * Getting group details
+     * -----------------------------------
+     */
 
-    private var groupDetails: ChatGroup? = null
-    private var userContacts: List<ContactModel>? = null
-    private var grpMessages: List<GroupMessage>? = null
+    private val _groupInfo: MutableLiveData<ChatGroup> = MutableLiveData()
+    override val groupInfo: LiveData<ChatGroup> = _groupInfo
 
     fun startWatchingGroupDetails() {
-        _chatGroupDetails.value = Lce.loading()
         groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
-            .addSnapshotListener { data, error ->
+                .addSnapshotListener { data, error ->
 
-                if (error != null) {
-                    _chatGroupDetails.value = Lce.error(error.toString())
-                } else if (data != null) {
-                    groupDetails = data.toObject(ChatGroup::class.java)!!.apply {
-                        this.id = data.id
+                    error?.let {
+                        CrashlyticsLogger.e(TAG, "In startWatchingGroupDetails()", it)
                     }
 
-                    if (userContacts != null) {
-                        compareGroupMembersWithContactsAndEmit()
+                    if (data != null) {
+                        groupDetails = data.toObject(ChatGroup::class.java)!!.apply {
+                            this.id = data.id
+                        }
+
+                        if (userContacts != null) {
+                            compareGroupMembersWithContactsAndEmit()
+                        }
                     }
                 }
-            }
 
-        addContactsChangeListener()
+        startContactsChangeListener()
     }
 
-    private fun addContactsChangeListener() {
+    /**
+     * --------------------------
+     * Listeneing for Contact Details Changes
+     * -----------------------------
+     */
+
+    private fun startContactsChangeListener() {
         if (groupContactsListener != null)
             return
 
         groupContactsListener = chatContactsRepository.getUserContacts()
-            .addSnapshotListener { snap, error ->
-                snap?.let {
-                    userContacts = it.documents.map {
-                        it.toObject(ContactModel::class.java)!!.apply {
-                            this.id = it.id
-                        }
+                .addSnapshotListener { snap, error ->
+                    error?.let {
+                        CrashlyticsLogger.e(TAG, "In addContactsChangeListener()", it)
                     }
 
-                    if (groupDetails != null)
-                        compareGroupMembersWithContactsAndEmit()
+                    snap?.let {
+                        userContacts = it.documents.map {
+                            it.toObject(ContactModel::class.java)!!.apply {
+                                this.id = it.id
+                            }
+                        }
 
-                    if (grpMessages != null)
-                        compareGroupMessagesWithContactsAndEmit()
+                        if (groupDetails != null)
+                            compareGroupMembersWithContactsAndEmit()
+
+                        if (grpMessages != null)
+                            compareGroupMessagesWithContactsAndEmit()
+                    }
                 }
-            }
     }
 
-    private val _groupMessages: MutableLiveData<List<GroupMessage>> = MutableLiveData()
-    val groupMessages: LiveData<List<GroupMessage>> = _groupMessages
 
-    fun startListeningForGroupMessages() {
+    /**
+     * -------------------------------------------
+     * Listening For group Messages
+     * -------------------------------------------
+     */
+
+    private val _groupMessages: MutableLiveData<List<ChatMessage>> = MutableLiveData()
+    override val messages: LiveData<List<ChatMessage>> = _groupMessages
+
+
+    override fun getGroupInfoAndStartListeningToMessages() {
+        startWatchingGroupDetails()
+        startWatchingGroupMessages()
+        startWatchingUserGroupHeader()
+        startContactsChangeListener()
+    }
+
+    private fun startWatchingUserGroupHeader() {
+        userGroupHeaderChangeListener = chatGroupRepository
+                .userGroupHeaderRef(groupId)
+                .addSnapshotListener { value, error ->
+
+                    error?.let {
+                        CrashlyticsLogger.e(
+                                TAG,
+                                "Listening to user chat header",
+                                it
+                        )
+                    }
+
+                    val unseenMessageCount = value?.get(ChatHeader.KEY_UNSEEN_MESSAGE_COUNT) ?: 0
+                    if (unseenMessageCount != 0)
+                        setMessagesUnseenCountToZero()
+
+                }
+    }
+
+    private fun startWatchingGroupMessages() {
         groupMessagesListener = chatGroupRepository
-            .groupMessagesRef(groupId)
-            .orderBy("timestamp", Query.Direction.ASCENDING)
-            .addSnapshotListener { value, error ->
+                .groupMessagesRef(groupId)
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener { value, error ->
 
-                if (error != null)
-                    Log.e(TAG, "Error while listening group messages", error)
+                    if (error != null)
+                        Log.e(TAG, "Error while listening group messages", error)
 
-                grpMessages = value?.documents?.map { doc ->
-                    doc.toObject(GroupMessage::class.java)!!.apply {
-                        id = doc.id
+                    grpMessages = value?.documents?.map { doc ->
+                        doc.toObject(ChatMessage::class.java)!!.apply {
+                            id = doc.id
+                            this.chatType = ChatConstants.CHAT_TYPE_GROUP
+                        }
+                    }?.toMutableList()
+
+                    if (userContacts != null) {
+                        compareGroupMessagesWithContactsAndEmit()
                     }
                 }
-
-                if (userContacts != null) {
-                    compareGroupMessagesWithContactsAndEmit()
-                }
-            }
-
-        addContactsChangeListener()
     }
 
 
@@ -188,16 +256,16 @@ class GroupChatViewModel constructor(
                 groupMember.name = ""
             }
         }
-        _chatGroupDetails.value = Lce.content(groupDetails!!)
+        _groupInfo.value = groupDetails!!
     }
 
     private fun compareGroupMessagesWithContactsAndEmit() {
         grpMessages!!.forEach { groupMessage ->
 
-            val matchInContact = userContacts!!.find { groupMessage.senderInfo!!.id == it.uid }
+            val matchInContact = userContacts!!.find { groupMessage.senderInfo.id == it.uid }
 
             if (matchInContact != null) {
-                groupMessage.senderInfo!!.name = if (matchInContact.name.isNullOrBlank()) {
+                groupMessage.senderInfo.name = if (matchInContact.name.isNullOrBlank()) {
                     matchInContact.mobile
                 } else {
                     matchInContact.name ?: ""
@@ -211,9 +279,9 @@ class GroupChatViewModel constructor(
     private var currentUserSenderInfo: UserInfo? = null
     private suspend fun createCurrentUserSenderInfo(): UserInfo {
 
-//        if (currentUserSenderInfo != null)
-//            return currentUserSenderInfo!!
-//
+        if (currentUserSenderInfo != null)
+            return currentUserSenderInfo!!
+
 //        val profile = profileFirebaseRepository.getProfileData()
 //        val profilePic =
 //            if (profile.profileAvatarName.isBlank() || profile.profileAvatarName == "avatar.jpg")
@@ -225,36 +293,36 @@ class GroupChatViewModel constructor(
 //                    .child(profile.profileAvatarName)
 //                    .getDownloadUrlOrThrow().toString()
 //            }
-//
-//        currentUserSenderInfo = UserInfo(id = uid, name = profile.name, profilePic = profilePic ?: "")
-//        return currentUserSenderInfo!!
-
-        throw TODO("to be done yet")
+//        return  UserInfo(id = currentUser.uid, name = profile.name, profilePic = profilePic ?: "")
+        return UserInfo(id = currentUser.uid, name = "name", profilePic = "")
     }
 
     //---------------------------
     // Sending Group messages
     //--------------------------
 
-    private var _sendingMessage = MutableLiveData<GroupMessage>()
-    val sendingMessage: LiveData<GroupMessage> = _sendingMessage
+//    private var _sendingMessage = MutableLiveData<GroupMessage>()
+//    val sendingMessage: LiveData<GroupMessage> = _sendingMessage
 
     fun sendNewText(
-        text: String
+            text: String
     ) = viewModelScope.launch {
 
         try {
-            val message = GroupMessage(
-                id = UUID.randomUUID().toString(),
-                groupHeaderId = groupId,
-                senderInfo = createCurrentUserSenderInfo(),
-                type = ChatConstants.MESSAGE_TYPE_TEXT,
-                content = text,
-                timestamp = Timestamp.now()
+            val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    headerId = groupId,
+                    senderInfo = createCurrentUserSenderInfo(),
+                    type = ChatConstants.MESSAGE_TYPE_TEXT,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    flowType = ChatConstants.FLOW_TYPE_OUT,
+                    content = text,
+                    timestamp = Timestamp.now()
             )
 
-            val groupMembers = groupDetails?.groupMembers ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
-            chatGroupRepository.sendTextMessage(groupId,groupMembers, message)
+            val groupMembers = groupDetails?.groupMembers
+                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
+            chatGroupRepository.sendTextMessage(groupId, groupMembers, message)
         } catch (e: Exception) {
             e.printStackTrace()
             //handle error
@@ -263,41 +331,44 @@ class GroupChatViewModel constructor(
 
     @SuppressLint("NewApi")
     fun sendNewImageMessage(
-        text: String = "",
-        uri: Uri
+            text: String = "",
+            uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
 
             val thumbnail =
-                try {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
-                    } else {
-                        ImageUtils.resizeBitmap(uri.path!!, 96, 96)
+                    try {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                            ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
+                        } else {
+                            ImageUtils.resizeBitmap(uri.path!!, 96, 96)
+                        }
+                    } catch (e: Exception) {
+                        null
                     }
-                } catch (e: Exception) {
-                    null
-                }
 
-            val message = GroupMessage(
-                id = UUID.randomUUID().toString(),
-                groupHeaderId = groupId,
-                senderInfo = createCurrentUserSenderInfo(),
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
-                content = text,
-                timestamp = Timestamp.now(),
-                thumbnailBitmap = thumbnail,
-                attachmentPath = null
+            val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    headerId = groupId,
+                    senderInfo = createCurrentUserSenderInfo(),
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    flowType = ChatConstants.FLOW_TYPE_OUT,
+                    content = text,
+                    timestamp = Timestamp.now(),
+                    thumbnailBitmap = thumbnail,
+                    attachmentPath = null
             )
-            _sendingMessage.postValue(message)
+            grpMessages?.add(message)
+            _groupMessages.postValue(grpMessages)
 
-            val groupMembers = groupDetails?.groupMembers ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
+            val groupMembers = groupDetails?.groupMembers
+                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
             chatGroupRepository.sendNewImageMessage(
-                groupId = groupId,
-                message = message,
-                imageUri = uri,
-                groupMembers = groupMembers
+                    groupId = groupId,
+                    message = message,
+                    imageUri = uri
             )
         } catch (e: Exception) {
             //handle error
@@ -305,24 +376,34 @@ class GroupChatViewModel constructor(
     }
 
     fun sendNewDocumentMessage(
-        text: String = "",
-        fileName: String,
-        uri: Uri
+            text: String = "",
+            fileName: String,
+            uri: Uri
     ) = viewModelScope.launch {
 
         try {
-            val message = GroupMessage(
-                id = UUID.randomUUID().toString(),
-                groupHeaderId = groupId,
-                senderInfo = createCurrentUserSenderInfo(),
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
-                content = text,
-                attachmentName = fileName,
-                timestamp = Timestamp.now()
+            val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    headerId = groupId,
+                    senderInfo = createCurrentUserSenderInfo(),
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    flowType = ChatConstants.FLOW_TYPE_OUT,
+                    content = text,
+                    attachmentName = fileName,
+                    timestamp = Timestamp.now()
             )
+            grpMessages?.add(message)
+            _groupMessages.postValue(grpMessages)
 
-            val groupMembers = groupDetails?.groupMembers ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
-            chatGroupRepository.sendNewDocumentMessage(groupId, groupMembers,message, fileName, uri)
+            val groupMembers = groupDetails?.groupMembers
+                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
+            chatGroupRepository.sendNewDocumentMessage(
+                    groupId,
+                    message,
+                    fileName,
+                    uri
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             //handle error
@@ -330,166 +411,93 @@ class GroupChatViewModel constructor(
     }
 
     fun sendNewVideoMessage(
-        context: Context,
-        text: String = "",
-        videosDirectoryRef: File,
-        videoInfo: VideoInfo,
-        uri: Uri
+            context: Context,
+            text: String = "",
+            videoInfo: VideoInfo,
+            uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
-            val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config,videoInfo.thumbnail.isMutable)
+            val thumbnailForUi =
+                    videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
 
-            val message = GroupMessage(
-                id = UUID.randomUUID().toString(),
-                groupHeaderId = groupId,
-                senderInfo = createCurrentUserSenderInfo(),
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
-                content = text,
-                attachmentName = videoInfo.name,
-                timestamp = Timestamp.now(),
-                videoAttachmentLength = videoInfo.duration,
-                thumbnailBitmap = thumbnailForUi
+            val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    headerId = groupId,
+                    senderInfo = createCurrentUserSenderInfo(),
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    flowType = ChatConstants.FLOW_TYPE_OUT,
+                    content = text,
+                    attachmentName = videoInfo.name,
+                    timestamp = Timestamp.now(),
+                    videoLength = videoInfo.duration,
+                    thumbnailBitmap = thumbnailForUi
             )
-            _sendingMessage.postValue(message)
 
-            val groupMembers = groupDetails?.groupMembers ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
+            grpMessages?.add(message)
+            _groupMessages.postValue(grpMessages)
+
+            val groupMembers = groupDetails?.groupMembers
+                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
             chatGroupRepository.sendNewVideoMessage(
-                context = context.applicationContext,
-                groupId =  groupId,
-                videosDirectoryRef = videosDirectoryRef,
-                videoInfo = videoInfo,
-                uri = uri,
-                message = message,
-                groupMembers = groupMembers
+                    context = context.applicationContext,
+                    groupId = groupId,
+                    videosDirectoryRef = chatLocalDirectoryReferenceManager.videosDirectoryRef,
+                    videoInfo = videoInfo,
+                    uri = uri,
+                    message = message
             )
         } catch (e: Exception) {
             //handle error
         }
     }
 
-    private val _chatAttachmentDownloadState: MutableLiveData<ChatAttachmentDownloadState> =
-        MutableLiveData()
-    val chatAttachmentDownloadState: LiveData<ChatAttachmentDownloadState> =
-        _chatAttachmentDownloadState
+    fun sendLocationMessage(
+            latitude: Double,
+            longitude: Double,
+            physicalAddress: String,
+            mapImageFile: File?
+    ) = GlobalScope.launch(Dispatchers.IO) {
+
+        try {
 
 
-    fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, groupMessage: GroupMessage) =
-        viewModelScope.launch {
-            val downloadLink = groupMessage.attachmentPath ?: return@launch
-
-            if (!appDirectoryFileRef.exists())
-                appDirectoryFileRef.mkdirs()
-
-            _chatAttachmentDownloadState.value = DownloadStarted(position)
-
-            try {
-
-                val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
-                val fileRef = if (groupMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
-                    val imagesDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
-
-                    if (!imagesDirectoryRef.exists())
-                        imagesDirectoryRef.mkdirs()
-
-                    File(imagesDirectoryRef, fileName)
-                } else if (groupMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
-                    val videosDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
-                    if (!videosDirectoryRef.exists())
-                        videosDirectoryRef.mkdirs()
-
-                    File(videosDirectoryRef, fileName)
-                } else if (groupMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
-                    val documentsDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
-
-                    if (!documentsDirectoryRef.exists())
-                        documentsDirectoryRef.mkdirs()
-
-                    File(documentsDirectoryRef, fileName)
-                } else {
-                    throw IllegalArgumentException("other types not supported yet")
-                }
-
-//                val response = downloadAttachmentService.downloadPaySlip(downloadLink)
-//
-//                if (response.isSuccessful) {
-//                    val body = response.body()!!
-//                    FileUtils.writeResponseBodyToDisk(body, fileRef)
-//                    _chatAttachmentDownloadState.value = DownloadCompleted(position)
-//                    _chatAttachmentDownloadState.value = null
-//                } else {
-//                    throw Exception("Unable to download attachment, ${response.message()}")
-//                }
-            } catch (e: Exception) {
-                _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
-                    position,
-                    e.message ?: "Unable to download attachment"
-                )
-                _chatAttachmentDownloadState.value = null
+            val mapImage: Bitmap? = if (mapImageFile != null) {
+                BitmapFactory.decodeFile(mapImageFile.absolutePath)
+            } else {
+                null
             }
+
+            val message = ChatMessage(
+                    id = UUID.randomUUID().toString(),
+                    headerId = groupId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid
+                    ),
+                    receiverInfo = null,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    flowType = ChatConstants.FLOW_TYPE_OUT,
+                    timestamp = Timestamp.now(),
+                    location = GeoPoint(latitude, longitude),
+                    locationPhysicalAddress = physicalAddress,
+                    thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
+            )
+
+            grpMessages?.add(message)
+            _groupMessages.postValue(grpMessages)
+
+            chatGroupRepository.sendLocationMessage(
+                    groupId = groupId,
+                    message = message,
+                    bitmap = mapImage
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+    }
 
-
-    fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, media: GroupMedia) =
-        viewModelScope.launch {
-            val downloadLink = media.attachmentPath ?: return@launch
-
-            if (!appDirectoryFileRef.exists())
-                appDirectoryFileRef.mkdirs()
-
-            _chatAttachmentDownloadState.value = DownloadStarted(position)
-
-            try {
-
-                val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
-                val fileRef = if (media.attachmentType == ChatConstants.ATTACHMENT_TYPE_IMAGE) {
-                    val imagesDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
-
-                    if (!imagesDirectoryRef.exists())
-                        imagesDirectoryRef.mkdirs()
-
-                    File(imagesDirectoryRef, fileName)
-                } else if (media.attachmentType == ChatConstants.ATTACHMENT_TYPE_VIDEO) {
-                    val videosDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
-                    if (!videosDirectoryRef.exists())
-                        videosDirectoryRef.mkdirs()
-
-                    File(videosDirectoryRef, fileName)
-                } else if (media.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
-                    val documentsDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
-
-                    if (!documentsDirectoryRef.exists())
-                        documentsDirectoryRef.mkdirs()
-
-                    File(documentsDirectoryRef, fileName)
-                } else {
-                    throw IllegalArgumentException("other types not supported yet")
-                }
-
-//                val response = downloadAttachmentService.downloadPaySlip(downloadLink)
-//
-//                if (response.isSuccessful) {
-//                    val body = response.body()!!
-//                    FileUtils.writeResponseBodyToDisk(body, fileRef)
-//                    _chatAttachmentDownloadState.value = DownloadCompleted(position)
-//                    _chatAttachmentDownloadState.value = null
-//                } else {
-//                    throw Exception("Unable to dowload attachment, ${response.message()}")
-//                }
-            } catch (e: Exception) {
-                _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
-                    position,
-                    e.message ?: "Unable to download attachment"
-                )
-                _chatAttachmentDownloadState.value = null
-            }
-        }
 
     private val _changeGroupName: MutableLiveData<Lse> = MutableLiveData()
     val changeGroupName: LiveData<Lse> = _changeGroupName
@@ -555,4 +563,6 @@ class GroupChatViewModel constructor(
     companion object {
         const val TAG: String = "GroupChatVM"
     }
+
+
 }

@@ -20,52 +20,6 @@ abstract class BaseChatRepository constructor(
         private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 ) : BaseFirestoreDBRepository() {
 
-    suspend fun uploadChatAttachment(fileNameWithExtension: String, image: Uri) =
-            suspendCoroutine<String> { cont ->
-                val filePathOnServer = firebaseStorage.reference
-                        .child("chat_attachments")
-                        .child(fileNameWithExtension)
-
-                filePathOnServer
-                        .putFile(image)
-                        .addOnSuccessListener {
-                            filePathOnServer
-                                    .downloadUrl
-                                    .addOnSuccessListener {
-                                        cont.resume(it.toString())
-
-                                    }.addOnFailureListener {
-                                        cont.resumeWithException(it)
-                                    }
-                        }
-                        .addOnFailureListener {
-                            cont.resumeWithException(it)
-                        }
-            }
-
-    suspend fun uploadChatAttachment(fileNameWithExtension: String, data: ByteArray) =
-            suspendCoroutine<String> { cont ->
-                val filePathOnServer = firebaseStorage.reference
-                        .child("chat_attachments")
-                        .child(fileNameWithExtension)
-
-                filePathOnServer
-                        .putBytes(data)
-                        .addOnSuccessListener {
-                            filePathOnServer
-                                    .downloadUrl
-                                    .addOnSuccessListener {
-                                        cont.resume(it.toString())
-
-                                    }.addOnFailureListener {
-                                        cont.resumeWithException(it)
-                                    }
-                        }
-                        .addOnFailureListener {
-                            cont.resumeWithException(it)
-                        }
-            }
-
     private fun prepareUniqueImageName(fileNameWithExtension: String): String {
         val timeStamp = SimpleDateFormat(
                 "yyyyMMdd_HHmmss",
@@ -186,8 +140,6 @@ abstract class BaseChatRepository constructor(
                     cont.resumeWithException(it)
                 }
     }
-
-
 
 
 }

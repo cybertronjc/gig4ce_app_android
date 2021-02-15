@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,7 +27,7 @@ import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.app.utils.ViewFullScreenVideoDialogFragment
-import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list.*
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list_main.*
 import java.io.File

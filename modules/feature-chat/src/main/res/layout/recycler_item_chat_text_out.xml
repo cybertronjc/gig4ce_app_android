@@ -9,6 +9,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:layout_marginEnd="@dimen/chat_item_margin"
+        android:maxWidth="@dimen/chat_item_max_length"
         app:cardBackgroundColor="@color/lipstick_2"
         app:cardCornerRadius="@dimen/chat_item_corner_radius"
         app:cardElevation="@dimen/chat_item_card_elevation">
@@ -17,6 +18,7 @@
             android:id="@+id/ll_msgContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/chat_item_max_length"
             android:padding="10dp">
 
             <TextView

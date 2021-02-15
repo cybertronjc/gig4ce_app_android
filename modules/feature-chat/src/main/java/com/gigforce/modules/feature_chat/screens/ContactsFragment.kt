@@ -26,40 +26,41 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
-import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
+import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
-import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import javax.inject.Inject
 
 
 class ContactsFragment : DialogFragment(),
-        PopupMenu.OnMenuItemClickListener,
-        OnContactClickListener {
+    PopupMenu.OnMenuItemClickListener,
+    OnContactClickListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
 
     private val viewModelNew: NewContactsViewModel by lazy {
         ViewModelProvider(
-                this,
-                NewContactsViewModelFactory(requireContext())
+            this,
+            NewContactsViewModelFactory(requireContext())
         ).get(NewContactsViewModel::class.java)
     }
 
     private val chatGroupViewModel: GroupChatViewModel by lazy {
         ViewModelProvider(
-                this,
-                GroupChatViewModelFactory(requireContext())
+            this,
+            GroupChatViewModelFactory(requireContext())
         ).get(GroupChatViewModel::class.java)
     }
 
@@ -120,8 +121,8 @@ class ContactsFragment : DialogFragment(),
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_contacts, container, false)
 
 
@@ -147,7 +148,8 @@ class ContactsFragment : DialogFragment(),
         askPermissionView = view.findViewById(R.id.askContactsPermission)
         contactsPermissionLayout = view.findViewById(R.id.contactsPermissionLayout)
 
-        refreshingUserHorizontalProgressBar = view.findViewById(R.id.processing_contacts_horizontal_progressbar)
+        refreshingUserHorizontalProgressBar =
+            view.findViewById(R.id.processing_contacts_horizontal_progressbar)
         refreshingUserCenterProgressBar = view.findViewById(R.id.processing_contacts_progressbar)
 
         toolbarOverflowMenu = view.findViewById(R.id.imageView41)
@@ -185,9 +187,9 @@ class ContactsFragment : DialogFragment(),
     private fun setListeners() {
 
         contactRecyclerView.layoutManager = LinearLayoutManager(
-                requireContext(),
-                RecyclerView.VERTICAL,
-                false
+            requireContext(),
+            RecyclerView.VERTICAL,
+            false
         )
         contactRecyclerView.adapter = contactsAdapter
 
@@ -223,23 +225,23 @@ class ContactsFragment : DialogFragment(),
                 layout.addView(groupNameEt)
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Enter a group name")
-                        .setTitle("Group name")
-                        .setView(layout)
-                        .setPositiveButton("Okay") { _, _ ->
+                    .setMessage("Enter a group name")
+                    .setTitle("Group name")
+                    .setView(layout)
+                    .setPositiveButton("Okay") { _, _ ->
 
-                            if (groupNameEt.length() == 0) {
-                                showToast("Please enter a group name")
-                            } else {
+                        if (groupNameEt.length() == 0) {
+                            showToast("Please enter a group name")
+                        } else {
 //                            chatGroupViewModel.createGroup(
 //                                groupName = groupNameEt.text.toString().capitalize(),
 //                                groupMembers = contactsAdapter.getSelectedContact()
 //                            )
-                            }
                         }
-                        .setNegativeButton("Cancel") { _, _ ->
+                    }
+                    .setNegativeButton("Cancel") { _, _ ->
 
-                        }.show()
+                    }.show()
             }
         }
 
@@ -251,7 +253,10 @@ class ContactsFragment : DialogFragment(),
             popUp.show()
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressCallback
+        )
     }
 
     private fun setClickListeners() {
@@ -302,23 +307,23 @@ class ContactsFragment : DialogFragment(),
                 layout.addView(groupNameEt)
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("Enter a group name")
-                        .setTitle("Group name")
-                        .setView(layout)
-                        .setPositiveButton("Okay") { _, _ ->
+                    .setMessage("Enter a group name")
+                    .setTitle("Group name")
+                    .setView(layout)
+                    .setPositiveButton("Okay") { _, _ ->
 
-                            if (groupNameEt.length() == 0) {
-                                showToast("Please enter a group name")
-                            } else {
-                                chatGroupViewModel.createGroup(
-                                        groupName = groupNameEt.text.toString().capitalize(),
-                                        groupMembers = contactsAdapter.getSelectedContact()
-                                )
-                            }
+                        if (groupNameEt.length() == 0) {
+                            showToast("Please enter a group name")
+                        } else {
+                            chatGroupViewModel.createGroup(
+                                groupName = groupNameEt.text.toString().capitalize(),
+                                groupMembers = contactsAdapter.getSelectedContact()
+                            )
                         }
-                        .setNegativeButton("Cancel") { _, _ ->
+                    }
+                    .setNegativeButton("Cancel") { _, _ ->
 
-                        }.show()
+                    }.show()
             }
         }
 
@@ -342,16 +347,16 @@ class ContactsFragment : DialogFragment(),
 
     private fun initViewModel() {
         viewModelNew.contacts
-                .observe(viewLifecycleOwner, Observer {
-                    showContactsOnView(it)
-                })
+            .observe(viewLifecycleOwner, Observer {
+                showContactsOnView(it)
+            })
 
         chatGroupViewModel
-                .createGroup
-                .observe(viewLifecycleOwner, Observer {
-                    it ?: return@Observer
+            .createGroup
+            .observe(viewLifecycleOwner, Observer {
+                it ?: return@Observer
 
-                    //todo shift group creation to a diff model
+                //todo shift group creation to a diff model
 
 //                    when (it) {
 //                        Lce.Loading -> UtilMethods.showLoading(requireContext())
@@ -376,7 +381,7 @@ class ContactsFragment : DialogFragment(),
 //                                    .show()
 //                        }
 //                    }
-                })
+            })
     }
 
     private fun showContactsAsSyncing() {
@@ -403,10 +408,10 @@ class ContactsFragment : DialogFragment(),
         refreshingUserCenterProgressBar.gone()
 
         MaterialAlertDialogBuilder(requireContext())
-                .setMessage(error)
-                .setTitle("Unable to sync contacts")
-                .setPositiveButton("Okay") { _, _ -> }
-                .show()
+            .setMessage(error)
+            .setTitle("Unable to sync contacts")
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
     }
 
     private fun showContactsOnView(it: List<ContactModel>) {
@@ -427,15 +432,15 @@ class ContactsFragment : DialogFragment(),
         // check for permissions
 
         if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        android.Manifest.permission.READ_CONTACTS
-                )
-                != PackageManager.PERMISSION_GRANTED
+                requireContext(),
+                android.Manifest.permission.READ_CONTACTS
+            )
+            != PackageManager.PERMISSION_GRANTED
         ) {
             Log.v(TAG, "Permission Required. Requesting Permission")
             requestPermissions(
-                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-                    REQUEST_CONTACTS_PERMISSION
+                arrayOf(android.Manifest.permission.READ_CONTACTS),
+                REQUEST_CONTACTS_PERMISSION
             )
             showPermissionLayout()
         } else {
@@ -444,9 +449,9 @@ class ContactsFragment : DialogFragment(),
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -469,9 +474,9 @@ class ContactsFragment : DialogFragment(),
 
             if (permissionSnackBar == null) {
                 permissionSnackBar = Snackbar.make(
-                        rootContactsLayout,
-                        "Grant contacts permission to sync contacts",
-                        Snackbar.LENGTH_INDEFINITE
+                    rootContactsLayout,
+                    "Grant contacts permission to sync contacts",
+                    Snackbar.LENGTH_INDEFINITE
                 )
                 permissionSnackBar?.setAction("Okay") {
                     startAppSettingsPage()
@@ -504,10 +509,11 @@ class ContactsFragment : DialogFragment(),
 //            findNavController().navigate(R.id.chatScreenFragment, bundle)
 
             navigation.navigateToChatPage(
-                    otherUserId = contact.uid!!,
-                    headerId = contact.headerId ?: "",
-                    otherUserName = contact.name ?: "",
-                    otherUserProfilePicture = contact.imagePathInStorage ?: ""
+                otherUserId = contact.uid!!,
+                headerId = contact.headerId ?: "",
+                otherUserName = contact.name ?: "",
+                otherUserProfilePicture = contact.imagePathInStorage ?: "",
+                chatType = ChatConstants.CHAT_TYPE_USER
             )
         }
     }
@@ -521,13 +527,13 @@ class ContactsFragment : DialogFragment(),
         super.onCreate(savedInstanceState)
 
         (this.requireContext().applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
+            .provideChatModule()
+            .inject(this)
         navigation.context = requireContext()
 
         setStyle(
-                STYLE_NORMAL,
-                android.R.style.Theme_Light_NoTitleBar_Fullscreen
+            STYLE_NORMAL,
+            android.R.style.Theme_Light_NoTitleBar_Fullscreen
         )
     }
 
@@ -560,12 +566,12 @@ class ContactsFragment : DialogFragment(),
 
 
         fun launchForSelectingContact(
-                fm: FragmentManager,
-                onContactsSelectedListener: OnContactsSelectedListener
+            fm: FragmentManager,
+            onContactsSelectedListener: OnContactsSelectedListener
         ) {
             ContactsFragment().apply {
                 arguments = bundleOf(
-                        INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
+                    INTENT_EXTRA_RETURN_SELECTED_RESULTS to true
                 )
                 this.onContactSelectedListener = onContactsSelectedListener
                 show(fm, TAG)

@@ -74,11 +74,11 @@ abstract class DocumentMessageView(
             if (fileHasBeenDownloaded) {
                 progressbar.gone()
             } else {
-                if (msg.attachmentCurrentlyBeingDownloaded) {
-                    progressbar.visible()
-                } else {
-                    progressbar.gone()
-                }
+//                if (msg.attachmentCurrentlyBeingDownloaded) {
+//                    progressbar.visible()
+//                } else {
+//                    progressbar.gone()
+//                }
             }
         }
 
@@ -182,11 +182,8 @@ abstract class DocumentMessageView(
     }
 
     private fun handleDownloadedCompleted() {
-
         progressbar.gone()
-
     }
-
 }
 
 

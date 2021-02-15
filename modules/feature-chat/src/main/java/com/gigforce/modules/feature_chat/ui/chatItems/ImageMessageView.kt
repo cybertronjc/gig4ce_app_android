@@ -107,8 +107,6 @@ abstract class ImageMessageView(
                     .placeholder(getCircularProgressDrawable())
                     .into(imageView)
         }
-
-
     }
 
     private fun handleDownloadInProgress() {
@@ -131,11 +129,11 @@ abstract class ImageMessageView(
             } else {
                 loadThumbnail(msg)
 
-                if (msg.attachmentCurrentlyBeingDownloaded) {
-                    handleDownloadInProgress()
-                } else {
-                    handleImageNotDownloaded()
-                }
+//                if (msg.attachmentCurrentlyBeingDownloaded) {
+//                    handleDownloadInProgress()
+//                } else {
+//                    handleImageNotDownloaded()
+//                }
             }
         }
     }

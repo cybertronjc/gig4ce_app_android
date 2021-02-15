@@ -207,7 +207,7 @@ class InLocationMessageView(
 class OutLocationMessageView(
         context: Context,
         attrs: AttributeSet?
-) : VideoMessageView(
+) : LocationMessageView(
         MessageFlowType.OUT,
         MessageType.ONE_TO_ONE_MESSAGE,
         context,

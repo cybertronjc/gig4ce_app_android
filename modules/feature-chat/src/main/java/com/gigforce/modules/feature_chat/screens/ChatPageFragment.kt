@@ -28,13 +28,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_ui.rv.VerticalItemDecorator
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.PermissionUtils
 import com.gigforce.core.StringConstants
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -43,9 +45,11 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.VideoInfo
-import com.gigforce.modules.feature_chat.screens.vm.ChatPage2ViewModel
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
+import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -63,12 +67,17 @@ class ChatPageFragment : Fragment(),
     private lateinit var chatFooter: ChatFooter
     private lateinit var toolbarTitle: TextView
     private lateinit var toolbarOverflowBtn: ImageView
-    private lateinit var toolbarUserImageIV: ImageView
+    private lateinit var toolbarUserImageIV: GigforceImageView
     private lateinit var lastSeenTV: TextView
-    private lateinit var userBlockedOrRemovedLayout : TextView
+    private lateinit var userBlockedOrRemovedLayout: TextView
 
     private val viewModel: ChatPageViewModel by viewModels()
-    private val viewModel2: ChatPage2ViewModel by viewModels()
+    private val groupChatViewModel: GroupChatViewModel by lazy {
+        ViewModelProvider(
+                this,
+                GroupChatViewModelFactory(requireContext())
+        ).get(GroupChatViewModel::class.java)
+    }
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
         CameraAndGalleryIntegrator(this)
@@ -96,12 +105,19 @@ class ChatPageFragment : Fragment(),
                     .build()
         }
 
-    //Other User Info
-    private lateinit var chatHeaderId: String
-    private lateinit var otherUserId: String
-    private lateinit var username: String
-    private lateinit var mobileNumber: String
-    private lateinit var imageUrl: String
+    //-------------------------------------
+    //One-to-one and group chat common info
+    //-------------------------------------
+    private var chatType: String = ChatConstants.CHAT_TYPE_USER
+    private var chatHeaderOrGroupId: String? = null
+
+    //-------------------------------------
+    //Info specific to one to one chat
+    //-------------------------------------
+    private var receiverUserId: String? = null
+    private var receiverName: String? = null
+    private var receiverMobileNumber: String? = null
+    private var receiverPhotoUrl: String? = null
     private var fromClientActivation: Boolean = false
 
     private var selectedOperation = -1
@@ -118,11 +134,86 @@ class ChatPageFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(arguments, savedInstanceState)
+        validateIfRequiredDataIsAvailable()
 
         findViews(view)
         init()
-        subscribeViewModel()
         manageNewMessageToContact()
+        checkForChatTypeAndSubscribeToRespectiveViewModel()
+    }
+
+    private fun validateIfRequiredDataIsAvailable() {
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
+            if (receiverUserId == null) {
+
+                CrashlyticsLogger.e(
+                        TAG,
+                        "Checking for neccessary data at startup",
+                        IllegalArgumentException("Chat type is one-one chat but receiverUserId was null")
+                )
+                throw IllegalArgumentException("Chat type is one-one chat but receiverUserId was null")
+            }
+
+        } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+            if (chatHeaderOrGroupId == null) {
+                FirebaseCrashlytics.getInstance().apply {
+                    recordException(IllegalArgumentException("Chat type is group chat but chatHeaderOrGroupId was null"))
+                }
+
+                throw IllegalArgumentException("ChatPageFragment : for chat-type group you will need to pass group id ")
+            }
+        }
+    }
+
+    private fun checkForChatTypeAndSubscribeToRespectiveViewModel() {
+
+        if (chatType == ChatConstants.CHAT_TYPE_USER) {
+            viewModel.setRequiredDataAndStartListeningToMessages(
+                    otherUserId = receiverUserId!!,
+                    headerId = chatHeaderOrGroupId,
+                    otherUserName = receiverName,
+                    otherUserProfilePicture = receiverPhotoUrl
+            )
+            subscribeOneToOneViewModel()
+        } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+            groupChatViewModel.setGroupId(chatHeaderOrGroupId!!)
+            subscribeChatGroupViewModel()
+        }
+    }
+
+    private fun subscribeChatGroupViewModel() {
+        groupChatViewModel
+                .outputs
+                .groupInfo
+                .observe(viewLifecycleOwner, Observer {
+
+                    showGroupDetails(it)
+                })
+
+        groupChatViewModel
+                .outputs
+                .messages
+                .observe(viewLifecycleOwner, Observer {
+
+                    chatRecyclerView.collection = it
+                    chatRecyclerView.smoothScrollToLastPosition()
+                })
+
+        groupChatViewModel
+                .inputs
+                .getGroupInfoAndStartListeningToMessages()
+    }
+
+    private fun showGroupDetails(group: ChatGroup) {
+        toolbarTitle.text = group.name
+
+        if (group.groupAvatarThumbnail.isNotBlank()) {
+            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail)
+        } else if (group.groupAvatar.isNotBlank()) {
+            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail)
+        } else {
+            toolbarUserImageIV.loadImage(R.drawable.ic_group)
+        }
     }
 
     private fun findViews(view: View) {
@@ -133,7 +224,6 @@ class ChatPageFragment : Fragment(),
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
         chatRecyclerView.addItemDecoration(VerticalItemDecorator(20))
 
-
         toolbarUserImageIV = view.findViewById(R.id.user_image_iv)
 
         lastSeenTV = view.findViewById(R.id.tv_lastSeenValue)
@@ -142,44 +232,38 @@ class ChatPageFragment : Fragment(),
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+            chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)
+                    ?: throw IllegalArgumentException("please provide INTENT_EXTRA_CHAT_TYPE in intent extra")
             fromClientActivation = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-            imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
-            username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
-            chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
-            mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
+            receiverPhotoUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
+            receiverName = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
+            chatHeaderOrGroupId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
+            receiverUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)
+            receiverMobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
         }
 
         savedInstanceState?.let {
+            chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)!!
             fromClientActivation = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
-            imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
-            username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
-            chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
-            mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
+            receiverPhotoUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
+            receiverName = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
+            chatHeaderOrGroupId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
+            receiverUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
+            receiverMobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
 
         }
-
-        viewModel.setRequiredDataAndStartListeningToMessages(
-                otherUserId = otherUserId,
-                headerId = chatHeaderId,
-                otherUserName = username,
-                otherUserProfilePicture = imageUrl
-        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.apply {
-            /*
-            putString(INTENT_EXTRA_OTHER_USER_IMAGE, imageUrl)
-            putString(INTENT_EXTRA_OTHER_USER_NAME, username)
-            putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderId)
-            putString(INTENT_EXTRA_FOR_USER_ID, forUserId)
-            putString(INTENT_EXTRA_OTHER_USER_ID, otherUserId)
+            putString(INTENT_EXTRA_OTHER_USER_IMAGE, receiverPhotoUrl)
+            putString(INTENT_EXTRA_OTHER_USER_NAME, receiverName)
+            putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId)
+            putString(INTENT_EXTRA_CHAT_TYPE, chatType)
+            putString(INTENT_EXTRA_OTHER_USER_ID, receiverUserId)
             putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, fromClientActivation)
-            putString(StringConstants.MOBILE_NUMBER.value, mobileNumber)
-             */
+            putString(StringConstants.MOBILE_NUMBER.value, receiverMobileNumber)
         }
     }
 
@@ -188,7 +272,7 @@ class ChatPageFragment : Fragment(),
         initListeners()
     }
 
-    private fun subscribeViewModel() {
+    private fun subscribeOneToOneViewModel() {
 
         viewModel.otherUserInfo
                 .observe(viewLifecycleOwner, Observer {
@@ -200,32 +284,17 @@ class ChatPageFragment : Fragment(),
                     }
 
                     if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
-
-                        val thumbnailRef =
-                                firebaseStorage.reference.child(it.imageThumbnailPathInStorage!!)
-                        Glide.with(requireContext())
-                                .load(thumbnailRef)
-                                .placeholder(R.drawable.ic_user)
-                                .into(toolbarUserImageIV)
+                        toolbarUserImageIV.loadImageFromFirebase(it.imageThumbnailPathInStorage!!)
                     } else if (!it.imagePathInStorage.isNullOrBlank()) {
-
-                        val thumbnailRef = firebaseStorage.reference.child(it.imagePathInStorage!!)
-                        Glide.with(requireContext())
-                                .load(thumbnailRef)
-                                .placeholder(R.drawable.ic_user)
-                                .into(toolbarUserImageIV)
+                        toolbarUserImageIV.loadImageFromFirebase(it.imagePathInStorage!!)
                     } else {
-
-                        Glide.with(requireContext())
-                                .load(R.drawable.ic_user)
-                                .placeholder(R.drawable.ic_user)
-                                .into(toolbarUserImageIV)
-
+                        toolbarUserImageIV.loadImage(R.drawable.ic_user)
                     }
                 })
 
         viewModel.messages
                 .observe(viewLifecycleOwner, Observer {
+
                     chatRecyclerView.collection = it
                     chatRecyclerView.smoothScrollToLastPosition()
                 })
@@ -233,7 +302,7 @@ class ChatPageFragment : Fragment(),
         viewModel.headerInfo
                 .observe(viewLifecycleOwner, Observer {
 
-                    if(it.isBlocked){
+                    if (it.isBlocked) {
                         userBlockedOrRemovedLayout.visible()
                         userBlockedOrRemovedLayout.text = "You've blocked this contact"
                         chatFooter.gone()
@@ -258,29 +327,6 @@ class ChatPageFragment : Fragment(),
                         }
                     }
                 })
-    }
-
-    private fun openDocument(file: File) {
-        if (file.exists()) {
-            Intent(Intent.ACTION_VIEW).apply {
-//                setDataAndType(
-//                    FileProvider.getUriForFile(
-//                        requireContext(),
-//                        BuildConfig.APPLICATION_ID + ".provider",
-//                        file
-//                    ), "application/pdf"
-//                )
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                try {
-                    startActivity(this)
-                } catch (e: Exception) {
-                    showErrorDialog("Unable to open")
-                }
-            }
-        } else {
-            showErrorDialog("file_doesnt_exist")
-        }
     }
 
     private fun showErrorDialog(error: String) {
@@ -457,8 +503,13 @@ class ChatPageFragment : Fragment(),
         chatFooter.btn_send.setOnClickListener {
             if (validateNewMessageTask()) {
                 val message = chatFooter.et_message.text.toString()
-                viewModel.sendNewText(message)
                 chatFooter.et_message.setText("")
+
+
+                if (chatType == ChatConstants.CHAT_TYPE_USER)
+                    viewModel.sendNewText(message)
+                else
+                    groupChatViewModel.sendNewText(message)
             }
         }
     }
@@ -480,7 +531,8 @@ class ChatPageFragment : Fragment(),
         if (requestCode == PermissionUtils.reqCodePerm
                 && PermissionUtils.permissionsGrantedCheck(grantResults)
         ) {
-            toolbarTitle.text = checkForContact(mobileNumber, username)
+            toolbarTitle.text =
+                    checkForContact(receiverMobileNumber, receiverName!!) //todo check it
         }
 
 
@@ -495,13 +547,13 @@ class ChatPageFragment : Fragment(),
 
             if (allPermsGranted) {
                 if (selectedOperation == ChatConstants.OPERATION_PICK_IMAGE) {
-//                    pickImage()
+                    pickImage()
                     selectedOperation = -1
                 } else if (selectedOperation == ChatConstants.OPERATION_PICK_VIDEO) {
-//                    pickVideo()
+                    pickVideo()
                     selectedOperation = -1
                 } else if (selectedOperation == ChatConstants.OPERATION_PICK_DOCUMENT) {
-//                    pickDocument()
+                    pickDocument()
                     selectedOperation = -1
                 }
             } else
@@ -517,7 +569,8 @@ class ChatPageFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            PermissionUtils.reqCodePerm -> toolbarTitle.text = checkForContact(mobileNumber, username)
+            PermissionUtils.reqCodePerm -> toolbarTitle.text =
+                    checkForContact(receiverMobileNumber, receiverName!!)
             REQUEST_PICK_DOCUMENT -> if (resultCode == Activity.RESULT_OK) {
                 // Get the Uri of the selected file
                 val uri = data?.data ?: return
@@ -526,13 +579,20 @@ class ChatPageFragment : Fragment(),
 
                 val displayName: String? = getDisplayName(uriString, uri, myFile)
 
+                if (chatType == ChatConstants.CHAT_TYPE_USER)
+                    viewModel.sendNewDocumentMessage(
+                            requireContext(),
+                            "",
+                            displayName,
+                            uri
+                    )
+                else
+                    groupChatViewModel.sendNewDocumentMessage(
+                            text = "",
+                            fileName = displayName ?: "Document",
+                            uri = uri
+                    )
 
-                viewModel.sendNewDocumentMessage(
-                        requireContext(),
-                        "",
-                        displayName,
-                        uri
-                )
 
                 Log.d(TAG, displayName + "")
                 Log.d(TAG, uriString)
@@ -540,13 +600,17 @@ class ChatPageFragment : Fragment(),
             CameraAndGalleryIntegrator.REQUEST_CAPTURE_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_PICK_IMAGE,
             CameraAndGalleryIntegrator.REQUEST_CROP -> {
-                cameraAndGalleryIntegrator.parseResults(
-                        requestCode,
-                        resultCode,
-                        data,
-                        imageCropOptions,
-                        this@ChatPageFragment
-                )
+
+                if (resultCode == Activity.RESULT_OK) {
+
+                    cameraAndGalleryIntegrator.parseResults(
+                            requestCode,
+                            resultCode,
+                            data,
+                            imageCropOptions,
+                            this@ChatPageFragment
+                    )
+                }
             }
             REQUEST_PICK_VIDEO -> {
                 val uri = data?.data ?: return
@@ -555,27 +619,55 @@ class ChatPageFragment : Fragment(),
                 val myFile = File(uri.path)
 
                 val videoInfo = getVideoInfo(uriString, uri, myFile)
-                viewModel.sendNewVideoMessage(
-                        requireContext(),
-                        "",
-                        videoInfo,
-                        uri
-                )
+
+                if (chatType == ChatConstants.CHAT_TYPE_USER)
+                    viewModel.sendNewVideoMessage(
+                            requireContext(),
+                            "",
+                            videoInfo,
+                            uri
+                    )
+                else
+                    groupChatViewModel.sendNewVideoMessage(
+                            context = requireContext(),
+                            text = "",
+                            videoInfo = videoInfo,
+                            uri = uri
+                    )
             }
             REQUEST_GET_LOCATION -> {
-                val latitude = data!!.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LATITUDE, 0.0)
-                val longitude = data.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LONGITUDE, 0.0)
-                val address = data.getStringExtra(CaptureLocationActivity.INTENT_EXTRA_PHYSICAL_ADDRESS)
-                        ?: ""
-                val imageFile: File? = data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
-
-                viewModel.sendLocationMessage(
-                        latitude,
-                        longitude,
-                        address,
-                        imageFile
-                )
+                if (resultCode == Activity.RESULT_OK) {
+                    sendLocationMessage(data)
+                }
             }
+        }
+    }
+
+    private fun sendLocationMessage(data: Intent?) {
+        val latitude =
+                data!!.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LATITUDE, 0.0)
+        val longitude =
+                data.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LONGITUDE, 0.0)
+        val address =
+                data.getStringExtra(CaptureLocationActivity.INTENT_EXTRA_PHYSICAL_ADDRESS)
+                        ?: ""
+        val imageFile: File? =
+                data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
+
+        if (chatType == ChatConstants.CHAT_TYPE_USER)
+            viewModel.sendLocationMessage(
+                    latitude,
+                    longitude,
+                    address,
+                    imageFile
+            )
+        else {
+            groupChatViewModel.sendLocationMessage(
+                    latitude,
+                    longitude,
+                    address,
+                    imageFile
+            )
         }
     }
 
@@ -731,30 +823,6 @@ class ChatPageFragment : Fragment(),
     } //
 
 
-    companion object {
-        const val TAG = "ChatFragment"
-
-        const val INTENT_EXTRA_CHAT_HEADER_ID = "chat_header_id"
-        const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
-        const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
-        const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
-
-        private const val REQUEST_PICK_DOCUMENT = 202
-        private const val REQUEST_PICK_IMAGE = 203
-        private const val REQUEST_PICK_VIDEO = 204
-        private const val REQUEST_GET_LOCATION = 207
-        private const val REQUEST_STORAGE_PERMISSION = 205
-
-        private const val DOC = "application/msword"
-        private const val DOCX =
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        private const val IMAGE = "image/*"
-        private const val AUDIO = "audio/*"
-        private const val TEXT = "text/*"
-        private const val PDF = "application/pdf"
-        private const val XLS = "application/vnd.ms-excel"
-    }
-
     //
     //-----------------------------
     // Camera , Gallery and Image crop callbacks
@@ -769,9 +837,39 @@ class ChatPageFragment : Fragment(),
     }
 
     override fun imageResult(uri: Uri) {
-        viewModel.sendNewImageMessage(
-                text = "",
-                uri = uri
-        )
+
+        if (chatType == ChatConstants.CHAT_TYPE_USER)
+            viewModel.sendNewImageMessage(
+                    text = "",
+                    uri = uri
+            )
+        else {
+            groupChatViewModel.sendNewImageMessage(
+                    text = "",
+                    uri = uri
+            )
+        }
+    }
+
+    companion object {
+        const val TAG = "ChatFragment"
+
+        const val INTENT_EXTRA_CHAT_TYPE = "chat_type"
+        const val INTENT_EXTRA_CHAT_HEADER_ID = "chat_header_id"
+        const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
+        const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
+        const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
+
+        private const val REQUEST_PICK_DOCUMENT = 202
+        private const val REQUEST_PICK_IMAGE = 203
+        private const val REQUEST_PICK_VIDEO = 204
+        private const val REQUEST_GET_LOCATION = 207
+        private const val REQUEST_STORAGE_PERMISSION = 205
+
+        private const val DOC = "application/msword"
+        private const val DOCX =
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        private const val PDF = "application/pdf"
+        private const val XLS = "application/vnd.ms-excel"
     }
 }

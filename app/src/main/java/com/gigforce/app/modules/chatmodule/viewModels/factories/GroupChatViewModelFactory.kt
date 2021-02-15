@@ -1,11 +1,10 @@
-package com.vinners.cmi.ui.activity
+package com.gigforce.app.modules.chatmodule.viewModels.factories
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.app.modules.chatmodule.SyncPref
 import com.gigforce.app.modules.chatmodule.repository.ChatContactsRepository
-import com.gigforce.app.modules.chatmodule.viewModels.ContactsViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.utils.network.RetrofitFactory
 import com.google.firebase.storage.FirebaseStorage

@@ -14,12 +14,14 @@
         android:layout_gravity="left"
         app:cardBackgroundColor="#d6d6d6"
         app:cardElevation="0dp"
+
         app:cardCornerRadius="@dimen/chat_item_corner_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ll_msgContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/chat_item_max_length"
             android:padding="10dp">
 
             <TextView
