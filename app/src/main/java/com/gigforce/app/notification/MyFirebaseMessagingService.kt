@@ -114,12 +114,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val dataBundle = data.toBundle()
         dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
 
-        return NavDeepLinkBuilder(applicationContext)
-                .setGraph(R.navigation.nav_graph)
-                .setDestination(R.id.gigAttendancePageFragment)
-                .setGraph(R.navigation.nav_graph)
-                .setArguments(dataBundle)
-                .createPendingIntent()
+//        return NavDeepLinkBuilder(applicationContext)
+//                .setGraph(R.navigation.nav_graph)
+//                .setDestination(R.id.gigAttendancePageFragment)
+//                .setGraph(R.navigation.nav_graph)
+//                .setArguments(dataBundle)
+//                .createPendingIntent()
 
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
