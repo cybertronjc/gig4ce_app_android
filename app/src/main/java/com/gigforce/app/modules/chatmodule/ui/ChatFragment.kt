@@ -14,10 +14,8 @@ import android.os.Environment
 import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.util.Log
-import android.view.LayoutInflater
+import android.view.*
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -326,7 +324,9 @@ class ChatFragment : BaseFragment(),
     }
 
     private fun manageMenu(view: View) {
-        val popUp = PopupMenu(requireContext(), view)
+        val themeWrapper = ContextThemeWrapper(requireContext(), R.style.PopUpMenuWithOffset)
+        val popUp = PopupMenu(themeWrapper, view)
+        popUp.gravity = Gravity.END
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat)
         popUp.menu.findItem(R.id.action_block).title =

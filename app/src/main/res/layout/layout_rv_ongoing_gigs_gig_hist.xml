@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:paddingEnd="@dimen/size_16"
         android:clipToPadding="false"
+        android:scrollbars="none"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_on_going_gigs_gig_hist" />
 

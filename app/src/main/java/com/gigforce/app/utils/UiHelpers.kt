@@ -22,10 +22,10 @@ fun getScreenWidth(ctx: Activity): Size {
 }
 
 fun openPopupMenu(
-    view: View,
-    menuId: Int,
-    click: PopupMenu.OnMenuItemClickListener,
-    activity: Activity?
+        view: View,
+        menuId: Int,
+        click: PopupMenu.OnMenuItemClickListener,
+        activity: Activity?
 ) {
     val popUp = PopupMenu(activity?.applicationContext, view)
     popUp.setOnMenuItemClickListener(click)
@@ -36,36 +36,36 @@ fun openPopupMenu(
 
 fun getViewHeight(view: View): Int {
     val wm =
-        view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val display = wm.defaultDisplay
     val deviceWidth: Int
     val size = Point()
     display.getSize(size)
     deviceWidth = size.x
     val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-        deviceWidth,
-        View.MeasureSpec.AT_MOST
+            deviceWidth,
+            View.MeasureSpec.AT_MOST
     )
     val heightMeasureSpec =
-        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
     view.measure(widthMeasureSpec, heightMeasureSpec)
     return view.measuredHeight //        view.getMeasuredWidth();
 }
 
 fun getViewWidth(view: View): Int {
     val wm =
-        view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val display = wm.defaultDisplay
     val deviceWidth: Int
     val size = Point()
     display.getSize(size)
     deviceWidth = size.x
     val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-        deviceWidth,
-        View.MeasureSpec.AT_MOST
+            deviceWidth,
+            View.MeasureSpec.AT_MOST
     )
     val heightMeasureSpec =
-        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
     view.measure(widthMeasureSpec, heightMeasureSpec)
     return view.measuredWidth //        view.getMeasuredWidth();
 }
@@ -111,7 +111,7 @@ fun addAsteriskHint(normalTextColor: String, color: String, vararg ets: EditText
     for (et in ets) {
         val hint = et.hint.toString()
         et.hint =
-            Html.fromHtml("<font color=$normalTextColor>$hint </font><font color=$color> *</font>")
+                Html.fromHtml("<font color=$normalTextColor>$hint </font><font color=$color> *</font>")
     }
 }
 

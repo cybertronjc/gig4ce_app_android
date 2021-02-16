@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.ActionMode
 import android.view.View.OnClickListener
+import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatEditText
 import com.gigforce.app.R
 
@@ -100,5 +101,12 @@ class OtpEditText(context: Context, attrs: AttributeSet) : AppCompatEditText(con
         this.mNumChars = numChars;
         invalidate()
 
+    }
+
+    fun setUnderLineColor(@ColorRes res: Int) {
+        mLinesPaint = Paint(paint).apply {
+            this.strokeWidth = mLineStroke
+            this.color = resources.getColor(res)
+        }
     }
 }

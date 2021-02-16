@@ -29,7 +29,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="22dp"
-                android:src="@drawable/ic_warning" />
+                  app:srcCompat="@drawable/ic_warning" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,9 +79,9 @@
             android:background="@drawable/edittext_border_lipstick"
             android:inputType="textMultiLine"
             android:minHeight="76dp"
+            android:padding="5dp"
             android:textColor="#313131"
             android:textSize="14sp"
-            android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tellAboutGigLabel" />
 
@@ -105,7 +105,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="5dp"
-                android:src="@drawable/ic_add_pink"
+                  app:srcCompat="@drawable/ic_add_pink"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -113,17 +113,17 @@
                 android:id="@+id/addAttachmentTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Add Attachment"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:textColor="@color/lipstick"
-                android:textSize="12sp"
                 android:clickable="true"
                 android:focusable="true"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 android:paddingLeft="12dp"
+                android:paddingTop="4dp"
                 android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:text="Add Attachment"
+                android:textColor="@color/lipstick"
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@id/addIcon"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,10 +131,9 @@
                 android:id="@+id/attachments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/addIcon"/>
-
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/addIcon" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -162,6 +161,7 @@
             android:background="@drawable/gradient_button"
             android:fontFamily="@font/lato_bold"
             android:gravity="center"
+            android:minHeight="@dimen/size_36"
             android:text="SUBMIT"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/attachmentContainer" />

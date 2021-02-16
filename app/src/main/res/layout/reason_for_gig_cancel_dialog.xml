@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/caution_text"
         android:layout_width="336dp"
         android:layout_height="56dp"
-        android:drawableStart="@drawable/ic_warning"
         android:background="#e94b81"
-        android:paddingStart="16dp"
+        android:drawableStart="@drawable/ic_warning"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:text="Cancelling out on a gig!"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text="Cancelling out on a gig!"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-    
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/message_text"
+        style="@style/Widget.MaterialComponents.TextView"
         android:layout_width="298dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:text="Please let us know your reason, to mark 'not working'?"
-        app:layout_constraintTop_toBottomOf="@id/caution_text"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.TextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/caution_text" />
 
     <RadioGroup
         android:id="@+id/cancel_options"
         android:layout_width="288dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/message_text"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/message_text"
         app:layout_constraintStart_toStartOf="@id/message_text"
-        app:layout_constraintEnd_toEndOf="@id/message_text">
+        app:layout_constraintTop_toBottomOf="@id/message_text">
+
         <com.google.android.material.radiobutton.MaterialRadioButton
+            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:text="Option 1" />
+
         <com.google.android.material.radiobutton.MaterialRadioButton
+            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:text="Option 2" />
+
         <com.google.android.material.radiobutton.MaterialRadioButton
+            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:text="Option 3" />
+
         <com.google.android.material.radiobutton.MaterialRadioButton
+            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.CompoundButton.RadioButton"
             android:text="Option 4" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/cancel_button"
         android:layout_width="120dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/rect_button_outline"
         android:fontFamily="@font/lato_bold"
+
         android:gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="32dp"
+        android:minHeight="@dimen/size_36"
         android:text="CANCEL"
         android:textColor="@color/colorLightAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -85,15 +91,16 @@
     <TextView
         android:id="@+id/submit_button"
         android:layout_width="120dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/bg_delete_dialog_yes"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
+        android:minHeight="@dimen/size_36"
         android:text="SUBMIT"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

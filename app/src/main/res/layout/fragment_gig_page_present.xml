@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_gig_type"
+                      app:srcCompat="@drawable/bg_gig_type"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -113,8 +113,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:button="@drawable/sl_favorite_24_dp"
-                    app:buttonTint="@null"
                     android:buttonTint="@null"
+                    app:buttonTint="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV" />
 
@@ -233,7 +233,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="18dp"
-                            android:src="@drawable/ic_check_in_green"
+                              app:srcCompat="@drawable/ic_check_in_green"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -270,7 +270,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginEnd="18dp"
-                            android:src="@drawable/ic_checkout"
+                              app:srcCompat="@drawable/ic_checkout"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -343,13 +343,12 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="14dp"
                     android:fontFamily="@font/lato"
+                    android:minHeight="@dimen/size_36"
                     android:paddingTop="@dimen/size_10"
-                    android:textColor="@color/lipstick"
                     android:paddingBottom="@dimen/size_9"
                     android:text="@string/download_id_card"
                     android:textAllCaps="false"
-
-
+                    android:textColor="@color/lipstick"
                     android:textSize="@dimen/font_14"
                     app:layout_constraintTop_toBottomOf="@id/presentFutureGigNoteTV"
                     app:strokeColor="@color/lipstick" />
@@ -370,7 +369,7 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="19dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_calendar"
+                      app:srcCompat="@drawable/ic_calendar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -440,7 +439,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginStart="18dp"
-                            android:src="@drawable/ic_check_in_green"
+                              app:srcCompat="@drawable/ic_check_in_green"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -477,7 +476,7 @@
                             android:layout_width="24dp"
                             android:layout_height="28dp"
                             android:layout_marginEnd="18dp"
-                            android:src="@drawable/ic_checkout"
+                              app:srcCompat="@drawable/ic_checkout"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -602,9 +601,9 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="0"
+                        android:text="Payment as per the contract."
                         android:textColor="@color/black"
                         android:textSize="12sp"
-                        android:text="Payment as per the contract."
                         android:visibility="visible"
                         app:layout_constraintTop_toBottomOf="@id/payment_details_label" />
 
@@ -624,8 +623,6 @@
                         tools:text="Invoice Generated : 16 Apr 2020" />
 
 
-
-
                     <TextView
                         android:id="@+id/processingLabel"
                         android:layout_width="wrap_content"
@@ -634,12 +631,12 @@
                         android:layout_marginRight="19dp"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="0"
-                        tools:text="Processing"
                         android:textColor="@color/yellow"
                         android:textSize="12sp"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/payment_per_contract_label" />
+                        app:layout_constraintTop_toBottomOf="@id/payment_per_contract_label"
+                        tools:text="Processing" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -704,14 +701,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="23dp"
-                            android:background="@color/black"
                             android:layout_marginTop="12dp"
                             android:layout_marginEnd="16dp"
+                            android:background="@color/black"
                             android:fontFamily="@font/lato_italic"
-                            android:visibility="gone"
                             android:letterSpacing="0"
                             android:textColor="@color/warm_grey"
                             android:textSize="14sp"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/userFeedbackRatingBar"
                             tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
@@ -785,9 +782,9 @@
                             android:layout_marginEnd="16dp"
                             android:fontFamily="@font/lato_italic"
                             android:letterSpacing="0"
-                            android:visibility="gone"
                             android:textColor="@color/warm_grey"
                             android:textSize="14sp"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/userReceivedRatingBar"
                             tools:text="“Nunc justo eros, vehicula vel vehicula ut, lacinia a erat.Nam fringilla ero “" />
@@ -834,9 +831,9 @@
                     android:fontFamily="@font/lato"
                     android:paddingTop="@dimen/size_10"
                     android:paddingBottom="@dimen/size_9"
-                    android:textColor="@color/lipstick"
                     android:text="@string/download_id_card"
                     android:textAllCaps="false"
+                    android:textColor="@color/lipstick"
                     android:textSize="@dimen/font_14"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -851,10 +848,10 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_group_pink"
-
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bt_download_id_gig_past_gigs" />
+
+                    app:layout_constraintTop_toBottomOf="@id/bt_download_id_gig_past_gigs"
+                    app:srcCompat="@drawable/ic_group_pink" />
 
                 <TextView
                     android:id="@+id/contactPersonLabel"
@@ -904,7 +901,7 @@
                         android:layout_height="36dp"
                         android:scaleX="0.4"
                         android:scaleY="0.4"
-                        android:src="@drawable/fui_ic_phone_white_24dp"
+                          app:srcCompat="@drawable/fui_ic_phone_white_24dp"
                         android:tint="@color/lipstick" />
 
                 </androidx.cardview.widget.CardView>
@@ -918,9 +915,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="1dp"
-                    android:visibility="gone"
                     android:scaleX="0.9"
                     android:scaleY="0.9"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@color/light_pink"
                     app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -931,7 +928,7 @@
                         android:layout_height="36dp"
                         android:scaleX="0.4"
                         android:scaleY="0.4"
-                        android:src="@drawable/ic_chat" />
+                          app:srcCompat="@drawable/ic_chat" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -975,7 +972,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:src="@drawable/ic_calendar"
+                      app:srcCompat="@drawable/ic_calendar"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsLabelTV" />
 
@@ -1000,9 +997,9 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_clock_pink"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/durationTextTV" />
+                    app:layout_constraintTop_toBottomOf="@id/durationTextTV"
+                    app:srcCompat="@drawable/ic_clock_pink" />
 
                 <TextView
                     android:id="@+id/shiftTV"
@@ -1025,9 +1022,9 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/shiftTV" />
+                    app:layout_constraintTop_toBottomOf="@id/shiftTV"
+                    app:srcCompat="@drawable/ic_location" />
 
                 <TextView
                     android:id="@+id/addressTV"
@@ -1053,9 +1050,9 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_credit_card"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/addressTV" />
+                    app:layout_constraintTop_toBottomOf="@id/addressTV"
+                    app:srcCompat="@drawable/ic_credit_card" />
 
                 <TextView
                     android:id="@+id/wageTV"
@@ -1110,8 +1107,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gigHighlightsLabel" />
 
@@ -1119,15 +1116,15 @@
                     android:id="@+id/gigHighlightsSeeMoreTV"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_marginStart="35dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:letterSpacing="0"
-                    android:gravity="center_vertical"
                     android:fontFamily="@font/lato"
-                    android:layout_marginStart="35dp"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0"
+                    android:text="@string/plus_see_more"
                     android:textColor="@color/colorPrimary"
-                    app:layout_constraintTop_toBottomOf="@id/gigHighlightsContainer"
-                    android:text="@string/plus_see_more"/>
+                    app:layout_constraintTop_toBottomOf="@id/gigHighlightsContainer" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1168,8 +1165,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/gigRequirementsLabel" />
 
@@ -1177,15 +1174,15 @@
                     android:id="@+id/gigRequirementsSeeMoreTV"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_marginStart="35dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:letterSpacing="0"
-                    android:gravity="center_vertical"
                     android:fontFamily="@font/lato"
-                    android:layout_marginStart="35dp"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0"
+                    android:text="@string/plus_see_more"
                     android:textColor="@color/colorPrimary"
-                    app:layout_constraintTop_toBottomOf="@id/gigRequirementsContainer"
-                    android:text="@string/plus_see_more"/>
+                    app:layout_constraintTop_toBottomOf="@id/gigRequirementsContainer" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -1255,9 +1252,9 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    app:srcCompat="@drawable/ic_location"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/locationImageScrollView" />
+                    app:layout_constraintTop_toBottomOf="@id/locationImageScrollView"
+                    app:srcCompat="@drawable/ic_location" />
 
                 <TextView
                     android:id="@+id/fullMapAddresTV"
@@ -1265,11 +1262,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Address "
-                    android:clickable="true"
-                    android:focusable="true"
                     android:textColor="#d9000000"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1335,7 +1332,7 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_contact_us"
+                      app:srcCompat="@drawable/ic_contact_us"
                     app:layout_constraintLeft_toLeftOf="@id/contactUsLayout"
                     app:layout_constraintTop_toTopOf="@id/contactUsLayout" />
 
@@ -1357,7 +1354,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@id/contactUsLayout"
                     app:layout_constraintEnd_toEndOf="@id/contactUsLayout"
                     app:layout_constraintTop_toTopOf="@id/contactUsLayout" />
@@ -1387,7 +1384,7 @@
                     android:layout_height="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_referal"
+                      app:srcCompat="@drawable/ic_referal"
                     app:layout_constraintLeft_toLeftOf="@id/provide_feedback"
                     app:layout_constraintTop_toTopOf="@id/provide_feedback" />
 
@@ -1409,7 +1406,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="24dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                      app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
                     app:layout_constraintBottom_toBottomOf="@id/provide_feedback"
                     app:layout_constraintEnd_toEndOf="@id/provide_feedback"
                     app:layout_constraintTop_toTopOf="@id/provide_feedback" />
@@ -1449,15 +1446,15 @@
         android:visibility="gone"
         app:border_radius="8dp"
         app:inner_color="@color/lipstick"
-        app:text_size="16sp"
-        app:text_style="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noteTV"
         app:outer_color="@color/light_pink"
         app:slider_height="60dp"
         app:slider_icon="@drawable/ic_arrow_forward_white"
         app:slider_icon_color="@color/white"
-        app:text="Check - in" />
+        app:text="Check - in"
+        app:text_size="16sp"
+        app:text_style="bold" />
 
 
 </LinearLayout>

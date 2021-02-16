@@ -6,6 +6,8 @@
     android:id="@+id/learningToolbarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="@dimen/size_16"
+    android:paddingBottom="@dimen/size_16"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
@@ -14,22 +16,23 @@
         android:id="@+id/learningBackButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="@dimen/size_16"
         android:clickable="true"
+
         android:focusable="true"
         android:scaleX="0.85"
         android:scaleY="0.85"
-        android:src="@drawable/ic_arrow_back_black"
+          app:srcCompat="@drawable/ic_arrow_back_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/tv1HS1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginStart="@dimen/size_16"
+
         android:fontFamily="@font/lato"
         android:letterSpacing="0.01"
         android:text="Learning &amp; Assessment"
@@ -37,7 +40,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView30"
         app:layout_constraintStart_toEndOf="@+id/learningBackButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
     <ImageView
@@ -45,7 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_homescreen_chat"
+        android:visibility="gone"
+          app:srcCompat="@drawable/ic_homescreen_chat"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toStartOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="@+id/cardView" />
@@ -54,8 +59,9 @@
         android:id="@+id/imageView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_landinghome_search"
+          app:srcCompat="@drawable/ic_landinghome_search"
         app:layout_constraintBottom_toBottomOf="@+id/chat_icon_iv"
         app:layout_constraintEnd_toStartOf="@+id/chat_icon_iv"
         app:layout_constraintTop_toTopOf="@+id/chat_icon_iv" />
@@ -66,7 +72,9 @@
         android:layout_height="42dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
+        android:visibility="gone"
         app:cardCornerRadius="21dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -76,9 +84,9 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder_user"
+
+              app:srcCompat="@drawable/placeholder_user"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

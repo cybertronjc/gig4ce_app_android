@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/size_16"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_close"
+          app:srcCompat="@drawable/ic_close"
         android:tint="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/size_16"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_share_24"
+          app:srcCompat="@drawable/ic_baseline_share_24"
         android:tint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -201,7 +201,7 @@
                     android:layout_width="@dimen/size_24"
                     android:layout_height="19dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/giglogo"
+                      app:srcCompat="@drawable/giglogo"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="@dimen/size_4" />
             </FrameLayout>

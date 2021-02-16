@@ -44,9 +44,10 @@
     <TextView
         android:id="@+id/cancel_button"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="26dp"
+        android:minHeight="@dimen/size_36"
         android:layout_marginBottom="32dp"
         android:background="@drawable/rect_button_outline"
         android:fontFamily="@font/lato_bold"
@@ -67,9 +68,9 @@
     <TextView
         android:id="@+id/submit_button"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
-
+        android:minHeight="@dimen/size_36"
         android:background="@drawable/rect_button_gradient"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"

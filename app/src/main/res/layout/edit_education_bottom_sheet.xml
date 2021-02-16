@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_delete" />
+                      app:srcCompat="@drawable/ic_delete" />
 
             </LinearLayout>
 
@@ -176,6 +176,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
+                    android:minHeight="@dimen/size_36"
                     android:text="@string/cancel_text"
                     android:textColor="@color/gray_color"
                     app:strokeColor="@color/gray_color" />
@@ -188,6 +189,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
+                    android:minHeight="@dimen/size_36"
                     android:text="@string/save_text"
                     android:textColor="@color/colorPrimary"
                     app:strokeColor="@color/colorPrimary" />

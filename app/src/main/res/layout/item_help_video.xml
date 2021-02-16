@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="3dp"
             android:elevation="5dp"
-            android:src="@drawable/ic_time_help"
+              app:srcCompat="@drawable/ic_time_help"
             app:layout_constraintBottom_toBottomOf="@id/time_text"
             app:layout_constraintRight_toLeftOf="@+id/time_text"
             app:layout_constraintTop_toTopOf="@+id/time_text" />
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="5dp"
-            android:src="@drawable/ic_baseline_play_circle_outline_24"
+              app:srcCompat="@drawable/ic_baseline_play_circle_outline_24"
             app:layout_constraintBottom_toBottomOf="@id/help_first_card_img"
             app:layout_constraintLeft_toLeftOf="@id/help_first_card_img"
             app:layout_constraintRight_toRightOf="@id/help_first_card_img"

@@ -136,7 +136,9 @@ class CalendarHomeScreen : BaseFragment(),
             }
         })
         arrCalendarDependent =
-            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+        arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()
@@ -149,8 +151,8 @@ class CalendarHomeScreen : BaseFragment(),
             if(currentAppVersion.contains("Dev")){
                 currentAppVersion = currentAppVersion?.split("-")[0]
             }
-            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
-            var serverAPPVersion =
+            val appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            val serverAPPVersion =
                 latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
                 FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")

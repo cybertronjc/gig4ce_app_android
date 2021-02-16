@@ -56,6 +56,10 @@ data class ProfileData(
     @set:PropertyName("enrolledBy")
     var enrolledBy: EnrollmentInfo? = null,
 
+    @get:PropertyName("enrolledByLink")
+    @set:PropertyName("enrolledByLink")
+    var enrolledByLink:Boolean = false,
+
     @get:PropertyName("firstLogin")
     @set:PropertyName("firstLogin")
     var firstLogin: Timestamp? = null,
@@ -76,8 +80,8 @@ data class ProfileData(
     @set:PropertyName("profilePicThumbnail")
     var profileAvatarThumbnail: String = "",
 
-    @get:PropertyName("created_on")
-    @set:PropertyName("created_on")
+    @get:PropertyName("createdOn")
+    @set:PropertyName("createdOn")
     var createdOn: Timestamp = Timestamp.now(),
 
     @get:PropertyName("lastLoginDetails")

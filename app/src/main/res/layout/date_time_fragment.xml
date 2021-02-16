@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:tint="@color/black"
-            android:src="@drawable/ic_baseline_arrow_back_24"
+              app:srcCompat="@drawable/ic_baseline_arrow_back_24"
             />
 
         <TextView
@@ -74,7 +74,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView49"
         app:layout_constraintTop_toTopOf="@+id/textView49"
-        android:src="@drawable/ic_calendar_black" />
+          app:srcCompat="@drawable/ic_calendar_black" />
 
     <TextView
         android:id="@+id/textView50"
@@ -148,7 +148,7 @@
         android:layout_height="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_calendar_black"
+          app:srcCompat="@drawable/ic_calendar_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView55" />
 

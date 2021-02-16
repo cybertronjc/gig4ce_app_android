@@ -146,10 +146,10 @@
                     android:layout_height="@dimen/size_252"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    app:sriv_right_bottom_corner_radius="@dimen/size_4"
-                    app:sriv_left_top_corner_radius="@dimen/size_4"
                     app:sriv_left_bottom_corner_radius="@dimen/size_4"
-                    app:sriv_right_top_corner_radius="@dimen/size_4"/>
+                    app:sriv_left_top_corner_radius="@dimen/size_4"
+                    app:sriv_right_bottom_corner_radius="@dimen/size_4"
+                    app:sriv_right_top_corner_radius="@dimen/size_4" />
 
                 <ImageView
                     android:id="@+id/scenrio_placeholder"
@@ -233,7 +233,7 @@
         android:layout_marginBottom="@dimen/size_32"
         android:background="@drawable/bg_next_assess_frag"
         android:letterSpacing="0"
-        android:minHeight="@dimen/size_48"
+        android:minHeight="@dimen/size_36"
         android:paddingTop="@dimen/size_15"
         android:paddingBottom="@dimen/size_16"
         android:text="@string/next"
@@ -283,7 +283,7 @@
         android:layout_width="@dimen/size_24"
         android:layout_height="@dimen/size_24"
         android:alpha="0.6"
-        android:src="@drawable/ic_baseline_arrow_downward_24"
+          app:srcCompat="@drawable/ic_baseline_arrow_downward_24"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bt_next_assess_frag"
         app:layout_constraintEnd_toEndOf="parent"

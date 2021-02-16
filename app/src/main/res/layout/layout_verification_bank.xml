@@ -155,8 +155,9 @@
     <Button
         android:id="@+id/button_veri_bank_save"
         android:layout_width="156dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:minHeight="@dimen/size_36"
         android:layout_marginTop="61.5dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/colorAccent"
@@ -170,9 +171,10 @@
     <Button
         android:id="@+id/button_veri_bank_back"
         android:layout_width="156dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="61.5dp"
+        android:minHeight="@dimen/size_36"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@android:color/white"
         android:text="@string/back_text"

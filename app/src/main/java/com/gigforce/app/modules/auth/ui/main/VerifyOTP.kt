@@ -14,6 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import kotlinx.android.synthetic.main.otp_verification.*
@@ -28,13 +30,14 @@ class VerifyOTP : BaseFragment() {
     }
 
 
+    private var countDownTimer: CountDownTimer? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
     lateinit var viewModel: LoginViewModel
     var otpresentcounter = 0;
     private val OTP_NUMBER =
-        Pattern.compile("[0-9]{6}\$")
+            Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +49,9 @@ class VerifyOTP : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
@@ -90,12 +93,13 @@ class VerifyOTP : BaseFragment() {
 
     private fun initializeViews() {
         counterStart();
+        txt_otp.setUnderLineColor(R.color.otp_underline_color)
         var str = resources.getString(R.string.otp_reenter_mobile)
         val spannableString1 = SpannableString(str)
         spannableString1.setSpan(UnderlineSpan(), 0, str.length, 0)
         reenter_mobile.text = spannableString1
         otp_label?.text =
-            "One Time Password (OTP) has been sent to your mobile " + mobile_number + ". Please enter the same here to login."
+                getString(R.string.we_have_sent_otp) + " " + mobile_number + ".\n" + getString(R.string.please_enter_it_below)
     }
 
     private fun observer() {
@@ -103,6 +107,9 @@ class VerifyOTP : BaseFragment() {
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
+
+                countDownTimer?.cancel()
+
 //                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }
         })
@@ -113,7 +120,7 @@ class VerifyOTP : BaseFragment() {
         cvotpwrong?.visibility = View.INVISIBLE;
         txt_otp.setOnClickListener {
             cvotpwrong.visibility = View.INVISIBLE
-            textView26.visibility = View.VISIBLE
+//            textView26.visibility = View.VISIBLE
         }
         verify_otp_button?.setOnClickListener {
             val otpIn = txt_otp?.text
@@ -145,16 +152,20 @@ class VerifyOTP : BaseFragment() {
             }
         }
         reenter_mobile.setOnClickListener {
-            if (!timerStarted) {
+//            if (!timerStarted) {
                 navigateToLoginScreen()
-            }
+//            }
         }
         txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
+        iv_back_otp_fragment.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun navigateToLoginScreen() {
+        countDownTimer?.cancel()
         val bundle = bundleOf(
-            "mobileno" to mobile_number
+                "mobileno" to mobile_number
 
         )
         popAllBackStates()
@@ -165,7 +176,7 @@ class VerifyOTP : BaseFragment() {
     private fun counterStart() {
         showResendOTPMessage(false)
 
-        object : CountDownTimer(30000, 1000) {
+        countDownTimer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 var time = (millisUntilFinished / 1000)
                 var timeStr: String = "00:"
@@ -175,29 +186,29 @@ class VerifyOTP : BaseFragment() {
                     timeStr = timeStr + time
                 }
                 timer_tv?.text = timeStr
-                if (reenter_mobile != null)
-                    reenter_mobile.visibility = View.INVISIBLE
+//                if (reenter_mobile != null)
+//                    reenter_mobile.visibility = View.INVISIBLE
             }
 
             override fun onFinish() {
                 showResendOTPMessage(true)
-                if (reenter_mobile != null)
-                    reenter_mobile.visibility = View.VISIBLE
+//                if (reenter_mobile != null)
+//                    reenter_mobile.visibility = View.VISIBLE
             }
         }.start()
     }
 
     fun showResendOTPMessage(isShow: Boolean) {
-        if (otpnotcorrect == null) return
+
         if (isShow) {
-            otpnotcorrect.visibility = View.VISIBLE
             resend_otp.visibility = View.VISIBLE
-            setTextViewColor(timer_tv, R.color.time_up_color)
+            timer_tv.gone()
+//            setTextViewColor(timer_tv, R.color.time_up_color)
             timerStarted = false
         } else {
-            otpnotcorrect.visibility = View.INVISIBLE
-            resend_otp.visibility = View.INVISIBLE
-            setTextViewColor(timer_tv, R.color.timer_color)
+            resend_otp.visibility = View.GONE
+            timer_tv.visible()
+//            setTextViewColor(timer_tv, R.color.timer_color)
             timerStarted = true
         }
     }
@@ -205,10 +216,10 @@ class VerifyOTP : BaseFragment() {
     private fun showWrongOTPLayout(show: Boolean) {
         if (show) {
             cvotpwrong.visibility = View.VISIBLE
-            textView26.visibility = View.INVISIBLE
+
         } else {
             cvotpwrong.visibility = View.INVISIBLE
-            textView26.visibility = View.VISIBLE
+
         }
     }
 
@@ -218,5 +229,12 @@ class VerifyOTP : BaseFragment() {
             navigateToLoginScreen()
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (countDownTimer != null) {
+            countDownTimer?.cancel()
+        }
     }
 }

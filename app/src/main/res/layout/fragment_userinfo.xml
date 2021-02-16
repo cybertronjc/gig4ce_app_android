@@ -10,10 +10,10 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="#E42D2D"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="#E42D2D" >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/img_obprofile"
@@ -27,34 +27,42 @@
         android:id="@+id/recviewUserInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout1">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:paddingBottom="5dp"
-            android:baselineAligned="true">
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <EditText android:layout_weight="1" android:id="@+id/onboarding_chat_edit_text"
-                android:layout_height="45dp" android:layout_width="0dip">
-                <requestFocus></requestFocus>
-            </EditText>
-            <Button android:text="Send"
-                android:layout_height="45dp" android:layout_width="125dp"
-                android:id="@+id/onboarding_chat_send_btn"></Button>
-        </LinearLayout>
+        <EditText
+            android:id="@+id/onboarding_chat_edit_text"
+            android:layout_width="0dip"
+            android:layout_height="45dp"
+            android:layout_weight="1">
+
+            <requestFocus></requestFocus>
+        </EditText>
+
+        <Button
+            android:id="@+id/onboarding_chat_send_btn"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
+            android:text="Send"></Button>
+    </LinearLayout>
 
     <!--<ScrollView
         android:layout_width="match_parent"

@@ -62,13 +62,12 @@ class GigActivationFragment : BaseFragment(),
         playerViewHeight = (getScreenWidth(requireActivity()).height * 45) / 100
         layoutParams.height = playerViewHeight
         cv_player_view.layoutParams = layoutParams
-
-        checkForBackPress()
         viewModel =
             ViewModelProvider(
                 this,
                 SavedStateViewModelFactory(requireActivity().application, this)
             ).get(GigActivationViewModel::class.java)
+        checkForBackPress()
         setupRecycler()
         initObservers()
         initClicks()
@@ -197,8 +196,7 @@ class GigActivationFragment : BaseFragment(),
             if (!jpApplication.activation[i].isDone) {
                 adapter.setImageDrawable(
                     jpApplication.activation[i].type!!,
-                    ContextCompat.getDrawable(requireActivity(), R.drawable.ic_status_pending)!!
-                    ,
+                    ContextCompat.getDrawable(requireActivity(), R.drawable.ic_status_pending)!!,
                     false
                 )
             } else {

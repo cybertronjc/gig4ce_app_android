@@ -515,7 +515,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     }
 
     private fun populateStateAndCitySpinner() {
-        val states = viewModel.states.toMutableList().apply {
+        val states = viewModel.states.sortedWith(compareBy { it.name }).toMutableList().apply {
             add(0, State(name = "Select State"))
         }
 
@@ -525,8 +525,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         state_spinner.adapter = adapter
         permanent_state_spinner.adapter = adapter
 
-        val cities = viewModel.cities.toMutableList().apply {
-            add(0, City(name = "Select district"))
+        val cities = viewModel.cities.sortedWith(compareBy { it.name }).toMutableList().apply {
+            add(0, City(name = "Select District"))
         }
         val cityAdapter: ArrayAdapter<City> =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)

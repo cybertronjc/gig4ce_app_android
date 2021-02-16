@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_gig_type"
+                      app:srcCompat="@drawable/bg_gig_type"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -115,7 +115,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_star"
+                      app:srcCompat="@drawable/ic_star"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
@@ -127,7 +127,7 @@
                     android:layout_height="16dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_star"
+                      app:srcCompat="@drawable/ic_star"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toStartOf="@id/company_rating_tv"
@@ -193,7 +193,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator31" />
 
@@ -251,7 +251,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator32" />
 
@@ -308,7 +308,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator33" />
 
@@ -352,7 +352,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator34" />
 
@@ -396,7 +396,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator35" />
 

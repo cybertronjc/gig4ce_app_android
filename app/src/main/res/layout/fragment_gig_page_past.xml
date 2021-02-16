@@ -42,7 +42,7 @@
                 android:id="@+id/gigBannerImageIV"
                 android:layout_width="match_parent"
                 android:layout_height="225dp"
-                android:src="@drawable/bg_gig_type"
+                  app:srcCompat="@drawable/bg_gig_type"
                 app:layout_constraintTop_toTopOf="parent" />
 
 

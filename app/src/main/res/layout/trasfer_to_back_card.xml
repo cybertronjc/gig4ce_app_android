@@ -13,7 +13,7 @@
             android:id="@+id/trasfer_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/wallet"
+              app:srcCompat="@drawable/wallet"
             android:layout_marginStart="28dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

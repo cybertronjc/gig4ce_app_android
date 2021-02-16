@@ -30,6 +30,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <!--
@@ -83,7 +84,7 @@
         <service
             android:name=".modules.chatmodule.service.FetchContactsService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
 
         <meta-data
@@ -113,7 +114,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".utils.DocViewerActivity"

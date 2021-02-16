@@ -22,6 +22,11 @@ class ProfileViewModel : ViewModel() {
     var profileID: String = ""
     var profileFirebaseRepository = ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
+    private val _ambassadorProfilePicUpdate: MutableLiveData<String> = MutableLiveData<String>()
+    val ambassadorProfilePicUpdate = _ambassadorProfilePicUpdate;
+    private val _errorObs: MutableLiveData<String> = MutableLiveData<String>()
+    val errorObs = _errorObs;
+
     var Tags: MutableLiveData<TagData> = MutableLiveData<TagData>()
     lateinit var uid: String
     var query: Query? = null
@@ -39,16 +44,22 @@ class ProfileViewModel : ViewModel() {
                         return
                     }
 
-                    if (value!!.data == null) {
-                        profileFirebaseRepository.createEmptyProfile()
-                    } else {
-                        Log.d("ProfileViewModel", value!!.data.toString())
-                        val obj = value!!.toObject(ProfileData::class.java)
-                        obj?.id = value.id;
-                        userProfileData.value = obj
-                        Log.d("ProfileViewModel", userProfileData.toString())
-                    }
-                }))
+                if (value!!.data == null) {
+                    profileFirebaseRepository.createEmptyProfile()
+                } else {
+                    Log.d("ProfileViewModel", value!!.data.toString())
+                    val obj = value!!.toObject(ProfileData::class.java)
+                    obj?.id = value.id;
+                    userProfileData.value = obj
+                    Log.d("ProfileViewModel", userProfileData.toString())
+
+                    // if user logged in via link
+//                    isonboardingdone
+//                    profileAvatarName
+//                    isProfileUpdatedtoAmbassador
+
+                }
+            }))
 
 
         return userProfileData
@@ -144,6 +155,10 @@ class ProfileViewModel : ViewModel() {
         profileFirebaseRepository.setProfileAvatarName(profileAvatarName)
     }
 
+    fun setProfileThumbnailName(thumbnailName: String) {
+        profileFirebaseRepository.setProfileThumbNail(thumbnailName)
+    }
+
     fun removeProfileExperience(experience: Experience) {
         profileFirebaseRepository.removeData(experience)
     }
@@ -208,6 +223,29 @@ class ProfileViewModel : ViewModel() {
             _profile.value = Lce.content(profile)
         } catch (e: Exception) {
             _profile.value = Lce.error(e.message ?: "Unable to fetch")
+        }
+
+    }
+
+    fun updateInAmbassadorEnrollment(imageName: String,thumbnailName: String) {
+        if (userProfileData.value?.enrolledBy != null) {
+            val enrolledBy = userProfileData.value?.enrolledBy
+            profileFirebaseRepository.firebaseDB.collection("Ambassador_Enrolled_User").document(
+                    enrolledBy?.id
+                            ?: ""
+            ).collection("Enrolled_Users").document(profileFirebaseRepository.getUID()).set(
+                    mapOf(
+                            "profilePic" to imageName,
+                            "profilePic_thumbnail" to thumbnailName
+
+                    ), SetOptions.merge()
+            ).addOnCompleteListener {
+                _ambassadorProfilePicUpdate.value = if (it.isSuccessful) imageName else "avatar.jpg"
+                if (it.exception != null) {
+                    _errorObs.value = it.exception?.message ?: ""
+                }
+            }
+
         }
 
     }

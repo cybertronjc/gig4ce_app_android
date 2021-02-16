@@ -31,9 +31,9 @@
                 android:layout_marginTop="12dp"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
-                android:src="@drawable/ic_arrow_back_black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_back_black" />
 
             <ImageView
                 android:id="@+id/ellipses_iv"
@@ -44,9 +44,9 @@
                 android:scaleX="0.7"
                 android:scaleY="0.7"
                 android:visibility="gone"
-                android:src="@drawable/ic_ellipses"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_ellipses" />
 
             <ImageView
                 android:id="@+id/amb_banner_iv"
@@ -56,8 +56,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="21dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/banner_group"
-                app:layout_constraintTop_toBottomOf="@id/back_btn_iv" />
+                app:layout_constraintTop_toBottomOf="@id/back_btn_iv"
+                app:srcCompat="@drawable/banner_group" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,12 +95,12 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="2sp"
+                android:text="@string/gigforce"
                 android:textColor="#707070"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/roleNameTV"
-                android:text="@string/gigforce" />
+                app:layout_constraintTop_toBottomOf="@id/roleNameTV" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -109,15 +109,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#5fe94b81"
-            android:textStyle="italic"
-            android:textSize="16sp"
-            android:textColor="@color/black"
             android:gravity="center"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:paddingTop="20dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="20dp"
             android:text="@string/earn_rs_50_per_giger_onboarding_no_limit_on_earning"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@id/gigOverViewLayout" />
 
         <include
@@ -161,9 +161,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            android:src="@drawable/ic_credit_card"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator31" />
+            app:layout_constraintTop_toBottomOf="@id/separator31"
+            app:srcCompat="@drawable/ic_credit_card" />
 
 
         <TextView
@@ -204,8 +204,8 @@
             android:gravity="center_vertical"
             android:letterSpacing="0"
             android:text="@string/plus_see_more"
-            android:visibility="gone"
             android:textColor="@color/colorPrimary"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/ambReqContainer" />
 
         <View
@@ -222,9 +222,9 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_credit_card"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator32" />
+            app:layout_constraintTop_toBottomOf="@id/separator32"
+            app:srcCompat="@drawable/ic_credit_card" />
 
 
         <TextView
@@ -262,8 +262,8 @@
             android:gravity="center_vertical"
             android:letterSpacing="0"
             android:text="@string/plus_see_more"
-            android:visibility="gone"
             android:textColor="@color/colorPrimary"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/ambRespContainer" />
 
         <View
@@ -282,10 +282,10 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_credit_card"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator33" />
+            app:layout_constraintTop_toBottomOf="@id/separator33"
+            app:srcCompat="@drawable/ic_credit_card" />
 
 
         <TextView
@@ -296,10 +296,10 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/lato_bold"
             android:letterSpacing="0.02"
-            android:visibility="gone"
             android:text="@string/frequently_asked_questions"
             android:textColor="@color/black"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/gig_faq_iv"
             app:layout_constraintTop_toBottomOf="@id/separator33" />
 
@@ -310,8 +310,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:visibility="gone"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/gig_faq_label" />
 
 
@@ -333,15 +333,14 @@
             android:layout_marginBottom="@dimen/size_32"
             android:background="@drawable/gradient_button"
             android:letterSpacing="0"
-            android:minHeight="@dimen/size_48"
+            android:minHeight="@dimen/size_36"
             android:paddingTop="@dimen/size_8"
             android:paddingBottom="@dimen/size_8"
-            android:textAllCaps="false"
             android:text="@string/apply_now"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator36" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
