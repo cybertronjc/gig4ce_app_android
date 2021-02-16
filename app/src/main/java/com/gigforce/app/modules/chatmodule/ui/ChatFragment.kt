@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -56,7 +57,7 @@ class ChatFragment : BaseFragment(),
 
     private val viewModel: ChatMessagesViewModel by viewModels()
 
-    private val currentUser : FirebaseUser by lazy {
+    private val currentUser: FirebaseUser by lazy {
         FirebaseAuth.getInstance().currentUser!!
     }
 
@@ -103,7 +104,6 @@ class ChatFragment : BaseFragment(),
 
     private var imageUrl: String? = null
     private lateinit var username: String
-    private lateinit var forUserId: String
     private lateinit var chatHeaderId: String
     private lateinit var otherUserId: String
     private var fromClientActivation: Boolean = false
@@ -135,7 +135,6 @@ class ChatFragment : BaseFragment(),
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID) ?: currentUser.uid
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
         }
@@ -145,16 +144,20 @@ class ChatFragment : BaseFragment(),
             imageUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE)
             username = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
             chatHeaderId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID) ?: ""
-            forUserId = it.getString(INTENT_EXTRA_FOR_USER_ID) ?: currentUser.uid
             otherUserId = it.getString(INTENT_EXTRA_OTHER_USER_ID)!!
             mobileNumber = it.getString(StringConstants.MOBILE_NUMBER.value) ?: ""
 
         }
 
+        Log.d("Chat","Image url : $imageUrl")
+        Log.d("Chat","Username : $username")
+        Log.d("Chat","chatHeaderId : $chatHeaderId")
+        Log.d("Chat","mobileNumber : $mobileNumber")
+        Log.d("Chat","Other UserId : $otherUserId")
+
         viewModel.headerId = chatHeaderId
         viewModel.otherUserName = username
         viewModel.otherUserProfilePicture = imageUrl
-        viewModel.forUserId = forUserId
         viewModel.otherUserId = otherUserId
     }
 
@@ -164,7 +167,6 @@ class ChatFragment : BaseFragment(),
             putString(INTENT_EXTRA_OTHER_USER_IMAGE, imageUrl)
             putString(INTENT_EXTRA_OTHER_USER_NAME, username)
             putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderId)
-            putString(INTENT_EXTRA_FOR_USER_ID, forUserId)
             putString(INTENT_EXTRA_OTHER_USER_ID, otherUserId)
             putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, fromClientActivation)
             putString(StringConstants.MOBILE_NUMBER.value, mobileNumber)
@@ -222,6 +224,14 @@ class ChatFragment : BaseFragment(),
                         contact_blocked_container.gone()
                         container_footer.visible()
                     }
+
+                    if (it.otherUser?.profilePic.isNullOrBlank()) {
+                        Glide.with(requireContext()).load(R.drawable.ic_user).into(civ_personImage)
+                    } else {
+                        val uri = Uri.parse(it.otherUser!!.profilePic)
+                        Glide.with(requireContext()).load(uri).into(civ_personImage)
+                    }
+                    tv_nameValueInChat.text = it.otherUser?.name
                 })
 
         viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
@@ -800,10 +810,9 @@ class ChatFragment : BaseFragment(),
     companion object {
         const val TAG = "ChatFragment"
 
-        const val INTENT_EXTRA_CHAT_HEADER_ID = "chatHeaderId"
-        const val INTENT_EXTRA_FOR_USER_ID = "sender_id"
-        const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
-        const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
+        const val INTENT_EXTRA_CHAT_HEADER_ID = "chat_header_id"
+        const val INTENT_EXTRA_OTHER_USER_ID = "receiver_id"
+        const val INTENT_EXTRA_OTHER_USER_NAME = "receiver_name"
         const val INTENT_EXTRA_OTHER_USER_IMAGE = "imageUrl"
 
         private const val REQUEST_PICK_DOCUMENT = 102

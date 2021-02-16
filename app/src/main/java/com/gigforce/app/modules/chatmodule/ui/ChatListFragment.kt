@@ -209,10 +209,9 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
         if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
 
             val bundle = Bundle()
-            bundle.putString(AppConstants.IMAGE_URL, chatHeader.otherUser?.profilePic)
-            bundle.putString(AppConstants.CONTACT_NAME, chatHeader.otherUser?.name)
+            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, chatHeader.otherUser?.profilePic)
+            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, chatHeader.otherUser?.name)
             bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, chatHeader.id)
-            bundle.putString(ChatFragment.INTENT_EXTRA_FOR_USER_ID, chatHeader.forUserId)
             bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, chatHeader.otherUserId)
             navigate(R.id.chatScreenFragment, bundle)
         } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {

@@ -266,11 +266,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun openChat(enrollUser: EnrolledUser) {
         val bundle = Bundle()
-        bundle.putString(AppConstants.IMAGE_URL, enrollUser.profileAvatarThumbnail)
-        bundle.putString(AppConstants.CONTACT_NAME, enrollUser.name)
+
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, enrollUser.profileAvatarThumbnail)
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
 
         bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
-        bundle.putString(ChatFragment.INTENT_EXTRA_FOR_USER_ID, viewModel.getUID())
         bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID,enrollUser.id)
 
         bundle.putString(StringConstants.MOBILE_NUMBER.value, enrollUser.mobileNumber)
