@@ -25,7 +25,6 @@
                 android:id="@+id/cl_header_client_activation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_pink"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -36,10 +35,6 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:minHeight="309dp"
-                    android:paddingStart="@dimen/size_8"
-                    android:paddingTop="@dimen/size_28"
-                    android:paddingEnd="@dimen/size_8"
-                    android:paddingBottom="@dimen/size_23"
                     android:scaleType="fitCenter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
