@@ -164,7 +164,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 if (jpApplication.activation.all {
                             it.isDone
                         }) {
-                    jpApplication.status = "Applied"
+                    jpApplication.status = "Inprocess"
                 }
                 repository.db.collection("JP_Applications")
                         .document(items.documents[0].id)

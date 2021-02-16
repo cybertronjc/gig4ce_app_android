@@ -60,7 +60,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
-
+        viewModel.getActivationData(mJobProfileId)
         viewModel.draftApplication(mJobProfileId)
 
     }
@@ -97,18 +97,30 @@ class ApplicationClientActivationFragment : BaseFragment(),
     }
 
     private fun initObservers() {
+
+        viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
+            if (gigAcivation) {
+                viewModel.isActivationScreenFound = gigAcivation
+            }
+        })
+
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
         })
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
             popBackState()
-            navigate(
-                    R.id.fragment_gig_activation, bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId
-
-            )
-            )
+            if (viewModel.isActivationScreenFound) {
+                navigate(
+                        R.id.fragment_gig_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId
+                )
+                )
+            } else {
+                navigate(
+                        R.id.application_submitted_fragment
+                )
+            }
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()

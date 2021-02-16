@@ -98,9 +98,9 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                 model.activation = dependency.toMutableList()
                 model.activationStart=Date()
             }
-            if(model.status!="Inprocess"){
+            if(model.status!="Submitted"){
                 if (model.activation.all { it.isDone }) {
-                    model.status = "Inprocess"
+                    model.status = "Submitted"
                     model.activationComplete=Date()
                 }
             }
