@@ -60,4 +60,11 @@ enum class GigStatus constructor(
 
         throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any")
     }
+
+    companion object {
+
+        fun fromGig(gig: Gig): GigStatus {
+            return GigStatus.valueOf(gig.gigStatus)
+        }
+    }
 }
