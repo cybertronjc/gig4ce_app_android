@@ -60,7 +60,7 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
     }
 
     override fun getUserID(): String {
-        return ""
+        return FirebaseAuth.getInstance().currentUser?.uid!!
     }
 
 

@@ -17,6 +17,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
@@ -96,6 +97,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     }
 
+    var jpSettings: JpSettings? = null
     private fun initObservers() {
 
         viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
@@ -117,9 +119,11 @@ class ApplicationClientActivationFragment : BaseFragment(),
                 )
                 )
             } else {
-                navigate(
-                        R.id.application_submitted_fragment
-                )
+                jpSettings?.completionTitle?.let {
+                    navigate(
+                            R.id.application_submitted_fragment, bundleOf(StringConstants.JOB_PROFILE_ID.value to mJobProfileId, StringConstants.BUSSINESS_NAME.value to it)
+                    )
+                }
             }
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
@@ -130,6 +134,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
+            jpSettings = it
             Glide.with(this).load(it?.coverImg).placeholder(
                     com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)

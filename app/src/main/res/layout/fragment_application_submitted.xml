@@ -16,15 +16,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/colorPrimary">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
-            android:src="@drawable/ic_arrow_back_24"
+
+        <ImageView
+            android:id="@+id/ic_back_iv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -92,7 +93,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/thanks_msg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/size16"
@@ -109,7 +110,7 @@
         android:layout_marginTop="@dimen/size_50"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/primary_action"
+        android:id="@+id/refer_gig"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -122,6 +123,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/size_100"/>
 
-
+    <ProgressBar
+        android:id="@+id/pb_client_activation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
