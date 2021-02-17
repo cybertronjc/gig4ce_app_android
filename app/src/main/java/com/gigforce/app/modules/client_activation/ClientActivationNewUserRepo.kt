@@ -2,6 +2,7 @@ package com.gigforce.app.modules.client_activation
 
 import android.location.Location
 import com.gigforce.app.modules.client_activation.models.Media
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -40,7 +41,7 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
         var listener: ListenerRegistration? = null
         listener = firebaseDB.collection("JP_Applications")
                 .whereEqualTo("jpid", jobProfileID)
-                .whereEqualTo("gigerId", getUserID())
+                .whereEqualTo("gigerId", FirebaseAuth.getInstance().currentUser?.uid)
                 .addSnapshotListener { success, err ->
                     listener?.remove()
                     run {

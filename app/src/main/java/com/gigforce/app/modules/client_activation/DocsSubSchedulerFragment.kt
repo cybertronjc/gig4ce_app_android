@@ -80,6 +80,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
                 }
                 viewModel.checkIfTeamLeadersProfileExists(it.number)
                 initMappedUser(it)
+
             }
 
 
@@ -256,7 +257,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
                                             StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                                             StringConstants.TITLE.value to mTitle,
                                             StringConstants.TYPE.value to mType,
-                                            StringConstants.MOBILE_NUMBER.value to it
+                                            StringConstants.MOBILE_NUMBER.value to it,
+                                            StringConstants.MOBILE_NUMBERS.value to viewModel?.gfmappedUserObj?.numbers
                                     )
                             )
                         }
