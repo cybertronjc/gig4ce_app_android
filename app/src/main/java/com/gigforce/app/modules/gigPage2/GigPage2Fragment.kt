@@ -389,16 +389,24 @@ class GigPage2Fragment : BaseFragment(),
             divider_below_people_to_expect.gone()
         }
 
-        showOtherOptions()
+        showOtherOptions(gig)
     }
 
-    private fun showOtherOptions() {
+    private fun showOtherOptions(gig: Gig) {
+        val status = GigStatus.fromGig(gig)
 
-        val optionList = listOf(
-                IDENTITY_CARD,
-                ATTENDANCE_HISTORY,
-                DECLINE_GIG
-        )
+        val optionList = if (status == GigStatus.UPCOMING) {
+            listOf(
+                    IDENTITY_CARD,
+                    ATTENDANCE_HISTORY,
+                    DECLINE_GIG
+            )
+        } else {
+            listOf(
+                    IDENTITY_CARD,
+                    ATTENDANCE_HISTORY
+            )
+        }
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
                 requireContext(),

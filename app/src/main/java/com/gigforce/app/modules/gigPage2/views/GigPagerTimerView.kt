@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -29,13 +30,14 @@ import java.util.concurrent.TimeUnit
 class GigPagerTimerView(
         context: Context,
         attrs: AttributeSet
-) : MaterialCardView(
+) : FrameLayout(
         context,
         attrs
 ) {
 
     //Views
     private lateinit var rootCardView: MaterialCardView
+    private lateinit var statusCardView: MaterialCardView
 
     private lateinit var gigDateTV: TextView
     private lateinit var gigTimerTV: TextView
@@ -54,28 +56,30 @@ class GigPagerTimerView(
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        layoutInflater.inflate(
+        val view = layoutInflater.inflate(
                 R.layout.fragment_gig_page_2_timer_layout,
                 this,
                 true
         )
-        findViews()
+        findViews(view)
     }
 
-    private fun findViews() {
-        rootCardView = findViewById(R.id.gig_page_timer_layout)
+    private fun findViews(view : View) {
+        rootCardView = view.findViewById(R.id.timer_root_card_layout)
+        statusCardView = view.findViewById(R.id.status_card_view)
 
-        gigTimerAndDetailsLayout = findViewById(R.id.timer_and_attendance_layout)
-        gigAttendanceDetailsLayout = findViewById(R.id.gig_attendance_details_layout)
 
-        gigDateTV = findViewById(R.id.gig_date_tv)
-        gigTimerTV = findViewById(R.id.gig_timer_tv)
-        gigCheckInTimeTV = findViewById(R.id.gig_checkin_time_tv)
-        gigStatusTV = findViewById(R.id.gig_status_tv)
-        gigStatusIV = findViewById(R.id.gig_status_iv)
+        gigTimerAndDetailsLayout = view.findViewById(R.id.timer_and_attendance_layout)
+        gigAttendanceDetailsLayout = view.findViewById(R.id.gig_attendance_details_layout)
 
-        checkInTimeTV = findViewById(R.id.presentGigpunchInTimeTV)
-        checkOutTimeTV = findViewById(R.id.presentGigpunchOutTimeTV)
+        gigDateTV = view.findViewById(R.id.gig_date_tv)
+        gigTimerTV = view.findViewById(R.id.gig_timer_tv)
+        gigCheckInTimeTV = view.findViewById(R.id.gig_checkin_time_tv)
+        gigStatusTV = view.findViewById(R.id.gig_status_tv)
+        gigStatusIV = view.findViewById(R.id.gig_status_iv)
+
+        checkInTimeTV = view.findViewById(R.id.presentGigpunchInTimeTV)
+        checkOutTimeTV = view.findViewById(R.id.presentGigpunchOutTimeTV)
     }
 
     fun setGigData(gig: Gig) {
@@ -145,10 +149,9 @@ class GigPagerTimerView(
         gigTimerAndDetailsLayout.gone()
         gigAttendanceDetailsLayout.visible()
 
-//        rootCardView.setCardBackgroundColor(ColorStateList.valueOf(
-//                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
-//        ))
-
+        rootCardView.setCardBackgroundColor(ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.gig_timer_completed_grey ,null)
+        ))
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
