@@ -7,20 +7,22 @@
     android:layout_marginTop="6dp"
     android:layout_marginBottom="6dp"
     android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp">
+    android:layout_marginEnd="16dp"
+    app:cardBackgroundColor="#f5f5f5">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:minHeight="70dp">
 
         <LinearLayout
             android:id="@+id/day_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/lipstick"
-            android:minWidth="52dp"
-            android:minHeight="60dp"
+            android:minWidth="54dp"
+            android:minHeight="70dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:minWidth="80dp"
+            android:minWidth="60dp"
             android:textColor="@color/black_85"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
@@ -99,6 +101,39 @@
             app:layout_constraintTop_toBottomOf="@id/punch_out_label"
             app:layout_constraintStart_toEndOf="@id/punch_in_tv"
             />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/status_card_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/gig_status_iv"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/ic_status_pending" />
+
+                <TextView
+                    android:id="@+id/gig_status_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_85"
+                    android:textSize="12sp"
+                    tools:text="Status" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

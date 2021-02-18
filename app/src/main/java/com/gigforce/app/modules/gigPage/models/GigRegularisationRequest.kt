@@ -1,11 +1,9 @@
 package com.gigforce.app.modules.gigPage.models
 
-import androidx.annotation.Keep
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
-@Keep
 class GigRegularisationRequest : BaseFirestoreDataModel(OBJECT_NAME) {
 
     @get:PropertyName("contactPersons")
@@ -26,11 +24,11 @@ class GigRegularisationRequest : BaseFirestoreDataModel(OBJECT_NAME) {
 
     @get:PropertyName("remarksFromUser")
     @set:PropertyName("remarksFromUser")
-    var remarksFromUser = ""
+    var remarksFromUser : String? = ""
 
     @get:PropertyName("remarksFromManager")
     @set:PropertyName("remarksFromManager")
-    var remarksFromManager = ""
+    var remarksFromManager : String? = ""
 
     companion object {
         const val OBJECT_NAME = "regularisation_request"

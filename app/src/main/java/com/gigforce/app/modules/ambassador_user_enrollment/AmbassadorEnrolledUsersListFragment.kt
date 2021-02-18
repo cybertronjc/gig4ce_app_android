@@ -314,7 +314,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun locationReceiver(location: Location?) {
-
     }
 
     override fun lastLocationReceiver(location: Location?) {

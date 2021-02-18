@@ -13,15 +13,15 @@ import kotlinx.android.synthetic.main.recycler_item_gig_people_to_expect.view.*
 interface GigPeopleToExpectAdapterClickListener {
     fun onPeopleToExpectClicked(option: GigPeopleToExpect)
 
-    fun onCallManagerClicked(manager : GigPeopleToExpect)
+    fun onCallManagerClicked(manager: GigPeopleToExpect)
 
-    fun onChatWithManagerClicked(manager : GigPeopleToExpect)
+    fun onChatWithManagerClicked(manager: GigPeopleToExpect)
 }
 
 class GigPeopleToExpectAdapter(
-    private val context: Context
+        private val context: Context
 ) :
-    RecyclerView.Adapter<GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder>() {
+        RecyclerView.Adapter<GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder>() {
 
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigPeopleToExpectAdapterClickListener? = null
@@ -37,8 +37,8 @@ class GigPeopleToExpectAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder {
 
         if (!::mLayoutInflater.isInitialized) {
@@ -46,11 +46,11 @@ class GigPeopleToExpectAdapter(
         }
 
         return GigPeopleToExpectViewHolder(
-            mLayoutInflater.inflate(
-                R.layout.recycler_item_gig_people_to_expect,
-                parent,
-                false
-            )
+                mLayoutInflater.inflate(
+                        R.layout.recycler_item_gig_people_to_expect,
+                        parent,
+                        false
+                )
         )
     }
 
@@ -63,31 +63,35 @@ class GigPeopleToExpectAdapter(
     override fun getItemCount() = gigPeopleToExpect.size
 
     inner class GigPeopleToExpectViewHolder(
-        itemView: View
+            itemView: View
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-
-        init {
-            itemView.setOnClickListener(this)
-        }
 
         private val userImageTV = itemView.user_image_iv
         private val designationTV = itemView.designation_tv
         private val userNameTV = itemView.user_name_tv
+        private val callButton = itemView.call_btn
+        private val chatButton = itemView.chat_btn
+
+        init {
+            itemView.setOnClickListener(this)
+            callButton.setOnClickListener(this)
+            chatButton.setOnClickListener(this)
+        }
 
         fun bind(peopleToExpect: GigPeopleToExpect) = peopleToExpect.apply {
 
             if (this.profilePicture != null) {
 
                 Glide.with(context.applicationContext)
-                    .load(this.profilePicture)
-                    .circleCrop()
-                    .into(userImageTV)
+                        .load(this.profilePicture)
+                        .circleCrop()
+                        .into(userImageTV)
             } else {
 
                 Glide.with(context.applicationContext)
-                    .load(R.drawable.avatar)
-                    .circleCrop()
-                    .into(userImageTV)
+                        .load(R.drawable.avatar)
+                        .circleCrop()
+                        .into(userImageTV)
             }
 
             designationTV.text = this.designation
@@ -95,7 +99,14 @@ class GigPeopleToExpectAdapter(
         }
 
         override fun onClick(v: View?) {
-            otherOptionClickListener?.onPeopleToExpectClicked(gigPeopleToExpect[adapterPosition])
+            val viewClicked = v ?: return
+            when (viewClicked.id) {
+                R.id.call_btn -> otherOptionClickListener?.onCallManagerClicked(gigPeopleToExpect[adapterPosition])
+                R.id.chat_btn -> otherOptionClickListener?.onChatWithManagerClicked(gigPeopleToExpect[adapterPosition])
+                else -> {
+                    otherOptionClickListener?.onPeopleToExpectClicked(gigPeopleToExpect[adapterPosition])
+                }
+            }
         }
     }
 

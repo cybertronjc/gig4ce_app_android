@@ -38,21 +38,21 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
         val attendanceUpdateMap: Map<String, Any?> = if (checkInTimeAccToUser == null) {
             mapOf(
-                    "checkInAddress" to locationPhysicalAddress,
-                    "checkInImage" to image,
-                    "checkInLat" to latitude,
-                    "checkInLong" to longitude,
-                    "checkInMarked" to true,
-                    "checkInTime" to checkInTime
+                    "attendance.checkInAddress" to locationPhysicalAddress,
+                    "attendance.checkInImage" to image,
+                    "attendance.checkInLat" to latitude,
+                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInMarked" to true,
+                    "attendance.checkInTime" to checkInTime
             )
         } else {
             mapOf(
-                    "checkInAddress" to locationPhysicalAddress,
-                    "checkInImage" to image,
-                    "checkInLat" to latitude,
-                    "checkInLong" to longitude,
-                    "checkInMarked" to true,
-                    "checkInTime" to checkInTime,
+                    "attendance.checkInAddress" to locationPhysicalAddress,
+                    "attendance.checkInImage" to image,
+                    "attendance.checkInLat" to latitude,
+                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInMarked" to true,
+                    "attendance.checkInTime" to checkInTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
@@ -80,21 +80,21 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
         val attendanceUpdateMap: Map<String, Any?> = if (checkOutTimeAccToUser == null) {
             mapOf(
-                    "checkOutAddress" to locationPhysicalAddress,
-                    "checkOutImage" to image,
-                    "checkOutLat" to latitude,
-                    "checkOutLong" to longitude,
-                    "checkOutMarked" to true,
-                    "checkOutTime" to checkOutTime
+                    "attendance.checkOutAddress" to locationPhysicalAddress,
+                    "attendance.checkOutImage" to image,
+                    "attendance.checkOutLat" to latitude,
+                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutMarked" to true,
+                    "attendance.checkOutTime" to checkOutTime
             )
         } else {
             mapOf(
-                    "checkOutAddress" to locationPhysicalAddress,
-                    "checkOutImage" to image,
-                    "checkOutLat" to latitude,
-                    "checkOutLong" to longitude,
-                    "checkOutMarked" to true,
-                    "checkOutTime" to checkOutTime,
+                    "attendance.checkOutAddress" to locationPhysicalAddress,
+                    "attendance.checkOutImage" to image,
+                    "attendance.checkOutLat" to latitude,
+                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutMarked" to true,
+                    "attendance.checkOutTime" to checkOutTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,

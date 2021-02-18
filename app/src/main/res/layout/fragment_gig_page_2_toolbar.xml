@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="25dp"
-    tools:background="@color/lipstick_two">
+    android:background="@color/lipstick_two">
 
     <ImageView
         android:id="@+id/gig_cross_btn"
@@ -35,22 +35,23 @@
         app:tint="@color/white" />
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/company_logo_overlay_iv"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
+        android:background="@drawable/round_white"
+        style="@style/circleImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gig_cross_btn" />
 
-
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/company_logo_iv"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:src="@drawable/ic_location"
+        style="@style/circleImageView"
         app:layout_constraintBottom_toBottomOf="@id/company_logo_overlay_iv"
         app:layout_constraintEnd_toEndOf="@id/company_logo_overlay_iv"
         app:layout_constraintStart_toStartOf="@id/company_logo_overlay_iv"

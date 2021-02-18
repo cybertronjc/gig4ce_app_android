@@ -44,17 +44,22 @@
                     android:id="@+id/gig_page_top_bar"
                     layout="@layout/fragment_gig_page_2_toolbar" />
 
-                <include
+
+                <com.gigforce.app.modules.gigPage2.views.GigPagerTimerView
                     android:id="@+id/gig_page_timer_layout"
-                    layout="@layout/fragment_gig_page_2_timer_layout" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
+
 
                 <include
-                    android:id="@+id/gig_page_completiton_layout"
-                    android:visibility="gone"
-                    layout="@layout/fragment_gig_page_2_completiton_payment_details" />
-
-
-                <include layout="@layout/fragment_gig_page_2_gig_type" />
+                    android:id="@+id/gig_type_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    layout="@layout/fragment_gig_page_2_gig_type" />
 
                 <include layout="@layout/fragment_gig_page_2_address" />
 
@@ -76,15 +81,6 @@
                     android:layout_marginTop="16dp"
                     android:background="#e4e4e4" />
 
-                <include
-                    android:id="@+id/payment_info"
-                    layout="@layout/fragment_gig_page_2_payment_info" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#e4e4e4" />
 
                 <include layout="@layout/fragment_gig_page_2_other_options" />
 

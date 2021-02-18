@@ -15,58 +15,95 @@ import java.util.concurrent.TimeUnit
 
 @Keep
 data class Gig(
+
+        @get:PropertyName("tag")
+        @set:PropertyName("tag")
         var tag: String = "",
-        @DocumentId var gigId: String = "",
+
+        @DocumentId
+        @get:PropertyName("gigId")
+        @set:PropertyName("gigId")
+        var gigId: String = "",
+
+        @get:PropertyName("gigerId")
+        @set:PropertyName("gigerId")
         var gigerId: String = "",
+
+        @get:PropertyName("title")
+        @set:PropertyName("title")
         var title: String = "",
+
+        @get:PropertyName("bannerImage")
+        @set:PropertyName("bannerImage")
         var bannerImage: String? = null,
+
+        @get:PropertyName("address")
+        @set:PropertyName("address")
         var address: String = "",
+
+        @get:PropertyName("latitude")
+        @set:PropertyName("latitude")
         var latitude: Double? = null,
+
+        @get:PropertyName("longitude")
+        @set:PropertyName("longitude")
         var longitude: Double? = null,
 
+        @get:PropertyName("gigAmount")
+        @set:PropertyName("gigAmount")
         var gigAmount: Double = 0.0,
+
+        @get:PropertyName("invoiceGenerationDate")
+        @set:PropertyName("invoiceGenerationDate")
         var invoiceGenerationDate: Timestamp? = null,
+
+        @get:PropertyName("paymentStatus")
+        @set:PropertyName("paymentStatus")
         var paymentStatus: String = "Processing",
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var startDateTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("cancellationReason")
+        @set:PropertyName("cancellationReason")
+        var cancellationReason: String = "",
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkInBeforeTime : Timestamp = Timestamp.now(),
+        @get:PropertyName("startDateTime")
+        @set:PropertyName("startDateTime")
+        var startDateTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkInBeforeTime")
+        @set:PropertyName("checkInBeforeTime")
+        var checkInBeforeTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkInAfterBufferTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkInBeforeBufferTime")
+        @set:PropertyName("checkInBeforeBufferTime")
+        var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkInAfterTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkInAfterBufferTime")
+        @set:PropertyName("checkInAfterBufferTime")
+        var checkInAfterBufferTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var endDateTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkInAfterTime")
+        @set:PropertyName("checkInAfterTime")
+        var checkInAfterTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkOutBeforeTime : Timestamp = Timestamp.now(),
+        @get:PropertyName("endDateTime")
+        @set:PropertyName("endDateTime")
+        var endDateTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkOutBeforeTime")
+        @set:PropertyName("checkOutBeforeTime")
+        var checkOutBeforeTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkOutBeforeBufferTime")
+        @set:PropertyName("checkOutBeforeBufferTime")
+        var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("isFullDay")
-    @set:PropertyName("isFullDay")
-    var checkOutAfterTime: Timestamp = Timestamp.now(),
+        @get:PropertyName("checkOutAfterBufferTime")
+        @set:PropertyName("checkOutAfterBufferTime")
+        var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
+
+        @get:PropertyName("checkOutAfterTime")
+        @set:PropertyName("checkOutAfterTime")
+        var checkOutAfterTime: Timestamp = Timestamp.now(),
 
 
         var checkInBeforeTimeBufferInMins: Long = 60,
@@ -102,6 +139,10 @@ data class Gig(
         @set:PropertyName("isFullDay")
         var isFullDay: Boolean = false,
 
+        @get:PropertyName("gigOrderId")
+        @set:PropertyName("gigOrderId")
+        var gigOrderId: String = "",
+
         var gigRating: Float = 0.0F,
         var gigUserFeedback: String? = null,
         var gigUserFeedbackAttachments: List<String> = emptyList(),
@@ -114,17 +155,20 @@ data class Gig(
         var gigType: String? = null,
         var gigHighlights: List<String> = emptyList(),
         var gigRequirements: List<String> = emptyList(),
-        var gigResponsibilities: List<String> = listOf(
-                "Deliver excellent service to ensure high levels of customer satisfaction.",
-                "Motivate the sales team to meet sales objectives by training and mentoring staff.",
-                "Create business strategies to attract new customers, expand store traffic, and enhance profitability."
-        ),
+        var gigResponsibilities: List<String> = listOf(),
         var attendance: GigAttendance? = null,
         var gigContactDetails: GigContactDetails? = null,
 
+        @get:PropertyName("declinedBy")
+        @set:PropertyName("declinedBy")
         var declinedBy: String? = null,
+
+        @get:PropertyName("declineReason")
+        @set:PropertyName("declineReason")
         var declineReason: String? = null,
 
+        @get:PropertyName("regularisationRequest")
+        @set:PropertyName("regularisationRequest")
         var regularisationRequest: GigRegularisationRequest? = null,
 
         @get:PropertyName("contactPersons")
@@ -139,18 +183,18 @@ data class Gig(
     @get:Exclude
     @set:Exclude
     var startHour: Int = 0
-        get() = startDateTime!!.toLocalDateTime().hour
+        get() = startDateTime.toLocalDateTime().hour
 
     @get:Exclude
     @set:Exclude
     var startMinute: Int = 0
-        get() = startDateTime!!.toLocalDateTime().minute
+        get() = startDateTime.toLocalDateTime().minute
 
     @get:Exclude
     @set:Exclude
     var duration: Float = 0.0F
         get() {
-            val diffInMilliSecs = endDateTime!!.toDate().time - startDateTime!!.toDate().time
+            val diffInMilliSecs = endDateTime.toDate().time - startDateTime.toDate().time
             val minutes = TimeUnit.MINUTES.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
             val hours = TimeUnit.HOURS.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
 
@@ -161,7 +205,7 @@ data class Gig(
     fun isGigOfToday(): Boolean {
 
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isEqual(currentDate)
     }
@@ -169,7 +213,7 @@ data class Gig(
     @Exclude
     fun isGigOfFuture(): Boolean {
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isAfter(currentDate)
     }
@@ -178,7 +222,7 @@ data class Gig(
     fun isGigOfPastDay(): Boolean {
 
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isBefore(currentDate)
     }
@@ -212,7 +256,7 @@ data class Gig(
             if (isCheckInAndCheckOutMarked())
                 return true
 
-            val gigCheckInTime = startDateTime!!.toLocalDateTime()
+            val gigCheckInTime = startDateTime.toLocalDateTime()
             val maxCheckInTime = gigCheckInTime.plusMinutes(checkInAfterTimeBufferInMins)
             if (LocalDateTime.now().isAfter(maxCheckInTime) && isCheckInMarked().not()) {
                 //User Has Exceeded max check in time and hasn't marked check-in yet
@@ -222,7 +266,7 @@ data class Gig(
             return if (endDateTime != null) {
 
                 val gigCheckOutTime =
-                        endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
+                        endDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
                                 .toLocalDateTime()
                 val maxCheckOutTime =
                         gigCheckOutTime.plusMinutes(checkOutAfterTimeBufferInMins) //1 Hour window for checkout after gig time expires
@@ -240,7 +284,7 @@ data class Gig(
             return false
 
         val gigCheckInTime =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
+                startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
                         .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusMinutes(checkInBeforeTimeBufferInMins)
         val maxCheckInTime = gigCheckInTime.plusMinutes(checkInAfterTimeBufferInMins)
@@ -251,7 +295,7 @@ data class Gig(
         return if (endDateTime != null) {
 
             val gigCheckOutTime =
-                    endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
+                    endDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
                             .toLocalDateTime()
 
 //            if (gigCheckOutTime.isBefore(currentTime)) {
@@ -269,7 +313,7 @@ data class Gig(
     fun isUpcomingGig(): Boolean {
 
         val gigCheckInTime =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
+                startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
                         .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusMinutes(checkInBeforeTimeBufferInMins)
         val currentTime = LocalDateTime.now()
@@ -282,6 +326,7 @@ data class Gig(
         return regularisationRequest != null
     }
 
+    @Exclude
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
         val obj = other as? Gig
@@ -295,29 +340,29 @@ data class GigPeopleToExpect(
 
         @get:PropertyName("uid")
         @set:PropertyName("uid")
-        var uid : String? = null,
+        var uid: String? = null,
 
         @get:PropertyName("profilePicture")
         @set:PropertyName("profilePicture")
-        var profilePicture : String? = null,
+        var profilePicture: String? = null,
 
         @get:PropertyName("whatsAppNo")
         @set:PropertyName("whatsAppNo")
-        var whatsAppNo : String? = null,
+        var whatsAppNo: String? = null,
 
         @get:PropertyName("name")
         @set:PropertyName("name")
-        var name : String? = null,
+        var name: String? = null,
 
         @get:PropertyName("designation")
         @set:PropertyName("designation")
-        var designation : String? = null,
+        var designation: String? = null,
 
         @get:PropertyName("contactNumber")
         @set:PropertyName("contactNumber")
-        var contactNumber : String? = null,
+        var contactNumber: String? = null,
 
         @get:PropertyName("rating")
         @set:PropertyName("rating")
-        var rating : Float? = null
+        var rating: Float? = null
 ) : Parcelable

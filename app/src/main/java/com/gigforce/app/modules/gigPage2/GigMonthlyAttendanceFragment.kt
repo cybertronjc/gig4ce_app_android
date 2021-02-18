@@ -19,6 +19,7 @@ import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
@@ -26,7 +27,6 @@ import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*
-import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.TextStyle
 import java.util.*
@@ -38,10 +38,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
     private var role: String? = null
     private var companyName: String? = null
     private var companyLogo: String? = null
-    private var rating: Float = 0.0f
-
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+    private lateinit var gigOrderId: String
 
     private var currentlySelectedMonthYear: LocalDate = LocalDate.now()
 
@@ -61,23 +58,26 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
-            rating = it.getFloat(INTENT_EXTRA_RATING)
-
             val monthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE)
             if (monthYear != null) currentlySelectedMonthYear = monthYear as LocalDate
 
             role = it.getString(INTENT_EXTRA_ROLE)
             companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
+            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
+                    "Gig order id not passed in intent"
+            )
         }
 
         savedInstanceState?.let {
             currentlySelectedMonthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE) as LocalDate
-            rating = it.getFloat(INTENT_EXTRA_RATING)
 
             role = it.getString(INTENT_EXTRA_ROLE)
             companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
+            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
+                    "Gig order id not passed in saved intent"
+            )
         }
     }
 
@@ -85,10 +85,10 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         super.onSaveInstanceState(outState)
         outState.putSerializable(INTENT_EXTRA_SELECTED_DATE, currentlySelectedMonthYear)
 
-        outState.putFloat(INTENT_EXTRA_RATING, rating)
         outState.putString(INTENT_EXTRA_ROLE, role)
         outState.putString(INTENT_EXTRA_COMPANY_NAME, companyName)
         outState.putString(INTENT_EXTRA_COMPANY_LOGO, companyLogo)
+        outState.putString(INTENT_EXTRA_GIG_ORDER_ID, gigOrderId)
     }
 
     private fun initUi() {
@@ -109,7 +109,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)
             } else {
-               val imageRef =  FirebaseStorage.getInstance()
+                val imageRef = FirebaseStorage.getInstance()
                         .getReference("companies_gigs_images")
                         .child(companyLogo!!)
 
@@ -133,11 +133,6 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
         gig_title_tv.text = role
         gig_company_name_tv.text = "\ufeff@ $companyName"
-        company_rating_tv.text = if (rating != 0.0f)
-            "-"
-        else
-            rating.toString()
-
     }
 
     private fun initViewModel() {
@@ -169,6 +164,22 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         attendance_monthly_learning_error.gone()
         attendance_monthly_rv.visible()
 
+        var completedGigsCount = 0
+        var absentGigsCount = 0
+
+        content.forEach {
+            val status = GigStatus.fromGig(it)
+
+            if (status == GigStatus.COMPLETED) {
+                completedGigsCount++
+            } else if (status == GigStatus.MISSED) {
+                absentGigsCount++
+            }
+        }
+
+        total_days_tv.text = ": ${completedGigsCount} Days"
+        total_working_days_tv.text = ": ${absentGigsCount} Days"
+
         attendance_monthly_rv.layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -177,7 +188,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
         val adapter = GigAttendanceAdapter(
                 requireContext(),
-                content.sortedBy { it.startDateTime!!.seconds }
+                content.sortedBy { it.startDateTime.seconds }
         ).apply {
             setListener(this@GigMonthlyAttendanceFragment)
         }
@@ -240,7 +251,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         dateYearTV.text = "$monthName - $year"
 
         viewModel.getGigsForMonth(
-                companyName = "Seedworks",
+                gigOrderId = gigOrderId,
                 month = currentlySelectedMonthYear.monthValue,
                 year = currentlySelectedMonthYear.year
         )
@@ -248,11 +259,11 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
 
     companion object {
+        const val INTENT_EXTRA_ROLE = "role"
         const val INTENT_EXTRA_COMPANY_NAME = "company_name"
         const val INTENT_EXTRA_COMPANY_LOGO = "company_logo"
-        const val INTENT_EXTRA_ROLE = "role"
-        const val INTENT_EXTRA_RATING = "rating"
         const val INTENT_EXTRA_SELECTED_DATE = "selected_month_year"
+        const val INTENT_EXTRA_GIG_ORDER_ID = "gig_order_id"
     }
 
 }

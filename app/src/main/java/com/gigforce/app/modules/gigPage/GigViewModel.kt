@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.core.toDate
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -40,6 +42,10 @@ class GigViewModel constructor(
 
     var currentGig: Gig? = null
 
+    private val currentUser: FirebaseUser by lazy {
+        FirebaseAuth.getInstance().currentUser!!
+    }
+
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
 
@@ -65,7 +71,7 @@ class GigViewModel constructor(
             longitude: Double,
             locationPhysicalAddress: String,
             image: String,
-            checkInTimeAccToUser: Timestamp,
+            checkInTimeAccToUser: Timestamp?,
             remarks: String?
     ) = viewModelScope.launch {
         val gig = currentGig ?: return@launch
@@ -106,7 +112,7 @@ class GigViewModel constructor(
             longitude: Double,
             locationPhysicalAddress: String,
             image: String,
-            checkInTimeAccToUser: Timestamp,
+            checkInTimeAccToUser: Timestamp?,
             remarks: String?
     ) {
         _markingAttendanceState.postValue(Lse.loading())
@@ -134,7 +140,7 @@ class GigViewModel constructor(
             longitude: Double,
             locationPhysicalAddress: String,
             image: String,
-            checkOutTimeAccToUser: Timestamp,
+            checkOutTimeAccToUser: Timestamp?,
             remarks: String?
     ) {
         _markingAttendanceState.postValue(Lse.loading())
@@ -161,27 +167,17 @@ class GigViewModel constructor(
 
         val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-
-            if (it.endDateTime != null) {
-                it.endDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
-            } else {
-                it.startDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
-            }
+            it.endDateTime.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
         }.sortedBy {
-            it.startDateTime!!.seconds
+            it.startDateTime.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
-        val userGigs: MutableList<Gig> = mutableListOf()
-        querySnapshot.documents.forEach { t ->
-            t.toObject(Gig::class.java)?.let {
-                it.gigId = t.id
-                userGigs.add(it)
-            }
-        }
-        return userGigs
+        return querySnapshot.documents.map { t ->
+            t.toObject(Gig::class.java)!!
+        }.toMutableList()
     }
 
 
@@ -447,8 +443,7 @@ class GigViewModel constructor(
 
                     if (querySnapshot != null) {
                         val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                            it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                                    .isBefore(tomorrow))
+                            it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
                         }
                         _todaysGigs.value = Lce.content(todaysUpcomingGigs)
                     } else {
@@ -471,8 +466,7 @@ class GigViewModel constructor(
 
             val tomorrow = date.plusDays(1)
             val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                        .isBefore(tomorrow))
+                it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
             }
             _todaysGigs.value = Lce.content(todaysUpcomingGigs)
             _todaysGigs.value = null
@@ -486,23 +480,32 @@ class GigViewModel constructor(
     private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
     val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
 
-    fun getGigsForMonth(companyName: String, month: Int, year: Int) = viewModelScope.launch {
+    fun getGigsForMonth(
+            gigOrderId: String,
+            month: Int,
+            year: Int
+    ) = viewModelScope.launch {
 
         val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
-        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1);
+        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1)
 
         try {
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
                     .getCurrentUserGigs()
-//                .whereGreaterThan("startDateTime", monthStart)
-//                .whereLessThan("startDateTime", monthEnd)
-                    .whereEqualTo("companyName", companyName)
+                    .whereEqualTo("gigerId", currentUser.uid)
+                    .whereEqualTo("gigOrderId", gigOrderId)
+                    .whereGreaterThan("startDateTime", monthStart.toDate)
+                    .whereLessThan("startDateTime", monthEnd.toDate)
                     .getOrThrow()
 
             val gigs = extractGigs(querySnap)
             _monthlyGigs.value = Lce.content(gigs)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().apply {
+                recordException(e)
+            }
+            e.printStackTrace()
             _monthlyGigs.value = Lce.error(e.message!!)
         }
     }

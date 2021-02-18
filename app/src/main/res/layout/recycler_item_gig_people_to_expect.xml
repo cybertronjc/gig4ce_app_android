@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:minWidth="240dp"
         android:padding="16dp">
 
 
@@ -35,7 +36,7 @@
             android:layout_gravity="center_horizontal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/user_image_iv"
-            tools:text="Sunita Willsddsdsdams" />
+            tools:text="Sunita " />
 
         <TextView
             android:id="@+id/designation_tv"
@@ -72,6 +73,7 @@
             android:layout_height="wrap_content"
             android:minHeight="0dp"
             android:text="@string/call"
+            android:drawableLeft="@drawable/ic_chat_pink"
             android:textAllCaps="false"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
@@ -92,6 +94,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="4dp"
             app:backgroundTint="#ffe9ef"
+            android:drawableLeft="@drawable/ic_chat_pink"
             android:textColor="@color/lipstick"
             app:layout_constraintStart_toEndOf="@id/call_btn"
             app:layout_constraintEnd_toEndOf="parent"
