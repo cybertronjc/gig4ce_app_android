@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OutlineTextButtonComponent">
+        <attr name="android:textAllCaps" format="boolean"/>
+        <attr name="android:text" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CoreRecyclerView">
+        <attr name="android:orientation" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="StandardTextActionButtonComponent">
+        <attr name="android:textAllCaps" format="boolean"/>
+        <attr name="android:text" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TestButton">
+        <attr name="testButtonStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="IconButton">
+        <attr name="iconButtonStyle" format="reference"/>
+        <attr name="iconType" format="enum">
+            <enum name="Chat" value="101"/>
+            <enum name="Profile" value="104"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="StandardActionCardComponent">
+        <attr name="bgcolor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+
+        <attr name="textcolor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+
+<!--        <attr name="titleTextColor" format="color"/>-->
+<!--        <attr name="subtitleTextColor" format="color"/>-->
+    </declare-styleable>
+    <declare-styleable name="FeatureLayoutComponent">
+        <attr name="android:orientation" format="integer" />
+        <attr name="rows" format="integer"/>
+    </declare-styleable>
+
+
+</resources>

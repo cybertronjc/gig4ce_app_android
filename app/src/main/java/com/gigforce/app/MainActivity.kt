@@ -1,10 +1,12 @@
 package com.gigforce.app
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -17,19 +19,40 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+ import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.INavigationProvider
+import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class MainActivity : AppCompatActivity(), NavFragmentsData {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(),
+    NavFragmentsData,
+    INavigationProvider
+{
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
+
+    fun getNavController():NavController{
+        return this.navController
+    }
+
+    @Inject
+    lateinit var navigation:INavigation
+
+    override fun getINavigation(): INavigation {
+        return navigation
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTaskRoot

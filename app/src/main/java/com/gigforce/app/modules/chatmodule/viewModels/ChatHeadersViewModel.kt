@@ -14,7 +14,6 @@ import com.google.firebase.firestore.Query
 class ChatHeadersViewModel : ViewModel() {
 
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-
     private var firebaseDB = FirebaseFirestore.getInstance()
 
     // private var chatHeaderRepository = ChatHeaderFirebaseRepository()

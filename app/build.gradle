@@ -5,8 +5,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+
     signingConfigs {
         debug {
             storeFile file('../keystore/gigforceapp.jks')
@@ -120,6 +122,15 @@ android {
 }
 
 dependencies {
+
+    implementation project(path: ':modules:core')
+    implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:feature-chat')
+    implementation project(path: ':modules:app-giger')
+    implementation project(path: ':modules:learning')
+    implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:profile')
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
@@ -167,7 +178,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
     // implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
-    implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation 'com.android.support:appcompat-v7:'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
@@ -175,7 +186,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
-    def nav_version = "2.3.0"
+    def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -284,6 +295,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
 
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation 'com.jsibbold:zoomage:1.3.1'
@@ -306,6 +318,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
+    //implementation 'com.google.dagger:dagger:2.31'
+    //kapt 'com.google.dagger:dagger-compiler:2.31'
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
     // Rx
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -313,8 +331,7 @@ dependencies {
     // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha.22'
-
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-rc01'
 
     implementation 'com.google.android:flexbox:2.0.1'
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'

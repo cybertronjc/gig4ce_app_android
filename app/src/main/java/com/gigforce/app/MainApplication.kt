@@ -4,15 +4,17 @@ import android.app.Application
 import android.app.NotificationManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.facebook.FacebookSdk;
+import dagger.hilt.android.HiltAndroidApp
 
-class MainApplication: Application() {
+@HiltAndroidApp
+class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         setupCleverTap()
     }
 
-    private fun setupCleverTap(){
+    private fun setupCleverTap() {
         val clevertapDefaultInstance =
             CleverTapAPI.getDefaultInstance(applicationContext)
 
@@ -26,7 +28,7 @@ class MainApplication: Application() {
             true
         )
 
-        cleverTapAPI?.pushEvent("MAIN_APP_CREATED");
+        cleverTapAPI?.pushEvent("MAIN_APP_CREATED")
     }
 
 }

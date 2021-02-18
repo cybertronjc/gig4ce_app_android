@@ -122,6 +122,9 @@ class ChatContactsRepository constructor(
         )
 
         if (!response.isSuccessful) {
+            //todo: Badgateway Error, Sync took time or something.
+            // todo: Progress bar still running after error came.
+            // todo: syncing is taking a lot of time.
             throw Exception("Unable to sync contacts, ${response.message()}")
         }
         syncPref.setContactsAsSynced()

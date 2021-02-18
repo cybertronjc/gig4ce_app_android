@@ -1,2 +1,9 @@
+include ':modules:profile'
+include ':modules:client-activation'
+include ':modules:learning'
+include ':modules:app-giger'
+include ':modules:common-ui'
+include ':modules:core'
+include ':modules:feature-chat'
 include ':app'
 //rootProject.name = "Gigforce1"

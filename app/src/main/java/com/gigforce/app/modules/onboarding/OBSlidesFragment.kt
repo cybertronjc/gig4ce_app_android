@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.core.dp
 import kotlinx.android.synthetic.main.fragment_ob_slides.*
 //import kotlinx.android.synthetic.main.fragment_intro_slides.*

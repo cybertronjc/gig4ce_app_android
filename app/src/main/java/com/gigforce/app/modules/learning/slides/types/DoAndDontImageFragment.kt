@@ -14,7 +14,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_dos_donts.*
 

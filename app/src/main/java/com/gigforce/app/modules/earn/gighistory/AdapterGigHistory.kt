@@ -10,6 +10,7 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.DocChange
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*

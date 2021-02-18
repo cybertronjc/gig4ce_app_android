@@ -29,8 +29,9 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
+        android:theme="@style/GigforceTheme"
+        android:name=".MainApplication"
         android:largeHeap="true"
-        android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -89,7 +90,7 @@
         <service
             android:name=".modules.chatmodule.service.FetchContactsService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"/>
 
 
         <meta-data

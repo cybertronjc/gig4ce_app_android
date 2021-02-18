@@ -28,7 +28,7 @@ import com.gigforce.app.modules.verification.models.PANDocData
 import com.gigforce.app.modules.verification.models.PostDataOCR
 import com.gigforce.app.modules.verification.models.PostDataPAN
 import com.gigforce.app.modules.verification.service.RetrofitFactory
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

@@ -12,8 +12,11 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
-        <item name="android:letterSpacing">0.0</item>
-
+        <item name="android:letterSpacing">0</item>
+<!--        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>-->
+<!--        <item name="android:scrollbars">vertical</item>-->
+<!--        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>-->
+<!--        <item name="android:scrollbarStyle">outsideOverlay</item>-->
         <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
         <item name="android:windowBackground">@color/bg</item>
         <!--        <item name="android:popupMenuStyle">@style/PopupMenu</item>-->

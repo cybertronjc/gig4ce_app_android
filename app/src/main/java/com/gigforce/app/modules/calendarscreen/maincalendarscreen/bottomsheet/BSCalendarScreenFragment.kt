@@ -54,6 +54,7 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -70,11 +71,11 @@ class BSCalendarScreenFragment : BaseFragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val profileViewModel : ProfileViewModel by viewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.home_screen_bottom_sheet_fragment, inflater, container)
     }
@@ -105,7 +106,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text == getString(R.string.open)) {
+            if (amb_join_open_btn.text ==  getString(R.string.open)) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
             } else {
                 navigate(R.id.ambassadorProgramDetailsFragment)
@@ -682,6 +683,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
+        datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.nav_graph_chat))
 
 //        datalist.add(
 //            FeatureModel(
@@ -701,22 +703,22 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         val itemWidth = ((width / 7) * 1.6).toInt()
         val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
-                RecyclerGenericAdapter<FeatureModel>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
-                            if (item?.navigationID != -1) {
-                                item?.navigationID?.let { navigate(it) }
-                            } else {
-                                showToast("This page are inactive. We’ll activate it in a few weeks")
-                            }
-                        },
-                        RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
-                            val lp = getView(viewHolder, R.id.card_view).layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            getView(viewHolder, R.id.card_view).layoutParams = lp
-                            getImageView(viewHolder, R.id.feature_icon).setImageResource(obj?.icon!!)
-                            getTextView(viewHolder, R.id.feature_title).text = obj.title
+            RecyclerGenericAdapter<FeatureModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
+                    if (item?.navigationID != -1) {
+                        item?.navigationID?.let { navigate(it) }
+                    } else {
+                        showToast("This page is inactive. We’ll activate it in a few weeks")
+                    }
+                },
+                RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
+                    val lp = getView(viewHolder, R.id.card_view).layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    getView(viewHolder, R.id.card_view).layoutParams = lp
+                    getImageView(viewHolder, R.id.feature_icon).setImageResource(obj?.icon!!)
+                    getTextView(viewHolder, R.id.feature_title).text = obj.title
 
                         })!!
         recyclerGenericAdapter.setList(datalist)
