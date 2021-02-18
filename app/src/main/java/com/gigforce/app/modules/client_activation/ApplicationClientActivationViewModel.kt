@@ -3,6 +3,7 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.client_activation.models.GigActivation
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
@@ -161,14 +162,23 @@ class ApplicationClientActivationViewModel : ViewModel() {
     fun apply(jobProfileId: String) = viewModelScope.launch {
 
         val application = getJPApplication(jobProfileId)
-        repository.db.collection("JP_Applications").document(application.id)
-            .update(
-                mapOf(
+        var statusUpdate = mapOf(
+                "stepsTotal" to (observableJobProfile.value?.step ?: 0),
+                "status" to "Submitted",
+                "applicationComplete" to Date()
+
+        )
+        if(isActivationScreenFound){
+            statusUpdate = mapOf(
                     "stepsTotal" to (observableJobProfile.value?.step ?: 0),
-                    "status" to "Applied",
+                    "status" to "Inprocess",
                     "applicationComplete" to Date()
 
-                )
+            )
+        }
+        repository.db.collection("JP_Applications").document(application.id)
+            .update(
+                    statusUpdate
             )
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -179,13 +189,34 @@ class ApplicationClientActivationViewModel : ViewModel() {
             }
     }
 
+    private val _observableGigActivation = MutableLiveData<Boolean>()
+    val observableGigActivation: MutableLiveData<Boolean> = _observableGigActivation
+    var isActivationScreenFound = false
+    fun getActivationData(jobProfileID: String) {
+
+        repository.getCollectionReference().whereEqualTo("jobProfileId", jobProfileID)
+                .whereEqualTo("type", "activation").addSnapshotListener { success, err ->
+                    if (err == null) {
+                        if (success?.documents?.isNotEmpty() == true) {
+                            observableGigActivation.value =
+                                    true
+
+                        }
+                    } else {
+                        observableError.value = err.message
+                    }
+                }
+
+    }
+
+
     fun draftApplication(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
         if (application.status == "") {
             repository.db.collection("JP_Applications").document(application.id)
                 .update(
                     mapOf(
-                        "status" to "Draft"
+                        "status" to "Interested"
                     )
                 )
                 .addOnCompleteListener {

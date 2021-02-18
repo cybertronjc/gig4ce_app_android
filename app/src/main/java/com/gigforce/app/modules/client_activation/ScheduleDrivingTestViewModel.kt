@@ -27,7 +27,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     private val _verifyOTP = MutableLiveData<Lce<VerifyOtpResponse>>()
     val verifyOTP: MutableLiveData<Lce<VerifyOtpResponse>> = _verifyOTP
     private val _observableError: SingleLiveEvent<String> by lazy {
-        SingleLiveEvent<String>();
+        SingleLiveEvent<String>()
     }
 
     val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
@@ -35,12 +35,12 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     private val _observableJpApplication: SingleLiveEvent<DrivingCertificate> by lazy {
-        SingleLiveEvent<DrivingCertificate>();
+        SingleLiveEvent<DrivingCertificate>()
     }
     val observableJpApplication: SingleLiveEvent<DrivingCertificate> get() = _observableJpApplication
 
     private val _observableApplied: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableApplied: SingleLiveEvent<Boolean> get() = _observableApplied
     var otpVerificationToken: String = ""
@@ -101,7 +101,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     fun apply(
-            mJobProfileId: String, type: String, title: String, options: List<CheckItem>
+            mJobProfileId: String, type: String, title: String, options: List<CheckItem>,tlMobileNo: String?
     ) = viewModelScope.launch {
 
 
@@ -109,7 +109,8 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 mJobProfileId,
                 type,
                 title,
-                options
+                options,
+                tlMobileNo
         )
 
     }
@@ -118,7 +119,8 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     suspend fun setInJPApplication(
             jobProfileID: String,
             type: String,
-            title: String, options: List<CheckItem>
+            title: String, options: List<CheckItem>,
+            tlMobileNo: String?
     ) {
         val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
                 .whereEqualTo("gigerId", repository.getUID()).get()
@@ -131,6 +133,9 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         val collection = repository.db.collection("JP_Applications")
                 .document(items?.documents!![0].id)
                 .collection("Submissions")
+        tlMobileNo?.let {
+            repository.getCollectionReference().document(items.documents[0].id).update(mapOf("verifiedTLNumber" to it ))
+        }
 
         val task = if (submissions?.documents?.isEmpty() == true)
             collection.document().set(mapOf("options" to options, "type" to type, "title" to title))
@@ -164,7 +169,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                 if (jpApplication.activation.all {
                             it.isDone
                         }) {
-                    jpApplication.status = "Applied"
+                    jpApplication.status = "Inprocess"
                 }
                 repository.db.collection("JP_Applications")
                         .document(items.documents[0].id)
@@ -187,14 +192,30 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
     }
 
+    var otpVerificationTokenList = ArrayList<String>()
+
     fun sendOTPToMobile(
-            mobileNo: String
+            mobileNo: String,
+            otherMobileNoMapped: ArrayList<String> = ArrayList<String>()
     ) = viewModelScope.launch {
 
         _sendOTP.postValue(Lce.loading())
         try {
 
             val repsonse = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
+            val filteredData = otherMobileNoMapped?.filter {
+                var finalMobileNumber = ""
+                if (it.contains("+91"))
+                    finalMobileNumber = it.takeLast(10)
+                else finalMobileNumber = it
+
+                finalMobileNumber != mobileNo
+            }
+            otpVerificationTokenList.clear()
+            for (number in filteredData) {
+                val repsonse1 = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(number)
+                otpVerificationTokenList.add(repsonse1.verificationToken.toString())
+            }
             _sendOTP.value = Lce.content(repsonse)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -206,14 +227,24 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             otp: String
     ) = viewModelScope.launch {
         try {
+            var finalOTPResponse: VerifyOtpResponse? = null
             val verifyOtpResponse = userEnrollmentRepository.verifyOtp(otpVerificationToken, otp)
 
-            if (verifyOtpResponse.isVerified) {
-                _verifyOTP.value = Lce.content(verifyOtpResponse)
-            } else {
-                _verifyOTP.value = Lce.error("Not Verified")
+            for (token in otpVerificationTokenList) {
+                val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
+                if (verifyOtpResponse.isVerified) {
+                    finalOTPResponse = verifyOtpResponse
+                }
             }
 
+            if (verifyOtpResponse.isVerified) {
+                finalOTPResponse = verifyOtpResponse
+            }
+            finalOTPResponse?.let {
+                _verifyOTP.value = Lce.content(it)
+            } ?: let {
+                _verifyOTP.value = Lce.error("Not Verified")
+            }
         } catch (e: Exception) {
             _verifyOTP.value = Lce.error(e.message ?: "Not Verified")
         }
@@ -221,9 +252,9 @@ class ScheduleDrivingTestViewModel : ViewModel() {
 
 
     companion object {
-        val CODE_SENT = 2;
-        val VERIFY_FAILED = 3;
-        val VERIFY_SUCCESS = 4;
+        val CODE_SENT = 2
+        val VERIFY_FAILED = 3
+        val VERIFY_SUCCESS = 4
     }
 
 

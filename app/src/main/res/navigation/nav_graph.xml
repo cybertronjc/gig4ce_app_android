@@ -813,6 +813,13 @@
         tools:layout="@layout/layout_fragment_activation_gig" />
 
     <fragment
+        android:id="@+id/application_submitted_fragment"
+        android:name="com.gigforce.app.modules.client_activation.ApplicationSubmittedFragment"
+        android:label="fragment_application_submitted"
+        tools:layout="@layout/fragment_application_submitted"
+        />
+
+    <fragment
         android:id="@+id/fragment_upload_cert"
         android:name="com.gigforce.app.modules.client_activation.UploadDrivingCertificate"
         android:label="fragment_upload_cert"

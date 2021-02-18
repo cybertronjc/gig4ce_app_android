@@ -17,6 +17,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
@@ -60,7 +61,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
-
+        viewModel.getActivationData(mJobProfileId)
         viewModel.draftApplication(mJobProfileId)
 
     }
@@ -96,19 +97,34 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     }
 
+    var jpSettings: JpSettings? = null
     private fun initObservers() {
+
+        viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
+            if (gigAcivation) {
+                viewModel.isActivationScreenFound = gigAcivation
+            }
+        })
+
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
         })
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
             popBackState()
-            navigate(
-                    R.id.fragment_gig_activation, bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId
-
-            )
-            )
+            if (viewModel.isActivationScreenFound) {
+                navigate(
+                        R.id.fragment_gig_activation, bundleOf(
+                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId
+                )
+                )
+            } else {
+                jpSettings?.completionTitle?.let {
+                    navigate(
+                            R.id.application_submitted_fragment, bundleOf(StringConstants.JOB_PROFILE_ID.value to mJobProfileId, StringConstants.BUSSINESS_NAME.value to it)
+                    )
+                }
+            }
         })
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
@@ -118,6 +134,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
             }
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
+            jpSettings = it
             Glide.with(this).load(it?.coverImg).placeholder(
                     com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
             ).into(iv_application_client_activation)

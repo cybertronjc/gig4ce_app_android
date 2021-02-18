@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.questionnaire
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.app.utils.*
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks,
@@ -67,6 +69,11 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         setupRecycler()
         initObservers()
         initClicks()
+
+        //need to resolve this : list not refreshing after state city loaded
+        Handler().postDelayed({
+            adapter.notifyDataSetChanged()
+        }, 1000)
     }
 
 
@@ -132,6 +139,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         }
         PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
                 .setOnClickListener(View.OnClickListener {
+
                     if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
                         val items = adapter.items.filter { questions ->
                             questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer ||
@@ -316,6 +324,10 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         this.parentPosition = adapterPosition;
         this.childPosition = childPosition;
         viewModel.getAllCities()
+    }
+
+    override fun refresh() {
+//        adapter.notifyDataSetChanged()
     }
 
     override fun onClickRefer() {

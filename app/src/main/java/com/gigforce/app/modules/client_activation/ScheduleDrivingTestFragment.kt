@@ -37,6 +37,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     private lateinit var mTitle: String
     private lateinit var mType: String
     private lateinit var mNumber: String
+    private var mNumbers:ArrayList<String> = ArrayList<String>()
     private val adapter: AdapterScheduleTestCb by lazy {
         AdapterScheduleTestCb()
     }
@@ -184,7 +185,8 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                             mJobProfileId,
                             mType,
                             mTitle,
-                            adapter.selectedItems
+                            adapter.selectedItems,
+                            it.content.mobile
                     )
                     pb_schedule_test.visible()
 
@@ -210,6 +212,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
+            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value)?:return@let
         }
 
         arguments?.let {
@@ -217,6 +220,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
+            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value)?:return@let
         }
     }
 
@@ -226,6 +230,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
         outState.putString(StringConstants.MOBILE_NUMBER.value, mNumber)
+        outState.putStringArrayList(StringConstants.MOBILE_NUMBERS.value,mNumbers)
     }
 
     private val OTP_NUMBER =
@@ -233,6 +238,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     lateinit var match: Matcher;
 
     private fun initViews() {
+
         txt_otp.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 verify_otp_button_schedule.isEnabled = enableOtpEditText && (s?.length ?: 0) >= 6
@@ -250,24 +256,27 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             if(mNumber.contains("+91"))
                 finalMobileNumber = mNumber.takeLast(10)
             else finalMobileNumber = mNumber
-            viewModel.sendOTPToMobile(finalMobileNumber)
+            viewModel.sendOTPToMobile(finalMobileNumber,mNumbers)
         }
         otpnotcorrect_schedule_test.setOnClickListener{
             var finalMobileNumber = ""
             if(mNumber.contains("+91"))
                 finalMobileNumber = mNumber.takeLast(10)
             else finalMobileNumber = mNumber
-            viewModel.sendOTPToMobile(finalMobileNumber)
+            viewModel.sendOTPToMobile(finalMobileNumber,mNumbers)
             counterStart()
         }
 //        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
                 Html.fromHtml(getString(R.string.resend_message))
+
+
         verify_otp_button_schedule?.setOnClickListener {
             val otpIn = txt_otp?.text.toString()
             verify_otp_button_schedule.isEnabled = false
             viewModel.verifyOTP(otpIn)
         }
+
         iv_back_application_gig_activation.setOnClickListener { popBackState() }
     }
 
