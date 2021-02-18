@@ -1,5 +1,6 @@
 package com.gigforce.app.notification
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.DeepLinkActivity
 import com.gigforce.app.R
+import com.gigforce.app.notification.NotificationChannels.CHAT_NOTIFICATIONS
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
 import kotlin.random.Random
 
@@ -58,10 +60,25 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        val reqCode = Random.nextInt(0,100)
+        val reqCode = Random.nextInt(0, 100)
         mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
 
+    fun createUrgentPriorityNotification(
+        requestCode: Int,
+        notification: Notification
+    ) {
+
+
+
+        val mNotificationManager =
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.createNotificationChannel(CHAT_NOTIFICATIONS)
+        }
+
+        mNotificationManager.notify(requestCode /* Request Code */, notification)
+    }
 
 
     /**
@@ -99,7 +116,7 @@ class NotificationHelper(private val mContext: Context) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
 
-        val reqCode = Random.nextInt(0,100)
+        val reqCode = Random.nextInt(0, 100)
         mNotificationManager.notify(reqCode /* Request Code */, mBuilder.build())
     }
 

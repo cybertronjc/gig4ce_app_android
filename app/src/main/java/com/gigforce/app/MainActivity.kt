@@ -1,12 +1,10 @@
 package com.gigforce.app
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -19,7 +17,6 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.NavFragmentsData
@@ -53,7 +50,9 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(StringConstants.JOB_PROFILE_ID.value),
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),
@@ -100,6 +99,22 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigerVerificationFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.chatScreenFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.groupChatFragment,
                     intent.extras
                 )
             }
