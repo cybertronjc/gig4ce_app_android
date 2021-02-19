@@ -21,7 +21,7 @@ data class JpApplication(
     var activationStart: Date? = null,
     var activationComplete: Date? = null,
     var applicationLearningCompletionDate: Date? = null,
-    var activationLearningCompletionDate: Date? = null
-
+    var activationLearningCompletionDate: Date? = null,
+    var verifiedTLNumber :String?=null
 
 )

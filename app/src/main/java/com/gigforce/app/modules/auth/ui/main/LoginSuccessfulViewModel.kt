@@ -40,14 +40,15 @@ class LoginSuccessfulViewModel constructor(
         MutableLiveData<ProfileAnGigInfo>()
 
     fun getProfileData(
-        latitude: Double ,
+        latitude: Double,
         longitude: Double,
         locationAddress: String
     ) = viewModelScope.launch {
         try {
-            val profile = profileFirebaseRepository.updateLoginInfoIfUserProfileExistElseCreateProfile(
-                latitude, longitude, locationAddress
-            )
+            val profile =
+                profileFirebaseRepository.updateLoginInfoIfUserProfileExistElseCreateProfile(
+                    latitude, longitude, locationAddress
+                )
             userProfileData.postValue(profile)
         } catch (e: Exception) {
             val errProfileData = ProfileData()
@@ -63,13 +64,15 @@ class LoginSuccessfulViewModel constructor(
             .db
             .collection("Version_info")
             .document(profileFirebaseRepository.getUID())
-            .set(UserVersionInfo(
-                currentVersion = BuildConfig.VERSION_NAME
-            ))
+            .set(
+                UserVersionInfo(
+                    currentVersion = BuildConfig.VERSION_NAME
+                )
+            )
             .addOnSuccessListener {
-                Log.d("VersionInfo","User version added")
+                Log.d("VersionInfo", "User version added")
             }.addOnFailureListener {
-                Log.e("VersionInfo","unable to add version info",it)
+                Log.e("VersionInfo", "unable to add version info", it)
             }
 
 
@@ -80,16 +83,21 @@ class LoginSuccessfulViewModel constructor(
                     var errProfileData = ProfileData()
                     errProfileData.status = false
                     errProfileData.errormsg = e.toString()
-                    userProfileAndGigData.postValue(ProfileAnGigInfo(
-                        profile = errProfileData,
-                        hasGigs = false
-                    ))
+                    userProfileAndGigData.postValue(
+                        ProfileAnGigInfo(
+                            profile = errProfileData,
+                            hasGigs = false
+                        )
+                    )
                     return@EventListener
                 }
                 if (value!!.data == null) {
                     profileFirebaseRepository.createEmptyProfile()
                 } else {
-                    checkForGigData(value.toObject(ProfileData::class.java)!!)
+                    value.toObject(ProfileData::class.java)?.let {
+                        checkForGigData(it)
+                    }
+
                 }
             })
     }
@@ -98,26 +106,30 @@ class LoginSuccessfulViewModel constructor(
         gigsRepository.getCurrentUserGigs()
             .get()
             .addOnSuccessListener {
-               val gigAvailable =  hasGigs(it)
+                val gigAvailable = hasGigs(it)
 
-                userProfileAndGigData.postValue(ProfileAnGigInfo(
-                    profile = profileData,
-                    hasGigs = gigAvailable
-                ))
+                userProfileAndGigData.postValue(
+                    ProfileAnGigInfo(
+                        profile = profileData,
+                        hasGigs = gigAvailable
+                    )
+                )
 
             }.addOnFailureListener {
 
                 var errProfileData = ProfileData()
                 errProfileData.status = false
                 errProfileData.errormsg = it.message!!
-                userProfileAndGigData.postValue(ProfileAnGigInfo(
-                    profile = errProfileData,
-                    hasGigs = false
-                ))
+                userProfileAndGigData.postValue(
+                    ProfileAnGigInfo(
+                        profile = errProfileData,
+                        hasGigs = false
+                    )
+                )
             }
     }
 
-    private fun hasGigs(querySnapshot: QuerySnapshot) : Boolean{
+    private fun hasGigs(querySnapshot: QuerySnapshot): Boolean {
         val userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
             t.toObject(Gig::class.java)?.let {
@@ -132,7 +144,7 @@ class LoginSuccessfulViewModel constructor(
         }
     }
 
-    private fun dumm()  {
+    private fun dumm() {
 
         firebaseFunctions.getHttpsCallable("getMainScreenRedirectionConfig")
             .call()
@@ -141,11 +153,11 @@ class LoginSuccessfulViewModel constructor(
                 result
             }
             .addOnSuccessListener {
-                Log.d("D","d")
+                Log.d("D", "d")
             }
             .addOnFailureListener {
 
-                Log.d("D","d")
+                Log.d("D", "d")
             }
 
     }

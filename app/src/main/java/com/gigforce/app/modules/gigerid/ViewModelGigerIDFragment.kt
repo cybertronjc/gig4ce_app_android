@@ -142,7 +142,8 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
     }
 
     fun getGigDetails(string: String?) {
-        gigerIDCallbacks.getGigDetails(string!!, this)
+
+        string?.let { gigerIDCallbacks.getGigDetails(it, this) }
     }
 
 }

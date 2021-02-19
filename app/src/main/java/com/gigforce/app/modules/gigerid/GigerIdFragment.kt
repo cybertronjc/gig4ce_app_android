@@ -31,6 +31,7 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import kotlin.jvm.Throws
 
 
 class GigerIdFragment : BaseFragment() {
@@ -95,7 +96,11 @@ class GigerIdFragment : BaseFragment() {
             tv_giger_name_giger_id.text = it?.name ?: "--"
             tv_giger_location_giger_id.text =
                 "${if (it?.address?.current?.city?.isEmpty()!!) "--" else it?.address?.current?.city} , ${if (it?.address?.current?.state?.isEmpty()!!) "--" else it?.address?.current?.state}"
-            tv_contact_giger_id.text = it?.contact?.get(0)?.phone ?: "--"
+            it?.contact?.let {
+                if (it.size>0)
+                tv_contact_giger_id.text = it.get(0)?.phone ?: "--"
+            }
+
             tv_email_giger_id.text =
                 if (it?.contact?.get(0)?.email?.isEmpty()!!) "--" else it.contact?.get(0)?.email
             viewModelGigerID.getURl()
