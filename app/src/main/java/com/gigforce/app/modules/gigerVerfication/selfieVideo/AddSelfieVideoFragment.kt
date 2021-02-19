@@ -216,13 +216,15 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
             object : SlideToActView.OnSlideCompleteListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
-                    if (context == null) return
+                    requireContext()?.let {
+                        val transcodedFile = File(
+                            it.filesDir,
+                            "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
+                        )
+                        mCapturedVideoPath?.let { viewModel.uploadSelfieVideo(it, transcodedFile) }
 
-                    val transcodedFile = File(
-                        requireContext().filesDir,
-                        "vid_${DateHelper.getFullDateTimeStamp()}.mp4"
-                    )
-                    viewModel.uploadSelfieVideo(mCapturedVideoPath!!, transcodedFile)
+                    }
+
                 }
             }
 

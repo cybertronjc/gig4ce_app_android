@@ -61,7 +61,6 @@ class ApplicationClientActivationFragment : BaseFragment(),
         setupRecycler()
         initObservers()
         initClicks()
-        viewModel.getActivationData(mJobProfileId)
         viewModel.draftApplication(mJobProfileId)
 
     }
@@ -99,12 +98,6 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
     var jpSettings: JpSettings? = null
     private fun initObservers() {
-
-        viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
-            if (gigAcivation) {
-                viewModel.isActivationScreenFound = gigAcivation
-            }
-        })
 
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it ?: "")
@@ -335,7 +328,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     override fun onClickSubmit() {
-        viewModel.apply(mJobProfileId)
+        viewModel.apply1(mJobProfileId)
         dialog?.dismiss()
         pb_application_client_activation.visible()
 
