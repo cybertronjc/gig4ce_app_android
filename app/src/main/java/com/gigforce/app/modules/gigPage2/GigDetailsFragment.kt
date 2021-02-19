@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -43,12 +44,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
-import kotlinx.android.synthetic.main.fragment_gig_page_2_details.gigRequirementsSeeMoreTV
-import kotlinx.android.synthetic.main.fragment_gig_page_2_details.gig_chip_group
-import kotlinx.android.synthetic.main.fragment_gig_page_2_details.roleNameTV
 import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_keywords.*
-import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -109,7 +106,7 @@ class GigDetailsFragment : BaseFragment(),
             if (viewModel.currentGig == null)
                 return@setOnClickListener
 
-            if (gigRequirementsContainer.childCount == 4) {
+            if (gig_req_container.childCount == 4) {
                 //Collapsed
                 inflateGigRequirements(
                         viewModel.currentGig!!.gigRequirements.subList(
@@ -120,7 +117,7 @@ class GigDetailsFragment : BaseFragment(),
                 gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_less)
             } else {
                 //Expanded
-                gigRequirementsContainer.removeViews(4, gigRequirementsContainer.childCount - 4)
+                gig_req_container.removeViews(4, gig_req_container.childCount - 4)
                 gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_more)
             }
         }
@@ -278,6 +275,9 @@ class GigDetailsFragment : BaseFragment(),
         inflateGigChips(gig)
         inflateKeywords(gig.keywords)
 
+        if (!gig.bannerImage.isNullOrBlank())
+            Glide.with(requireContext()).load(gig.bannerImage).into(gigBannerImageIV)
+
         gig_req_container.removeAllViews()
         if (gig.gigRequirements.size > 4) {
             inflateGigRequirements(gig.gigRequirements.take(4))
@@ -327,16 +327,16 @@ class GigDetailsFragment : BaseFragment(),
     }
 
     private fun inflateKeywords(keywords: List<String>) {
-      keywords.forEach {
+        keywords.forEach {
 
-          val chip = layoutInflater.inflate(
-                  R.layout.fragment_gig_page_2_details_chips,
-                  gig_keywords_group,
-                  false
-          ) as Chip
-          chip.text = it
-          gig_keywords_group.addView(chip)
-      }
+            val chip = layoutInflater.inflate(
+                    R.layout.fragment_gig_page_2_details_chips,
+                    gig_keywords_group,
+                    false
+            ) as Chip
+            chip.text = it
+            gig_keywords_group.addView(chip)
+        }
     }
 
     private fun inflateGigChips(gig: Gig) {
