@@ -4,10 +4,12 @@ import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.app.modules.gigPage.models.JobProfileFull
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -157,6 +159,15 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             }
         }
         return userGigs
+    }
+
+     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+        val getJobProfileQuery = db.collection("Job_Profiles")
+                .document(jobId)
+                .get()
+                .await()
+
+       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
     }
 
     companion object {

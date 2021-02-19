@@ -45,7 +45,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
-import kotlinx.android.synthetic.main.fragment_gig_page_2_info.gig_address_tv
 import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*

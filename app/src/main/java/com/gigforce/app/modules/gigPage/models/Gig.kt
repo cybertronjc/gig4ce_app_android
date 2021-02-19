@@ -29,6 +29,10 @@ data class Gig(
         @set:PropertyName("gigerId")
         var gigerId: String = "",
 
+        @get:PropertyName("description")
+        @set:PropertyName("description")
+        var description: String = "",
+
         @get:PropertyName("bannerImage")
         @set:PropertyName("bannerImage")
         var bannerImage: String? = null,
@@ -154,6 +158,8 @@ data class Gig(
         @set:PropertyName("legalEntity")
         var legalEntity: LegalEntity = LegalEntity(),
 
+        var keywords: List<String> = emptyList(),
+
         var gigRating: Float = 0.0F,
         var gigUserFeedback: String? = null,
         var gigUserFeedbackAttachments: List<String> = emptyList(),
@@ -177,6 +183,8 @@ data class Gig(
         @get:PropertyName("declineReason")
         @set:PropertyName("declineReason")
         var declineReason: String? = null,
+
+        var payoutDetails: String? = null,
 
         @get:PropertyName("regularisationRequest")
         @set:PropertyName("regularisationRequest")

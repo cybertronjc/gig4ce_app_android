@@ -13,7 +13,7 @@
         android:id="@+id/location_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-          app:srcCompat="@drawable/ic_location"
+        app:srcCompat="@drawable/ic_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,12 +27,13 @@
         android:letterSpacing="0.02"
         android:textColor="@color/black_85"
         android:textSize="16sp"
+        android:text="Description"
         app:layout_constraintStart_toEndOf="@id/location_iv"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/gig_address_tv"
+        android:id="@+id/gig_desc_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"

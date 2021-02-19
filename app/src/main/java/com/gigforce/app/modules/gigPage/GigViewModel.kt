@@ -204,8 +204,49 @@ class GigViewModel constructor(
                 }
     }
 
-    fun getGigWithDetails(gigId : String) {
+    fun getGigWithDetails(gigId: String) = viewModelScope.launch {
+        _gigDetails.value = Lce.loading()
 
+        try {
+            val getGigQuery = gigsRepository
+                    .getCollectionReference()
+                    .document(gigId)
+                    .get().await()
+
+            val gig = getGigQuery.toObject(Gig::class.java)!!
+            val jobDetails = gigsRepository.getJobDetails(gig.profile.id!!)
+
+            gig.bannerImage = jobDetails.illustrationImage
+
+            val jobRequirementsMatch = jobDetails.info.find { it.title == "requirements" }
+            if (jobRequirementsMatch != null) {
+                gig.gigRequirements = jobRequirementsMatch.pointsData
+            }
+
+            val jobResponsibilitiesMatch = jobDetails.info.find { it.title == "responsibilities" }
+            if (jobResponsibilitiesMatch != null) {
+                gig.gigResponsibilities = jobResponsibilitiesMatch.pointsData
+            }
+
+            val jobDescriptionMatch = jobDetails.info.find { it.title == "description" }
+            if (jobDescriptionMatch != null) {
+                gig.description = jobDescriptionMatch.pointsData.firstOrNull() ?: ""
+            }
+
+            val jobPayoutMatch = jobDetails.info.find { it.title == "payout" }
+            if (jobPayoutMatch != null) {
+                gig.payoutDetails = jobPayoutMatch.pointsData.firstOrNull() ?: ""
+            }
+
+            val keywordsMatch = jobDetails.info.find { it.title == "keywords" }
+            if (keywordsMatch != null) {
+                gig.keywords = keywordsMatch.pointsData
+            }
+
+            _gigDetails.value = Lce.content(gig)
+        } catch (e: Exception) {
+            _gigDetails.value = Lce.error(e.message!!)
+        }
     }
 
     private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
@@ -225,6 +266,7 @@ class GigViewModel constructor(
             _gigDetails.value = Lce.error(it.message!!)
         }
     }
+
 
     suspend fun getDownloadLinkFor(folder: String, file: String) =
             suspendCoroutine<String> { cont ->
@@ -392,13 +434,13 @@ class GigViewModel constructor(
             val gig = getGigNow(gigId)
 
             gigsRepository
-                .getCollectionReference()
-                .document(gig.gigId)
-                .updateOrThrow(mapOf(
-                    "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                    "declinedBy" to gig.gigerId,
-                    "declineReason" to reason
-                ))
+                    .getCollectionReference()
+                    .document(gig.gigId)
+                    .updateOrThrow(mapOf(
+                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                            "declinedBy" to gig.gigerId,
+                            "declineReason" to reason
+                    ))
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
@@ -417,13 +459,13 @@ class GigViewModel constructor(
 
                 val gig = getGigNow(it)
                 gigsRepository
-                    .getCollectionReference()
-                    .document(gig.gigId)
-                    .updateOrThrow(mapOf(
-                        "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                        "declinedBy" to gig.gigerId,
-                        "declineReason" to reason
-                    ))
+                        .getCollectionReference()
+                        .document(gig.gigId)
+                        .updateOrThrow(mapOf(
+                                "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                                "declinedBy" to gig.gigerId,
+                                "declineReason" to reason
+                        ))
             }
 
             _declineGig.value = Lse.success()

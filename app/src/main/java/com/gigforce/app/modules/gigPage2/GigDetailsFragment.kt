@@ -44,7 +44,10 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.gigRequirementsSeeMoreTV
+import kotlinx.android.synthetic.main.fragment_gig_page_2_details.gig_chip_group
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.roleNameTV
+import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
+import kotlinx.android.synthetic.main.fragment_gig_page_2_keywords.*
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import java.text.SimpleDateFormat
@@ -135,7 +138,7 @@ class GigDetailsFragment : BaseFragment(),
                     }
                 })
 
-        viewModel.watchGig(gigId)
+        viewModel.getGigWithDetails(gigId)
     }
 
     private fun initLearningViewModel() {
@@ -261,7 +264,6 @@ class GigDetailsFragment : BaseFragment(),
 
     private fun setGigDetailsOnView(gig: Gig) {
 
-
         if (gig.isPresentGig() || gig.isPastGig()) {
             iv_options_gig_details.gone()
         } else {
@@ -271,8 +273,10 @@ class GigDetailsFragment : BaseFragment(),
         tv_title_gig_details.text = gig?.profile?.title
         roleNameTV.text = gig?.profile?.title
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
+        gig_desc_tv.text = gig.description
 
         inflateGigChips(gig)
+        inflateKeywords(gig.keywords)
 
         gig_req_container.removeAllViews()
         if (gig.gigRequirements.size > 4) {
@@ -292,8 +296,8 @@ class GigDetailsFragment : BaseFragment(),
             gigResponsiblitiesSeeMoreTV.gone()
         }
 
-        val earningRow = if (gig.isMonthlyGig) {
-            "<b>Typical per month earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
+        val earningRow = if (gig.payoutDetails != null) {
+            gig.payoutDetails!!
         } else {
             "<b>Typical per day earning</b> : ${if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "As per contract"}"
         }
@@ -305,25 +309,37 @@ class GigDetailsFragment : BaseFragment(),
                 )
         )
 
-        gig_others_container.removeAllViews()
-        inflateGigOthers(
-                listOf(
-                        "Dummy Other row",
-                        "Dummy Other row 2"
-                )
-        )
+//        gig_others_container.removeAllViews()
+//        inflateGigOthers(
+//                listOf(
+//                        "Dummy Other row",
+//                        "Dummy Other row 2"
+//                )
+//        )
+//
+//        gig_faq_container.removeAllViews()
+//        inflateGigFaqs(
+//                listOf(
+//                        "Dummy Faq row",
+//                        "Dummy Faq row 2"
+//                )
+//        )
+    }
 
-        gig_faq_container.removeAllViews()
-        inflateGigFaqs(
-                listOf(
-                        "Dummy Faq row",
-                        "Dummy Faq row 2"
-                )
-        )
+    private fun inflateKeywords(keywords: List<String>) {
+      keywords.forEach {
+
+          val chip = layoutInflater.inflate(
+                  R.layout.fragment_gig_page_2_details_chips,
+                  gig_keywords_group,
+                  false
+          ) as Chip
+          chip.text = it
+          gig_keywords_group.addView(chip)
+      }
     }
 
     private fun inflateGigChips(gig: Gig) {
-        var chip: Chip
         if (gig.gigType != null) {
             var chip = layoutInflater.inflate(
                     R.layout.fragment_gig_page_2_details_chips,
@@ -334,12 +350,13 @@ class GigDetailsFragment : BaseFragment(),
             gig_chip_group.addView(chip)
         }
 
+        var chip: Chip
         chip = layoutInflater.inflate(
                 R.layout.fragment_gig_page_2_details_chips,
                 gig_chip_group,
                 false
         ) as Chip
-        chip.text = if (gig.isMonthlyGig) "Monthly" else "daily"
+        chip.text = if (gig.isMonthlyGig) "Monthly" else "Daily"
         gig_chip_group.addView(chip)
 
 
