@@ -269,21 +269,21 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     private fun setGigDetailsOnView(gig: Gig) {
         this.gig = gig
-        roleNameTV.text = gig.title
-        companyNameTV.text = "@ ${gig.companyName}"
+        roleNameTV.text = gig?.profile?.title
+        companyNameTV.text = "@ ${gig.legalEntity.name}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
 
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.legalEntity.logo.isNullOrBlank()) {
+            if (gig.legalEntity.logo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                        .load(gig.companyLogo)
+                        .load(gig.legalEntity.logo)
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
                         .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .child(gig.legalEntity.logo!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
                             Glide.with(requireContext())
@@ -292,10 +292,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.legalEntity.name!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)

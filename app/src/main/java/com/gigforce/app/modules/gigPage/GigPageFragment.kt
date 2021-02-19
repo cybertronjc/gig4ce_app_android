@@ -511,17 +511,17 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
             }
 
         }
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.legalEntity.logo.isNullOrBlank()) {
+            if (gig.legalEntity.logo!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                        .load(gig.companyLogo)
+                        .load(gig.legalEntity.logo)
                         .placeholder(getCircularProgressDrawable())
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .reference
+                        .child(gig.legalEntity.logo!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -532,10 +532,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.legalEntity.name!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -567,9 +567,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         }
 
 
-        tv_title_gig_page.text = gig.title
-        roleNameTV.text = gig.title
-        companyNameTV.text = "@ ${gig.companyName}"
+        tv_title_gig_page.text = gig?.profile?.title
+        roleNameTV.text =gig?.profile?.title
+        companyNameTV.text = "@ ${gig.legalEntity.name}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "N/A"

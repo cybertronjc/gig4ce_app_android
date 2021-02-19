@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage.models.GigPeopleToExpect
+import com.gigforce.app.modules.gigPage.models.ContactPerson
 import kotlinx.android.synthetic.main.recycler_item_gig_people_to_expect.view.*
 
 interface GigPeopleToExpectAdapterClickListener {
-    fun onPeopleToExpectClicked(option: GigPeopleToExpect)
+    fun onPeopleToExpectClicked(option: ContactPerson)
 
-    fun onCallManagerClicked(manager: GigPeopleToExpect)
+    fun onCallManagerClicked(manager: ContactPerson)
 
-    fun onChatWithManagerClicked(manager: GigPeopleToExpect)
+    fun onChatWithManagerClicked(manager: ContactPerson)
 }
 
 class GigPeopleToExpectAdapter(
@@ -25,14 +25,14 @@ class GigPeopleToExpectAdapter(
 
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigPeopleToExpectAdapterClickListener? = null
-    private var gigPeopleToExpect: List<GigPeopleToExpect> = emptyList()
+    private var contactPerson: List<ContactPerson> = emptyList()
 
     fun setListener(otherOptionClickListener: GigPeopleToExpectAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener
     }
 
-    fun updatePeopleToExpect(gigPeopleToExpect: List<GigPeopleToExpect>) {
-        this.gigPeopleToExpect = gigPeopleToExpect
+    fun updatePeopleToExpect(contactPerson: List<ContactPerson>) {
+        this.contactPerson = contactPerson
         notifyDataSetChanged()
     }
 
@@ -56,11 +56,11 @@ class GigPeopleToExpectAdapter(
 
     override fun onBindViewHolder(holder: GigPeopleToExpectViewHolder, position: Int) {
 
-        val peopleToExpect = gigPeopleToExpect[position]
+        val peopleToExpect = contactPerson[position]
         holder.bind(peopleToExpect)
     }
 
-    override fun getItemCount() = gigPeopleToExpect.size
+    override fun getItemCount() = contactPerson.size
 
     inner class GigPeopleToExpectViewHolder(
             itemView: View
@@ -78,7 +78,7 @@ class GigPeopleToExpectAdapter(
             chatButton.setOnClickListener(this)
         }
 
-        fun bind(peopleToExpect: GigPeopleToExpect) = peopleToExpect.apply {
+        fun bind(peopleToExpect: ContactPerson) = peopleToExpect.apply {
 
             if (this.profilePicture != null) {
 
@@ -101,10 +101,10 @@ class GigPeopleToExpectAdapter(
         override fun onClick(v: View?) {
             val viewClicked = v ?: return
             when (viewClicked.id) {
-                R.id.call_btn -> otherOptionClickListener?.onCallManagerClicked(gigPeopleToExpect[adapterPosition])
-                R.id.chat_btn -> otherOptionClickListener?.onChatWithManagerClicked(gigPeopleToExpect[adapterPosition])
+                R.id.call_btn -> otherOptionClickListener?.onCallManagerClicked(contactPerson[adapterPosition])
+                R.id.chat_btn -> otherOptionClickListener?.onChatWithManagerClicked(contactPerson[adapterPosition])
                 else -> {
-                    otherOptionClickListener?.onPeopleToExpectClicked(gigPeopleToExpect[adapterPosition])
+                    otherOptionClickListener?.onPeopleToExpectClicked(contactPerson[adapterPosition])
                 }
             }
         }

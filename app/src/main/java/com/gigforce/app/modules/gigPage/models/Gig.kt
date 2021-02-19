@@ -29,10 +29,6 @@ data class Gig(
         @set:PropertyName("gigerId")
         var gigerId: String = "",
 
-        @get:PropertyName("title")
-        @set:PropertyName("title")
-        var title: String = "",
-
         @get:PropertyName("bannerImage")
         @set:PropertyName("bannerImage")
         var bannerImage: String? = null,
@@ -105,15 +101,22 @@ data class Gig(
         @set:PropertyName("checkOutAfterTime")
         var checkOutAfterTime: Timestamp = Timestamp.now(),
 
+        @get:PropertyName("agencyContact")
+        @set:PropertyName("agencyContact")
+        var agencyContact: ContactPerson? = null,
+
+        @get:PropertyName("businessContact")
+        @set:PropertyName("businessContact")
+        var businessContact: ContactPerson? = null,
 
         var checkInBeforeTimeBufferInMins: Long = 60,
         var checkInAfterTimeBufferInMins: Long = 60,
         var checkOutBeforeTimeBufferInMins: Long = 60,
         var checkOutAfterTimeBufferInMins: Long = 60,
 
+        @get:PropertyName("gigStatus")
+        @set:PropertyName("gigStatus")
         var gigStatus: String = "upcoming",
-        var companyLogo: String? = null,
-        var companyName: String? = null,
 
         @get:PropertyName("isGigActivated")
         @set:PropertyName("isGigActivated")
@@ -143,6 +146,14 @@ data class Gig(
         @set:PropertyName("gigOrderId")
         var gigOrderId: String = "",
 
+        @get:PropertyName("profile")
+        @set:PropertyName("profile")
+        var profile: JobProfile = JobProfile(),
+
+        @get:PropertyName("legalEntity")
+        @set:PropertyName("legalEntity")
+        var legalEntity: LegalEntity = LegalEntity(),
+
         var gigRating: Float = 0.0F,
         var gigUserFeedback: String? = null,
         var gigUserFeedbackAttachments: List<String> = emptyList(),
@@ -170,10 +181,6 @@ data class Gig(
         @get:PropertyName("regularisationRequest")
         @set:PropertyName("regularisationRequest")
         var regularisationRequest: GigRegularisationRequest? = null,
-
-        @get:PropertyName("contactPersons")
-        @set:PropertyName("contactPersons")
-        var contactPersons: List<GigPeopleToExpect> = emptyList(),
 
         @field:Exclude
         var chatInfo: Map<String, Any>? = null
@@ -335,20 +342,42 @@ data class Gig(
     }
 }
 
+
 @Parcelize
-data class GigPeopleToExpect(
+data class LegalEntity(
+
+        @get:PropertyName("id")
+        @set:PropertyName("id")
+        var id: String? = null,
+
+        @get:PropertyName("logo")
+        @set:PropertyName("logo")
+        var logo: String? = null,
+
+        @get:PropertyName("name")
+        @set:PropertyName("name")
+        var name: String? = null
+) : Parcelable
+
+@Parcelize
+data class JobProfile(
+
+        @get:PropertyName("id")
+        @set:PropertyName("id")
+        var id: String? = null,
+
+        @get:PropertyName("title")
+        @set:PropertyName("title")
+        var title: String? = null
+) : Parcelable
+
+
+@Parcelize
+data class ContactPerson(
 
         @get:PropertyName("uid")
         @set:PropertyName("uid")
         var uid: String? = null,
-
-        @get:PropertyName("profilePicture")
-        @set:PropertyName("profilePicture")
-        var profilePicture: String? = null,
-
-        @get:PropertyName("whatsAppNo")
-        @set:PropertyName("whatsAppNo")
-        var whatsAppNo: String? = null,
 
         @get:PropertyName("name")
         @set:PropertyName("name")
@@ -358,11 +387,15 @@ data class GigPeopleToExpect(
         @set:PropertyName("designation")
         var designation: String? = null,
 
-        @get:PropertyName("contactNumber")
-        @set:PropertyName("contactNumber")
+        @get:PropertyName("profilePicture")
+        @set:PropertyName("profilePicture")
+        var profilePicture: String? = null,
+
+        @get:PropertyName("primary_no")
+        @set:PropertyName("primary_no")
         var contactNumber: String? = null,
 
-        @get:PropertyName("rating")
-        @set:PropertyName("rating")
-        var rating: Float? = null
+        @get:PropertyName("secondary_no")
+        @set:PropertyName("secondary_no")
+        var secondaryContactNo: String? = null
 ) : Parcelable

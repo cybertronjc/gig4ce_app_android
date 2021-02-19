@@ -251,7 +251,7 @@ class HourViewFragment: RosterBaseFragment() {
                         startHour = gig.startHour,
                         startMinute = gig.startMinute,
                         duration = gig.duration,
-                        title = gig.title,
+                        title = gig.profile.title ?: "",
                         cardHeight = (itemHeight * gig.duration).toInt().px
                     )
                     upcomingCard.id = View.generateViewId()
@@ -273,7 +273,7 @@ class HourViewFragment: RosterBaseFragment() {
                         startHour = gig.startHour,
                         startMinute = gig.startMinute,
                         duration = gig.duration,
-                        title = gig.title,
+                        title = gig.profile.title ?: "",
                         amount = gig.gigAmount,
                         rating = gig.gigRating,
                         gigSuccess = gig.isGigCompleted,
@@ -300,7 +300,7 @@ class HourViewFragment: RosterBaseFragment() {
                         startHour = gig.startHour,
                         startMinute = gig.startMinute,
                         duration = gig.duration,
-                        title = gig.title,
+                        title = gig.profile.title ?: "",
                         cardHeight = (itemHeight * gig.duration).toInt().px
                     )
                     currentCard.id = View.generateViewId()

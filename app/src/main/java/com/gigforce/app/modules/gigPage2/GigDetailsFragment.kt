@@ -268,8 +268,8 @@ class GigDetailsFragment : BaseFragment(),
             iv_options_gig_details.visible()
         }
 
-        tv_title_gig_details.text = gig.title
-        roleNameTV.text = gig.title
+        tv_title_gig_details.text = gig?.profile?.title
+        roleNameTV.text = gig?.profile?.title
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
 
         inflateGigChips(gig)

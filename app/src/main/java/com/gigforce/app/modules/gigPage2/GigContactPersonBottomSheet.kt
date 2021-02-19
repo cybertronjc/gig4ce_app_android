@@ -15,9 +15,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.app.modules.gigPage.models.GigPeopleToExpect
+import com.gigforce.app.modules.gigPage.models.ContactPerson
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,7 +27,7 @@ import java.util.*
 
 class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
 
-    private lateinit var contactPersonDetail: GigPeopleToExpect
+    private lateinit var contactPersonDetail: ContactPerson
     private val profileViewModel: ProfileViewModel by viewModels()
 
     private val firebaseUser = FirebaseAuth.getInstance().currentUser!!
@@ -84,10 +83,10 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
 
         whatsapp_card_view.setOnClickListener {
 
-            val phoneNumber = if (contactPersonDetail.whatsAppNo!!.startsWith("+91")) {
-                contactPersonDetail.whatsAppNo!!
+            val phoneNumber = if (contactPersonDetail.contactNumber!!.startsWith("+91")) {
+                contactPersonDetail.contactNumber!!
             } else {
-                "+91" + contactPersonDetail.whatsAppNo!!
+                "+91" + contactPersonDetail.contactNumber!!
             }
 
             val uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=")
@@ -109,30 +108,23 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
         user_name_tv.text = contactPersonDetail.name
         designation_tv.text = contactPersonDetail.designation
 
-        if (contactPersonDetail.rating != null) {
-            rating_tv.visible()
-            rating_star_iv.visible()
+        rating_tv.gone()
+        rating_star_iv.gone()
 
-            rating_tv.text = contactPersonDetail.rating.toString()
-        } else {
-
-            rating_tv.gone()
-            rating_star_iv.gone()
-        }
-
-        if (contactPersonDetail.profilePicture != null) {
-
-            Glide.with(requireContext())
-                    .load(contactPersonDetail.profilePicture)
-                    .circleCrop()
-                    .into(user_image_iv)
-        } else {
-
-            Glide.with(requireContext())
-                    .load(R.drawable.avatar)
-                    .circleCrop()
-                    .into(user_image_iv)
-        }
+        //todo show picture here
+//        if (contactPersonDetail.profilePicture != null) {
+//
+//            Glide.with(requireContext())
+//                    .load(contactPersonDetail.profilePicture)
+//                    .circleCrop()
+//                    .into(user_image_iv)
+//        } else {
+//
+//            Glide.with(requireContext())
+//                    .load(R.drawable.avatar)
+//                    .circleCrop()
+//                    .into(user_image_iv)
+//        }
 
         if (!contactPersonDetail.contactNumber.isNullOrBlank()) {
             call_card_view.visible()
@@ -150,7 +142,7 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
             message_tv.gone()
         }
 
-        if (!contactPersonDetail.whatsAppNo.isNullOrBlank()) {
+        if (!contactPersonDetail.contactNumber.isNullOrBlank()) {
             whatsapp_card_view.visible()
             whatsApp_tv.visible()
         } else {
@@ -202,8 +194,7 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
                 ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
                 ChatFragment.INTENT_EXTRA_FOR_USER_ID to firebaseUser.uid,
                 ChatFragment.INTENT_EXTRA_OTHER_USER_ID to id,
-                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name,
-                ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to contactPersonDetail.profilePicture
+                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
         ))
     }
 

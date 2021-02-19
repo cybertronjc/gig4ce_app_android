@@ -495,7 +495,7 @@ class RosterDayViewModel constructor(
             if (it.isPastGig()) {
                 val widget = CompletedGigCard(
                         topBar!!.context,
-                        title = it.title,
+                        title = it.profile.title ?: "",
                         gigSuccess = it.isGigCompleted,
                         paymentSuccess = it.isPaymentDone,
                         rating = it.gigRating,
@@ -510,7 +510,7 @@ class RosterDayViewModel constructor(
                 // TODO: Implement current day gig card
                 val widget = CurrentGigCard(
                         topBar!!.context,
-                        title = it.title,
+                        title = it.profile.title ?: "",
                         startHour = it.startHour,
                         startMinute = it.startMinute,
                         duration = 0.0F,
@@ -522,7 +522,7 @@ class RosterDayViewModel constructor(
             } else if (it.isUpcomingGig()) {
                 val widget = UpcomingGigCard(
                         topBar!!.context,
-                        title = it.title,
+                        title = it.profile.title ?: "",
                         startHour = it.startHour,
                         startMinute = it.startMinute,
                         duration = 0.0F,

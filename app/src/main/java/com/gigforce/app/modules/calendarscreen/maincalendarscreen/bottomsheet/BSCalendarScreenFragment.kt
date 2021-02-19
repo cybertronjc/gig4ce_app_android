@@ -449,7 +449,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
-                                getTextView(viewHolder, R.id.textView41).text = obj?.title
+                                getTextView(viewHolder, R.id.textView41).text = obj?.profile?.title
                                 getTextView(viewHolder, R.id.contactPersonTV).text =
                                         obj?.gigContactDetails?.contactName
 
@@ -515,18 +515,18 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                                 val companyLogoIV = getImageView(viewHolder, R.id.companyLogoIV)
 
-                                if (!obj.companyLogo.isNullOrBlank()) {
+                                if (!obj.legalEntity.logo.isNullOrBlank()) {
 
-                                    if (obj.companyLogo!!.startsWith("http", true)) {
+                                    if (obj.legalEntity.logo!!.startsWith("http", true)) {
 
                                         Glide.with(requireContext())
-                                                .load(obj.companyLogo)
+                                                .load(obj.legalEntity.logo)
                                                 .into(companyLogoIV)
 
                                     } else {
                                         FirebaseStorage.getInstance()
-                                                .getReference("companies_gigs_images")
-                                                .child(obj.companyLogo!!)
+                                                .reference
+                                                .child(obj.legalEntity.logo!!)
                                                 .downloadUrl
                                                 .addOnSuccessListener {
 
@@ -536,10 +536,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                                 }
                                     }
                                 } else {
-                                    val companyInitials = if (obj.companyName.isNullOrBlank())
+                                    val companyInitials = if (obj.legalEntity.name.isNullOrBlank())
                                         "C"
                                     else
-                                        obj.companyName!![0].toString().toUpperCase()
+                                        obj.legalEntity.name!![0].toString().toUpperCase()
                                     val drawable = TextDrawable.builder().buildRound(
                                             companyInitials,
                                             ResourcesCompat.getColor(resources, R.color.lipstick, null)

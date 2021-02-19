@@ -116,7 +116,7 @@ class GigerIdFragment : BaseFragment() {
     }
 
     private fun initUi(gig: Gig) {
-        tv_designation_giger_id.text = gig.title
+        tv_designation_giger_id.text = gig.profile.title
         tv_gig_since_giger_id.text =
             "${resources.getString(R.string.giger_since)} ${
                 parseTime(
@@ -124,17 +124,17 @@ class GigerIdFragment : BaseFragment() {
                     gig?.startDateTime?.toDate()
                 )
             }"
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.legalEntity.logo.isNullOrBlank()) {
+            if (gig.legalEntity.logo!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(gig.companyLogo)
+                    .load(gig.legalEntity.logo)
                     .placeholder(getCircularProgressDrawable())
                     .into(iv_brand_logo_giger_id)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(gig.companyLogo!!)
+                    .reference
+                    .child(gig.legalEntity.logo!!)
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
 
@@ -145,10 +145,10 @@ class GigerIdFragment : BaseFragment() {
                     }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.legalEntity.name!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                 companyInitials,
                 ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -156,7 +156,7 @@ class GigerIdFragment : BaseFragment() {
 
             iv_brand_logo_giger_id.setImageDrawable(drawable)
         }
-        tv_brand_name_giger_id.text = "@${gig.companyName}"
+        tv_brand_name_giger_id.text = "@${gig.legalEntity.name}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
         gig.startDateTime?.let {
             tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", it.toDate())

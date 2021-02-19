@@ -23,14 +23,18 @@ enum class GigStatus constructor(
         return this.string.capitalize()
     }
 
+    fun getStatusString(): String{
+        return this.string
+    }
+
     @DrawableRes
     fun getIconForStatus(): Int{
         return when (this) {
-            GigStatus.UPCOMING -> R.drawable.ic_status_pending
-            GigStatus.DECLINED -> R.drawable.ic_status_pending
-            GigStatus.CANCELLED -> R.drawable.ic_status_pending
+            GigStatus.UPCOMING -> R.drawable.ic_gig_upoming
+            GigStatus.DECLINED -> R.drawable.ic_gig_declined_cancelled
+            GigStatus.CANCELLED -> R.drawable.ic_gig_declined_cancelled
             GigStatus.ONGOING -> R.drawable.ic_status_pending
-            GigStatus.PENDING -> R.drawable.ic_status_pending
+            GigStatus.PENDING -> R.drawable.ic_gig_upoming
             GigStatus.NO_SHOW -> R.drawable.ic_status_pending
             GigStatus.COMPLETED -> R.drawable.ic_status_pending
             GigStatus.MISSED -> R.drawable.ic_status_pending
@@ -75,7 +79,7 @@ enum class GigStatus constructor(
             }
 
             if (currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime()) &&
-                    currentTime.isBefore(gig.checkInAfterTime.toLocalDateTime()) &&
+                    currentTime.isBefore(gig.endDateTime.toLocalDateTime()) &&
                     gig.isCheckInMarked().not()
             ) {
                 return PENDING

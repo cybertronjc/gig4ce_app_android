@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toDate
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
@@ -203,6 +204,10 @@ class GigViewModel constructor(
                 }
     }
 
+    fun getGigWithDetails(gigId : String) {
+
+    }
+
     private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
         runCatching {
             val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
@@ -385,11 +390,15 @@ class GigViewModel constructor(
 
         try {
             val gig = getGigNow(gigId)
-            gig.declinedBy = gig.gigerId
-            gig.declineReason = reason
-            gig.gigerId = ""
 
-            gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+            gigsRepository
+                .getCollectionReference()
+                .document(gig.gigId)
+                .updateOrThrow(mapOf(
+                    "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                    "declinedBy" to gig.gigerId,
+                    "declineReason" to reason
+                ))
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
@@ -407,11 +416,14 @@ class GigViewModel constructor(
             gigIds.forEach {
 
                 val gig = getGigNow(it)
-                gig.declinedBy = gig.gigerId
-                gig.declineReason = reason
-                gig.gigerId = ""
-
-                gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+                gigsRepository
+                    .getCollectionReference()
+                    .document(gig.gigId)
+                    .updateOrThrow(mapOf(
+                        "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                        "declinedBy" to gig.gigerId,
+                        "declineReason" to reason
+                    ))
             }
 
             _declineGig.value = Lse.success()
@@ -567,6 +579,4 @@ class GigViewModel constructor(
     fun getUid(): String {
         return gigsRepository.getUID()
     }
-
-
 }
