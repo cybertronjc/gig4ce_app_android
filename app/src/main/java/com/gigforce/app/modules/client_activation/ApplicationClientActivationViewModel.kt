@@ -212,36 +212,6 @@ class ApplicationClientActivationViewModel : ViewModel() {
     //    private val _observableGigActivation = MutableLiveData<Boolean>()
 //    val observableGigActivation: LiveData<Boolean> = _observableGigActivation
     var isActivationScreenFound = false
-//    fun getActivationData(jobProfileID: String) {
-//
-//        var data = repository.getCollectionReference().whereEqualTo("jobProfileId", jobProfileID)
-//                .whereEqualTo("type", "activation").get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
-//                fun onComplete(task: Task<QuerySnapshot>) {
-//                    if (task.isSuccessful()) {
-//                        for (document: QueryDocumentSnapshot in task.result!!) {
-//
-//                        }
-//                    } else {
-//                        Log.d("CITITES_REPO", "Error getting documents: ", task.exception);
-//                    }
-//                }
-//            }
-//
-////        addSnapshotListener { success, err ->
-////                    if (err == null) {
-////                        if (success?.documents?.isNotEmpty() == true) {
-////                            isActivationScreenFound = true
-//////                            _observableGigActivation.value =
-//////                                    true
-////
-////                        }
-////                    } else {
-////                        observableError.value = err.message
-////                    }
-////                }
-//
-//    }
-
 
     fun draftApplication(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
