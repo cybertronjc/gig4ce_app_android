@@ -65,40 +65,40 @@ data class Gig(
         @set:PropertyName("startDateTime")
         var startDateTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInBeforeTime")
-        @set:PropertyName("checkInBeforeTime")
+        @get:PropertyName("checkInBeforeSlot")
+        @set:PropertyName("checkInBeforeSlot")
         var checkInBeforeTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInBeforeBufferTime")
-        @set:PropertyName("checkInBeforeBufferTime")
+        @get:PropertyName("checkInBeforeBuffer")
+        @set:PropertyName("checkInBeforeBuffer")
         var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInAfterBufferTime")
-        @set:PropertyName("checkInAfterBufferTime")
+        @get:PropertyName("checkInAfterBuffer")
+        @set:PropertyName("checkInAfterBuffer")
         var checkInAfterBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInAfterTime")
-        @set:PropertyName("checkInAfterTime")
+        @get:PropertyName("checkInAfterSlot")
+        @set:PropertyName("checkInAfterSlot")
         var checkInAfterTime: Timestamp = Timestamp.now(),
 
         @get:PropertyName("endDateTime")
         @set:PropertyName("endDateTime")
         var endDateTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutBeforeTime")
-        @set:PropertyName("checkOutBeforeTime")
+        @get:PropertyName("checkOutBeforeSlot")
+        @set:PropertyName("checkOutBeforeSlot")
         var checkOutBeforeTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutBeforeBufferTime")
-        @set:PropertyName("checkOutBeforeBufferTime")
+        @get:PropertyName("checkOutBeforeBuffer")
+        @set:PropertyName("checkOutBeforeBuffer")
         var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutAfterBufferTime")
-        @set:PropertyName("checkOutAfterBufferTime")
+        @get:PropertyName("checkOutAfterBuffer")
+        @set:PropertyName("checkOutAfterBuffer")
         var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutAfterTime")
-        @set:PropertyName("checkOutAfterTime")
+        @get:PropertyName("checkOutAfterSlot")
+        @set:PropertyName("checkOutAfterSlot")
         var checkOutAfterTime: Timestamp = Timestamp.now(),
 
         @get:PropertyName("agencyContact")
