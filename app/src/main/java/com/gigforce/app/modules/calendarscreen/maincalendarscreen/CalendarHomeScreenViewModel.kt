@@ -15,6 +15,7 @@ import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage.models.JobProfile
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ServerTimestamp
@@ -96,7 +97,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
         lateinit var startDateTime: Date
         @ServerTimestamp
         var endDateTime: Date? = null
-        var title: String = ""
+        var profile : JobProfile = JobProfile()
+
 
         constructor(
             duration: Int,
@@ -104,18 +106,19 @@ class CalendarHomeScreenViewModel : ViewModel() {
             gigerId: String,
             startDateTime: Date,
             endDateTime: Date?,
-            title: String
+            title: JobProfile
         ) {
             this.duration = duration
             this.gigStatus = gigStatus
             this.gigerId = gigerId
             this.startDateTime = startDateTime
             this.endDateTime = endDateTime
-            this.title = title
+            this.profile = title
         }
 
         constructor() {}
     }
+
 
     fun getVerticalCalendarData(
         dataItem: VerticalCalendarDataItemModel?,

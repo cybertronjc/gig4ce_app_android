@@ -450,8 +450,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
                                 getTextView(viewHolder, R.id.textView41).text = obj?.profile?.title
-                                getTextView(viewHolder, R.id.contactPersonTV).text =
-                                        obj?.gigContactDetails?.contactName
+                                getTextView(viewHolder, R.id.contactPersonTV).text = obj?.businessContact?.name
 
                                 if (obj!!.isGigOfToday()) {
 
@@ -498,7 +497,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 )
 
                                 val callView = getView(viewHolder, R.id.callCardView)
-                                if (!obj.gigContactDetails?.contactNumberString.isNullOrEmpty()) {
+                                if (!obj.businessContact?.contactNumber.isNullOrEmpty()) {
 
 
                                     callView.visible()
@@ -595,7 +594,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
             val intent = Intent(
                     Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
+                    Uri.fromParts("tel", gig.businessContact?.contactNumber, null)
             )
             startActivity(intent)
         }
