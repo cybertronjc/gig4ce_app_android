@@ -725,7 +725,7 @@
         android:label="GigRegulariseAttendanceFragment" />
     <dialog
         android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.GigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
         android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment

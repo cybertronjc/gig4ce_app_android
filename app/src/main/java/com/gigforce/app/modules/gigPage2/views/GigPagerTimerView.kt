@@ -37,13 +37,11 @@ class GigPagerTimerView(
 
     //Views
     private lateinit var rootCardView: MaterialCardView
-    private lateinit var statusCardView: MaterialCardView
 
     private lateinit var gigDateTV: TextView
     private lateinit var gigTimerTV: TextView
     private lateinit var gigCheckInTimeTV: TextView
-    private lateinit var gigStatusIV: ImageView
-    private lateinit var gigStatusTV: TextView
+    private lateinit var gigStatusCardView: GigStatusCardView
 
     private lateinit var gigTimerAndDetailsLayout: View
     private lateinit var gigAttendanceDetailsLayout: View
@@ -66,8 +64,6 @@ class GigPagerTimerView(
 
     private fun findViews(view : View) {
         rootCardView = view.findViewById(R.id.timer_root_card_layout)
-        statusCardView = view.findViewById(R.id.status_card_view)
-
 
         gigTimerAndDetailsLayout = view.findViewById(R.id.timer_and_attendance_layout)
         gigAttendanceDetailsLayout = view.findViewById(R.id.gig_attendance_details_layout)
@@ -75,8 +71,7 @@ class GigPagerTimerView(
         gigDateTV = view.findViewById(R.id.gig_date_tv)
         gigTimerTV = view.findViewById(R.id.gig_timer_tv)
         gigCheckInTimeTV = view.findViewById(R.id.gig_checkin_time_tv)
-        gigStatusTV = view.findViewById(R.id.gig_status_tv)
-        gigStatusIV = view.findViewById(R.id.gig_status_iv)
+        gigStatusCardView = view.findViewById(R.id.gig_status_card_view)
 
         checkInTimeTV = view.findViewById(R.id.presentGigpunchInTimeTV)
         checkOutTimeTV = view.findViewById(R.id.presentGigpunchOutTimeTV)
@@ -86,9 +81,7 @@ class GigPagerTimerView(
         resetTimer()
         val status = GigStatus.fromGig(gig)
 
-        gigStatusTV.text = status.getStatusCapitalized()
-        Glide.with(context).load(status.getIconForStatus()).into(gigStatusIV)
-
+        gigStatusCardView.setGigData(status)
         when (status) {
             GigStatus.UPCOMING -> showUpcomingGigDetails(gig)
             GigStatus.DECLINED -> showGigDeclined(gig)

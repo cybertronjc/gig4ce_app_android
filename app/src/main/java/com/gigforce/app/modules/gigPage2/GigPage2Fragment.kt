@@ -31,6 +31,7 @@ import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickL
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionsAdapter
 import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSheet
+import com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity

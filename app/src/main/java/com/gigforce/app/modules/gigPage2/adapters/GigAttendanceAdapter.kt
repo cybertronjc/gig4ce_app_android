@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -77,8 +76,7 @@ class GigAttendanceAdapter(
         }
 
         val gigStatus = GigStatus.fromGig(gig)
-        holder.statusTV.text = gigStatus.getStatusCapitalized()
-        Glide.with(holder.statusIV).load(gigStatus.getIconForStatus()).into(holder.statusIV)
+        holder.gigStatusCardView.setGigData(gigStatus)
     }
 
     override fun getItemCount() = gigs.size
@@ -94,8 +92,7 @@ class GigAttendanceAdapter(
         val dayTV = itemView.dayTV
         val punchInTV = itemView.punch_in_tv
         val punchOutTV = itemView.punch_out_tv
-        val statusIV = itemView.gig_status_iv
-        val statusTV = itemView.gig_status_tv
+        val gigStatusCardView = itemView.status_card_view
 
         override fun onClick(v: View?) {
             otherOptionClickListener?.onAttendanceClicked(gigs[adapterPosition])
