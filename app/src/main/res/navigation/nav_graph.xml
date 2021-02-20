@@ -882,7 +882,7 @@
         android:label="AddUserCurrentAddressFragment" />
     <dialog
         android:id="@+id/gigContactPersonBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.GigContactPersonBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
 

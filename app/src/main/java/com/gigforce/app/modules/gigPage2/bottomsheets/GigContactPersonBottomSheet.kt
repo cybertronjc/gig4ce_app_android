@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2
+package com.gigforce.app.modules.gigPage2.bottomsheets
 
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible

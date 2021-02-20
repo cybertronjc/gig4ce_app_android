@@ -165,7 +165,6 @@ class GigPagerTimerView(
     private fun showUpcomingGigDetails(
             gig: Gig
     ) {
-
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
@@ -180,6 +179,7 @@ class GigPagerTimerView(
 
         if (daysDiff > 1) {
             //Show Date only
+            gigTimerTV.text = "$daysDiff Days"
         } else {
             startCountDownTimer(gig.startDateTime.toDate())
         }
@@ -227,14 +227,14 @@ class GigPagerTimerView(
             val diffInMillisec: Long = gigStartTime.time - currentTime
 
             countDownTimer = object : CountDownTimer(diffInMillisec, 1000L) {
-
                 override fun onTick(millisUntilFinished: Long) {
-                    val diffInHours: Long = if (diffInMillisec > 3600000)
-                        TimeUnit.MILLISECONDS.toHours(diffInMillisec)
+
+                    val diffInHours: Long = if (millisUntilFinished > 3600000)
+                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
                     else
                         0L
-                    val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
-                    val diffInSec: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillisec) % 60
+                    val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60
+                    val diffInSec: Long = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
 
                     gigTimerTV.text = "$diffInHours Hrs : $diffInMin Mins : $diffInSec Sec"
                 }
@@ -271,10 +271,10 @@ class GigPagerTimerView(
         gigTimerAndDetailsLayout.visible()
 
         rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_silver_light, null)
+                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
         )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = gig.cancellationReason
+        gigCheckInTimeTV.text = "Declined Reason : ${gig.declineReason}"
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }

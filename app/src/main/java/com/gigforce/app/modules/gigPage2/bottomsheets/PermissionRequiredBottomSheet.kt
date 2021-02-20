@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2
+package com.gigforce.app.modules.gigPage2.bottomsheets
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -130,11 +130,11 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
         const val TAG = "PermissionRequiredBottomSheet"
 
         fun launch(
-            childFragmentManager: FragmentManager,
-            permissionBottomSheetActionListener: PermissionBottomSheetActionListener,
-            permissionWithReason: Map<String, String>,
-            permissionText: String? = null,
-            @DrawableRes imageToShow: Int? = null
+                childFragmentManager: FragmentManager,
+                permissionBottomSheetActionListener: PermissionBottomSheetActionListener,
+                permissionWithReason: Map<String, String>,
+                permissionText: String? = null,
+                @DrawableRes imageToShow: Int? = null
         ) {
             PermissionRequiredBottomSheet().apply {
                 this.permissionBottomSheetActionListener = permissionBottomSheetActionListener

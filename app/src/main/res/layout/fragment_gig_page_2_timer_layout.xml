@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/status_card_view">
+                app:layout_constraintTop_toBottomOf="@id/gig_status_card_view">
 
                 <TextView
                     android:id="@+id/gig_timer_tv"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                app:layout_constraintTop_toBottomOf="@id/status_card_view">
+                app:layout_constraintTop_toBottomOf="@id/gig_status_card_view">
 
                 <View
                     android:id="@+id/view40"
