@@ -287,7 +287,7 @@ class GigPagerTimerView(
                 ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
         )
         gigTimerTV.text = "- -hrs: - -mins"
-        gigCheckInTimeTV.text = gig.declineReason
+        gigCheckInTimeTV.text = gig.cancellationReason
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
     }
