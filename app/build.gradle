@@ -130,10 +130,12 @@ dependencies {
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
     implementation project(path: ':modules:profile')
-
     implementation project(':user_profile')
-
+    
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+
+
+
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     //implementation 'com.android.support.constraint:constraint-layout:1.1.3'
