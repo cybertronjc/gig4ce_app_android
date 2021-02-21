@@ -42,6 +42,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
@@ -317,11 +318,14 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
             messageCardView.visible()
             messageCardView.setOnClickListener { view ->
                 val bundle = Bundle()
-                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
-                bundle.putString(AppConstants.CONTACT_NAME, it.name)
-                bundle.putString("chatHeaderId", "")
-                bundle.putString("forUserId", viewModel.getUid())
-                bundle.putString("otherUserId", it.id)
+//                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
+//                bundle.putString(AppConstants.CONTACT_NAME, it.name)
+
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, it.profileAvatarName)
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, it.name)
+
+                bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, it.id)
                 bundle.putString(StringConstants.MOBILE_NUMBER.value, it.loginMobile)
                 bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
                 navigate(R.id.chatScreenFragment, bundle)

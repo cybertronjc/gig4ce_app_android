@@ -113,7 +113,7 @@ class RosterDayFragment : RosterBaseFragment() {
 
         initializeMonthTV(calendar, false)
 
-        rosterViewModel.dayContext = requireContext()
+//        rosterViewModel.dayContext = requireContext()
 //        arrCalendarDependent =
 //            arrayOf(calendar_top_cl, mark_unavailable_bs)
 

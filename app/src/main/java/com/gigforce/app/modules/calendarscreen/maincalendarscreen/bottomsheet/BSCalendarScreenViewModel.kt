@@ -3,6 +3,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.AppConstants
@@ -40,11 +41,10 @@ class BSCalendarScreenViewModel : ViewModel() {
                 if (!success?.documents.isNullOrEmpty()) {
                     val toObject = success?.documents?.get(0)?.toObject(ProfileData::class.java)
                     gig.chatInfo = mapOf(
-                            AppConstants.IMAGE_URL to (toObject?.profileAvatarName ?: ""),
-                            AppConstants.CONTACT_NAME to (toObject?.name ?: ""),
-                            "chatHeaderId" to "",
-                            "forUserId" to bsCalendarScreenRepository.getUID(),
-                            "otherUserId" to (success?.documents?.get(0)?.id ?: ""),
+                            ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to (toObject?.profileAvatarName ?: ""),
+                            ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to (toObject?.name ?: ""),
+                            ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
+                            ChatFragment.INTENT_EXTRA_OTHER_USER_ID to (success?.documents?.get(0)?.id ?: ""),
                             StringConstants.MOBILE_NUMBER.value to (toObject?.loginMobile ?: ""),
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
 

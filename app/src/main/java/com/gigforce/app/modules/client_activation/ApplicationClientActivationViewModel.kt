@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.client_activation
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,10 @@ import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.SingleLiveEvent
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -21,22 +26,22 @@ class ApplicationClientActivationViewModel : ViewModel() {
     var redirectToNextStep: Boolean = false
 
     private val _observableJobProfile: SingleLiveEvent<JpSettings> by lazy {
-        SingleLiveEvent<JpSettings>();
+        SingleLiveEvent<JpSettings>()
     }
     val observableJobProfile: SingleLiveEvent<JpSettings> get() = _observableJobProfile
 
     private val _observableError: SingleLiveEvent<String> by lazy {
-        SingleLiveEvent<String>();
+        SingleLiveEvent<String>()
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     private val _observableApplicationStatus: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableApplicationStatus: SingleLiveEvent<Boolean> get() = _observableApplicationStatus
 
     private val _observableInitApplication: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableInitApplication: SingleLiveEvent<Boolean> get() = _observableInitApplication
 
@@ -110,7 +115,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             val verification = getVerification()
                             it.isDone =
                                 verification?.driving_license != null && (verification.driving_license?.state
-                                    ?: -2) >= -1 && verification?.driving_license?.backImage != "" && verification?.driving_license?.frontImage != ""
+                                    ?: -2) >= -1 && verification.driving_license?.backImage != "" && verification.driving_license?.frontImage != ""
                         }
                         "questionnaire" -> {
                             it.isDone =
@@ -158,26 +163,55 @@ class ApplicationClientActivationViewModel : ViewModel() {
         }
 
 
-    fun apply(jobProfileId: String) = viewModelScope.launch {
-
-        val application = getJPApplication(jobProfileId)
-        repository.db.collection("JP_Applications").document(application.id)
-            .update(
-                mapOf(
-                    "stepsTotal" to (observableJobProfile.value?.step ?: 0),
-                    "status" to "Applied",
-                    "applicationComplete" to Date()
-
-                )
-            )
-            .addOnCompleteListener {
+    fun apply1(jobProfileId: String) {
+        repository.db.collection("JP_Settings").whereEqualTo("jobProfileId", jobProfileId)
+            .whereEqualTo("type", "activation").get()
+            .addOnCompleteListener(OnCompleteListener<QuerySnapshot> {
                 if (it.isSuccessful) {
-                    observableApplicationStatus.value = true
+                    for (document: QueryDocumentSnapshot in it.result!!) {
+                        isActivationScreenFound = true
+                    }
+
                 } else {
-                    observableError.value = it?.exception?.message ?: ""
+                    Log.d("CITITES_REPO", "Error getting documents: ", it.exception)
                 }
-            }
+
+                apply(jobProfileId)
+            })
     }
+
+    fun apply(jobProfileId: String) = viewModelScope.launch {
+            val application = getJPApplication(jobProfileId)
+            var statusUpdate = mapOf(
+                "stepsTotal" to (observableJobProfile.value?.step ?: 0),
+                "status" to "Submitted",
+                "applicationComplete" to Date()
+            )
+            if (isActivationScreenFound) {
+                statusUpdate = mapOf(
+                    "stepsTotal" to (observableJobProfile.value?.step ?: 0),
+                    "status" to "Inprocess",
+                    "applicationComplete" to Date()
+                )
+            }
+            repository.db.collection("JP_Applications").document(application.id)
+                .update(
+                    statusUpdate
+                )
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        observableApplicationStatus.value = true
+
+                    } else {
+                        observableError.value = it.exception?.message ?: ""
+                    }
+                }
+
+    }
+
+    //    private val _observableGigActivation = MutableLiveData<Boolean>()
+//    val observableGigActivation: LiveData<Boolean> = _observableGigActivation
+    var isActivationScreenFound = false
 
     fun draftApplication(jobProfileId: String) = viewModelScope.launch {
         val application = getJPApplication(jobProfileId)
@@ -185,14 +219,14 @@ class ApplicationClientActivationViewModel : ViewModel() {
             repository.db.collection("JP_Applications").document(application.id)
                 .update(
                     mapOf(
-                        "status" to "Draft"
+                        "status" to "Interested"
                     )
                 )
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         observableApplicationStatus.value = true
                     } else {
-                        observableError.value = it?.exception?.message ?: ""
+                        observableError.value = it.exception?.message ?: ""
                     }
                 }
         }
@@ -213,7 +247,7 @@ class ApplicationClientActivationViewModel : ViewModel() {
             toObject.id = items.documents[0].id
             return toObject
         } catch (e: Exception) {
-            _observableError.value = e.message;
+            _observableError.value = e.message
         }
         return JpApplication()
 

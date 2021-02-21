@@ -78,7 +78,7 @@ data class ProfileData(
 
     @get:PropertyName("profilePicThumbnail")
     @set:PropertyName("profilePicThumbnail")
-    var profileAvatarThumbnail: String = "",
+    var profileAvatarThumbnail: String? = "",
 
     @get:PropertyName("createdOn")
     @set:PropertyName("createdOn")

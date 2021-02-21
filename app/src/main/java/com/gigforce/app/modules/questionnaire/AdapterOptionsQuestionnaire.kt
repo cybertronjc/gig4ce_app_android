@@ -348,6 +348,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     fun setCallbacks(callbacks: AdapterOptionsQuestionnaireCallbacks) {
         this.callbacks = callbacks;
+        callbacks.refresh()
     }
 
     fun setStates(states: List<States>) {
@@ -378,7 +379,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         fun getStates(stateCityMap: MutableMap<States, MutableList<Cities>?>, position: Int)
         fun getCities(stateCityMap: MutableMap<States, MutableList<Cities>?>, states: States)
         fun getAllCities(childPosition: Int)
-
+        fun refresh()
     }
 
 

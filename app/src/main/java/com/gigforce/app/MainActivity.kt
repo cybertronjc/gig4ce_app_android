@@ -64,18 +64,18 @@ class MainActivity : AppCompatActivity(),
             return;
         }
         super.onCreate(savedInstanceState)
-
         this.setContentView(R.layout.activity_main)
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
-
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(StringConstants.JOB_PROFILE_ID.value),
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),
@@ -122,6 +122,22 @@ class MainActivity : AppCompatActivity(),
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigerVerificationFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.chatScreenFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.groupChatFragment,
                     intent.extras
                 )
             }

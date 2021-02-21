@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.toDate
@@ -22,24 +21,15 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
 import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.android.material.card.MaterialCardView
-import com.ncorti.slidetoact.SlideToActView
-import com.riningan.widget.ExtendedBottomSheetBehavior
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import kotlinx.android.synthetic.main.item_roster_day.view.*
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.*
-import kotlinx.android.synthetic.main.unavailable_time_adjustment_bottom_sheet.view.start_day_time
-import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
-import kotlinx.android.synthetic.main.vertical_calendar_item.*
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class HourViewFragment: RosterBaseFragment() {
+class HourViewFragment : RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     var actualDateTime = LocalDateTime.now()
@@ -59,19 +49,46 @@ class HourViewFragment: RosterBaseFragment() {
     lateinit var viewModelCustomPreference: CustomPreferencesViewModel
 
     // TODO: Figure out why last two items are needed to show 24
-    val times = ArrayList<String>(listOf("01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00",
-    "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
-    "21:00", "22:00", "23:00", "24:00", "-"))
+    val times = ArrayList<String>(
+        listOf(
+            "01:00",
+            "02:00",
+            "03:00",
+            "04:00",
+            "05:00",
+            "06:00",
+            "07:00",
+            "08:00",
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00",
+            "19:00",
+            "20:00",
+            "21:00",
+            "22:00",
+            "23:00",
+            "24:00",
+            "-"
+        )
+    )
 
     var timeToHourMap = HashMap<String, Int>(
-            hashMapOf(Pair("00:00", 0), Pair("01:00", 1), Pair("02:00", 2), Pair("03:00", 3),
-                    Pair("04:00", 4), Pair("05:00", 5), Pair("06:00", 6), Pair("07:00", 7),
-                    Pair("08:00", 8), Pair("09:00", 9), Pair("10:00", 10), Pair("11:00", 11),
-                    Pair("12:00", 12), Pair("13:00", 13), Pair("14:00", 14), Pair("15:00", 15),
-                    Pair("16:00", 16), Pair("17:00", 17), Pair("18:00", 18), Pair("19:00", 19),
-                    Pair("20:00", 20), Pair("21:00", 21), Pair("22:00", 22), Pair("23:00", 23),
-                    Pair("24:00", 24)
-            )
+        hashMapOf(
+            Pair("00:00", 0), Pair("01:00", 1), Pair("02:00", 2), Pair("03:00", 3),
+            Pair("04:00", 4), Pair("05:00", 5), Pair("06:00", 6), Pair("07:00", 7),
+            Pair("08:00", 8), Pair("09:00", 9), Pair("10:00", 10), Pair("11:00", 11),
+            Pair("12:00", 12), Pair("13:00", 13), Pair("14:00", 14), Pair("15:00", 15),
+            Pair("16:00", 16), Pair("17:00", 17), Pair("18:00", 18), Pair("19:00", 19),
+            Pair("20:00", 20), Pair("21:00", 21), Pair("22:00", 22), Pair("23:00", 23),
+            Pair("24:00", 24)
+        )
     )
 
     var upcomingGigs = ArrayList<Gig>()
@@ -128,7 +145,7 @@ class HourViewFragment: RosterBaseFragment() {
     private fun setCustomPreference() {
         try {
             viewModelCustomPreference.customPreferencesDataModel
-        }catch (e:UninitializedPropertyAccessException){
+        } catch (e: UninitializedPropertyAccessException) {
             viewModelCustomPreference.getAllData()
         }
     }
@@ -149,7 +166,7 @@ class HourViewFragment: RosterBaseFragment() {
         rosterViewModel.completedGigs = completedGigs
         rosterViewModel.currentGigs = currentGigs
         rosterViewModel.fulldayGigs = fullDayGigs
-        if(rosterViewModel.topBar!=null){
+        if (rosterViewModel.topBar != null) {
             rosterViewModel.topBar?.fullDayGigCard = null
         }
 
@@ -161,7 +178,7 @@ class HourViewFragment: RosterBaseFragment() {
             scheduleCurrentTimerUpdate()
         }
 
-        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer {dayGigs ->
+        rosterViewModel.allGigs[dayTag]!!.observe(viewLifecycleOwner, Observer { dayGigs ->
 
             Log.d("HourViewFragment", "Day Gigs for " + activeDateTime.toString())
             Log.d("HourViewFragment", dayGigs.toString())
@@ -169,31 +186,36 @@ class HourViewFragment: RosterBaseFragment() {
 //            if (
 //                (upcomingGigs.size + completedGigs.size +
 //                        currentGigs.size + fullDayGigs.size) != dayGigs.size) {
-                // at least one gig is updated
-                // remove currently added gig cards and add the new ones
-                removeGigs(upcomingGigs)
-                removeGigs(completedGigs)
-                removeGigs(currentGigs)
-                //rosterViewModel.topBar.fullDayGigCard = null
+            // at least one gig is updated
+            // remove currently added gig cards and add the new ones
+            removeGigs(upcomingGigs)
+            removeGigs(completedGigs)
+            removeGigs(currentGigs)
+            //rosterViewModel.topBar.fullDayGigCard = null
 
-                val date = activeDateTime.toDate
-                upcomingGigs = rosterViewModel.getFilteredGigs(
-                    date, "upcoming")
-                completedGigs = rosterViewModel.getFilteredGigs(
-                    date, "completed")
-                currentGigs = rosterViewModel.getFilteredGigs(
-                    date, "current")
-                fullDayGigs = rosterViewModel.getFilteredGigs(
-                    date, "fullday")
+            val date = activeDateTime.toDate
+            upcomingGigs = rosterViewModel.getFilteredGigs(
+                date, "upcoming"
+            )
+            completedGigs = rosterViewModel.getFilteredGigs(
+                date, "completed"
+            )
+            currentGigs = rosterViewModel.getFilteredGigs(
+                date, "current"
+            )
+            fullDayGigs = rosterViewModel.getFilteredGigs(
+                date, "fullday"
+            )
 
-                addGigCards(upcomingGigs, "upcoming")
-                addGigCards(completedGigs, "completed")
-                addGigCards(currentGigs, "current")
+            addGigCards(upcomingGigs, "upcoming")
+            addGigCards(completedGigs, "completed")
+            addGigCards(currentGigs, "current")
 
-                rosterViewModel.upcomingGigs = upcomingGigs
-                rosterViewModel.currentGigs = currentGigs
-                rosterViewModel.completedGigs = completedGigs
-                rosterViewModel.setFullDayGigs(rosterViewModel.dayContext)
+            rosterViewModel.upcomingGigs = upcomingGigs
+            rosterViewModel.currentGigs = currentGigs
+            rosterViewModel.completedGigs = completedGigs
+
+            rosterViewModel.setFullDayGigs()
 //            }
         })
 
@@ -211,15 +233,18 @@ class HourViewFragment: RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
-        val handler = Handler() { msg ->
-            val datetime = LocalDateTime.now()
-            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-            current_time_divider.requestLayout()
+        val handler = Handler { msg ->
+            current_time_divider?.let {
+                val datetime = LocalDateTime.now()
+                val marginTop =
+                    (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+                val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+                current_time_divider.requestLayout()
+            }
             true
         }
-        timer.scheduleAtFixedRate(object: TimerTask() {
+        timer.scheduleAtFixedRate(object : TimerTask() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun run() {
                 Log.d("HOUR VIEW", "HELLO WORLD")
@@ -235,7 +260,8 @@ class HourViewFragment: RosterBaseFragment() {
         val datetime = LocalDateTime.now()
         // set current time divider
         current_time_divider.visibility = View.VISIBLE
-        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val marginTop =
+            (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
         val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
         current_time_divider.requestLayout()
@@ -307,7 +333,7 @@ class HourViewFragment: RosterBaseFragment() {
                     currentCard.tag = gig.tag
 
                     currentCard.setOnClickListener {
-                        GigNavigation.openGigAttendancePage(findNavController(),Bundle().apply {
+                        GigNavigation.openGigAttendancePage(findNavController(), Bundle().apply {
                             this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }
@@ -322,31 +348,52 @@ class HourViewFragment: RosterBaseFragment() {
     private fun setGigCardInView(card: MaterialCardView, type: String) {
         Log.d("HourViewFragment", "Even this is called ")
         var marginTop: Int = 0
-        if (type == "upcoming" ) {
+        if (type == "upcoming") {
             val gigCard = card as UpcomingGigCard
-            marginTop = (gigCard.startHour*itemHeight + (
-                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+            marginTop = (gigCard.startHour * itemHeight + (
+                    (gigCard.startMinute / 60.0F) * itemHeight).toInt()).px
         }
         if (type == "completed") {
             val gigCard = card as CompletedGigCard
-            marginTop = (gigCard.startHour*itemHeight + (
-                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+            marginTop = (gigCard.startHour * itemHeight + (
+                    (gigCard.startMinute / 60.0F) * itemHeight).toInt()).px
         }
 
         if (type == "current") {
             val gigCard = card as CurrentGigCard
-            marginTop = (gigCard.startHour*itemHeight + (
-                    (gigCard.startMinute/60.0F)*itemHeight).toInt()).px
+            marginTop = (gigCard.startHour * itemHeight + (
+                    (gigCard.startMinute / 60.0F) * itemHeight).toInt()).px
         }
 
-        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        card.setLayoutParams(params)
+        val params = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+        card.layoutParams = params
 
         val constraintSet = ConstraintSet()
         constraintSet.clone(day_times)
-        constraintSet.connect(card.id, ConstraintSet.START, start_guideline.id, ConstraintSet.START, marginCardStart)
-        constraintSet.connect(card.id, ConstraintSet.END, end_guideline.id, ConstraintSet.START, marginCardEnd)
-        constraintSet.connect(card.id, ConstraintSet.TOP, day_times.id, ConstraintSet.TOP, marginTop)
+        constraintSet.connect(
+            card.id,
+            ConstraintSet.START,
+            start_guideline.id,
+            ConstraintSet.START,
+            marginCardStart
+        )
+        constraintSet.connect(
+            card.id,
+            ConstraintSet.END,
+            end_guideline.id,
+            ConstraintSet.START,
+            marginCardEnd
+        )
+        constraintSet.connect(
+            card.id,
+            ConstraintSet.TOP,
+            day_times.id,
+            ConstraintSet.TOP,
+            marginTop
+        )
         constraintSet.applyTo(day_times)
     }
 
@@ -384,11 +431,17 @@ class HourViewFragment: RosterBaseFragment() {
         // Adding constraints for hourly widgets
         constraintSet = ConstraintSet()
         constraintSet.clone(timeViewGroup)
-        for ((index,idx) in hourIds.withIndex()) {
+        for ((index, idx) in hourIds.withIndex()) {
             if (index == 0) {
                 constraintSet.connect(idx, ConstraintSet.TOP, hour_0.id, ConstraintSet.BOTTOM, 0)
             } else {
-                constraintSet.connect(idx, ConstraintSet.TOP, hourIds[index - 1], ConstraintSet.BOTTOM, 0)
+                constraintSet.connect(
+                    idx,
+                    ConstraintSet.TOP,
+                    hourIds[index - 1],
+                    ConstraintSet.BOTTOM,
+                    0
+                )
             }
             constraintSet.connect(idx, ConstraintSet.START, start_guideline.id, ConstraintSet.START)
             constraintSet.connect(idx, ConstraintSet.END, end_guideline.id, ConstraintSet.START)
@@ -419,8 +472,8 @@ class HourViewFragment: RosterBaseFragment() {
         resultDateTime = resultDateTime.minusHours(activeDateTime.hour.toLong())
         resultDateTime = resultDateTime.minusMinutes(activeDateTime.minute.toLong())
 //
-        resultDateTime =  resultDateTime.plusHours(hour.toLong())
-        resultDateTime =  resultDateTime.plusMinutes(minute.toLong())
+        resultDateTime = resultDateTime.plusHours(hour.toLong())
+        resultDateTime = resultDateTime.plusMinutes(minute.toLong())
 
         return resultDateTime
 
@@ -492,7 +545,7 @@ class HourViewFragment: RosterBaseFragment() {
     override fun onResume() {
         super.onResume()
         rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, day_times, configDataModel
+            viewModelCustomPreference, day_times, configDataModel
         )
         rosterViewModel.scrollToPosition(activeDateTime.toDate)
     }

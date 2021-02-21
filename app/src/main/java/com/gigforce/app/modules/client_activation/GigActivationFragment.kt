@@ -163,15 +163,15 @@ class GigActivationFragment : BaseFragment(),
                 tv_verification_gig_activation.text =
                     jpSettings?.status
                 rl_thanks_gig_activation.setBackgroundResource(
-                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                    if (jpSettings?.status == "Interested" || jpSettings?.status == "Inprocess" || jpSettings?.status == "Submitted")
                         R.drawable.bg_status_pending else if (jpSettings?.status == "Activated") R.drawable.bg_thanks_for_applying else R.drawable.bg_status_rejected
                 )
                 ic_applied_gig_activation.setImageResource(
-                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                    if (jpSettings?.status == "Interested" || jpSettings?.status == "Inprocess" || jpSettings?.status == "Submitted")
                         R.drawable.ic_status_pending else if (jpSettings?.status == "Activated") R.drawable.ic_applied else R.drawable.ic_status_pending
                 )
                 tv_application_gig_activation.text = Html.fromHtml(
-                    if (jpSettings?.status == "Draft" || jpSettings?.status == "Applied" || jpSettings?.status == "Inprocess")
+                    if (jpSettings?.status == "Interested" || jpSettings?.status == "Inprocess" || jpSettings?.status == "Submitted")
                         viewModel.observableGigActivation.value?.subTitle + getString(R.string.pending_bold) else if (jpSettings?.status == "Activated") viewModel.observableGigActivation.value?.subTitle + getString(
                         R.string.approved_bold
                     ) else viewModel.observableGigActivation.value?.subTitle + getString(R.string.rejected_bold)

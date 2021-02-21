@@ -3,6 +3,7 @@ package com.gigforce.app
 import android.app.Application
 import android.app.NotificationManager
 import com.clevertap.android.sdk.CleverTapAPI
+import com.facebook.FacebookSdk;
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -29,5 +30,5 @@ class MainApplication : Application() {
 
         cleverTapAPI?.pushEvent("MAIN_APP_CREATED")
     }
-}
 
+}

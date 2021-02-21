@@ -468,14 +468,18 @@ class ContactsFragment : DialogFragment(),
         } else {
 
             val bundle = Bundle()
-            bundle.putString(
-                    AppConstants.IMAGE_URL,
-                    contact.imageUrl
-            )
-            bundle.putString(AppConstants.CONTACT_NAME, contact.name)
-            bundle.putString("chatHeaderId", contact.headerId)
-            bundle.putString("forUserId", currentUserId)
-            bundle.putString("otherUserId", contact.uid)
+//            bundle.putString(
+//                    AppConstants.IMAGE_URL,
+//                    contact.imageUrl
+//            )
+//            bundle.putString(AppConstants.CONTACT_NAME, contact.name)
+
+            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, contact.imageUrl)
+            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, contact.name)
+
+            bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, contact.headerId)
+            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID,contact.uid)
+
             findNavController().navigate(R.id.chatScreenFragment, bundle)
         }
     }

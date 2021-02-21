@@ -39,6 +39,7 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigViewModel
@@ -430,11 +431,11 @@ class BSCalendarScreenFragment : BaseFragment() {
                                         getView(viewHolder, R.id.messageCardView).setOnClickListener {
                                             val bundle = Bundle()
                                             val map = upcomingGigs[viewHolder.adapterPosition].chatInfo
-                                            bundle.putString(AppConstants.IMAGE_URL, map?.get(AppConstants.IMAGE_URL) as String)
-                                            bundle.putString(AppConstants.CONTACT_NAME, map?.get(AppConstants.CONTACT_NAME) as String)
-                                            bundle.putString("chatHeaderId", map?.get("chatHeaderId") as String)
-                                            bundle.putString("forUserId", map?.get("forUserId") as String)
-                                            bundle.putString("otherUserId", map?.get("otherUserId") as String)
+                                            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE ,(AppConstants.IMAGE_URL as String))
+                                            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME ,(AppConstants.CONTACT_NAME as String))
+
+                                            bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, map?.get("chatHeaderId") as String)
+                                            bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, map?.get("otherUserId") as String)
                                             bundle.putString(StringConstants.MOBILE_NUMBER.value, map?.get(StringConstants.MOBILE_NUMBER.value) as String)
                                             bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, map?.get(StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean)
                                             navigate(R.id.chatScreenFragment, bundle)
@@ -682,7 +683,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
         datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
-        datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.nav_graph_chat))
+       // datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.nav_graph_chat))
 
 //        datalist.add(
 //            FeatureModel(
