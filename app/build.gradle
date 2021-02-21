@@ -110,7 +110,6 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -131,7 +130,7 @@ dependencies {
     implementation project(path: ':modules:client-activation')
     implementation project(path: ':modules:profile')
     implementation project(':user_profile')
-    
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
 
