@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.app.user_profile.components.AddContentCard
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -16,7 +17,7 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile_.models.ContentCardData
 import com.gigforce.core.utils.GlideApp
-//import com.gigforce.user_profile.components.AddContentCard
+//import com.app.user_profile.components.AddContentCard
 import com.google.android.material.appbar.AppBarLayout
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

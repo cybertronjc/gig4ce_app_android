@@ -1,4 +1,4 @@
-package com.gigforce.user_profile.components
+package com.app.user_profile.components
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
-import com.gigforce.user_profile.R
+import com.app.user_profile.R
 import com.tokenautocomplete.TokenCompleteTextView
 
 class ChipsEditText : FrameLayout {
@@ -31,37 +31,37 @@ class ChipsEditText : FrameLayout {
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     fun setAdapter(items: List<String>) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).setAdapter(
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).setAdapter(
             ArrayAdapter<String>(
                 context,
                 android.R.layout.simple_list_item_1,
                 items
             )
         )
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).threshold = 1
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select)
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).threshold = 1
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select)
     }
 
     fun setTextColor(color: String) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).setTextColor(Color.parseColor(color))
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).setTextColor(Color.parseColor(color))
     }
 
     fun setHint(hint: String) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).hint = hint
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).hint = hint
     }
 
     fun setHintTextColor(color: String) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).setHintTextColor(Color.parseColor(color))
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).setHintTextColor(Color.parseColor(color))
     }
 
     fun setBackgroundTint(color: String) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).backgroundTintList =
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).backgroundTintList =
             ColorStateList.valueOf(Color.parseColor(color));
 
     }
 
     fun setTextSize(pixelSize: Float) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).textSize = pixelSize
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).textSize = pixelSize
     }
 
     fun setContentPadding(
@@ -70,7 +70,7 @@ class ChipsEditText : FrameLayout {
         paddingTop: Int = 0,
         paddingBottom: Int = 0
     ) {
-        findViewById<ChipCollectionView>(R.id.cmp_chip_et).setPadding(
+        findViewById<com.app.user_profile.components.ChipCollectionView>(R.id.cmp_chip_et).setPadding(
             paddingLeft,
             paddingTop,
             paddingRight,

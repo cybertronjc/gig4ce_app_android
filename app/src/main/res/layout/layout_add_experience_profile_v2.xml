@@ -134,7 +134,7 @@
                     android:visibility="visible"
                     app:chipSpacingHorizontal="14dp" />
 
-                <com.gigforce.user_profile.components.ChipsEditText
+                <com.app.user_profile.components.ChipsEditText
                     android:id="@+id/act_add_experience_profile_v2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

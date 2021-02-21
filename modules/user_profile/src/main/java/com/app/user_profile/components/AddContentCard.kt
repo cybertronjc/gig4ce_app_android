@@ -1,4 +1,4 @@
-package com.gigforce.user_profile.components
+package com.app.user_profile.components
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.gigforce.user_profile.R
+import com.app.user_profile.R
 
 typealias ClickHandler = (AddContentCard) -> Unit
 

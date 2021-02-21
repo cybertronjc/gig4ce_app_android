@@ -271,7 +271,7 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#66979797" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_address_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -451,7 +451,7 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#f5f7ff" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_experience_profile_fragment_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -466,7 +466,7 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#66979797" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_skills_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -481,7 +481,7 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#f5f7ff" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_documents_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -496,7 +496,7 @@ Profile "
             android:layout_marginTop="@dimen/size_16"
             android:background="#66979797" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_education_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -602,7 +602,7 @@ Profile "
             android:layout_marginTop="@dimen/size_24"
             android:background="#66979797" />
 
-        <com.gigforce.user_profile.components.AddContentCard
+        <com.app.user_profile.components.AddContentCard
             android:id="@+id/add_language_profile_v2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

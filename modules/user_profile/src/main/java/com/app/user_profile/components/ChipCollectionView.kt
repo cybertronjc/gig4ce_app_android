@@ -1,4 +1,4 @@
-package com.gigforce.user_profile.components
+package com.app.user_profile.components
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,7 @@ import android.widget.Filterable
 import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import com.gigforce.user_profile.R
+import com.app.user_profile.R
 import com.tokenautocomplete.TokenCompleteTextView
 
 open class ChipCollectionView(context: Context?, attrs: AttributeSet?) :

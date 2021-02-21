@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.gigforce.user_profile.components.ChipCollectionView
+    <com.app.user_profile.components.ChipCollectionView
         android:id="@+id/cmp_chip_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

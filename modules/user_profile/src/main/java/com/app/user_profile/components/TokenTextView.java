@@ -1,11 +1,12 @@
-package com.gigforce.user_profile.components;
+package com.app.user_profile.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.gigforce.user_profile.R;
+import com.app.user_profile.R;
+
 
 public class TokenTextView extends AppCompatTextView {
 
