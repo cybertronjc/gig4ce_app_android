@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 
 class ViewModelAboutExpandedFragment(private val modelCallbacksAboutExpandedFragment: ModelCallbacksAboutExpandedFragment) :
     ViewModel(),

@@ -14,8 +14,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.InputFilterMinMax
-import com.gigforce.app.utils.PermissionUtils
+import com.gigforce.common_ui.core.InputFilterMinMax
+import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import kotlinx.android.synthetic.main.layout_add_experience_profile_v2.*
@@ -48,7 +48,12 @@ class AddExperienceProfileV2 : BaseFragment() {
     }
 
     private fun initExperienceEtSuffix() {
-        et_months_add_experience.filters = arrayOf<InputFilter>(InputFilterMinMax("1", "12"))
+        et_months_add_experience.filters = arrayOf<InputFilter>(
+            InputFilterMinMax(
+                "1",
+                "12"
+            )
+        )
         et_years_add_experience.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }

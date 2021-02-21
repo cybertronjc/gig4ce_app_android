@@ -13,9 +13,10 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.ItemOffsetDecoration
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.decors.ItemOffsetDecoration
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_rejection_dialog.*
 
 open class RejectionDialog : DialogFragment() {
@@ -76,7 +77,9 @@ open class RejectionDialog : DialogFragment() {
         tv_sub_two_rejection_dialog.gone()
         tv_content_title_rejection_dialog.text = Html.fromHtml(TITLE)
         Glide.with(this).load(ILLUSTRATION).placeholder(
-                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+            getCircularProgressDrawable(
+                requireContext()
+            )
         ).into(iv_rejection_illustration)
         rv_wrong_questions_rejection_dialog.visible()
     }
@@ -85,11 +88,11 @@ open class RejectionDialog : DialogFragment() {
         rv_wrong_questions_rejection_dialog.adapter = adapter
         rv_wrong_questions_rejection_dialog.layoutManager = LinearLayoutManager(requireContext())
         rv_wrong_questions_rejection_dialog.addItemDecoration(
-                ItemOffsetDecoration(
-                        resources.getDimensionPixelSize(
-                                R.dimen.size_16
-                        )
+            ItemOffsetDecoration(
+                resources.getDimensionPixelSize(
+                    R.dimen.size_16
                 )
+            )
         )
         adapter.addData(CONTENT ?: listOf())
 

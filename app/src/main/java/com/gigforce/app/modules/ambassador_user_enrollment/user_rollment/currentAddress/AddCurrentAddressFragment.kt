@@ -18,15 +18,15 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.core.datamodels.City
 import com.gigforce.app.modules.ambassador_user_enrollment.models.PostalOffice
-import com.gigforce.app.modules.ambassador_user_enrollment.models.State
+import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
 import java.util.*
@@ -174,7 +174,9 @@ class AddCurrentAddressFragment : BaseFragment() {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
                 }.toMutableList().apply {
-                    add(0, City(name = getString(R.string.select_district)))
+                    add(0,
+                        City(name = getString(R.string.select_district))
+                    )
                 }
 
                 val cityAdapter: ArrayAdapter<City> =
@@ -350,7 +352,9 @@ class AddCurrentAddressFragment : BaseFragment() {
 
     private fun populateStateAndCitySpinner() {
         val states = viewModel.states.toMutableList().apply {
-            add(0, State(name = getString(R.string.select_state)))
+            add(0,
+                State(name = getString(R.string.select_state))
+            )
         }
 
         val adapter: ArrayAdapter<State> =
@@ -359,7 +363,9 @@ class AddCurrentAddressFragment : BaseFragment() {
         state_spinner.adapter = adapter
 
         val cities = viewModel.cities.toMutableList().apply {
-            add(0, City(name = getString(R.string.select_district)))
+            add(0,
+                City(name = getString(R.string.select_district))
+            )
         }
         val cityAdapter: ArrayAdapter<City> =
                 ArrayAdapter<City>(requireContext(), android.R.layout.simple_spinner_item, cities)

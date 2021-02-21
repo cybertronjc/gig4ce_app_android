@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.configrepository.ConfigViewModel
+import com.gigforce.common_ui.configrepository.ConfigViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*

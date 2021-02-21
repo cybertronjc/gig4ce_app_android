@@ -26,8 +26,8 @@ import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getScreenWidth
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -59,7 +59,9 @@ class GigActivationFragment : BaseFragment(),
         getDataFromIntents(savedInstanceState)
         val layoutParams: ConstraintLayout.LayoutParams =
             cv_player_view.layoutParams as ConstraintLayout.LayoutParams
-        playerViewHeight = (getScreenWidth(requireActivity()).height * 45) / 100
+        playerViewHeight = (getScreenWidth(
+            requireActivity()
+        ).height * 45) / 100
         layoutParams.height = playerViewHeight
         cv_player_view.layoutParams = layoutParams
         viewModel =
@@ -143,7 +145,9 @@ class GigActivationFragment : BaseFragment(),
         viewModel.observableGigActivation.observe(viewLifecycleOwner, Observer { gigAcivation ->
             if (gigAcivation != null) {
                 Glide.with(this).load(gigAcivation.coverImg).placeholder(
-                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                    com.gigforce.common_ui.utils.getCircularProgressDrawable(
+                        requireContext()
+                    )
                 ).into(iv_gig_activation)
 //                tv_application_gig_activation.text = Html.fromHtml(gigAcivation.subTitle)
                 tv_title_toolbar.text = gigAcivation.title

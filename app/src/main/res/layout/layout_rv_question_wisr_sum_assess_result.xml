@@ -6,7 +6,7 @@
    >
 
 
-    <com.gigforce.app.utils.widgets.CircularView
+    <com.gigforce.common_ui.widgets.CircularView
         android:id="@+id/fl_rv_question_wise_sum_assess_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,5 +29,5 @@
             android:singleLine="true"
             android:textSize="@dimen/font_16" />
 
-    </com.gigforce.app.utils.widgets.CircularView>
+    </com.gigforce.common_ui.widgets.CircularView>
 </FrameLayout>

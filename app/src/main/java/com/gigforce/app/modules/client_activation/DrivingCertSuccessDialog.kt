@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.client_activation
 
-import android.Manifest
 import android.app.Dialog
 import android.app.DownloadManager
 import android.app.ProgressDialog
@@ -17,10 +16,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
-import com.gigforce.app.utils.PermissionUtils
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_dialog_driving_certificate_success.*
 
 class DrivingCertSuccessDialog : DialogFragment() {

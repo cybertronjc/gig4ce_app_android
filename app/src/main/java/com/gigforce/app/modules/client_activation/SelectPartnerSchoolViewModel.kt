@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.client_activation.models.PartnerSchool
-import com.gigforce.app.utils.SingleLiveEvent
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.SingleLiveEvent
+import com.gigforce.common_ui.StringConstants
 
 class SelectPartnerSchoolViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     val repository = SelectPartnerSchoolRepository()

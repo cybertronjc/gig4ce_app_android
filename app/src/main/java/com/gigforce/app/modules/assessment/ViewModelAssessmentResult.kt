@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.utils.PermissionUtils
+import com.gigforce.core.utils.PermissionUtils
 
 
 class ViewModelAssessmentResult : ViewModel() {

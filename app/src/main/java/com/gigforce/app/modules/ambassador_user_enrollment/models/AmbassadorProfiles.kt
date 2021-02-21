@@ -1,8 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.models
 
-import com.gigforce.app.utils.CheckCollectionTranslation
-import com.gigforce.app.utils.TranslationNeeded
-import com.gigforce.app.utils.CheckNestedTranslation
+import com.gigforce.core.TranslationNeeded
 import com.gigforce.app.utils.lang_models.BaseLangModel
 
 data class AmbassadorProfiles(

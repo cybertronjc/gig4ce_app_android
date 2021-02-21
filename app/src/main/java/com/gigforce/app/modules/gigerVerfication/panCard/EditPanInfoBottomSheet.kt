@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.gigforce.app.R
-import com.gigforce.app.utils.DateHelper
+import com.gigforce.core.utils.DateHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_edit_pan_info.*
 import java.util.*

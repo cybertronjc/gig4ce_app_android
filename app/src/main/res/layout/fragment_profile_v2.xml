@@ -25,7 +25,7 @@
             app:statusBarScrim="@android:color/transparent"
             app:toolbarId="@+id/toolbar">
 
-            <com.gigforce.app.utils.widgets.RoundCornerImageView
+            <com.gigforce.common_ui.widgets.RoundCornerImageView
                 android:id="@+id/iv_profile_v2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -84,7 +84,7 @@
 
     <include layout="@layout/content_scrolling" />
 
-    <com.gigforce.app.utils.widgets.CircleImageView
+    <com.gigforce.common_ui.widgets.CircleImageView
         android:id="@+id/iv_share_profile_v2"
         android:layout_width="@dimen/size_36"
         android:layout_height="@dimen/size_36"

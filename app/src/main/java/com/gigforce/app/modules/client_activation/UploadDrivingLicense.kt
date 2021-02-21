@@ -32,7 +32,7 @@ import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.GenericSpinnerAdapter
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView

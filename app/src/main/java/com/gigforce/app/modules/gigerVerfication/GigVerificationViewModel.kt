@@ -13,8 +13,8 @@ import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDa
 import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
 import com.gigforce.app.modules.gigerVerfication.selfieVideo.SelfieVideoDataModel
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.SingleLiveEvent2
-import com.gigforce.app.utils.setOrThrow
+import com.gigforce.core.SingleLiveEvent2
+import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch

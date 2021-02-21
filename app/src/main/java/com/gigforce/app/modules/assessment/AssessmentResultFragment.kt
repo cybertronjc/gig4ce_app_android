@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
@@ -35,7 +35,15 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.ItemDecor
+import com.gigforce.common_ui.decors.ItemDecorSugLearning
+import com.gigforce.common_ui.utils.getScreenShot
+import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.PermissionUtils
+import com.gigforce.core.utils.shareFile
+import com.gigforce.core.utils.storeImage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.fragment_assessment_result.view.*
@@ -370,7 +378,11 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
             false
         )
         rv_sug_learnings_assess_result.adapter = recyclerGenericAdapter
-        rv_sug_learnings_assess_result.addItemDecoration(ItemDecorSugLearning(requireContext()))
+        rv_sug_learnings_assess_result.addItemDecoration(
+            ItemDecorSugLearning(
+                requireContext()
+            )
+        )
 
     }
 
@@ -410,7 +422,12 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
 
     private fun initClicks() {
         iv_options_menu_tb.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+            openPopupMenu(
+                it,
+                R.menu.menu_assessment_result,
+                this,
+                activity
+            )
         }
         iv_back.setOnClickListener {
             clearBackStackToContentList()

@@ -3,8 +3,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.GigsDetail
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
@@ -12,9 +11,7 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
-import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ServerTimestamp

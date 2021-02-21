@@ -23,7 +23,11 @@ import com.gigforce.app.modules.client_activation.models.Cities
 import com.gigforce.app.modules.client_activation.models.States
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
-import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.RVPagerSnapFancyDecorator
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.RatioLayoutManager
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 import java.util.*
 

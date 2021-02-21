@@ -39,7 +39,6 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnContactC
 import com.gigforce.app.modules.chatmodule.viewModels.ContactsViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -47,7 +46,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.vinners.cmi.ui.activity.ContactsViewModelFactory
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
-import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.fragment_chat_new_contact.*
 
 /*

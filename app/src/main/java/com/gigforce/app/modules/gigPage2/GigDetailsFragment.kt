@@ -9,18 +9,17 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
@@ -35,7 +34,7 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -66,6 +65,7 @@ class GigDetailsFragment : BaseFragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_2_details, inflater, container)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -99,7 +99,12 @@ class GigDetailsFragment : BaseFragment(),
 
         roleBasedLearningTV.text = "Related Learnings"
         iv_options_gig_details.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_gig_attendance, GigDetailsFragment@ this, requireActivity())
+            openPopupMenu(
+                it,
+                R.menu.menu_gig_attendance,
+                GigDetailsFragment@ this,
+                requireActivity()
+            )
         }
         gigRequirementsSeeMoreTV.setOnClickListener {
 

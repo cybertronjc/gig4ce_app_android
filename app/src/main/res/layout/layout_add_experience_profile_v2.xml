@@ -213,7 +213,7 @@
                         android:layout_height="@dimen/size_1"
                         android:layout_centerHorizontal="true" />
 
-                    <com.gigforce.app.utils.widgets.EditTextWithSuffix
+                    <com.gigforce.common_ui.widgets.EditTextWithSuffix
                         android:id="@+id/et_years_add_experience"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -235,7 +235,7 @@
                         android:textStyle="normal"
                         app:suffix=" years" />
 
-                    <com.gigforce.app.utils.widgets.EditTextWithSuffix
+                    <com.gigforce.common_ui.widgets.EditTextWithSuffix
                         android:id="@+id/et_months_add_experience"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

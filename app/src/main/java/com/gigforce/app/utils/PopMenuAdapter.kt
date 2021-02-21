@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.gigforce.app.R
+import com.gigforce.common_ui.MenuItem
 import com.skydoves.powermenu.MenuBaseAdapter
 
 class PopMenuAdapter : MenuBaseAdapter<MenuItem?>() {

@@ -17,9 +17,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.PermissionUtils
-import com.gigforce.app.utils.openPopupMenu
-import com.gigforce.app.utils.showViews
+import com.gigforce.core.utils.PermissionUtils
+import com.gigforce.common_ui.utils.openPopupMenu
+import com.gigforce.common_ui.utils.showViews
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import kotlinx.android.synthetic.main.fragment_add_education.*
@@ -109,7 +109,12 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
 
         }
         tv_privacy_add_education.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_privacy, this, activity)
+            openPopupMenu(
+                it,
+                R.menu.menu_privacy,
+                this,
+                activity
+            )
         }
 
     }
@@ -181,7 +186,11 @@ class AddEducationProfileV2 : BaseFragment(), PopupMenu.OnMenuItemClickListener 
             }
             getString(R.string.pass_10th), getString(R.string.pass_12th) -> {
                 rl_education_details_add_education.visible()
-                showViews(false, et_course_add_education, tv_label_course_add_education)
+                showViews(
+                    false,
+                    et_course_add_education,
+                    tv_label_course_add_education
+                )
                 showViews(
                     true,
                     et_institute_add_education,

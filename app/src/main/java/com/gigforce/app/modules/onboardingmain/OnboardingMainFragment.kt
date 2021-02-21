@@ -14,7 +14,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,10 +22,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 

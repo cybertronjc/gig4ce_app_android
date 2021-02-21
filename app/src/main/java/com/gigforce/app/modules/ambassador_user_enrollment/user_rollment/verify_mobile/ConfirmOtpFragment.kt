@@ -17,10 +17,9 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
-import com.gigforce.app.utils.PermissionUtils
+import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_confirm_otp.*
 

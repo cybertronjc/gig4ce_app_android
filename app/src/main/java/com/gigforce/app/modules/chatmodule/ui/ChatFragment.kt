@@ -42,6 +42,10 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnChatMess
 import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -185,7 +189,11 @@ class ChatFragment : BaseFragment(),
         layoutManager.stackFromEnd = true
         rv_chats.layoutManager = layoutManager
 
-        rv_chats.addItemDecoration(VerticalItemDecorator(30))
+        rv_chats.addItemDecoration(
+            VerticalItemDecorator(
+                30
+            )
+        )
         // rv_chats.setHasFixedSize(true)
         rv_chats.adapter = mAdapter
     }

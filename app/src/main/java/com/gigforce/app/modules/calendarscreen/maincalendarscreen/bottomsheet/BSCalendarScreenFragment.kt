@@ -24,7 +24,6 @@ import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,8 +34,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
@@ -54,6 +53,10 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.AppConstants
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
@@ -436,8 +439,12 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                                             bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, map?.get("chatHeaderId") as String)
                                             bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, map?.get("otherUserId") as String)
-                                            bundle.putString(StringConstants.MOBILE_NUMBER.value, map?.get(StringConstants.MOBILE_NUMBER.value) as String)
-                                            bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, map?.get(StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean)
+                                            bundle.putString(
+                                                StringConstants.MOBILE_NUMBER.value, map?.get(
+                                                    StringConstants.MOBILE_NUMBER.value) as String)
+                                            bundle.putBoolean(
+                                                StringConstants.FROM_CLIENT_ACTIVATON.value, map?.get(
+                                                    StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean)
                                             navigate(R.id.chatScreenFragment, bundle)
                                         }
 

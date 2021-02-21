@@ -12,8 +12,9 @@ import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.client_activation.models.JpSettings
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_dialog_submit_application.*
 
 class ReviewApplicationDialogClientActivation : DialogFragment() {
@@ -30,7 +31,10 @@ class ReviewApplicationDialogClientActivation : DialogFragment() {
         if (dialog != null) {
 
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.setLayout(getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(R.dimen.size_48), ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                getScreenWidth(
+                    requireActivity()
+                ).width - resources.getDimensionPixelSize(R.dimen.size_48), ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
 
@@ -68,7 +72,9 @@ class ReviewApplicationDialogClientActivation : DialogFragment() {
         tv_title_submit_application.text = jpSettings.completionTitle
         tv_content_submit_application.text = Html.fromHtml(jpSettings.completionMessage)
         Glide.with(this).load(jpSettings?.completionImage).placeholder(
-                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+            getCircularProgressDrawable(
+                requireContext()
+            )
         ).into(iv_submit_application)
 
 

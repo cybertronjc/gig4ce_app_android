@@ -17,9 +17,9 @@ import com.gigforce.app.IconMenuAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
-import com.gigforce.app.utils.CustomTypeFaceSpan
+import com.gigforce.core.utils.CustomTypeFaceSpan
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.IconPowerMenuItem
+import com.gigforce.common_ui.IconPowerMenuItem
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.skydoves.powermenu.CustomPowerMenu
@@ -131,7 +131,11 @@ class EnrolledUsersRecyclerAdapter constructor(
             val font = Typeface.createFromAsset(itemView.context.assets, "fonts/Lato-Regular.ttf")
             val mNewTitle = SpannableString(mi.getTitle())
             mNewTitle.setSpan(
-                CustomTypeFaceSpan("", font, Color.BLACK),
+                CustomTypeFaceSpan(
+                    "",
+                    font,
+                    Color.BLACK
+                ),
                 0,
                 mNewTitle.length,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE

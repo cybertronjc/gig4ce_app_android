@@ -3,10 +3,9 @@ package com.gigforce.app.modules.client_activation
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.client_activation.models.DrivingCertificate
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

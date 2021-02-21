@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.gigerVerfication
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentReference
 
 class GigerVerificationRepository : BaseFirestoreDBRepository() {

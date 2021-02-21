@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -19,8 +20,8 @@ import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*
 
-
-class SlidesFragment : BaseFragment(), ViewPager.OnPageChangeListener,
+class SlidesFragment : Fragment(),
+    ViewPager.OnPageChangeListener,
     VideoFragmentOrientationListener {
 
     private lateinit var mLessonId: String

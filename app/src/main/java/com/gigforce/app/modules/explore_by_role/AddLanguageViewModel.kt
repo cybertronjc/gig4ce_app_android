@@ -2,7 +2,7 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.profile.models.Language
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 
 class AddLanguageViewModel : ViewModel() {
     private val _observableSuccess: SingleLiveEvent<String> by lazy {

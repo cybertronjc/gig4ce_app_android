@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.core.setDarkStatusBarTheme
 import kotlinx.android.synthetic.main.preferred_location_fragment.*

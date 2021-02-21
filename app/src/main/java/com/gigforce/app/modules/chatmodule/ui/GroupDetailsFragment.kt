@@ -14,7 +14,6 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +33,7 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnGroupMem
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
+import com.gigforce.core.AppConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory

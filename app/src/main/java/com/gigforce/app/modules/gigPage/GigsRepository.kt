@@ -1,10 +1,10 @@
 package com.gigforce.app.modules.gigPage
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.utils.getOrThrow
+import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
 import java.time.LocalDate

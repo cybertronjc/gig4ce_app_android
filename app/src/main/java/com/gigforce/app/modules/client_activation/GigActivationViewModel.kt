@@ -8,7 +8,7 @@ import com.gigforce.app.modules.client_activation.models.GigActivation
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.models.progress.LessonProgress
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*

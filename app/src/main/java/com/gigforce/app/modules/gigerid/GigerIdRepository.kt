@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.gigerid
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.preferences.PreferencesFragment
 
 class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {

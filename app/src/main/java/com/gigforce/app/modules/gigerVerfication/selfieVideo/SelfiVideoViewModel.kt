@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.SingleLiveEvent2
-import com.gigforce.app.utils.setOrThrow
+import com.gigforce.core.SingleLiveEvent2
+import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

@@ -19,6 +19,11 @@ import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.network.RetrofitFactory
+import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.EventLogs.*
+import com.gigforce.core.utils.FileUtils
+import com.gigforce.core.utils.FirebaseUtils
+import com.gigforce.core.utils.ImageUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*

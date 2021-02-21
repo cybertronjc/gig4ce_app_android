@@ -31,6 +31,9 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -83,7 +86,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
 
         enrolled_users_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
+        enrolled_users_rv.addItemDecoration(
+            VerticalItemDecorator(
+                30
+            )
+        )
         enrolled_users_rv.adapter = enrolledUserAdapter
 
         share_link.setOnClickListener {

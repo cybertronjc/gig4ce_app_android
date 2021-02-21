@@ -8,16 +8,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.ambassador_user_enrollment.models.City
-import com.gigforce.app.modules.ambassador_user_enrollment.models.CreateUserResponse
+import com.gigforce.core.datamodels.City
 import com.gigforce.app.modules.ambassador_user_enrollment.models.PincodeResponse
-import com.gigforce.app.modules.ambassador_user_enrollment.models.State
+import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
-import com.gigforce.app.modules.preferences.AppConfigurationRepository
+import com.gigforce.common_ui.configrepository.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.EventLogs.putBytesOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
@@ -25,15 +25,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
-import com.gigforce.app.utils.putFileOrThrow
+import com.gigforce.core.utils.EventLogs.putFileOrThrow
+import com.gigforce.core.utils.ImageUtils
 
 
 class UserDetailsViewModel constructor(
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val enrolledUserListRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
-        private val configurationRepository: AppConfigurationRepository = AppConfigurationRepository(),
-        private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val enrolledUserListRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
+    private val configurationRepository: AppConfigurationRepository = AppConfigurationRepository(),
+    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
 ) : ViewModel() {
 
     var states: List<State> = emptyList()

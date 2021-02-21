@@ -3,9 +3,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollmen
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorApplication
 import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorProfiles
-import com.gigforce.app.modules.client_activation.ApplicationClientActivationRepository
-import com.gigforce.app.modules.client_activation.models.JpSettings
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import com.gigforce.app.utils.lang_models.LangMapSingleton
 import java.util.*
 

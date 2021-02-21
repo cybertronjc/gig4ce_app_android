@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.earn.gighistory.models
 
-import com.gigforce.app.core.base.models.BaseResponse
+import com.gigforce.core.base.models.BaseResponse
 import com.gigforce.app.modules.gigPage.models.Gig
 
 

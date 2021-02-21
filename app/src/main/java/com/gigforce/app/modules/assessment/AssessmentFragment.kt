@@ -27,10 +27,10 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.models.AssementQuestionsReponse
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.ItemDecoratorAssessmentOptions
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
-import com.gigforce.app.utils.widgets.CustomScrollView
+import com.gigforce.common_ui.decors.ItemDecoratorAssessmentOptions
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.widgets.CustomScrollView
 import kotlinx.android.synthetic.main.fragment_assessment.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.text.SimpleDateFormat
@@ -51,7 +51,9 @@ class AssessmentFragment : BaseFragment(),
     private var countDownTimer: CountDownTimer? = null
     private var adapter: AssessmentAnswersAdapter? = null
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ViewModelAssessmentFragment(ModelAssessmentFragment()))
+        ViewModelProviderFactory(
+            ViewModelAssessmentFragment(ModelAssessmentFragment())
+        )
     }
     private val viewModelAssessmentFragment: ViewModelAssessmentFragment by lazy {
         ViewModelProvider(this, viewModelFactory).get(ViewModelAssessmentFragment::class.java)

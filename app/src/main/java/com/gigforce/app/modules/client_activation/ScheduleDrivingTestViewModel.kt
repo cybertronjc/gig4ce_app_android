@@ -9,7 +9,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnr
 import com.gigforce.app.modules.auth.ui.main.LoginResponse
 import com.gigforce.app.modules.client_activation.models.*
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 

@@ -18,8 +18,11 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.*
-import com.gigforce.core.utils.GlideApp
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.utils.getScreenShot
+import com.gigforce.core.utils.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
@@ -36,7 +39,9 @@ import kotlin.jvm.Throws
 
 class GigerIdFragment : BaseFragment() {
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ViewModelGigerIDFragment(GigerIdRepository()))
+        ViewModelProviderFactory(
+            ViewModelGigerIDFragment(GigerIdRepository())
+        )
     }
     private val viewModelGigerID: ViewModelGigerIDFragment by lazy {
         ViewModelProvider(this, viewModelFactory).get(ViewModelGigerIDFragment::class.java)
@@ -125,10 +130,10 @@ class GigerIdFragment : BaseFragment() {
         tv_designation_giger_id.text = gig.title
         tv_gig_since_giger_id.text =
             "${resources.getString(R.string.giger_since)} ${
-                parseTime(
-                    "MMM yyyy",
-                    gig?.startDateTime?.toDate()
-                )
+            parseTime(
+                "MMM yyyy",
+                gig?.startDateTime?.toDate()
+            )
             }"
         if (!gig.companyLogo.isNullOrBlank()) {
             if (gig.companyLogo!!.startsWith("http", true)) {
@@ -165,9 +170,13 @@ class GigerIdFragment : BaseFragment() {
         tv_brand_name_giger_id.text = "@${gig.companyName}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
         gig.startDateTime?.let {
-            tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", it.toDate())
+            tv_gig_date_giger_id.text =
+                parseTime("dd MMM yyyy", it.toDate())
             tv_issued_date_giger_id.text =
-                "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
+                "${getString(R.string.issued_on)} ${parseTime(
+                    "dd MMM yyyy",
+                    it.toDate()
+                )}"
         }
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)

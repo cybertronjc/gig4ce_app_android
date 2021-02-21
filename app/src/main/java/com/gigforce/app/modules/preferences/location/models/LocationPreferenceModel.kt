@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.preferences.location.models
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 import com.google.firebase.firestore.DocumentReference
 
 class LocationPreferenceModel: BaseFirestoreDataModel {

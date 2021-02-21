@@ -23,7 +23,7 @@ import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.utils.configrepository.ConfigDataModel
+import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore

@@ -27,17 +27,16 @@ import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.profile.models.RoleInterests
-import com.gigforce.app.utils.HorizontaltemDecoration
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
-import com.gigforce.app.utils.openPopupMenu
+import com.gigforce.common_ui.decors.HorizontaltemDecoration
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.common_ui.utils.openPopupMenu
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_role_details_fragment.*
 import java.io.File
 import java.io.FileOutputStream
@@ -115,7 +114,12 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
     private fun initClicks() {
 
         iv_options_role_details.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_assessment_result, this, activity)
+            openPopupMenu(
+                it,
+                R.menu.menu_assessment_result,
+                this,
+                activity
+            )
         }
     }
 
@@ -463,10 +467,10 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
         rv_preferred_locations_role_details.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         rv_preferred_locations_role_details.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_11
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_11
+            )
         )
 
     }

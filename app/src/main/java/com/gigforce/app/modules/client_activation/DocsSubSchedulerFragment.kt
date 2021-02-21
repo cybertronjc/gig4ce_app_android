@@ -19,8 +19,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 

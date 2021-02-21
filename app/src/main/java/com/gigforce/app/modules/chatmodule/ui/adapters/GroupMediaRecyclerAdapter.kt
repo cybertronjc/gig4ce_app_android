@@ -13,7 +13,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ChatConstants
 import com.gigforce.app.modules.chatmodule.models.GroupMedia
-import com.gigforce.app.utils.FirebaseUtils
+import com.gigforce.core.utils.FirebaseUtils
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.util.concurrent.TimeUnit

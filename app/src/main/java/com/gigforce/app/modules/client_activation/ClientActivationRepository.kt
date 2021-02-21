@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
 import android.location.Location
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.client_activation.models.Media
 import com.gigforce.app.modules.profile.models.ClientActs
 import com.google.firebase.firestore.FieldValue

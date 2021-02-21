@@ -42,6 +42,8 @@ import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.core.utils.DateHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_group_chat.*
@@ -146,7 +148,11 @@ class GroupChatFragment : BaseFragment(),
 //        layoutManager.reverseLayout = true
         rv_chats.layoutManager = layoutManager
 
-        rv_chats.addItemDecoration(VerticalItemDecorator(30))
+        rv_chats.addItemDecoration(
+            VerticalItemDecorator(
+                30
+            )
+        )
         // rv_chats.setHasFixedSize(true)
         rv_chats.adapter = mAdapter
     }

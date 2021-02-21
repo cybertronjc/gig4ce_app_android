@@ -8,7 +8,7 @@ import com.gigforce.app.modules.learning.LearningRepository
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.SingleLiveEvent2
+import com.gigforce.core.SingleLiveEvent2
 import kotlinx.coroutines.launch
 
 sealed class VideoSaveState {
@@ -79,7 +79,8 @@ class CourseVideoViewModel constructor(
     private val _videoSaveState = MutableLiveData<Lce<VideoSaveState>>()
     val videoSaveState: LiveData<Lce<VideoSaveState>> = _videoSaveState
 
-    private val _openNextDestination = SingleLiveEvent2<CourseContent>()
+    private val _openNextDestination =
+        SingleLiveEvent2<CourseContent>()
     val openNextDestination: LiveData<CourseContent> = _openNextDestination
 
     fun markVideoAsComplete(moduleId: String, lessonId: String) = viewModelScope.launch {

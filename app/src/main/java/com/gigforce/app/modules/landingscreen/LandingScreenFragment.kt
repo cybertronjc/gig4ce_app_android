@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -28,8 +27,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
@@ -51,10 +50,9 @@ import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
-import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
-import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
-import com.gigforce.app.views.MonthYearPickerDialog
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
@@ -74,10 +72,10 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
-import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.AppConstants
 
-import java.util.*
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 
 class LandingScreenFragment : BaseFragment() {
 

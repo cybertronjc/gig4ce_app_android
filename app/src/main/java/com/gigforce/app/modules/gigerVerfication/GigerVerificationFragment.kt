@@ -26,9 +26,9 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.DocViewerActivity
-import com.gigforce.app.utils.PermissionUtils
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.utils.PermissionUtils
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*

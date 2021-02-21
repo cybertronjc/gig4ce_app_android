@@ -2,18 +2,15 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.launch
 
 class BSCalendarScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel

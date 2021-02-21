@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.profile
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone

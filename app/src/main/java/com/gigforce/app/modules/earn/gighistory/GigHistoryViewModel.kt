@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage.models.DocChange
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException

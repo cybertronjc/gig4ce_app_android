@@ -19,8 +19,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.utils.DropdownAdapter
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_education_fragment.view.*
 import java.text.SimpleDateFormat
@@ -279,7 +279,11 @@ class AdapterAddEducation : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
                 Glide.with(holder.itemView.context)
                     .load(education?.educationDocument)
-                    .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                    .placeholder(
+                        getCircularProgressDrawable(
+                            holder.itemView.context
+                        )
+                    )
                     .into(viewHolderAddEducation.itemView.clickedImageIV_education)
 
                 if (education?.validateFields == true) {

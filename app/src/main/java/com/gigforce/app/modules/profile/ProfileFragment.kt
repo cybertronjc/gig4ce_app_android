@@ -22,7 +22,7 @@ import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage

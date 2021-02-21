@@ -1,16 +1,16 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment
 
 import com.gigforce.app.BuildConfig
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.ambassador_user_enrollment.models.*
 import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.EnrollmentInfo
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 import com.gigforce.app.modules.verification.service.RetrofitFactory
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.setOrThrow
-import com.gigforce.app.utils.updateOrThrow
+import com.gigforce.core.AppConstants
+import com.gigforce.core.utils.EventLogs.setOrThrow
+import com.gigforce.core.utils.EventLogs.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 

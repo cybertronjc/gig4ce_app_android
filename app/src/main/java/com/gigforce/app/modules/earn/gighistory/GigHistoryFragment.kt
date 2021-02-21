@@ -8,19 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.PaginationScrollListener
-import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.listeners.PaginationScrollListener
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_gig_history.*
@@ -34,7 +32,11 @@ import kotlinx.android.synthetic.main.fragment_gig_history.*
 class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCallbacks,
     NoGigsDialog.NoGigsDialogCallbacks {
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(GigHistoryViewModel(GigHistoryRepository()))
+        ViewModelProviderFactory(
+            GigHistoryViewModel(
+                GigHistoryRepository()
+            )
+        )
     }
     private val viewModel: GigHistoryViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(GigHistoryViewModel::class.java)

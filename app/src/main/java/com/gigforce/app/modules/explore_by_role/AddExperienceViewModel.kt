@@ -1,9 +1,8 @@
 package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.profile.models.Education
 import com.gigforce.app.modules.profile.models.Experience
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 
 class AddExperienceViewModel :ViewModel() {
     val experienceRepo = AddExperienceRepository()

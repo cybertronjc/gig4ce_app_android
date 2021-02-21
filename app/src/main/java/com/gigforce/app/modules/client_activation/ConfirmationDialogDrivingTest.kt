@@ -14,10 +14,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_contact
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_location

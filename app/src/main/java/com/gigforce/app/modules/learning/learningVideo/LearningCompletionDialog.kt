@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_lesson_completed_.*
 
 class LearningCompletionDialog : DialogFragment() {
@@ -18,7 +18,9 @@ class LearningCompletionDialog : DialogFragment() {
         super.onStart()
         dialog?.window
                 ?.setLayout(
-                        (getScreenWidth(requireActivity()).width - resources.getDimension(R.dimen.size_32)).toInt(),
+                        (getScreenWidth(
+                            requireActivity()
+                        ).width - resources.getDimension(R.dimen.size_32)).toInt(),
                         ViewGroup.LayoutParams.WRAP_CONTENT
                 );
         dialog?.window

@@ -9,9 +9,8 @@ import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
@@ -318,7 +317,8 @@ class ApplicationClientActivationViewModel : ViewModel() {
     }
 
 
-    var userProfileData: SingleLiveEvent<ProfileData> = SingleLiveEvent<ProfileData>()
+    var userProfileData: SingleLiveEvent<ProfileData> =
+        SingleLiveEvent<ProfileData>()
 
 
 }

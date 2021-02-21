@@ -4,12 +4,14 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.*
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getScreenWidth
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
@@ -100,7 +102,11 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
                 GlideApp.with(viewHolderGigDetails.itemView.context)
                         .load(gig.companyLogo)
-                        .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                        .placeholder(
+                            getCircularProgressDrawable(
+                                viewHolderGigDetails.itemView.context
+                            )
+                        )
                         .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
             } else {
                 FirebaseStorage.getInstance()
@@ -111,7 +117,11 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
                             GlideApp.with(viewHolderGigDetails.itemView)
                                     .load(fileUri)
-                                    .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
+                                    .placeholder(
+                                        getCircularProgressDrawable(
+                                            viewHolderGigDetails.itemView.context
+                                        )
+                                    )
                                     .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
                         }
             }

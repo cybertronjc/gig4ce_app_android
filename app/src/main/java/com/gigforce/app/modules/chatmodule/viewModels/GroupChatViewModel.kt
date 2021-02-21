@@ -2,8 +2,6 @@ package com.gigforce.app.modules.chatmodule.viewModels
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.util.Log
@@ -20,6 +18,10 @@ import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.network.RetrofitFactory
+import com.gigforce.core.utils.EventLogs.getDownloadUrlOrThrow
+import com.gigforce.core.utils.FileUtils
+import com.gigforce.core.utils.FirebaseUtils
+import com.gigforce.core.utils.ImageUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
@@ -27,7 +29,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*

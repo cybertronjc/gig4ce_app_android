@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.wallet.models
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 
 data class Wallet(
     var balance: Float = 0F,

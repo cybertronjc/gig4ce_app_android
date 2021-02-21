@@ -16,7 +16,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.DateHelper
+import com.gigforce.core.utils.DateHelper
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.Mode

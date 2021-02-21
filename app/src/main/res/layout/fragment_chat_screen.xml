@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.gigforce.app.utils.widgets.CircleImageView
+            <com.gigforce.common_ui.widgets.CircleImageView
                 android:id="@+id/civ_personImage"
                 android:layout_width="@dimen/size_40"
                 android:layout_height="@dimen/size_40"

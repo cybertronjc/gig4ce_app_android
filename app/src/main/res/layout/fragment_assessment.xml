@@ -11,7 +11,7 @@
     <include layout="@layout/toolbar" />
 
 
-    <com.gigforce.app.utils.widgets.CustomScrollView
+    <com.gigforce.common_ui.widgets.CustomScrollView
         android:id="@+id/sv_assess_frag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -140,7 +140,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_scenario_value_assess_frag">
 
-                <com.gigforce.app.utils.widgets.RoundCornerImageView
+                <com.gigforce.common_ui.widgets.RoundCornerImageView
                     android:id="@+id/iv_scenario_value_assess_frag"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_252"
@@ -221,7 +221,7 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.gigforce.app.utils.widgets.CustomScrollView>
+    </com.gigforce.common_ui.widgets.CustomScrollView>
 
     <Button
         android:id="@+id/bt_next_assess_frag"

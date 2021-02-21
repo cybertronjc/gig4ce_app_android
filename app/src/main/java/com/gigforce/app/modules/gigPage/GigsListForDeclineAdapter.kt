@@ -12,7 +12,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.recycler_row_gig_list_for_decline.view.*
 import java.text.SimpleDateFormat

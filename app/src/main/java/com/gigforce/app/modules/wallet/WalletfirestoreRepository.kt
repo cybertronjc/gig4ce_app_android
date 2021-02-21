@@ -1,11 +1,8 @@
 package com.gigforce.app.modules.wallet
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.wallet.models.Payslip
-import com.gigforce.app.utils.getOrThrow
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.gigforce.core.utils.EventLogs.getOrThrow
 
 class WalletfirestoreRepository: BaseFirestoreDBRepository() {
     var COLLECTION_NAME = "Wallets"

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import kotlinx.android.synthetic.main.chat_contact_item.*
 import kotlinx.android.synthetic.main.fragment_fake_contact_screen.*
 

@@ -6,7 +6,7 @@ import com.gigforce.app.modules.profile.models.Contact
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.SingleLiveEvent
 
 class AddContactViewmodel : ViewModel() {
     val repositoryAddContact = RepositoryAddContact()

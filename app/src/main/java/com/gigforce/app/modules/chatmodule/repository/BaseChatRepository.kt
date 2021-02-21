@@ -2,7 +2,7 @@ package com.gigforce.app.modules.chatmodule.repository
 
 import android.content.Context
 import android.net.Uri
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.storage.FirebaseStorage
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener

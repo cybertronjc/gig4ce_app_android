@@ -17,7 +17,7 @@ import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*

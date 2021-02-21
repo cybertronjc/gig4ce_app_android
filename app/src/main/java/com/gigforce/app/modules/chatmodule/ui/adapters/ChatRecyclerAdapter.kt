@@ -25,7 +25,7 @@ import com.gigforce.app.modules.chatmodule.ChatConstants
 import com.gigforce.app.modules.chatmodule.models.*
 import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnChatMessageClickListener
 import com.gigforce.app.modules.chatmodule.ui.adapters.diffUtils.ChatDiffUtilCallback
-import com.gigforce.app.utils.FirebaseUtils
+import com.gigforce.core.utils.FirebaseUtils
 import java.io.File
 import java.util.concurrent.TimeUnit
 

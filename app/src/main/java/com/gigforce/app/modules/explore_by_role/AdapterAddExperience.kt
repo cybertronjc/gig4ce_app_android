@@ -17,7 +17,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.DropdownAdapter
-import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.common_ui.utils.PushDownAnim
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_experience.view.*
 import java.text.SimpleDateFormat

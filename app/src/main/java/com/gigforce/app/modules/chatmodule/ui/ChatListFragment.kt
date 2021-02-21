@@ -27,8 +27,7 @@ import com.gigforce.app.modules.chatmodule.models.ChatHeader
 import com.gigforce.app.modules.chatmodule.service.FetchContactsService
 import com.gigforce.app.modules.chatmodule.ui.adapters.ChatListRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
-import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.VerticalItemDecorator
+import com.gigforce.common_ui.decors.VerticalItemDecorator
 import kotlinx.android.synthetic.main.contact_screen_fragment.*
 
 /*
@@ -149,7 +148,11 @@ class ChatListFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener,
 
     private fun initRecycler() {
         rv_contacts.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        rv_contacts.addItemDecoration(VerticalItemDecorator(5))
+        rv_contacts.addItemDecoration(
+            VerticalItemDecorator(
+                5
+            )
+        )
         rv_contacts.adapter = mAdapter
     }
 

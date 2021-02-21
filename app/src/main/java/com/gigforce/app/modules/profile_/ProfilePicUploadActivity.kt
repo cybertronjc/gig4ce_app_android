@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.app.R
-import com.gigforce.app.core.ImagePicker
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.ClickOrSelectImageBottomSheet

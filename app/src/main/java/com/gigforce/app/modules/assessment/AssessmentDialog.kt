@@ -19,9 +19,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getScreenWidth
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_assessment_dialog.*
 import java.text.SimpleDateFormat

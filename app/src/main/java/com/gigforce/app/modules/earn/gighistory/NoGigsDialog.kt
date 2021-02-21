@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_dialog_no_gigs.*
 
 class NoGigsDialog : DialogFragment() {

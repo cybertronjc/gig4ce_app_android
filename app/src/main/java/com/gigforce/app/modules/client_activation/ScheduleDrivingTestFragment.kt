@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.client_activation
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -19,9 +18,9 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.app.utils.ItemOffsetDecoration
+import com.gigforce.common_ui.decors.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.txt_otp
@@ -65,7 +64,11 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         rv_cb_schedule_test.adapter = adapter
         adapter.setCallbacks(this)
         rv_cb_schedule_test.layoutManager = LinearLayoutManager(requireContext())
-        rv_cb_schedule_test.addItemDecoration(ItemOffsetDecoration(resources.getDimensionPixelSize(R.dimen.size_4)))
+        rv_cb_schedule_test.addItemDecoration(
+            ItemOffsetDecoration(
+                resources.getDimensionPixelSize(R.dimen.size_4)
+            )
+        )
     }
 
 

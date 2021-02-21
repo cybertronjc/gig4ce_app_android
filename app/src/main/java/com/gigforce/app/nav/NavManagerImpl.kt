@@ -1,11 +1,9 @@
 package com.gigforce.app.nav
 
 import android.content.Context
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.utils.StringConstants
 import com.gigforce.common_ui.BaseNavigationImpl
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject

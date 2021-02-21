@@ -53,5 +53,32 @@
         <attr name="rows" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="ImageViewRounded">
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
 
+    <declare-styleable name="RoundCornerImageView">
+        <attr name="sriv_left_top_corner_radius" format="dimension" />
+        <attr name="sriv_right_top_corner_radius" format="dimension" />
+        <attr name="sriv_left_bottom_corner_radius" format="dimension" />
+        <attr name="sriv_right_bottom_corner_radius" format="dimension" />
+        <attr name="sriv_border_width" format="dimension" />
+        <attr name="sriv_border_color" format="color" />
+        <attr name="sriv_oval" format="boolean" />
+        <attr name="android:scaleType" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_circle_background_color" format="color" />
+        <attr name="civ_dashed_border" format="boolean" />
+        <attr name="civ_is_qr" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="EditTextWithSuffix">
+        <attr name="suffix" format="string|reference" />
+        <attr name="suffixPadding" format="dimension" />
+    </declare-styleable>
 </resources>

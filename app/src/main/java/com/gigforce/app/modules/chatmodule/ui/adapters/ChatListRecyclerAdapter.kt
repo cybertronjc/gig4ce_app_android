@@ -17,7 +17,7 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ChatConstants
 import com.gigforce.app.modules.chatmodule.models.ChatHeader
 import com.gigforce.app.modules.chatmodule.models.Message
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import java.text.SimpleDateFormat
 
 

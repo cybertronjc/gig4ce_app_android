@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.custom_gig_preferences
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 import java.util.*
 import kotlin.collections.ArrayList
 

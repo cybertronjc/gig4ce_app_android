@@ -40,9 +40,9 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
+import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -114,7 +114,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                             android.Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        var intent = Intent(context, ImageCaptureActivity::class.java)
+                        var intent = Intent(context, AttendanceImageCaptureActivity::class.java)
                         startActivityForResult(intent, REQUEST_CODE_UPLOAD_SELFIE_IMAGE)
                     } else {
                         requestPermissionForGPS()

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.app.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
 
 class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolder>() {
@@ -27,7 +27,7 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
         val dependency = items[position]
         holder.itemView.iv_status_application.setImageDrawable(
                 if (dependency.drawable == null) getCircularProgressDrawable(
-                        holder.itemView.context
+                    holder.itemView.context
                 ) else {
                     dependency.drawable
                 }

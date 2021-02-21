@@ -21,9 +21,9 @@ import com.gigforce.app.core.selectChipWithText
 import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.ambassador_user_enrollment.models.City
+import com.gigforce.core.datamodels.City
 import com.gigforce.app.modules.ambassador_user_enrollment.models.PostalOffice
-import com.gigforce.app.modules.ambassador_user_enrollment.models.State
+import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.verification.UtilMethods
@@ -31,7 +31,6 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.address_line_1_et
@@ -187,7 +186,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
                 }.toMutableList().apply {
-                    add(0, City(name = "Select District"))
+                    add(0,
+                        City(name = "Select District")
+                    )
                 }
 
                 val permanentCityAdapter: ArrayAdapter<City> =
@@ -575,7 +576,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         val cities = viewModel.cities.filter {
             it.stateCode == id
         }.toMutableList().apply {
-            add(0, City(name = getString(R.string.select_district)))
+            add(0,
+                City(name = getString(R.string.select_district))
+            )
         }
 
         val cityAdapter: ArrayAdapter<City> =

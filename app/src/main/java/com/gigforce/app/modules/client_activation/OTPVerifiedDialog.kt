@@ -5,7 +5,8 @@ import android.text.Html
 import com.bumptech.glide.Glide
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rejection_dialog.*
 
 class OTPVerifiedDialog : RejectionDialog() {
@@ -46,7 +47,9 @@ class OTPVerifiedDialog : RejectionDialog() {
         tv_sub_two_rejection_dialog.gone()
         tv_content_title_rejection_dialog.text = Html.fromHtml(TITLE)
         Glide.with(this).load(ILLUSTRATION).placeholder(
-                com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+            getCircularProgressDrawable(
+                requireContext()
+            )
         ).into(iv_rejection_illustration)
         tv_refer_rejection_dialog.text = ACTIONMAIN
         tv_take_me_home_rejection_dialog.text = ACTIONSEC

@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
@@ -27,6 +27,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.ext.showToast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
@@ -40,7 +41,7 @@ import kotlinx.android.synthetic.main.fragment_main_learning_toolbar.*
 import java.util.*
 
 
-class MainLearningFragment : BaseFragment() {
+class MainLearningFragment : Fragment() {
     private val viewModelProfile: ProfileViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
@@ -48,7 +49,7 @@ class MainLearningFragment : BaseFragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_main_learning, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_main_learning, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -176,7 +177,6 @@ class MainLearningFragment : BaseFragment() {
                                 getTextView(viewHolder, R.id.title).text = obj?.title
                                 getTextView(viewHolder, R.id.time).text = "02:00"
 
-
                                 getTextView(viewHolder, R.id.status).text = "PENDING"
                                 getTextView(
                                         viewHolder,
@@ -186,8 +186,6 @@ class MainLearningFragment : BaseFragment() {
                                         viewHolder,
                                         R.id.side_bar_status
                                 ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
-
-
                             })
             recyclerGenericAdapter.list = content
             recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)

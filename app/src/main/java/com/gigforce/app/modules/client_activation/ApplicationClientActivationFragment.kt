@@ -21,7 +21,7 @@ import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
 
@@ -129,7 +129,9 @@ class ApplicationClientActivationFragment : BaseFragment(),
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             jpSettings = it
             Glide.with(this).load(it?.coverImg).placeholder(
-                    com.gigforce.app.utils.getCircularProgressDrawable(requireContext())
+                com.gigforce.common_ui.utils.getCircularProgressDrawable(
+                    requireContext()
+                )
             ).into(iv_application_client_activation)
 
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")

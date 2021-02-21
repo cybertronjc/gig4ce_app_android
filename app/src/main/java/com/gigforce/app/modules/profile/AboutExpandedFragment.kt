@@ -21,8 +21,8 @@ import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_
 import com.gigforce.app.modules.profile.models.ContactEmail
 import com.gigforce.app.modules.profile.models.ContactPhone
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -41,7 +41,9 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
     }
 
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ViewModelAboutExpandedFragment(ModelAboutExpandedFragment()))
+        ViewModelProviderFactory(
+            ViewModelAboutExpandedFragment(ModelAboutExpandedFragment())
+        )
     }
     private val viewModel: ViewModelAboutExpandedFragment by lazy {
         ViewModelProvider(

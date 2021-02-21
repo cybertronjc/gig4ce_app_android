@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
@@ -23,8 +22,8 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
@@ -35,6 +34,9 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.MenuItem
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.core.utils.GlideApp
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -124,15 +126,15 @@ class ClientActivationFragment : BaseFragment(),
             customPowerMenu =
                     CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
                             .addItem(
-                                    MenuItem(getString(R.string.share))
+                                MenuItem(getString(R.string.share))
                             )
 
                             .setShowBackground(false)
                             .setOnMenuItemClickListener(object :
-                                    OnMenuItemClickListener<com.gigforce.app.utils.MenuItem> {
+                                    OnMenuItemClickListener<MenuItem> {
                                 override fun onItemClick(
                                         position: Int,
-                                        item: com.gigforce.app.utils.MenuItem?
+                                        item: MenuItem?
                                 ) {
                                     pb_client_activation.visible()
                                     Firebase.dynamicLinks.shortLinkAsync {
@@ -205,7 +207,9 @@ class ClientActivationFragment : BaseFragment(),
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
-                    getCircularProgressDrawable(requireContext())
+                com.gigforce.common_ui.utils.getCircularProgressDrawable(
+                    requireContext()
+                )
             ).into(iv_main_client_activation)
             tv_businessname_client_activation.text = (it?.title ?: "")
             tv_role_client_activation.text = (it?.subTitle ?: "")
@@ -336,10 +340,10 @@ class ClientActivationFragment : BaseFragment(),
         layoutManager.alignItems = AlignItems.FLEX_START
         rv_preferred_locations_client_activation.layoutManager = layoutManager
         rv_preferred_locations_client_activation.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_11
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_11
+            )
         )
 
     }

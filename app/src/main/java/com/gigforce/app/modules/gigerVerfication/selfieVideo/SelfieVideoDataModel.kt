@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.gigerVerfication.selfieVideo
 
 import androidx.annotation.Keep
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class SelfieVideoDataModel(

@@ -20,8 +20,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -146,22 +146,22 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
                             )
                         },
                         RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
+                            val view = getView(viewHolder, R.id.card_view)
                             val lp = view.layoutParams
                             lp.height = lp.height
                             lp.width = itemWidth
                             view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title_)
+                            val title = getTextView(viewHolder, R.id.title_)
                             title.text = obj?.name
 
-                            var subtitle = getTextView(viewHolder, R.id.title)
+                            val subtitle = getTextView(viewHolder, R.id.title)
                             subtitle.text = obj?.level
 
-                            var comImg = getImageView(viewHolder, R.id.completed_iv)
+                            val comImg = getImageView(viewHolder, R.id.completed_iv)
                             comImg.isVisible = obj?.completed ?: false
 
-                            var img = getImageView(viewHolder, R.id.learning_img)
+                            val img = getImageView(viewHolder, R.id.learning_img)
                             if (!obj!!.coverPicture.isNullOrBlank()) {
                                 if (obj.coverPicture!!.startsWith("http", true)) {
 

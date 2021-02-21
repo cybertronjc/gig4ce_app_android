@@ -45,9 +45,13 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
+import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.openPopupMenu
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -145,7 +149,12 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         }
 
         iv_options_gig_page.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_gig_attendance, this, requireActivity())
+            openPopupMenu(
+                it,
+                R.menu.menu_gig_attendance,
+                this,
+                requireActivity()
+            )
         }
 
         contactUsLayout?.setOnClickListener {
@@ -198,7 +207,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         val has_permission_coarse_location = ContextCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
                         if (userGpsDialogActionCount == 1 || has_permission_coarse_location) {
-                            val intent = Intent(context, ImageCaptureActivity::class.java)
+                            val intent = Intent(context, AttendanceImageCaptureActivity::class.java)
                             startActivityForResult(intent,
                                     GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
                             )

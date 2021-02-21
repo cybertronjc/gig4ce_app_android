@@ -1,7 +1,6 @@
 package com.gigforce.app.modules.profile.models
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
-import java.util.*
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 
 data class Skill(
     var id: String = ""
