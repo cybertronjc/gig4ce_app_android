@@ -12,13 +12,14 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_single_image.*
 
-class SingleImageFragment : BaseFragment() {
+class SingleImageFragment : Fragment() {
 
     companion object {
         const val TAG = "SingleImageFragment"
@@ -56,7 +57,7 @@ class SingleImageFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflateView(R.layout.fragment_learning_slide_single_image, inflater, container)
+    ): View? = inflater.inflate(R.layout.fragment_learning_slide_single_image, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

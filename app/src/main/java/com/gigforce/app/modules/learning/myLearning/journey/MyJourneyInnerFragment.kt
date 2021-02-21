@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -22,14 +23,14 @@ import kotlinx.android.synthetic.main.fragment_my_journey.*
 import java.util.*
 
 
-class MyJourneyInnerFragment : BaseFragment() {
+class MyJourneyInnerFragment : Fragment() {
 
     private val journeyViewModel : JourneyViewModel by viewModels ()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_my_journey, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_my_journey, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

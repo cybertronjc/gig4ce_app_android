@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,14 +19,14 @@ import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import kotlinx.android.synthetic.main.fragment_help_video.*
 
 
-class HelpVideosFragment : BaseFragment() {
+class HelpVideosFragment : Fragment() {
 
     private val viewModel: HelpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_help_video, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_help_video, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

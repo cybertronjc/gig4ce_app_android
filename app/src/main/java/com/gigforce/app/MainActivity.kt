@@ -22,6 +22,7 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.NavFragmentsData
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.tasks.OnCompleteListener
@@ -196,7 +197,7 @@ class MainActivity : AppCompatActivity(),
             navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
-            handled = (fragmentholder as BaseFragment).onBackPressed()
+            handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
         } catch (e: Exception) {
         }
 

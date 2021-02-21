@@ -48,7 +48,6 @@ import java.util.*
 
 class PhotoCrop : AppCompatActivity() {
 
-
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
             ProfilePictureOptionsBottomSheetFragment()
@@ -308,7 +307,7 @@ class PhotoCrop : AppCompatActivity() {
     /**
      * To get uri from the data received when using the camera to capture image
      */
-    open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+     fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =

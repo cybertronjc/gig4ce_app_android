@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -25,7 +26,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_video_with_text.*
 
-class VideoWithTextFragment : BaseFragment() {
+class VideoWithTextFragment : Fragment() {
 
     companion object {
         const val TAG = "VideoWithTextFragment"
@@ -75,7 +76,7 @@ class VideoWithTextFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflateView(R.layout.fragment_learning_slide_video_with_text, inflater, container)
+    ): View? = inflater.inflate(R.layout.fragment_learning_slide_video_with_text, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

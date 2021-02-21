@@ -21,7 +21,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_my_learning.*
 
 
-class MyLearningFragment : BaseFragment() {
+class MyLearningFragment : Fragment() {
 
     private val viewModelProfile: ProfileViewModel by viewModels()
 
@@ -29,7 +29,7 @@ class MyLearningFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_my_learning, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_my_learning, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

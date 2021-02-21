@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -17,14 +18,14 @@ import kotlinx.android.synthetic.main.fragment_my_learning_inner.*
 import java.util.ArrayList
 
 
-class MyLearningsInnerFragment : BaseFragment() {
+class MyLearningsInnerFragment : Fragment() {
 
     private val viewModelProfile: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_my_learning_inner, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_my_learning_inner, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +42,7 @@ class MyLearningsInnerFragment : BaseFragment() {
         width = displayMetrics.widthPixels
         val itemWidth = ((width / 3) * 2).toInt()
         // model will change when integrated with DB
-        var datalist: ArrayList<MainLearningFragment.TitleSubtitleModel> =
+        val datalist: ArrayList<MainLearningFragment.TitleSubtitleModel> =
             ArrayList<MainLearningFragment.TitleSubtitleModel>()
 //        datalist.add(
 //            MainLearningFragment.TitleSubtitleModel(

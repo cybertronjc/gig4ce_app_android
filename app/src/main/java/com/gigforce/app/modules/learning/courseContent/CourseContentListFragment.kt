@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,14 +21,20 @@ import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.utils.Lce
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_course_content_list.*
+import javax.inject.Inject
 
-class CourseContentListFragment : BaseFragment() {
+@AndroidEntryPoint
+class CourseContentListFragment : Fragment() {
 
     private lateinit var mCourseId: String
     private lateinit var mModuleId: String
 
     private val viewModel: CourseDetailsViewModel by viewModels()
+
+    @Inject lateinit var navigation:INavigation
 
     private val mAdapter: LearningDetailsLessonsAdapter by lazy {
         LearningDetailsLessonsAdapter(requireContext())
@@ -36,7 +43,7 @@ class CourseContentListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_course_content_list, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_course_content_list, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,16 +77,17 @@ class CourseContentListFragment : BaseFragment() {
 
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
-                    navigate(
-                        R.id.assessment_fragment, bundleOf(
+                    navigation.navigateTo(
+                        "assessment", bundleOf(
                             AssessmentFragment.INTENT_LESSON_ID to it.id,
                             AssessmentFragment.INTENT_MODULE_ID to it.moduleId
                         )
                     )
                 }
                 CourseContent.TYPE_SLIDE -> {
-                    navigate(
-                        R.id.slidesFragment,
+                    //todo: register: slides: R.id.slidesFragment
+                    navigation.navigateTo(
+                        "slides",
                         bundleOf(
                             SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
                             SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,

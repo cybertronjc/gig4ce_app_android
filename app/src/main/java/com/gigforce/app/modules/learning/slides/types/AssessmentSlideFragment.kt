@@ -10,14 +10,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.core.navigation.INavigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_slide_assessment.*
+import javax.inject.Inject
 
-class AssessmentSlideFragment : BaseFragment() {
+@AndroidEntryPoint
+class AssessmentSlideFragment : Fragment() {
 
     companion object {
         const val TAG = "AssessmentFragment"
@@ -41,6 +46,8 @@ class AssessmentSlideFragment : BaseFragment() {
         }
     }
 
+    @Inject lateinit var navigation:INavigation
+
     private lateinit var mAssessmentId: String
     private lateinit var mAssessmentTitle: String
     private lateinit var mAssessmentDescription: String
@@ -49,7 +56,7 @@ class AssessmentSlideFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflateView(R.layout.fragment_learning_slide_assessment, inflater, container)
+    ): View? = inflater.inflate(R.layout.fragment_learning_slide_assessment, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,7 +76,8 @@ class AssessmentSlideFragment : BaseFragment() {
         }
 
         start_assessment_btn.setOnClickListener {
-            navigate(R.id.assessment_fragment,  bundleOf(
+            // todo: register: assessment: R.id.assessment_fragment
+            navigation.navigateTo("assessment",  bundleOf(
                 AssessmentFragment.INTENT_LESSON_ID to mAssessmentId
             ))
         }

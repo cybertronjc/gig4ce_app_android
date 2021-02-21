@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
@@ -16,7 +17,7 @@ import com.gigforce.app.modules.learning.slides.SlideViewModel
 import com.gigforce.app.utils.Lse
 import kotlinx.android.synthetic.main.fragment_learning_slide_completed.*
 
-class SlidesCompletedFragment : BaseFragment() {
+class SlidesCompletedFragment : Fragment() {
 
     companion object {
         const val TAG = "SlidesCompletedFragment"
@@ -47,7 +48,7 @@ class SlidesCompletedFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflateView(R.layout.fragment_learning_slide_completed, inflater, container)
+    ): View? = inflater.inflate(R.layout.fragment_learning_slide_completed, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

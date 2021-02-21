@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,17 +36,22 @@ import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.navigation.INavigation
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
 import kotlinx.android.synthetic.main.fragment_learning_course_details_main.*
+import javax.inject.Inject
 
-class LearningCourseDetailsFragment : BaseFragment() {
+@AndroidEntryPoint
+class LearningCourseDetailsFragment : Fragment() {
 
     private var mCurrentModuleNo: Int = -1
     private lateinit var mCourseId: String
     private var mModuleId: String? = null
     private var FROM_CLIENT_ACTIVATION = false
 
+    @Inject lateinit var navigation:INavigation
 
     private val viewModel: CourseDetailsViewModel by viewModels()
 
@@ -57,7 +63,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_learning_course_details, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_learning_course_details, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

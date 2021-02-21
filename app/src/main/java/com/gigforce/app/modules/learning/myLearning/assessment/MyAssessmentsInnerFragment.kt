@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_my_assessments.*
 import java.util.ArrayList
 
 
-class MyAssessmentsInnerFragment : BaseFragment() {
+class MyAssessmentsInnerFragment : Fragment() {
 
 
     private val viewModelProfile: ProfileViewModel by viewModels()
@@ -26,7 +27,7 @@ class MyAssessmentsInnerFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_my_assessments, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_my_assessments, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +44,7 @@ class MyAssessmentsInnerFragment : BaseFragment() {
         val width = displayMetrics.widthPixels
         val itemWidth = ((width / 5) * 3.5).toInt()
 
-        var datalist: ArrayList<BSCalendarScreenFragment.Assessment> = ArrayList<BSCalendarScreenFragment.Assessment>()
+        val datalist: ArrayList<BSCalendarScreenFragment.Assessment> = ArrayList<BSCalendarScreenFragment.Assessment>()
 
         datalist.add(
             BSCalendarScreenFragment.Assessment(

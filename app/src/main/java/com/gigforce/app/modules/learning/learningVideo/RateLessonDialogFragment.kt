@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_rate_lesson.*
 import kotlinx.android.synthetic.main.fragment_rate_lesson_main.*
 
 interface RateLessonDialogFragmentClosingListener{
-
     fun rateLessonDialogDismissed()
 }
 

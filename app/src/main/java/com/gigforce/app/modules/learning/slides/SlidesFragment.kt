@@ -17,11 +17,13 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.slides.types.VideoFragmentOrientationListener
 import com.gigforce.app.utils.Lce
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*
 
 class SlidesFragment : Fragment(),
     ViewPager.OnPageChangeListener,
+    IOnBackPressedOverride,
     VideoFragmentOrientationListener {
 
     private lateinit var mLessonId: String
@@ -33,7 +35,7 @@ class SlidesFragment : Fragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_slides, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_slides, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

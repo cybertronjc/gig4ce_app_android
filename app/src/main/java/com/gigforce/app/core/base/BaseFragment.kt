@@ -43,6 +43,7 @@ import com.gigforce.core.NavFragmentsData
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -50,8 +51,10 @@ import com.gigforce.app.utils.ui_models.ShimmerModel
  * Use the [BaseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-        SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
+open class BaseFragment : Fragment(),
+    ViewsFromViewsInterface, NavigationInterface,
+    IOnBackPressedOverride,
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
@@ -128,7 +131,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         this.configrepositoryObj?.configCollectionListener()
     }
 
-    open fun onBackPressed(): Boolean {
+    override fun onBackPressed(): Boolean {
         return false
     }
 

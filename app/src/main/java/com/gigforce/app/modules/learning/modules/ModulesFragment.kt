@@ -13,7 +13,8 @@ import com.gigforce.app.modules.learning.learningVideo.LearningVideo
 import com.gigforce.app.modules.learning.learningVideo.LearningVideoLineAdapter
 import kotlinx.android.synthetic.main.fragment_course_content_list.*
 
-class ModulesFragment : BaseFragment() {
+/*
+class ModulesFragment : Fragment() {
 
     private lateinit var mAdapter: LearningVideoLineAdapter
     private lateinit var mLayoutManager: LinearLayoutManager
@@ -62,7 +63,7 @@ class ModulesFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_course_content_list, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_course_content_list, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,4 +81,4 @@ class ModulesFragment : BaseFragment() {
         learningAndAssessmentRV.adapter = mAdapter
     }
 
-}
+}*/
