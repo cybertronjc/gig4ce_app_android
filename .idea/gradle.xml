@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/modules/feature-chat" />
             <option value="$PROJECT_DIR$/modules/learning" />
             <option value="$PROJECT_DIR$/modules/profile" />
+            <option value="$PROJECT_DIR$/user_profile" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

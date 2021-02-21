@@ -111,8 +111,7 @@
         android:id="@+id/tempFragment"
         android:name="com.gigforce.app.TempFragment"
         android:label="TempFragment"
-        tools:layout="@layout/calendar_dialog">
-    </fragment>
+        tools:layout="@layout/calendar_dialog"></fragment>
 
 
     <fragment
@@ -897,6 +896,30 @@
         android:id="@+id/addUserCurrentAddressFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
+    <fragment
+        android:id="@+id/fragment_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.ProfileFragmentv2"
+        android:label="fragment_profile_v2" />
+    <fragment
+        android:id="@+id/fragment_add_lang_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddLanguageProfileV2"
+        android:label="fragment_add_lang_profile_v2" />
+    <fragment
+        android:id="@+id/fragment_add_education_v2"
+        android:name="com.gigforce.app.modules.profile_.AddEducationProfileV2"
+        android:label="fragment_add_education_v2" />
+    <fragment
+        android:id="@+id/fragment_add_experience_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddExperienceProfileV2"
+        android:label="fragment_add_experience_profile_v2" />
+    <fragment
+        android:id="@+id/fragment_add_headline_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddHeadlineFragmentProfileV2"
+        android:label="fragment_add_headline_profile_v2" />
+    <fragment
+        android:id="@+id/fragment_add_skills_profile_v2"
+        android:name="com.gigforce.app.modules.profile_.AddSkillsProfileV2"
+        android:label="fragment_add_skills_profile_v2" />
 
     <include app:graph="@navigation/nav_graph_chat" />
 

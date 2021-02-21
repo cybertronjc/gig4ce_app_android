@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_add_skills_profile_v2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_72"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_back_application_add_skills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:paddingStart="@dimen/size_16"
+                android:paddingTop="@dimen/size_16"
+                android:paddingEnd="@dimen/size_16"
+                android:paddingBottom="@dimen/size_16"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_title_application_add_skills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_back_application_add_skills"
+                android:fontFamily="@font/lato"
+                android:text="Add Skills"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/iv_content_illustration_add_skills"
+        android:layout_width="@dimen/size_53"
+        android:layout_height="@dimen/size_40"
+        android:layout_marginStart="@dimen/size_32"
+        android:layout_marginTop="@dimen/size_36"
+        android:src="@drawable/ic_skills_profile_v2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_add_skills_profile_v2" />
+
+    <TextView
+        android:id="@+id/tv_content_text_add_skills"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_15"
+        android:layout_marginEnd="@dimen/size_18"
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:text="@string/let_people_know_what_all_skills_you_have"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_add_skills"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_skills"
+        app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_skills" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_select_lang_add_skills"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_26"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/bg_2d979797_rad_2"
+        android:minHeight="@dimen/size_140"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content_text_add_skills">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/select_skills_you_have"
+            android:textColor="#333333"
+            android:textSize="14sp"
+
+            android:textStyle="bold" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_add_skills"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:chipSpacingHorizontal="14dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_search_add_skills"
+                style="@style/AppSingleChoiceChip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/others_"
+                app:chipIcon="@drawable/ic_landinghome_search"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp"
+                app:drawableTint="@color/app_chip_bck_colors" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.gigforce.user_profile.components.ChipsEditText
+                android:id="@+id/act_add_skills_profile_v2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_32"
+                android:backgroundTint="#68979797"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/lato"
+                android:hint="@string/search_skills"
+                android:inputType="text|textNoSuggestions|textMultiLine"
+                android:lineSpacingExtra="1dp"
+                android:paddingTop="@dimen/size_7"
+                android:paddingBottom="@dimen/size_17"
+                android:textColor="#333333"
+                android:textColorHint="#68979797"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_save_add_skills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_26"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/gradient_button"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="3sp"
+        android:paddingStart="@dimen/size_40"
+        android:paddingTop="@dimen/size_9"
+        android:paddingEnd="@dimen/size_40"
+        android:paddingBottom="@dimen/size_9"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_skills" />
+
+    <TextView
+        android:id="@+id/tv_cancel_add_skills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_26"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/border_lipstick_rad_4"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="3sp"
+        android:paddingStart="@dimen/size_35"
+        android:paddingTop="@dimen/size_9"
+        android:paddingEnd="@dimen/size_35"
+        android:paddingBottom="@dimen/size_9"
+        android:text="@string/cancel"
+        android:textColor="@color/lipstick"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_save_add_skills"
+        app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_skills" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

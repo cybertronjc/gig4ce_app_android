@@ -124,6 +124,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+//        checkForDeepLink()
         setTipsInViewModel()
         initUI()
         initializeExploreByRole()
@@ -134,7 +135,7 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
-        //checkForDeepLink()
+
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {

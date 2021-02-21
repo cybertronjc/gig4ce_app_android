@@ -6,4 +6,5 @@ include ':modules:common-ui'
 include ':modules:core'
 include ':modules:feature-chat'
 include ':app'
+include ':user_profile'
 //rootProject.name = "Gigforce1"

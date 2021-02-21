@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="24dp"
-    android:paddingRight="24dp"
     android:paddingTop="16dp"
+    android:paddingRight="24dp"
     android:paddingBottom="32dp"
     tools:context=".modules.gigerVerfication.SelectImageSourceBottomSheet">
 
@@ -18,40 +18,70 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
+        android:text="Change Photo "
         android:textColor="#171314"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Change Photo " />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/remove_profile_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/size_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/change_photo_label">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:text="Remove Photo"
+            android:textColor="#333333"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/camera_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/remove_profile_pic"
         app:layout_constraintTop_toBottomOf="@id/change_photo_label">
-        
+
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:srcCompat="@drawable/ic_camera_round"/>
+            app:srcCompat="@drawable/ic_camera_round" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:textStyle="normal"
-            android:textSize="12sp"
-            android:textColor="#333333"
             android:layout_marginTop="10dp"
-            android:lineSpacingExtra="3sp"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
             android:text="Camera"
-            />
+            android:textColor="#333333"
+            android:textSize="12sp"
+            android:textStyle="normal" />
 
 
     </LinearLayout>
@@ -61,30 +91,29 @@
         android:id="@+id/gallery_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        android:layout_marginStart="24dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toEndOf="@id/camera_layout"
         app:layout_constraintTop_toBottomOf="@id/change_photo_label">
 
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:srcCompat="@drawable/ic_gallery_round"/>
+            app:srcCompat="@drawable/ic_gallery_round" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
-            android:textStyle="normal"
-            android:textSize="12sp"
-            android:textColor="#333333"
             android:layout_marginTop="10dp"
-            android:lineSpacingExtra="3sp"
+            android:fontFamily="@font/lato"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
             android:text="Gallery"
-            />
+            android:textColor="#333333"
+            android:textSize="12sp"
+            android:textStyle="normal" />
 
 
     </LinearLayout>

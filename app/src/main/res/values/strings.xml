@@ -1338,4 +1338,181 @@
     <string name="please_enter_it_below">Please enter it below.</string>
     <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
     <string name="bank_details_updated">Bank Details Updated</string>
+    <string name="add_now">Add Now</string>
+
+    <string name="add_language">Add Language</string>
+    <string name="select_languages">Select Languages</string>
+    <string name="large_text">
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+        "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n"
+    </string>
+    <string name="upload_picture"><u>Upload Picture</u></string>
+    <string name="share_now_underline"><u>Share Now</u></string>
+    <string name="add_contact_address">Add Contact Address</string>
+    <string name="video_intro">Video Intro</string>
+    <string name="let_people_know_more_about_you_record_your_introduction_video">Let people know more about you. Record your introduction Video.</string>
+    <string name="record_now">Record Now</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="social_media">Social Media</string>
+    <string name="exp_matters">Let people know what you have done so \n far in your career</string>
+    <string name="skills_known">Skills Known</string>
+    <string name="let_people_skills">Let People know about your skills</string>
+    <string name="documents">Documents</string>
+    <string name="upload_your_documents">Upload your documents</string>
+    <string name="upload_now">Upload Now</string>
+    <string name="let_people_education">Let people know what you have studied so far in your career</string>
+    <string name="lang_known">Languages Known</string>
+    <string name="add_lang_known">Add Languages Known</string>
+    <string name="others_">Others</string>
+    <string name="search_language">Search Language</string>
+    <string name="let_people_lang">Let people Know what all language you know</string>
+    <string name="add_education_tag_line">Adding Education will make profile stronger by 25 %.</string>
+    <string name="select_level_education">Select Level of Education</string>
+    <string name="institute_name">Institute Name</string>
+    <string name="enter_institute_name">Enter Institute Name</string>
+    <string name="enter_course_name">Enter Course Name</string>
+    <string name="completion_date">Completion date</string>
+    <string name="media_label">Media</string>
+    <string name="add_certificate">Add Certificate</string>
+    <string name="below_10th">&gt;10th</string>
+    <string name="post_grad">Post Graduation</string>
+    <string name="grad">Graduation</string>
+    <string name="pass_12th">12th Pass</string>
+    <string name="pass_10th">10th pass</string>
+    <string name="tenth">10th</string>
+    <string name="select_year">Select Year</string>
+    <string name="select_month">Select Month</string>
+    <string name="delete_media">Delete Media</string>
+    <string name="add_media">Add Media</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="no_face">No Face Detected!!!!!</string>
+    <string name="adding_experience_profile_v2">Adding Experience will make profile stronger by 25 %.</string>
+    <string name="search_role">Search Role</string>
+    <string name="search_lang">Search Language</string>
+    <string name="enter_company_name">Enter Company Name</string>
+    <string name="enter_earnings">Enter Earnings</string>
+    <string name="no_of_years">No of Years</string>
+    <string name="no_of_months">No of Months</string>
+    <string name="company_name">Company Name</string>
+    <string name="description_optional">Description (optional)</string>
+    <string name="let_people_know_what_all_skills_you_have">Let people Know what all skills you have</string>
+    <string name="select_skills_you_have">Select Skills you have</string>
+    <string name="search_skills">Search Skills</string>
+    <string name="add_about_me">Add About Me</string>
+
+
+    <string-array name="lang_array">
+        <item>Ahirani</item>
+        <item>Awadhi</item>
+        <item>Assamese</item>
+        <item>Bagheli</item>
+        <item>Bagri</item>
+        <item>Banjari</item>
+        <item>Bhili</item>
+        <item>Bodo</item>
+
+        <item>  Brajbhasha</item>
+
+        <item>  Bundel</item>
+
+        <item>   Chhattisgarhi</item>
+
+        <item>  Dhundhari</item>
+
+        <item>   Dogri</item>
+
+        <item>   Garhwali</item>
+
+        <item>   Garo</item>
+
+        <item>  Gondi</item>
+
+        <item>  Gujarati</item>
+
+        <item>   Gujjari</item>
+
+        <item>  Hara</item>
+
+        <item>    Haryanvi</item>
+
+        <item>   Kachchhi</item>
+
+        <item>   Kangri</item>
+
+        <item>   Kashmiri</item>
+
+        <item>    Khasi</item>
+
+        <item>   Khortha</item>
+
+        <item>   Konkani</item>
+
+        <item>    Kumauni</item>
+
+        <item>   Kurukh</item>
+
+        <item>   Lamani</item>
+
+        <item>  Magadhi</item>
+
+        <item>    Maithili</item>
+
+        <item>   Malayalam</item>
+
+        <item>  Malvi</item>
+
+        <item>   Manipuri</item>
+
+        <item>   Marwari</item>
+
+        <item>  Mewari</item>
+
+        <item>  Mundari</item>
+
+        <item>  Nepali</item>
+
+        <item>  Nimadi</item>
+
+        <item>  Odia</item>
+
+        <item>  Pahari</item>
+
+        <item> Punjabi</item>
+
+        <item>  Rajasthani</item>
+
+        <item>  Sadan</item>
+
+        <item>  Sambalpuri</item>
+
+        <item>  Santali</item>
+
+        <item>  Sindhi</item>
+
+        <item> Surgujia</item>
+
+        <item>  Surjapuri</item>
+
+        <item>   Tulu</item>
+
+        <item>  Urdu</item>
+
+        <item>  Wagdi</item>
+    </string-array>
+
+
 </resources>

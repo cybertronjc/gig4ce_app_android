@@ -44,6 +44,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class AddProfilePictureFragment : BaseFragment(),
         ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
 
@@ -189,7 +190,7 @@ class AddProfilePictureFragment : BaseFragment(),
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
-            ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+            ClickOrSelectImageBottomSheet.launch(childFragmentManager, false,this)
         else
             requestStoragePermission()
     }
@@ -321,7 +322,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 }
 
                 if (allPermsGranted)
-                    ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+                    ClickOrSelectImageBottomSheet.launch(childFragmentManager, false,this)
                 else {
                     showToast(getString(R.string.please_grant_storage_permission))
                 }
@@ -337,6 +338,10 @@ class AddProfilePictureFragment : BaseFragment(),
     override fun onPickImageThroughCameraClicked() {
         val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
         startActivityForResult(intents, REQUEST_PICK_IMAGE)
+    }
+
+    override fun removeProfilePic() {
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
