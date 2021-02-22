@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
@@ -27,9 +26,13 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.core.navigation.INavigation
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
 import kotlinx.android.synthetic.main.fragment_main_learning_assessments.*
 import kotlinx.android.synthetic.main.fragment_main_learning_explore_learnings_layout.*
@@ -39,13 +42,14 @@ import kotlinx.android.synthetic.main.fragment_main_learning_recommended_learnin
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
 import kotlinx.android.synthetic.main.fragment_main_learning_toolbar.*
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainLearningFragment : Fragment() {
     private val viewModelProfile: ProfileViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
-
+    @Inject lateinit var navigation : INavigation
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -61,15 +65,18 @@ class MainLearningFragment : Fragment() {
         }
 
         journey_completed_cardview.setOnClickListener {
-            navigate(R.id.myLearningFragment)
+//            navigate(R.id.myLearningFragment)
+            navigation.navigateTo("mylearning")
         }
 
         journey_ongoing_cardview.setOnClickListener {
-            navigate(R.id.myLearningFragment)
+//            navigate(R.id.myLearningFragment)
+            navigation.navigateTo("mylearning")
         }
 
         journey_pending_cardview.setOnClickListener {
-            navigate(R.id.myLearningFragment)
+//            navigate(R.id.myLearningFragment)
+            navigation.navigateTo("mylearning")
         }
 
         initializeExploreByIndustry()
@@ -123,9 +130,13 @@ class MainLearningFragment : Fragment() {
     private fun showAssessmentProgress() {
         main_learning_assessments_rv.gone()
         main_learning_assessment_error.gone()
-        startShimmer(assessment_loader as LinearLayout, ShimmerModel(minHeight = R.dimen.size_78,
-                minWidth = R.dimen.size_227, marginRight = R.dimen.size_1,
-                orientation = LinearLayout.HORIZONTAL))
+        startShimmer(assessment_loader as LinearLayout,
+            ShimmerDataModel(
+                minHeight = 78,
+                minWidth = 227, marginRight = 1,
+                orientation = LinearLayout.HORIZONTAL
+            ),R.id.shimmer_controller
+        )
     }
 
     private fun showAssessmentError(error: String) {
@@ -210,8 +221,13 @@ class MainLearningFragment : Fragment() {
 
     private fun showRoleBasedLearningProgress() {
         startShimmer(learning_based_horizontal_progress as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 
@@ -304,9 +320,13 @@ class MainLearningFragment : Fragment() {
     }
 
     private fun showExploreLearningProgress() {
-        startShimmer(explore_learnings_loader as LinearLayout, ShimmerModel(minHeight = R.dimen.size_168,
+        startShimmer(explore_learnings_loader as LinearLayout,
+            ShimmerModel(
+                minHeight = R.dimen.size_168,
                 minWidth = R.dimen.size_147, marginRight = R.dimen.size_1,
-                orientation = LinearLayout.HORIZONTAL))
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         explore_learnings_rv.gone()
         explore_learning_error.gone()
     }

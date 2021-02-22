@@ -13,5 +13,7 @@ class NavForLearningModule(
         baseImplementation.registerRoute("${moduleName}/course", R.id.mainLearningFragment)
         baseImplementation.registerRoute("${moduleName}/lesson", R.id.mainLearningFragment)
         baseImplementation.registerRoute("${moduleName}/assessment", R.id.mainLearningFragment)
+        baseImplementation.registerRoute("${moduleName}/mylearning", R.id.myLearningFragment)
+
     }
 }

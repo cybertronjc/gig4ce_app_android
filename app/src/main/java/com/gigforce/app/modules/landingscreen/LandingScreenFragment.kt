@@ -826,9 +826,14 @@ class LandingScreenFragment : BaseFragment() {
         learning_rv.gone()
         learning_learning_error.gone()
         startShimmer(loader_learning_home as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
     }
 
     private fun showErrorWhileLoadingCourse(error: String) {
@@ -1034,8 +1039,12 @@ class LandingScreenFragment : BaseFragment() {
 
             }
         })
-        startShimmer(loader_explore_gigs as LinearLayout, ShimmerModel(marginRight = R.dimen.size_1,
-                orientation = LinearLayout.HORIZONTAL))
+        startShimmer(loader_explore_gigs as LinearLayout,
+            ShimmerModel(
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         landingScreenViewModel.getJobProfile()
     }
 

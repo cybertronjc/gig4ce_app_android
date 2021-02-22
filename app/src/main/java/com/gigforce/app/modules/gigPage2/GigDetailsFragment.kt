@@ -15,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
@@ -170,8 +169,13 @@ class GigDetailsFragment : BaseFragment(),
 
     private fun showRoleBasedLearningProgress() {
         startShimmer(learning_based_horizontal_progress as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 

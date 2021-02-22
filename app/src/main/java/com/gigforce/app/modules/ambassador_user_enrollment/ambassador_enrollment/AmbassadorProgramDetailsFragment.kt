@@ -115,8 +115,13 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
     private fun showRoleBasedLearningProgress() {
         startShimmer(learning_based_horizontal_progress as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 
