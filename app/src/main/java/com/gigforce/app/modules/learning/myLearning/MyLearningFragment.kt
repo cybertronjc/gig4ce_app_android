@@ -10,20 +10,17 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.viewModels
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.learning.myLearning.assessment.MyAssessmentsInnerFragment
 import com.gigforce.app.modules.learning.myLearning.journey.MyJourneyInnerFragment
 import com.gigforce.app.modules.learning.myLearning.learning.MyLearningsInnerFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_my_learning.*
 
 
 class MyLearningFragment : Fragment() {
 
-    private val viewModelProfile: ProfileViewModel by viewModels()
+//    private val viewModelProfile: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +53,7 @@ class MyLearningFragment : Fragment() {
 
                 text = currentTab.text.toString()
                 letterSpacing = 0.0f
-                setTextSize(TypedValue.COMPLEX_UNIT_SP,16.0f)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f)
 
 
                 if (currentTab.position == 0) {

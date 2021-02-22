@@ -1,4 +1,4 @@
-package com.gigforce.giger_app.repo
+package com.gigforce.common_ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +13,8 @@ interface ILoginInfoRepo {
     fun getData(): LiveData<LoginInfoRepo.UserLoginInfo>
 }
 
-class LoginInfoRepo @Inject constructor() : ILoginInfoRepo {
+class LoginInfoRepo @Inject constructor() :
+    ILoginInfoRepo {
     private var data: MutableLiveData<UserLoginInfo> = MutableLiveData()
     val collectionName = "Profiles"
 
@@ -63,7 +64,14 @@ class LoginInfoRepo @Inject constructor() : ILoginInfoRepo {
                                 var dataProfile = it.data as Map<String, Any>
                                 val name = dataProfile.get("name") as? String ?: ""
                                 val profilePic = dataProfile.get("profileAvatarName") as? String ?: ""
-                                userLoginInfo = UserLoginInfo(uid = it2.uid,profileName = name,profilePicPath = profilePic,isAmbassador = dataProfile.get("isUserAmbassador") as? Boolean ?: false)
+                                userLoginInfo =
+                                    UserLoginInfo(
+                                        uid = it2.uid,
+                                        profileName = name,
+                                        profilePicPath = profilePic,
+                                        isAmbassador = dataProfile.get("isUserAmbassador") as? Boolean
+                                            ?: false
+                                    )
 //                                data.value = UserLoginInfo(uid = it2.uid,profileName = name,profilePicPath = profilePic,isAmbassador = dataProfile.get("isUserAmbassador") as? Boolean ?: false)
                             }
                         })

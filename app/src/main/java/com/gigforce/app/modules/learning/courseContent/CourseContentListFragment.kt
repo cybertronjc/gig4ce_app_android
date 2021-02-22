@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
@@ -34,7 +33,8 @@ class CourseContentListFragment : Fragment() {
 
     private val viewModel: CourseDetailsViewModel by viewModels()
 
-    @Inject lateinit var navigation:INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     private val mAdapter: LearningDetailsLessonsAdapter by lazy {
         LearningDetailsLessonsAdapter(requireContext())

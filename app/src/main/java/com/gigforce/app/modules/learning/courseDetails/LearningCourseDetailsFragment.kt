@@ -19,9 +19,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.assessment.AssessmentFragment
@@ -33,10 +30,15 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.modules.learning.slides.SlidesFragment
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
@@ -44,14 +46,15 @@ import kotlinx.android.synthetic.main.fragment_learning_course_details_main.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LearningCourseDetailsFragment : Fragment() {
+class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
     private var mCurrentModuleNo: Int = -1
     private lateinit var mCourseId: String
     private var mModuleId: String? = null
     private var FROM_CLIENT_ACTIVATION = false
 
-    @Inject lateinit var navigation:INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     private val viewModel: CourseDetailsViewModel by viewModels()
 
@@ -60,9 +63,9 @@ class LearningCourseDetailsFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_learning_course_details, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,16 +123,16 @@ class LearningCourseDetailsFragment : Fragment() {
         mAdapter.setOnLearningVideoActionListener {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
-                    navigate(
-                        R.id.assessment_fragment, bundleOf(
+                    navigation.navigateTo(
+                        "learning/assessment", bundleOf(
                             AssessmentFragment.INTENT_LESSON_ID to it.id,
                             AssessmentFragment.INTENT_MODULE_ID to it.moduleId
                         )
                     )
                 }
                 CourseContent.TYPE_SLIDE -> {
-                    navigate(
-                        R.id.slidesFragment,
+                    navigation.navigateTo(
+                        "learning/assessmentslides",
                         bundleOf(
                             SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
                             SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
@@ -167,8 +170,8 @@ class LearningCourseDetailsFragment : Fragment() {
         assessmentSeeMoreButton.setOnClickListener {
 
             if (viewModel.currentlySelectedModule != null) {
-                navigate(
-                    R.id.assessmentListFragment, bundleOf(
+                navigation.navigateTo(
+                    "learning/assessmentListFragment", bundleOf(
                         AssessmentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
                         AssessmentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
                     )
@@ -177,8 +180,8 @@ class LearningCourseDetailsFragment : Fragment() {
         }
 
         lessonsSeeMoreButton.setOnClickListener {
-            navigate(
-                R.id.courseContentListFragment,
+            navigation.navigateTo(
+                "learning/courseContentListFragment",
                 bundleOf(
                     CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
                     CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
@@ -220,16 +223,16 @@ class LearningCourseDetailsFragment : Fragment() {
                 }
             })
 
-        viewModel
-            .courseAssessments
-            .observe(viewLifecycleOwner, Observer {
-
-                when (it) {
-                    Lce.Loading -> showAssessmentsAsLoading()
-                    is Lce.Content -> showAssessmentsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingAssessments(it.error)
-                }
-            })
+//        viewModel
+//            .courseAssessments
+//            .observe(viewLifecycleOwner, Observer {
+//
+//                when (it) {
+//                    Lce.Loading -> showAssessmentsAsLoading()
+//                    is Lce.Content -> showAssessmentsOnView(it.content)
+//                    is Lce.Error -> showErrorInLoadingAssessments(it.error)
+//                }
+//            })
     }
 
     private fun showCourseDetails(course: Course) {
@@ -261,8 +264,8 @@ class LearningCourseDetailsFragment : Fragment() {
             }
         } else {
             GlideApp.with(requireContext())
-                    .load(R.drawable.ic_learning_default_back)
-                    .into(videoThumnailIV)
+                .load(R.drawable.ic_learning_default_back)
+                .into(videoThumnailIV)
         }
 
         videoTitleTV.text = course.name
@@ -599,25 +602,25 @@ class LearningCourseDetailsFragment : Fragment() {
         learning_details_assessments_progress_bar.visible()
     }
 
-    private fun showAssessmentsOnView(content: List<CourseContent>) {
-
-        learning_details_assessments_error.gone()
-        learning_details_assessments_progress_bar.gone()
-        learning_details_assessments_rv.visible()
-
-        if (content.isEmpty()) {
-            showAssessments(emptyList())
-            assessmentSeeMoreButton.gone()
-            learning_details_assessments_error.visible()
-            learning_details_assessments_error.text = "No assessments found"
-        } else if (content.size > 4) {
-            assessmentSeeMoreButton.visible()
-            showAssessments(content.sortedBy { it.priority }.take(4))
-        } else {
-            assessmentSeeMoreButton.gone()
-            showAssessments(content.sortedBy { it.priority })
-        }
-    }
+//    private fun showAssessmentsOnView(content: List<CourseContent>) {
+//
+//        learning_details_assessments_error.gone()
+//        learning_details_assessments_progress_bar.gone()
+//        learning_details_assessments_rv.visible()
+//
+//        if (content.isEmpty()) {
+//            showAssessments(emptyList())
+//            assessmentSeeMoreButton.gone()
+//            learning_details_assessments_error.visible()
+//            learning_details_assessments_error.text = "No assessments found"
+//        } else if (content.size > 4) {
+//            assessmentSeeMoreButton.visible()
+//            showAssessments(content.sortedBy { it.priority }.take(4))
+//        } else {
+//            assessmentSeeMoreButton.gone()
+//            showAssessments(content.sortedBy { it.priority })
+//        }
+//    }
 
     private fun showErrorInLoadingAssessments(error: String) {
 
@@ -629,74 +632,82 @@ class LearningCourseDetailsFragment : Fragment() {
     }
 
 
-    private fun showAssessments(content: List<CourseContent>) {
+//    private fun showAssessments(content: List<CourseContent>) {
+//
+//        val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
+//            RecyclerGenericAdapter<CourseContent>(
+//                activity?.applicationContext,
+//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//
+//                    val assessment = item as CourseContent
+//
+//                    navigate(
+//                        R.id.assessment_fragment, bundleOf(
+//                            AssessmentFragment.INTENT_LESSON_ID to assessment.id,
+//                            AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
+//                        )
+//                    )
+//
+//                },
+//                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+//
+//                    getTextView(viewHolder, R.id.title).text = obj?.title
+//                    getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
+//
+//
+//                    if (obj.completed) {
+//                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
+//                        getTextView(
+//                            viewHolder,
+//                            R.id.status
+//                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
+//                        (getView(
+//                            viewHolder,
+//                            R.id.side_bar_status
+//                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
+//                    } else {
+//
+//                        getTextView(viewHolder, R.id.status).text = "PENDING"
+//                        getTextView(
+//                            viewHolder,
+//                            R.id.status
+//                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+//                        (getView(
+//                            viewHolder,
+//                            R.id.side_bar_status
+//                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
+//                    }
+//
+//                })
+//        recyclerGenericAdapter.list = content
+//        recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
+//        learning_details_assessments_rv.layoutManager = LinearLayoutManager(
+//            activity?.applicationContext,
+//            LinearLayoutManager.VERTICAL,
+//            false
+//        )
+//        learning_details_assessments_rv.adapter = recyclerGenericAdapter
+//
+//
+//    }
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-            RecyclerGenericAdapter<CourseContent>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-
-                    val assessment = item as CourseContent
-
-                    navigate(
-                        R.id.assessment_fragment, bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id,
-                            AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
-                        )
-                    )
-
-                },
-                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
-
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
-
-
-                    if (obj.completed) {
-                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
-                    } else {
-
-                        getTextView(viewHolder, R.id.status).text = "PENDING"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
-                    }
-
-                })
-        recyclerGenericAdapter.list = content
-        recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
-        learning_details_assessments_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        learning_details_assessments_rv.adapter = recyclerGenericAdapter
-
-
-    }
+//    override fun onBackPressed(): Boolean {
+//        if (FROM_CLIENT_ACTIVATION) {
+//            navFragmentsData.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+//            popBackState()
+//            return true
+//        }
+//        return super.onBackPressed()
+//    }
 
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATION) {
-            navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
-            popBackState()
+            (activity as NavFragmentsData).setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
+            navigation.popBackState()
             return true
         }
-        return super.onBackPressed()
+        return false
     }
-
 
     companion object {
 

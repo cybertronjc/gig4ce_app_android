@@ -12,9 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.assessment.AssessmentFragment
-import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +44,8 @@ class AssessmentSlideFragment : Fragment() {
         }
     }
 
-    @Inject lateinit var navigation:INavigation
+    @Inject
+    lateinit var navigation: INavigation
 
     private lateinit var mAssessmentId: String
     private lateinit var mAssessmentTitle: String
@@ -77,9 +76,11 @@ class AssessmentSlideFragment : Fragment() {
 
         start_assessment_btn.setOnClickListener {
             // todo: register: assessment: R.id.assessment_fragment
-            navigation.navigateTo("assessment",  bundleOf(
-                AssessmentFragment.INTENT_LESSON_ID to mAssessmentId
-            ))
+            navigation.navigateTo(
+                "assessment", bundleOf(
+                    AssessmentFragment.INTENT_LESSON_ID to mAssessmentId
+                )
+            )
         }
 
         setAssessmentInfoOnView()

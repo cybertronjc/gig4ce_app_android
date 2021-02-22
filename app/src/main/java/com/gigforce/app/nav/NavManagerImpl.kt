@@ -31,6 +31,8 @@ class NavManagerImpl @Inject constructor(
         NavForVerificationModule(this)
     }
 
+
+
     private fun registerForWalletAndPayouts(){
         val moduleName:String = "wallet"
         this.registerRoute("${moduleName}/main", R.id.walletBalancePage)

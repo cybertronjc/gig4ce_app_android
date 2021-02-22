@@ -4,6 +4,8 @@ import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
+import com.gigforce.common_ui.ILoginInfoRepo
+import com.gigforce.common_ui.LoginInfoRepo
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
@@ -14,7 +16,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
-import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
 @Module

@@ -14,7 +14,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.core.utils.GlideApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_learning_slide_single_image.*

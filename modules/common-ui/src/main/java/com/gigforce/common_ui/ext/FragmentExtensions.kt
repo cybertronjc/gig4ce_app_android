@@ -1,9 +1,11 @@
 package com.gigforce.common_ui.ext
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -44,4 +46,13 @@ fun Fragment.stopShimmer(view: LinearLayout,shimmerId:Int) {
     }
     view.removeAllViews()
     view.gone()
+}
+
+
+fun Fragment.getCircularProgressDrawable(): CircularProgressDrawable {
+    val circularProgressDrawable = CircularProgressDrawable(requireContext())
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 20f
+    circularProgressDrawable.start()
+    return circularProgressDrawable
 }

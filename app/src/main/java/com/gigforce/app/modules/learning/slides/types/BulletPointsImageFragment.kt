@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 
 class BulletPointsImageFragment : Fragment() {
 
