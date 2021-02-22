@@ -14,8 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
@@ -23,13 +21,16 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,10 +50,11 @@ class MainLearningFragment : Fragment() {
     private val viewModelProfile: ProfileViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
-    @Inject lateinit var navigation : INavigation
+    @Inject
+    lateinit var navigation: INavigation
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_main_learning, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,37 +92,37 @@ class MainLearningFragment : Fragment() {
 
     private fun initLearningViewModel() {
         learningViewModel
-                .roleBasedCourses
-                .observe(viewLifecycleOwner, Observer {
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showRoleBasedLearningProgress()
-                        is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
-                        is Lce.Error -> showRoleBasedLearningError(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showRoleBasedLearningProgress()
+                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
+                    is Lce.Error -> showRoleBasedLearningError(it.error)
+                }
+            })
 
         learningViewModel
-                .allCourses
-                .observe(viewLifecycleOwner, Observer {
+            .allCourses
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showExploreLearningProgress()
-                        is Lce.Content -> showCoursesOnExploreLearning(it.content.sortedBy { it.priority })
-                        is Lce.Error -> showExploreLearningError(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showExploreLearningProgress()
+                    is Lce.Content -> showCoursesOnExploreLearning(it.content.sortedBy { it.priority })
+                    is Lce.Error -> showExploreLearningError(it.error)
+                }
+            })
 
         mainLearningViewModel
-                .allAssessments
-                .observe(viewLifecycleOwner, Observer {
+            .allAssessments
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showAssessmentProgress()
-                        is Lce.Content -> showAssessments(it.content)
-                        is Lce.Error -> showAssessmentError(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showAssessmentProgress()
+                    is Lce.Content -> showAssessments(it.content)
+                    is Lce.Error -> showAssessmentError(it.error)
+                }
+            })
 
         learningViewModel.getRoleBasedCourses()
         learningViewModel.getAllCourses()
@@ -130,12 +132,13 @@ class MainLearningFragment : Fragment() {
     private fun showAssessmentProgress() {
         main_learning_assessments_rv.gone()
         main_learning_assessment_error.gone()
-        startShimmer(assessment_loader as LinearLayout,
+        startShimmer(
+            assessment_loader as LinearLayout,
             ShimmerDataModel(
                 minHeight = 78,
                 minWidth = 227, marginRight = 1,
                 orientation = LinearLayout.HORIZONTAL
-            ),R.id.shimmer_controller
+            ), R.id.shimmer_controller
         )
     }
 
@@ -145,7 +148,7 @@ class MainLearningFragment : Fragment() {
         main_learning_assessment_error.visible()
 
         main_learning_assessment_error.text = error
-        stopShimmer(assessment_loader as LinearLayout)
+        stopShimmer(assessment_loader as LinearLayout, R.id.shimmer_controller)
     }
 
 
@@ -153,7 +156,7 @@ class MainLearningFragment : Fragment() {
 
         main_learning_assessment_error.gone()
         main_learning_assessments_rv.visible()
-        stopShimmer(assessment_loader as LinearLayout)
+        stopShimmer(assessment_loader as LinearLayout, R.id.shimmer_controller)
 
         if (content.isEmpty()) {
             main_learning_assessments_rv.gone()
@@ -169,41 +172,41 @@ class MainLearningFragment : Fragment() {
 
 
             val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-                    RecyclerGenericAdapter<CourseContent>(
-                            activity?.applicationContext,
-                            PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                                val assessment = item as CourseContent
+                RecyclerGenericAdapter<CourseContent>(
+                    activity?.applicationContext,
+                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                        val assessment = item as CourseContent
 
-                                showToast("Disabled ,will be enabled soon")
+                        showToast("Disabled ,will be enabled soon")
 
 //                        navigate(R.id.assessment_fragment,  bundleOf(
 //                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
 //                        ))
-                            },
-                            RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
-                                val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
-                                lp.height = lp.height
-                                lp.width = itemWidth
-                                getView(viewHolder, R.id.assessment_cl).layoutParams = lp
-                                getTextView(viewHolder, R.id.title).text = obj?.title
-                                getTextView(viewHolder, R.id.time).text = "02:00"
+                    },
+                    RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                        val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
+                        lp.height = lp.height
+                        lp.width = itemWidth
+                        getView(viewHolder, R.id.assessment_cl).layoutParams = lp
+                        getTextView(viewHolder, R.id.title).text = obj?.title
+                        getTextView(viewHolder, R.id.time).text = "02:00"
 
-                                getTextView(viewHolder, R.id.status).text = "PENDING"
-                                getTextView(
-                                        viewHolder,
-                                        R.id.status
-                                ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                                (getView(
-                                        viewHolder,
-                                        R.id.side_bar_status
-                                ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
-                            })
+                        getTextView(viewHolder, R.id.status).text = "PENDING"
+                        getTextView(
+                            viewHolder,
+                            R.id.status
+                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                        (getView(
+                            viewHolder,
+                            R.id.side_bar_status
+                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
+                    })
             recyclerGenericAdapter.list = content
             recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
             main_learning_assessments_rv.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
             main_learning_assessments_rv.adapter = recyclerGenericAdapter
         }
@@ -220,11 +223,12 @@ class MainLearningFragment : Fragment() {
     }
 
     private fun showRoleBasedLearningProgress() {
-        startShimmer(learning_based_horizontal_progress as LinearLayout,
-            ShimmerModel(
-                minHeight = R.dimen.size_148,
-                minWidth = R.dimen.size_300,
-                marginRight = R.dimen.size_1,
+        startShimmer(
+            learning_based_horizontal_progress as LinearLayout,
+            ShimmerDataModel(
+                minHeight = 148,
+                minWidth = 300,
+                marginRight = 1,
                 orientation = LinearLayout.HORIZONTAL
             )
         )
@@ -245,68 +249,68 @@ class MainLearningFragment : Fragment() {
         // model will change when integrated with DB
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-                RecyclerGenericAdapter<Course>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                            val course = item as Course
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
 
-                            navigate(
-                                    R.id.learningCourseDetails,
-                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                            )
-                        },
-                        RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
-                            val lp = view.layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            view.layoutParams = lp
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title_)
-                            title.text = obj?.name
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.name
 
-                            var subtitle = getTextView(viewHolder, R.id.title)
-                            subtitle.text = obj?.level
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.level
 
-                            var comImg = getImageView(viewHolder, R.id.completed_iv)
-                            comImg.isVisible = obj?.completed ?: false
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
 
-                            var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = getImageView(viewHolder, R.id.learning_img)
 
-                            if (!obj!!.coverPicture.isNullOrBlank()) {
-                                if (obj.coverPicture!!.startsWith("http", true)) {
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
 
                                     GlideApp.with(requireContext())
-                                            .load(obj.coverPicture!!)
-                                            .placeholder(getCircularProgressDrawable())
-                                            .error(R.drawable.ic_learning_default_back)
-                                            .into(img)
-                                } else {
-                                    FirebaseStorage.getInstance()
-                                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                            .child(obj.coverPicture!!)
-                                            .downloadUrl
-                                            .addOnSuccessListener { fileUri ->
-
-                                                GlideApp.with(requireContext())
-                                                        .load(fileUri)
-                                                        .placeholder(getCircularProgressDrawable())
-                                                        .error(R.drawable.ic_learning_default_back)
-                                                        .into(img)
-                                            }
-                                }
-                            } else {
-                                GlideApp.with(requireContext())
-                                        .load(R.drawable.ic_learning_default_back)
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
-                            }
-                        })
+                                }
+                        }
+                    } else {
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
         recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
         learning_based_role_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         learning_based_role_rv.adapter = recyclerGenericAdapter
     }
@@ -320,10 +324,11 @@ class MainLearningFragment : Fragment() {
     }
 
     private fun showExploreLearningProgress() {
-        startShimmer(explore_learnings_loader as LinearLayout,
-            ShimmerModel(
-                minHeight = R.dimen.size_168,
-                minWidth = R.dimen.size_147, marginRight = R.dimen.size_1,
+        startShimmer(
+            explore_learnings_loader as LinearLayout,
+            ShimmerDataModel(
+                minHeight = 168,
+                minWidth = 147, marginRight = 1,
                 orientation = LinearLayout.HORIZONTAL
             )
         )
@@ -342,67 +347,67 @@ class MainLearningFragment : Fragment() {
         // model will change when integrated with DB
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-                RecyclerGenericAdapter<Course>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                            val course = item as Course
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
 
-                            navigate(
-                                    R.id.learningCourseDetails,
-                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                            )
-                        },
-                        RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
-                            val lp = view.layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            view.layoutParams = lp
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title)
-                            title.text = obj?.name
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.name
 
-                            var subtitle = getTextView(viewHolder, R.id.subtitle)
-                            subtitle.text = obj?.level
+                    var subtitle = getTextView(viewHolder, R.id.subtitle)
+                    subtitle.text = obj?.level
 
-                            var comImg = getImageView(viewHolder, R.id.completed_iv)
-                            comImg.isVisible = obj?.completed ?: false
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
 
-                            var img = getImageView(viewHolder, R.id.img)
-                            if (!obj!!.coverPicture.isNullOrBlank()) {
-                                if (obj.coverPicture!!.startsWith("http", true)) {
+                    var img = getImageView(viewHolder, R.id.img)
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
 
                                     GlideApp.with(requireContext())
-                                            .load(obj.coverPicture!!)
-                                            .placeholder(getCircularProgressDrawable())
-                                            .error(R.drawable.ic_learning_default_back)
-                                            .into(img)
-                                } else {
-                                    FirebaseStorage.getInstance()
-                                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                            .child(obj.coverPicture!!)
-                                            .downloadUrl
-                                            .addOnSuccessListener { fileUri ->
-
-                                                GlideApp.with(requireContext())
-                                                        .load(fileUri)
-                                                        .placeholder(getCircularProgressDrawable())
-                                                        .error(R.drawable.ic_learning_default_back)
-                                                        .into(img)
-                                            }
-                                }
-                            } else {
-                                GlideApp.with(requireContext())
-                                        .load(R.drawable.ic_learning_default_back)
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
-                            }
-                        })
+                                }
+                        }
+                    } else {
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
         recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.most_popular_item)
         explore_learnings_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         explore_learnings_rv.adapter = recyclerGenericAdapter
     }
@@ -417,16 +422,16 @@ class MainLearningFragment : Fragment() {
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
-                    PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
             GlideApp.with(this.requireContext())
-                    .load(profilePicRef)
-                    .apply(RequestOptions().circleCrop())
-                    .into(profile_image_main)
+                .load(profilePicRef)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image_main)
         } else {
             GlideApp.with(this.requireContext())
-                    .load(R.drawable.avatar)
-                    .apply(RequestOptions().circleCrop())
-                    .into(profile_image_main)
+                .load(R.drawable.avatar)
+                .apply(RequestOptions().circleCrop())
+                .into(profile_image_main)
         }
     }
 
@@ -448,84 +453,84 @@ class MainLearningFragment : Fragment() {
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
 
         datalist.add(
-                TitleSubtitleModel(
-                        "Delivery",
-                        "Maintaining hygiene and safety at gig",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
-                )
+            TitleSubtitleModel(
+                "Delivery",
+                "Maintaining hygiene and safety at gig",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
+            )
         )
 
         datalist.add(
-                TitleSubtitleModel(
-                        "Cook",
-                        "How to cook low salt meals",
-                        "How to prepare coffee?\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
-                )
+            TitleSubtitleModel(
+                "Cook",
+                "How to cook low salt meals",
+                "How to prepare coffee?\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
+            )
         )
 
 
         datalist.add(
-                TitleSubtitleModel(
-                        "Housekeeping",
-                        "Selecting the right reagent to clean different floors?",
-                        "Maintaining hygiene and safety at gig\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
-                )
+            TitleSubtitleModel(
+                "Housekeeping",
+                "Selecting the right reagent to clean different floors?",
+                "Maintaining hygiene and safety at gig\", \"https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fman_with_mask.jpg?alt=media&token=5b39c546-edcb-4d09-be53-70d34febb192"
+            )
         )
         datalist.add(
-                TitleSubtitleModel(
-                        "Barista",
-                        "How to prepare coffee?",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
-                )
+            TitleSubtitleModel(
+                "Barista",
+                "How to prepare coffee?",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fbrista_ls_img.jpg?alt=media&token=c5061822-a7d6-497c-8bee-09079cb8dc70"
+            )
         )
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-                RecyclerGenericAdapter<TitleSubtitleModel>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                            val course = item as Course
+            RecyclerGenericAdapter<TitleSubtitleModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
 
-                            navigate(
-                                    R.id.learningCourseDetails,
-                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                            )
-                        },
-                        RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
-                            val lp = view.layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            view.layoutParams = lp
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title)
-                            title.text = obj?.title
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.title
 
-                            var subtitle = getTextView(viewHolder, R.id.subtitle)
-                            subtitle.text = obj?.subtitle
+                    var subtitle = getTextView(viewHolder, R.id.subtitle)
+                    subtitle.text = obj?.subtitle
 
-                            obj?.imgStr?.let {
-                                var img = getImageView(viewHolder, R.id.img)
-                                showGlideImage(it, img)
-                            }
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.img)
+                        showGlideImage(it, img)
+                    }
 
 //                    var img = getImageView(viewHolder,R.id.img)
 //                    img.setImageResource(obj?.imgIcon!!)
-                        })
+                })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.most_popular_item)
         mostPopularLearningsRV.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         mostPopularLearningsRV.adapter = recyclerGenericAdapter
     }
 
     private fun showGlideImage(url: String, imgview: ImageView) {
         GlideApp.with(requireContext())
-                .load(url)
-                .placeholder(getCircularProgressDrawable())
-                .into(imgview)
+            .load(url)
+            .placeholder(getCircularProgressDrawable())
+            .into(imgview)
     }
 
     var width: Int = 0
@@ -543,46 +548,46 @@ class MainLearningFragment : Fragment() {
 //            )
 //        )
         datalist.add(
-                TitleSubtitleModel(
-                        "Driver",
-                        "How to accept a ride",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
-                )
+            TitleSubtitleModel(
+                "Driver",
+                "How to accept a ride",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Fdriver_img.jpg?alt=media&token=68412376-59c8-4598-81d6-9630724afff6"
+            )
         )
         val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
-                RecyclerGenericAdapter<TitleSubtitleModel>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                            val course = item as Course
+            RecyclerGenericAdapter<TitleSubtitleModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
 
-                            navigate(
-                                    R.id.learningCourseDetails,
-                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                            )
-                        },
-                        RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
-                            val lp = view.layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            view.layoutParams = lp
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<TitleSubtitleModel> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title_)
-                            title.text = obj?.title
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.title
 
-                            var subtitle = getTextView(viewHolder, R.id.title)
-                            subtitle.text = obj?.subtitle
-                            obj?.imgStr?.let {
-                                var img = getImageView(viewHolder, R.id.learning_img)
-                                showGlideImage(it, img)
-                            }
-                        })
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.subtitle
+                    obj?.imgStr?.let {
+                        var img = getImageView(viewHolder, R.id.learning_img)
+                        showGlideImage(it, img)
+                    }
+                })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
         searchSuggestionBasedVideosRV.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         searchSuggestionBasedVideosRV.adapter = recyclerGenericAdapter
     }
