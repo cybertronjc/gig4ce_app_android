@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.setDarkStatusBarTheme
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth

@@ -17,8 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible

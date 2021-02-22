@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,8 +28,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible

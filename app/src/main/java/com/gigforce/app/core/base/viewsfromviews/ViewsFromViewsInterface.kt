@@ -1,11 +1,11 @@
-package com.gigforce.core.base.viewsfromviews
+package com.gigforce.app.core.base.viewsfromviews
 
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 
 //import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 

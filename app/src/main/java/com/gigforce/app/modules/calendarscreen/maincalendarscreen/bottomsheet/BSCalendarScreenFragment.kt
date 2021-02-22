@@ -24,6 +24,7 @@ import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,8 +35,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment

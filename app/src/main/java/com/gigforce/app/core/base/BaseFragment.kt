@@ -34,9 +34,9 @@ import com.gigforce.core.base.shareddata.SharedDataImp
 import com.gigforce.core.base.shareddata.SharedDataInterface
 import com.gigforce.core.base.utilfeatures.UtilAndValidationImp
 import com.gigforce.core.base.utilfeatures.UtilAndValidationInterface
-import com.gigforce.core.base.viewsfromviews.ViewsFromViewsImpl
-import com.gigforce.core.base.viewsfromviews.ViewsFromViewsInterface
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.core.NavFragmentsData

@@ -5,11 +5,9 @@ import android.os.Handler
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -34,9 +32,9 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.core.NavFragmentsData
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
@@ -449,141 +447,144 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
     private var recyclerGenericAdapter: RecyclerGenericAdapter<Module>? = null
     private var linearLayoutManager: LinearLayoutManager? = null
+
+
     private fun setModulesOnView(content: List<Module>) {
-        var width: Int = 0
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        width = displayMetrics.widthPixels
-        val itemWidth = ((width / 3) * 1.7).toInt()
-        // model will change when integrated with DB
+//        var width: Int = 0
+//        val displayMetrics = DisplayMetrics()
+//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//        width = displayMetrics.widthPixels
+//        val itemWidth = ((width / 3) * 1.7).toInt()
+//        // model will change when integrated with DB
+//
+//        recyclerGenericAdapter =
+//            RecyclerGenericAdapter<Module>(
+//                activity?.applicationContext,
+//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    //navigate(R.id.learningVideoFragment)
+//                    val module = item as Module
+//                    viewModel.currentlySelectedModule = module
+//
+//                    viewModel.getCourseLessonsAndAssessments(
+//                        courseId = mCourseId,
+//                        moduleId = module.id
+//                    )
+//
+//                    course_details_main_layout.post {
+//                        course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
+//                    }
+//
+//                    var oldPostion = viewModel.currentlySelectedModulePosition
+//                    viewModel.currentlySelectedModulePosition = position
+//
+//                    if (oldPostion != viewModel.currentlySelectedModulePosition) {
+//                        recyclerGenericAdapter?.notifyItemChanged(oldPostion)
+//                        recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
+//                        linearLayoutManager?.scrollToPositionWithOffset(
+//                            viewModel.currentlySelectedModulePosition,
+//                            40
+//                        )
+////                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
+//                    }
+//                },
+//                RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    var title = getTextView(viewHolder, R.id.title_)
+//                    title.text = obj?.title
+//
+//                    var subtitle = getTextView(viewHolder, R.id.title)
+//                    subtitle.text = "${obj.lessonsCompleted} / ${obj.totalLessons} Completed"
+//
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//
+//
+//                    var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
+//                    var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
+//
+//                    if (obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons) {
+//                        completedPercTV.text = "100%"
+//                        completedPercTV.setTextColor(
+//                            ResourcesCompat.getColor(
+//                                resources,
+//                                R.color.green,
+//                                null
+//                            )
+//                        )
+//                        completedIV.setImageResource(R.drawable.ic_successful_green_tick)
+//                    } else {
+//                        val completedPercentage =
+//                            if (obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
+//
+//                        completedPercTV.setTextColor(
+//                            ResourcesCompat.getColor(
+//                                resources,
+//                                R.color.app_orange,
+//                                null
+//                            )
+//                        )
+//                        completedPercTV.text = "$completedPercentage%"
+//                        completedIV.setImageResource(R.drawable.ic_clock_orange)
+//                    }
+//
+//
+//                    var borderView = getView(viewHolder, R.id.borderFrameLayout)
+//                    if (viewModel.currentlySelectedModulePosition == position) {
+//                        //Set Module as selected
+//                        borderView.visible()
+//                    } else {
+//                        borderView.gone()
+//                    }
+//
+//                    if (!obj.coverPicture.isNullOrBlank()) {
+//                        if (obj.coverPicture!!.startsWith("http", true)) {
+//
+//                            GlideApp.with(requireContext())
+//                                .load(obj.coverPicture)
+//                                .thumbnail(
+//                                    GlideApp.with(requireContext()).load(R.drawable.ic_loading)
+//                                )
+//                                .error(R.drawable.ic_learning_default_back)
+//                                .into(img)
+//                        } else {
+//                            FirebaseStorage.getInstance()
+//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+//                                .child(obj.coverPicture!!)
+//                                .downloadUrl
+//                                .addOnSuccessListener { fileUri ->
+//
+//                                    GlideApp.with(requireContext())
+//                                        .load(fileUri)
+//                                        .thumbnail(
+//                                            GlideApp.with(requireContext())
+//                                                .load(R.drawable.ic_loading)
+//                                        )
+//                                        .error(R.drawable.ic_learning_default_back)
+//                                        .into(img)
+//                                }
+//                        }
+//                    } else {
+//                        GlideApp.with(requireContext())
+//                            .load(R.drawable.ic_learning_default_back)
+//                            .into(img)
+//                    }
+//
+//                })
+//        recyclerGenericAdapter?.list = content
+//        recyclerGenericAdapter?.setLayout(R.layout.recycler_item_course_module)
+//        linearLayoutManager = LinearLayoutManager(
+//            activity?.applicationContext,
+//            LinearLayoutManager.HORIZONTAL,
+//            false
+//        )
+//        learning_details_modules_rv.layoutManager = linearLayoutManager
+//        learning_details_modules_rv.adapter = recyclerGenericAdapter
 
-        recyclerGenericAdapter =
-            RecyclerGenericAdapter<Module>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //navigate(R.id.learningVideoFragment)
-                    val module = item as Module
-                    viewModel.currentlySelectedModule = module
-
-                    viewModel.getCourseLessonsAndAssessments(
-                        courseId = mCourseId,
-                        moduleId = module.id
-                    )
-
-                    course_details_main_layout.post {
-                        course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
-                    }
-
-                    var oldPostion = viewModel.currentlySelectedModulePosition
-                    viewModel.currentlySelectedModulePosition = position
-
-                    if (oldPostion != viewModel.currentlySelectedModulePosition) {
-                        recyclerGenericAdapter?.notifyItemChanged(oldPostion)
-                        recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
-                        linearLayoutManager?.scrollToPositionWithOffset(
-                            viewModel.currentlySelectedModulePosition,
-                            40
-                        )
-//                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
-                    }
-                },
-                RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = "${obj.lessonsCompleted} / ${obj.totalLessons} Completed"
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-
-
-                    var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
-                    var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
-
-                    if (obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons) {
-                        completedPercTV.text = "100%"
-                        completedPercTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
-                            )
-                        )
-                        completedIV.setImageResource(R.drawable.ic_successful_green_tick)
-                    } else {
-                        val completedPercentage =
-                            if (obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
-
-                        completedPercTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.app_orange,
-                                null
-                            )
-                        )
-                        completedPercTV.text = "$completedPercentage%"
-                        completedIV.setImageResource(R.drawable.ic_clock_orange)
-                    }
-
-
-                    var borderView = getView(viewHolder, R.id.borderFrameLayout)
-                    if (viewModel.currentlySelectedModulePosition == position) {
-                        //Set Module as selected
-                        borderView.visible()
-                    } else {
-                        borderView.gone()
-                    }
-
-                    if (!obj.coverPicture.isNullOrBlank()) {
-                        if (obj.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj.coverPicture)
-                                .thumbnail(
-                                    GlideApp.with(requireContext()).load(R.drawable.ic_loading)
-                                )
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
-
-                                    GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .thumbnail(
-                                            GlideApp.with(requireContext())
-                                                .load(R.drawable.ic_loading)
-                                        )
-                                        .error(R.drawable.ic_learning_default_back)
-                                        .into(img)
-                                }
-                        }
-                    } else {
-                        GlideApp.with(requireContext())
-                            .load(R.drawable.ic_learning_default_back)
-                            .into(img)
-                    }
-
-                })
-        recyclerGenericAdapter?.list = content
-        recyclerGenericAdapter?.setLayout(R.layout.recycler_item_course_module)
-        linearLayoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        learning_details_modules_rv.layoutManager = linearLayoutManager
-        learning_details_modules_rv.adapter = recyclerGenericAdapter
-
+        learning_details_modules_rv.collection = getAllCourses(content)
         Handler().postDelayed({
             if (viewModel.currentlySelectedModulePosition != 0)
                 linearLayoutManager?.scrollToPositionWithOffset(
@@ -592,6 +593,21 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 )
         }, 200)
 
+    }
+
+    private fun getAllCourses(content: List<Module>): ArrayList<FeatureItemCardDVM> {
+        var moduleList = ArrayList<FeatureItemCardDVM>()
+//        var abc = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
+        content.forEach { e ->
+            moduleList.add(
+                FeatureItemCardDVM(
+                    image = e.coverPicture,
+                    title = e.title,
+                    subtitle = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
+                )
+            )
+        }
+        return moduleList
     }
 
 

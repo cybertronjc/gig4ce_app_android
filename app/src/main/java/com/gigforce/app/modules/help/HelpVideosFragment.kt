@@ -13,9 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import kotlinx.android.synthetic.main.fragment_help_video.*
 
 
@@ -70,7 +69,7 @@ class HelpVideosFragment : Fragment() {
                 },
                 RecyclerGenericAdapter.ItemInterface<HelpVideo> { obj, viewHolder, position ->
 
-                    var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
+                    /*var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
                     Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
@@ -83,7 +82,7 @@ class HelpVideosFragment : Fragment() {
                         "$minutes:$secs"
                     } else {
                         "00:${obj.videoLength}"
-                    }
+                    }*/
 
 
 //                    var img = getImageView(viewHolder, R.id.learning_img)

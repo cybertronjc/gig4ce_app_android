@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
@@ -50,6 +50,7 @@ import kotlinx.android.synthetic.main.fragment_assessment_result.view.*
 import kotlinx.android.synthetic.main.fragment_learning_video_item.*
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 import kotlinx.android.synthetic.main.layout_rv_question_wisr_sum_assess_result.view.*
+import kotlinx.android.synthetic.main.layout_sug_learning_ass_result.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -329,19 +330,19 @@ class AssessmentResultFragment : BaseFragment(), PopupMenu.OnMenuItemClickListen
                     )
                 },
                 RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
+//                    var view = getView(viewHolder, R.id.card_view)
 //                    val lp = view.layoutParams
 //                    lp.height = lp.height
 //                    lp.width = itemWidth
 //                    view.layoutParams = lp
 
-                    var title = getTextView(viewHolder, R.id.title_)
+                    var title = title_//getTextView(viewHolder, R.id.title_)
                     title.text = obj?.name
 
-                    var subtitle = getTextView(viewHolder, R.id.title)
+                    var subtitle = title //getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.level
 
-                    var img = getImageView(viewHolder, R.id.learning_img)
+                    var img = learning_img//getImageView(viewHolder, R.id.learning_img)
                     if (!obj!!.coverPicture.isNullOrBlank()) {
                         if (obj.coverPicture!!.startsWith("http", true)) {
 

@@ -1,18 +1,28 @@
 package com.gigforce.app.modules.learning
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -33,20 +43,20 @@ import kotlinx.android.synthetic.main.fragment_main_learning_toolbar.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainLearningFragment : Fragment(), IOnBackPressedOverride {
+class MainLearningFragment : BaseFragment() {//, IOnBackPressedOverride
     //    private val viewModelProfile: ProfileViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
 
     @Inject
     lateinit var loginInfo: ILoginInfoRepo
 
-    //    private val mainLearningViewModel: MainLearningViewModel by viewModels()
+        private val mainLearningViewModel: MainLearningViewModel by viewModels()
     @Inject
     lateinit var navigation: INavigation
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_main_learning, container)
+    ) = inflateView(R.layout.fragment_main_learning,inflater,container)//inflater.inflate(R.layout.fragment_main_learning, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,27 +92,27 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initLearningViewModel() {
-//        learningViewModel
-//            .roleBasedCourses
-//            .observe(viewLifecycleOwner, Observer {
-//
-//                when (it) {
-//                    Lce.Loading -> showRoleBasedLearningProgress()
-//                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
-//                    is Lce.Error -> showRoleBasedLearningError(it.error)
-//                }
-//            })
+        learningViewModel
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
 
-//        learningViewModel
-//            .allCourses
-//            .observe(viewLifecycleOwner, Observer {
-//
-//                when (it) {
-//                    Lce.Loading -> showExploreLearningProgress()
-//                    is Lce.Content -> showCoursesOnExploreLearning(it.content.sortedBy { it.priority })
-//                    is Lce.Error -> showExploreLearningError(it.error)
-//                }
-//            })
+                when (it) {
+                    Lce.Loading -> showRoleBasedLearningProgress()
+                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
+                    is Lce.Error -> showRoleBasedLearningError(it.error)
+                }
+            })
+
+        learningViewModel
+            .allCourses
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lce.Loading -> showExploreLearningProgress()
+                    is Lce.Content -> showCoursesOnExploreLearning(it.content.sortedBy { it.priority })
+                    is Lce.Error -> showExploreLearningError(it.error)
+                }
+            })
 
 //        mainLearningViewModel
 //            .allAssessments
@@ -229,83 +239,83 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 
     }
 
-//    private fun showRoleBasedLearnings(content: List<Course>) {
-//        learning_based_horizontal_progress.gone()
-//        role_based_learning_error.gone()
-//        learning_based_role_rv.visible()
-//        stopShimmer(learning_based_horizontal_progress as LinearLayout)
-//        val displayMetrics = DisplayMetrics()
-//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-//        width = displayMetrics.widthPixels
-//        val itemWidth = ((width / 3) * 2).toInt()
-//        // model will change when integrated with DB
-//
-//        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-//            RecyclerGenericAdapter<Course>(
-//                activity?.applicationContext,
-//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    val course = item as Course
-//
-//                    navigate(
-//                        R.id.learningCourseDetails,
-//                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-//                    )
-//                },
-//                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-//                    var view = getView(viewHolder, R.id.card_view)
-//                    val lp = view.layoutParams
-//                    lp.height = lp.height
-//                    lp.width = itemWidth
-//                    view.layoutParams = lp
-//
-//                    var title = getTextView(viewHolder, R.id.title_)
-//                    title.text = obj?.name
-//
-//                    var subtitle = getTextView(viewHolder, R.id.title)
-//                    subtitle.text = obj?.level
-//
-//                    var comImg = getImageView(viewHolder, R.id.completed_iv)
-//                    comImg.isVisible = obj?.completed ?: false
-//
-//                    var img = getImageView(viewHolder, R.id.learning_img)
-//
-//                    if (!obj!!.coverPicture.isNullOrBlank()) {
-//                        if (obj.coverPicture!!.startsWith("http", true)) {
-//
-//                            GlideApp.with(requireContext())
-//                                .load(obj.coverPicture!!)
-//                                .placeholder(getCircularProgressDrawable())
-//                                .error(R.drawable.ic_learning_default_back)
-//                                .into(img)
-//                        } else {
-//                            FirebaseStorage.getInstance()
-//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-//                                .child(obj.coverPicture!!)
-//                                .downloadUrl
-//                                .addOnSuccessListener { fileUri ->
-//
-//                                    GlideApp.with(requireContext())
-//                                        .load(fileUri)
-//                                        .placeholder(getCircularProgressDrawable())
-//                                        .error(R.drawable.ic_learning_default_back)
-//                                        .into(img)
-//                                }
-//                        }
-//                    } else {
-//                        GlideApp.with(requireContext())
-//                            .load(R.drawable.ic_learning_default_back)
-//                            .into(img)
-//                    }
-//                })
-//        recyclerGenericAdapter.list = content
-//        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-//        learning_based_role_rv.layoutManager = LinearLayoutManager(
-//            activity?.applicationContext,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
-//        learning_based_role_rv.adapter = recyclerGenericAdapter
-//    }
+    private fun showRoleBasedLearnings(content: List<Course>) {
+        learning_based_horizontal_progress.gone()
+        role_based_learning_error.gone()
+        learning_based_role_rv.visible()
+        stopShimmer(learning_based_horizontal_progress as LinearLayout)
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        width = displayMetrics.widthPixels
+        val itemWidth = ((width / 3) * 2).toInt()
+        // model will change when integrated with DB
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
+
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.name
+
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.level
+
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
+
+                    var img = getImageView(viewHolder, R.id.learning_img)
+
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(requireContext())
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
+                                        .into(img)
+                                }
+                        }
+                    } else {
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
+        recyclerGenericAdapter.list = content
+        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+        learning_based_role_rv.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        learning_based_role_rv.adapter = recyclerGenericAdapter
+    }
 
     private fun showExploreLearningError(error: String) {
 
@@ -524,79 +534,79 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     // Todo: uncomment courses on Explore Learning method
-//    private fun showCoursesOnExploreLearning(content: List<Course>) {
-//        explore_learning_error.gone()
-//        explore_learnings_rv.visible()
-//        stopShimmer(explore_learnings_loader as LinearLayout)
-//        val displayMetrics = DisplayMetrics()
-//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-//        width = displayMetrics.widthPixels
-//        val itemWidth = ((width / 2.8) * 1).toInt()
-//        // model will change when integrated with DB
-//
-//        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-//            RecyclerGenericAdapter<Course>(
-//                activity?.applicationContext,
-//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    val course = item as Course
-//
-//                    navigate(
-//                        R.id.learningCourseDetails,
-//                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-//                    )
-//                },
-//                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-//                    var view = getView(viewHolder, R.id.card_view)
-//                    val lp = view.layoutParams
-//                    lp.height = lp.height
-//                    lp.width = itemWidth
-//                    view.layoutParams = lp
-//
-//                    var title = getTextView(viewHolder, R.id.title)
-//                    title.text = obj?.name
-//
-//                    var subtitle = getTextView(viewHolder, R.id.subtitle)
-//                    subtitle.text = obj?.level
-//
-//                    var comImg = getImageView(viewHolder, R.id.completed_iv)
-//                    comImg.isVisible = obj?.completed ?: false
-//
-//                    var img = getImageView(viewHolder, R.id.img)
-//                    if (!obj!!.coverPicture.isNullOrBlank()) {
-//                        if (obj.coverPicture!!.startsWith("http", true)) {
-//
-//                            GlideApp.with(requireContext())
-//                                .load(obj.coverPicture!!)
-//                                .placeholder(getCircularProgressDrawable())
-//                                .error(R.drawable.ic_learning_default_back)
-//                                .into(img)
-//                        } else {
-//                            FirebaseStorage.getInstance()
-//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-//                                .child(obj.coverPicture!!)
-//                                .downloadUrl
-//                                .addOnSuccessListener { fileUri ->
-//
-//                                    GlideApp.with(requireContext())
-//                                        .load(fileUri)
-//                                        .placeholder(getCircularProgressDrawable())
-//                                        .error(R.drawable.ic_learning_default_back)
-//                                        .into(img)
-//                                }
-//                        }
-//                    } else {
-//                        GlideApp.with(requireContext())
-//                            .load(R.drawable.ic_learning_default_back)
-//                            .into(img)
-//                    }
-//                })
-//        recyclerGenericAdapter.list = content
-//        recyclerGenericAdapter.setLayout(R.layout.most_popular_item)
-//        explore_learnings_rv.layoutManager = LinearLayoutManager(
-//            activity?.applicationContext,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
-//        explore_learnings_rv.adapter = recyclerGenericAdapter
-//    }
+    private fun showCoursesOnExploreLearning(content: List<Course>) {
+        explore_learning_error.gone()
+        explore_learnings_rv.visible()
+        stopShimmer(explore_learnings_loader as LinearLayout)
+        val displayMetrics = DisplayMetrics()
+        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        width = displayMetrics.widthPixels
+        val itemWidth = ((width / 2.8) * 1).toInt()
+        // model will change when integrated with DB
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
+
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
+
+                    var title = getTextView(viewHolder, R.id.title)
+                    title.text = obj?.name
+
+                    var subtitle = getTextView(viewHolder, R.id.subtitle)
+                    subtitle.text = obj?.level
+
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
+
+                    var img = getImageView(viewHolder, R.id.img)
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
+
+                                    GlideApp.with(requireContext())
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
+                                        .into(img)
+                                }
+                        }
+                    } else {
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
+        recyclerGenericAdapter.list = content
+        recyclerGenericAdapter.setLayout(R.layout.most_popular_item)
+        explore_learnings_rv.layoutManager = LinearLayoutManager(
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        explore_learnings_rv.adapter = recyclerGenericAdapter
+    }
 }

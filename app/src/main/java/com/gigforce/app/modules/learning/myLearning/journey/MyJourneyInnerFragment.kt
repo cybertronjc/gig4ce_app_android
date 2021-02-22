@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.MainLearningFragment
 import com.gigforce.app.modules.learning.models.Module
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_my_journey.*
 import java.util.*
 
 
-class MyJourneyInnerFragment : Fragment() {
+class MyJourneyInnerFragment : BaseFragment() {
 
     private val journeyViewModel : JourneyViewModel by viewModels ()
 

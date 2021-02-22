@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import kotlinx.android.synthetic.main.edit_cover_bottom_sheet.*
 
 class EditCoverBottomSheet(): ProfileBaseBottomSheetFragment() {
