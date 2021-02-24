@@ -4,12 +4,9 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.assessment.models.Assessment
-import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.learning.learning.models.CourseContent
 import kotlinx.android.synthetic.main.assessment_bs_item.view.*
 
 interface AssessmentClickListener{

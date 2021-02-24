@@ -41,16 +41,16 @@ import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Compani
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.*
+//import com.gigforce.app.utils.*
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.StringConstants
@@ -75,6 +75,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
+import com.gigforce.core.utils.Lce
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 

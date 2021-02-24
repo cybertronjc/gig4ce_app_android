@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="grey_transparetn">#4B979797</color>
+    <color name="black_85">#d9000000</color>
+    <color name="warm_grey">#888888</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="darkish_pink_two">#e94b81</color>
+    <color name="grey_c7">#c7c7c7</color>
+    <color name="status_bg_completed">#72a839</color>
+    <color name="status_bg_pending">#f5a623</color>
+    <color name="text_green">#468800</color>
+    <color name="text_yellow">#fa6400</color>
+    <color name="text_orange">#f7b500</color>
+    <color name="black_33">#54000000</color>
+
+</resources>

@@ -19,7 +19,7 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
 import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable

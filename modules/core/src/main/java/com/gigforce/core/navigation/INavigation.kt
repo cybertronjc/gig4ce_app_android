@@ -6,5 +6,7 @@ import androidx.navigation.NavOptions
 
 interface INavigation {
     fun navigateTo(dest:String, args: Bundle? = null, navOptions: NavOptions? = null)
-    fun popBackState()
+    fun popBackStack()
+    fun popBackStack(des: String, inclusive: Boolean = true)
+    fun getBackStackEntry(des:String)
 }

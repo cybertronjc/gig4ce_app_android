@@ -65,8 +65,11 @@ enum class StringConstants(val value: String) {
     REJECTION_ILLUSTRATION("REJECTION_ILLUSTRATION"),
     AMBASSADOR_ID("AMBASSADOR_ID"),
     AMB_APPLICATION_OBJ("AMB_APPLICATION_OBJ"),
+
+    INTENT_COURSE_ID("course_id"),
     INTENT_MODULE_ID("module_id"),
     INTENT_LESSON_ID("lesson_id"),
+
     INTENT_NEXT_LESSON_ID("next_lesson_id")
 
 

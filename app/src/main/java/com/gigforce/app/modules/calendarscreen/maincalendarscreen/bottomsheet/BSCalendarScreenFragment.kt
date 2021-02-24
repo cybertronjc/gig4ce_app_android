@@ -46,19 +46,20 @@ import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.MainLearningViewModel
-import com.gigforce.app.modules.learning.models.Course
-import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.MainLearningViewModel
+import com.gigforce.learning.learning.models.Course
+import com.gigforce.learning.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.*
+//import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -152,10 +153,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                 .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
                     when (it) {
-                        Lce.Loading -> {
+                        com.gigforce.app.utils.Lce.Loading -> {
                         }
-                        is Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
-                        is Lce.Error -> {
+                        is com.gigforce.app.utils.Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
+                        is com.gigforce.app.utils.Lce.Error -> {
                         }
                     }
                 })

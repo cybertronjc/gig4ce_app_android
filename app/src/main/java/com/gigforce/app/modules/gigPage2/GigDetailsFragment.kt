@@ -26,15 +26,16 @@ import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
 import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
+//import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.core.utils.Lce
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -133,9 +134,9 @@ class GigDetailsFragment : BaseFragment(),
         viewModel.gigDetails
                 .observe(viewLifecycleOwner, Observer {
                     when (it) {
-                        Lce.Loading -> showGigDetailsAsLoading()
-                        is Lce.Content -> setGigDetailsOnView(it.content)
-                        is Lce.Error -> showErrorWhileLoadingGigData(it.error)
+                        com.gigforce.app.utils.Lce.Loading -> showGigDetailsAsLoading()
+                        is com.gigforce.app.utils.Lce.Content -> setGigDetailsOnView(it.content)
+                        is com.gigforce.app.utils.Lce.Error -> showErrorWhileLoadingGigData(it.error)
                     }
                 })
 

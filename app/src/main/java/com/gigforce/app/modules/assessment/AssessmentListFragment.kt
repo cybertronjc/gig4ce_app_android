@@ -1,11 +1,9 @@
 package com.gigforce.app.modules.assessment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,12 +12,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.models.Assessment
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.courseDetails.CourseDetailsViewModel
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
+import com.gigforce.learning.learning.courseDetails.CourseDetailsViewModel
+import com.gigforce.learning.learning.models.CourseContent
+//import com.gigforce.app.utils.Lce
 import kotlinx.android.synthetic.main.fragment_assessment_list.*
 
 

@@ -15,7 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.gigforce.app.R
-import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
+import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource

@@ -24,8 +24,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.utils.getScreenWidth
 import com.google.android.exoplayer2.C

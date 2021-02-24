@@ -17,11 +17,10 @@ import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.learning.learningVideo.CourseVideoViewModel
-import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.app.modules.learning.learningVideo.PositionLimitingControlDispatcher
-import com.gigforce.app.modules.learning.models.CourseContent
-import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
+import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
+import com.gigforce.learning.learning.learningVideo.PositionLimitingControlDispatcher
+import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player

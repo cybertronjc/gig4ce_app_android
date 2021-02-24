@@ -537,7 +537,7 @@
         android:label="MonthlyEarningPage" />
     <fragment
         android:id="@+id/mainLearningFragment"
-        android:name="com.gigforce.app.modules.learning.MainLearningFragment"
+        android:name="com.gigforce.learning.learning.MainLearningFragment"
         android:label="fragment_main_learning"
         tools:layout="@layout/fragment_main_learning" />
     <fragment
@@ -557,11 +557,11 @@
         android:label="WalletExpandedPage" />
     <fragment
         android:id="@+id/learningCourseDetails"
-        android:name="com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment"
+        android:name="com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment"
         android:label="LearningVideoFragment" />
     <fragment
         android:id="@+id/playVideoDialogFragment"
-        android:name="com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment"
+        android:name="com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment"
         android:label="fragment_play_video"
         tools:layout="@layout/fragment_play_video" />
 
@@ -633,7 +633,7 @@
         tools:layout="@layout/fragment_fake_contact_screen" />
     <fragment
         android:id="@+id/slidesFragment"
-        android:name="com.gigforce.app.modules.learning.slides.SlidesFragment"
+        android:name="com.gigforce.learning.learning.slides.SlidesFragment"
         android:label="fragment_slides"
         tools:layout="@layout/fragment_slides" />
     <fragment
@@ -643,12 +643,12 @@
         tools:layout="@layout/fragment_assessment_list" />
     <fragment
         android:id="@+id/myLearningFragment"
-        android:name="com.gigforce.app.modules.learning.myLearning.MyLearningFragment"
+        android:name="com.gigforce.learning.learning.myLearning.MyLearningFragment"
         android:label="fragment_my_learning"
         tools:layout="@layout/fragment_my_learning" />
     <fragment
         android:id="@+id/courseContentListFragment"
-        android:name="com.gigforce.app.modules.learning.courseContent.CourseContentListFragment"
+        android:name="com.gigforce.learning.learning.courseContent.CourseContentListFragment"
         android:label="fragment_course_content_list"
         tools:layout="@layout/fragment_course_content_list" />
     <fragment

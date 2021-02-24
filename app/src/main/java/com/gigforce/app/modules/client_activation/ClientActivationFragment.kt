@@ -31,9 +31,9 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.Media
 import com.gigforce.app.modules.explore_by_role.AdapterPreferredLocation
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.app.modules.learning.models.LessonModel
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
+import com.gigforce.learning.learning.models.LessonModel
 import com.gigforce.app.utils.*
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
