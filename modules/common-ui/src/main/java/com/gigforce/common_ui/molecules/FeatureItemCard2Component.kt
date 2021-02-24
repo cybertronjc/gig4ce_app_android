@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.feature_item_card2.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeatureItemCard2(context: Context, attrs: AttributeSet?) :
+class FeatureItemCard2Component(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
 

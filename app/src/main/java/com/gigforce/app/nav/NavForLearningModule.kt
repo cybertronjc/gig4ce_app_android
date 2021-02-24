@@ -10,7 +10,7 @@ class NavForLearningModule(
         val moduleName:String = "learning"
 
         baseImplementation.registerRoute("${moduleName}/main", R.id.mainLearningFragment)
-//        baseImplementation.registerRoute("${moduleName}/course", R.id.mainLearningFragment)
+        baseImplementation.registerRoute("${moduleName}/coursedetails", R.id.learningCourseDetails)
 //        baseImplementation.registerRoute("${moduleName}/lesson", R.id.mainLearningFragment)
 //        baseImplementation.registerRoute("${moduleName}/assessment", R.id.mainLearningFragment)
         baseImplementation.registerRoute("${moduleName}/mylearning", R.id.myLearningFragment)
@@ -18,6 +18,7 @@ class NavForLearningModule(
         baseImplementation.registerRoute("${moduleName}/assessmentslides", R.id.slidesFragment)
         baseImplementation.registerRoute("${moduleName}/assessmentListFragment", R.id.assessmentListFragment)
         baseImplementation.registerRoute("${moduleName}/courseContentListFragment", R.id.courseContentListFragment)
+
 
 
 

@@ -64,7 +64,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_learning_course_details, container)
+    ) = inflater.inflate(R.layout.fragment_learning_course_details, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

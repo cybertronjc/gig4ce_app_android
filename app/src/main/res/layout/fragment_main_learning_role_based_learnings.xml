@@ -43,7 +43,6 @@
             android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/learning_based_role_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -51,6 +50,14 @@
             android:visibility="gone"
 
             />
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/learning_based_role_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:visibility="gone"/>
 
 
         <TextView
