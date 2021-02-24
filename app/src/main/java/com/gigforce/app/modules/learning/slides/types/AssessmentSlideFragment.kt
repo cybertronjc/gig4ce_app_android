@@ -12,7 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.gigforce.app.R
-import com.gigforce.app.modules.assessment.AssessmentFragment
+import com.gigforce.core.StringConstants
 import com.gigforce.core.navigation.INavigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +78,7 @@ class AssessmentSlideFragment : Fragment() {
             // todo: register: assessment: R.id.assessment_fragment
             navigation.navigateTo(
                 "assessment", bundleOf(
-                    AssessmentFragment.INTENT_LESSON_ID to mAssessmentId
+                    StringConstants.INTENT_LESSON_ID.value to mAssessmentId
                 )
             )
         }

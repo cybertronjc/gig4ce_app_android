@@ -22,11 +22,11 @@ import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.assessment.AssessmentFragment
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.slides.SlidesFragment
 import com.gigforce.app.modules.learning.slides.types.VideoWithTextFragment
 import com.gigforce.app.utils.Lce
+import com.gigforce.core.StringConstants
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -63,9 +63,9 @@ class PlayVideoDialogFragment :
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         savedInstanceState?.let {
@@ -77,7 +77,7 @@ class PlayVideoDialogFragment :
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
             shouldShowFeedbackDialog = it.getBoolean(
-                    INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
             )
         }
 
@@ -87,7 +87,7 @@ class PlayVideoDialogFragment :
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
             shouldShowFeedbackDialog = it.getBoolean(
-                    INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
             )
         }
 
@@ -104,8 +104,8 @@ class PlayVideoDialogFragment :
         outState.putString(INTENT_EXTRA_LESSON_ID, mLessonId)
         outState.putString(INTENT_EXTRA_MODULE_ID, mModuleId)
         outState.putBoolean(
-                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION,
-                shouldShowFeedbackDialog
+            INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION,
+            shouldShowFeedbackDialog
         )
         outState.putBoolean(DISABLE_LESSON_COMPLETION, disableLessonCompletionDialog)
     }
@@ -125,10 +125,10 @@ class PlayVideoDialogFragment :
 //        }
 
         playerView
-                .findViewById<View>(R.id.toggle_full_screen)
-                .setOnClickListener {
-                    changeOrientation()
-                }
+            .findViewById<View>(R.id.toggle_full_screen)
+            .setOnClickListener {
+                changeOrientation()
+            }
 
 
     }
@@ -169,38 +169,38 @@ class PlayVideoDialogFragment :
 
     private fun initViewModel() {
         viewModel.videoDetails
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showVideoAsLoading()
-                        is Lce.Content -> showVideo(it.content)
-                        is Lce.Error -> showErrorInLoadingVideo(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showVideoAsLoading()
+                    is Lce.Content -> showVideo(it.content)
+                    is Lce.Error -> showErrorInLoadingVideo(it.error)
+                }
+            })
 
         viewModel.videoSaveState
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showVideoAsLoading()
-                        is Lce.Content -> {
-                            when (it.content) {
-                                VideoSaveState.VideoStateSaved -> {
-                                    videoStateSaved = true
-                                    fragment_play_video_progress_bar.gone()
-                                    clearBackStackToContentList()
-                                    dismiss()
-                                }
-                                VideoSaveState.VideoMarkedComplete -> {
-                                    //Open next
-                                    fragment_play_video_progress_bar.gone()
-                                    videoStateSaved = true
-                                }
+                when (it) {
+                    Lce.Loading -> showVideoAsLoading()
+                    is Lce.Content -> {
+                        when (it.content) {
+                            VideoSaveState.VideoStateSaved -> {
+                                videoStateSaved = true
+                                fragment_play_video_progress_bar.gone()
+                                clearBackStackToContentList()
+                                dismiss()
+                            }
+                            VideoSaveState.VideoMarkedComplete -> {
+                                //Open next
+                                fragment_play_video_progress_bar.gone()
+                                videoStateSaved = true
                             }
                         }
-                        is Lce.Error -> showErrorInLoadingVideo(it.error)
                     }
-                })
+                    is Lce.Error -> showErrorInLoadingVideo(it.error)
+                }
+            })
 
         viewModel.openNextDestination.observe(viewLifecycleOwner, Observer { cc ->
             if (!disableLessonCompletionDialog) {
@@ -225,33 +225,33 @@ class PlayVideoDialogFragment :
         } else {
             lessonCompleteDialog = LearningCompletionDialog()
             lessonCompleteDialog?.setCallbacks(object :
-                    LearningCompletionDialog.LearningCompletedDialogCallbacks {
+                LearningCompletionDialog.LearningCompletedDialogCallbacks {
                 override fun actionClick() {
                     backPressed()
                     when (nextLessonContent?.type) {
                         CourseContent.TYPE_VIDEO -> {
                             PlayVideoDialogFragment.launch(
-                                    childFragmentManager = childFragmentManager,
-                                    moduleId = nextLessonContent!!.moduleId,
-                                    lessonId = nextLessonContent!!.id,
-                                    shouldShowFeedbackDialog = nextLessonContent!!.shouldShowFeedbackDialog
+                                childFragmentManager = childFragmentManager,
+                                moduleId = nextLessonContent!!.moduleId,
+                                lessonId = nextLessonContent!!.id,
+                                shouldShowFeedbackDialog = nextLessonContent!!.shouldShowFeedbackDialog
                             )
                         }
                         CourseContent.TYPE_ASSESSMENT -> {
                             navigationController.navigate(
-                                    R.id.assessment_fragment, bundleOf(
-                                    AssessmentFragment.INTENT_LESSON_ID to nextLessonContent!!.id,
-                                    AssessmentFragment.INTENT_MODULE_ID to nextLessonContent!!.moduleId
-                            )
+                                R.id.assessment_fragment, bundleOf(
+                                    StringConstants.INTENT_LESSON_ID.value to nextLessonContent!!.id,
+                                    StringConstants.INTENT_MODULE_ID.value to nextLessonContent!!.moduleId
+                                )
                             )
                         }
                         CourseContent.TYPE_SLIDE -> {
                             navigationController.navigate(
-                                    R.id.slidesFragment, bundleOf(
+                                R.id.slidesFragment, bundleOf(
                                     SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to nextLessonContent!!.title,
                                     SlidesFragment.INTENT_EXTRA_MODULE_ID to nextLessonContent!!.moduleId,
                                     SlidesFragment.INTENT_EXTRA_LESSON_ID to nextLessonContent!!.id
-                            )
+                                )
                             )
                         }
                         else -> {
@@ -267,8 +267,8 @@ class PlayVideoDialogFragment :
                 }
             })
             lessonCompleteDialog?.show(
-                    parentFragmentManager,
-                    LearningCompletionDialog::class.java.name
+                parentFragmentManager,
+                LearningCompletionDialog::class.java.name
             )
         }
 
@@ -344,7 +344,7 @@ class PlayVideoDialogFragment :
                 playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
 
                 activity?.window?.decorView?.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
                 Log.d(VideoWithTextFragment.TAG, "LANDSCAPE")
@@ -375,10 +375,10 @@ class PlayVideoDialogFragment :
             val currentPos = player?.currentPosition ?: 0L
             val totalLenght = player?.duration ?: 0L
             viewModel.savedVideoState(
-                    moduleId = mModuleId,
-                    lessonId = mLessonId,
-                    playBackPosition = currentPos,
-                    fullVideoLength = totalLenght
+                moduleId = mModuleId,
+                lessonId = mLessonId,
+                playBackPosition = currentPos,
+                fullVideoLength = totalLenght
             )
         }
     }
@@ -439,7 +439,7 @@ class PlayVideoDialogFragment :
     fun initShowLessCompDialog() {
         if (!disableLessonCompletionDialog) {
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                showLessonCompletedDialog = true;
+                showLessonCompletedDialog = true
             } else {
                 showLessonCompleteDialog()
             }
@@ -468,16 +468,16 @@ class PlayVideoDialogFragment :
                     Handler().postDelayed({
                         if (shouldShowFeedbackDialog) {
                             RateLessonDialogFragment.launch(
-                                    childFragmentManager,
-                                    this@PlayVideoDialogFragment,
-                                    mModuleId,
-                                    mLessonId
+                                childFragmentManager,
+                                this@PlayVideoDialogFragment,
+                                mModuleId,
+                                mLessonId
                             )
                         } else {
                             initShowLessCompDialog()
                             viewModel.markVideoAsComplete(
-                                    moduleId = mModuleId,
-                                    lessonId = mLessonId
+                                moduleId = mModuleId,
+                                lessonId = mLessonId
                             )
                         }
                     }, 300)
@@ -497,23 +497,23 @@ class PlayVideoDialogFragment :
         const val INTENT_EXTRA_LESSON_ID = "lesson_id"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
         const val INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION =
-                "show_feedback_dialog_on_completion"
+            "show_feedback_dialog_on_completion"
         const val TAG = "PlayVideoDialogFragment"
         const val DISABLE_LESSON_COMPLETION = "dis_less_comp"
 
         fun launch(
-                childFragmentManager: FragmentManager,
-                moduleId: String,
-                lessonId: String,
-                shouldShowFeedbackDialog: Boolean,
-                disableLessonCompleteAction: Boolean = false
+            childFragmentManager: FragmentManager,
+            moduleId: String,
+            lessonId: String,
+            shouldShowFeedbackDialog: Boolean,
+            disableLessonCompleteAction: Boolean = false
         ) {
             val frag = PlayVideoDialogFragment()
             val bundle = bundleOf(
-                    INTENT_EXTRA_MODULE_ID to moduleId,
-                    INTENT_EXTRA_LESSON_ID to lessonId,
-                    INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog,
-                    DISABLE_LESSON_COMPLETION to disableLessonCompleteAction
+                INTENT_EXTRA_MODULE_ID to moduleId,
+                INTENT_EXTRA_LESSON_ID to lessonId,
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog,
+                DISABLE_LESSON_COMPLETION to disableLessonCompleteAction
             )
 
             frag.arguments = bundle
