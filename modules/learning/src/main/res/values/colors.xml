@@ -13,5 +13,9 @@
     <color name="text_yellow">#fa6400</color>
     <color name="text_orange">#f7b500</color>
     <color name="black_33">#54000000</color>
+    <color name="app_green">#468800</color>
+    <color name="red">#FF0000</color>
+    <color name="darkish_pink_100">#e14c6c</color>
+
 
 </resources>

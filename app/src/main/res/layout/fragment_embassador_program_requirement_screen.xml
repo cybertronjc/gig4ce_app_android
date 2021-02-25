@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    tools:context=".modules.assessment.AssessmentFragment">
+    tools:context="com.gigforce.learning.assessment.AssessmentFragment">
 
     <LinearLayout
         android:id="@+id/toolbar_layout"

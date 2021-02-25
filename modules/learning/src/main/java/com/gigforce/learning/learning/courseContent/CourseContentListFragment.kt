@@ -14,7 +14,7 @@ import com.example.learning.R
 import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-//import com.gigforce.app.modules.assessment.AssessmentFragment
+//import com.gigforce.learning.assessment.AssessmentFragment
 import com.gigforce.learning.learning.courseDetails.CourseDetailsViewModel
 import com.gigforce.learning.learning.courseDetails.LearningDetailsLessonsAdapter
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
@@ -81,7 +81,7 @@ class CourseContentListFragment : Fragment() {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
                     navigation.navigateTo(
-                        "assessment", bundleOf(
+                        "learning/assessment", bundleOf(
                             StringConstants.INTENT_LESSON_ID.value to it.id,
                             StringConstants.INTENT_MODULE_ID.value to it.moduleId
                         )

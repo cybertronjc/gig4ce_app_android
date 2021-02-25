@@ -18,6 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 interface ILearningDataRepository {
     fun loadData()
     fun getData(): LiveData<List<FeatureItemCardDVM>>
+
 }
 
 class LearningDataRepository @Inject constructor() :

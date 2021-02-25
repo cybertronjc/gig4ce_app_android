@@ -20,8 +20,8 @@ import com.example.learning.R
 //import com.gigforce.app.R
 //import com.gigforce.app.core.gone
 //import com.gigforce.app.core.visible
-//import com.gigforce.app.modules.assessment.AssessmentFragment
-//import com.gigforce.app.modules.assessment.AssessmentListFragment
+//import com.gigforce.learning.assessment.AssessmentFragment
+//import com.gigforce.learning.assessment.AssessmentListFragment
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
