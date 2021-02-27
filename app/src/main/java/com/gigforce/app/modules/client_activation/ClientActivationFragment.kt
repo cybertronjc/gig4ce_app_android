@@ -294,14 +294,14 @@ class ClientActivationFragment : BaseFragment(),
                     tv_applied_client_activation.text =
                             if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
                     tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
+                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.drawable.ic_applied else R.drawable.ic_application_rejected,
                             0,
                             0,
                             0
                     )
                     setTextViewColor(
                             tv_applied_client_activation,
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
+                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.color.activated_color else R.color.rejected_color
                     )
                     var actionButtonText =
                             if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
