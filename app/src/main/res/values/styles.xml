@@ -510,6 +510,7 @@
         <item name="chipStrokeColor">@color/attendance_chip_stroke_colors</item>
     </style>
 
+
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>

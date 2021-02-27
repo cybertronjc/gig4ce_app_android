@@ -20,17 +20,44 @@ interface GigAttendanceAdapterClickListener {
 }
 
 class GigAttendanceAdapter(
-        private val context: Context,
-        private val gigs: List<Gig>
-) :
-        RecyclerView.Adapter<GigAttendanceAdapter.GigAttendanceViewHolder>() {
+        private val context: Context
+) : RecyclerView.Adapter<GigAttendanceAdapter.GigAttendanceViewHolder>() {
 
+    private var originalGigs: List<Gig> = emptyList()
+    private var gigs: List<Gig> = emptyList()
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigAttendanceAdapterClickListener? = null
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     fun setListener(otherOptionClickListener: GigAttendanceAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener
+    }
+
+    fun updateAttendanceList(gigs: List<Gig>) {
+        this.originalGigs = gigs
+        this.gigs = gigs
+        notifyDataSetChanged()
+    }
+
+    fun showAllAttendances() {
+        gigs = originalGigs
+        notifyDataSetChanged()
+    }
+
+    fun showPresentAttendances() {
+        gigs = originalGigs.filter {
+            val gigStats = GigStatus.fromGig(it)
+            gigStats == GigStatus.COMPLETED && gigStats == GigStatus.ONGOING
+        }
+        notifyDataSetChanged()
+    }
+
+    fun showAbsentAttendances() {
+        gigs = originalGigs.filter {
+            val gigStats = GigStatus.fromGig(it)
+            gigStats == GigStatus.DECLINED && gigStats == GigStatus.MISSED && gigStats == GigStatus.NO_SHOW
+        }
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GigAttendanceViewHolder {
@@ -98,5 +125,4 @@ class GigAttendanceAdapter(
             otherOptionClickListener?.onAttendanceClicked(gigs[adapterPosition])
         }
     }
-
 }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -32,8 +33,8 @@ import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionsAdapter
 import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet
-import com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.PermissionRequiredBottomSheet
+import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
@@ -46,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
+import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
@@ -113,16 +115,33 @@ class GigPage2Fragment : BaseFragment(),
                     .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             FirebaseCrashlytics.getInstance().log("GigPage2Fragment: No Gig id found")
         }
+
+        Log.d(TAG, "Gig Id : $gigId")
     }
 
     private fun initUi() {
 
         details_label.setOnClickListener {
+            Log.d(TAG, "Opening Details Page for gig ${viewModel.currentGig?.gigId}")
             navigate(
                     R.id.gigDetailsFragment, bundleOf(
                     GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
             )
             )
+        }
+
+        image_view.setOnClickListener {
+
+            val gig = viewModel.currentGig ?: return@setOnClickListener
+            if (gig.latitude != null && gig.longitude != 0.0) {
+                val uri = "http://maps.google.com/maps?q=loc:${gig.latitude},${gig.longitude} (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            } else if (gig.geoPoint != null) {
+                val uri = "http://maps.google.com/maps?q=loc:${gig.geoPoint!!.latitude},${gig.geoPoint!!.longitude} (Gig Location)"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                requireContext().startActivity(intent)
+            }
         }
 
         people_to_expect_rv.layoutManager = LinearLayoutManager(
@@ -133,15 +152,15 @@ class GigPage2Fragment : BaseFragment(),
         people_to_expect_rv.addItemDecoration(VerticalItemDecorator(30))
         people_to_expect_rv.adapter = peopleToExpectAdapter
 
-        gig_page_timer_layout.setOnClickListener {
-            val gig = viewModel.currentGig ?: return@setOnClickListener
-
-            navigate(
-                    R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
-                    GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to gig.gigId
-            )
-            )
-        }
+//        gig_page_timer_layout.setOnClickListener {
+//            val gig = viewModel.currentGig ?: return@setOnClickListener
+//
+//            navigate(
+//                    R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
+//                    GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to gig.gigId
+//            )
+//            )
+//        }
 
         expand_iv.setOnClickListener {
             navigate(
@@ -155,17 +174,23 @@ class GigPage2Fragment : BaseFragment(),
             activity?.onBackPressed()
         }
 
+        feedback_layout.setOnClickListener {
+
+            val gig = viewModel.currentGig ?: return@setOnClickListener
+
+            if (gig.gigRating == 0.0f) {
+                showFeedbackBottomSheet()
+            }
+        }
+
         gig_ellipses_iv.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), it)
             popupMenu.menuInflater.inflate(R.menu.menu_gig_2, popupMenu.menu)
-
             viewModel.currentGig?.let {
 
-                if (it.isPresentGig() || it.isPastGig()) {
-                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(false)
-                } else {
-                    popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(true)
-                }
+                val status = GigStatus.fromGig(it)
+                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING)
+                popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
             }
 
             popupMenu.setOnMenuItemClickListener(this@GigPage2Fragment)
@@ -196,6 +221,7 @@ class GigPage2Fragment : BaseFragment(),
                                 startRegularisation()
                             }
                         } else {
+                            checkInCheckOutSliderBtn?.resetSlider()
                             showPermissionRequiredAndTheirReasonsDialog()
                         }
                     }
@@ -273,6 +299,29 @@ class GigPage2Fragment : BaseFragment(),
                     }
                 })
 
+        viewModel.markingAttendanceState
+                .observe(viewLifecycleOwner, Observer {
+
+                    when (it) {
+                        Lce.Loading -> {
+                        }
+                        is Lce.Content -> {
+
+                            if (it.content == AttendanceType.CHECK_OUT) {
+                                showToast("Checkout Marked.")
+                                showFeedbackBottomSheet()
+                            } else {
+                                showToast("Check-in marked")
+                            }
+                        }
+                        is Lce.Error -> {
+                            showAlertDialog("Error while marking attendance, $it")
+                        }
+                        else -> {
+                        }
+                    }
+                })
+
         viewModel.watchGig(gigId)
     }
 
@@ -300,6 +349,17 @@ class GigPage2Fragment : BaseFragment(),
         showCommonDetails(gig)
         gig_page_timer_layout.setGigData(gig)
         setAttendanceButtonVisibility(gig)
+
+        val gigStatus = GigStatus.fromGig(gig)
+        if (gigStatus == GigStatus.CANCELLED) {
+            gig_page_top_bar.setBackgroundResource(R.drawable.bck_gig_toolbar_grey)
+        } else {
+            gig_page_top_bar.setBackgroundResource(R.drawable.bck_gig_toolbar_pink)
+        }
+
+        val status = GigStatus.fromGig(gig)
+        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED ||
+                status == GigStatus.UPCOMING
     }
 
     private fun setAttendanceButtonVisibility(gig: Gig) = when (GigStatus.fromGig(gig)) {
@@ -353,10 +413,10 @@ class GigPage2Fragment : BaseFragment(),
                         .into(company_logo_iv)
             }
         } else {
-            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.name!![0].toString().toUpperCase()
+                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
 
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
@@ -367,9 +427,9 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         gig_title_tv.text = gig.profile.title
-        gig_company_name_tv.text = "${gig.legalEntity.name}"
+        gig_company_name_tv.text = "${gig.legalEntity.getCompanyName()}"
 
-        gig_type.text = if (gig.isMonthlyGig) ": Monthly" else ": Daily"
+        gig_type.text = if (gig.isFullDay) ": Full time" else ": Part time"
 
         gig_duration.text =
                 ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
@@ -378,7 +438,12 @@ class GigPage2Fragment : BaseFragment(),
                     )
                 }"
 
-        image_view.isVisible = gig.latitude != null && gig.latitude != 0.0
+        if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
+            GlideApp.with(requireContext()).load(R.drawable.map_demo).into(image_view)
+        } else {
+            GlideApp.with(requireContext()).load(R.drawable.ic_location_illus).into(image_view)
+        }
+
         gig_address_tv.text = gig.address
 
         if (gig.businessContact != null ||
@@ -402,6 +467,19 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         showOtherOptions(gig)
+        showUserFeedback(gig)
+    }
+
+    private fun showUserFeedback(gig: Gig) {
+        if (gig.isCheckInAndCheckOutMarked()) {
+            feedback_layout.visible()
+            divider_below_feedback.visible()
+        } else {
+            feedback_layout.gone()
+            divider_below_feedback.gone()
+        }
+
+        userFeedbackRatingBar.rating = gig.gigRating
     }
 
     private fun showOtherOptions(gig: Gig) {
@@ -458,7 +536,7 @@ class GigPage2Fragment : BaseFragment(),
                                 1
                         ),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.legalEntity.logo,
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.legalEntity.name,
+                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.legalEntity.getCompanyName(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.profile.title
                 )
@@ -724,6 +802,7 @@ class GigPage2Fragment : BaseFragment(),
 
 
     companion object {
+        const val TAG = "Gig_page_2"
         const val INTENT_EXTRA_GIG_ID = "gig_id"
         const val INTENT_EXTRA_COMING_FROM_CHECK_IN = "coming_from_checkin"
 
@@ -737,19 +816,19 @@ class GigPage2Fragment : BaseFragment(),
         private val IDENTITY_CARD = OtherOption(
                 id = ID_IDENTITY_CARD,
                 name = "Identity Card",
-                icon = R.drawable.ic_clothes
+                icon = R.drawable.ic_identity_card
         )
 
         private val ATTENDANCE_HISTORY = OtherOption(
                 id = ID_ATTENDANCE_HISTORY,
                 name = "Attendance History",
-                icon = R.drawable.ic_compensation
+                icon = R.drawable.ic_attendance
         )
 
         private val DECLINE_GIG = OtherOption(
                 id = ID_DECLINE_GIG,
                 name = "Decline Gig",
-                icon = R.drawable.ic_id_card
+                icon = R.drawable.ic_gig_decline
         )
 
         private val PERMISSION_AND_REASONS: HashMap<String, String> = hashMapOf(

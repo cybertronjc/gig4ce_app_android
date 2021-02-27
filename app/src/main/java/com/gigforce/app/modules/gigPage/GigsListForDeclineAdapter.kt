@@ -135,10 +135,10 @@ class GigsListForDeclineAdapter constructor(
                         }
                 }
             } else {
-                val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
+                val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
                     "C"
                 else
-                    gig.legalEntity.name!![0].toString().toUpperCase()
+                    gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
                 val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(context.resources, R.color.lipstick, null)

@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -24,12 +23,13 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_rate_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_rate_gig_dialog_main.*
 
 
-class RateGigDialogFragment : DialogFragment() {
+class RateGigDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -142,19 +142,21 @@ class RateGigDialogFragment : DialogFragment() {
         attachmentsList.forEach {
             setClickedImage(it)
         }
+
+        submitBtn.isEnabled = rating == 0.0f
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-
-            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
-            setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        dialog?.window?.apply {
+//
+//            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
+//            setLayout(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT
+//            )
+//        }
+//    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

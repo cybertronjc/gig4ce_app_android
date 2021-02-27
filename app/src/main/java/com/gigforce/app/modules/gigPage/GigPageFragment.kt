@@ -532,10 +532,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.name!![0].toString().toUpperCase()
+                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -569,7 +569,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
 
         tv_title_gig_page.text = gig?.profile?.title
         roleNameTV.text =gig?.profile?.title
-        companyNameTV.text = "@ ${gig.legalEntity.name}"
+        companyNameTV.text = "@ ${gig.legalEntity.getCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "N/A"

@@ -270,7 +270,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
     private fun setGigDetailsOnView(gig: Gig) {
         this.gig = gig
         roleNameTV.text = gig?.profile?.title
-        companyNameTV.text = "@ ${gig.legalEntity.name}"
+        companyNameTV.text = "@ ${gig.legalEntity.getCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
 
@@ -292,10 +292,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.name.isNullOrBlank())
+            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.name!![0].toString().toUpperCase()
+                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)

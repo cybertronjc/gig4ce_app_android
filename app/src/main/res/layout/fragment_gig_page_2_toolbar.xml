@@ -5,17 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="25dp"
-    android:background="@color/lipstick_two">
+    android:background="@drawable/bck_gig_toolbar_pink">
 
     <ImageView
         android:id="@+id/gig_cross_btn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:scaleX="0.9"
-        android:scaleY="0.9"
-        android:src="@drawable/ic_cross_grey"
+        android:src="@drawable/back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />
@@ -29,7 +27,6 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_ellipses"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white" />

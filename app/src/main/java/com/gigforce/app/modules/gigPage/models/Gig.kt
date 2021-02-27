@@ -6,6 +6,7 @@ import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
@@ -40,6 +41,10 @@ data class Gig(
         @get:PropertyName("address")
         @set:PropertyName("address")
         var address: String = "",
+
+        @get:PropertyName("geoPoint")
+        @set:PropertyName("geoPoint")
+        var geoPoint: GeoPoint? = null,
 
         @get:PropertyName("latitude")
         @set:PropertyName("latitude")
@@ -113,6 +118,10 @@ data class Gig(
         @set:PropertyName("businessContact")
         var businessContact: ContactPerson? = null,
 
+        @get:PropertyName("assignedOn")
+        @set:PropertyName("assignedOn")
+        var assignedOn: Timestamp = Timestamp.now(),
+
         var checkInBeforeTimeBufferInMins: Long = 60,
         var checkInAfterTimeBufferInMins: Long = 60,
         var checkOutBeforeTimeBufferInMins: Long = 60,
@@ -145,6 +154,7 @@ data class Gig(
         @get:PropertyName("isFullDay")
         @set:PropertyName("isFullDay")
         var isFullDay: Boolean = false,
+
 
         @get:PropertyName("gigOrderId")
         @set:PropertyName("gigOrderId")
@@ -364,8 +374,19 @@ data class LegalEntity(
 
         @get:PropertyName("name")
         @set:PropertyName("name")
-        var name: String? = null
-) : Parcelable
+        var name: String? = null,
+
+        @get:PropertyName("tradingName")
+        @set:PropertyName("tradingName")
+        var tradingName: String? = null
+) : Parcelable {
+
+    @Exclude
+     fun getCompanyName(): String? {
+         return tradingName ?: name
+    }
+
+}
 
 @Parcelize
 data class JobProfile(
@@ -405,5 +426,9 @@ data class ContactPerson(
 
         @get:PropertyName("secondary_no")
         @set:PropertyName("secondary_no")
-        var secondaryContactNo: String? = null
+        var secondaryContactNo: String? = null,
+
+        @get:PropertyName("company_name")
+        @set:PropertyName("company_name")
+        var companyName: String? = null
 ) : Parcelable

@@ -126,9 +126,9 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             viewModel.isLoading = false
         })
         viewModel.observableShowExplore.observe(viewLifecycleOwner, Observer {
-            val dialog = NoGigsDialog();
-            dialog.setCallbacks(this)
-            dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
+//            val dialog = NoGigsDialog();
+//            dialog.setCallbacks(this)
+//            dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it!!)

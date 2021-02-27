@@ -49,7 +49,7 @@ class GigPagerTimerView(
     private lateinit var checkInTimeTV: TextView
     private lateinit var checkOutTimeTV: TextView
 
-    private val gigDateFormat = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
+    private val gigDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     init {
@@ -103,9 +103,9 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
+//        )
         gigTimerTV.text = "- -hrs: - -mins"
         gigCheckInTimeTV.text = "Checkin Not Marked"
 
@@ -116,9 +116,9 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
+//        )
         gigTimerTV.text = "- -hrs: - -mins"
         gigCheckInTimeTV.text = "You've missed this gig"
 
@@ -129,9 +129,9 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_no_show_red, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
+//        )
         gigTimerTV.text = "- -hrs: - -mins"
         gigCheckInTimeTV.text = "Check-in Pending"
 
@@ -142,9 +142,9 @@ class GigPagerTimerView(
         gigTimerAndDetailsLayout.gone()
         gigAttendanceDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(ColorStateList.valueOf(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_completed_grey ,null)
-        ))
+//        rootCardView.setCardBackgroundColor(ColorStateList.valueOf(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_completed_grey ,null)
+//        ))
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
@@ -168,16 +168,16 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_upcoming_pink, null)
+//        )
 
         val daysDiff = Duration.between(
-                gig.startDateTime.toLocalDateTime(),
-                LocalDate.now().atStartOfDay()
+                LocalDate.now().atStartOfDay(),
+                gig.startDateTime.toLocalDateTime()
         ).toDays()
 
-        if (daysDiff > 1) {
+        if (daysDiff > 1 ) {
             //Show Date only
             gigTimerTV.text = "$daysDiff Days"
         } else {
@@ -186,35 +186,6 @@ class GigPagerTimerView(
 
         gigCheckInTimeTV.text = "Left for the gig start"
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
-
-
-//        if (gig.isCheckInAndCheckOutMarked()) {
-//            val checkInTime = gig.attendance!!.checkInTime!!
-//            val checkOutTime = gig.attendance!!.checkOutTime!!
-//
-//            val diffInMillisec: Long = checkOutTime.time - checkInTime.time
-//            val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-//            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
-//
-//            gig_timer_tv.text = "$diffInHours Hrs : $diffInMin Mins"
-//            val checkoutTime = gig.attendance!!.checkOutTime
-//            gig_checkin_time_tv.text = "${timeFormatter.format(checkInTime)} - ${
-//                timeFormatter.format(checkoutTime)
-//            }"
-//        } else if (gig.isCheckInMarked()) {
-//            val gigStartDateTime = gig.startDateTime.toDate()
-//            val currentTime = Date().time
-//
-//            val diffInMillisec: Long = currentTime - gigStartDateTime.time
-//            val diffInHours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillisec)
-//            val diffInMin: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillisec) % 60
-//
-//            gig_timer_tv.text = "No check-out marked"
-//            gig_checkin_time_tv.text = "${timeFormatter.format(gigStartDateTime)} -"
-//        } else {
-//            gig_timer_tv.text = "No Check-in"
-//            gig_checkin_time_tv.gone()
-//        }
 
     }
 
@@ -252,9 +223,9 @@ class GigPagerTimerView(
         gigTimerAndDetailsLayout.gone()
         gigAttendanceDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_ongoing_green, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_ongoing_green, null)
+//        )
 
         gigDateTV.text = formatGigDateForTimer(gig.startDateTime)
 
@@ -270,9 +241,9 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
+//        )
         gigTimerTV.text = "- -hrs: - -mins"
         gigCheckInTimeTV.text = "Declined Reason : ${gig.declineReason}"
 
@@ -283,9 +254,9 @@ class GigPagerTimerView(
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
 
-        rootCardView.setCardBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.gig_timer_declined_red, null)
-        )
+//        rootCardView.setCardBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.gig_timer_silver_light, null)
+//        )
         gigTimerTV.text = "- -hrs: - -mins"
         gigCheckInTimeTV.text = gig.cancellationReason
 
@@ -301,9 +272,9 @@ class GigPagerTimerView(
 
         if (daysDiff == 0L) {
             return "Today, ${gigDateFormat.format(startDateTime.toDate())}"
-        } else if (daysDiff == 1L) {
-            return "Tomorrow, ${gigDateFormat.format(startDateTime.toDate())}"
         } else if (daysDiff == -1L) {
+            return "Tomorrow, ${gigDateFormat.format(startDateTime.toDate())}"
+        } else if (daysDiff == 1L) {
             return "Yesterday, ${gigDateFormat.format(startDateTime.toDate())}"
         } else {
             return gigDateFormat.format(startDateTime.toDate())

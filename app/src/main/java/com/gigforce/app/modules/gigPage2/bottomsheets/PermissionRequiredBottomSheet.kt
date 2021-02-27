@@ -95,7 +95,7 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
 
     private fun setDataOnView() {
 
-        val imageToShow = imageToShow ?: R.drawable.ic_about_me
+        val imageToShow = imageToShow ?: R.drawable.ic_location_permission
         val permissionLabelText =
             permissionLabelText ?: "Following permission are required to proceed further"
 
@@ -109,9 +109,9 @@ class PermissionRequiredBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
-        Glide.with(requireContext())
-            .load(imageToShow)
-            .into(permissionImageView)
+//        Glide.with(requireContext())
+//            .load(imageToShow)
+//            .into(permissionImageView)
 
         permissionLabelTextView.text = permissionLabelText
         permissionTextView.text = permissionAndReasonText

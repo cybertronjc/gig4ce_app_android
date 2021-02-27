@@ -135,6 +135,7 @@ class GigDetailsFragment : BaseFragment(),
                     }
                 })
 
+
         viewModel.getGigWithDetails(gigId)
     }
 
@@ -177,6 +178,14 @@ class GigDetailsFragment : BaseFragment(),
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
         stopShimmer(learning_based_horizontal_progress as LinearLayout)
+
+
+
+        if(content.size != 0){
+            learning_based_role_layout.visible()
+        } else{
+            learning_based_role_layout.gone()
+        }
 
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -260,12 +269,6 @@ class GigDetailsFragment : BaseFragment(),
     }
 
     private fun setGigDetailsOnView(gig: Gig) {
-
-        if (gig.isPresentGig() || gig.isPastGig()) {
-            iv_options_gig_details.gone()
-        } else {
-            iv_options_gig_details.visible()
-        }
 
         tv_title_gig_details.text = gig?.profile?.title
         roleNameTV.text = gig?.profile?.title

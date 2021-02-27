@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toDate
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
@@ -64,8 +65,8 @@ class GigViewModel constructor(
                 }
     }
 
-    private val _markingAttendanceState = MutableLiveData<Lse>()
-    val markingAttendanceState: LiveData<Lse> get() = _markingAttendanceState
+    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>>()
+    val markingAttendanceState: LiveData<Lce<AttendanceType>> get() = _markingAttendanceState
 
     fun markAttendance(
             latitude: Double,
@@ -116,7 +117,7 @@ class GigViewModel constructor(
             checkInTimeAccToUser: Timestamp?,
             remarks: String?
     ) {
-        _markingAttendanceState.postValue(Lse.loading())
+        _markingAttendanceState.postValue(Lce.loading())
 
         try {
             gigsRepository.markCheckIn(
@@ -129,9 +130,9 @@ class GigViewModel constructor(
                     checkInTimeAccToUser = checkInTimeAccToUser,
                     remarks = remarks
             )
-            _markingAttendanceState.postValue(Lse.success())
+            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
         } catch (e: Exception) {
-            _markingAttendanceState.postValue(Lse.error(e.toString()))
+            _markingAttendanceState.postValue(Lce.error(e.toString()))
         }
     }
 
@@ -144,7 +145,7 @@ class GigViewModel constructor(
             checkOutTimeAccToUser: Timestamp?,
             remarks: String?
     ) {
-        _markingAttendanceState.postValue(Lse.loading())
+        _markingAttendanceState.postValue(Lce.loading())
 
         try {
             gigsRepository.markCheckOut(
@@ -157,9 +158,9 @@ class GigViewModel constructor(
                     checkOutTimeAccToUser = checkOutTimeAccToUser,
                     remarks = remarks
             )
-            _markingAttendanceState.postValue(Lse.success())
+            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_OUT))
         } catch (e: Exception) {
-            _markingAttendanceState.postValue(Lse.error(e.toString()))
+            _markingAttendanceState.postValue(Lce.error(e.toString()))
         }
     }
 
@@ -206,6 +207,7 @@ class GigViewModel constructor(
 
     fun getGigWithDetails(gigId: String) = viewModelScope.launch {
         _gigDetails.value = Lce.loading()
+        Log.d("GigViewModel", "Fetching gig details ")
 
         try {
             val getGigQuery = gigsRepository
@@ -243,8 +245,11 @@ class GigViewModel constructor(
                 gig.keywords = keywordsMatch.pointsData
             }
 
+            Log.d("GigViewModel", "Gig : $gig")
             _gigDetails.value = Lce.content(gig)
         } catch (e: Exception) {
+            Log.e("GigViewModel", "Error while retriving gig details", e)
+            e.printStackTrace()
             _gigDetails.value = Lce.error(e.message!!)
         }
     }

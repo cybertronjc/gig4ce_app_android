@@ -5,6 +5,7 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.gigPage.models.JobProfileFull
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
@@ -45,7 +46,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkInLat" to latitude,
                     "attendance.checkInLong" to longitude,
                     "attendance.checkInMarked" to true,
-                    "attendance.checkInTime" to checkInTime
+                    "attendance.checkInTime" to checkInTime,
+                    "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         } else {
             mapOf(
@@ -60,7 +62,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
                     "regularisationRequest.checkOutTimeAccToUser" to null,
                     "regularisationRequest.remarksFromUser" to remarks,
-                    "regularisationRequest.remarksFromManager" to null
+                    "regularisationRequest.remarksFromManager" to null,
+                    "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         }
 
@@ -87,7 +90,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkOutLat" to latitude,
                     "attendance.checkOutLong" to longitude,
                     "attendance.checkOutMarked" to true,
-                    "attendance.checkOutTime" to checkOutTime
+                    "attendance.checkOutTime" to checkOutTime,
+                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         } else {
             mapOf(
@@ -101,7 +105,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
                     "regularisationRequest.remarksFromUser" to remarks,
-                    "regularisationRequest.remarksFromManager" to null
+                    "regularisationRequest.remarksFromManager" to null,
+                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         }
 

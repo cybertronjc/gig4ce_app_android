@@ -133,6 +133,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/attendance_overview_layout"
         app:singleSelection="true">
 
@@ -144,8 +145,8 @@
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
-            android:checked="true"
             app:chipStrokeWidth="1dp"
+            android:id="@+id/attendance_all_chip"
             />
 
 
@@ -157,7 +158,9 @@
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
-            app:chipStrokeWidth="1dp" />
+            app:chipStrokeWidth="1dp"
+            android:id="@+id/attendance_present_chip"
+            />
 
 
         <com.google.android.material.chip.Chip
@@ -168,6 +171,7 @@
             android:fontFamily="@font/lato_bold"
             android:textAlignment="center"
             android:minWidth="82dp"
+            android:id="@+id/attendance_absent_chip"
             app:chipStrokeWidth="1dp" />
 
 
@@ -198,11 +202,15 @@
 
         <TextView
             android:id="@+id/attendance_monthly_learning_error"
-            android:layout_width="wrap_content"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_calendar"
-            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="16sp"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/lipstick"
+            app:drawableTopCompat="@drawable/illus_no_attendance"
+            android:drawablePadding="20dp"
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>

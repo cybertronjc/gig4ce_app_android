@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.models.GigStatus
@@ -18,6 +19,8 @@ class GigStatusCardView(
         context,
         attrs
 ) {
+
+    private lateinit var statusCardView : MaterialCardView
 
     private lateinit var gigStatusIV: ImageView
     private lateinit var gigStatusTV: TextView
@@ -33,6 +36,8 @@ class GigStatusCardView(
     }
 
     private fun findViews(view: View) {
+        statusCardView = view.findViewById(R.id.status_card_view)
+
         gigStatusTV = view.findViewById(R.id.gig_status_tv)
         gigStatusIV = view.findViewById(R.id.gig_status_iv)
     }
@@ -41,5 +46,10 @@ class GigStatusCardView(
 
         gigStatusTV.text = status.getStatusCapitalized()
         Glide.with(context).load(status.getIconForStatus()).into(gigStatusIV)
+        statusCardView.strokeColor = ResourcesCompat.getColor(
+                context.resources,
+                status.getColorForStatus(),
+                null
+        )
     }
 }

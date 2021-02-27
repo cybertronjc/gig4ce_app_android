@@ -69,6 +69,7 @@ class GigPeopleToExpectAdapter(
 
         private val userImageTV = itemView.user_image_iv
         private val designationTV = itemView.designation_tv
+        private val companyNameTV = itemView.company_name_tv
         private val userNameTV = itemView.user_name_tv
         private val callButton = itemView.call_btn
         private val chatButton = itemView.chat_btn
@@ -90,13 +91,15 @@ class GigPeopleToExpectAdapter(
             } else {
 
                 Glide.with(context.applicationContext)
-                        .load(R.drawable.avatar)
+                        .load(R.drawable.ic_avatar_male)
                         .circleCrop()
                         .into(userImageTV)
             }
 
             designationTV.text = this.designation
             userNameTV.text = this.name
+            companyNameTV.text = this.companyName
+
             chatButton.isVisible = this.uid != null
         }
 

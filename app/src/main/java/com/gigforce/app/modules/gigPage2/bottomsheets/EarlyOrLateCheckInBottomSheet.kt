@@ -106,7 +106,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
             CHECK_IN_TYPE_EARLY -> {
                 title_bar.text = "Early Checkin"
                 actual_checkin_time_tv.text = "Gig Check-in"
-                check_in_label.text = "You have early checked- in for this gig."
+                check_in_label.text = "You are checking in early for this gig."
 
                 your_checkin_layout.gone()
             }
@@ -114,15 +114,15 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 title_bar.text = "Late Checkin"
                 actual_checkin_time_tv.text = "Gig Check-in"
                 your_checkin_time_tv.text = "Your Check-in"
-                check_in_label.text = "This Check- in will be considered once your manager approves."
+                check_in_label.text = "You are Checking in late for this Gig. This will be notified to your manager."
 
-                your_checkin_layout.visible()
+                your_checkin_layout.gone()
             }
             CHECK_OUT_TYPE_EARLY -> {
                 title_bar.text = "Early Checkout"
                 actual_checkin_time_tv.text = "Gig Check-out"
 
-                check_in_label.text = "This Check- out will be considered once your manager approves."
+                check_in_label.text = "You are checking out early for this gig."
                 your_checkin_layout.gone()
             }
             CHECK_OUT_TYPE_LATE -> {
@@ -130,7 +130,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 actual_checkin_time_tv.text = "Gig Check-out"
                 your_checkin_time_tv.text = "Your Check-out"
 
-                check_in_label.text = "This Check- out will be considered once your manager approves."
+                check_in_label.text = "You are Checking out late for this Gig. This will be notified to your manager."
                 your_checkin_layout.visible()
             }
             else -> {

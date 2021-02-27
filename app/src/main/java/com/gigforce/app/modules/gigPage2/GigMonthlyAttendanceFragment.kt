@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +18,6 @@ import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
-import com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
@@ -35,6 +33,14 @@ import java.util.*
 class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickListener {
 
     private val viewModel: GigViewModel by viewModels()
+
+    private val adapter: GigAttendanceAdapter by lazy {
+        GigAttendanceAdapter(
+                requireContext()
+        ).apply {
+            setListener(this@GigMonthlyAttendanceFragment)
+        }
+    }
 
     private var role: String? = null
     private var companyName: String? = null
@@ -94,6 +100,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
     private fun initUi() {
 
+        gig_ellipses_iv.gone()
         dateYearTV.setOnClickListener {
             showMonthCalendar()
         }
@@ -101,6 +108,13 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         gig_cross_btn.setOnClickListener {
             activity?.onBackPressed()
         }
+
+        attendance_monthly_rv.layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+        )
+        attendance_monthly_rv.adapter = adapter
 
         if (!companyLogo.isNullOrBlank()) {
             if (companyLogo!!.startsWith("http", true)) {
@@ -134,6 +148,15 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
         gig_title_tv.text = role
         gig_company_name_tv.text = "\ufeff@ $companyName"
+
+        attendance_type_chipgroup.setOnCheckedChangeListener { group, checkedId ->
+
+            when (checkedId) {
+                R.id.attendance_all_chip -> adapter.showAllAttendances()
+                R.id.attendance_present_chip -> adapter.showPresentAttendances()
+                R.id.attendance_absent_chip -> adapter.showAbsentAttendances()
+            }
+        }
     }
 
     private fun initViewModel() {
@@ -171,38 +194,36 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         content.forEach {
             val status = GigStatus.fromGig(it)
 
-            if (status == GigStatus.COMPLETED) {
-                completedGigsCount++
-            } else if (status == GigStatus.MISSED) {
-                absentGigsCount++
+            when (status) {
+                GigStatus.COMPLETED, GigStatus.ONGOING -> {
+                    completedGigsCount++
+                }
+                GigStatus.DECLINED, GigStatus.MISSED, GigStatus.NO_SHOW -> {
+                    absentGigsCount++
+                }
             }
         }
 
         total_days_tv.text = ": ${completedGigsCount} Days"
         total_working_days_tv.text = ": ${absentGigsCount} Days"
 
-        attendance_monthly_rv.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-        )
-
-        val adapter = GigAttendanceAdapter(
-                requireContext(),
-                content.sortedBy { it.startDateTime.seconds }
-        ).apply {
-            setListener(this@GigMonthlyAttendanceFragment)
+        attendance_type_chipgroup.check(R.id.attendance_all_chip)
+        adapter.updateAttendanceList(content)
+        if (content.isEmpty()) {
+            attendance_monthly_learning_error.visible()
+            attendance_monthly_learning_error.text = "No Gigs assigned in selected month!"
+        } else {
+            attendance_monthly_learning_error.gone()
         }
-        attendance_monthly_rv.adapter = adapter
     }
 
 
     override fun onAttendanceClicked(option: Gig) {
-        navigate(
-                R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
-                GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to option.gigId
-        )
-        )
+//        navigate(
+//                R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
+//                GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to option.gigId
+//        )
+//        )
     }
 
     fun showMonthCalendar() {

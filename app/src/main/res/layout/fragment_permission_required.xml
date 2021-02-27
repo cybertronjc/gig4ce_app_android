@@ -13,6 +13,7 @@
     <ImageView
         android:id="@+id/permission_image_view"
         android:layout_width="250dp"
+        android:src="@drawable/ic_location_permission"
         android:layout_height="191dp" />
 
     <TextView
@@ -43,6 +44,8 @@ Gig  near you
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/lipstick"
+        android:textColor="@color/white"
         android:text="Okay"/>
 
 
