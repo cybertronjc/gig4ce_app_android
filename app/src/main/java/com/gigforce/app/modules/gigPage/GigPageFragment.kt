@@ -35,6 +35,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
@@ -47,7 +48,6 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.*
-import com.gigforce.core.utils.GlideApp
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -494,7 +494,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         if (!gig.getFullCompanyLogo().isNullOrBlank()) {
             if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(companyLogoIV)
@@ -505,7 +505,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
-                            GlideApp.with(requireContext())
+                            Glide.with(requireContext())
                                     .load(fileUri)
                                     .placeholder(getCircularProgressDrawable())
                                     .into(companyLogoIV)
@@ -527,7 +527,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         if (!gig.bannerImage.isNullOrBlank()) {
             if (gig.bannerImage!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(gig.bannerImage)
                         .placeholder(getCircularProgressDrawable())
                         .into(gigBannerImageIV)
@@ -538,7 +538,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
-                            GlideApp.with(requireContext())
+                            Glide.with(requireContext())
                                     .load(fileUri)
                                     .placeholder(getCircularProgressDrawable())
                                     .into(gigBannerImageIV)
@@ -976,7 +976,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         if (it.startsWith("http", true)) {
             gigItem.tag = it
 
-            GlideApp.with(requireContext())
+            Glide.with(requireContext())
                     .load(it)
                     .placeholder(getCircularProgressDrawable())
                     .into(locationImageView)
@@ -987,7 +987,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
+                        Glide.with(requireContext())
                                 .load(fileUri)
                                 .placeholder(getCircularProgressDrawable())
                                 .into(locationImageView)

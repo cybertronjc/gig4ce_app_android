@@ -183,7 +183,7 @@ class HourViewFragment : RosterBaseFragment() {
             rosterViewModel.upcomingGigs = upcomingGigs
             rosterViewModel.currentGigs = currentGigs
             rosterViewModel.completedGigs = completedGigs
-            rosterViewModel.setFullDayGigs(rosterViewModel.dayContext)
+            rosterViewModel.setFullDayGigs()
 //            }
         })
 

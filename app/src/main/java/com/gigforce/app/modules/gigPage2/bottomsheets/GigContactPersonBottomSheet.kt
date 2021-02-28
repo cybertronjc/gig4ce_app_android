@@ -191,7 +191,6 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
     private fun startChatScreen(id: String) {
         findNavController().navigate(R.id.chatScreenFragment, bundleOf(
                 ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
-                ChatFragment.INTENT_EXTRA_FOR_USER_ID to firebaseUser.uid,
                 ChatFragment.INTENT_EXTRA_OTHER_USER_ID to id,
                 ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
         ))

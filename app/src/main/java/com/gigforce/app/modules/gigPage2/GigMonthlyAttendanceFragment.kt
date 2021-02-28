@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -19,7 +20,6 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
@@ -119,7 +119,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         if (!companyLogo.isNullOrBlank()) {
             if (companyLogo!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(companyLogo)
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)
@@ -128,7 +128,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
                         .getReference("companies_gigs_images")
                         .child(companyLogo!!)
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(imageRef)
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)

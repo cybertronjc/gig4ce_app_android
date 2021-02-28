@@ -21,6 +21,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
@@ -398,7 +399,7 @@ class GigPage2Fragment : BaseFragment(),
         if (!gig.getFullCompanyLogo().isNullOrBlank()) {
             if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)
@@ -407,7 +408,7 @@ class GigPage2Fragment : BaseFragment(),
                         .reference
                         .child(gig.getFullCompanyLogo()!!)
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(imageRef)
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)
@@ -439,9 +440,9 @@ class GigPage2Fragment : BaseFragment(),
                 }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
-            GlideApp.with(requireContext()).load(R.drawable.map_demo).into(image_view)
+            Glide.with(requireContext()).load(R.drawable.map_demo).into(image_view)
         } else {
-            GlideApp.with(requireContext()).load(R.drawable.ic_location_illus).into(image_view)
+            Glide.with(requireContext()).load(R.drawable.ic_location_illus).into(image_view)
         }
 
         gig_address_tv.text = gig.address
