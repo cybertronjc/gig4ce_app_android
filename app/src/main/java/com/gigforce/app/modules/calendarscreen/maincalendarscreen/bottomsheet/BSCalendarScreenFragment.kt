@@ -408,7 +408,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                             activity?.applicationContext,
                             PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                                 val gig = item as Gig
-                                GigNavigation.openGigMainPage(findNavController(), gig.gigId)
+                                GigNavigation.openGigMainPage(findNavController(), gig.openNewGig() ,gig.gigId)
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
@@ -450,7 +450,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
                                 getView(viewHolder, R.id.card_view).layoutParams = lp
-                                getTextView(viewHolder, R.id.textView41).text = obj?.profile?.title
+                                getTextView(viewHolder, R.id.textView41).text = obj?.getGigTitle()
                                 getTextView(viewHolder, R.id.contactPersonTV).text = obj?.agencyContact?.name
 
                                 val gigStatus = GigStatus.fromGig(obj!!)
@@ -528,18 +528,18 @@ class BSCalendarScreenFragment : BaseFragment() {
 
 
                                 val companyLogoIV = getImageView(viewHolder, R.id.companyLogoIV)
-                                if (!obj.legalEntity.logo.isNullOrBlank()) {
+                                if (!obj.getFullCompanyLogo().isNullOrBlank()) {
 
-                                    if (obj.legalEntity.logo!!.startsWith("http", true)) {
+                                    if (obj.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                                         Glide.with(requireContext())
-                                                .load(obj.legalEntity.logo)
+                                                .load(obj.getFullCompanyLogo())
                                                 .into(companyLogoIV)
 
                                     } else {
                                         FirebaseStorage.getInstance()
                                                 .reference
-                                                .child(obj.legalEntity.logo!!)
+                                                .child(obj.getFullCompanyLogo()!!)
                                                 .downloadUrl
                                                 .addOnSuccessListener {
 
@@ -549,10 +549,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                                 }
                                     }
                                 } else {
-                                    val companyInitials = if (obj.legalEntity.getCompanyName().isNullOrBlank())
+                                    val companyInitials = if (obj.getFullCompanyName().isNullOrBlank())
                                         "C"
                                     else
-                                        obj.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                                        obj.getFullCompanyName()!![0].toString().toUpperCase()
                                     val drawable = TextDrawable.builder().buildRound(
                                             companyInitials,
                                             ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -597,7 +597,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            GigNavigation.openGigAttendancePage(findNavController(), gig.gigId)
+            GigNavigation.openGigAttendancePage(findNavController(),gig.openNewGig() ,gig.gigId)
         }
     }
 

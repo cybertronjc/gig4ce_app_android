@@ -43,7 +43,6 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.*
@@ -55,6 +54,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
@@ -399,27 +399,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         } else if (userGpsDialogActionCount == 0) {
             requestPermissionForGPS()
         } else {
-            if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
-                val markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                0.0,
-                                0.0,
-                                selfieImg,
-                                ""
-                        )
-//                viewModel.markAttendance(markAttendance, gigId)
+            viewModel.markAttendance(
+                    latitude = 0.0,
+                    longitude = 0.0,
+                    locationPhysicalAddress = "",
+                    image = selfieImg,
+                    checkInTimeAccToUser = Timestamp.now(),
+                    remarks = ""
+            )
 
-            } else {
-                gig!!.attendance!!.setCheckout(
-                        true, Date(), 0.0,
-                        0.0, selfieImg,
-                        ""
-                )
-//                viewModel.markAttendance(gig!!.attendance!!, gigId)
-
-            }
         }
     }
 
@@ -449,28 +437,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
 
             val ifAttendanceMarked = it.attendance?.checkInMarked ?: false
 
-            if (!ifAttendanceMarked) {
-                val markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                latitude,
-                                longitude,
-                                selfieImg,
-                                locationAddress
-                        )
-//                viewModel.markAttendance(markAttendance, gigId)
-            } else {
-                it.attendance?.setCheckout(
-                        true,
-                        Date(),
-                        latitude,
-                        longitude,
-                        selfieImg,
-                        locationAddress
-                )
-//                viewModel.markAttendance(it.attendance!!, gigId)
-            }
+            viewModel.markAttendance(
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationAddress,
+                    image = selfieImg,
+                    checkInTimeAccToUser = Timestamp.now(),
+                    remarks = ""
+            )
+
 
         } ?: run {
             FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
@@ -505,23 +480,23 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
             if (!gig?.gigContactDetails!!.contactNumberString.contains("+91")) {
                 viewModel.checkIfTeamLeadersProfileExists("+91" + gig.gigContactDetails!!.contactNumber)
 
-            }else{
+            } else {
                 viewModel.checkIfTeamLeadersProfileExists(gig?.gigContactDetails?.contactNumberString
                         ?: "")
             }
 
         }
-        if (!gig.legalEntity.logo.isNullOrBlank()) {
-            if (gig.legalEntity.logo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                        .load(gig.legalEntity.logo)
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
                         .reference
-                        .child(gig.legalEntity.logo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -532,10 +507,10 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -567,9 +542,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         }
 
 
-        tv_title_gig_page.text = gig?.profile?.title
-        roleNameTV.text =gig?.profile?.title
-        companyNameTV.text = "@ ${gig.legalEntity.getCompanyName()}"
+        tv_title_gig_page.text = gig.getGigTitle()
+        roleNameTV.text = gig.getGigTitle()
+        companyNameTV.text = "@ ${gig.getFullCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "N/A"

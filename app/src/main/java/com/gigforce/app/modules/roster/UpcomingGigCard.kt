@@ -22,7 +22,8 @@ class UpcomingGigCard(
     var title: String = "",
     var cardHeight: Int = 0,
     var isFullDay: Boolean = false,
-    var gigId: String = ""
+    var gigId: String = "",
+    var isNewGigPage : Boolean
 ): MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.upcoming_gig_card, this)
@@ -55,7 +56,7 @@ class UpcomingGigCard(
             cardHeight = 40.px
 
         this.setOnClickListener {
-            GigNavigation.openGigMainPage(findNavController(), gigId)
+            GigNavigation.openGigMainPage(findNavController(), isNewGigPage,gigId)
         }
     }
 }

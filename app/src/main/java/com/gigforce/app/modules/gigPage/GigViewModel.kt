@@ -167,9 +167,9 @@ class GigViewModel constructor(
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
         val userGigs: MutableList<Gig> = extractGigs(querySnapshot)
 
-        val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-            it.endDateTime.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
+            val gigStatus = GigStatus.fromGig(it)
+            gigStatus == GigStatus.UPCOMING || gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING
         }.sortedBy {
             it.startDateTime.seconds
         }

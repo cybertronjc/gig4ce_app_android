@@ -207,8 +207,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         seeMoreBtn.setOnClickListener {
+            val gig = viewModel.currentGig?: return@setOnClickListener
 
-            GigNavigation.openGigMainPage(findNavController(), Bundle().apply {
+            GigNavigation.openGigMainPage(findNavController(), gig.openNewGig(),Bundle().apply {
                 this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
                 this.putBoolean(GigPageFragment.INTENT_EXTRA_COMING_FROM_CHECK_IN, true)
             })
@@ -269,21 +270,21 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     private fun setGigDetailsOnView(gig: Gig) {
         this.gig = gig
-        roleNameTV.text = gig?.profile?.title
-        companyNameTV.text = "@ ${gig.legalEntity.getCompanyName()}"
+        roleNameTV.text = gig.getGigTitle()
+        companyNameTV.text = "@ ${gig.getFullCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
 
-        if (!gig.legalEntity.logo.isNullOrBlank()) {
-            if (gig.legalEntity.logo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                        .load(gig.legalEntity.logo)
+                        .load(gig.getFullCompanyLogo())
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
                         .getReference("companies_gigs_images")
-                        .child(gig.legalEntity.logo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
                             Glide.with(requireContext())
@@ -292,10 +293,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)

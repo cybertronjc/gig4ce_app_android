@@ -166,7 +166,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun openGigDetails(gig: Gig) {
-        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
+        GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
     }
 
 

@@ -75,10 +75,11 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 ArrayList(getGigsWithId(
                         querySnapshot,
                         checkForCompletedGigs = false,
-                        fetchOnGoing = initialLoading
+                        fetchOnGoing = initialLoading,
+                        getUpcomingGig = false
                 ).filter {
                     val gigStatus = GigStatus.fromGig(it)
-                    gigStatus == GigStatus.ONGOING
+                    gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
                 })
         ) else {
             error?.message?.let {
@@ -101,7 +102,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             observableScheduledGigs.value = GigsResponse(
                     true,
                     "Past Gigs Loaded Successfully",
-                    getGigsWithId(querySnapshot, true, fetchOnGoing = false)
+                    getGigsWithId(querySnapshot, true, fetchOnGoing = false, getUpcomingGig = false)
             )
             repositoryCallbacks.removeListener()
         } else {
@@ -125,7 +126,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             observableScheduledGigs.value = GigsResponse(
                     true,
                     "Upcoming Gigs Loaded Successfully",
-                    getGigsWithId(querySnapshot, false, fetchOnGoing = false)
+                    getGigsWithId(querySnapshot, false, fetchOnGoing = false, getUpcomingGig = true)
             )
             repositoryCallbacks.removeListener()
         } else {
@@ -185,7 +186,8 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     private fun getGigsWithId(
             querySnapshot: QuerySnapshot,
             checkForCompletedGigs: Boolean,
-            fetchOnGoing: Boolean
+            fetchOnGoing: Boolean,
+            getUpcomingGig : Boolean
     ): ArrayList<Gig> {
         var userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
@@ -197,14 +199,20 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         if (checkForCompletedGigs) {
             userGigs.retainAll { element ->
                 val gigStatus = GigStatus.fromGig(element)
-                gigStatus == GigStatus.COMPLETED
+                gigStatus == GigStatus.COMPLETED || gigStatus == GigStatus.MISSED
             }
         } else if (fetchOnGoing) {
             userGigs.retainAll { element ->
 
                 val gigStatus = GigStatus.fromGig(element)
-                gigStatus == GigStatus.ONGOING
+                gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
 
+            }
+        } else if(getUpcomingGig){
+            userGigs.retainAll { element ->
+
+                val gigStatus = GigStatus.fromGig(element)
+                gigStatus == GigStatus.UPCOMING
             }
         }
         return userGigs as ArrayList<Gig>

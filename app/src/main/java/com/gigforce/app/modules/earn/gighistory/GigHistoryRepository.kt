@@ -39,12 +39,11 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
         val gigQuery =
                 if (lastVisible != null) getCollectionReference()
                         .whereEqualTo("gigerId", getUID())
-                        .whereLessThan("endDateTime", Date())
-                        .orderBy("endDateTime", Query.Direction.DESCENDING).startAfter(lastVisible)
+                        .orderBy("endDateTime", Query.Direction.DESCENDING)
+                        .startAfter(lastVisible)
                         .limit(limit)
                 else
                     getCollectionReference().whereEqualTo("gigerId", getUID())
-                            .whereLessThan("endDateTime",  Date())
                             .orderBy("endDateTime", Query.Direction.DESCENDING)
                             .limit(limit)
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -64,14 +63,12 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
         val gigQuery =
                 if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
-                        .whereGreaterThan("checkOutBeforeSlot",  Date())
-                        .orderBy("checkOutBeforeSlot", Query.Direction.ASCENDING)
+                        .orderBy("startDateTime", Query.Direction.ASCENDING)
                         .startAfter(lastVisible)
                         .limit(limit)
                 else
                     getCollectionReference().whereEqualTo("gigerId", getUID())
-                            .whereGreaterThan("checkOutBeforeSlot",  Date())
-                            .orderBy("checkOutBeforeSlot", Query.Direction.ASCENDING)
+                            .orderBy("startDateTime", Query.Direction.ASCENDING)
                             .limit(limit)
 
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->

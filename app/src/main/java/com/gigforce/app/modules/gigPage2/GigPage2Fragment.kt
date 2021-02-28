@@ -395,17 +395,17 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun showCommonDetails(gig: Gig) {
 
-        if (!gig.legalEntity.logo.isNullOrBlank()) {
-            if (gig.legalEntity.logo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                        .load(gig.legalEntity.logo)
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(company_logo_iv)
             } else {
                 val imageRef = FirebaseStorage.getInstance()
                         .reference
-                        .child(gig.legalEntity.logo!!)
+                        .child(gig.getFullCompanyLogo()!!)
 
                 GlideApp.with(requireContext())
                         .load(imageRef)
@@ -413,10 +413,10 @@ class GigPage2Fragment : BaseFragment(),
                         .into(company_logo_iv)
             }
         } else {
-            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
 
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
@@ -426,8 +426,8 @@ class GigPage2Fragment : BaseFragment(),
             company_logo_iv.setImageDrawable(drawable)
         }
 
-        gig_title_tv.text = gig.profile.title
-        gig_company_name_tv.text = "${gig.legalEntity.getCompanyName()}"
+        gig_title_tv.text = gig.getGigTitle()
+        gig_company_name_tv.text = "${gig.getFullCompanyName()}"
 
         gig_type.text = if (gig.isFullDay) ": Full time" else ": Part time"
 
@@ -535,10 +535,10 @@ class GigPage2Fragment : BaseFragment(),
                                 currentDate.monthValue,
                                 1
                         ),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.legalEntity.logo,
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.legalEntity.getCompanyName(),
+                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
+                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.profile.title
+                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
                 )
                 )
             }

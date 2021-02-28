@@ -120,7 +120,7 @@ class GigerIdFragment : BaseFragment() {
     }
 
     private fun initUi(gig: Gig, gigOrder: GigOrder) {
-        tv_designation_giger_id.text = gig.profile.title
+        tv_designation_giger_id.text = gig.getGigTitle()
         tv_giger_location_giger_id.text = "${gigOrder.getGigOrderCity()}, ${gigOrder.getGigOrderState()}"
         tv_gig_since_giger_id.text =
                 "${resources.getString(R.string.giger_since)} ${
@@ -129,17 +129,17 @@ class GigerIdFragment : BaseFragment() {
                             gig?.startDateTime?.toDate()
                     )
                 }"
-        if (!gig.legalEntity.logo.isNullOrBlank()) {
-            if (gig.legalEntity.logo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                        .load(gig.legalEntity.logo)
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(iv_brand_logo_giger_id)
             } else {
                 FirebaseStorage.getInstance()
                         .reference
-                        .child(gig.legalEntity.logo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -150,10 +150,10 @@ class GigerIdFragment : BaseFragment() {
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -161,7 +161,7 @@ class GigerIdFragment : BaseFragment() {
 
             iv_brand_logo_giger_id.setImageDrawable(drawable)
         }
-        tv_brand_name_giger_id.text = "@${gig.legalEntity.getCompanyName()}"
+        tv_brand_name_giger_id.text = "@${gig.getFullCompanyName()}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
 
         tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", gigOrder.endDate.toDate())

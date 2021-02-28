@@ -8,7 +8,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import java.time.LocalDateTime
 
 enum class GigStatus constructor(
-    private val string: String
+        private val string: String
 ) {
     UPCOMING("upcoming"),
     DECLINED("declined"),
@@ -60,6 +60,35 @@ enum class GigStatus constructor(
 
         fun fromGig(gig: Gig): GigStatus {
 
+            return if (gig.openNewGig()) {
+                getGigStatus(gig)
+            } else {
+                getGigStatusLegacy(gig)
+            }
+        }
+
+        private fun getGigStatusLegacy(gig: Gig): GigStatus {
+
+            return if (gig.isPresentGig()) {
+                if (gig.isCheckInMarked()) {
+                    ONGOING
+                } else {
+                    PENDING
+                }
+            } else if (gig.isPastGig()) {
+                if (gig.isCheckInOrCheckOutMarked()) {
+                    COMPLETED
+                } else {
+                    MISSED
+                }
+            } else if (gig.isUpcomingGig()) {
+                UPCOMING
+            } else {
+                throw IllegalArgumentException("GigStatus : Status Supplied doesn't match with any")
+            }
+        }
+
+        private fun getGigStatus(gig: Gig): GigStatus {
             if (gig.gigStatus.isBlank())
                 throw IllegalArgumentException("GigStatus : Status cannot be empty")
 
@@ -78,7 +107,7 @@ enum class GigStatus constructor(
             }
 
             if (currentTime.isAfter(gig.endDateTime.toLocalDateTime())
-                && !gig.isCheckInMarked()
+                    && !gig.isCheckInMarked()
             ) {
                 return MISSED
             }
@@ -88,21 +117,21 @@ enum class GigStatus constructor(
             }
 
             if (currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime()) &&
-                gig.isCheckInMarked()
+                    gig.isCheckInMarked()
             ) {
                 return ONGOING
             }
 
             if (currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime()) &&
-                currentTime.isBefore(gig.checkInAfterTime.toLocalDateTime()) &&
-                gig.isCheckInMarked().not()
+                    currentTime.isBefore(gig.checkInAfterTime.toLocalDateTime()) &&
+                    gig.isCheckInMarked().not()
             ) {
                 return PENDING
             }
 
             if (currentTime.isAfter(gig.checkInAfterTime.toLocalDateTime()) &&
-                currentTime.isBefore(gig.endDateTime.toLocalDateTime()) &&
-                gig.isCheckInMarked().not()
+                    currentTime.isBefore(gig.endDateTime.toLocalDateTime()) &&
+                    gig.isCheckInMarked().not()
             ) {
                 return NO_SHOW
             }

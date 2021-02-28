@@ -270,8 +270,8 @@ class GigDetailsFragment : BaseFragment(),
 
     private fun setGigDetailsOnView(gig: Gig) {
 
-        tv_title_gig_details.text = gig?.profile?.title
-        roleNameTV.text = gig?.profile?.title
+        tv_title_gig_details.text = gig.getGigTitle()
+        roleNameTV.text = gig?.getGigTitle()
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
         gig_desc_tv.text = gig.description
 

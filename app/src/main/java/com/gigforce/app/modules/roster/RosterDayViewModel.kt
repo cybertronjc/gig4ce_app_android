@@ -495,7 +495,7 @@ class RosterDayViewModel constructor(
             if (it.isPastGig()) {
                 val widget = CompletedGigCard(
                         topBar!!.context,
-                        title = it.profile.title ?: "",
+                        title = it.getGigTitle(),
                         gigSuccess = it.isGigCompleted,
                         paymentSuccess = it.isPaymentDone,
                         rating = it.gigRating,
@@ -503,14 +503,15 @@ class RosterDayViewModel constructor(
                         duration = 0.0F,
                         cardHeight = itemHeight.px,
                         isFullDay = true,
-                        gigId = it.gigId
+                        gigId = it.gigId,
+                        isNewgigPage = it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
                 // TODO: Implement current day gig card
                 val widget = CurrentGigCard(
                         topBar!!.context,
-                        title = it.profile.title ?: "",
+                        title = it.getGigTitle() ?: "",
                         startHour = it.startHour,
                         startMinute = it.startMinute,
                         duration = 0.0F,
@@ -522,13 +523,14 @@ class RosterDayViewModel constructor(
             } else if (it.isUpcomingGig()) {
                 val widget = UpcomingGigCard(
                         topBar!!.context,
-                        title = it.profile.title ?: "",
+                        title = it.getGigTitle(),
                         startHour = it.startHour,
                         startMinute = it.startMinute,
                         duration = 0.0F,
                         cardHeight = itemHeight.px,
                         isFullDay = true,
-                        gigId = it.gigId
+                        gigId = it.gigId,
+                        isNewGigPage = it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else {

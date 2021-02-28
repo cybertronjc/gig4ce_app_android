@@ -159,8 +159,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected = true
                     viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
                     viewHolderGigDetails.itemView.rl_scheduled_gig_hist.visibility = View.VISIBLE
-                    holder.itemView.tv_designation_rv_gig_hist.text = gig.profile.title
-                    holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.legalEntity.getCompanyName()}"
+                    holder.itemView.tv_designation_rv_gig_hist.text = gig.getGigTitle()
+                    holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.getFullCompanyName()}"
                     holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
                     holder.itemView.tv_rating_rv_gig_hist.text = gig.gigRating.toString()
                     holder.itemView.tv_time_rv_gig_hist.text = ""
@@ -203,17 +203,17 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             gig: Gig,
             viewHolderGigDetails: ViewHolderGigDetails
     ) {
-        if (!gig.legalEntity.logo .isNullOrBlank()) {
-            if (gig.legalEntity.logo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(viewHolderGigDetails.itemView.context)
-                        .load(gig.legalEntity.logo)
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
                         .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
             } else {
                 FirebaseStorage.getInstance()
                         .reference
-                        .child(gig.legalEntity.logo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -224,10 +224,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
             }
         } else {
-            val companyInitials = if (gig.legalEntity.getCompanyName().isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.legalEntity.getCompanyName()!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(

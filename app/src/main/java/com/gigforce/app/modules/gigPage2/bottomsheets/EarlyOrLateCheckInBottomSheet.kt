@@ -116,7 +116,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 your_checkin_time_tv.text = "Your Check-in"
                 check_in_label.text = "You are Checking in late for this Gig. This will be notified to your manager."
 
-                your_checkin_layout.gone()
+                your_checkin_layout.visible()
             }
             CHECK_OUT_TYPE_EARLY -> {
                 title_bar.text = "Early Checkout"

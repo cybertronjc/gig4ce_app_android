@@ -21,8 +21,9 @@ class CurrentGigCard(
     var title: String = "",
     var cardHeight: Int = 0,
     var isFullDay: Boolean = false,
-    var gigId: String = ""
-): MaterialCardView(context) {
+    var gigId: String = "",
+    var isNewGigPage: Boolean = false
+    ): MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.current_gig_card, this)
         setCardHeight()
@@ -54,7 +55,7 @@ class CurrentGigCard(
         cardHeight = 40.px
 
         this.setOnClickListener {
-            GigNavigation.openGigAttendancePage(findNavController(),Bundle().apply {
+            GigNavigation.openGigAttendancePage(findNavController(),isNewGigPage, Bundle().apply {
                 this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gigId)
             })
         }
