@@ -128,6 +128,10 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
                 callbacks.getAllCities(holder.adapterPosition, childPosition)
             }
 
+            override fun refresh() {
+                callbacks.refresh()
+            }
+
         })
 
     }
@@ -166,7 +170,7 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         fun getStates(childPosition: Int, parentPosition: Int)
         fun getCities(state: States, parentPosition: Int)
         fun getAllCities(adapterPosition: Int, childPosition: Int)
-
+        fun refresh()
 
     }
 }

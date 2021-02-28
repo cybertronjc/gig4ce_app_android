@@ -28,6 +28,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -265,11 +266,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun openChat(enrollUser: EnrolledUser) {
         val bundle = Bundle()
-        bundle.putString(AppConstants.IMAGE_URL, enrollUser.profileAvatarThumbnail)
-        bundle.putString(AppConstants.CONTACT_NAME, enrollUser.name)
-        bundle.putString("chatHeaderId", "")
-        bundle.putString("forUserId", viewModel.getUID())
-        bundle.putString("otherUserId", enrollUser.id)
+
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, enrollUser.profileAvatarThumbnail)
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
+
+        bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID,enrollUser.id)
+
         bundle.putString(StringConstants.MOBILE_NUMBER.value, enrollUser.mobileNumber)
         bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
         navigate(R.id.chatScreenFragment, bundle)

@@ -53,6 +53,9 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
+import com.gigforce.app.views.MonthYearPickerDialog
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
@@ -71,6 +74,10 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
+import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+
+import java.util.*
 
 class LandingScreenFragment : BaseFragment() {
 
@@ -117,7 +124,6 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
-//        checkForDeepLink()
         setTipsInViewModel()
         initUI()
         initializeExploreByRole()
@@ -128,7 +134,7 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
-
+        //checkForDeepLink()
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {

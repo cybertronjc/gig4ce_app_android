@@ -25,7 +25,7 @@ import com.gigforce.app.modules.photocrop.*
 import com.gigforce.app.modules.verification.models.OCRDocsData
 import com.gigforce.app.modules.verification.models.PostDataOCRs
 import com.gigforce.app.modules.verification.service.RetrofitFactory
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

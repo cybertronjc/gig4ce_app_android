@@ -15,7 +15,7 @@ import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.MainLearningFragment
 import com.gigforce.app.modules.learning.models.Module
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_my_journey.*

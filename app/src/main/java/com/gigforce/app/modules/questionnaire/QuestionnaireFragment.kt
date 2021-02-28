@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.questionnaire
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,7 @@ import java.util.*
 
 
 class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuestionnaireCallbacks,
-        RejectionDialog.RejectionDialogCallbacks {
+    RejectionDialog.RejectionDialogCallbacks {
     private var parentPosition: Int = -1
     private var childPosition: Int = -1
     private lateinit var ratioLayoutManager: RatioLayoutManager
@@ -41,15 +42,15 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     private lateinit var list: ArrayList<Dependency>
 
     private lateinit var viewModel: ViewModelQuestionnaire
-    private var selectedPosition = 0;
+    private var selectedPosition = 0
     private val adapter: AdapterQuestionnaire by lazy {
         AdapterQuestionnaire()
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.layout_questionnaire_fragment, inflater, container)
 
@@ -60,13 +61,18 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         getDataFromIntents(savedInstanceState)
 
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(ViewModelQuestionnaire::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(ViewModelQuestionnaire::class.java)
         setupRecycler()
         initObservers()
         initClicks()
+
+        //need to resolve this : list not refreshing after state city loaded
+        Handler().postDelayed({
+            adapter.notifyDataSetChanged()
+        }, 1000)
     }
 
 
@@ -83,10 +89,10 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     override fun onBackPressed(): Boolean {
         if (FROM_CLIENT_ACTIVATON) {
             navFragmentsData?.setData(
-                    bundleOf(
-                            StringConstants.BACK_PRESSED.value to true
+                bundleOf(
+                    StringConstants.BACK_PRESSED.value to true
 
-                    )
+                )
             )
 
             popBackState()
@@ -102,7 +108,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
 
 
         }
@@ -112,7 +118,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
             FROM_CLIENT_ACTIVATON =
-                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
 
 
         }
@@ -131,71 +137,72 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
             onBackPressed()
         }
         PushDownAnim.setPushDownAnimTo(tv_action_questionnaire)
-                .setOnClickListener(View.OnClickListener {
-                    if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
-                        val items = adapter.items.filter { questions ->
-                            questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer ||
-                                    questions.type == "date" && checkForDateRange(questions)
-                        }
-                        if (items.isEmpty()) {
-                            pb_questionnaire.visible()
-                            viewModel.addQuestionnaire(
-                                    mJobProfileId,
-                                    mTitle,
-                                    mType,
-                                    adapter.items
-                            )
-                        } else {
-                            val rejectionDialog = RejectionDialog()
-                            rejectionDialog.setCallbacks(this)
-                            rejectionDialog
-                            rejectionDialog.arguments = bundleOf(
-                                    StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
-                                    StringConstants.TITLE.value to viewModel.observableQuestionnaireResponse.value?.rejectionTitle,
-                                    StringConstants.REJECTION_ILLUSTRATION.value to viewModel.observableQuestionnaireResponse.value?.rejectionIllustration,
-                                    StringConstants.CONTENT.value to items.map { it.rejectionPoint }
-                            )
-                            rejectionDialog.show(
-                                    parentFragmentManager,
-                                    DrivingCertSuccessDialog::class.java.name
-                            )
+            .setOnClickListener(View.OnClickListener {
 
-                        }
-
-                        return@OnClickListener
+                if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
+                    val items = adapter.items.filter { questions ->
+                        questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer ||
+                                questions.type == "date" && checkForDateRange(questions)
                     }
-                    if (adapter.items[selectedPosition].selectedAnswer != -1) {
-                        selectedPosition += 1
-                        ratioLayoutManager.setScrollEnabled(true)
-                        smoothScroller.targetPosition = selectedPosition
-                        ratioLayoutManager.startSmoothScroll(smoothScroller)
-                        adapter.notifyItemChanged(selectedPosition)
-                        rv_questionnaire.postDelayed({
-                            ratioLayoutManager.setScrollEnabled(false)
-
-                        }, 500)
-
-
+                    if (items.isEmpty()) {
+                        pb_questionnaire.visible()
+                        viewModel.addQuestionnaire(
+                            mJobProfileId,
+                            mTitle,
+                            mType,
+                            adapter.items
+                        )
                     } else {
-                        showToast(getString(R.string.answer_the_ques))
+                        val rejectionDialog = RejectionDialog()
+                        rejectionDialog.setCallbacks(this)
+                        rejectionDialog
+                        rejectionDialog.arguments = bundleOf(
+                            StringConstants.REJECTION_TYPE.value to RejectionDialog.REJECTION_QUESTIONNAIRE,
+                            StringConstants.TITLE.value to viewModel.observableQuestionnaireResponse.value?.rejectionTitle,
+                            StringConstants.REJECTION_ILLUSTRATION.value to viewModel.observableQuestionnaireResponse.value?.rejectionIllustration,
+                            StringConstants.CONTENT.value to items.map { it.rejectionPoint }
+                        )
+                        rejectionDialog.show(
+                            parentFragmentManager,
+                            DrivingCertSuccessDialog::class.java.name
+                        )
 
                     }
 
+                    return@OnClickListener
+                }
+                if (selectedPosition > -1 && adapter.items[selectedPosition].selectedAnswer != -1) {
+                    selectedPosition += 1
+                    ratioLayoutManager.setScrollEnabled(true)
+                    smoothScroller.targetPosition = selectedPosition
+                    ratioLayoutManager.startSmoothScroll(smoothScroller)
+                    adapter.notifyItemChanged(selectedPosition)
+                    rv_questionnaire.postDelayed({
+                        ratioLayoutManager.setScrollEnabled(false)
 
-                })
+                    }, 500)
+
+
+                } else {
+                    showToast(getString(R.string.answer_the_ques))
+
+                }
+
+
+            })
 
 
     }
 
     private fun checkForDateRange(questions: Questions): Boolean {
-        val selectedDate: Date = questions.selectedDate ?: Date();
+        val selectedDate: Date = questions.selectedDate ?: Date()
         val quesObj = questions.validation
         if (quesObj?.validationRequire == true) {
             if (quesObj.outRangeRequire) {
                 val split = quesObj.outRange?.beforeDate?.split(":")
-                val yearToMinus = split?.get(0)?.toInt() ?: 0;
-                val monthToMinus = split?.get(1)?.toInt() ?: 0;
-                val daysToMinus = split?.get(2)?.toInt() ?: 0;
+                val yearToMinus = split?.get(0)?.toInt() ?: 0
+                val monthToMinus = split?.get(1)?.toInt() ?: 0
+                val daysToMinus = split?.get(2)?.toInt() ?: 0
                 val currentDate = Calendar.getInstance()
                 currentDate.add(Calendar.YEAR, -yearToMinus)
                 currentDate.add(Calendar.MONTH, -monthToMinus)
@@ -261,27 +268,27 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
         adapter.setCallbacks(this)
         val ratioToCover = 0.85f
         ratioLayoutManager = RatioLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false,
-                ratioToCover
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false,
+            ratioToCover
         )
         ratioLayoutManager.setScrollEnabled(false)
         rv_questionnaire.layoutManager = ratioLayoutManager
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(rv_questionnaire)
         rv_questionnaire.addItemDecoration(
-                RVPagerSnapFancyDecorator(
-                        requireContext(),
-                        (getScreenWidth(requireActivity()).width * ratioToCover).toInt(),
-                        0.015f
-                )
+            RVPagerSnapFancyDecorator(
+                requireContext(),
+                (getScreenWidth(requireActivity()).width * ratioToCover).toInt(),
+                0.015f
+            )
         )
         rv_questionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 tb_layout_questionnaire.getTabAt(ratioLayoutManager.findFirstCompletelyVisibleItemPosition())
-                        ?.select();
+                    ?.select()
             }
         })
 
@@ -301,8 +308,8 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     }
 
     override fun getStates(childPosition: Int, parentPosition: Int) {
-        this.childPosition = childPosition;
-        this.parentPosition = parentPosition;
+        this.childPosition = childPosition
+        this.parentPosition = parentPosition
         viewModel.getState()
 
     }
@@ -313,9 +320,13 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
     }
 
     override fun getAllCities(adapterPosition: Int, childPosition: Int) {
-        this.parentPosition = adapterPosition;
-        this.childPosition = childPosition;
+        this.parentPosition = adapterPosition
+        this.childPosition = childPosition
         viewModel.getAllCities()
+    }
+
+    override fun refresh() {
+//        adapter.notifyDataSetChanged()
     }
 
     override fun onClickRefer() {

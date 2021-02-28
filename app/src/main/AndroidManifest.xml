@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -30,8 +29,9 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
+        android:theme="@style/GigforceTheme"
+        android:name=".MainApplication"
         android:largeHeap="true"
-        android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -48,9 +48,15 @@
                app to run.
         -->
 
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="your API key" />-->
+
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="your API key" />
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value"
+            />
 
         <!--        <meta-data-->
         <!--            android:name="CLEVERTAP_ACCOUNT_ID"-->
@@ -84,7 +90,7 @@
         <service
             android:name=".modules.chatmodule.service.FetchContactsService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"/>
 
 
         <meta-data
@@ -159,6 +165,14 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.gigforce.app.verification.open_verification_page" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.chats.open_chat" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.chats.open_group_chat" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

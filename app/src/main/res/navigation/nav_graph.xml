@@ -34,6 +34,10 @@
         android:label="AddLanguageBottomSheetFragment" />
 
     <fragment
+        android:id="@+id/bsFragment"
+        android:name="com.gigforce.giger_app.screens.FeaturesBSFragment" />
+
+    <fragment
         android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
@@ -702,7 +706,13 @@
         android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
         android:label="fragment_home_bottom_sheet"
 
-        tools:layout="@layout/home_screen_bottom_sheet_fragment" />
+        tools:layout="@layout/home_screen_bottom_sheet_fragment" >
+
+        <action
+            android:id="@+id/action_fragment_to_second_graph"
+            app:destination="@id/nav_graph_chat" />
+        
+    </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
         android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
@@ -803,6 +813,13 @@
         tools:layout="@layout/layout_fragment_activation_gig" />
 
     <fragment
+        android:id="@+id/application_submitted_fragment"
+        android:name="com.gigforce.app.modules.client_activation.ApplicationSubmittedFragment"
+        android:label="fragment_application_submitted"
+        tools:layout="@layout/fragment_application_submitted"
+        />
+
+    <fragment
         android:id="@+id/fragment_upload_cert"
         android:name="com.gigforce.app.modules.client_activation.UploadDrivingCertificate"
         android:label="fragment_upload_cert"
@@ -885,6 +902,7 @@
         android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
+    <include app:graph="@navigation/nav_graph_chat" />
 
 </navigation>
 

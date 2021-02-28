@@ -19,20 +19,40 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+ import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.NotificationConstants
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.INavigationProvider
+import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
-class MainActivity : AppCompatActivity(), NavFragmentsData {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(),
+    NavFragmentsData,
+    INavigationProvider
+{
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
+
+    fun getNavController():NavController{
+        return this.navController
+    }
+
+    @Inject
+    lateinit var navigation:INavigation
+
+    override fun getINavigation(): INavigation {
+        return navigation
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTaskRoot
@@ -53,7 +73,9 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(StringConstants.JOB_PROFILE_ID.value),
+                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                            StringConstants.JOB_PROFILE_ID.value
+                        ),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),
@@ -105,6 +127,22 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 navController.popAllBackStates()
                 navController.navigate(
                     R.id.gigerVerificationFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.chatScreenFragment,
+                    intent.extras
+                )
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
+                Log.d("MainActivity", "redirecting to gig verification page")
+                navController.popAllBackStates()
+                navController.navigate(
+                    R.id.groupChatFragment,
                     intent.extras
                 )
             }

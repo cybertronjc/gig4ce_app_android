@@ -591,8 +591,14 @@ class GroupChatFragment : BaseFragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        findNavController().popBackStack(R.id.contactScreenFragment, false)
-        return true
+
+        try {
+            findNavController().getBackStackEntry(R.id.contactScreenFragment)
+            findNavController().popBackStack(R.id.contactScreenFragment, false)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     override fun onRequestPermissionsResult(

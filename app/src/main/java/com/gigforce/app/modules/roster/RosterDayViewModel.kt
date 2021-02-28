@@ -50,7 +50,7 @@ class RosterDayViewModel constructor(
     private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
 
-    lateinit var dayContext: Context
+//    var dayContext: Context? = null
 
     var userGigs = HashMap<String, ArrayList<Gig>>()
 
@@ -484,7 +484,7 @@ class RosterDayViewModel constructor(
     }
 
 
-    fun setFullDayGigs(context: Context? = null) {
+    fun setFullDayGigs() {
         val currentDate = currentDateTime.value!!
         val fullDayGig = getFilteredGigs(currentDate.toDate, "fullday")
 

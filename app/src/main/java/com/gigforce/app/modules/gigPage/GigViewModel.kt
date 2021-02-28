@@ -268,7 +268,7 @@ class GigViewModel constructor(
         }.onSuccess {
             _gigDetails.value = Lce.content(it)
         }.onFailure {
-            _gigDetails.value = Lce.error(it.message!!)
+            it.message?.let { it1->_gigDetails.value =  Lce.error(it1) }
         }
     }
 

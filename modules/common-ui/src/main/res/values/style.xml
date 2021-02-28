@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
+    <style name="Theme.RadioButtonLipstickPink" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="buttonTint">@drawable/radio_button_drawable</item>
+    </style>
+
+
+</resources>

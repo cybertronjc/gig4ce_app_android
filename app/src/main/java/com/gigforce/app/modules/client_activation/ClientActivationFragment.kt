@@ -35,6 +35,7 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -291,19 +292,19 @@ class ClientActivationFragment : BaseFragment(),
                     else
                         tv_applied_client_activation.visible()
                     tv_applied_client_activation.text =
-                            if (jpApplication.status == "Draft" || jpApplication.status == "Applied") "Pending" else jpApplication.status
+                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
                     tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                            if (jpApplication.status == "Draft" || jpApplication.status == "Applied" || jpApplication.status == "Inprocess") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
+                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.drawable.ic_applied else R.drawable.ic_application_rejected,
                             0,
                             0,
                             0
                     )
                     setTextViewColor(
                             tv_applied_client_activation,
-                            if (jpApplication.status == "Draft" || jpApplication.status == "Applied" || jpApplication.status == "Inprocess") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
+                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.color.activated_color else R.color.rejected_color
                     )
                     var actionButtonText =
-                            if (jpApplication.status == "Draft") getString(R.string.complete_application) else if (jpApplication.status == "Applied") getString(
+                            if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
                                     R.string.complete_activation
                             ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
                     if (actionButtonText == "")
@@ -605,7 +606,7 @@ class ClientActivationFragment : BaseFragment(),
     }
 
     fun markAsInterestClick(jpApplication: JpApplication?) {
-        if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Draft") {
+        if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
             if (mClientViaDeeplink == true) {
                 if (location == null) {
                     showToast(getString(R.string.set_location_to_high_accuracy))
@@ -629,7 +630,7 @@ class ClientActivationFragment : BaseFragment(),
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
             }
 
-        } else if (jpApplication.status == "Applied") {
+        } else if (jpApplication.status == "Inprocess") {
             navigate(
                     R.id.fragment_gig_activation, bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
