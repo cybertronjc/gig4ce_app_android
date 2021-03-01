@@ -20,8 +20,8 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
 
     private var checkInType: String? = null
     private var actualCheckInTime: String? = null
-    private var onEarlyOrLateCheckInBottomSheetClickListener: OnEarlyOrLateCheckInBottomSheetClickListener? = null
     private var checkInTimeAccToUser: Date? = null
+    var onEarlyOrLateCheckInBottomSheetClickListener: OnEarlyOrLateCheckInBottomSheetClickListener? = null
 
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
@@ -53,6 +53,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.setCanceledOnTouchOutside(false)
         getDataFromIntents(arguments, savedInstanceState)
 
         initView()
@@ -139,6 +140,8 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
     }
 
     companion object {
+        const val TAG = "EarlyOrLateCheckInBottomSheet"
+
         const val INTENT_CHECK_IN_TYPE = "check_in_type"
         const val INTENT_ACTUAL_CHECKIN_TIME = "actual_checkin_time"
 
@@ -154,6 +157,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
         ) {
             EarlyOrLateCheckInBottomSheet().apply {
 
+                this.isCancelable = false
                 val args = bundleOf(
                         INTENT_CHECK_IN_TYPE to CHECK_IN_TYPE_EARLY,
                         INTENT_ACTUAL_CHECKIN_TIME to actualCheckInTime
@@ -162,7 +166,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 this.onEarlyOrLateCheckInBottomSheetClickListener =
                         onEarlyOrLateCheckInBottomSheetClickListener
 
-                show(childFragmentMgr, "EarlyOrLateCheckInBottomSheet")
+                show(childFragmentMgr, TAG)
             }
         }
 
@@ -173,6 +177,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
         ) {
             EarlyOrLateCheckInBottomSheet().apply {
 
+                this.isCancelable = false
                 val args = bundleOf(
                         INTENT_CHECK_IN_TYPE to CHECK_IN_TYPE_LATE,
                         INTENT_ACTUAL_CHECKIN_TIME to actualCheckInTime
@@ -181,7 +186,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 this.onEarlyOrLateCheckInBottomSheetClickListener =
                         onEarlyOrLateCheckInBottomSheetClickListener
 
-                show(childFragmentMgr, "EarlyOrLateCheckInBottomSheet")
+                show(childFragmentMgr, TAG)
             }
         }
 
@@ -193,6 +198,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
         ) {
             EarlyOrLateCheckInBottomSheet().apply {
 
+                this.isCancelable = false
                 val args = bundleOf(
                         INTENT_CHECK_IN_TYPE to CHECK_OUT_TYPE_EARLY,
                         INTENT_ACTUAL_CHECKIN_TIME to actualCheckInTime
@@ -201,7 +207,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 this.onEarlyOrLateCheckInBottomSheetClickListener =
                         onEarlyOrLateCheckInBottomSheetClickListener
 
-                show(childFragmentMgr, "EarlyOrLateCheckInBottomSheet")
+                show(childFragmentMgr, TAG)
             }
         }
 
@@ -212,6 +218,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
         ) {
             EarlyOrLateCheckInBottomSheet().apply {
 
+                this.isCancelable = false
                 val args = bundleOf(
                         INTENT_CHECK_IN_TYPE to CHECK_OUT_TYPE_LATE,
                         INTENT_ACTUAL_CHECKIN_TIME to actualCheckInTime
@@ -220,7 +227,7 @@ class EarlyOrLateCheckInBottomSheet : BottomSheetDialogFragment() {
                 this.onEarlyOrLateCheckInBottomSheetClickListener =
                         onEarlyOrLateCheckInBottomSheetClickListener
 
-                show(childFragmentMgr, "EarlyOrLateCheckInBottomSheet")
+                show(childFragmentMgr, TAG)
             }
         }
     }
