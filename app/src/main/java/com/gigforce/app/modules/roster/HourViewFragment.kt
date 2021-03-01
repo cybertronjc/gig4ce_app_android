@@ -293,7 +293,8 @@ class HourViewFragment : RosterBaseFragment() {
                             startMinute = gig.startMinute,
                             duration = gig.duration,
                             title = gig.getGigTitle(),
-                            cardHeight = (itemHeight * gig.duration).toInt().px
+                            cardHeight = (itemHeight * gig.duration).toInt().px,
+                            isNewGigPage = gig.openNewGig()
                     )
                     currentCard.id = View.generateViewId()
                     currentCard.tag = gig.tag

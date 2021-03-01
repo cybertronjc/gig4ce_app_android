@@ -517,7 +517,8 @@ class RosterDayViewModel constructor(
                         duration = 0.0F,
                         cardHeight = itemHeight.px,
                         isFullDay = true,
-                        gigId = it.gigId
+                        gigId = it.gigId,
+                        isNewGigPage =  it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
