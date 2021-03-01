@@ -205,7 +205,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
+                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
 
                                 MaterialAlertDialogBuilder(requireContext())
                                         .setTitle(getString(R.string.alert))
