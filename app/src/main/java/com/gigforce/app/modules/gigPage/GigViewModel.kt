@@ -14,6 +14,7 @@ import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -273,10 +274,20 @@ class GigViewModel constructor(
 
                val profile = profileFirebaseRepository.getProfileDataIfExist(gig.businessContact!!.uid)
                 profile?.let {
-                    gig.businessContact?.profilePicture = if(!profile.profileAvatarThumbnail.isNullOrBlank()){
-                        profile.profileAvatarThumbnail
+                    gig.businessContact?.profilePicture = if(!it.profileAvatarThumbnail.isNullOrBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarThumbnail}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
                     } else if(profile.profileAvatarName.isNotBlank()){
-                        profile.profileAvatarName
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarName}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
                     } else{
                         ""
                     }
@@ -287,10 +298,20 @@ class GigViewModel constructor(
 
                 val profile = profileFirebaseRepository.getProfileDataIfExist(gig.agencyContact!!.uid)
                 profile?.let {
-                    gig.agencyContact?.profilePicture = if(!profile.profileAvatarThumbnail.isNullOrBlank()){
-                        profile.profileAvatarThumbnail
+                    gig.agencyContact?.profilePicture = if(!it.profileAvatarThumbnail.isNullOrBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarThumbnail}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
                     } else if(profile.profileAvatarName.isNotBlank()){
-                        profile.profileAvatarName
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarName}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
                     } else{
                         ""
                     }

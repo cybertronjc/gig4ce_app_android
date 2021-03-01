@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.gigPage2.adapters
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,13 +86,13 @@ class GigPeopleToExpectAdapter(
 
             if (this.profilePicture != null) {
 
-               val storageRef =  FirebaseStorage
-                    .getInstance()
-                    .reference
-                    .child("profile_pics/${this.profilePicture}")
+//               val storageRef =  FirebaseStorage
+//                    .getInstance()
+//                    .reference
+//                    .child("profile_pics/${this.profilePicture}")
 
                 Glide.with(context.applicationContext)
-                    .load(storageRef)
+                    .load(Uri.parse(profilePicture))
                     .placeholder(R.drawable.ic_avatar_male)
                     .circleCrop()
                     .into(userImageTV)
