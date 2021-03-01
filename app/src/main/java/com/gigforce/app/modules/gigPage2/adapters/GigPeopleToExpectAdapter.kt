@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.ContactPerson
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.recycler_item_gig_people_to_expect.view.*
 
 interface GigPeopleToExpectAdapterClickListener {
@@ -20,9 +21,9 @@ interface GigPeopleToExpectAdapterClickListener {
 }
 
 class GigPeopleToExpectAdapter(
-        private val context: Context
+    private val context: Context
 ) :
-        RecyclerView.Adapter<GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder>() {
+    RecyclerView.Adapter<GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder>() {
 
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigPeopleToExpectAdapterClickListener? = null
@@ -38,8 +39,8 @@ class GigPeopleToExpectAdapter(
     }
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): GigPeopleToExpectAdapter.GigPeopleToExpectViewHolder {
 
         if (!::mLayoutInflater.isInitialized) {
@@ -47,11 +48,11 @@ class GigPeopleToExpectAdapter(
         }
 
         return GigPeopleToExpectViewHolder(
-                mLayoutInflater.inflate(
-                        R.layout.recycler_item_gig_people_to_expect,
-                        parent,
-                        false
-                )
+            mLayoutInflater.inflate(
+                R.layout.recycler_item_gig_people_to_expect,
+                parent,
+                false
+            )
         )
     }
 
@@ -64,7 +65,7 @@ class GigPeopleToExpectAdapter(
     override fun getItemCount() = contactPerson.size
 
     inner class GigPeopleToExpectViewHolder(
-            itemView: View
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         private val userImageTV = itemView.user_image_iv
@@ -84,16 +85,22 @@ class GigPeopleToExpectAdapter(
 
             if (this.profilePicture != null) {
 
+               val storageRef =  FirebaseStorage
+                    .getInstance()
+                    .reference
+                    .child("profile_pics/${this.profilePicture}")
+
                 Glide.with(context.applicationContext)
-                        .load(this.profilePicture)
-                        .circleCrop()
-                        .into(userImageTV)
+                    .load(storageRef)
+                    .placeholder(R.drawable.ic_avatar_male)
+                    .circleCrop()
+                    .into(userImageTV)
             } else {
 
                 Glide.with(context.applicationContext)
-                        .load(R.drawable.ic_avatar_male)
-                        .circleCrop()
-                        .into(userImageTV)
+                    .load(R.drawable.ic_avatar_male)
+                    .circleCrop()
+                    .into(userImageTV)
             }
 
             designationTV.text = this.designation

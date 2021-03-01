@@ -164,6 +164,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
+                <action android:name="com.gigforce.app.gig.open_gig_page_2" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="com.gigforce.app.verification.open_verification_page" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

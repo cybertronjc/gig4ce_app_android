@@ -11,6 +11,7 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.google.firebase.Timestamp
@@ -35,7 +36,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
         private val gigsRepository: GigsRepository = GigsRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : ViewModel() {
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -169,7 +171,7 @@ class GigViewModel constructor(
 
         val upcomingGigs = userGigs.filter {
             val gigStatus = GigStatus.fromGig(it)
-            gigStatus == GigStatus.UPCOMING || gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING
+            gigStatus == GigStatus.UPCOMING || gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
         }.sortedBy {
             it.startDateTime.seconds
         }
@@ -190,7 +192,7 @@ class GigViewModel constructor(
     private val _gigDetails = MutableLiveData<Lce<Gig>>()
     val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
 
-    fun watchGig(gigId: String, shouldConvertToDownloadLink: Boolean = false) {
+    fun watchGig(gigId: String, shouldGetContactdetails: Boolean = false) {
         _gigDetails.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
                 .getCollectionReference()
@@ -198,7 +200,7 @@ class GigViewModel constructor(
                 .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                     if (documentSnapshot != null) {
-                        extractGigData(documentSnapshot)
+                        extractGigData(documentSnapshot, shouldGetContactdetails)
                     } else {
                         _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                     }
@@ -254,7 +256,10 @@ class GigViewModel constructor(
         }
     }
 
-    private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
+    private fun extractGigData(
+            documentSnapshot: DocumentSnapshot,
+            shouldGetContactdetails: Boolean = false
+    ) = viewModelScope.launch {
         runCatching {
             val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
             gig.gigId = documentSnapshot.id
@@ -263,12 +268,41 @@ class GigViewModel constructor(
             val gigAttachmentWithLinks = gig.gigUserFeedbackAttachments.map {
                 getDownloadLinkFor("gig_feedback_images", it)
             }
+
+            if (shouldGetContactdetails && gig.businessContact != null && gig.businessContact!!.uid != null) {
+
+               val profile = profileFirebaseRepository.getProfileDataIfExist(gig.businessContact!!.uid)
+                profile?.let {
+                    gig.businessContact?.profilePicture = if(!profile.profileAvatarThumbnail.isNullOrBlank()){
+                        profile.profileAvatarThumbnail
+                    } else if(profile.profileAvatarName.isNotBlank()){
+                        profile.profileAvatarName
+                    } else{
+                        ""
+                    }
+                }
+            }
+
+            if (shouldGetContactdetails && gig.agencyContact != null && gig.agencyContact!!.uid != null) {
+
+                val profile = profileFirebaseRepository.getProfileDataIfExist(gig.agencyContact!!.uid)
+                profile?.let {
+                    gig.agencyContact?.profilePicture = if(!profile.profileAvatarThumbnail.isNullOrBlank()){
+                        profile.profileAvatarThumbnail
+                    } else if(profile.profileAvatarName.isNotBlank()){
+                        profile.profileAvatarName
+                    } else{
+                        ""
+                    }
+                }
+            }
+
             gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
             gig
         }.onSuccess {
             _gigDetails.value = Lce.content(it)
         }.onFailure {
-            it.message?.let { it1->_gigDetails.value =  Lce.error(it1) }
+            it.message?.let { it1 -> _gigDetails.value = Lce.error(it1) }
         }
     }
 

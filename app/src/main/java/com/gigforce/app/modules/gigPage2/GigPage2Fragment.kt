@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage.models.ContactPerson
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -96,10 +97,18 @@ class GigPage2Fragment : BaseFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkIfFragmentIsVisible()
         getDataFromIntents(arguments, savedInstanceState)
         initUi()
         initViewModel()
         startLocationUpdates()
+    }
+
+    private fun checkIfFragmentIsVisible() {
+        val fragment = childFragmentManager.findFragmentByTag(EarlyOrLateCheckInBottomSheet.TAG)
+        if (fragment != null && fragment is EarlyOrLateCheckInBottomSheet) {
+            fragment.onEarlyOrLateCheckInBottomSheetClickListener = this
+        }
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -323,7 +332,7 @@ class GigPage2Fragment : BaseFragment(),
                     }
                 })
 
-        viewModel.watchGig(gigId)
+        viewModel.watchGig(gigId, true)
     }
 
 
@@ -682,6 +691,10 @@ class GigPage2Fragment : BaseFragment(),
 
     override fun onChatWithManagerClicked(manager: ContactPerson) {
 
+        navigate(R.id.chatScreenFragment, bundleOf(
+                ChatFragment.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
+                ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
+                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name))
     }
 
     override fun onPermissionOkayClicked() {
@@ -740,7 +753,9 @@ class GigPage2Fragment : BaseFragment(),
                     earlyCheckInTime,
                     this
             )
-        } else if (!gig.isCheckOutMarked() && currentTime.isBefore(gig.checkOutBeforeBufferTime.toLocalDateTime())) {
+        } else if (!gig.isCheckOutMarked() &&
+                currentTime.isAfter(gig.checkInAfterTime.toLocalDateTime()) &&
+                currentTime.isBefore(gig.checkOutBeforeBufferTime.toLocalDateTime())) {
             //Early CheckIn
             val earlyCheckInTime = timeFormatter.format(gig.endDateTime.toDate())
             EarlyOrLateCheckInBottomSheet.launchEarlyCheckOutBottomSheet(
