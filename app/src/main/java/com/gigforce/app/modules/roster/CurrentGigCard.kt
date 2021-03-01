@@ -22,7 +22,7 @@ class CurrentGigCard(
     var cardHeight: Int = 0,
     var isFullDay: Boolean = false,
     var gigId: String = "",
-    var isNewGigPage: Boolean = false
+    var isNewGigPage: Boolean
     ): MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.current_gig_card, this)
