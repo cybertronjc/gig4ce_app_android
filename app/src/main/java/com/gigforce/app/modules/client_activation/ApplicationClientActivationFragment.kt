@@ -8,29 +8,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.Dependency
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpSettings
-import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.profile.ProfileFragment
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
+import javax.inject.Inject
 
-class ApplicationClientActivationFragment : BaseFragment(),
+@AndroidEntryPoint
+class ApplicationClientActivationFragment : Fragment(),
         AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
         ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
     private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
-
+    @Inject lateinit var navigation : INavigation
 
     private val adapter: AdapterApplicationClientActivation by lazy {
         AdapterApplicationClientActivation()
@@ -43,10 +47,10 @@ class ApplicationClientActivationFragment : BaseFragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        return inflateView(
+        return inflater.inflate(
                 R.layout.layout_application_client_activation_fragment,
-                inflater,
-                container
+                container,
+                false
         )
     }
 
@@ -67,7 +71,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     private fun checkForBackPress() {
-
+            var navFragmentsData = activity as NavFragmentsData
         if (navFragmentsData?.getData() != null) {
             if (navFragmentsData?.getData()
                             ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
@@ -104,17 +108,17 @@ class ApplicationClientActivationFragment : BaseFragment(),
         })
         viewModel.observableApplicationStatus.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
-            popBackState()
+            navigation.popBackStack()
             if (viewModel.isActivationScreenFound) {
-                navigate(
-                        R.id.fragment_gig_activation, bundleOf(
+                navigation.navigateTo(
+                        "client_activation/gigActivation", bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to mJobProfileId
                 )
                 )
             } else {
                 jpSettings?.completionTitle?.let {
-                    navigate(
-                            R.id.application_submitted_fragment, bundleOf(StringConstants.JOB_PROFILE_ID.value to mJobProfileId, StringConstants.BUSSINESS_NAME.value to it)
+                    navigation.navigateTo(
+                            "client_activation/applicationSubmission", bundleOf(StringConstants.JOB_PROFILE_ID.value to mJobProfileId, StringConstants.BUSSINESS_NAME.value to it)
                     )
                 }
             }
@@ -188,37 +192,37 @@ class ApplicationClientActivationFragment : BaseFragment(),
             if (!adapter.items[i].isDone) {
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
-                        navigate(
-                                R.id.profileFragment, bundleOf(
+                        navigation.navigateTo(
+                                "profile", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true,
-                                StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
+                                StringConstants.ACTION.value to UPLOAD_PROFILE_PIC
 
                         )
                         )
                     }
                     "about_me" -> {
-                        navigate(
-                                R.id.fragment_add_bio, bundleOf(
+                        navigation.navigateTo(
+                                "learning/addBio", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                         )
                     }
-                    "questionnaire" -> navigate(
-                            R.id.application_questionnaire, bundleOf(
+                    "questionnaire" -> navigation.navigateTo(
+                            "learning/questionnair", bundleOf(
                             StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                             StringConstants.TITLE.value to adapter.items[i].title,
                             StringConstants.TYPE.value to adapter.items[i].type,
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
                     )
                     )
-                    "driving_licence" -> navigate(
-                            R.id.fragment_upload_dl_cl_act,
+                    "driving_licence" -> navigation.navigateTo(
+                            "verification/DLCA",
                             bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
-                    "learning" -> navigate(
-                            R.id.learningCourseDetails,
+                    "learning" -> navigation.navigateTo(
+                            "learning/coursedetails",
                             bundleOf(
-                                    LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
+                                    INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
                                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
                             )
                     )
@@ -230,7 +234,11 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
 
     }
-
+    companion object {
+        val UPLOAD_PROFILE_PIC = 1
+        const val INTENT_EXTRA_COURSE_ID = "course_id"
+        const val INTENT_EXTRA_MODULE_ID = "module_id"
+    }
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
 
@@ -285,40 +293,40 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
         when (dependency.type) {
             "profile_pic" -> {
-                navigate(
-                        R.id.profileFragment, bundleOf(
+                navigation.navigateTo(
+                        "profile", bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true,
-                        StringConstants.ACTION.value to ProfileFragment.UPLOAD_PROFILE_PIC
+                        StringConstants.ACTION.value to UPLOAD_PROFILE_PIC
 
                 )
                 )
 
             }
             "about_me" -> {
-                navigate(
-                        R.id.fragment_add_bio, bundleOf(
+                navigation.navigateTo(
+                        "profile/addBio", bundleOf(
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true
                 )
                 )
             }
-            "questionnaire" -> navigate(
-                    R.id.application_questionnaire, bundleOf(
+            "questionnaire" -> navigation.navigateTo(
+                    "learning/questionnair", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                     StringConstants.TITLE.value to dependency.title,
                     StringConstants.TYPE.value to dependency.type,
                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
             )
             )
-            "driving_licence" -> navigate(
-                    R.id.fragment_upload_dl_cl_act,
+            "driving_licence" -> navigation.navigateTo(
+                    "verification/DLCA",
                     bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
             "learning" ->
 
-                navigate(
-                        R.id.learningCourseDetails,
+                navigation.navigateTo(
+                        "learning/coursedetails",
                         bundleOf(
-                                LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
+                                INTENT_EXTRA_COURSE_ID to dependency.courseId,
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                 )

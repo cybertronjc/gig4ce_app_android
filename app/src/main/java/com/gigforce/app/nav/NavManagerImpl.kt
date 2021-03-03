@@ -18,7 +18,7 @@ class NavManagerImpl @Inject constructor(
     }
 
     override fun registerAllRoutes() {
-        this.registerRoute("profile", R.id.profileFragment)
+
         this.registerRoute("bottom_sheet",R.id.bsFragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerForWalletAndPayouts()

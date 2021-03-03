@@ -21,6 +21,8 @@ class NavForLearningModule(
 
         baseImplementation.registerRoute("${moduleName}/assessmentResultFragment", R.id.assessment_result_fragment)
 
+        baseImplementation.registerRoute("${moduleName}/questionnair", R.id.application_questionnaire)
+
 
 
 

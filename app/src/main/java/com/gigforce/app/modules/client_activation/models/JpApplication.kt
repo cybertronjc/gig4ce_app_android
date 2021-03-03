@@ -1,6 +1,4 @@
 package com.gigforce.app.modules.client_activation.models
-
-import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.google.gson.annotations.SerializedName
 import java.util.*
 

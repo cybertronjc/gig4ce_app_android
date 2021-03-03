@@ -7,7 +7,10 @@ class NavForVerificationModule(
     baseImplementation: BaseNavigationImpl
 ){
     init {
-        val moduleName:String = "verification"
+        val moduleName = "verification"
         baseImplementation.registerRoute("${moduleName}/main", R.id.gigerVerificationFragment)
+        baseImplementation.registerRoute("${moduleName}/DLCA", R.id.fragment_upload_dl_cl_act)
+
+
     }
 }

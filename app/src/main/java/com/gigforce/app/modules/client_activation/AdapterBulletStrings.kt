@@ -1,14 +1,11 @@
 package com.gigforce.app.modules.client_activation
 
-import android.graphics.Typeface
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import kotlinx.android.synthetic.main.bullet_string_item.view.*
-import kotlinx.android.synthetic.main.layout_rv_bullet_points.view.*
 
 class AdapterBulletStrings : RecyclerView.Adapter<AdapterBulletStrings.ViewHolder>() {
     var items: List<String> = arrayListOf()

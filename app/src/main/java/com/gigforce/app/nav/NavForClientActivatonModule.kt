@@ -9,5 +9,11 @@ class NavForClientActivatonModule(
     init {
         val moduleName:String = "client_activation"
         baseImplementation.registerRoute("${moduleName}", R.id.fragment_client_activation)
+        baseImplementation.registerRoute("${moduleName}/gigActivation", R.id.fragment_gig_activation)
+        baseImplementation.registerRoute("${moduleName}/applicationSubmission", R.id.application_submitted_fragment)
+
+
+
+
     }
 }
