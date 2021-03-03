@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.client_activation.models.Dependency
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpSettings
-import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
-//import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.OnCompleteListener

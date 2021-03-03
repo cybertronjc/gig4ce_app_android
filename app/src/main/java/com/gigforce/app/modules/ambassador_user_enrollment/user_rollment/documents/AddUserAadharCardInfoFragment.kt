@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -23,18 +22,16 @@ import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharEditLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharViewLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageHolder

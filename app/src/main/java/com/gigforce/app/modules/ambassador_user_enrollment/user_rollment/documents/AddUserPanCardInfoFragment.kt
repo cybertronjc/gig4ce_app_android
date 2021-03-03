@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -21,7 +20,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.gigerVerfication.*
-import com.gigforce.app.modules.gigerVerfication.panCard.PanCardDataModel
+import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,7 +30,6 @@ import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panEditLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.panViewLayout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.doYouHavePanCardLabel
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.helpIconIV

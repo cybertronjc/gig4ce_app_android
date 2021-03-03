@@ -8,6 +8,7 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent2
+import com.gigforce.core.datamodels.verification.SelfieVideoDataModel
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
@@ -131,10 +132,11 @@ class SelfiVideoViewModel constructor(
 
         try {
             val model = getVerificationModel()
-            model.selfie_video = SelfieVideoDataModel(
-                videoPath = selfieVideoFileName,
-                verified = false
-            )
+            model.selfie_video =
+                SelfieVideoDataModel(
+                    videoPath = selfieVideoFileName,
+                    verified = false
+                )
             gigerVerificationRepository.getDBCollection().setOrThrow(model)
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigerVerfication.selfieVideo
+package com.gigforce.core.datamodels.verification
 
 import androidx.annotation.Keep
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
