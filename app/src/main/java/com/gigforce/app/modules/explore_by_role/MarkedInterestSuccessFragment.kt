@@ -251,7 +251,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates!!.stopLocationUpdates(requireActivity())
+        locationUpdates!!.stopLocationUpdates()
     }
 
     override fun onResume() {
@@ -268,7 +268,7 @@ class MarkedInterestSuccessFragment : BaseFragment(),
                 inviteID ?: ""
 
             )
-            locationUpdates?.stopLocationUpdates(activity)
+            locationUpdates?.stopLocationUpdates()
             roleUpdated = true
         }
 

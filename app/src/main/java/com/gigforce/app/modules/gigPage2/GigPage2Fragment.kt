@@ -787,7 +787,7 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun stopLocationUpdates() {
         this.isRequestingLocation = false
-        locationUpdates.stopLocationUpdates(requireActivity())
+        locationUpdates.stopLocationUpdates()
     }
 
     override fun lastLocationReceiver(location: Location?) {}

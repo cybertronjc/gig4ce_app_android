@@ -570,7 +570,7 @@ class ClientActivationFragment : BaseFragment(),
     var location: Location? = null
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates?.stopLocationUpdates(requireActivity())
+        locationUpdates?.stopLocationUpdates()
     }
 
     override fun onResume() {
@@ -595,7 +595,7 @@ class ClientActivationFragment : BaseFragment(),
                     ?.let {
                         popAllBackStates()
                         it.performClick()
-                        locationUpdates?.stopLocationUpdates(requireActivity())
+                        locationUpdates?.stopLocationUpdates()
                     }
 
 
