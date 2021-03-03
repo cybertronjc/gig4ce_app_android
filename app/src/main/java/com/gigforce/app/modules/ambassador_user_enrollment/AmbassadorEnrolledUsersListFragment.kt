@@ -280,7 +280,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates.stopLocationUpdates(requireActivity())
+        locationUpdates.stopLocationUpdates()
     }
 
     override fun onResume() {

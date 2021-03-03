@@ -413,14 +413,15 @@ class GigViewModel constructor(
         _submitGigRatingState.value = Lse.loading()
 
         try {
-            val gig = gigsRepository.getGig(gigId)
-            gig.gigRating = rating
-            gig.gigUserFeedback = feedback
-
-            gig.gigUserFeedbackAttachments = uploadFilesAndReturnNamesOnServer(files)
             gigsRepository.getCollectionReference()
                     .document(gigId)
-                    .setOrThrow(gig)
+                    .updateOrThrow(
+                            mapOf(
+                                    "gigRating" to rating,
+                                    "gigUserFeedback" to feedback,
+                                    "gigUserFeedbackAttachments" to files
+                            )
+                    )
 
             _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {

@@ -47,7 +47,7 @@
         android:id="@+id/company_logo_iv"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:src="@drawable/ic_location"
+        app:srcCompat="@drawable/ic_location"
         style="@style/circleImageView"
         app:layout_constraintBottom_toBottomOf="@id/company_logo_overlay_iv"
         app:layout_constraintEnd_toEndOf="@id/company_logo_overlay_iv"
