@@ -466,27 +466,6 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun pickImage() {
-
-//        if (!imagesDirectoryFileRef.exists())
-//            imagesDirectoryFileRef.mkdirs()
-//
-//        val newFileName = "$uid-${DateHelper.getFullDateTimeStamp()}.png"
-//        val imagefile = File(imagesDirectoryFileRef, newFileName)
-
-//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-//        photoCropIntent.putExtra(
-//            PhotoCrop.INTENT_EXTRA_PURPOSE,
-//            PhotoCrop.PURPOSE_VERIFICATION
-//        )
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
-//        photoCropIntent.putExtra("folder", "verification")
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_OUTPUT_FILE, imagefile)
-//        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
-//        startActivityForResult(
-//            photoCropIntent,
-//            REQUEST_PICK_IMAGE
-//        )
         cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
     }
 

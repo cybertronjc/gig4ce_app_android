@@ -9,7 +9,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_msgContainer"
-        android:layout_width="@dimen/chat_item_max_length"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         app:cardBackgroundColor="#d6d6d6"
@@ -19,8 +19,9 @@
 
         <RelativeLayout
             android:id="@+id/ll_msgContainer"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="2dp">
 
@@ -38,14 +39,14 @@
 
             <FrameLayout
                 android:id="@+id/thumbnail_layout"
-                android:layout_width="190dp"
-                android:layout_height="190dp"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
                 android:layout_below="@id/user_name_tv">
 
                 <com.gigforce.common_ui.views.GigforceImageView
                     android:id="@+id/iv_image"
-                    android:layout_width="190dp"
-                    android:layout_height="190dp"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
                     android:scaleType="centerCrop"
 
                     app:layout_constraintStart_toStartOf="parent"

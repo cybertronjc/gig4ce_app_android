@@ -476,7 +476,7 @@ class GroupChatViewModel constructor(
                     id = currentUser.uid
                 ),
                 receiverInfo = null,
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
+                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION,
                 chatType = ChatConstants.CHAT_TYPE_GROUP,
                 flowType = ChatConstants.FLOW_TYPE_OUT,
                 timestamp = Timestamp.now(),

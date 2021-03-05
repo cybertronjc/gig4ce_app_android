@@ -10,7 +10,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_msgContainer"
-        android:layout_width="@dimen/chat_item_max_length"
+        android:layout_width="@dimen/chat_video_image_item_max_length"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/chat_item_margin"
         app:cardBackgroundColor="@color/lipstick_2"
