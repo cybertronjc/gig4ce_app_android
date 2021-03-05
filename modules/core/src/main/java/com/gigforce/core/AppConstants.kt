@@ -11,7 +11,9 @@ object AppConstants {
     const val  ALL_MOBILE_NUMBERS_USED = "all_mobile_no_used"
 
     const val PINCODE_URL = "https://api.postalpincode.in/pincode/"
-
+    const val idfyAcid = "fd5931df2bde/f8451777-05d8-4e0f-b859-ad5dfa895bd4";//BuildConfig.IDFY_AC_ID
+    const val idfyApiKey = "1bc58043-00fb-4799-bea3-93a012d174bb";//BuildConfig.IDFY_API_KEY
+    const val IDFY_BASE_URL = "https://eve.idfy.com/v3/tasks/"
 
 
     // Temporary For Chat

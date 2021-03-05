@@ -13,8 +13,8 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.common_ui.decors.ItemOffsetDecoration
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.ItemOffsetDecoration
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_rejection_dialog.*
@@ -36,9 +36,9 @@ open class RejectionDialog : DialogFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.layout_rejection_dialog, container, false)
     }
@@ -48,9 +48,9 @@ open class RejectionDialog : DialogFragment() {
         val dialog: Dialog? = dialog
         if (dialog != null) {
             dialog.window?.setLayout(
-                    getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
-                            R.dimen.size_48
-                    ), ViewGroup.LayoutParams.WRAP_CONTENT
+                getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(
+                    R.dimen.size_48
+                ), ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -103,21 +103,21 @@ open class RejectionDialog : DialogFragment() {
         savedInstanceState?.let {
             TYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
             CONTENT = it.getStringArrayList(StringConstants.CONTENT.value)
-                    ?: arrayListOf()
+                ?: arrayListOf()
             TITLE = it.getString(StringConstants.TITLE.value) ?: ""
             ILLUSTRATION =
-                    it.getString(StringConstants.ILLUSTRATION.value) ?: ""
+                it.getString(StringConstants.ILLUSTRATION.value) ?: ""
 
         }
 
         arguments?.let {
             TYPE = it.getInt(StringConstants.REJECTION_TYPE.value)
             CONTENT = it.getStringArrayList(StringConstants.CONTENT.value)
-                    ?: arrayListOf()
+                ?: arrayListOf()
             TITLE = it.getString(StringConstants.TITLE.value) ?: ""
             ILLUSTRATION =
 
-                    it.getString(StringConstants.ILLUSTRATION.value) ?: ""
+                it.getString(StringConstants.ILLUSTRATION.value) ?: ""
 
         }
     }
@@ -135,7 +135,7 @@ open class RejectionDialog : DialogFragment() {
 
     private fun initView() {
         tv_take_me_home_rejection_dialog.paintFlags =
-                tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+            tv_take_me_home_rejection_dialog.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
     }
 

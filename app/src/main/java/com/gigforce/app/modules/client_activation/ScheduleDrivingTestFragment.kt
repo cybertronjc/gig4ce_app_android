@@ -8,45 +8,52 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.common_ui.decors.ItemOffsetDecoration
 import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.decors.ItemOffsetDecoration
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.*
-import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.timer_tv
-import kotlinx.android.synthetic.main.layout_fragment_schedule_driving_test.txt_otp
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class ScheduleDrivingTestFragment : BaseFragment(),
-        DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks,
-        AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks, RejectionDialog.RejectionDialogCallbacks {
+@AndroidEntryPoint
+class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
+    DrivingCertSuccessDialog.DrivingCertSuccessDialogCallbacks,
+    AdapterScheduleTestCb.AdapterScheduleTestCbCallbacks, RejectionDialog.RejectionDialogCallbacks {
+    @Inject
+    lateinit var navigation: INavigation
     private var enableOtpEditText: Boolean = false
     private var countDownTimer: CountDownTimer? = null
     private lateinit var mJobProfileId: String
     private lateinit var mTitle: String
     private lateinit var mType: String
     private lateinit var mNumber: String
-    private var mNumbers:ArrayList<String> = ArrayList<String>()
+    private var mNumbers: ArrayList<String> = ArrayList<String>()
     private val adapter: AdapterScheduleTestCb by lazy {
         AdapterScheduleTestCb()
     }
     val viewModel: ScheduleDrivingTestViewModel by viewModels()
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_schedule_driving_test, inflater, container)
+        return inflater.inflate(R.layout.layout_fragment_schedule_driving_test, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,27 +88,28 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             tv_title_toolbar.text = docReceiving.title
             tv_driving_test_certification.text = docReceiving.subtitle
             otp_label.text = docReceiving.otpLabel
-            note_msg.text = Html.fromHtml("<b><font color=\'#333333\'>Note</font></b> : "+docReceiving.noteMsg)
+            note_msg.text =
+                Html.fromHtml("<b><font color=\'#333333\'>Note</font></b> : " + docReceiving.noteMsg)
             viewModel.getApplication(mJobProfileId, mType, mTitle)
 
 
             viewModel.observableApplied.observe(viewLifecycleOwner, Observer {
                 pb_schedule_test.gone()
                 val otpVerifiedDialog =
-                        OTPVerifiedDialog()
+                    OTPVerifiedDialog()
                 otpVerifiedDialog.isCancelable = false
                 otpVerifiedDialog.setCallbacks(this)
                 otpVerifiedDialog.arguments = bundleOf(
-                        StringConstants.TITLE.value to docReceiving.dialogTitle,
-                        StringConstants.ACTION_MAIN.value to docReceiving.dialogActionMain,
-                        StringConstants.ACTION_SEC.value to docReceiving.dialogActionSec,
-                        StringConstants.SUBTITLE.value to docReceiving.dialogSubtitle,
-                        StringConstants.ILLUSTRATION.value to docReceiving.dialogIllustration,
-                        StringConstants.CONTENT.value to docReceiving.dialogContent
+                    StringConstants.TITLE.value to docReceiving.dialogTitle,
+                    StringConstants.ACTION_MAIN.value to docReceiving.dialogActionMain,
+                    StringConstants.ACTION_SEC.value to docReceiving.dialogActionSec,
+                    StringConstants.SUBTITLE.value to docReceiving.dialogSubtitle,
+                    StringConstants.ILLUSTRATION.value to docReceiving.dialogIllustration,
+                    StringConstants.CONTENT.value to docReceiving.dialogContent
                 )
                 otpVerifiedDialog.show(
-                        parentFragmentManager,
-                        DrivingCertSuccessDialog::class.java.name
+                    parentFragmentManager,
+                    DrivingCertSuccessDialog::class.java.name
                 )
             })
         })
@@ -152,29 +160,29 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
         viewModel.getUIData(mJobProfileId)
         viewModel.sendOTP
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    when (it) {
-                        Lce.Loading -> {
-                            UtilMethods.showLoading(requireContext())
-                        }
-                        is Lce.Content -> {
-                            UtilMethods.hideLoading()
-                            generate_otp.gone()
-                            showToast("Otp sent")
-                            note_msg.gone()
-                            verify_otp_button_schedule.visible()
-                            otp_screen.visible()
-                            counterStart()
-                            adapter.disableAllItems()
-                            viewModel.otpVerificationToken = it.content.verificationToken.toString()
-                        }
-                        is Lce.Error -> {
-                            UtilMethods.hideLoading()
-                            showToast("" + it.error)
-                        }
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
                     }
-                })
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+                        generate_otp.gone()
+                        showToast("Otp sent")
+                        note_msg.gone()
+                        verify_otp_button_schedule.visible()
+                        otp_screen.visible()
+                        counterStart()
+                        adapter.disableAllItems()
+                        viewModel.otpVerificationToken = it.content.verificationToken.toString()
+                    }
+                    is Lce.Error -> {
+                        UtilMethods.hideLoading()
+                        showToast("" + it.error)
+                    }
+                }
+            })
         viewModel.verifyOTP.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
             when (it) {
@@ -185,11 +193,11 @@ class ScheduleDrivingTestFragment : BaseFragment(),
                     countDownTimer?.cancel()
 
                     viewModel.apply(
-                            mJobProfileId,
-                            mType,
-                            mTitle,
-                            adapter.selectedItems,
-                            it.content.mobile
+                        mJobProfileId,
+                        mType,
+                        mTitle,
+                        adapter.selectedItems,
+                        it.content.mobile
                     )
                     pb_schedule_test.visible()
 
@@ -215,7 +223,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
-            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value)?:return@let
+            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value) ?: return@let
         }
 
         arguments?.let {
@@ -223,7 +231,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mType = it.getString(StringConstants.TYPE.value) ?: return@let
             mTitle = it.getString(StringConstants.TITLE.value) ?: return@let
-            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value)?:return@let
+            mNumbers = it.getStringArrayList(StringConstants.MOBILE_NUMBERS.value) ?: return@let
         }
     }
 
@@ -233,12 +241,12 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         outState.putString(StringConstants.TYPE.value, mType)
         outState.putString(StringConstants.TITLE.value, mTitle)
         outState.putString(StringConstants.MOBILE_NUMBER.value, mNumber)
-        outState.putStringArrayList(StringConstants.MOBILE_NUMBERS.value,mNumbers)
+        outState.putStringArrayList(StringConstants.MOBILE_NUMBERS.value, mNumbers)
     }
 
     private val OTP_NUMBER =
-            Pattern.compile("[0-9]{6}\$")
-    lateinit var match: Matcher;
+        Pattern.compile("[0-9]{6}\$")
+    lateinit var match: Matcher
 
     private fun initViews() {
 
@@ -256,22 +264,22 @@ class ScheduleDrivingTestFragment : BaseFragment(),
         })
         generate_otp.setOnClickListener {
             var finalMobileNumber = ""
-            if(mNumber.contains("+91"))
+            if (mNumber.contains("+91"))
                 finalMobileNumber = mNumber.takeLast(10)
             else finalMobileNumber = mNumber
-            viewModel.sendOTPToMobile(finalMobileNumber,mNumbers)
+            viewModel.sendOTPToMobile(finalMobileNumber, mNumbers)
         }
-        otpnotcorrect_schedule_test.setOnClickListener{
+        otpnotcorrect_schedule_test.setOnClickListener {
             var finalMobileNumber = ""
-            if(mNumber.contains("+91"))
+            if (mNumber.contains("+91"))
                 finalMobileNumber = mNumber.takeLast(10)
             else finalMobileNumber = mNumber
-            viewModel.sendOTPToMobile(finalMobileNumber,mNumbers)
+            viewModel.sendOTPToMobile(finalMobileNumber, mNumbers)
             counterStart()
         }
 //        resend_otp.paintFlags = resend_otp.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
         otpnotcorrect_schedule_test.text =
-                Html.fromHtml(getString(R.string.resend_message))
+            Html.fromHtml(getString(R.string.resend_message))
 
 
         verify_otp_button_schedule?.setOnClickListener {
@@ -280,32 +288,32 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             viewModel.verifyOTP(otpIn)
         }
 
-        iv_back_application_gig_activation.setOnClickListener { popBackState() }
+        iv_back_application_gig_activation.setOnClickListener { navigation.popBackStack() }
     }
 
     private fun counterStart() {
         showResendOTPMessage(false)
 
         countDownTimer =
-                object : CountDownTimer(30000, 1000) {
-                    override fun onTick(millisUntilFinished: Long) {
-                        var time = (millisUntilFinished / 1000)
-                        var timeStr: String = "00:"
-                        if (time.toString().length < 2) {
-                            timeStr = timeStr + "0" + time
-                        } else {
-                            timeStr += time
-                        }
-                        timer_tv?.text = timeStr
-
+            object : CountDownTimer(30000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    var time = (millisUntilFinished / 1000)
+                    var timeStr: String = "00:"
+                    if (time.toString().length < 2) {
+                        timeStr = timeStr + "0" + time
+                    } else {
+                        timeStr += time
                     }
+                    timer_tv?.text = timeStr
 
-                    override fun onFinish() {
-                        showResendOTPMessage(true)
+                }
+
+                override fun onFinish() {
+                    showResendOTPMessage(true)
 //                        if (reenter_mobile != null)
 //                            reenter_mobile.visibility = View.VISIBLE
-                    }
-                }.start()
+                }
+            }.start()
     }
 
     fun showResendOTPMessage(isShow: Boolean) {
@@ -313,13 +321,27 @@ class ScheduleDrivingTestFragment : BaseFragment(),
             tv_number_otp.visibility = View.VISIBLE
             otpnotcorrect_schedule_test.visibility = View.VISIBLE
 //            resend_otp.visibility = View.VISIBLE
-            setTextViewColor(timer_tv, R.color.time_up_color)
+            activity?.let {
+                timer_tv.setTextColor(
+                    ContextCompat.getColor(
+                        it.applicationContext,
+                        R.color.time_up_color
+                    )
+                )
+            }
             timerStarted = false
         } else {
             tv_number_otp.visibility = View.GONE
             otpnotcorrect_schedule_test.visibility = View.GONE
 //            resend_otp.visibility = View.GONE
-            setTextViewColor(timer_tv, R.color.timer_color)
+            activity?.let {
+                timer_tv.setTextColor(
+                    ContextCompat.getColor(
+                        it.applicationContext,
+                        R.color.timer_color
+                    )
+                )
+            }
             timerStarted = true
         }
     }
@@ -327,7 +349,7 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     var timerStarted = false
     override fun onBackPressed(): Boolean {
         countDownTimer?.cancel()
-        return super.onBackPressed()
+        return false
 
     }
 
@@ -342,12 +364,12 @@ class ScheduleDrivingTestFragment : BaseFragment(),
     }
 
     override fun onClickRefer() {
-        popFragmentFromStack(R.id.fragment_doc_sub)
-        navigate(R.id.referrals_fragment)
+        navigation.popBackStack("client_activation/doc_sub_doc")
+        navigation.navigateTo("referrals")
     }
 
     override fun onClickTakMeHome() {
-        popFragmentFromStack(R.id.fragment_doc_sub)
+        navigation.popBackStack("client_activation/doc_sub_doc")
     }
 
 //    fun sendVerificationCode(phoneNumber: String) {

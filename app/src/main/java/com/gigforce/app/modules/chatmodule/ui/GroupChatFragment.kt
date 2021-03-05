@@ -40,7 +40,7 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.GroupChatRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnGroupChatMessageClickListener
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.utils.*
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.core.utils.DateHelper

@@ -18,40 +18,41 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.layout_rv_status_pending, parent, false)
-        );
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_rv_status_pending, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dependency = items[position]
         holder.itemView.iv_status_application.setImageDrawable(
-                if (dependency.drawable == null) getCircularProgressDrawable(
-                    holder.itemView.context
-                ) else {
-                    dependency.drawable
-                }
+            if (dependency.drawable == null) getCircularProgressDrawable(
+                holder.itemView.context
+            ) else {
+                dependency.drawable
+            }
         )
         holder.itemView.tv_status.visibility =
-                if (!dependency.status.isNullOrEmpty()) View.VISIBLE else View.GONE
+            if (!dependency.status.isNullOrEmpty()) View.VISIBLE else View.GONE
         holder.itemView.tv_status.text = dependency.status
         holder.itemView.tv_status_application.text = dependency.title
         holder.itemView.divider_bottom.visibility =
-                if (position == items.size - 1) View.GONE else View.VISIBLE
+            if (position == items.size - 1) View.GONE else View.VISIBLE
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
-            callbacks?.onItemClick(items.get(holder.adapterPosition)
+            callbacks?.onItemClick(
+                items.get(holder.adapterPosition)
             )
         }
 
     }
 
     override fun getItemCount(): Int {
-        return items.size;
+        return items.size
     }
 
     fun addData(items: List<Dependency>) {
-        this.items = items;
+        this.items = items
         notifyDataSetChanged()
     }
 
@@ -59,15 +60,15 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
         val i = items.indexOf(Dependency(type = feature))
         items[i].drawable = drawable
         items[i].isDone = isDone
-        notifyItemChanged(i);
+        notifyItemChanged(i)
     }
 
     fun setCallbacks(callbacks: AdapterApplicationClientActivationCallbacks) {
-        this.callbacks = callbacks;
+        this.callbacks = callbacks
     }
 
     interface AdapterApplicationClientActivationCallbacks {
-        fun onItemClick(dependency: Dependency);
+        fun onItemClick(dependency: Dependency)
 
     }
 

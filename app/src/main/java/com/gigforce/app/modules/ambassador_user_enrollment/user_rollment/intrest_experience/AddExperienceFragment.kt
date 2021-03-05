@@ -18,7 +18,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.app.utils.Lce
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.android.material.chip.Chip

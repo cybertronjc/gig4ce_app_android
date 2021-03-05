@@ -1,5 +1,6 @@
 package com.gigforce.app.di
 
+import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
@@ -7,6 +8,7 @@ import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.common_ui.LoginInfoRepo
 import com.gigforce.core.ICoreViewHolderFactory
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
 import com.gigforce.learning.repo.ILearningDataRepository
@@ -44,6 +46,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
+
+    @Binds
+    fun provideBuildConfig(imp:BuildConfigImp): IBuildConfig
 }
 
 @InstallIn(ViewModelComponent::class)

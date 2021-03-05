@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.client_activation.models
 
-import com.gigforce.app.modules.landingscreen.models.Dependency
 
 data class GigActivation(
     var coverImg: String = "",

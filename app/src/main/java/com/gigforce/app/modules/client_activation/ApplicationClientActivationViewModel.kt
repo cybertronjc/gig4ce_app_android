@@ -8,7 +8,7 @@ import com.gigforce.app.modules.client_activation.models.Dependency
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.JpSettings
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QueryDocumentSnapshot

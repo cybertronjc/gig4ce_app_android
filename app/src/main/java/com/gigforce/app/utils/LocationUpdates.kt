@@ -11,7 +11,7 @@ import android.location.LocationManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.gigforce.app.modules.ambassador_user_enrollment.BsLocationAccess
+import com.gigforce.common_ui.utils.BsLocationAccess
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 

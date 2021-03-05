@@ -293,7 +293,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                     if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
                         if (it.drivingLicenseDataModel.userHasDL != null) {
-                            if (it.drivingLicenseDataModel.userHasDL) {
+                            if (it.drivingLicenseDataModel.userHasDL!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
@@ -343,7 +343,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         if (dlDetails.frontImage != null) {
 
-            if (dlDetails.frontImage.startsWith("http", true)) {
+            if (dlDetails.frontImage!!.startsWith("http", true)) {
                 Glide.with(requireContext())
                         .load(dlDetails.frontImage)
                         .placeholder(getCircularProgressDrawable())
@@ -353,7 +353,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(dlDetails.frontImage)
+                        .child(dlDetails.frontImage!!)
                         .downloadUrl.addOnSuccessListener {
                             Glide.with(requireContext()).load(it)
                                     .placeholder(getCircularProgressDrawable())
@@ -366,7 +366,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlFrontErrorMessage.gone()
 
         if (dlDetails.backImage != null) {
-            if (dlDetails.backImage.startsWith("http", true)) {
+            if (dlDetails.backImage!!.startsWith("http", true)) {
                 Glide.with(requireContext())
                         .load(dlDetails.backImage)
                         .placeholder(getCircularProgressDrawable())
@@ -376,7 +376,7 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(dlDetails.backImage)
+                        .child(dlDetails.backImage!!)
                         .downloadUrl.addOnSuccessListener {
                             Glide.with(requireContext()).load(it)
                                     .placeholder(getCircularProgressDrawable())
@@ -419,21 +419,21 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
         dlSubmitSliderBtn.text = getString(R.string.update)
 
         drivingLicenseEditText.setText(dlData.dlNo)
-        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState)
+        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState!!)
 
         dlAvailaibilityOptionRG.check(R.id.dlYesRB)
 
 
         if (dlData.frontImage != null) {
 
-            if (dlData.frontImage.startsWith("http", true)) {
+            if (dlData.frontImage!!.startsWith("http", true)) {
                 showFrontDrivingLicense(Uri.parse(dlData.frontImage))
             } else {
 
                 val imageRef = firebaseStorage
                         .reference
                         .child("verification")
-                        .child(dlData.frontImage)
+                        .child(dlData.frontImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showFrontDrivingLicense(it)
@@ -445,14 +445,14 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
         if (dlData.backImage != null) {
 
-            if (dlData.backImage.startsWith("http", true)) {
+            if (dlData.backImage!!.startsWith("http", true)) {
                 showBackDrivingLicense(Uri.parse(dlData.backImage))
             } else {
 
                 val imageRef = firebaseStorage
                         .reference
                         .child("verification")
-                        .child(dlData.backImage)
+                        .child(dlData.backImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showBackDrivingLicense(it)

@@ -38,7 +38,7 @@ import com.gigforce.app.modules.chatmodule.ui.adapters.ContactsRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.ui.adapters.clickListeners.OnContactClickListener
 import com.gigforce.app.modules.chatmodule.viewModels.ContactsViewModel
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
-import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

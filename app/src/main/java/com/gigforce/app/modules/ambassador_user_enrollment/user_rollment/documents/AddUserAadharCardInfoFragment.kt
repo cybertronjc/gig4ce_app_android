@@ -212,29 +212,30 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
         ambsd_aadhar_skip_btn.setOnClickListener {
 
-            navigate(R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+            navigate(
+                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                     EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
+                )
             )
         }
 
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.you_are_reuploading_aadhar))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.you_are_reuploading_aadhar))
+                .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
-                        aadharViewLayout.gone()
-                        aadharEditLayout.visible()
+                    aadharViewLayout.gone()
+                    aadharEditLayout.visible()
 
-                        setDataOnEditLayout(aadharCardDataModel)
-                        aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
-                        aadharSubmitSliderBtn.isEnabled = true
-                    }
-                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                    .show()
+                    setDataOnEditLayout(aadharCardDataModel)
+                    aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
+                    aadharSubmitSliderBtn.isEnabled = true
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                .show()
         }
 
 
@@ -308,15 +309,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
-                    if (it.aadharCardDataModel.userHasAadharCard != null) {
-                        if (it.aadharCardDataModel.userHasAadharCard) {
+                    it.aadharCardDataModel.userHasAadharCard?.let { it1 ->
+                        if (it1) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
                             aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
                         }
-
-                    } else {
+                    } ?: let {
                         //Uncheck both and hide capture layout
                         setDataOnEditLayout(null)
                         aadharAvailaibilityOptionRG.clearCheck()
@@ -532,15 +532,15 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             )
         )
 
-        if (aadharDetails.frontImage != null) {
-            if (aadharDetails.frontImage.startsWith("http", true)) {
+        aadharDetails.frontImage?.let {
+            if (it.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.frontImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
             } else {
-                val storageRef= firebaseStorage
+                val storageRef = firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.frontImage)
+                    .child(it)
 
                 Glide.with(requireContext())
                     .load(storageRef)
@@ -549,16 +549,15 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             }
         }
         aadharViewFrontErrorMessage.gone()
-
-        if (aadharDetails.backImage != null) {
-            if (aadharDetails.backImage.startsWith("http", true)) {
+        aadharDetails.backImage?.let {
+            if (it.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.backImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
             } else {
                 val imageRef = firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.backImage)
+                    .child(it)
 
                 Glide
                     .with(requireContext())
@@ -567,6 +566,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
                     .into(aadharViewBackImageIV)
             }
         }
+
         aadharViewBackErrorMessageTV.gone()
 
         aadharNoTV.text = aadharDetails.aadharCardNo
@@ -597,14 +597,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharCardET.setText(aadharData.aadharCardNo)
 
 
-        if (aadharData.frontImage != null) {
-            if (aadharData.frontImage.startsWith("http", true)) {
+        aadharData.frontImage?.let {
+            if (it.startsWith("http", true)) {
                 showFrontAadharCard(Uri.parse(aadharData.frontImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.frontImage)
+                    .child(it)
                     .downloadUrl.addOnSuccessListener {
                         showFrontAadharCard(it)
                     }.addOnFailureListener {
@@ -613,14 +613,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             }
         }
 
-        if (aadharData.backImage != null) {
-            if (aadharData.backImage.startsWith("http", true)) {
+        aadharData.backImage?.let {
+            if (it.startsWith("http", true)) {
                 showBackAadharCard(Uri.parse(aadharData.backImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.backImage)
+                    .child(it)
                     .downloadUrl.addOnSuccessListener {
                         showBackAadharCard(it)
                     }.addOnFailureListener {

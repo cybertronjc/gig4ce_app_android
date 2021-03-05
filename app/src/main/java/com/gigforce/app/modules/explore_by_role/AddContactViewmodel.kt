@@ -2,10 +2,10 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.explore_by_role.models.ContactModel
-import com.gigforce.app.modules.profile.models.Contact
-import com.gigforce.app.modules.profile.models.ContactEmail
-import com.gigforce.app.modules.profile.models.ContactPhone
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.Contact
+import com.gigforce.core.datamodels.profile.ContactEmail
+import com.gigforce.core.datamodels.profile.ContactPhone
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
 
 class AddContactViewmodel : ViewModel() {

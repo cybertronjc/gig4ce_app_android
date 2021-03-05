@@ -5,7 +5,7 @@ import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 
 @Keep
 data class PanCardDataModel(
-    val userHasPanCard: Boolean? = null,
+    val userHasPanCard: Boolean? = false,
     val panCardImagePath: String?= null,
     val verified: Boolean = false,
     val panCardNo : String? = null,

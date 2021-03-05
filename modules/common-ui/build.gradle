@@ -69,4 +69,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
+    implementation "com.github.skydoves:powermenu:2.1.9"
+
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+
 }

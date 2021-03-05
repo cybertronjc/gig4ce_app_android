@@ -1,10 +1,9 @@
 package com.gigforce.app.modules.client_activation
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.verification.service.CreateUserAccEnrollmentAPi
 
 class ScheduleDrivingTestRepository : BaseFirestoreDBRepository() {
-    private val createUserApi: CreateUserAccEnrollmentAPi = com.gigforce.app.modules.verification.service.RetrofitFactory.createUserAccEnrollmentAPi()
+    //    private val createUserApi: CreateUserAccEnrollmentAPi = com.gigforce.app.modules.verification.service.RetrofitFactory.createUserAccEnrollmentAPi()
     override fun getCollectionName(): String {
         return "JP_Applications"
     }

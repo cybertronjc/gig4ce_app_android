@@ -31,7 +31,7 @@ abstract class GenericRecyclerAdapterTemp<T> : RecyclerView.Adapter<RecyclerView
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as Binder<T>).bind(listItems[position])
+        (holder as Binder<T>).bind(listItems[position],position)
     }
 
     override fun getItemCount(): Int {
@@ -47,6 +47,6 @@ abstract class GenericRecyclerAdapterTemp<T> : RecyclerView.Adapter<RecyclerView
     abstract fun getViewHolder(view: View, viewType: Int):RecyclerView.ViewHolder
 
     interface Binder<T> {
-        fun bind(data: T)
+        fun bind(data: T,position: Int)
     }
 }

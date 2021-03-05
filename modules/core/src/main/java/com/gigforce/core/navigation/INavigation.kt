@@ -1,7 +1,9 @@
 package com.gigforce.core.navigation
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 
 interface INavigation {
@@ -9,4 +11,9 @@ interface INavigation {
     fun popBackStack()
     fun popBackStack(des: String, inclusive: Boolean = true)
     fun getBackStackEntry(des:String)
+    fun popAllBackStates()
+    fun getActivity():Activity
+    fun navigateToDocViewerActivity(activity: Activity,url:String)
+    fun navigateToPlayVideoDialogFragment(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
+    fun navigateToPlayVideoDialogWithUrl(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
 }

@@ -308,7 +308,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                     if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
                         if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                            if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                            if (it.bankUploadDetailsDataModel.userHasPassBook!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
@@ -360,14 +360,14 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankDetails.passbookImagePath != null) {
 
-            if (bankDetails.passbookImagePath.startsWith("http", true)) {
+            if (bankDetails.passbookImagePath!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(bankDetails.passbookImagePath)
                         .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(bankDetails.passbookImagePath)
+                        .child(bankDetails.passbookImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             Glide.with(requireContext())
                                     .load(it)
@@ -419,13 +419,13 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
         if (bankData.passbookImagePath != null) {
 
-            if (bankData.passbookImagePath.startsWith("http", true)) {
+            if (bankData.passbookImagePath!!.startsWith("http", true)) {
                 showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(bankData.passbookImagePath)
+                        .child(bankData.passbookImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             showPassbookInfoCard(it)
                         }.addOnFailureListener {

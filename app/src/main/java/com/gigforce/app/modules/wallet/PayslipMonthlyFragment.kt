@@ -15,7 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.verification.UtilMethods
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.modules.wallet.adapters.MonthlyPayslipsAdapter
 import com.gigforce.app.modules.wallet.models.Payslip
 import com.gigforce.app.utils.Lce

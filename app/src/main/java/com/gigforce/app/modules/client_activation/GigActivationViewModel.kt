@@ -4,15 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.client_activation.models.Dependency
 import com.gigforce.app.modules.client_activation.models.GigActivation
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.landingscreen.models.Dependency
-import com.gigforce.learning.learning.models.progress.LessonProgress
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.learning.LessonProgress
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
-import kotlin.Exception
 import kotlin.collections.ArrayList
 
 class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -20,17 +19,17 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
     var redirectToNextStep: Boolean = true
 
     private val _observableError: SingleLiveEvent<String> by lazy {
-        SingleLiveEvent<String>();
+        SingleLiveEvent<String>()
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     private val _observableJpApplication: SingleLiveEvent<JpApplication> by lazy {
-        SingleLiveEvent<JpApplication>();
+        SingleLiveEvent<JpApplication>()
     }
     val observableJpApplication: SingleLiveEvent<JpApplication> get() = _observableJpApplication
 
     private val _observableInitApplication: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableInitApplication: SingleLiveEvent<Boolean> get() = _observableInitApplication
 
@@ -96,12 +95,12 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
 
             if (model.activation.isNullOrEmpty()) {
                 model.activation = dependency.toMutableList()
-                model.activationStart=Date()
+                model.activationStart = Date()
             }
-            if(model.status!="Submitted"){
+            if (model.status != "Submitted") {
                 if (model.activation.all { it.isDone }) {
                     model.status = "Submitted"
-                    model.activationComplete=Date()
+                    model.activationComplete = Date()
                 }
             }
 
@@ -124,7 +123,7 @@ class GigActivationViewModel(private val savedStateHandle: SavedStateHandle) : V
                             it.isDone = checkIfCourseCompleted(it.moduleId)
                             if (it.isDone) {
                                 it.status = ""
-                                model.activationLearningCompletionDate= Date()
+                                model.activationLearningCompletionDate = Date()
                             }
                         }
 

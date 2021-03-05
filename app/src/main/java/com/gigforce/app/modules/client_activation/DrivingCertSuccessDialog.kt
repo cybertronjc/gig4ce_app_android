@@ -16,8 +16,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.gigforce.app.R
-import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_dialog_driving_certificate_success.*
 
@@ -62,9 +62,9 @@ class DrivingCertSuccessDialog : DialogFragment() {
 //            callbacks.onClickOkay()
 //        }
         PushDownAnim.setPushDownAnimTo(tv_okay_driving_cert_success)
-                .setOnClickListener(View.OnClickListener {
-                    dismiss()
-                    callbacks.onClickOkay()
+            .setOnClickListener(View.OnClickListener {
+                dismiss()
+                callbacks.onClickOkay()
 
 //                    if (PermissionUtils.checkForPermissionFragment(
 //                                    this,
@@ -76,7 +76,7 @@ class DrivingCertSuccessDialog : DialogFragment() {
 //
 ////                        downloadCertificate(mDocURL)
 //                    }
-                })
+            })
 
     }
 
@@ -110,12 +110,12 @@ class DrivingCertSuccessDialog : DialogFragment() {
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mDocURL = it.getString(StringConstants.DOC_URL.value,"") ?: ""
+            mDocURL = it.getString(StringConstants.DOC_URL.value, "") ?: ""
 
         }
 
         arguments?.let {
-            mDocURL = it.getString(StringConstants.DOC_URL.value,"") ?: ""
+            mDocURL = it.getString(StringConstants.DOC_URL.value, "") ?: ""
 
         }
     }

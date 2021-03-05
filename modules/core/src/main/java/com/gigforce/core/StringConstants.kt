@@ -70,7 +70,11 @@ enum class StringConstants(val value: String) {
     INTENT_MODULE_ID("module_id"),
     INTENT_LESSON_ID("lesson_id"),
 
-    INTENT_NEXT_LESSON_ID("next_lesson_id")
+    INTENT_NEXT_LESSON_ID("next_lesson_id"),
+    INTENT_EXTRA_OTHER_USER_IMAGE("imageUrl"),
+    INTENT_EXTRA_OTHER_USER_NAME("receiver_name"),
+    INTENT_EXTRA_CHAT_HEADER_ID("chat_header_id"),
+    INTENT_EXTRA_OTHER_USER_ID("receiver_id")
 
 
 

@@ -18,9 +18,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.datamodels.verification.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -293,11 +294,21 @@ class RoleDocUpload: Fragment() {
                     uriBack = data?.getParcelableExtra("uri")!!;
                     var imgb641 = UtilMethods.encodeImageToBase64(requireContext(), uriFront);
                     var imgb642 = UtilMethods.encodeImageToBase64(requireContext(), uriBack);
-                    var ocrdata = OCRDocsData(imgb641,imgb642,"yes")
+                    var ocrdata =
+                        OCRDocsData(
+                            imgb641,
+                            imgb642,
+                            "yes"
+                        )
                     //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataOCRs(taskid,groupid,ocrdata!!)
+                    var postData =
+                        PostDataOCRs(
+                            taskid,
+                            groupid,
+                            ocrdata!!
+                        )
                     idfyApiCall(postData)
                     //loadImage("verification",filepath, layout.VeriDD_back)
                     layout.VeriDD_back.setImageURI(uriBack);

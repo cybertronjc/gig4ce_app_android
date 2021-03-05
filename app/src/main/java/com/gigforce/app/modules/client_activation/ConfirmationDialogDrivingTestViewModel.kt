@@ -3,12 +3,8 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.client_activation.models.DrivingCertificate
-import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.util.*
 
 class ConfirmationDialogDrivingTestViewModel : ViewModel() {
     val repository = ConfirmationDialogDrivingTestRepository()
@@ -18,22 +14,22 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
     val observableJpApplication: MutableLiveData<Boolean> = _observableJpApplication
 
     fun apply(
-            mJobProfileId: String,
-            partnerDetails: PartnerSchoolDetails,
-            date: String,
-            slot: String,
-            drivingLicenseCheck: Boolean, type: String, title: String
+        mJobProfileId: String,
+        partnerDetails: PartnerSchoolDetails,
+        date: String,
+        slot: String,
+        drivingLicenseCheck: Boolean, type: String, title: String
     ) = viewModelScope.launch {
 
 
         setInJPApplication(
-                mJobProfileId,
-                type,
-                title,
-                partnerDetails,
-                date,
-                slot,
-                drivingLicenseCheck
+            mJobProfileId,
+            type,
+            title,
+            partnerDetails,
+            date,
+            slot,
+            drivingLicenseCheck
         )
 
     }
@@ -41,12 +37,12 @@ class ConfirmationDialogDrivingTestViewModel : ViewModel() {
 
     suspend fun setInJPApplication(
         jobProfileID: String,
-            type: String,
-            title: String,
-            partnerDetails: PartnerSchoolDetails,
-            date: String,
-            slot: String,
-            drivingLicenseCheck: Boolean
+        type: String,
+        title: String,
+        partnerDetails: PartnerSchoolDetails,
+        date: String,
+        slot: String,
+        drivingLicenseCheck: Boolean
     ) {
 //        val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
 //                .whereEqualTo("gigerId", repository.getUID()).get()

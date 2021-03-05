@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
-import com.gigforce.app.modules.ambassador_user_enrollment.models.RegisterMobileNoResponse
+import com.gigforce.core.datamodels.ambassador.EnrolledUser
+import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.Lce
@@ -92,6 +92,6 @@ class AmbassadorEnrollViewModel constructor(
 }
 
 data class SendOtpResponseData(
-        val enrolledUser: EnrolledUser,
-        val checkMobileResponse: RegisterMobileNoResponse
+    val enrolledUser: EnrolledUser,
+    val checkMobileResponse: RegisterMobileNoResponse
 )

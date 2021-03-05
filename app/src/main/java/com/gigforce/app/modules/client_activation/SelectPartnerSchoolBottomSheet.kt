@@ -13,8 +13,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.PartnerSchoolDetails
-import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_select_partner_bottom_sheet.*
@@ -128,12 +128,12 @@ class SelectPartnerSchoolBottomSheet : BottomSheetDialogFragment(),
     }
 
     fun setCallbacks(callbacks: SelectPartnerBsCallbacks) {
-        this.callbacks = callbacks;
+        this.callbacks = callbacks
     }
 
-    public interface SelectPartnerBsCallbacks {
+    interface SelectPartnerBsCallbacks {
 
-        fun setPartnerAddress(address: PartnerSchoolDetails);
+        fun setPartnerAddress(address: PartnerSchoolDetails)
     }
 
     override fun onItemClick(position: Int) {

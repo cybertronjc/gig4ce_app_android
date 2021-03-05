@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.Toast
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_experience_bottom_sheet.*
 import java.text.SimpleDateFormat

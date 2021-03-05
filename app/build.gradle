@@ -253,10 +253,10 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:design:26.1.0'
     //vision api for face detect
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+//    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
 
     //vision api for face detect
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+//    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
     implementation 'com.github.yalantis:ucrop:2.2.4'
     // verification
     // https://github.com/square/retrofit

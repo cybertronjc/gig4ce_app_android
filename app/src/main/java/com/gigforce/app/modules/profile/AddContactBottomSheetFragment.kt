@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.profile.models.Contact
-import com.gigforce.app.modules.profile.models.ContactEmail
-import com.gigforce.app.modules.profile.models.ContactPhone
+import com.gigforce.core.datamodels.profile.Contact
+import com.gigforce.core.datamodels.profile.ContactEmail
+import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.utils.isValidMail
 import com.gigforce.core.utils.isValidMobile

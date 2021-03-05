@@ -9,12 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.City
-import com.gigforce.app.modules.ambassador_user_enrollment.models.PincodeResponse
+import com.gigforce.core.datamodels.ambassador.PincodeResponse
 import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.common_ui.configrepository.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.*
 import com.gigforce.core.utils.EventLogs.putBytesOrThrow

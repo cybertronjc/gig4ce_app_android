@@ -7,20 +7,20 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.Media
-import com.gigforce.learning.learning.models.LessonModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.learning.LessonModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 
 class ClientActivationViewmodel(
-        private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel(), ClientActivationNavCallbacks.ClientActivationResponseCallbacks {
 
     private lateinit var clientActivationNavCallbacks: ClientActivationNavCallbacks
     fun setRepository(callbacks: ClientActivationNavCallbacks) {
-        this.clientActivationNavCallbacks = callbacks;
+        this.clientActivationNavCallbacks = callbacks
     }
 
     var initialized: Boolean = false
@@ -31,27 +31,27 @@ class ClientActivationViewmodel(
 
 
     private val _observableCourses: MutableLiveData<List<LessonModel>> by lazy {
-        MutableLiveData<List<LessonModel>>();
+        MutableLiveData<List<LessonModel>>()
     }
     val observableCourses: MutableLiveData<List<LessonModel>>
         get() = _observableCourses
     private val _observableCoursesLce: MutableLiveData<Lce<List<LessonModel>>> by lazy {
-        MutableLiveData<Lce<List<LessonModel>>>();
+        MutableLiveData<Lce<List<LessonModel>>>()
     }
     val observableCoursesLce: MutableLiveData<Lce<List<LessonModel>>> = _observableCoursesLce
 
 
     private val _observableJpApplication: SingleLiveEvent<JpApplication> by lazy {
-        SingleLiveEvent<JpApplication>();
+        SingleLiveEvent<JpApplication>()
     }
     val observableJpApplication: SingleLiveEvent<JpApplication> get() = _observableJpApplication
     private val _observableError: SingleLiveEvent<String> by lazy {
-        SingleLiveEvent<String>();
+        SingleLiveEvent<String>()
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
 
     private val _observableAddInterest: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableAddInterest: SingleLiveEvent<Boolean> get() = _observableAddInterest
 
@@ -78,7 +78,11 @@ class ClientActivationViewmodel(
         return clientActivationNavCallbacks.getUserID()
     }
 
-    override fun lessonResponse(snapShot: QuerySnapshot?, exception: Exception?, lessonsToFilter: List<String>) {
+    override fun lessonResponse(
+        snapShot: QuerySnapshot?,
+        exception: Exception?,
+        lessonsToFilter: List<String>
+    ) {
         if (exception != null) {
             _observableCoursesLce.value = Lce.error(exception.message.toString())
         } else {
@@ -87,7 +91,7 @@ class ClientActivationViewmodel(
 //                savedStateHandle.set(
 //                        StringConstants.SAVED_STATE_VIDEOS_CLIENT_ACT.value,
 //                        toObjects)
-                _observableCourses.value = toObjects!!;
+                _observableCourses.value = toObjects!!
                 _observableCoursesLce.value = Lce.content(_observableCourses.value!!)
 
             } else {

@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.verification
 
 import android.util.Log
-import com.gigforce.app.modules.verification.models.*
+import com.gigforce.core.datamodels.verification.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 

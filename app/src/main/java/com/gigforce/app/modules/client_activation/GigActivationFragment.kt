@@ -13,21 +13,24 @@ import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.client_activation.models.Dependency
 import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
-import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.utils.getScreenWidth
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -35,9 +38,12 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_fragment_activation_gig.*
+import javax.inject.Inject
 
-class GigActivationFragment : BaseFragment(),
+@AndroidEntryPoint
+class GigActivationFragment : Fragment(),
     AdapterGigActivation.AdapterApplicationClientActivationCallbacks {
     private lateinit var viewModel: GigActivationViewModel
     private lateinit var mJobProfileId: String
@@ -46,12 +52,14 @@ class GigActivationFragment : BaseFragment(),
     private var playbackPosition: Long = 0
     var playerViewHeight = 0
     private var isPlayingVideo: Boolean? = null
+    @Inject
+    lateinit var navigation: INavigation
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_activation_gig, inflater, container)
+        return inflater.inflate(R.layout.layout_fragment_activation_gig, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,7 +85,7 @@ class GigActivationFragment : BaseFragment(),
     }
 
     private fun initClicks() {
-        iv_back_application_gig_activation.setOnClickListener { popBackState() }
+        iv_back_application_gig_activation.setOnClickListener { navigation.popBackStack() }
         playerView
             .findViewById<View>(R.id.toggle_full_screen)
             .setOnClickListener {
@@ -114,7 +122,7 @@ class GigActivationFragment : BaseFragment(),
                 tb_gig_activation.visible()
                 sv_gig_activation.post {
                     if (sv_gig_activation != null)
-                        sv_gig_activation.fullScroll(ScrollView.FOCUS_UP);
+                        sv_gig_activation.fullScroll(ScrollView.FOCUS_UP)
                 }
 
 
@@ -217,13 +225,13 @@ class GigActivationFragment : BaseFragment(),
 
 
     private fun checkForBackPress() {
-
-        if (navFragmentsData?.getData() != null) {
-            if (navFragmentsData?.getData()
-                    ?.getBoolean(StringConstants.BACK_PRESSED.value, false) == true
+        var navFragmentsData = activity as NavFragmentsData
+        if (navFragmentsData.getData() != null) {
+            if (navFragmentsData.getData()
+                .getBoolean(StringConstants.BACK_PRESSED.value, false) == true
             ) {
                 viewModel.redirectToNextStep = false
-                navFragmentsData?.setData(bundleOf())
+                navFragmentsData.setData(bundleOf())
             }
         }
     }
@@ -270,8 +278,8 @@ class GigActivationFragment : BaseFragment(),
                 if (dependency.isSlotBooked) {
                     val index = adapter.items.indexOf(Dependency(type = "document"))
                     if (index != -1) {
-                        navigate(
-                            R.id.fragment_doc_sub,
+                        navigation.navigateTo(
+                            "client_activation/doc_sub_doc",
                             bundleOf(
                                 StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                                 StringConstants.TITLE.value to adapter.items[index].title,
@@ -292,8 +300,8 @@ class GigActivationFragment : BaseFragment(),
 //                        )
 //                )
 
-                navigate(
-                    R.id.fragment_doc_sub,
+                navigation.navigateTo(
+                    "client_activation/doc_sub_doc",
                     bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                         StringConstants.TITLE.value to dependency.title,
@@ -302,8 +310,8 @@ class GigActivationFragment : BaseFragment(),
                 )
 
             "learning" -> {
-                navigate(
-                    R.id.learningCourseDetails,
+                navigation.navigateTo(
+                    "learning/coursedetails",
                     bundleOf(
                         LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to dependency.courseId,
                         StringConstants.FROM_CLIENT_ACTIVATON.value to true
@@ -321,8 +329,8 @@ class GigActivationFragment : BaseFragment(),
 
                     "learning" ->
                         if (checForOtherIndices(i, adapter.items)) {
-                            navigate(
-                                R.id.learningCourseDetails,
+                            navigation.navigateTo(
+                                "learning/coursedetails",
                                 bundleOf(
                                     LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
                                     StringConstants.FROM_CLIENT_ACTIVATON.value to true

@@ -1,10 +1,13 @@
 package com.gigforce.common_ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.getStartOfDay
 import java.lang.Exception
 
 abstract class BaseNavigationImpl(): INavigation {
@@ -46,6 +49,14 @@ abstract class BaseNavigationImpl(): INavigation {
             throw Exception("Nav Key Already Exists") // Comment if not required
         }
         this.navMap[dest] = destResId
+    }
+
+    override fun popAllBackStates() {
+        val navController = getNavController()
+        var hasBackStack = true;
+        while (hasBackStack) {
+            hasBackStack = navController.popBackStack()
+        }
     }
 
  }

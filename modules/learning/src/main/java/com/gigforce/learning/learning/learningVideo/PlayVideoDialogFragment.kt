@@ -21,7 +21,7 @@ import com.example.learning.R
 //import com.gigforce.app.R
 //import com.gigforce.app.core.gone
 //import com.gigforce.app.core.visible
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
 //import com.gigforce.app.utils.Lce

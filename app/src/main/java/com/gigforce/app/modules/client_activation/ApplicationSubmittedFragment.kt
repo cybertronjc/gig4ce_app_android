@@ -10,24 +10,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
-import com.gigforce.app.BuildConfig
+import androidx.fragment.app.Fragment
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.di.interfaces.IBuildConfig
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_application_submitted.*
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
+@AndroidEntryPoint
+class ApplicationSubmittedFragment : Fragment() {
 
-class ApplicationSubmittedFragment : BaseFragment() {
+    @Inject lateinit var buildConfig: IBuildConfig
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -84,7 +89,7 @@ class ApplicationSubmittedFragment : BaseFragment() {
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(deepLink.toString()))
-                .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
+                .setDomainUriPrefix(buildConfig.getReferralBaseUrl())
                 // Open links with this app on Android
                 .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
                 // Open links with com.example.ios on iOS

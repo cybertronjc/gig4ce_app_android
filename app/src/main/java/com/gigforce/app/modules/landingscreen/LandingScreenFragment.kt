@@ -49,7 +49,7 @@ import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel

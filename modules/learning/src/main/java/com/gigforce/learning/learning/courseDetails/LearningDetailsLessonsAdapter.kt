@@ -14,7 +14,7 @@ import com.gigforce.core.extensions.visible
 //import com.gigforce.app.core.gone
 //import com.gigforce.app.core.visible
 import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.utils.GlideApp
 import com.github.vipulasri.timelineview.TimelineView
 import com.google.firebase.storage.FirebaseStorage

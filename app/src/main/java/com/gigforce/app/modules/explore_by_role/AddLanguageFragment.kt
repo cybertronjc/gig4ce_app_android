@@ -11,7 +11,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.profile.models.Language
+import com.gigforce.core.datamodels.profile.Language
 import com.gigforce.common_ui.decors.AddLangugeRvItemDecorator
 import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.layout_fragment_add_language.*

@@ -18,12 +18,6 @@ import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.layout_confirm_driving_slot.*
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_contact
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.iv_location
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView137
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView139
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.textView143
-import kotlinx.android.synthetic.main.layout_confirm_driving_slot.tv_change_slot
 
 class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
     TimeSlotsDialog.TimeSlotDialogCallbacks {
@@ -90,7 +84,7 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
     }
 
     private fun initView() {
-        tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG;
+        tv_change_slot.paintFlags = tv_change_slot.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         selectedPartner =
             arguments?.getParcelable<PartnerSchoolDetails>(StringConstants.SELECTED_PARTNER.value)
         timeSlot = arguments?.getString(StringConstants.SELECTED_TIME_SLOT.value)
@@ -120,9 +114,9 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
 
         iv_contact.setOnClickListener {
             if (!selectedPartner?.contact.isNullOrEmpty()) {
-                val callIntent = Intent(Intent.ACTION_DIAL);
-                callIntent.data = Uri.parse("tel: " + selectedPartner?.contact!![0].number);
-                startActivity(callIntent);
+                val callIntent = Intent(Intent.ACTION_DIAL)
+                callIntent.data = Uri.parse("tel: " + selectedPartner?.contact!![0].number)
+                startActivity(callIntent)
             }
         }
 
@@ -162,7 +156,7 @@ class ConfirmationDialogDrivingTest : BottomSheetDialogFragment(),
         this.callbacks = callbacks
     }
 
-    public interface ConfirmationDialogDrivingTestCallbacks {
+    interface ConfirmationDialogDrivingTestCallbacks {
         fun moveToNextStep()
         fun submissionSuccess()
         fun changeSlot()

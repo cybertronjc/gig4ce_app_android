@@ -263,7 +263,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                     if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
                         if (it.panCardDetails.userHasPanCard != null) {
-                            if (it.panCardDetails.userHasPanCard) {
+                            if (it.panCardDetails.userHasPanCard!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
@@ -449,13 +449,13 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
         if (panDetails.panCardImagePath != null) {
 
-            if (panDetails.panCardImagePath.startsWith("http", true)) {
+            if (panDetails.panCardImagePath!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(panDetails.panCardImagePath).placeholder(getCircularProgressDrawable()).into(panViewImageIV)
             } else {
                 val storageRef = firebaseStorage
                         .reference
                         .child("verification")
-                        .child(panDetails.panCardImagePath)
+                        .child(panDetails.panCardImagePath!!)
 
                 Glide.with(requireContext())
                         .load(storageRef)
@@ -496,13 +496,13 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         panCardEditText.setText(panData.panCardNo)
 
         if (panData.panCardImagePath != null) {
-            if (panData.panCardImagePath.startsWith("http", true)) {
+            if (panData.panCardImagePath!!.startsWith("http", true)) {
                 showPanInfoCard(Uri.parse(panData.panCardImagePath))
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(panData.panCardImagePath)
+                        .child(panData.panCardImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             showPanInfoCard(it)
                         }.addOnFailureListener {

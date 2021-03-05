@@ -209,7 +209,7 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
                     if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
                         if (it.panCardDetails.userHasPanCard != null) {
-                            if (it.panCardDetails.userHasPanCard) {
+                            if (it.panCardDetails.userHasPanCard!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
@@ -260,13 +260,13 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
 
         if (panDetails.panCardImagePath != null) {
 
-            if (panDetails.panCardImagePath.startsWith("http", true)) {
+            if (panDetails.panCardImagePath!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(panDetails.panCardImagePath).placeholder(getCircularProgressDrawable()).into(panViewImageIV)
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(panDetails.panCardImagePath)
+                        .child(panDetails.panCardImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             Glide.with(requireContext()).load(it)
                                     .placeholder(getCircularProgressDrawable()).into(panViewImageIV)
@@ -307,13 +307,13 @@ class AddPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActio
         panCardEditText.setText(panData.panCardNo)
 
         if (panData.panCardImagePath != null) {
-            if (panData.panCardImagePath.startsWith("http", true)) {
+            if (panData.panCardImagePath!!.startsWith("http", true)) {
                 showPanInfoCard(Uri.parse(panData.panCardImagePath))
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(panData.panCardImagePath)
+                        .child(panData.panCardImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             showPanInfoCard(it)
                         }.addOnFailureListener {

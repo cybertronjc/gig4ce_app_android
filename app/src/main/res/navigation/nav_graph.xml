@@ -801,7 +801,7 @@
         tools:layout="@layout/layout_questionnaire_fragment" />
     <fragment
         android:id="@+id/fragment_upload_dl_cl_act"
-        android:name="com.gigforce.app.modules.client_activation.UploadDrivingLicense"
+        android:name="com.gigforce.app.modules.gigerVerfication.UploadDrivingLicense"
         android:label="fragment_upload_dl_cl_act"
         tools:layout="@layout/layout_fragment_client_activation" />
 
@@ -820,7 +820,7 @@
 
     <fragment
         android:id="@+id/fragment_upload_cert"
-        android:name="com.gigforce.app.modules.client_activation.UploadDrivingCertificate"
+        android:name="com.gigforce.app.modules.gigerVerfication.UploadDrivingCertificate"
         android:label="fragment_upload_cert"
         tools:layout="@layout/layout_fragment_upload_driving_certificate" />
 

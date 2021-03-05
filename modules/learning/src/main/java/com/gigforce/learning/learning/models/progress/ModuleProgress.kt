@@ -1,5 +1,6 @@
 package com.gigforce.learning.learning.models.progress
 
+import com.gigforce.core.datamodels.learning.LessonProgress
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 

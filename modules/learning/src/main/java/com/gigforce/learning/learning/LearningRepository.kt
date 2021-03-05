@@ -2,10 +2,11 @@ package com.gigforce.learning.learning
 
 import com.gigforce.learning.learning.models.*
 import com.gigforce.learning.learning.models.progress.CourseProgress
-import com.gigforce.learning.learning.models.progress.LessonProgress
+import com.gigforce.core.datamodels.learning.LessonProgress
 import com.gigforce.learning.learning.models.progress.ModuleProgress
 import com.gigforce.learning.learning.models.progress.ProgressConstants
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.utils.EventLogs.addOrThrow
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow

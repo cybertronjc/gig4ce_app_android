@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Language
+import com.gigforce.core.datamodels.profile.Language
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_language_bottom_sheet.*
 import kotlinx.android.synthetic.main.edit_language_bottom_sheet.cancel

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.modules.explore_by_role.models.Completed
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.profile.models.RoleInterests
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.profile.RoleInterests
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FieldValue

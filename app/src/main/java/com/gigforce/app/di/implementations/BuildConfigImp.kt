@@ -6,13 +6,11 @@ import javax.inject.Inject
 
 class BuildConfigImp @Inject constructor(): IBuildConfig {
 
-    override fun getDrivingCertificateMethod(): String =
-        when (BuildConfig.BUILD_TYPE) {
-            "dev" -> "DrivingCertificate-Dev"
-            "prod" -> "DrivingCertificate-Prod"
-            "staging" -> "DrivingCertificate-Staging"
-            else -> ""
-        }
+    override fun getDrivingCertificateMethod(): String = BuildConfig.DRIVING_CERTIFICATE_METHOD
+    override fun getReferralBaseUrl(): String = BuildConfig.REFERRAL_BASE_URL
+    override fun getCreateUserUrl(): String = BuildConfig.CREATE_USER_URL
+    override fun getCreateOrSendOTPUrl(): String = BuildConfig.CHECK_USER_OR_SEND_OTP_URL
+    override fun getVerifyOTPURL(): String = BuildConfig.VERIFY_OTP_URL
 
 
 }

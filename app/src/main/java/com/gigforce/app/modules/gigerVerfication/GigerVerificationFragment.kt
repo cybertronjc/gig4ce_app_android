@@ -308,8 +308,8 @@ class GigerVerificationFragment : BaseFragment() {
                                 )
                         )
                     }
-
-                    if (it.panCardDetails?.userHasPanCard != null && it.panCardDetails.userHasPanCard) {
+                    val userHasPan = it.panCardDetails?.userHasPanCard?:false
+                    if (it.panCardDetails?.userHasPanCard != null && userHasPan) {
                         panLayout.descTitleTV.text = it.panCardDetails.verifiedString
 
                         panLayout.descTitleTV.setTextColor(
@@ -331,8 +331,8 @@ class GigerVerificationFragment : BaseFragment() {
                     }
 
 
-
-                    if (it.bankUploadDetailsDataModel?.userHasPassBook != null && it.bankUploadDetailsDataModel.userHasPassBook) {
+                    val userhasPassBook = it.bankUploadDetailsDataModel?.userHasPassBook?:false
+                    if (it.bankUploadDetailsDataModel?.userHasPassBook != null && userhasPassBook) {
                         bankDetailsLayout.descTitleTV.text =
                                 it.bankUploadDetailsDataModel.verifiedString
                         bankDetailsLayout.descTitleTV.setTextColor(
@@ -356,8 +356,8 @@ class GigerVerificationFragment : BaseFragment() {
                     }
 
 
-
-                    if (it.aadharCardDataModel?.userHasAadharCard != null && it.aadharCardDataModel.userHasAadharCard) {
+                    val userHasAadharCard = it.aadharCardDataModel?.userHasAadharCard?:false
+                    if (it.aadharCardDataModel?.userHasAadharCard != null && userHasAadharCard) {
                         aadharLayout.descTitleTV.text = it.aadharCardDataModel.verifiedString
                         aadharLayout.descTitleTV.setTextColor(
                                 ResourcesCompat.getColor(
@@ -378,8 +378,8 @@ class GigerVerificationFragment : BaseFragment() {
                     }
 
 
-
-                    if (it.drivingLicenseDataModel?.userHasDL != null && it.drivingLicenseDataModel.userHasDL) {
+                    val userHasDL = it.drivingLicenseDataModel?.userHasDL?:false
+                    if (it.drivingLicenseDataModel?.userHasDL != null && userHasDL) {
                         drivingLayout.descTitleTV.text = it.drivingLicenseDataModel.verifiedString
                         drivingLayout.descTitleTV.setTextColor(
                                 ResourcesCompat.getColor(

@@ -18,7 +18,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.learning.learning.courseDetails.CourseDetailsViewModel
 import com.gigforce.learning.learning.courseDetails.LearningDetailsLessonsAdapter
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.slides.SlidesFragment
 //import com.gigforce.app.utils.Lce
 import com.gigforce.core.navigation.INavigation

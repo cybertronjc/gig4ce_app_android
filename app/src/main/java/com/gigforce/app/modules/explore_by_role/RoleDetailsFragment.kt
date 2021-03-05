@@ -25,10 +25,11 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.profile.models.RoleInterests
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.profile.RoleInterests
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.adapter.AdapterPreferredLocation
 import com.gigforce.common_ui.utils.getScreenWidth
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.google.firebase.auth.FirebaseAuth

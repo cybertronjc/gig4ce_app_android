@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.verification.models.*
+import com.gigforce.core.datamodels.verification.Address
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.layout_verification.view.*
 
@@ -46,7 +46,7 @@ class AddressUpload : BottomSheetDialogFragment() {
     private fun addNewContact() {
         updates.add(
             Address(
-                address = layout.add_veri_address_line1.text.toString()+" "+layout.add_veri_address_line2.text.toString(),
+                address = layout.add_veri_address_line1.text.toString() + " " + layout.add_veri_address_line2.text.toString(),
                 city = layout.add_veri_address_city.text.toString(),
                 state = layout.add_veri_address_state.text.toString(),
                 pincode = layout.add_veri_address_pin.text.toString()

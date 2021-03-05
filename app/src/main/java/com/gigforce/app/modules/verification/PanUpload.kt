@@ -3,7 +3,6 @@ package com.gigforce.app.modules.verification
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,17 +17,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.gigforce.app.R
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.UtilMethods.encodeImageToBase64
-import com.gigforce.app.modules.verification.UtilMethods.encodeImagesToBase64
-import com.gigforce.app.modules.verification.models.OCRDocData
-import com.gigforce.app.modules.verification.models.PANDocData
-import com.gigforce.app.modules.verification.models.PostDataOCR
-import com.gigforce.app.modules.verification.models.PostDataPAN
+import com.gigforce.common_ui.utils.UtilMethods.encodeImageToBase64
+import com.gigforce.core.datamodels.verification.PANDocData
+import com.gigforce.core.datamodels.verification.PostDataPAN
 import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.common_ui.utils.UtilMethods
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -203,10 +199,20 @@ class PanUpload: Fragment() {
                     uriBack = data?.getParcelableExtra("uri")!!;
                     var imgb641 = encodeImageToBase64(requireContext(),uriFront);
                     var imgb642 = encodeImageToBase64(requireContext(),uriBack);
-                    var ocrdata = PANDocData(imgb641,imgb642,"yes")
+                    var ocrdata =
+                        PANDocData(
+                            imgb641,
+                            imgb642,
+                            "yes"
+                        )
                     val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
                     val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
-                    var postData = PostDataPAN(taskid,groupid,ocrdata!!)
+                    var postData =
+                        PostDataPAN(
+                            taskid,
+                            groupid,
+                            ocrdata!!
+                        )
                     idfyApiCall(postData)
                     //loadImage("verification",filepath, layout.Pan_back)
                     layout.pbPan.setProgress(100,true)

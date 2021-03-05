@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.app.modules.wallet.models.PaySlipResponseModel
 import com.gigforce.app.modules.wallet.models.Payslip
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService

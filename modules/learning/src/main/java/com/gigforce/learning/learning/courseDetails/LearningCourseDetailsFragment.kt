@@ -26,7 +26,7 @@ import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.learning.learning.models.Course
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.models.Module
 import com.gigforce.learning.learning.slides.SlidesFragment
 //import com.gigforce.app.utils.Lce

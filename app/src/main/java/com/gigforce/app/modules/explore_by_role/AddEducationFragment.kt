@@ -14,7 +14,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.core.datamodels.profile.Education
 import com.gigforce.common_ui.decors.ItemDecorationAddContact
 import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

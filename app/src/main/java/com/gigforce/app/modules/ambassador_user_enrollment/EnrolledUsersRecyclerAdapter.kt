@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.IconMenuAdapter
 import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
+import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.core.utils.CustomTypeFaceSpan
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.IconPowerMenuItem

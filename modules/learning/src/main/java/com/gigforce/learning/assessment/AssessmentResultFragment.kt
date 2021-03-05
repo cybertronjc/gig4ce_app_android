@@ -37,10 +37,9 @@ import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
 import com.gigforce.core.utils.*
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
-import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.learning.learning.models.Course
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -697,7 +696,9 @@ class QuestionnairViewHolder : RecyclerView.ViewHolder, GenericRecyclerAdapterTe
         viewItem = view
         this.context = context
     }
-    override fun bind(obj: Boolean) {
+
+
+    override fun bind(obj: Boolean, position: Int) {
         context?.let {
             itemView.fl_rv_question_wise_sum_assess_result.setSolidColor(if (obj) "#ffd9e6" else "#888888")
             itemView.tv_q_no_rv_ques_sum_assess_result.text = "" + (position + 1)

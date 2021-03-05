@@ -10,21 +10,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.navigation.INavigation
 import com.ncorti.slidetoact.SlideToActView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
+import javax.inject.Inject
 
-
-class DocsSubSchedulerFragment : BaseFragment() {
+@AndroidEntryPoint
+class DocsSubSchedulerFragment : Fragment() {
+    @Inject
+    lateinit var navigation: INavigation
     private val viewModel: DocSubSchedulerViewModel by viewModels()
 
     private var dateString: String? = null
@@ -40,11 +45,11 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
-        return inflateView(R.layout.fragment_docs_sub_scheduler, inflater, container)
+        return inflater.inflate(R.layout.fragment_docs_sub_scheduler, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,9 +65,9 @@ class DocsSubSchedulerFragment : BaseFragment() {
         viewModel.observableQuestionnairDocument.observe(viewLifecycleOwner, Observer {
             Log.e("data", it?.stepId.toString())
             it?.answers?.forEach {
-                Log.e("data", it?.type!! + it?.options?.size.toString())
-                if (it?.type == "cities") {
-                    it?.answer?.let {
+                Log.e("data", it.type!! + it.options?.size.toString())
+                if (it.type == "cities") {
+                    it.answer?.let {
                         viewModel.getMappedUser(it)
                     }
                 }
@@ -74,8 +79,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
                 if (!it.number.contains("+91")) {
                     it.numberWithoutnineone = it.number
                     it.number = "+91" + it.number
-                }
-                else{
+                } else {
                     it.numberWithoutnineone = it.number
                 }
                 viewModel.checkIfTeamLeadersProfileExists(it.number)
@@ -92,15 +96,18 @@ class DocsSubSchedulerFragment : BaseFragment() {
 //                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
 //                bundle.putString(AppConstants.CONTACT_NAME, it.name)
 
-                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, it.profileAvatarName)
-                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, it.name)
+                bundle.putString(
+                    StringConstants.INTENT_EXTRA_OTHER_USER_IMAGE.value,
+                    it.profileAvatarName
+                )
+                bundle.putString(StringConstants.INTENT_EXTRA_OTHER_USER_NAME.value, it.name)
 
-                bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
-                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, it.id)
+                bundle.putString(StringConstants.INTENT_EXTRA_CHAT_HEADER_ID.value, "")
+                bundle.putString(StringConstants.INTENT_EXTRA_OTHER_USER_ID.value, it.id)
 
                 bundle.putString(StringConstants.MOBILE_NUMBER.value, it.loginMobile)
                 bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
-                navigate(R.id.chatScreenFragment, bundle)
+                navigation.navigateTo("chats/chatScreenFragment", bundle)
             }
         })
 
@@ -186,17 +193,17 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
             viewModel.getApplication(mJobProfileId, mType, mTitle)
         })
-        viewModel.getPartnerSchoolDetails(mType, mJobProfileId);
+        viewModel.getPartnerSchoolDetails(mType, mJobProfileId)
 
 
     }
 
     private fun setupBulletPontsRv() {
-        adapterBulletStrings = AdapterBulletStrings();
+        adapterBulletStrings = AdapterBulletStrings()
 
         rv_bullet_points.adapter = adapterBulletStrings
         rv_bullet_points.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 
 
     }
@@ -222,18 +229,18 @@ class DocsSubSchedulerFragment : BaseFragment() {
         slider_checkout.isEnabled = true
 
         slider_checkout.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_pink, null)
+            ResourcesCompat.getColor(resources, R.color.light_pink, null)
         slider_checkout.innerColor =
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableCheckoutButton() {
         slider_checkout.isEnabled = false
 
         slider_checkout.outerColor =
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         slider_checkout.innerColor =
-                ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun initClicks() {
@@ -244,31 +251,31 @@ class DocsSubSchedulerFragment : BaseFragment() {
             } else disableCheckoutButton()
         }
         call.setOnClickListener {
-            viewModel?.gfmappedUserObj?.number?.let {
+            viewModel.gfmappedUserObj?.number?.let {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", it, null))
                 startActivity(intent)
             }
         }
 
         slider_checkout.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
-                        viewModel?.gfmappedUserObj?.numberWithoutnineone?.let {
-                            navigate(
-                                    R.id.fragment_schedule_test,
-                                    bundleOf(
-                                            StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                                            StringConstants.TITLE.value to mTitle,
-                                            StringConstants.TYPE.value to mType,
-                                            StringConstants.MOBILE_NUMBER.value to it,
-                                            StringConstants.MOBILE_NUMBERS.value to viewModel?.gfmappedUserObj?.numbers
-                                    )
+                override fun onSlideComplete(view: SlideToActView) {
+                    viewModel.gfmappedUserObj?.numberWithoutnineone?.let {
+                        navigation.navigateTo(
+                            "client_activation/schedule_test",
+                            bundleOf(
+                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                StringConstants.TITLE.value to mTitle,
+                                StringConstants.TYPE.value to mType,
+                                StringConstants.MOBILE_NUMBER.value to it,
+                                StringConstants.MOBILE_NUMBERS.value to viewModel.gfmappedUserObj?.numbers
                             )
-                        }
-
+                        )
                     }
+
                 }
+            }
 //        tv_change_slot.setOnClickListener {
 //            changeSlot()
 //
@@ -296,7 +303,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
 //            newInstance.show(parentFragmentManager, SelectPartnerSchoolBottomSheet.javaClass.name)
 //        }
         imageView11.setOnClickListener {
-            popBackState()
+            navigation.popBackStack()
         }
 //        view_select_time_slots.setOnClickListener { view ->
 //            val newInstance = TimeSlotsDialog.newInstance()

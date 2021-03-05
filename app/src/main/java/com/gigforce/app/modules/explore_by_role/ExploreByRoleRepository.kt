@@ -2,7 +2,7 @@ package com.gigforce.app.modules.explore_by_role
 
 import android.location.Location
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.profile.models.RoleInterests
+import com.gigforce.core.datamodels.profile.RoleInterests
 import com.google.firebase.firestore.FieldValue
 
 class ExploreByRoleRepository : BaseFirestoreDBRepository(), ExploreByRoleCallbacks {

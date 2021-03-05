@@ -249,7 +249,7 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
                     if (it.aadharCardDataModel.userHasAadharCard != null) {
-                        if (it.aadharCardDataModel.userHasAadharCard) {
+                        if (it.aadharCardDataModel.userHasAadharCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
@@ -298,14 +298,14 @@ class AddAadharCardInfoFragment : BaseFragment() {
         )
 
         if (aadharDetails.frontImage != null) {
-            if (aadharDetails.frontImage.startsWith("http", true)) {
+            if (aadharDetails.frontImage!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.frontImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.frontImage)
+                    .child(aadharDetails.frontImage!!)
                     .downloadUrl.addOnSuccessListener {
                         Glide.with(requireContext()).load(it)
                             .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
@@ -317,14 +317,14 @@ class AddAadharCardInfoFragment : BaseFragment() {
         aadharViewFrontErrorMessage.gone()
 
         if (aadharDetails.backImage != null) {
-            if (aadharDetails.backImage.startsWith("http", true)) {
+            if (aadharDetails.backImage!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.backImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.backImage)
+                    .child(aadharDetails.backImage!!)
                     .downloadUrl.addOnSuccessListener {
                         Glide.with(requireContext()).load(it)
                             .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
@@ -365,13 +365,13 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
 
         if (aadharData.frontImage != null) {
-            if (aadharData.frontImage.startsWith("http", true)) {
+            if (aadharData.frontImage!!.startsWith("http", true)) {
                 showFrontAadharCard(Uri.parse(aadharData.frontImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.frontImage)
+                    .child(aadharData.frontImage!!)
                     .downloadUrl.addOnSuccessListener {
                         showFrontAadharCard(it)
                     }.addOnFailureListener {
@@ -381,13 +381,13 @@ class AddAadharCardInfoFragment : BaseFragment() {
         }
 
         if (aadharData.backImage != null) {
-            if (aadharData.backImage.startsWith("http", true)) {
+            if (aadharData.backImage!!.startsWith("http", true)) {
                 showBackAadharCard(Uri.parse(aadharData.backImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.backImage)
+                    .child(aadharData.backImage!!)
                     .downloadUrl.addOnSuccessListener {
                         showBackAadharCard(it)
                     }.addOnFailureListener {

@@ -16,13 +16,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.capitalizeWords
-import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ErrorWhileSettingUserAsAmbassador
-import com.gigforce.app.modules.profile.models.SettingUserAsAmbassador
-import com.gigforce.app.modules.profile.models.UserSetAsAmbassadorSuccessfully
+import com.gigforce.core.datamodels.profile.ErrorWhileSettingUserAsAmbassador
+import com.gigforce.core.datamodels.profile.SettingUserAsAmbassador
+import com.gigforce.core.datamodels.profile.UserSetAsAmbassadorSuccessfully
 import com.gigforce.app.modules.roster.inflate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_apply_for_ambassador.*

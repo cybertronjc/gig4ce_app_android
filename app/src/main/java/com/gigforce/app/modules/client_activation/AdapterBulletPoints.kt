@@ -172,7 +172,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
                 Typeface.createFromAsset(context.assets, "fonts/Lato-Regular.ttf")
             textView.typeface = face
             val layoutParams1 = TableRow.LayoutParams(
-                getScreenWidth(context as Activity).width - (context.resources.getDimensionPixelSize(
+                1000 - (context.resources.getDimensionPixelSize(
                     R.dimen.size_66
                 )),
                 TableRow.LayoutParams.WRAP_CONTENT

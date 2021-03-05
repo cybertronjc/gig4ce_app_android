@@ -17,11 +17,11 @@ import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.utils.Lce
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.learning.learning.learningVideo.PositionLimitingControlDispatcher
-import com.gigforce.learning.learning.models.CourseContent
 import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
-import com.gigforce.app.utils.Lce
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -49,20 +49,20 @@ class PlayVideoDialogWithUrl : DialogFragment() {
         const val INTENT_EXTRA_LESSON_ID = "lesson_id"
         const val INTENT_EXTRA_MODULE_ID = "module_id"
         const val INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION =
-                "show_feedback_dialog_on_completion"
+            "show_feedback_dialog_on_completion"
         const val TAG = "PlayVideoDialogFragment"
 
         fun launch(
-                childFragmentManager: FragmentManager,
-                moduleId: String,
-                lessonId: String,
-                shouldShowFeedbackDialog: Boolean
+            childFragmentManager: FragmentManager,
+            moduleId: String,
+            lessonId: String,
+            shouldShowFeedbackDialog: Boolean
         ) {
             val frag = PlayVideoDialogWithUrl()
             val bundle = bundleOf(
-                    INTENT_EXTRA_MODULE_ID to moduleId,
-                    INTENT_EXTRA_LESSON_ID to lessonId,
-                    INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog
+                INTENT_EXTRA_MODULE_ID to moduleId,
+                INTENT_EXTRA_LESSON_ID to lessonId,
+                INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION to shouldShowFeedbackDialog
             )
 
             frag.arguments = bundle
@@ -71,9 +71,9 @@ class PlayVideoDialogWithUrl : DialogFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         savedInstanceState?.let {
@@ -84,7 +84,7 @@ class PlayVideoDialogWithUrl : DialogFragment() {
             mLessonId = it.getString(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID) ?: return@let
             shouldShowFeedbackDialog = it.getBoolean(
-                    PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
+                PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
             )
         }
 
@@ -93,7 +93,7 @@ class PlayVideoDialogWithUrl : DialogFragment() {
             mLessonId = it.getString(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID) ?: return@let
             shouldShowFeedbackDialog = it.getBoolean(
-                    PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
+                PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION
             )
         }
 
@@ -110,8 +110,8 @@ class PlayVideoDialogWithUrl : DialogFragment() {
         outState.putString(PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID, mLessonId)
         outState.putString(PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID, mModuleId)
         outState.putBoolean(
-                PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION,
-                shouldShowFeedbackDialog
+            PlayVideoDialogFragment.INTENT_EXTRA_SHOULD_SHOW_FEEDBACK_DIALOG_ON_COMPLETION,
+            shouldShowFeedbackDialog
         )
     }
 
@@ -130,10 +130,10 @@ class PlayVideoDialogWithUrl : DialogFragment() {
 //        }
 
         playerView
-                .findViewById<View>(R.id.toggle_full_screen)
-                .setOnClickListener {
-                    changeOrientation()
-                }
+            .findViewById<View>(R.id.toggle_full_screen)
+            .setOnClickListener {
+                changeOrientation()
+            }
 
 
     }
@@ -168,7 +168,7 @@ class PlayVideoDialogWithUrl : DialogFragment() {
                 playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
 
                 activity?.window?.decorView?.systemUiVisibility =
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
                 Log.d(VideoWithTextFragment.TAG, "LANDSCAPE")
@@ -255,14 +255,14 @@ class PlayVideoDialogWithUrl : DialogFragment() {
 
     fun initViewModel() {
         viewModel.videoDetails
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showVideoAsLoading()
-                        is Lce.Content -> showVideo(it.content)
-                        is Lce.Error -> showErrorInLoadingVideo(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showVideoAsLoading()
+                    is Lce.Content -> showVideo(it.content)
+                    is Lce.Error -> showErrorInLoadingVideo(it.error)
+                }
+            })
 
 
         viewModel.getVideoDetails(mModuleId, mLessonId)

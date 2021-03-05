@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.learning.R
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.gigforce.core.StringConstants
 import com.gigforce.core.extensions.gone

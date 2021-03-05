@@ -6,13 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.verification.models.Bank
+import com.gigforce.core.datamodels.verification.Bank
 import kotlinx.android.synthetic.main.layout_verification_bank.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern

@@ -3,8 +3,8 @@ package com.gigforce.app.modules.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.ambassador_user_enrollment.models.RegisterMobileNoResponse
-import com.gigforce.app.modules.ambassador_user_enrollment.models.VerifyOtpResponse
+import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
+import com.gigforce.core.datamodels.ambassador.VerifyOtpResponse
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.auth.ui.main.LoginResponse
 import com.gigforce.app.modules.client_activation.models.*
@@ -53,23 +53,23 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     suspend fun getJPApplication(
-            jobProfileID: String,
-            type: String,
-            title: String
+        jobProfileID: String,
+        type: String,
+        title: String
     ): DrivingCertificate? {
         try {
             val items =
-                    repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
-                            .whereEqualTo("gigerId", repository.getUID()).get()
-                            .await()
+                repository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileID)
+                    .whereEqualTo("gigerId", repository.getUID()).get()
+                    .await()
             if (items.documents.isNullOrEmpty()) {
                 return null
             }
             applicationId = items.documents[0].id
             val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                    .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
-                            "title", title
-                    ).whereEqualTo("type", type).get().await()
+                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
+                    "title", title
+                ).whereEqualTo("type", type).get().await()
             if (submissions.documents.isNullOrEmpty()) {
                 return null
             }
@@ -86,55 +86,60 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     fun getUIData(jobProfileID: String) {
 
         repository.db.collection("JP_Settings").limit(1).whereEqualTo("jobProfileId", jobProfileID)
-                .whereEqualTo("type", "driving_certificate").addSnapshotListener { success, err ->
-                    if (err == null) {
-                        if (success?.documents?.isNotEmpty() == true) {
-                            _observableJPSettings.value =
-                                    success.toObjects(PartnerSchool::class.java)[0].checkoutConfig
+            .whereEqualTo("type", "driving_certificate").addSnapshotListener { success, err ->
+                if (err == null) {
+                    if (success?.documents?.isNotEmpty() == true) {
+                        _observableJPSettings.value =
+                            success.toObjects(PartnerSchool::class.java)[0].checkoutConfig
 
-                        }
-                    } else {
-                        _observableError.value = err.message
                     }
+                } else {
+                    _observableError.value = err.message
                 }
+            }
 
     }
 
     fun apply(
-            mJobProfileId: String, type: String, title: String, options: List<CheckItem>,tlMobileNo: String?
+        mJobProfileId: String,
+        type: String,
+        title: String,
+        options: List<CheckItem>,
+        tlMobileNo: String?
     ) = viewModelScope.launch {
 
 
         setInJPApplication(
-                mJobProfileId,
-                type,
-                title,
-                options,
-                tlMobileNo
+            mJobProfileId,
+            type,
+            title,
+            options,
+            tlMobileNo
         )
 
     }
 
 
     suspend fun setInJPApplication(
-            jobProfileID: String,
-            type: String,
-            title: String, options: List<CheckItem>,
-            tlMobileNo: String?
+        jobProfileID: String,
+        type: String,
+        title: String, options: List<CheckItem>,
+        tlMobileNo: String?
     ) {
         val items = repository.getCollectionReference().whereEqualTo("jpid", jobProfileID)
-                .whereEqualTo("gigerId", repository.getUID()).get()
-                .await()
+            .whereEqualTo("gigerId", repository.getUID()).get()
+            .await()
         val submissions = repository.getCollectionReference().document(items.documents[0].id)
-                .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
-                        "title", title
-                ).whereEqualTo("type", type).get().await()
+            .collection("Submissions").whereEqualTo("stepId", jobProfileID).whereEqualTo(
+                "title", title
+            ).whereEqualTo("type", type).get().await()
 
         val collection = repository.db.collection("JP_Applications")
-                .document(items?.documents!![0].id)
-                .collection("Submissions")
+            .document(items?.documents!![0].id)
+            .collection("Submissions")
         tlMobileNo?.let {
-            repository.getCollectionReference().document(items.documents[0].id).update(mapOf("verifiedTLNumber" to it ))
+            repository.getCollectionReference().document(items.documents[0].id)
+                .update(mapOf("verifiedTLNumber" to it))
         }
 
         val task = if (submissions?.documents?.isEmpty() == true)
@@ -144,7 +149,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
         task.addOnCompleteListener { complete ->
             if (complete.isSuccessful) {
                 val jpApplication =
-                        items.toObjects(JpApplication::class.java)[0]
+                    items.toObjects(JpApplication::class.java)[0]
                 jpApplication.activation.forEach { draft ->
                     if (draft.type == "onsite_document") {
 
@@ -167,25 +172,25 @@ class ScheduleDrivingTestViewModel : ViewModel() {
                     }
                 }
                 if (jpApplication.activation.all {
-                            it.isDone
-                        }) {
+                        it.isDone
+                    }) {
                     jpApplication.status = "Inprocess"
                 }
                 repository.db.collection("JP_Applications")
-                        .document(items.documents[0].id)
-                        .update(
-                                mapOf(
-                                        "activation" to jpApplication.activation,
-                                        "status" to jpApplication.status
-                                )
+                    .document(items.documents[0].id)
+                    .update(
+                        mapOf(
+                            "activation" to jpApplication.activation,
+                            "status" to jpApplication.status
                         )
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                _observableApplied.value = true
-                            } else {
-                                _observableError.value = it.exception?.message ?: ""
-                            }
+                    )
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            _observableApplied.value = true
+                        } else {
+                            _observableError.value = it.exception?.message ?: ""
                         }
+                    }
             }
         }
 
@@ -195,15 +200,16 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     var otpVerificationTokenList = ArrayList<String>()
 
     fun sendOTPToMobile(
-            mobileNo: String,
-            otherMobileNoMapped: ArrayList<String> = ArrayList<String>()
+        mobileNo: String,
+        otherMobileNoMapped: ArrayList<String> = ArrayList<String>()
     ) = viewModelScope.launch {
 
         _sendOTP.postValue(Lce.loading())
         try {
 
-            val repsonse = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
-            val filteredData = otherMobileNoMapped?.filter {
+            val repsonse =
+                userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
+            val filteredData = otherMobileNoMapped.filter {
                 var finalMobileNumber = ""
                 if (it.contains("+91"))
                     finalMobileNumber = it.takeLast(10)
@@ -213,7 +219,8 @@ class ScheduleDrivingTestViewModel : ViewModel() {
             }
             otpVerificationTokenList.clear()
             for (number in filteredData) {
-                val repsonse1 = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(number)
+                val repsonse1 =
+                    userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(number)
                 otpVerificationTokenList.add(repsonse1.verificationToken.toString())
             }
             _sendOTP.value = Lce.content(repsonse)
@@ -224,7 +231,7 @@ class ScheduleDrivingTestViewModel : ViewModel() {
     }
 
     fun verifyOTP(
-            otp: String
+        otp: String
     ) = viewModelScope.launch {
         try {
             var finalOTPResponse: VerifyOtpResponse? = null

@@ -50,9 +50,9 @@ import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
 import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.learning.learning.models.Course
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable

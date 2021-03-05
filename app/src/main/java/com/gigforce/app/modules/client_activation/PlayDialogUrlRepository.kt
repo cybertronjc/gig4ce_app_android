@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.client_activation
 
 import com.gigforce.learning.learning.LearningRepository
-import com.gigforce.learning.learning.models.CourseContent
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

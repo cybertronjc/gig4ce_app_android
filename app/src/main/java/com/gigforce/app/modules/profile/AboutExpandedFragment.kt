@@ -18,9 +18,9 @@ import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
-import com.gigforce.app.modules.profile.models.ContactEmail
-import com.gigforce.app.modules.profile.models.ContactPhone
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ContactEmail
+import com.gigforce.core.datamodels.profile.ContactPhone
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*

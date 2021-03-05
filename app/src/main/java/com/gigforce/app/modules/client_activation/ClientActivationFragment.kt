@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.client_activation
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,32 +13,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JpApplication
 import com.gigforce.app.modules.client_activation.models.Media
-import com.gigforce.app.modules.explore_by_role.AdapterPreferredLocation
-import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.LessonModel
-import com.gigforce.app.utils.*
+import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.adapter.AdapterPreferredLocation
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.common_ui.utils.PopMenuAdapter
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.datamodels.learning.LessonModel
+import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
 import com.gigforce.core.utils.GlideApp
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -53,13 +60,18 @@ import com.google.firebase.storage.FirebaseStorage
 import com.skydoves.powermenu.CustomPowerMenu
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_assessment_result.*
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.layout_role_description.view.*
+import kotlinx.android.synthetic.main.learning_bs_item.view.*
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
-class ClientActivationFragment : BaseFragment(),
-        LocationUpdates.LocationUpdateCallbacks {
+@AndroidEntryPoint
+class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
+    LocationUpdates.LocationUpdateCallbacks {
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
@@ -68,22 +80,27 @@ class ClientActivationFragment : BaseFragment(),
     private var adapterPreferredLocation: AdapterPreferredLocation? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
 
+    @Inject
+    lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var buildConfig: IBuildConfig
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_client_activation, inflater, container)
+        return inflater.inflate(R.layout.layout_fragment_client_activation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel =
-                ViewModelProvider(
-                        this,
-                        SavedStateViewModelFactory(requireActivity().application, this)
-                ).get(ClientActivationViewmodel::class.java)
+            ViewModelProvider(
+                this,
+                SavedStateViewModelFactory(requireActivity().application, this)
+            ).get(ClientActivationViewmodel::class.java)
         viewModel.setRepository(if (FirebaseAuth.getInstance().currentUser?.uid == null) ClientActivationNewUserRepo() else ClientActivationRepository())
         getDataFromIntents(savedInstanceState)
         checkForApplicationRedirection()
@@ -105,11 +122,11 @@ class ClientActivationFragment : BaseFragment(),
 
 
     private fun setupBulletPontsRv() {
-        adapterBulletPoints = AdapterBulletPoints();
+        adapterBulletPoints = AdapterBulletPoints()
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
-                LinearLayoutManager(requireContext())
+            LinearLayoutManager(requireContext())
 
 
     }
@@ -119,60 +136,60 @@ class ClientActivationFragment : BaseFragment(),
     private fun initClicks() {
 
         iv_back_client_activation.setOnClickListener {
-            popBackState()
+            navigation.popBackStack()
         }
 
         iv_options_client_activation.setOnClickListener {
 
             customPowerMenu =
-                    CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
-                            .addItem(
-                                MenuItem(getString(R.string.share))
-                            )
-
-                            .setShowBackground(false)
-                            .setOnMenuItemClickListener(object :
-                                    OnMenuItemClickListener<MenuItem> {
-                                override fun onItemClick(
-                                        position: Int,
-                                        item: MenuItem?
-                                ) {
-                                    pb_client_activation.visible()
-                                    Firebase.dynamicLinks.shortLinkAsync {
-                                        longLink =
-                                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
-                                    }.addOnSuccessListener { result ->
-                                        // Short link created
-                                        val shortLink = result.shortLink
-                                        shareToAnyApp(shortLink.toString())
-                                    }.addOnFailureListener {
-                                        // Error
-                                        // ...
-                                        showToast(it.message!!);
-                                    }
-                                    customPowerMenu?.dismiss()
-                                }
-
-                            })
-                            .setAnimation(MenuAnimation.DROP_DOWN)
-                            .setMenuRadius(
-                                    resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                            )
-                            .setMenuShadow(
-                                    resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                            )
-
-                            .build()
-            customPowerMenu?.showAsDropDown(
-                    it,
-                    -(((customPowerMenu?.getContentViewWidth()
-                            ?: 0) - (it.resources.getDimensionPixelSize(R.dimen.size_32))
-                            )
-                            ),
-                    -(resources.getDimensionPixelSize(
-                            R.dimen.size_24
+                CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
+                    .addItem(
+                        MenuItem(getString(R.string.share))
                     )
-                            )
+
+                    .setShowBackground(false)
+                    .setOnMenuItemClickListener(object :
+                        OnMenuItemClickListener<MenuItem> {
+                        override fun onItemClick(
+                            position: Int,
+                            item: MenuItem?
+                        ) {
+                            pb_client_activation.visible()
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                val shortLink = result.shortLink
+                                shareToAnyApp(shortLink.toString())
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                showToast(it.message!!)
+                            }
+                            customPowerMenu?.dismiss()
+                        }
+
+                    })
+                    .setAnimation(MenuAnimation.DROP_DOWN)
+                    .setMenuRadius(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+                    .setMenuShadow(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+
+                    .build()
+            customPowerMenu?.showAsDropDown(
+                it,
+                -(((customPowerMenu?.getContentViewWidth()
+                    ?: 0) - (it.resources.getDimensionPixelSize(R.dimen.size_32))
+                        )
+                        ),
+                -(resources.getDimensionPixelSize(
+                    R.dimen.size_24
+                )
+                        )
             )
         }
 
@@ -180,20 +197,22 @@ class ClientActivationFragment : BaseFragment(),
 
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            mRedirectToApplication = it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
+            mRedirectToApplication =
+                it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
             mClientViaDeeplink =
-                    it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
 
 
         }
 
         arguments?.let {
-            mRedirectToApplication = it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
+            mRedirectToApplication =
+                it.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value, false)
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mClientViaDeeplink =
-                    it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
+                it.getBoolean(StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value, false)
             mInviteUserID = it.getString(StringConstants.INVITE_USER_ID.value) ?: return@let
         }
     }
@@ -212,23 +231,23 @@ class ClientActivationFragment : BaseFragment(),
                     requireContext()
                 )
             ).into(iv_main_client_activation)
-            tv_businessname_client_activation.text = (it?.title ?: "")
-            tv_role_client_activation.text = (it?.subTitle ?: "")
-            it?.locationList?.map { item -> item.location }?.let { locations ->
+            tv_businessname_client_activation.text = it.title
+            tv_role_client_activation.text = it.subTitle
+            it.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
             }
-            tv_earning_client_activation.text = Html.fromHtml(it?.payoutNote)
+            tv_earning_client_activation.text = Html.fromHtml(it.payoutNote)
             ll_role_desc.removeAllViews()
-            it?.queries?.forEach { element ->
+            it.queries?.forEach { element ->
                 val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
                 viewRoleDesc.tv_what_client_activation.text = element.query
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
 
                 if (!element.icon.isNullOrEmpty()) {
                     GlideApp.with(requireContext())
-                            .load(element.icon)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(viewRoleDesc.iv_what)
+                        .load(element.icon)
+                        .placeholder(getCircularProgressDrawable())
+                        .into(viewRoleDesc.iv_what)
 
                 } else {
                     viewRoleDesc.iv_what.setImageResource(R.drawable.ic_play_gradient)
@@ -237,33 +256,33 @@ class ClientActivationFragment : BaseFragment(),
 
             }
 
-            adapterBulletPoints.addData(it?.info!!)
+            adapterBulletPoints.addData(it.info!!)
 
 
             learning_cl.visible()
-            textView120.text = it?.requiredMedia?.title
-            if (!it?.requiredMedia?.icon.isNullOrEmpty()) {
+            textView120.text = it.requiredMedia?.title
+            if (!it.requiredMedia?.icon.isNullOrEmpty()) {
                 GlideApp.with(requireContext())
-                        .load(it?.requiredMedia?.icon)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(imageView36)
+                    .load(it.requiredMedia?.icon)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView36)
 
             } else {
                 imageView36.setImageResource(R.drawable.ic_play_gradient)
             }
-            initializeLearningModule(it?.requiredMedia?.media ?: listOf())
+            initializeLearningModule(it.requiredMedia?.media ?: listOf())
 
 
-            viewModel.getApplication(it?.profileId ?: "")
+            viewModel.getApplication(it.profileId)
 
         })
         viewModel.observableAddInterest.observe(viewLifecycleOwner, Observer {
             pb_client_activation.gone()
             if (it == true) {
-                navigate(
-                        R.id.fragment_application_client_activation, bundleOf(
+                navigation.navigateTo(
+                    "client_activation/applicationClientActivation", bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
-                )
+                    )
                 )
             }
         })
@@ -275,15 +294,16 @@ class ClientActivationFragment : BaseFragment(),
                 if (FirebaseAuth.getInstance().currentUser?.uid == null) {
                     iv_options_client_activation.gone()
                     tv_mark_as_interest_role_details.setOnClickListener {
-                        navFragmentsData?.setData(
-                                bundleOf(
-                                        StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
-                                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to mClientViaDeeplink,
-                                        StringConstants.INVITE_USER_ID.value to mInviteUserID,
-                                        StringConstants.AUTO_REDIRECT_TO_APPL.value to true
-                                )
+                        var navFragmentsData = activity as NavFragmentsData
+                        navFragmentsData.setData(
+                            bundleOf(
+                                StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to mClientViaDeeplink,
+                                StringConstants.INVITE_USER_ID.value to mInviteUserID,
+                                StringConstants.AUTO_REDIRECT_TO_APPL.value to true
+                            )
                         )
-                        navigate(R.id.Login)
+                        navigation.navigateTo("login")
                     }
                 } else {
                     tv_mark_as_interest_role_details.setOnClickListener {
@@ -297,21 +317,25 @@ class ClientActivationFragment : BaseFragment(),
                     else
                         tv_applied_client_activation.visible()
                     tv_applied_client_activation.text =
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
                     tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-                            0,
-                            0,
-                            0
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
+                        0,
+                        0,
+                        0
                     )
-                    setTextViewColor(
-                            tv_applied_client_activation,
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
-                    )
+                    activity?.applicationContext?.let {
+                        tv_applied_client_activation.setTextColor(
+                            ContextCompat.getColor(
+                                it,
+                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
+                            )
+                        )
+                    }
                     var actionButtonText =
-                            if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
-                                    R.string.complete_activation
-                            ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
+                        if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
+                            R.string.complete_activation
+                        ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
                     if (actionButtonText == "")
                         tv_mark_as_interest_role_details.gone()
                     else
@@ -332,7 +356,8 @@ class ClientActivationFragment : BaseFragment(),
     private fun setupPreferredLocationRv() {
 
 
-        adapterPreferredLocation = AdapterPreferredLocation()
+        adapterPreferredLocation =
+            AdapterPreferredLocation()
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
 
         val layoutManager = FlexboxLayoutManager(requireContext())
@@ -392,109 +417,130 @@ class ClientActivationFragment : BaseFragment(),
         } else {
             learning_cl.visible()
 
-            val displayMetrics = DisplayMetrics()
-            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-            val width = displayMetrics.widthPixels
-            val itemWidth = ((width / 3) * 2).toInt()
-            // model will change when integrated with DB
+//            val displayMetrics = DisplayMetrics()
+//            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//            val width = displayMetrics.widthPixels
+//            val itemWidth = ((width / 3) * 2).toInt()
+//            // model will change when integrated with DB
+//
+//            val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
+//                RecyclerGenericAdapter<LessonModel>(
+//                    activity?.applicationContext,
+//                    PFRecyclerViewAdapter.OnViewHolderClick<LessonModel> { view, position, item ->
+//                        if (item.type == "document") {
+//                            val docIntent = Intent(
+//                                requireContext(),
+//                                DocViewerActivity::class.java
+//                            )
+//                            docIntent.putExtra(
+//                                StringConstants.DOC_URL.value,
+//                                item.url
+//                            )
+//                            startActivity(docIntent)
+//                        } else {
+//                            if (FirebaseAuth.getInstance().currentUser?.uid == null) {
+//                                PlayVideoDialogWithUrl.launch(
+//                                    childFragmentManager = childFragmentManager,
+//                                    lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+//                                        position
+//                                    )?.lessonId ?: "",
+//                                    moduleId = "",
+//                                    shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
+//                                )
+//                            } else {
+//                                PlayVideoDialogFragment.launch(
+//                                    childFragmentManager = childFragmentManager,
+//                                    lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+//                                        position
+//                                    )?.lessonId ?: "",
+//                                    moduleId = "",
+//                                    shouldShowFeedbackDialog = item.shouldShowFeedbackDialog,
+//                                    disableLessonCompleteAction = true
+//                                )
+//                            }
+//
+//
+//                        }
+//
+//                    },
+//                    RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
+//                        val view = getView(viewHolder, R.id.card_view)
+//                        val lp = view.layoutParams
+//                        lp.height = lp.height
+//                        lp.width = itemWidth
+//                        view.layoutParams = lp
+//
+//                        val title = getTextView(viewHolder, R.id.title_)
+//                        title.text = obj?.name
+//
+//                        val subtitle = getTextView(viewHolder, R.id.title)
+//                        subtitle.text = obj?.description
+//
+//                        val comImg = getImageView(viewHolder, R.id.completed_iv)
+//                        comImg.isVisible = obj?.completed ?: false
+//
+//                        val img = getImageView(viewHolder, R.id.learning_img)
+//
+//                        if (!obj!!.coverPicture.isNullOrBlank()) {
+//                            if (obj.coverPicture!!.startsWith("http", true)) {
+//
+//                                GlideApp.with(requireContext())
+//                                    .load(obj.coverPicture!!)
+//                                    .placeholder(getCircularProgressDrawable())
+//                                    .error(R.drawable.ic_learning_default_back)
+//                                    .into(img)
+//                            } else {
+//                                FirebaseStorage.getInstance()
+//                                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+//                                    .child(obj.coverPicture!!)
+//                                    .downloadUrl
+//                                    .addOnSuccessListener { fileUri ->
+//
+//                                        GlideApp.with(requireContext())
+//                                            .load(fileUri)
+//                                            .placeholder(getCircularProgressDrawable())
+//                                            .error(R.drawable.ic_learning_default_back)
+//                                            .into(img)
+//                                    }
+//                            }
+//                        } else {
+//
+//                            GlideApp.with(requireContext())
+//                                .load(R.drawable.ic_learning_default_back)
+//                                .into(img)
+//                        }
+//
+//                        //img.setImageResource(obj?.imgIcon!!)
+//                    })
+//            recyclerGenericAdapter.list = content
+//            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+//            learning_rv.layoutManager = LinearLayoutManager(
+//                activity?.applicationContext,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//            )
+//            learning_rv.adapter = recyclerGenericAdapter
+//
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<LessonModel> =
-                    RecyclerGenericAdapter<LessonModel>(
-                            activity?.applicationContext,
-                            PFRecyclerViewAdapter.OnViewHolderClick<LessonModel> { view, position, item ->
-                                if (item.type == "document") {
-                                    val docIntent = Intent(
-                                            requireContext(),
-                                            DocViewerActivity::class.java
-                                    )
-                                    docIntent.putExtra(
-                                            StringConstants.DOC_URL.value,
-                                            item.url
-                                    )
-                                    startActivity(docIntent)
-                                } else {
-                                    if (FirebaseAuth.getInstance().currentUser?.uid == null) {
-                                        PlayVideoDialogWithUrl.launch(
-                                                childFragmentManager = childFragmentManager,
-                                                lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
-                                                        position
-                                                )?.lessonId ?: "",
-                                                moduleId = "",
-                                                shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
-                                        )
-                                    } else {
-                                        PlayVideoDialogFragment.launch(
-                                                childFragmentManager = childFragmentManager,
-                                                lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
-                                                        position
-                                                )?.lessonId ?: "",
-                                                moduleId = "",
-                                                shouldShowFeedbackDialog = item.shouldShowFeedbackDialog,
-                                                disableLessonCompleteAction = true
-                                        )
-                                    }
 
+            val myAdapter = object : GenericRecyclerAdapterTemp<LessonModel>(content) {
+                override fun getLayoutId(position: Int, obj: LessonModel): Int {
+                    return R.layout.learning_bs_item
+                }
 
-                                }
+                override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+                    return LessonViewHolder(
+                        view,
+                        activity,
+                        this@ClientActivationFragment,
+                        viewModel
+                    )
+                }
+            }
+            learning_rv.layoutManager = LinearLayoutManager(context)
+            learning_rv.setHasFixedSize(true)
+            learning_rv.adapter = myAdapter
 
-                            },
-                            RecyclerGenericAdapter.ItemInterface<LessonModel?> { obj, viewHolder, position ->
-                                val view = getView(viewHolder, R.id.card_view)
-                                val lp = view.layoutParams
-                                lp.height = lp.height
-                                lp.width = itemWidth
-                                view.layoutParams = lp
-
-                                val title = getTextView(viewHolder, R.id.title_)
-                                title.text = obj?.name
-
-                                val subtitle = getTextView(viewHolder, R.id.title)
-                                subtitle.text = obj?.description
-
-                                val comImg = getImageView(viewHolder, R.id.completed_iv)
-                                comImg.isVisible = obj?.completed ?: false
-
-                                val img = getImageView(viewHolder, R.id.learning_img)
-
-                                if (!obj!!.coverPicture.isNullOrBlank()) {
-                                    if (obj.coverPicture!!.startsWith("http", true)) {
-
-                                        GlideApp.with(requireContext())
-                                                .load(obj.coverPicture!!)
-                                                .placeholder(getCircularProgressDrawable())
-                                                .error(R.drawable.ic_learning_default_back)
-                                                .into(img)
-                                    } else {
-                                        FirebaseStorage.getInstance()
-                                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                                .child(obj.coverPicture!!)
-                                                .downloadUrl
-                                                .addOnSuccessListener { fileUri ->
-
-                                                    GlideApp.with(requireContext())
-                                                            .load(fileUri)
-                                                            .placeholder(getCircularProgressDrawable())
-                                                            .error(R.drawable.ic_learning_default_back)
-                                                            .into(img)
-                                                }
-                                    }
-                                } else {
-
-                                    GlideApp.with(requireContext())
-                                            .load(R.drawable.ic_learning_default_back)
-                                            .into(img)
-                                }
-
-                                //img.setImageResource(obj?.imgIcon!!)
-                            })!!
-            recyclerGenericAdapter.list = content
-            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-            learning_rv.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-            )
-            learning_rv.adapter = recyclerGenericAdapter
 
         }
     }
@@ -503,13 +549,13 @@ class ClientActivationFragment : BaseFragment(),
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
         outState.putBoolean(
-                StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
-                mClientViaDeeplink ?: false
+            StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
+            mClientViaDeeplink ?: false
         )
         outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
         outState.putBoolean(
-                StringConstants.AUTO_REDIRECT_TO_APPL.value,
-                mRedirectToApplication ?: false
+            StringConstants.AUTO_REDIRECT_TO_APPL.value,
+            mRedirectToApplication ?: false
         )
 
 
@@ -518,21 +564,21 @@ class ClientActivationFragment : BaseFragment(),
 
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse(deepLink.toString()))
-                .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
-                // Open links with this app on Android
-                .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-                // Open links with com.example.ios on iOS
-                .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
-                .setSocialMetaTagParameters(
-                        DynamicLink.SocialMetaTagParameters.Builder()
-                                .setTitle("Gigforce")
-                                .setDescription("Flexible work and learning platform")
-                                .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
-                                .build()
-                ).buildDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix(buildConfig.getReferralBaseUrl())//BuildConfig.REFERRAL_BASE_URL
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                    .build()
+            ).buildDynamicLink()
 
-        return dynamicLink.uri;
+        return dynamicLink.uri
     }
 
     fun shareToAnyApp(url: String) {
@@ -540,13 +586,13 @@ class ClientActivationFragment : BaseFragment(),
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
             shareIntent.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(R.string.app_name)
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.app_name)
             )
             val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                    BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 
@@ -558,11 +604,11 @@ class ClientActivationFragment : BaseFragment(),
             outPutStream.close()
             outputFile.setReadable(true, false)
             shareIntent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().packageName + ".provider",
                     outputFile
-            )
+                )
             )
             startActivity(Intent.createChooser(shareIntent, "choose one"))
         } catch (e: Exception) {
@@ -597,11 +643,11 @@ class ClientActivationFragment : BaseFragment(),
         this.location = location
         if (mRedirectToApplication == true) {
             tv_mark_as_interest_role_details
-                    ?.let {
-                        popAllBackStates()
-                        it.performClick()
-                        locationUpdates?.stopLocationUpdates(requireActivity())
-                    }
+                ?.let {
+                    navigation.popAllBackStates()
+                    it.performClick()
+                    locationUpdates?.stopLocationUpdates(requireActivity())
+                }
 
 
         }
@@ -620,27 +666,27 @@ class ClientActivationFragment : BaseFragment(),
                 }
                 pb_client_activation.visible()
                 viewModel.addInviteUserId(
-                        mInviteUserID ?: "",
-                        mJobProfileId,
-                        location!!
+                    mInviteUserID ?: "",
+                    mJobProfileId,
+                    location!!
                 )
 
 
             } else {
-                navigate(
-                        R.id.fragment_application_client_activation, bundleOf(
+                navigation.navigateTo(
+                    "client_activation/applicationClientActivation", bundleOf(
                         StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
-                )
+                    )
                 )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
             }
 
         } else if (jpApplication.status == "Inprocess") {
-            navigate(
-                    R.id.fragment_gig_activation, bundleOf(
+            navigation.navigateTo(
+                "client_activation/gigActivation", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
                     StringConstants.NEXT_DEP.value to viewModel.observableJobProfile.value?.nextDependency
-            )
+                )
             )
         }
     }
@@ -649,8 +695,163 @@ class ClientActivationFragment : BaseFragment(),
         if (customPowerMenu != null && customPowerMenu?.isShowing() == true) {
             customPowerMenu?.dismiss()
         }
-        return super.onBackPressed()
+        return false
     }
 
+
+    //------------------------------Temp View Holder
+
+    class LessonViewHolder : RecyclerView.ViewHolder,
+        GenericRecyclerAdapterTemp.Binder<LessonModel> {
+
+        var viewItem: View
+        var activity: Activity? = null
+        var fragment: Fragment? = null
+        var viewModel: ClientActivationViewmodel? = null
+        var itemWidth = 0
+
+        constructor(
+            view: View,
+            activity: Activity?,
+            fragment: Fragment,
+            viewModel: ClientActivationViewmodel
+        ) : super(view) {
+            viewItem = view
+            this.activity = activity
+            this.fragment = fragment
+            this.viewModel = viewModel
+            val displayMetrics = DisplayMetrics()
+            this.activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            itemWidth = ((width / 3) * 2).toInt()
+        }
+
+        override fun bind(obj: LessonModel, itemPosition: Int) {
+            activity?.let {
+                fragment?.let { it2 ->
+                    viewModel?.let { it1 ->
+                        viewItem.setOnClickListener(
+                            LessonClickListener(
+                                obj,
+                                it2,
+                                it,
+                                it1,
+                                itemPosition
+                            )
+                        )
+                    }
+                }
+                val view = viewItem.card_view //getView(viewHolder, R.id.card_view)
+                val lp = view.layoutParams
+                lp.height = lp.height
+                lp.width = itemWidth
+                view.layoutParams = lp
+
+                val title = viewItem.title_ //getTextView(viewHolder, R.id.title_)
+                title.text = obj.name
+
+                val subtitle = viewItem.title //getTextView(viewHolder, R.id.title)
+                subtitle.text = obj.description
+
+                val comImg = viewItem.completed_iv //getImageView(viewHolder, R.id.completed_iv)
+                comImg.isVisible = obj.completed
+
+                val img = viewItem.learning_img //getImageView(viewHolder, R.id.learning_img)
+
+                if (!obj.coverPicture.isNullOrBlank()) {
+                    if (obj.coverPicture!!.startsWith("http", true)) {
+
+                        GlideApp.with(it)
+                            .load(obj.coverPicture!!)
+                            .placeholder(fragment?.getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    } else {
+                        FirebaseStorage.getInstance()
+                            .getReference(LEARNING_IMAGES_FIREBASE_FOLDER)
+                            .child(obj.coverPicture!!)
+                            .downloadUrl
+                            .addOnSuccessListener { fileUri ->
+
+                                GlideApp.with(it)
+                                    .load(fileUri)
+                                    .placeholder(fragment?.getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(img)
+                            }
+                    }
+                } else {
+
+                    GlideApp.with(it)
+                        .load(R.drawable.ic_learning_default_back)
+                        .into(img)
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val LEARNING_IMAGES_FIREBASE_FOLDER = "learning_images"
+    }
+
+    class LessonClickListener(
+        val item: LessonModel,
+        val fragment: Fragment,
+        val activity: Activity,
+        val viewModel: ClientActivationViewmodel,
+        val position: Int
+    ) : View.OnClickListener {
+        override fun onClick(v: View?) {
+            if (item.type == "document") {
+//                val docIntent = Intent(
+//                    fragment.context,
+//                    DocViewerActivity::class.java
+//                )
+//                docIntent.putExtra(
+//                    StringConstants.DOC_URL.value,
+//                    item.url
+//                )
+//                fragment.startActivity(docIntent)
+                (fragment as ClientActivationFragment).navigation.navigateToDocViewerActivity(
+                    activity,
+                    item.url
+                )
+            } else {
+                if (FirebaseAuth.getInstance().currentUser?.uid == null) {
+//                    PlayVideoDialogWithUrl.launch(
+//                        childFragmentManager = fragment.childFragmentManager,
+//                        lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+//                            position
+//                        )?.lessonId ?: "",
+//                        moduleId = "",
+//                        shouldShowFeedbackDialog = item.shouldShowFeedbackDialog
+//                    )
+
+                    (fragment as ClientActivationFragment).navigation.navigateToPlayVideoDialogWithUrl(
+                        fragment, viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+                            position
+                        )?.lessonId ?: "", item.shouldShowFeedbackDialog
+                    )
+                } else {
+                    (fragment as ClientActivationFragment).navigation.navigateToPlayVideoDialogFragment(
+                        fragment, viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+                            position
+                        )?.lessonId ?: "", item.shouldShowFeedbackDialog
+                    )
+//                    PlayVideoDialogFragment.launch(
+//                        childFragmentManager = fragment.childFragmentManager,
+//                        lessonId = viewModel.observableJobProfile.value?.requiredMedia?.media?.get(
+//                            position
+//                        )?.lessonId ?: "",
+//                        moduleId = "",
+//                        shouldShowFeedbackDialog = item.shouldShowFeedbackDialog,
+//                        disableLessonCompleteAction = true
+//                    )
+                }
+
+
+            }
+        }
+    }
 
 }

@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.base.validation.Regexes
-import com.gigforce.app.modules.verification.models.Address
+import com.gigforce.core.datamodels.verification.Address
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import java.util.regex.Matcher
 

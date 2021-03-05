@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.core.SingleLiveEvent
 
 class AddExperienceViewModel :ViewModel() {
