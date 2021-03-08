@@ -31,6 +31,7 @@
                 android:maxWidth="@dimen/chat_item_max_length"
                 android:textSize="16sp"
                 android:id="@+id/tv_msgValue"
+                android:linksClickable="true"
                 android:autoLink="web"
                 android:text="Hello df"
                 app:layout_constraintTop_toTopOf="parent"

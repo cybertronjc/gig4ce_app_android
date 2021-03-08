@@ -1,8 +1,11 @@
 package com.gigforce.modules.feature_chat.models
 
+import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ContactModel(
 
  @get:PropertyName("id")
@@ -57,4 +60,4 @@ data class ContactModel(
  @get:PropertyName("isUserGroupManager")
  @set:PropertyName("isUserGroupManager")
  var isUserGroupManager: Boolean = false
-)
+) : Parcelable

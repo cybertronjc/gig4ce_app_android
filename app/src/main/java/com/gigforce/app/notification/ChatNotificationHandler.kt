@@ -16,7 +16,7 @@ import androidx.core.graphics.drawable.IconCompat
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.toBundle
-import com.gigforce.core.extensions.getDownloadUrlOrReturnNull
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
@@ -79,6 +79,7 @@ class ChatNotificationHandler constructor(
                         .addMessage(notificationMessage)
 
                 )
+                .setAutoCancel(true)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setOnlyAlertOnce(true)
 
@@ -115,6 +116,10 @@ class ChatNotificationHandler constructor(
 
         val dataBundle = data.toBundle()
         dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
+//        dataBundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, dataBundle.getString("sender_id"))
+//        dataBundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, dataBundle.getString("sender_name",""))
+//        dataBundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, dataBundle.getString("sender_profile",""))
+//        dataBundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, dataBundle.getString("chat_header_id",""))
 
         return TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(
@@ -122,7 +127,7 @@ class ChatNotificationHandler constructor(
                     context,
                     MainActivity::class.java
                 ).apply {
-                    putExtras(data.toBundle())
+                    putExtras(dataBundle)
                 })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
@@ -131,17 +136,17 @@ class ChatNotificationHandler constructor(
 
 
     private suspend fun createPerson(remoteMessage: RemoteMessage): Person {
-        val senderName = remoteMessage.notification?.title ?: ""
-        val senderId = remoteMessage.data.getOrDefault("sender_id", "")
-
-        val senderProfilePicturePath = remoteMessage.data.getOrDefault("sender_profile", "")
+        val senderName = remoteMessage.notification?.title ?: "User"
+        val senderId = remoteMessage.data.getOrDefault("receiver_id", "")
+        val senderProfilePicturePath = remoteMessage.data.getOrDefault("imageUrl", "")
         var senderProfilePicture: Bitmap? = null
         if (senderProfilePicturePath != "") {
-            val senderProfilePictureUri = firebaseStorage.reference.child(senderProfilePicturePath)
-                .getDownloadUrlOrReturnNull()
+            //todo
+//            val senderProfilePictureUri = firebaseStorage.reference.child(senderProfilePicturePath)
+//                .getDownloadUrlOrReturnNull()
 
-            if (senderProfilePictureUri != null)
-                senderProfilePicture = getBitmapFromURL(senderProfilePictureUri.toString())
+//            if (senderProfilePictureUri != null)
+            senderProfilePicture = getBitmapFromURL(senderProfilePicturePath.toString())
         }
 
         return Person.Builder()
@@ -189,6 +194,7 @@ class ChatNotificationHandler constructor(
                         .addMessage(notificationMessage)
 
                 )
+                .setAutoCancel(true)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setOnlyAlertOnce(true)
 
@@ -245,10 +251,6 @@ class ChatNotificationHandler constructor(
     }
 
     companion object {
-
-        const val CHAT_NOTIF_CHANNEL_ID = "chat_notifications"
-        const val CHAT_NOTIF_CHANNEL_NAME = "Chat Notifications"
-
         const val CHAT_NOTIF_REQUEST_CODE = 67
     }
 

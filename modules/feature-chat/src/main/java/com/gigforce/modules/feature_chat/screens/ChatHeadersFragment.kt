@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,6 +37,7 @@ class ChatHeadersFragment : Fragment() {
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
     private lateinit var contactsButton: MaterialButton
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,9 +105,14 @@ class ChatHeadersFragment : Fragment() {
 
         noChatsLayout = view.findViewById(R.id.no_chat_layout)
         contactsButton = view.findViewById(R.id.contacts_btn)
+        toolbar = view.findViewById(R.id.toolbar)
 
         contactsButton.setOnClickListener {
             navigation.navigateToContactsPage()
+        }
+
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
     }
 }

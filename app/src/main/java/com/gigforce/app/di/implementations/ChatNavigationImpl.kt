@@ -9,6 +9,7 @@ import com.gigforce.app.R
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.app.utils.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.navigation.BaseNavigationImpl
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import javax.inject.Inject
@@ -20,6 +21,18 @@ class ChatNavigationImpl @Inject constructor() : BaseNavigationImpl(),
 
     }
 
+    override fun navigateToGroupChat(headerId: String) {
+        Log.i("Chat/Nav/Impl", "Navigate to Chat Page Tapped")
+       // Toast.makeText(context, "Navigate to Chat Page Tapped", Toast.LENGTH_LONG).show()
+
+        (this.context as MainActivity).getNavController().navigate(
+            R.id.chatPageFragment, bundleOf(
+                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_GROUP,
+                ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to headerId
+            )
+        )
+    }
+
     override fun navigateToChatPage(
         chatType: String,
         otherUserId: String,
@@ -29,7 +42,7 @@ class ChatNavigationImpl @Inject constructor() : BaseNavigationImpl(),
     ) {
 
         Log.i("Chat/Nav/Impl", "Navigate to Chat Page Tapped")
-        Toast.makeText(context, "Navigate to Chat Page Tapped", Toast.LENGTH_LONG).show()
+       // Toast.makeText(context, "Navigate to Chat Page Tapped", Toast.LENGTH_LONG).show()
 
         (this.context as MainActivity).getNavController().navigate(
             R.id.chatPageFragment, bundleOf(

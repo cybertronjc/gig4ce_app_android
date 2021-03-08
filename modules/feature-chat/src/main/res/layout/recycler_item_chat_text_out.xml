@@ -28,6 +28,8 @@
                 android:text="How are you my brother"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
+                android:linksClickable="true"
+                android:autoLink="web"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

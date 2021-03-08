@@ -34,18 +34,18 @@ import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapte
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.NewContactsViewModel
+import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.gigforce.modules.feature_chat.screens.vm.factories.NewContactsViewModelFactory
 import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import javax.inject.Inject
 
 
 class ContactsFragment : DialogFragment(),
     PopupMenu.OnMenuItemClickListener,
-    OnContactClickListener {
+    OnContactClickListener, CreateGroupDialogFragment.CreateGroupDialogFragmentListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
@@ -55,13 +55,6 @@ class ContactsFragment : DialogFragment(),
             this,
             NewContactsViewModelFactory(requireContext())
         ).get(NewContactsViewModel::class.java)
-    }
-
-    private val chatGroupViewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
-        ).get(GroupChatViewModel::class.java)
     }
 
     // Views
@@ -300,30 +293,11 @@ class ContactsFragment : DialogFragment(),
                 dismiss()
             } else {
 
-                val groupNameEt = EditText(requireContext())
-
-                val layout = FrameLayout(requireContext())
-                layout.setPaddingRelative(45, 15, 45, 0)
-                layout.addView(groupNameEt)
-
-                MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a group name")
-                    .setTitle("Group name")
-                    .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
-
-                        if (groupNameEt.length() == 0) {
-                            showToast("Please enter a group name")
-                        } else {
-                            chatGroupViewModel.createGroup(
-                                groupName = groupNameEt.text.toString().capitalize(),
-                                groupMembers = contactsAdapter.getSelectedContact()
-                            )
-                        }
-                    }
-                    .setNegativeButton("Cancel") { _, _ ->
-
-                    }.show()
+                CreateGroupDialogFragment.launch(
+                    contacts = ArrayList(contactsAdapter.getSelectedContact()),
+                    createGroupDialogFragmentListener = this,
+                    fragmentManager = childFragmentManager
+                )
             }
         }
 
@@ -351,37 +325,6 @@ class ContactsFragment : DialogFragment(),
                 showContactsOnView(it)
             })
 
-        chatGroupViewModel
-            .createGroup
-            .observe(viewLifecycleOwner, Observer {
-                it ?: return@Observer
-
-                //todo shift group creation to a diff model
-
-//                    when (it) {
-//                        Lce.Loading -> UtilMethods.showLoading(requireContext())
-//                        is Lce.Content -> {
-//                            UtilMethods.hideLoading()
-//                            showToast("Group created")
-//
-//                            findNavController()
-//                                    .navigate(
-//                                            R.id.groupChatFragment, bundleOf(
-//                                            GroupChatFragment.INTENT_EXTRA_GROUP_ID to it.content
-//                                    )
-//                                    )
-//                        }
-//                        is Lce.Error -> {
-//                            UtilMethods.hideLoading()
-//
-//                            MaterialAlertDialogBuilder(requireContext())
-//                                    .setTitle("Error while creating group")
-//                                    .setMessage(it.error)
-//                                    .setPositiveButton("okay") { _, _ -> }
-//                                    .show()
-//                        }
-//                    }
-            })
     }
 
     private fun showContactsAsSyncing() {
@@ -577,5 +520,12 @@ class ContactsFragment : DialogFragment(),
                 show(fm, TAG)
             }
         }
+    }
+
+    override fun onGroupCreated(groupId: String) {
+
+        navigation.navigateToGroupChat(
+            headerId = groupId
+        )
     }
 }

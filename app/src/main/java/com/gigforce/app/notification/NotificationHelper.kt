@@ -22,9 +22,9 @@ class NotificationHelper(private val mContext: Context) {
      * Create and push the notification
      */
     fun createUrgentPriorityNotification(
-            title: String,
-            message: String,
-            pendingIntent: PendingIntent? = null
+        title: String,
+        message: String,
+        pendingIntent: PendingIntent? = null
     ) {
 
         val finalPendingIntent = if (pendingIntent == null) {
@@ -32,9 +32,9 @@ class NotificationHelper(private val mContext: Context) {
             val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             val resultPendingIntent = PendingIntent.getActivity(
-                    mContext,
-                    0 /* Request code */, resultIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                mContext,
+                0 /* Request code */, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
             resultPendingIntent
         } else {
@@ -42,20 +42,20 @@ class NotificationHelper(private val mContext: Context) {
         }
 
         val mBuilder = NotificationCompat.Builder(
-                mContext,
-                NotificationChannels.CHANNEL_URGENT_ID
+            mContext,
+            NotificationChannels.CHANNEL_URGENT_ID
         )
 
         mBuilder.setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
-                .setAutoCancel(true)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentIntent(finalPendingIntent)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
+            .setAutoCancel(true)
+            .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+            .setContentIntent(finalPendingIntent)
 
         val mNotificationManager =
-                mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }
@@ -65,14 +65,14 @@ class NotificationHelper(private val mContext: Context) {
     }
 
     fun createUrgentPriorityNotification(
-            requestCode: Int,
-            notification: Notification
+        requestCode: Int,
+        notification: Notification
     ) {
 
 
 
         val mNotificationManager =
-                mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(CHAT_NOTIFICATIONS)
         }
@@ -85,33 +85,33 @@ class NotificationHelper(private val mContext: Context) {
      * Create and push the notification
      */
     fun createNormalPriorityNotification(
-            title: String,
-            message: String
+        title: String,
+        message: String
     ) {
         /**Creates an explicit intent for an Activity in your app */
         val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resultPendingIntent = PendingIntent.getActivity(
-                mContext,
-                0 /* Request code */, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+            mContext,
+            0 /* Request code */, resultIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val mBuilder = NotificationCompat.Builder(
-                mContext,
-                NotificationChannels.CHANNEL_URGENT_ID
+            mContext,
+            NotificationChannels.CHANNEL_URGENT_ID
         )
 
         mBuilder.setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
-                .setAutoCancel(true)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setContentIntent(resultPendingIntent)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setColor(ResourcesCompat.getColor(mContext.resources, R.color.colorPrimary, null))
+            .setAutoCancel(true)
+            .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+            .setContentIntent(resultPendingIntent)
 
         val mNotificationManager =
-                mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(URGENT_NOTIFICATIONS)
         }

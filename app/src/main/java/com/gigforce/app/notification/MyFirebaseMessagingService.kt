@@ -4,9 +4,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
-import androidx.navigation.NavDeepLinkBuilder
 import com.gigforce.app.MainActivity
-import com.gigforce.app.R
 import com.gigforce.app.core.toBundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,8 +35,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         registerFirebaseTokenIfLoggedIn()
         FirebaseAuth.getInstance().currentUser ?: let {
             Log.v(
-                    TAG,
-                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                TAG,
+                "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
             )
             FirebaseAuth.getInstance().addAuthStateListener {
                 Log.v(TAG, "Firebase Auth State Changed")
@@ -51,17 +49,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         FirebaseAuth.getInstance().currentUser?.let {
             val uid = it.uid
             FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
-                    .set(
-                            hashMapOf(
-                                    "uid" to uid,
-                                    "type" to "fcm",
-                                    "timestamp" to Date().time
-                            )
-                    ).addOnSuccessListener {
-                        Log.v(TAG, "Token Updated on Firestore Successfully")
-                    }.addOnFailureListener {
-                        Log.e(TAG, "Token Update Failed on Firestore", it)
-                    }
+                .set(
+                    hashMapOf(
+                        "uid" to uid,
+                        "type" to "fcm",
+                        "timestamp" to Date().time
+                    )
+                ).addOnSuccessListener {
+                    Log.v(TAG, "Token Updated on Firestore Successfully")
+                }.addOnFailureListener {
+                    Log.e(TAG, "Token Update Failed on Firestore", it)
+                }
         }
     }
 
@@ -88,11 +86,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     null
 
                 NotificationHelper(applicationContext)
-                        .createUrgentPriorityNotification(
-                                title = it.title ?: "Gigforce",
-                                message = it.body ?: "message",
-                                pendingIntent = pendingIntent
-                        )
+                    .createUrgentPriorityNotification(
+                        title = it.title ?: "Gigforce",
+                        message = it.body ?: "message",
+                        pendingIntent = pendingIntent
+                    )
 
             }
         }
@@ -107,8 +105,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun createPendingIntentFromData(
-            clickAction: String,
-            data: Map<String, String>
+        clickAction: String,
+        data: Map<String, String>
     ): PendingIntent? {
 
         val dataBundle = data.toBundle()
@@ -123,12 +121,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
-                    Intent(
-                            applicationContext,
-                            MainActivity::class.java
-                    ).apply {
-                        putExtras(data.toBundle())
-                    })
+                Intent(
+                    applicationContext,
+                    MainActivity::class.java
+                ).apply {
+                    putExtras(data.toBundle())
+                })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }

@@ -15,6 +15,10 @@ interface IChatNavigation : INavigation {
         otherUserProfilePicture: String = ""
     )
 
+    fun navigateToGroupChat(
+        headerId: String
+    )
+
     fun navigateToContactsPage()
 
     fun openFullScreenImageViewDialogFragment(
