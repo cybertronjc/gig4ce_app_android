@@ -764,13 +764,13 @@
         tools:layout="@layout/layout_questionaire_fragment" />
     <fragment
         android:id="@+id/fragment_client_activation"
-        android:name="com.gigforce.app.modules.client_activation.ClientActivationFragment"
+        android:name="com.gigforce.client_activation.client_activation.ClientActivationFragment"
         android:label="fragment_client_activation"
         tools:layout="@layout/layout_fragment_client_activation" />
 
     <fragment
         android:id="@+id/fragment_application_client_activation"
-        android:name="com.gigforce.app.modules.client_activation.ApplicationClientActivationFragment"
+        android:name="com.gigforce.client_activation.client_activation.ApplicationClientActivationFragment"
         android:label="fragment_application_client_activation"
         tools:layout="@layout/layout_application_client_activation_fragment" />
     <fragment
@@ -807,13 +807,13 @@
 
     <fragment
         android:id="@+id/fragment_gig_activation"
-        android:name="com.gigforce.app.modules.client_activation.GigActivationFragment"
+        android:name="com.gigforce.client_activation.client_activation.GigActivationFragment"
         android:label="fragment_gig_activation"
         tools:layout="@layout/layout_fragment_activation_gig" />
 
     <fragment
         android:id="@+id/application_submitted_fragment"
-        android:name="com.gigforce.app.modules.client_activation.ApplicationSubmittedFragment"
+        android:name="com.gigforce.client_activation.client_activation.ApplicationSubmittedFragment"
         android:label="fragment_application_submitted"
         tools:layout="@layout/fragment_application_submitted"
         />
@@ -827,13 +827,13 @@
 
     <fragment
         android:id="@+id/fragment_doc_sub"
-        android:name="com.gigforce.app.modules.client_activation.DocsSubSchedulerFragment"
+        android:name="com.gigforce.client_activation.client_activation.DocsSubSchedulerFragment"
         android:label="fragment_doc_sub"
         tools:layout="@layout/fragment_docs_sub_scheduler" />
 
     <fragment
         android:id="@+id/fragment_schedule_test"
-        android:name="com.gigforce.app.modules.client_activation.ScheduleDrivingTestFragment"
+        android:name="com.gigforce.client_activation.client_activation.ScheduleDrivingTestFragment"
         android:label="fragment_schedule_test"
         tools:layout="@layout/layout_fragment_schedule_driving_test" />
     <fragment

@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.ambassador.PincodeResponse
 import com.gigforce.core.datamodels.State
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.common_ui.configrepository.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.ProfileData

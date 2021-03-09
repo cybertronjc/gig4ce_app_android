@@ -17,10 +17,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.DrivingCertSuccessDialog
-import com.gigforce.app.modules.client_activation.RejectionDialog
-import com.gigforce.app.modules.client_activation.models.Cities
-import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.client_activation.client_activation.DrivingCertSuccessDialog
+import com.gigforce.client_activation.client_activation.RejectionDialog
+import com.gigforce.client_activation.client_activation.models.Cities
+import com.gigforce.client_activation.client_activation.models.States
 import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.common_ui.StringConstants

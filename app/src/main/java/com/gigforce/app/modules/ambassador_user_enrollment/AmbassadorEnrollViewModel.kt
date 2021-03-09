@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.Lce
 import com.google.firebase.firestore.ListenerRegistration

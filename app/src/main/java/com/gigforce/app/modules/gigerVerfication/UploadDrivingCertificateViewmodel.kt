@@ -3,7 +3,7 @@ package com.gigforce.app.modules.gigerVerfication
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.client_activation.models.JpApplication
+import com.gigforce.client_activation.client_activation.models.JpApplication
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.storage.FirebaseStorage

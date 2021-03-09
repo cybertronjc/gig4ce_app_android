@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="plus_more">+more</string>
+    <string name="steps_pending">Steps Pending</string>
+    <string name="submit">Submit</string>
+    <string name="looking_for_dynamic_working_hours">\Looking for flexible working hours? Join me at Gigforce :</string>
+    <string name="share">Share</string>
+    <string name="apply_now">Apply Now</string>
+    <string name="complete_application">Complete Application</string>
+    <string name="complete_activation">Complete Activation</string>
+    <string name="set_location_to_high_accuracy">Please turn on your location and set it to high accuracy to continue!!</string>
+    <string name="why_do_we_need_this">Why we need this ?</string>
+    <string name="set_doc_preference">Set your Preference Document Submission</string>
+    <string name="set_doc_note">Note : You need to submit original Driving Licence and  Cheque of Rs 20,000 to Gigforce</string>
+    <string name="driving_test_details">Driving Test Details</string>
+    <string name="all_set_for_test">All Set for Driving Test</string>
+    <string name="change_slot">Change Slot</string>
+    <string name="select_partner_school">Select Partner School</string>
+    <string name="tap_to_select">Tap to Select</string>
+    <string name="select_date_of_visit">Select Date of Visit</string>
+    <string name="select_slot_of_visit">Select Slot of Visit</string>
+    <string name="activate">Activate</string>
+    <string name="schedule_doc_submission">Schedule Document Submission</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us">Congratulations! Your Driving Certificate successfully uploaded.Your docs are safe with us.</string>
+    <string name="driving_certificate">Driving Certificate</string>
+    <string name="okay">OKAY</string>
+    <string name="approved_bold"><![CDATA[<b>Approved </b>]]></string>
+    <string name="pending_bold"><![CDATA[<b>Pending</b>]]></string>
+    <string name="rejected_bold"><![CDATA[<b>Rejected </b>]]></string>
+    <string name="take_me_to_home">Take me to Home</string>
+    <string name="refer_a_friend">Refer a Friend</string>
+    <string name="meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role">Meanwhile you can refer your contacts who can be eligible for this role</string>
+    <string name="you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you">You can reapply for this role once you are eligible.We are always here to help you.</string>
+    <string name="no_worries">No Worries!!</string>
+    <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
+
+
+</resources>

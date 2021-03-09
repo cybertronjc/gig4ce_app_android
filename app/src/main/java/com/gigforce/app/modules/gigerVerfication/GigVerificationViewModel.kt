@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.*

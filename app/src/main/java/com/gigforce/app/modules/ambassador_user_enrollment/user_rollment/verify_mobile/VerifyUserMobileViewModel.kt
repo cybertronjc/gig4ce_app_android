@@ -7,19 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.Lce
 import com.gigforce.core.di.interfaces.IBuildConfig
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ViewModelScoped
 class VerifyUserMobileViewModel constructor(
-        private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : ViewModel() {
     @Inject lateinit var buildConfig : IBuildConfig
     private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>>()

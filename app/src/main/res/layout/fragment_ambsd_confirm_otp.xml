@@ -85,7 +85,7 @@
                 app:layout_constraintTop_toBottomOf="@id/enter_mobile_label" />
 
 
-            <com.gigforce.app.modules.auth.ui.main.OtpEditText
+            <com.gigforce.common_ui.widgets.OtpEditText
                 android:id="@+id/txt_otp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

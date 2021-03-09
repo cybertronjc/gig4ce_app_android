@@ -3,12 +3,11 @@ package com.gigforce.app.nav
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.modules.client_activation.PlayVideoDialogWithUrl
+import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.app.utils.DocViewerActivity
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants

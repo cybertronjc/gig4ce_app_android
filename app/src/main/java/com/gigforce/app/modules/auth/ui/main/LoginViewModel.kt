@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.core.datamodels.login.LoginResponse
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -42,12 +43,22 @@ class LoginViewModel() : ViewModel() {
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
-            liveState.postValue(LoginResponse(STATE_VERIFY_SUCCESS, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_VERIFY_SUCCESS,
+                    ""
+                )
+            )
             signInWithPhoneAuthCredential(credential)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            liveState.postValue(LoginResponse(STATE_VERIFY_FAILED, e.toString()))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_VERIFY_FAILED,
+                    e.toString()
+                )
+            )
         }
 
         override fun onCodeSent(
@@ -57,7 +68,12 @@ class LoginViewModel() : ViewModel() {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
-            liveState.postValue(LoginResponse(STATE_CODE_SENT, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_CODE_SENT,
+                    ""
+                )
+            )
         }
     }
 
@@ -87,7 +103,12 @@ class LoginViewModel() : ViewModel() {
                         Log.d(TAG, "signInWithCredential:success")
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", it.exception)
-                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
+                        liveState.postValue(
+                            LoginResponse(
+                                STATE_SIGNIN_FAILED,
+                                ""
+                            )
+                        )
                     }
                 }
                 .addOnSuccessListener {
@@ -96,7 +117,12 @@ class LoginViewModel() : ViewModel() {
                 }
                 .addOnFailureListener {
                     Log.d(TAG, "Signed in failed")
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
+                    liveState.postValue(
+                        LoginResponse(
+                            STATE_SIGNIN_FAILED,
+                            it.toString()
+                        )
+                    )
                 }
     }
 
@@ -110,11 +136,21 @@ class LoginViewModel() : ViewModel() {
                 if (it.isSuccessful) {
                     registerTokenOnServer(currentUser.uid, token!!)
                 } else {
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                    liveState.postValue(
+                        LoginResponse(
+                            STATE_SIGNIN_SUCCESS,
+                            ""
+                        )
+                    )
                 }
             }
         } else {
-            liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_SIGNIN_SUCCESS,
+                    ""
+                )
+            )
         }
     }
 
@@ -129,10 +165,20 @@ class LoginViewModel() : ViewModel() {
                         )
                 ).addOnSuccessListener {
                     Log.v(TAG, "Token Updated on Firestore Successfully")
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                    liveState.postValue(
+                        LoginResponse(
+                            STATE_SIGNIN_SUCCESS,
+                            ""
+                        )
+                    )
                 }.addOnFailureListener {
                     Log.e(TAG, "Token Update Failed on Firestore", it)
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                    liveState.postValue(
+                        LoginResponse(
+                            STATE_SIGNIN_SUCCESS,
+                            ""
+                        )
+                    )
                 }
     }
 }

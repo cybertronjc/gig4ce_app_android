@@ -21,7 +21,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.RejectionDialog
+import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides

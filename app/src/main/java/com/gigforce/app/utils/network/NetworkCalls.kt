@@ -2,7 +2,7 @@ package com.gigforce.app.utils.network
 
 //import com.gigforce.core.Buil
 //import com.gigforce.app.BuildConfig
-//import com.gigforce.app.modules.client_activation.models.DrivingCertificateResponse
+//import com.gigforce.client_activation.client_activation.models.DrivingCertificateResponse
 //import com.gigforce.core.BuildConfig
 
 interface NetworkCalls {
