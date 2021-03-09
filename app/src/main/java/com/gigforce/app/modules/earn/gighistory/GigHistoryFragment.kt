@@ -75,6 +75,12 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         iv_back_tb_gig_history.setOnClickListener {
             popBackState()
         }
+
+        cv_profile_image_gig_his.setOnClickListener {
+            navigate(R.id.profileFragment)
+        }
+
+
     }
 
     private fun setupRecycler() {

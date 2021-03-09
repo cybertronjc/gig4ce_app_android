@@ -263,6 +263,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             )
         }
 
+        ambsd_dl_edit_skip_btn.setOnClickListener {
+
+            UserDetailsFilledDialogFragment.launch(
+                userId = userId,
+                userName = userName,
+                fragmentManager = childFragmentManager,
+                okayClickListener = this@AddUserDrivingLicenseInfoFragment
+            )
+        }
+
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())

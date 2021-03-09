@@ -779,7 +779,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 //                R.id.landinghomefragment
 //            )
 //        )
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
+//        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(
             FeatureModel(
                 "Verification",

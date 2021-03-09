@@ -137,6 +137,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
         aadharSubmitSliderBtn.isEnabled = false
 
+        ambsd_aadhar_aahdar_skip_btn.setOnClickListener {
+
+            navigate(
+                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                )
+            )
+
+        }
 
         ic_back_iv.setOnClickListener {
             showGoBackConfirmationDialog()

@@ -16,7 +16,6 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.getScreenWidth
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*
@@ -34,9 +33,9 @@ class DeclineGigDialogFragment : DialogFragment() {
         const val TAG = "DeclineGigDialogFragment"
 
         fun launch(
-                gigId: String,
-                fragmentManager: FragmentManager,
-                declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
+            gigId: String,
+            fragmentManager: FragmentManager,
+            declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
         ) {
             val frag = DeclineGigDialogFragment()
             frag.arguments = bundleOf(INTENT_EXTRA_GIG_ID to gigId)
@@ -45,9 +44,9 @@ class DeclineGigDialogFragment : DialogFragment() {
         }
 
         fun launch(
-                gigIds: List<String>,
-                fragmentManager: FragmentManager,
-                declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
+            gigIds: List<String>,
+            fragmentManager: FragmentManager,
+            declineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
         ) {
             val frag = DeclineGigDialogFragment()
             frag.arguments = bundleOf(INTENT_EXTRA_GIG_IDS to ArrayList(gigIds))
@@ -65,9 +64,9 @@ class DeclineGigDialogFragment : DialogFragment() {
     private lateinit var mDeclineGigDialogFragmentResultListener: DeclineGigDialogFragmentResultListener
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_decline_gig_dialog, container, false)
     }
@@ -104,16 +103,16 @@ class DeclineGigDialogFragment : DialogFragment() {
                 }
                 Lse.Success -> {
                     Toast.makeText(requireContext(), "Gig Declined", Toast.LENGTH_LONG)
-                            .show()
+                        .show()
                     mDeclineGigDialogFragmentResultListener.gigDeclined()
                     dismiss()
                 }
                 is Lse.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Unable to decline gig, ${it.error}")
-                            .setPositiveButton("Okay") { _, _ -> }
-                            .show()
+                        .setTitle("Alert")
+                        .setMessage("Unable to decline gig, ${it.error}")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
                 }
             }
         })
@@ -135,6 +134,7 @@ class DeclineGigDialogFragment : DialogFragment() {
     private fun initView() {
 
         reason_radio_group.setOnCheckedChangeListener { _, checkedId ->
+            submitBtn.isEnabled = true
 
             if (checkedId == R.id.reason_others) {
                 reason_label.visible()
@@ -145,33 +145,28 @@ class DeclineGigDialogFragment : DialogFragment() {
             }
         }
 
-        confirm_decline_cb.setOnCheckedChangeListener { _, isChecked ->
-            submitBtn.isEnabled = isChecked
-        }
 
         submitBtn.setOnClickListener {
 
             val checkedRadioButtonId = reason_radio_group.checkedRadioButtonId
             if (checkedRadioButtonId == -1) {
 
-                confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Please select the reason")
-                        .setPositiveButton("Okay") { _, _ -> }
-                        .show()
+                    .setTitle("Alert")
+                    .setMessage("Please select the reason")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
 
                 return@setOnClickListener
             } else if (checkedRadioButtonId == R.id.reason_others
-                    && reason_et.text.isNullOrBlank()
+                && reason_et.text.isNullOrBlank()
             ) {
 
-                confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Please type the reason")
-                        .setPositiveButton("Okay") { _, _ -> }
-                        .show()
+                    .setTitle("Alert")
+                    .setMessage("Please type the reason")
+                    .setPositiveButton("Okay") { _, _ -> }
+                    .show()
 
                 return@setOnClickListener
             }
