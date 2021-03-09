@@ -37,12 +37,16 @@ class HelpVideosFragment : BaseFragment() {
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        shimmerFrameLayout.startShimmerAnimation()
     }
 
     private fun initViewModel() {
         viewModel.helpVideos
             .observe(viewLifecycleOwner, Observer {
-                setHelpVideosOnView(it)
+
+                shimmerFrameLayout.stopShimmerAnimation()
+               // setHelpVideosOnView(it)
             })
 
         viewModel.getAllHelpVideos()
