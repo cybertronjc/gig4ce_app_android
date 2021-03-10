@@ -76,9 +76,10 @@ import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.Lce
+import dagger.hilt.android.AndroidEntryPoint
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
-
+@AndroidEntryPoint
 class LandingScreenFragment : BaseFragment() {
 
     companion object {

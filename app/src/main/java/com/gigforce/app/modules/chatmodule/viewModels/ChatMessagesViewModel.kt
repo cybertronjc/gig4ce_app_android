@@ -16,9 +16,9 @@ import com.gigforce.app.modules.chatmodule.*
 import com.gigforce.app.modules.chatmodule.models.*
 import com.gigforce.app.modules.chatmodule.repository.ChatRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.gigforce.app.utils.*
-import com.gigforce.app.utils.network.RetrofitFactory
+import com.gigforce.core.retrofit.GeneratePaySlipService
+import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.core.utils.EventLogs.*
 import com.gigforce.core.utils.FileUtils

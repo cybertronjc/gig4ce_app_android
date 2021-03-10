@@ -133,7 +133,7 @@ dependencies {
     implementation project(path: ':modules:client-activation')
     implementation project(path: ':modules:profile')
     implementation project(path: ':modules:user_profile')
-
+    implementation project(path: ':modules:wallet')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
 
@@ -329,6 +329,9 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha03'
 
     // Rx
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

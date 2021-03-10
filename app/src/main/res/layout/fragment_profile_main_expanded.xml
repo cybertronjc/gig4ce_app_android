@@ -285,7 +285,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.gigforce.app.modules.profile.VerifiedButton
+                <com.gigforce.common_ui.utils.VerifiedButton
                     android:id="@+id/main_expanded_is_verified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

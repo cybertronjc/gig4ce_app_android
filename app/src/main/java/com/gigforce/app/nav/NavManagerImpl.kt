@@ -41,6 +41,7 @@ class NavManagerImpl @Inject constructor(
         NavForChatModule(this)
         NavForClientActivatonModule(this)
         NavForVerificationModule(this)
+        NavForWalletModule(this)
     }
 
 

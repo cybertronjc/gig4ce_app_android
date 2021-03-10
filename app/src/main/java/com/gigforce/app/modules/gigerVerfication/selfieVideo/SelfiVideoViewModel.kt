@@ -3,14 +3,18 @@ package com.gigforce.app.modules.gigerVerfication.selfieVideo
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationRepository
+import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.SelfieVideoDataModel
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -22,12 +26,13 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 
 class SelfiVideoViewModel constructor(
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
     private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
-) : GigVerificationViewModel() {
+) : ViewModel() {
 
     private var selfieVideoUploadTask: UploadTask? = null
 
@@ -36,6 +41,58 @@ class SelfiVideoViewModel constructor(
 
     private val _selfieVideoUploadState = MutableLiveData<String>()
     val selfieVideoUploadProgressState: LiveData<String> get() = _selfieVideoUploadState
+
+    private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()
+    val gigerVerificationStatus: LiveData<GigerVerificationStatus> get() = _gigerVerificationStatus
+
+    private var verificationChangesListener: ListenerRegistration? = null
+
+    fun startListeningForGigerVerificationStatusChanges() {
+        verificationChangesListener = gigerVerificationRepository
+            .getDBCollection()
+            .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+
+                if (documentSnapshot?.data == null && firebaseFirestoreException == null) {
+                    _gigerVerificationStatus.value = GigerVerificationStatus(
+                        selfieVideoUploaded = false,
+                        selfieVideoDataModel = null,
+                        panCardDetailsUploaded = false,
+                        panCardDetails = null,
+                        aadharCardDetailsUploaded = false,
+                        aadharCardDataModel = null,
+                        dlCardDetailsUploaded = false,
+                        drivingLicenseDataModel = null,
+                        bankDetailsUploaded = false,
+                        bankUploadDetailsDataModel = null,
+                        everyDocumentUploaded = false
+                    )
+                }
+
+                val docSnap = documentSnapshot ?: return@addSnapshotListener
+                docSnap.toObject(VerificationBaseModel::class.java)?.let {
+
+                    val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
+                            && it.pan_card?.userHasPanCard != null
+                            && it.bank_details?.userHasPassBook != null
+                            && it.driving_license?.userHasDL != null
+                            && it.selfie_video?.videoPath != null
+
+                    _gigerVerificationStatus.value = GigerVerificationStatus(
+                        selfieVideoUploaded = it.selfie_video?.videoPath != null,
+                        selfieVideoDataModel = it.selfie_video,
+                        panCardDetailsUploaded = it.pan_card?.userHasPanCard != null,
+                        panCardDetails = it.pan_card,
+                        aadharCardDetailsUploaded = it.aadhar_card?.userHasAadharCard != null,
+                        aadharCardDataModel = it.aadhar_card,
+                        dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
+                        drivingLicenseDataModel = it.driving_license,
+                        bankDetailsUploaded = it.bank_details?.userHasPassBook != null && it.bank_details?.userHasPassBook == true,
+                        bankUploadDetailsDataModel = it.bank_details,
+                        everyDocumentUploaded = everyDocumentUploaded
+                    )
+                }
+            }
+    }
 
     fun uploadSelfieVideo(videoPath: File, transcodedFile: File) = viewModelScope.launch {
         _uploadSelfieState.value = Lse.loading()
@@ -123,6 +180,29 @@ class SelfiVideoViewModel constructor(
             }
         }
 
+    suspend fun getVerificationModel(userId: String? = null): VerificationBaseModel =
+        suspendCoroutine { continuation ->
+
+            val docRef = if (userId != null) {
+                gigerVerificationRepository.getCollectionReference().document(userId)
+            } else {
+                gigerVerificationRepository.getDBCollection()
+            }
+            docRef.get().addOnSuccessListener {
+                runCatching {
+                    if (it.data == null)
+                        VerificationBaseModel()
+                    else
+                        it.toObject(VerificationBaseModel::class.java)!!
+                }.onSuccess {
+                    continuation.resume(it)
+                }.onFailure {
+                    continuation.resumeWithException(it)
+                }
+            }.addOnFailureListener {
+                continuation.resumeWithException(it)
+            }
+        }
 
     private suspend fun setCompleteSelfieInfo(
         selfieVideoFileName: String,

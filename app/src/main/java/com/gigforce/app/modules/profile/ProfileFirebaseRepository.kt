@@ -1,9 +1,10 @@
 package com.gigforce.app.modules.profile
 
 import android.util.Log
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.replace
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
+import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
@@ -13,12 +14,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
+class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepository(), IProfileFirestoreRepository {
 
     var firebaseDB = FirebaseFirestore.getInstance()
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
@@ -36,83 +38,94 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
     fun addNewTag(tag: String) {
         firebaseDB.collection(tagsCollectionName)
-                .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
+            .document("all_tags").update("tagName", FieldValue.arrayUnion(tag))
     }
 
-    fun createEmptyProfile(
-            latitude: Double = 0.0,
-            longitude: Double = 0.0,
-            locationAddress: String = ""
+    override fun createEmptyProfile(){
+        createEmptyUserProfile()
+    }
+    override fun createEmptyProfile(
+        latitude: Double,
+        longitude: Double,
+        locationAddress: String
+    ) {
+        createEmptyUserProfile(latitude, longitude, locationAddress)
+    }
+
+    fun createEmptyUserProfile(
+        latitude: Double = 0.0,
+        longitude: Double = 0.0,
+        locationAddress: String = ""
     ) {
         firebaseDB.collection(profileCollectionName).document(uid).set(
-                ProfileData(
-                        contact = ArrayList(
-                                listOf(
-                                        Contact(
-                                                phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                                                email = ""
-                                        )
-                                )
-                        ),
-                        loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                        createdOn = Timestamp.now(),
-                        enrolledByLink = false,
-                        firstLogin = Timestamp.now(),
-                        lastLoginDetails = LastLoginDetails(
-                                lastLoginTime = Timestamp.now(),
-                                lastLoginLocationLatitude = latitude,
-                                lastLoginLocationLongitude = longitude,
-                                lastLoginFromAddress = locationAddress
+            ProfileData(
+                contact = ArrayList(
+                    listOf(
+                        Contact(
+                            phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                            email = ""
                         )
+                    )
+                ),
+                loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                createdOn = Timestamp.now(),
+                enrolledByLink = false,
+                firstLogin = Timestamp.now(),
+                lastLoginDetails = LastLoginDetails(
+                    lastLoginTime = Timestamp.now(),
+                    lastLoginLocationLatitude = latitude,
+                    lastLoginLocationLongitude = longitude,
+                    lastLoginFromAddress = locationAddress
                 )
+            )
         )
     }
 
     private suspend fun createAndReturnEmptyProfile(
-            latitude: Double = 0.0,
-            longitude: Double = 0.0,
-            locationAddress: String = ""
+        latitude: Double = 0.0,
+        longitude: Double = 0.0,
+        locationAddress: String = ""
     ): ProfileData {
         val profile = ProfileData(
-                contact = ArrayList(
-                        listOf(
-                                Contact(
-                                        phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                                        email = ""
-                                )
-                        )
-                ),
-                createdOn = Timestamp.now(),
-                enrolledByLink = false,
-                firstLogin = Timestamp.now(),
-                loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
-                lastLoginDetails = LastLoginDetails(
-                        lastLoginTime = Timestamp.now(),
-                        lastLoginLocationLatitude = latitude,
-                        lastLoginLocationLongitude = longitude,
-                        lastLoginFromAddress = locationAddress
+            contact = ArrayList(
+                listOf(
+                    Contact(
+                        phone = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+                        email = ""
+                    )
                 )
+            ),
+            createdOn = Timestamp.now(),
+            enrolledByLink = false,
+            firstLogin = Timestamp.now(),
+            loginMobile = FirebaseAuth.getInstance().currentUser?.phoneNumber.toString(),
+            lastLoginDetails = LastLoginDetails(
+                lastLoginTime = Timestamp.now(),
+                lastLoginLocationLatitude = latitude,
+                lastLoginLocationLongitude = longitude,
+                lastLoginFromAddress = locationAddress
+            )
         )
         firebaseDB
-                .collection(profileCollectionName)
-                .document(uid)
-                .setOrThrow(
-                        profile
-                )
+            .collection(profileCollectionName)
+            .document(uid)
+            .setOrThrow(
+                profile
+            )
 
         return profile
     }
 
 
     suspend fun updateLoginInfoIfUserProfileExistElseCreateProfile(
-            latitude: Double = 0.0,
-            longitude: Double = 0.0,
-            locationAddress: String = ""
+        latitude: Double = 0.0,
+        longitude: Double = 0.0,
+        locationAddress: String = ""
     ): ProfileData {
         val docRef = firebaseDB
-                .collection(profileCollectionName)
-                .document(uid)
-                .getOrThrow()
+            .collection(profileCollectionName)
+            .document(uid)
+            .getOrThrow()
 
         if (docRef.exists()) {
 
@@ -120,29 +133,29 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 
             if (firstLoginPresent) {
                 firebaseDB
-                        .collection(profileCollectionName)
-                        .document(uid)
-                        .updateOrThrow(
-                                mapOf(
-                                        "lastLoginDetails.lastLoginTime" to Timestamp.now(),
-                                        "lastLoginDetails.lastLoginLocationLatitude" to latitude,
-                                        "lastLoginDetails.lastLoginLocationLongitude" to longitude,
-                                        "lastLoginDetails.lastLoginFromAddress" to locationAddress
-                                )
+                    .collection(profileCollectionName)
+                    .document(uid)
+                    .updateOrThrow(
+                        mapOf(
+                            "lastLoginDetails.lastLoginTime" to Timestamp.now(),
+                            "lastLoginDetails.lastLoginLocationLatitude" to latitude,
+                            "lastLoginDetails.lastLoginLocationLongitude" to longitude,
+                            "lastLoginDetails.lastLoginFromAddress" to locationAddress
                         )
+                    )
             } else {
                 firebaseDB
-                        .collection(profileCollectionName)
-                        .document(uid)
-                        .updateOrThrow(
-                                mapOf(
-                                        "lastLoginDetails.lastLoginTime" to Timestamp.now(),
-                                        "lastLoginDetails.lastLoginLocationLatitude" to latitude,
-                                        "lastLoginDetails.lastLoginLocationLongitude" to longitude,
-                                        "lastLoginDetails.lastLoginFromAddress" to locationAddress,
-                                        "firstLogin" to Timestamp.now()
-                                )
+                    .collection(profileCollectionName)
+                    .document(uid)
+                    .updateOrThrow(
+                        mapOf(
+                            "lastLoginDetails.lastLoginTime" to Timestamp.now(),
+                            "lastLoginDetails.lastLoginLocationLatitude" to latitude,
+                            "lastLoginDetails.lastLoginLocationLongitude" to longitude,
+                            "lastLoginDetails.lastLoginFromAddress" to locationAddress,
+                            "firstLogin" to Timestamp.now()
                         )
+                    )
             }
 
             return getProfileData()
@@ -154,88 +167,89 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     fun setProfileEducation(education: ArrayList<Education>) {
         for (ed in education) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("educations", FieldValue.arrayUnion(ed))
+                .document(uid).update("educations", FieldValue.arrayUnion(ed))
         }
     }
 
     fun removeProfileEducation(education: Education) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("educations", FieldValue.arrayRemove(education))
+            .update("educations", FieldValue.arrayRemove(education))
     }
 
     fun setProfileSkill(skills: ArrayList<String>) {
         for (sk in skills) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("skills", FieldValue.arrayUnion(sk))
+                .document(uid).update("skills", FieldValue.arrayUnion(sk))
         }
     }
 
     fun removeProfileSkill(skill: String) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("skills", FieldValue.arrayRemove(skill))
+            .update("skills", FieldValue.arrayRemove(skill))
     }
 
     fun setProfileAchievement(achievements: ArrayList<Achievement>) {
         for (ach in achievements) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("achievements", FieldValue.arrayUnion(ach))
+                .document(uid).update("achievements", FieldValue.arrayUnion(ach))
         }
     }
 
     fun removeProfileAchievement(achievement: Achievement) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("achievements", FieldValue.arrayRemove(achievement))
+            .update("achievements", FieldValue.arrayRemove(achievement))
     }
 
     fun setProfileContact(contacts: ArrayList<Contact>) {
         for (contact in contacts) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("contact", FieldValue.arrayUnion(contact))
-                    .addOnSuccessListener {
-                        Log.d("REPOSITORY", "contact added successfully!")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Repository", exception.toString())
-                    }
+                .document(uid).update("contact", FieldValue.arrayUnion(contact))
+                .addOnSuccessListener {
+                    Log.d("REPOSITORY", "contact added successfully!")
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("Repository", exception.toString())
+                }
         }
     }
 
     fun setProfileLanguage(languages: ArrayList<Language>) {
         for (lang in languages) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("languages", FieldValue.arrayUnion(lang))
+                .document(uid).update("languages", FieldValue.arrayUnion(lang))
         }
     }
 
     fun removeProfileLanguage(language: Language) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("languages", FieldValue.arrayRemove(language))
+            .update("languages", FieldValue.arrayRemove(language))
     }
 
     fun setProfileExperience(experiences: ArrayList<Experience>) {
         for (exp in experiences) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("experiences", FieldValue.arrayUnion(exp))
+                .document(uid).update("experiences", FieldValue.arrayUnion(exp))
         }
     }
 
     fun removeProfileExperience(experience: Experience) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("experiences", FieldValue.arrayRemove(experience))
+            .update("experiences", FieldValue.arrayRemove(experience))
     }
 
     fun setProfileTags(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("tags", FieldValue.arrayUnion(tag))
+                .document(uid).update("tags", FieldValue.arrayUnion(tag))
         }
     }
 
     fun setProfileAvatarName(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("profileAvatarName", profileAvatarName)
+            .document(uid).update("profileAvatarName", profileAvatarName)
 
     }
+
     fun setProfileThumbNail(profileAvatarName: String) {
         firebaseDB.collection(profileCollectionName)
             .document(uid).update("profilePicThumbnail", profileAvatarName)
@@ -243,34 +257,34 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     }
 
     fun setProfileAvatarName(
-            userId: String?,
-            profileAvatarName: String,
-            profileAvatarNameThumbnail: String? = null
+        userId: String?,
+        profileAvatarName: String,
+        profileAvatarNameThumbnail: String? = null
     ) {
         firebaseDB.collection(profileCollectionName)
-                .document(userId ?: getUID()).update(
-                        mapOf(
-                                "profileAvatarName" to profileAvatarName,
-                                "profilePicThumbnail" to profileAvatarNameThumbnail
-                        )
+            .document(userId ?: getUID()).update(
+                mapOf(
+                    "profileAvatarName" to profileAvatarName,
+                    "profilePicThumbnail" to profileAvatarNameThumbnail
                 )
+            )
     }
 
     fun removeProfileTag(tags: ArrayList<String>) {
         for (tag in tags) {
             firebaseDB.collection(profileCollectionName)
-                    .document(uid).update("tags", FieldValue.arrayRemove(tag))
+                .document(uid).update("tags", FieldValue.arrayRemove(tag))
         }
     }
 
     fun setProfileBio(bio: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("bio", bio)
+            .document(uid).update("bio", bio)
     }
 
     fun setProfileAboutMe(aboutMe: String) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid).update("aboutMe", aboutMe)
+            .document(uid).update("aboutMe", aboutMe)
     }
 
     fun addInviteToProfile() {
@@ -280,22 +294,22 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     suspend fun getProfileData(userId: String? = null): ProfileData = suspendCoroutine { cont ->
 
         getCollectionReference()
-                .document(userId ?: uid)
-                .get()
-                .addOnSuccessListener {
+            .document(userId ?: uid)
+            .get()
+            .addOnSuccessListener {
 
-                    if (it.exists()) {
-                        val profileData = it.toObject(ProfileData::class.java)
-                                ?: throw  IllegalStateException("unable to parse profile object")
-                        profileData.id = it.id
-                        cont.resume(profileData)
-                    } else {
-                        cont.resume(ProfileData())
-                    }
+                if (it.exists()) {
+                    val profileData = it.toObject(ProfileData::class.java)
+                        ?: throw  IllegalStateException("unable to parse profile object")
+                    profileData.id = it.id
+                    cont.resume(profileData)
+                } else {
+                    cont.resume(ProfileData())
                 }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
     }
 
     fun getProfileRef(userId: String?) = getCollectionReference().document(userId ?: getUID())
@@ -305,61 +319,63 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
      */
     fun setAddress(address: AddressFirestoreModel) {
         firebaseDB.collection(profileCollectionName).document(uid)
-                .update("address", FieldValue.delete())
+            .update("address", FieldValue.delete())
         firebaseDB.collection(profileCollectionName).document(uid).update("address", address)
     }
 
     fun updateCurrentAddress(address: AddressModel) {
         firebaseDB.collection(profileCollectionName)
-                .document(uid)
-                .update(mapOf(
-                        "address.current.firstLine" to address.firstLine,
-                        "address.current.secondLine" to address.secondLine,
-                        "address.current.area" to address.area,
-                        "address.current.city" to address.city,
-                        "address.current.state" to address.state
-                ))
+            .document(uid)
+            .update(
+                mapOf(
+                    "address.current.firstLine" to address.firstLine,
+                    "address.current.secondLine" to address.secondLine,
+                    "address.current.area" to address.area,
+                    "address.current.city" to address.city,
+                    "address.current.state" to address.state
+                )
+            )
     }
 
     suspend fun setUserAsAmbassador() {
         firebaseDB
-                .collection(profileCollectionName)
-                .document(uid)
-                .update("isUserAmbassador", true) //TODO replace with updateOrThrow
+            .collection(profileCollectionName)
+            .document(uid)
+            .update("isUserAmbassador", true) //TODO replace with updateOrThrow
     }
 
     suspend fun updateUserDetails(
-            uid: String,
-            phoneNumber: String,
-            name: String,
-            dateOfBirth: Date,
-            gender: String,
-            pincode: String,
-            highestQualification: String
+        uid: String,
+        phoneNumber: String,
+        name: String,
+        dateOfBirth: Date,
+        gender: String,
+        pincode: String,
+        highestQualification: String
     ) {
 
         var profileData = getProfileDataIfExist(userId = uid)
 
         if (profileData == null) {
             profileData = ProfileData(
-                    name = name,
-                    gender = gender,
-                    loginMobile = getNumberWithNineone(phoneNumber),
-                    address = AddressFirestoreModel(
-                            current = AddressModel(pincode = pincode)
-                    ),
-                    dateOfBirth = Timestamp(dateOfBirth),
-                    highestEducation = highestQualification,
-                    contact = ArrayList(
-                            listOf(
-                                    Contact(
-                                            phone = phoneNumber,
-                                            email = ""
-                                    )
-                            )
-                    ),
-                    createdOn = Timestamp.now(),
-                    isonboardingdone = true
+                name = name,
+                gender = gender,
+                loginMobile = getNumberWithNineone(phoneNumber),
+                address = AddressFirestoreModel(
+                    current = AddressModel(pincode = pincode)
+                ),
+                dateOfBirth = Timestamp(dateOfBirth),
+                highestEducation = highestQualification,
+                contact = ArrayList(
+                    listOf(
+                        Contact(
+                            phone = phoneNumber,
+                            email = ""
+                        )
+                    )
+                ),
+                createdOn = Timestamp.now(),
+                isonboardingdone = true
             )
         } else {
             profileData.apply {
@@ -373,9 +389,9 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         }
 
         firebaseDB
-                .collection(profileCollectionName)
-                .document(uid)
-                .setOrThrow(profileData)
+            .collection(profileCollectionName)
+            .document(uid)
+            .setOrThrow(profileData)
     }
 
     private fun getNumberWithNineone(phoneNumber: String): String {
@@ -385,78 +401,78 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun updateCurrentAddressDetails(
-            uid: String?,
-            pinCode: String,
-            addressLine1: String,
-            addressLine2: String,
-            state: String,
-            city: String,
-            preferredDistanceInKm: Int,
-            readyToChangeLocationForWork: Boolean,
-            homeCity: String = "",
-            homeState: String = "",
-            howDidYouCameToKnowOfCurrentJob: String = ""
+        uid: String?,
+        pinCode: String,
+        addressLine1: String,
+        addressLine2: String,
+        state: String,
+        city: String,
+        preferredDistanceInKm: Int,
+        readyToChangeLocationForWork: Boolean,
+        homeCity: String = "",
+        homeState: String = "",
+        howDidYouCameToKnowOfCurrentJob: String = ""
     ) {
         if (uid == null) {
             firebaseDB
-                    .collection(profileCollectionName)
-                    .document(getUID())
-                    .updateOrThrow(
-                            mapOf(
-                                    "address.current.firstLine" to addressLine1,
-                                    "address.current.area" to addressLine2,
-                                    "address.current.pincode" to pinCode,
-                                    "address.current.state" to state,
-                                    "address.current.city" to city,
-                                    "address.current.empty" to false
-                            )
+                .collection(profileCollectionName)
+                .document(getUID())
+                .updateOrThrow(
+                    mapOf(
+                        "address.current.firstLine" to addressLine1,
+                        "address.current.area" to addressLine2,
+                        "address.current.pincode" to pinCode,
+                        "address.current.state" to state,
+                        "address.current.city" to city,
+                        "address.current.empty" to false
                     )
+                )
         } else {
             firebaseDB
-                    .collection(profileCollectionName)
-                    .document(uid)
-                    .updateOrThrow(
-                            mapOf(
-                                    "address.current.firstLine" to addressLine1,
-                                    "address.current.area" to addressLine2,
-                                    "address.current.pincode" to pinCode,
-                                    "address.current.state" to state,
-                                    "address.current.city" to city,
-                                    "address.home.state" to homeState,
-                                    "address.home.city" to homeCity,
-                                    "address.howDidYouCameToKnowOfCurrentJob" to howDidYouCameToKnowOfCurrentJob,
-                                    "address.current.empty" to false,
-                                    "address.current.preferredDistanceActive" to true,
-                                    "address.current.preferred_distance" to preferredDistanceInKm,
-                                    "readyToChangeLocationForWork" to readyToChangeLocationForWork
-                            )
+                .collection(profileCollectionName)
+                .document(uid)
+                .updateOrThrow(
+                    mapOf(
+                        "address.current.firstLine" to addressLine1,
+                        "address.current.area" to addressLine2,
+                        "address.current.pincode" to pinCode,
+                        "address.current.state" to state,
+                        "address.current.city" to city,
+                        "address.home.state" to homeState,
+                        "address.home.city" to homeCity,
+                        "address.howDidYouCameToKnowOfCurrentJob" to howDidYouCameToKnowOfCurrentJob,
+                        "address.current.empty" to false,
+                        "address.current.preferredDistanceActive" to true,
+                        "address.current.preferred_distance" to preferredDistanceInKm,
+                        "readyToChangeLocationForWork" to readyToChangeLocationForWork
                     )
+                )
         }
     }
 
     suspend fun submitSkills(
-            uid: String,
-            interest: List<String>
+        uid: String,
+        interest: List<String>
     ) {
 
         val skills = interest.map {
             Skill(
-                    id = it
+                id = it
             )
         }
         db.collection(profileCollectionName)
-                .document(uid)
-                .updateOrThrow("skills", skills)
+            .document(uid)
+            .updateOrThrow("skills", skills)
     }
 
     suspend fun submitExperience(experience: Experience): Task<Void> {
         return firebaseDB.collection(profileCollectionName)
-                .document(uid).update("experiences", FieldValue.arrayUnion(experience))
+            .document(uid).update("experiences", FieldValue.arrayUnion(experience))
     }
 
     suspend fun submitExperience(userId: String, experience: Experience) {
         firebaseDB.collection(profileCollectionName)
-                .document(userId).updateOrThrow("experiences", FieldValue.arrayUnion(experience))
+            .document(userId).updateOrThrow("experiences", FieldValue.arrayUnion(experience))
     }
 
     suspend fun updateExistingExperienceElseAdd(userId: String, experience: Experience) {
@@ -473,31 +489,31 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         }
 
         firebaseDB
-                .collection(profileCollectionName)
-                .document(userId)
-                .updateOrThrow("experiences", mutableExpList)
+            .collection(profileCollectionName)
+            .document(userId)
+            .updateOrThrow("experiences", mutableExpList)
     }
 
     suspend fun getProfileDataIfExist(userId: String? = null): ProfileData? =
-            suspendCoroutine { cont ->
+        suspendCoroutine { cont ->
 
-                getCollectionReference()
-                        .document(userId ?: uid)
-                        .get()
-                        .addOnSuccessListener {
+            getCollectionReference()
+                .document(userId ?: uid)
+                .get()
+                .addOnSuccessListener {
 
-                            if (it.exists()) {
-                                val profileData = it.toObject(ProfileData::class.java)
-                                        ?: throw  IllegalStateException("unable to parse profile object")
-                                profileData.id = it.id
-                                cont.resume(profileData)
-                            } else {
-                                cont.resume(null)
-                            }
-                        }
-                        .addOnFailureListener {
-                            cont.resumeWithException(it)
-                        }
-            }
+                    if (it.exists()) {
+                        val profileData = it.toObject(ProfileData::class.java)
+                            ?: throw  IllegalStateException("unable to parse profile object")
+                        profileData.id = it.id
+                        cont.resume(profileData)
+                    } else {
+                        cont.resume(null)
+                    }
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
 
 }

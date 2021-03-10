@@ -11,6 +11,7 @@ class BuildConfigImp @Inject constructor(): IBuildConfig {
     override fun getCreateUserUrl(): String = BuildConfig.CREATE_USER_URL
     override fun getCreateOrSendOTPUrl(): String = BuildConfig.CHECK_USER_OR_SEND_OTP_URL
     override fun getVerifyOTPURL(): String = BuildConfig.VERIFY_OTP_URL
-
+    override fun getGeneratePayslipURL(): String = BuildConfig.GENERATE_PAYSLIP_URL
+    override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
 
 }

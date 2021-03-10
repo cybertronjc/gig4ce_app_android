@@ -6,4 +6,6 @@ interface IBuildConfig {
     fun getCreateUserUrl():String
     fun getCreateOrSendOTPUrl():String
     fun getVerifyOTPURL():String
+    fun getGeneratePayslipURL():String
+    fun getApplicationID():String
 }

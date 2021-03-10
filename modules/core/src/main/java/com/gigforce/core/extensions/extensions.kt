@@ -30,7 +30,8 @@ val Int.dp: Int
         return (this * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun View.gone() {
     visibility = View.GONE

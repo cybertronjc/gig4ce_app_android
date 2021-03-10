@@ -3,21 +3,26 @@ package com.gigforce.client_activation.client_activation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
-import com.gigforce.core.datamodels.ambassador.VerifyOtpResponse
 import com.gigforce.client_activation.client_activation.models.*
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
+import com.gigforce.core.datamodels.ambassador.VerifyOtpResponse
 import com.gigforce.core.datamodels.login.LoginResponse
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.core.utils.Lce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class ScheduleDrivingTestViewModel : ViewModel() {
+@HiltViewModel
+class ScheduleDrivingTestViewModel @Inject constructor(private val buildConfig: IBuildConfigVM) :
+    ViewModel() {
     var applicationId = ""
     var submissionId = ""
     val repository = ScheduleDrivingTestRepository()
-    val userEnrollmentRepository = UserEnrollmentRepository()
+    val userEnrollmentRepository = UserEnrollmentRepository(buildConfig = buildConfig)
 
     private val _observableJPSettings = MutableLiveData<DocReceiving>()
     val observableJPSettings: MutableLiveData<DocReceiving> = _observableJPSettings

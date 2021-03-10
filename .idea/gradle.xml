@@ -22,7 +22,6 @@
             <option value="$PROJECT_DIR$/modules/profile" />
             <option value="$PROJECT_DIR$/modules/user_profile" />
             <option value="$PROJECT_DIR$/modules/wallet" />
-            <option value="$PROJECT_DIR$/user_profile" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

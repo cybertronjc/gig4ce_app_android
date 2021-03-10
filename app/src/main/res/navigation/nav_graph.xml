@@ -453,11 +453,11 @@
         android:label="ArroundCurrentAddressFragment" />
     <fragment
         android:id="@+id/walletBalancePage"
-        android:name="com.gigforce.app.modules.wallet.WalletBalancePage"
+        android:name="com.gigforce.wallet.WalletBalancePage"
         android:label="WalletBalancePage" />
     <fragment
         android:id="@+id/invoiceStatusPage"
-        android:name="com.gigforce.app.modules.wallet.InvoiceStatusPage"
+        android:name="com.gigforce.wallet.InvoiceStatusPage"
         android:label="InvoiceStatusPage" />
 
 
@@ -523,17 +523,17 @@
 
     <fragment
         android:id="@+id/paymentDisputePage"
-        android:name="com.gigforce.app.modules.wallet.PaymentDisputePage"
+        android:name="com.gigforce.wallet.PaymentDisputePage"
         android:label="PaymentDisputePage" />
 
     <fragment
         android:id="@+id/paymentDisputeExpandedPage"
-        android:name="com.gigforce.app.modules.wallet.PaymentDisputeExpandedPage"
+        android:name="com.gigforce.wallet.PaymentDisputeExpandedPage"
         android:label="PaymentDisputeExpandedPage" />
 
     <fragment
         android:id="@+id/monthlyEarningPage"
-        android:name="com.gigforce.app.modules.wallet.MonthlyEarningPage"
+        android:name="com.gigforce.wallet.MonthlyEarningPage"
         android:label="MonthlyEarningPage" />
     <fragment
         android:id="@+id/mainLearningFragment"
@@ -553,7 +553,7 @@
 
     <fragment
         android:id="@+id/walletExpandedPage"
-        android:name="com.gigforce.app.modules.wallet.models.WalletExpandedPage"
+        android:name="com.gigforce.wallet.WalletExpandedPage"
         android:label="WalletExpandedPage" />
     <fragment
         android:id="@+id/learningCourseDetails"
@@ -567,7 +567,7 @@
 
     <fragment
         android:id="@+id/helpExpandedPage"
-        android:name="com.gigforce.app.modules.wallet.HelpExpandedPage"
+        android:name="com.gigforce.wallet.HelpExpandedPage"
         android:label="HelpExpandedPage"
         tools:layout="@layout/help_expanded_page" />
     <fragment
@@ -775,7 +775,7 @@
         tools:layout="@layout/layout_application_client_activation_fragment" />
     <fragment
         android:id="@+id/payslipMonthlyFragment"
-        android:name="com.gigforce.app.modules.wallet.PayslipMonthlyFragment"
+        android:name="com.gigforce.wallet.PayslipMonthlyFragment"
         android:label="PayslipMonthlyFragment" />
     <fragment
         android:id="@+id/chatNewContactFragment"

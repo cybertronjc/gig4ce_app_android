@@ -4,20 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
+import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class InterestAndExperienceViewModel constructor(
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+@HiltViewModel
+class InterestAndExperienceViewModel @Inject constructor(
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val userEnrollmentRepository: UserEnrollmentRepository =
+        UserEnrollmentRepository(buildConfig = buildConfig)
 
     private val _submitInterestState = MutableLiveData<Lse>()
     val submitInterestState: LiveData<Lse> = _submitInterestState
@@ -71,7 +77,7 @@ class InterestAndExperienceViewModel constructor(
             val experienceList = profileData.experiences ?: return@launch
             val skills = profileData.skills ?: return@launch
 
-            if(experienceList.size == profileData.skills!!.size) {
+            if (experienceList.size == profileData.skills!!.size) {
 
                 for (i in experienceList.indices) {
                     if (experienceList[i].title == experience.title) {
@@ -79,7 +85,8 @@ class InterestAndExperienceViewModel constructor(
                         if (i == experienceList.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
                         } else {
-                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value =
+                                Lce.content(experienceList[i + 1].title)
                         }
                         return@launch
                     }
@@ -104,48 +111,50 @@ class InterestAndExperienceViewModel constructor(
         }
     }
 
-    fun skipCurrentExperienceAndFetchNextOne(userId: String, expName: String) = viewModelScope.launch {
-        _saveExpAndReturnNextOne.value = Lce.loading()
+    fun skipCurrentExperienceAndFetchNextOne(userId: String, expName: String) =
+        viewModelScope.launch {
+            _saveExpAndReturnNextOne.value = Lce.loading()
 
-        try {
-            val profileData = profileFirebaseRepository.getProfileData(userId)
-            val experienceList = profileData.experiences ?: return@launch
-            val skills = profileData.skills ?: return@launch
+            try {
+                val profileData = profileFirebaseRepository.getProfileData(userId)
+                val experienceList = profileData.experiences ?: return@launch
+                val skills = profileData.skills ?: return@launch
 
 
-            if(experienceList.size == profileData.skills!!.size) {
+                if (experienceList.size == profileData.skills!!.size) {
 
-                for (i in experienceList.indices) {
-                    if (experienceList[i].title == expName) {
+                    for (i in experienceList.indices) {
+                        if (experienceList[i].title == expName) {
 
-                        if (i == experienceList.size - 1) {
-                            _saveExpAndReturnNextOne.value = Lce.content(null)
-                        } else {
-                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            if (i == experienceList.size - 1) {
+                                _saveExpAndReturnNextOne.value = Lce.content(null)
+                            } else {
+                                _saveExpAndReturnNextOne.value =
+                                    Lce.content(experienceList[i + 1].title)
+                            }
+                            return@launch
                         }
-                        return@launch
+                    }
+                } else {
+                    for (i in skills.indices) {
+                        if (skills[i].id == expName) {
+
+                            if (i == skills.size - 1) {
+                                _saveExpAndReturnNextOne.value = Lce.content(null)
+                            } else {
+                                _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            }
+                            return@launch
+                        }
                     }
                 }
-            } else {
-                for (i in skills.indices) {
-                    if (skills[i].id == expName) {
 
-                        if (i == skills.size - 1) {
-                            _saveExpAndReturnNextOne.value = Lce.content(null)
-                        } else {
-                            _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
-                        }
-                        return@launch
-                    }
-                }
+                _saveExpAndReturnNextOne.value = Lce.content(null)
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+                _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
             }
-
-            _saveExpAndReturnNextOne.value = Lce.content(null)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
-            _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
         }
-    }
 
 
     private suspend fun checkForPendingInterestExperience(userId: String) {

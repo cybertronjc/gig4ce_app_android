@@ -5,32 +5,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.core.datamodels.ambassador.CreateUserResponse
-import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
-import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.Lce
-import com.gigforce.core.di.interfaces.IBuildConfig
-import dagger.hilt.android.scopes.ViewModelScoped
+import com.gigforce.core.datamodels.ambassador.CreateUserResponse
+import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
+import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.repo.UserEnrollmentRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ViewModelScoped
-class VerifyUserMobileViewModel constructor(
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+@HiltViewModel
+class VerifyUserMobileViewModel @Inject constructor(
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+    private var buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    @Inject lateinit var buildConfig : IBuildConfig
+    private val userEnrollmentRepository: UserEnrollmentRepository =
+        UserEnrollmentRepository(buildConfig = buildConfig)
     private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>>()
     val checkMobileNo: LiveData<Lce<RegisterMobileNoResponse>> = _checkMobileNo
 
     fun checkMobileNo(
-            mobileNo: String
+        mobileNo: String
     ) = viewModelScope.launch {
 
         _checkMobileNo.postValue(Lce.loading())
         try {
-            val repsonse = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
+            val repsonse =
+                userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
             _checkMobileNo.value = Lce.content(repsonse)
             _checkMobileNo.value = null
         } catch (e: Exception) {
@@ -45,14 +47,14 @@ class VerifyUserMobileViewModel constructor(
     val createProfile: LiveData<Lce<CreateUserResponse>> = _createProfile
 
     fun checkOtpAndCreateProfile(
-            userId: String?,
-            mode: Int,
-            token: String,
-            otp: String,
-            mobile: String,
-            latitude: Double,
-            longitude: Double,
-            fullAddress: String
+        userId: String?,
+        mode: Int,
+        token: String,
+        otp: String,
+        mobile: String,
+        latitude: Double,
+        longitude: Double,
+        fullAddress: String
     ) = viewModelScope.launch {
 
         try {
@@ -71,10 +73,10 @@ class VerifyUserMobileViewModel constructor(
 
                     if (userId != null) {
                         userEnrollmentRepository.addEditLocationInLocationLogs(
-                                userId = userId,
-                                latitude = latitude,
-                                longitude = longitude,
-                                fullAddress = fullAddress
+                            userId = userId,
+                            latitude = latitude,
+                            longitude = longitude,
+                            fullAddress = fullAddress
                         )
                     }
                 } else {
@@ -84,12 +86,12 @@ class VerifyUserMobileViewModel constructor(
                 if (verifyOtpResponse.isVerified) {
                     val profile = profileFirebaseRepository.getProfileData()
                     val response = userEnrollmentRepository.createUser(
-                            createUserUrl = buildConfig.getCreateUserUrl(),
-                            mobile = mobile,
-                            enrolledByName = profile.name,
-                            latitude = latitude,
-                            longitude = longitude,
-                            fullAddress = fullAddress
+                        createUserUrl = buildConfig.getCreateUserUrl(),
+                        mobile = mobile,
+                        enrolledByName = profile.name,
+                        latitude = latitude,
+                        longitude = longitude,
+                        fullAddress = fullAddress
                     )
                     _createProfile.value = Lce.content(response)
                 } else {

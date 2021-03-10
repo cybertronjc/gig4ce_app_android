@@ -10,12 +10,16 @@ import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.*
+import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -52,12 +56,14 @@ data class GigerVerificationStatus(
         const val STATUS_DOCUMENT_UPLOADED = -1
     }
 }
-
-open class GigVerificationViewModel constructor(
-    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+@HiltViewModel
+open class GigVerificationViewModel @Inject constructor(
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
+    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(buildConfig = buildConfig)
+
     var redirectToNextStep: Boolean = false
 
     private val _gigerVerificationStatus = MutableLiveData<GigerVerificationStatus>()

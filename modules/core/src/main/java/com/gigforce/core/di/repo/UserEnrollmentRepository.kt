@@ -6,21 +6,20 @@ import com.gigforce.core.datamodels.ambassador.*
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.EnrollmentInfo
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.retrofit.CreateUserAccEnrollmentAPi
 import com.gigforce.core.retrofit.RetrofitFactory
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
-import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
-@ViewModelScoped
-class UserEnrollmentRepository constructor(
-    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi()
+
+class UserEnrollmentRepository @Inject constructor(
+    private val createUserApi: CreateUserAccEnrollmentAPi = RetrofitFactory.createUserAccEnrollmentAPi(),
+    private val buildConfig : IBuildConfigVM
 ) : BaseFirestoreDBRepository() {
-    @Inject lateinit var buildConfig : IBuildConfig
     suspend fun createUser(
         createUserUrl: String,
         mobile: String,
