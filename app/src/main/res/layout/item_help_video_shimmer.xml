@@ -21,7 +21,7 @@
             android:id="@+id/help_first_card_img"
             android:layout_width="98dp"
             android:layout_height="88dp"
-            tools:background="@drawable/video_icon"
+            android:background="@color/grey"
             android:elevation="5dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
             android:elevation="5dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            tools:text="What's a Gig? Gigs vs full-time jobs."
+            android:background="@color/grey"
             android:textColor="#444444"
             android:textSize="14sp"
             app:layout_constraintLeft_toRightOf="@+id/help_first_card_img"
@@ -55,13 +55,13 @@
 
         <TextView
             android:id="@+id/time_text"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:elevation="5dp"
             android:fontFamily="@font/lato"
-            tools:text="02:00"
+            android:background="@color/grey"
             android:textColor="#36000000"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,19 +72,10 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="3dp"
             android:elevation="5dp"
-              app:srcCompat="@drawable/ic_time_help"
+            android:background="@color/grey"
             app:layout_constraintBottom_toBottomOf="@id/time_text"
             app:layout_constraintRight_toLeftOf="@+id/time_text"
             app:layout_constraintTop_toTopOf="@+id/time_text" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="5dp"
-              app:srcCompat="@drawable/ic_baseline_play_circle_outline_24"
-            app:layout_constraintBottom_toBottomOf="@id/help_first_card_img"
-            app:layout_constraintLeft_toLeftOf="@id/help_first_card_img"
-            app:layout_constraintRight_toRightOf="@id/help_first_card_img"
-            app:layout_constraintTop_toTopOf="@id/help_first_card_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

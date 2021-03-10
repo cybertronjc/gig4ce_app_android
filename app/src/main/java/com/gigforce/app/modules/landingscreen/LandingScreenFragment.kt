@@ -886,18 +886,15 @@ class LandingScreenFragment : BaseFragment() {
                                                 .error(R.drawable.ic_learning_default_back)
                                                 .into(img)
                                     } else {
-                                        FirebaseStorage.getInstance()
+                                      val imageRef =   FirebaseStorage.getInstance()
                                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                                                 .child(obj!!.coverPicture!!)
-                                                .downloadUrl
-                                                .addOnSuccessListener { fileUri ->
 
-                                                    GlideApp.with(requireContext())
-                                                            .load(fileUri)
-                                                            .placeholder(getCircularProgressDrawable())
-                                                            .error(R.drawable.ic_learning_default_back)
-                                                            .into(img)
-                                                }
+                                        GlideApp.with(requireContext())
+                                                .load(imageRef)
+                                                .placeholder(getCircularProgressDrawable())
+                                                .error(R.drawable.ic_learning_default_back)
+                                                .into(img)
                                     }
                                 } else {
 

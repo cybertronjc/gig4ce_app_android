@@ -1,29 +1,28 @@
 package com.gigforce.app.modules.learning.courseDetails
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.VectorDrawableUtils
 import com.github.vipulasri.timelineview.TimelineView
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_learning_video_item.view.*
 
 class LearningDetailsLessonsAdapter constructor(
-    private val context: Context
+        private val context: Context
 ) :
-    RecyclerView.Adapter<LearningDetailsLessonsAdapter.TimeLineViewHolder>() {
+        RecyclerView.Adapter<LearningDetailsLessonsAdapter.TimeLineViewHolder>() {
 
     private var learningVideoActionListener: ((CourseContent) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
@@ -49,18 +48,18 @@ class LearningDetailsLessonsAdapter constructor(
         }
 
         return TimeLineViewHolder(
-            mLayoutInflater.inflate(
-                R.layout.fragment_learning_video_item,
-                parent,
-                false
-            ), viewType
+                mLayoutInflater.inflate(
+                        R.layout.fragment_learning_video_item,
+                        parent,
+                        false
+                ), viewType
         )
     }
 
     override fun onBindViewHolder(holder: TimeLineViewHolder, position: Int) {
 
         val videoModel = mCourseContent[position]
-      //  val viewType = getItemViewType(position)
+        //  val viewType = getItemViewType(position)
 
         if (videoModel.type == CourseContent.TYPE_ASSESSMENT) {
             holder.videoSlideLayout.gone()
@@ -75,15 +74,15 @@ class LearningDetailsLessonsAdapter constructor(
 //                holder.timeline.setStartLineColor(R.color.colorPrimary, viewType)
 //                holder.timeline.setEndLineColor(R.color.colorPrimary, viewType)
 
-              //  setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+                //  setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
 
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_completed)
                 holder.asessmentSideStausStrip.setCardBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.status_bg_completed,
-                        null
-                    )
+                        ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.status_bg_completed,
+                                null
+                        )
                 )
             } else {
                 //Not even started
@@ -96,11 +95,11 @@ class LearningDetailsLessonsAdapter constructor(
                 holder.assessmentStatus.text = "PENDING"
                 holder.assessmentStatus.setBackgroundResource(R.drawable.rect_assessment_status_pending)
                 holder.asessmentSideStausStrip.setCardBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.status_bg_pending,
-                        null
-                    )
+                        ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.status_bg_pending,
+                                null
+                        )
                 )
             }
         } else if (videoModel.type == CourseContent.TYPE_SLIDE) {
@@ -111,31 +110,28 @@ class LearningDetailsLessonsAdapter constructor(
                 if (videoModel.coverPicture!!.startsWith("http", true)) {
 
                     GlideApp.with(context)
-                        .load(videoModel.coverPicture)
-                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
-                        .error(R.drawable.ic_learning_default_back)
-                        .into(holder.slideVideoThumbnail)
+                            .load(videoModel.coverPicture)
+                            .placeholder(getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
+                            .into(holder.slideVideoThumbnail)
                 } else {
-                    FirebaseStorage.getInstance()
-                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                        .child(videoModel.coverPicture!!)
-                        .downloadUrl
-                        .addOnSuccessListener { fileUri ->
+                    val imageRef = FirebaseStorage.getInstance()
+                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                            .child(videoModel.coverPicture!!)
 
-                            GlideApp.with(context)
-                                .load(fileUri)
-                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(holder.slideVideoThumbnail)
-                        }
+                    GlideApp.with(context)
+                            .load(imageRef)
+                            .placeholder(getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
+                            .into(holder.slideVideoThumbnail)
                 }
             } else {
                 holder.slideVideoThumbnail.setBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.warm_grey,
-                        null
-                    )
+                        ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.warm_grey,
+                                null
+                        )
                 )
             }
 
@@ -149,31 +145,31 @@ class LearningDetailsLessonsAdapter constructor(
 //                setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
                 holder.lessonCompletionPercentage.text = "Completed 100%"
                 holder.lessonsSeeMoreButton.text = "Re-play"
-                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
+                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_green, null))
             } else /*if (videoModel.currentlyOnGoing)*/ {
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
                     //Not even started
-  //                  setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    //                  setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
                     holder.lessonCompletionPercentage.text = "Pending 0%"
                     holder.lessonsSeeMoreButton.text = "Play"
-                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_yellow, null))
                 } else {
                     //Currently going on
-    //                setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    //                setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
-                    val completedPercentage : Long = if(videoModel.lessonTotalLength != 0L)
+                    val completedPercentage: Long = if (videoModel.lessonTotalLength != 0L)
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
                     else
                         0
 
                     holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
-                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_orange, null))
                 }
             }
             //else {
-      //          setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
+            //          setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
             //}
 
 
@@ -185,32 +181,30 @@ class LearningDetailsLessonsAdapter constructor(
                 if (videoModel.coverPicture!!.startsWith("http", true)) {
 
                     GlideApp.with(context)
-                        .load(videoModel.coverPicture)
-                        .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
-                        .error(R.drawable.ic_learning_default_back)
-                        .into(holder.slideVideoThumbnail)
+                            .load(videoModel.coverPicture)
+                            .placeholder(getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
+                            .into(holder.slideVideoThumbnail)
                 } else {
-                    FirebaseStorage.getInstance()
-                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                        .child(videoModel.coverPicture!!)
-                        .downloadUrl
-                        .addOnSuccessListener { fileUri ->
+                    val imageRef = FirebaseStorage.getInstance()
+                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                            .child(videoModel.coverPicture!!)
 
-                            GlideApp.with(context)
-                                .load(fileUri)
-                                .thumbnail(GlideApp.with(context).load(R.drawable.ic_loading))
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(holder.slideVideoThumbnail)
-                        }
+                    GlideApp.with(context)
+                            .load(imageRef)
+                            .placeholder(getCircularProgressDrawable())
+                            .error(R.drawable.ic_learning_default_back)
+                            .into(holder.slideVideoThumbnail)
+
                 }
             } else {
 
                 holder.slideVideoThumbnail.setBackgroundColor(
-                    ResourcesCompat.getColor(
-                        context.resources,
-                        R.color.warm_grey,
-                        null
-                    )
+                        ResourcesCompat.getColor(
+                                context.resources,
+                                R.color.warm_grey,
+                                null
+                        )
                 )
             }
 
@@ -221,39 +215,38 @@ class LearningDetailsLessonsAdapter constructor(
             holder.slideVideoLength.text = videoModel.videoLengthString
 
             if (videoModel.completed) {
-        //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
+                //        setMarker(holder, R.drawable.ic_marker, R.color.colorPrimary)
                 holder.lessonCompletionPercentage.text = "Completed 100%"
                 holder.lessonsSeeMoreButton.text = "Re-play"
-                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_green,null))
-            } else /*if (videoModel.currentlyOnGoing) */{
+                holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_green, null))
+            } else /*if (videoModel.currentlyOnGoing) */ {
 
                 if (videoModel.completionProgress == 0L) {
                     //Not even started
-          //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    //          setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
                     holder.lessonCompletionPercentage.text = "Completed 0%"
                     holder.lessonsSeeMoreButton.text = "Play"
-                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_yellow, null))
                 } else {
                     //Currently going on
-            //        setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
+                    //        setMarker(holder, R.drawable.ic_marker_active, R.color.colorPrimary)
 
-                    val completedPercentage : Long = if(videoModel.lessonTotalLength != 0L)
+                    val completedPercentage: Long = if (videoModel.lessonTotalLength != 0L)
                         (videoModel.completionProgress * 100) / videoModel.lessonTotalLength
                     else
                         0
 
                     holder.lessonCompletionPercentage.text = "Completed $completedPercentage%"
                     holder.lessonsSeeMoreButton.text = "Resume"
-                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_orange,null))
+                    holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_orange, null))
                 }
             }
-                //else {
+            //else {
             //    holder.lessonCompletionPercentage.text = "Pending 0%"
-              //  holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
-              //  setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
-            }
+            //  holder.lessonCompletionPercentage.setTextColor(ResourcesCompat.getColor(context.resources,R.color.text_yellow,null))
+            //  setMarker(holder, R.drawable.ic_marker_inactive, R.color.colorPrimary)
         }
-
+    }
 
 
     private fun setMarker(holder: TimeLineViewHolder, drawableResId: Int, colorFilter: Int) {
@@ -266,16 +259,24 @@ class LearningDetailsLessonsAdapter constructor(
 
     override fun getItemCount() = mCourseContent.size
 
-    fun getCircularProgressDrawable(): CircularProgressDrawable {
-        val circularProgressDrawable = CircularProgressDrawable(context)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 20f
-        circularProgressDrawable.start()
-        return circularProgressDrawable
+    fun getCircularProgressDrawable(): Drawable {
+        val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+                .setDuration(1800) // how long the shimmering animation takes to do one full sweep
+                .setBaseAlpha(0.7f) //the alpha of the underlying children
+                .setHighlightAlpha(0.6f) // the shimmer alpha amount
+                .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+                .setAutoStart(true)
+                .build()
+
+
+// This is the placeholder for the imageView
+        return ShimmerDrawable().apply {
+            setShimmer(shimmer)
+        }
     }
 
     inner class TimeLineViewHolder(itemView: View, viewType: Int) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+            RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val videoSlideLayout = itemView.course_content_video_slide_layout
         val assessmentLayout = itemView.course_content_assessment_layout
@@ -301,7 +302,7 @@ class LearningDetailsLessonsAdapter constructor(
         val videoPlayIV = itemView.play_button_iv
         val lessonsSeeMoreButton = itemView.lessonsSeeMoreButton
         val videoTimeTV = itemView.video_time
-       // val timeline = itemView.timeline
+        // val timeline = itemView.timeline
 
 
         val lessonCompletionPercentage = itemView.lesson_completion_tv
@@ -317,7 +318,7 @@ class LearningDetailsLessonsAdapter constructor(
             val content = mCourseContent[adapterPosition]
 
 //            if (content.completed || content.currentlyOnGoing) {
-                learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
+            learningVideoActionListener?.invoke(mCourseContent[adapterPosition])
 //            } else {
 //                Toast.makeText(
 //                    context,

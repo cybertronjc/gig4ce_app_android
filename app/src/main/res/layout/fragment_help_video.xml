@@ -59,19 +59,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
-                    <include layout="@layout/item_help_video" />
+                    <include layout="@layout/item_help_video_shimmer" />
 
 
                 </LinearLayout>

@@ -21,6 +21,7 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.utils.configrepository.ConfigDataModel
@@ -124,6 +125,11 @@ class RosterDayViewModel constructor(
                             }
                         }
                     }
+
+                    added.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
+                    removed.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
+                    modified.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
+
                     allGigs[tag]!!.value!!.addAll(added)
                     allGigs[tag]!!.value!!.removeAll(removed)
 
