@@ -40,12 +40,14 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 81
-        versionName "1.27.2"
+        versionCode 87
+        versionName "1.27.8"
 
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "en", "fr"
+
 
     }
 
