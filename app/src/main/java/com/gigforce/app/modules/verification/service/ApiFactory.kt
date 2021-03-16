@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.verification.service
 
-import com.gigforce.app.modules.verification.AppConstants
+import com.gigforce.core.AppConstants
 import com.gigforce.core.retrofit.IdfyApiAadhaar
 
 object ApiFactory{

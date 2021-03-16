@@ -10,6 +10,7 @@ class NavForVerificationModule(
         val moduleName = "verification"
         baseImplementation.registerRoute("${moduleName}/main", R.id.gigerVerificationFragment)
         baseImplementation.registerRoute("${moduleName}/DLCA", R.id.fragment_upload_dl_cl_act)
+        baseImplementation.registerRoute("${moduleName}/aadhaarUpload", R.id.aadhaarUpload)
 
 
     }

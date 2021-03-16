@@ -15,18 +15,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.auth.ui.main.Login
-import com.gigforce.app.modules.photocrop.*
-
+import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.datamodels.verification.OCRDocsData
 import com.gigforce.core.datamodels.verification.PostDataOCRs
-import com.gigforce.app.modules.verification.service.RetrofitFactory
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.common_ui.utils.UtilMethods
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,10 +37,7 @@ import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import java.io.ByteArrayOutputStream
 
-class AadhaarUpload: BaseFragment() {
-    companion object {
-        fun newInstance() = Login()
-    }
+class AadhaarUpload : Fragment() {
 
     private lateinit var storage: FirebaseStorage
     var firebaseDB = FirebaseFirestore.getInstance()
@@ -51,11 +47,11 @@ class AadhaarUpload: BaseFragment() {
     private lateinit var AadhaarBack: ImageView
     lateinit var viewModel: VerificationViewModel
     private var PHOTO_CROP: Int = 45
-    private var frontNotDone = 1;
-    private var docUploaded = 0;
+    private var frontNotDone = 1
+    private var docUploaded = 0
 
-    private  lateinit  var uriFront: Uri
-    private  lateinit  var uriBack: Uri
+    private lateinit var uriFront: Uri
+    private lateinit var uriBack: Uri
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -66,9 +62,9 @@ class AadhaarUpload: BaseFragment() {
     ): View? {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        layout =  inflateView(R.layout.layout_verification_aadhaar, inflater, container)
+        layout = inflater.inflate(R.layout.layout_verification_aadhaar, container, false)
         //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-        layout?.pbAadhaar?.setProgress(20,true)
+        layout?.pbAadhaar?.setProgress(20, true)
         return layout
     }
 
@@ -79,21 +75,20 @@ class AadhaarUpload: BaseFragment() {
         AadhaarFront = layout?.findViewById(R.id.Aadhaar_front)!!
         AadhaarBack = layout?.findViewById(R.id.Aadhaar_back)!!
         val photoCropIntent = Intent(context, PhotoCrop::class.java)
-        photoCropIntent.putExtra("purpose","verification")
-        photoCropIntent.putExtra("uid",viewModel.uid)
+        photoCropIntent.putExtra("purpose", "verification")
+        photoCropIntent.putExtra("uid", viewModel.uid)
         photoCropIntent.putExtra("fbDir", "/verification/aadhaar/")
         photoCropIntent.putExtra("folder", "/verification/aadhaar/")
-        photoCropIntent.putExtra("detectFace",0)
+        photoCropIntent.putExtra("detectFace", 0)
 
         AadhaarFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
             startActivityForResult(photoCropIntent, PHOTO_CROP)
         }
         AadhaarBack.setOnClickListener {
-            if(AadhaarFront.drawable==null) {
+            if (AadhaarFront.drawable == null) {
                 showToast("Please upload the front side first!")
-            }
-            else {
+            } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
                 startActivityForResult(photoCropIntent, PHOTO_CROP)
             }
@@ -104,27 +99,28 @@ class AadhaarUpload: BaseFragment() {
         }
 
         buttonAadhaar1.setOnClickListener {
-            if(docUploaded==1)
-            {
+            if (docUploaded == 1) {
                 findNavController().navigate(R.id.uploadDropDown)
-            }
-            else {
+            } else {
                 showToast("Please upload the Aadhaar before proceeding")
             }
         }
     }
 
-    private fun encodeImageToBase64(uri: Uri):String{
+    private fun encodeImageToBase64(uri: Uri): String {
         val baos = ByteArrayOutputStream()
-        val bitmap =  MediaStore.Images.Media.getBitmap(context?.contentResolver, uri);//BitmapFactory.decodeResource(resources, uri)
+        val bitmap = MediaStore.Images.Media.getBitmap(
+            context?.contentResolver,
+            uri
+        )//BitmapFactory.decodeResource(resources, uri)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageBytes: ByteArray = baos.toByteArray()
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT)
     }
 
     @SuppressLint("CheckResult", "UseRequireInsteadOfGet")
-    private fun idfyApiCall(postData: PostDataOCRs){
-        if(this.context?.let { UtilMethods.isConnectedToInternet(it)}!!){
+    private fun idfyApiCall(postData: PostDataOCRs) {
+        if (this.context?.let { UtilMethods.isConnectedToInternet(it) }!!) {
             this.context?.let { UtilMethods.showLoading(it) }
             val observable = RetrofitFactory.idfyApiCallAD().postOCR(postData)
             observable.subscribeOn(Schedulers.io())
@@ -132,17 +128,17 @@ class AadhaarUpload: BaseFragment() {
                 .subscribe({ response ->
                     UtilMethods.hideLoading()
                     //here we can load all the data required
-                    var extractionOutput = response!!.result!!.extraction_output!!
+                    var extractionOutput = response!!.result.extraction_output
 
                     firebaseDB.collection("Verification")
                         .document(uid).update("Aadhaar", FieldValue.arrayUnion(extractionOutput))
                         .addOnSuccessListener {
-                                showToast("Document successfully uploaded!")
-                                Log.d("REPOSITORY", "Aadhaar added successfully!")
+                            showToast("Document successfully uploaded!")
+                            Log.d("REPOSITORY", "Aadhaar added successfully!")
                         }
-                        .addOnFailureListener{
-                                exception ->  Log.d("Repository", exception.toString())
-                                showToast("Some failure, please retry!")
+                        .addOnFailureListener { exception ->
+                            Log.d("Repository", exception.toString())
+                            showToast("Some failure, please retry!")
                         }
                     /** response is response data class*/
                 }, { error ->
@@ -150,7 +146,7 @@ class AadhaarUpload: BaseFragment() {
                     UtilMethods.showLongToast(this.context!!, error.message.toString())
                 }
                 )
-        }else{
+        } else {
             UtilMethods.showLongToast(this.context!!, "No Internet Connection!")
         }
     }
@@ -173,18 +169,17 @@ class AadhaarUpload: BaseFragment() {
             Log.v("verification_FRAG_OAR", "filename is:" + imageName)
             if (null != imageName) {
                 viewModel.setCardAvatarName(imageName.toString())
-                var filepath = "/Aadhaar/"+imageName;
-                if(frontNotDone==1){
-                    uriFront = data?.getParcelableExtra("uri")!!;
+                var filepath = "/Aadhaar/" + imageName
+                if (frontNotDone == 1) {
+                    uriFront = data?.getParcelableExtra("uri")!!
                     //loadImage("verification",filepath, layout?.Aadhaar_front)
-                    layout?.Aadhaar_front?.setImageURI(uriFront);
-                    frontNotDone = 0;
-                }
-                else{
-                    uriBack = data?.getParcelableExtra("uri")!!;
+                    layout?.Aadhaar_front?.setImageURI(uriFront)
+                    frontNotDone = 0
+                } else {
+                    uriBack = data?.getParcelableExtra("uri")!!
                     //var imgb64 = UtilMethods.encodeImagesToBase64(context!!, uriFront, uriBack);
-                    var imgb641 = UtilMethods.encodeImageToBase64(requireContext(), uriFront);
-                    var imgb642 = UtilMethods.encodeImageToBase64(requireContext(), uriBack);
+                    var imgb641 = UtilMethods.encodeImageToBase64(requireContext(), uriFront)
+                    var imgb642 = UtilMethods.encodeImageToBase64(requireContext(), uriBack)
                     var ocrdata =
                         OCRDocsData(
                             imgb641,
@@ -192,24 +187,24 @@ class AadhaarUpload: BaseFragment() {
                             "yes"
                         )
                     //var ocrdata = OCRDocsData(imgb64,imgb64,"yes")
-                    val taskid:String = "74f4c926-250c-43ca-9c53-453e87ceacd2";
-                    val groupid:String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f";
+                    val taskid: String = "74f4c926-250c-43ca-9c53-453e87ceacd2"
+                    val groupid: String = "8e16424a-58fc-4ba4-ab20-5bc8e7c3c41f"
                     var postData =
                         PostDataOCRs(
                             taskid,
                             groupid,
-                            ocrdata!!
+                            ocrdata
                         )
                     idfyApiCall(postData)
                     //loadImage("verification",filepath, layout?.Aadhaar_back)
-                    layout?.Aadhaar_back?.setImageURI(uriBack);
-                    docUploaded = 1;
+                    layout?.Aadhaar_back?.setImageURI(uriBack)
+                    docUploaded = 1
                 }
             }
         }
     }
 
-    private fun loadImage(collection: String, filepath: String, layoutid: ImageView ) {
+    private fun loadImage(collection: String, filepath: String, layoutid: ImageView) {
         var picRef: StorageReference = storage.reference.child(collection).child(filepath)
         GlideApp.with(this.requireContext())
             .load(picRef)

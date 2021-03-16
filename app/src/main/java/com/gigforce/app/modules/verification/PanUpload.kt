@@ -225,7 +225,7 @@ class PanUpload: Fragment() {
     
     private fun loadImage(collection: String, filepath: String, layoutid: ImageView ) {
         var picRef: StorageReference = storage.reference.child(collection).child(filepath)
-        GlideApp.with(this.context!!)
+        GlideApp.with(requireContext())
             .load(picRef)
             .into(layoutid)
     }

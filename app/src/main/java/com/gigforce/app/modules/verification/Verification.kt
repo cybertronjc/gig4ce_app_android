@@ -8,17 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.validation.Regexes
 import com.gigforce.core.datamodels.verification.Address
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import java.util.regex.Matcher
+import javax.inject.Inject
 
-
-class Verification: BaseFragment() {
+@AndroidEntryPoint
+class Verification: Fragment() {
     companion object {
         fun newInstance() = Verification()
     }
@@ -34,6 +38,8 @@ class Verification: BaseFragment() {
 
     lateinit var match: Matcher;
 
+    @Inject lateinit var navigation : INavigation
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +47,7 @@ class Verification: BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
-        layout = inflateView(R.layout.layout_verification, inflater,container);
+        layout = inflater.inflate(R.layout.layout_verification, container,false);
         //requireActivity().onBackPressedDispatcher.addCallback(this, callback)
         layout?.pbAddress?.setProgress(3,true)
         return layout
@@ -138,7 +144,8 @@ class Verification: BaseFragment() {
         layout?.button_veri_address_cancel?.setOnClickListener {
             // CHECK to reset or not?
             //resetLayout();
-            navigate(R.id.mainHomeScreen);
+//            navigate(R.id.mainHomeScreen);
+            navigation.navigateTo("main_home_screen")
         }
 
         layout?.button_veri_address_save?.setOnClickListener {
@@ -164,7 +171,8 @@ class Verification: BaseFragment() {
                 addNewContact()
                 saveNewContacts()
                 resetLayout()
-                navigate(R.id.aadhaarUpload)
+                navigation.navigateTo("verification/aadhaarUpload")
+//                navigate(R.id.aadhaarUpload)
                 //findNavController().navigate(R.id.panUpload)
             }
         }

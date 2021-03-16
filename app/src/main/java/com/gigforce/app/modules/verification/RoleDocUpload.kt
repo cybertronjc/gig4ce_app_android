@@ -95,7 +95,7 @@ class RoleDocUpload: Fragment() {
         storage = FirebaseStorage.getInstance()
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         layout = inflater.inflate(R.layout.layout_verification_dropdown, container, false)
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         layout.pbVeriDD.setProgress(40,true)
 
         spinner = layout.spinnerVeri
