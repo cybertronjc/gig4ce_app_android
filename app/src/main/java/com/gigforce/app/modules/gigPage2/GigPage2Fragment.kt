@@ -23,8 +23,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.toFirebaseTimeStamp
+import com.gigforce.app.core.toLocalDateTime
+import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage.models.ContactPerson
@@ -40,11 +43,12 @@ import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
+import com.gigforce.app.utils.LocationUtils
 import com.gigforce.common_ui.core.TextDrawable
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -55,7 +59,6 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_gig_type.*
-import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
@@ -203,7 +206,7 @@ class GigPage2Fragment : BaseFragment(),
             viewModel.currentGig?.let {
 
                 val status = GigStatus.fromGig(it)
-                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING)
+                popupMenu.menu.findItem(R.id.action_decline_gig).isVisible = status == GigStatus.UPCOMING
                 popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
             }
 
@@ -447,9 +450,9 @@ class GigPage2Fragment : BaseFragment(),
 
         gig_duration.text =
                 ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
-                    timeFormatter.format(
-                            gig.endDateTime.toDate()
-                    )
+                timeFormatter.format(
+                        gig.endDateTime.toDate()
+                )
                 }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
@@ -651,7 +654,7 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-        val intent = Intent(context, ImageCaptureActivity::class.java)
+        val intent = Intent(context, AttendanceImageCaptureActivity::class.java)
         startActivityForResult(
                 intent,
                 GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
@@ -791,7 +794,7 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun stopLocationUpdates() {
         this.isRequestingLocation = false
-        locationUpdates.stopLocationUpdates()
+        locationUpdates.stopLocationUpdates(requireActivity())
     }
 
     override fun lastLocationReceiver(location: Location?) {}

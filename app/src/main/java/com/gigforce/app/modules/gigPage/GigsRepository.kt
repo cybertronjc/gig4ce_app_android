@@ -7,7 +7,7 @@ import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.app.modules.gigPage.models.JobProfileFull
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.updateOrThrow
+import com.gigforce.core.extensions.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
