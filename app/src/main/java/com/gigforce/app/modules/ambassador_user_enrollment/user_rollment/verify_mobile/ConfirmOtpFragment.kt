@@ -181,7 +181,7 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
 
     override fun onPause() {
         super.onPause()
-        locationUpdates.stopLocationUpdates(requireActivity())
+        locationUpdates.stopLocationUpdates()
     }
 
     override fun onResume() {

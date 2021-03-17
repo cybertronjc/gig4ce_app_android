@@ -111,7 +111,8 @@
         android:id="@+id/tempFragment"
         android:name="com.gigforce.app.TempFragment"
         android:label="TempFragment"
-        tools:layout="@layout/calendar_dialog"></fragment>
+        tools:layout="@layout/calendar_dialog">
+    </fragment>
 
 
     <fragment
@@ -734,7 +735,7 @@
         android:label="GigRegulariseAttendanceFragment" />
     <dialog
         android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.GigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
         android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
@@ -920,6 +921,10 @@
         android:id="@+id/fragment_add_skills_profile_v2"
         android:name="com.gigforce.app.modules.profile_.AddSkillsProfileV2"
         android:label="fragment_add_skills_profile_v2" />
+    <dialog
+        android:id="@+id/gigContactPersonBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
+        android:label="GigContactPersonBottomSheet" />
 
     <include app:graph="@navigation/nav_graph_chat" />
 

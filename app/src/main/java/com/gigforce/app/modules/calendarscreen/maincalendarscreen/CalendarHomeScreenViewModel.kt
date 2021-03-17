@@ -11,10 +11,12 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
+import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.google.firebase.firestore.DocumentSnapshot
+import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage.models.JobProfile
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.ServerTimestamp
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
@@ -93,7 +95,15 @@ class CalendarHomeScreenViewModel : ViewModel() {
         lateinit var startDateTime: Date
         @ServerTimestamp
         var endDateTime: Date? = null
-        var title: String = ""
+
+        @get:PropertyName("title")
+        @set:PropertyName("title")
+         var title: String = ""
+
+        @get:PropertyName("profile")
+        @set:PropertyName("profile")
+        var profile: JobProfile? = JobProfile()
+
 
         constructor(
             duration: Int,
@@ -101,18 +111,27 @@ class CalendarHomeScreenViewModel : ViewModel() {
             gigerId: String,
             startDateTime: Date,
             endDateTime: Date?,
-            title: String
+            profile: JobProfile?,
+            legacyTitle : String?
         ) {
             this.duration = duration
             this.gigStatus = gigStatus
             this.gigerId = gigerId
             this.startDateTime = startDateTime
             this.endDateTime = endDateTime
-            this.title = title
+            this.profile = profile
+            this.title = legacyTitle ?: ""
         }
 
         constructor() {}
+
+        @Exclude
+        fun getGigTitle(): String {
+            return profile?.title ?: title
+        }
+
     }
+
 
     fun getVerticalCalendarData(
         dataItem: VerticalCalendarDataItemModel?,

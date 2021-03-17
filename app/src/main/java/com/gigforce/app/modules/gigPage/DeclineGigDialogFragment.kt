@@ -119,17 +119,17 @@ class DeclineGigDialogFragment : DialogFragment() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
-            setLayout(
-                    (getScreenWidth(requireActivity()).width - resources.getDimension(R.dimen.size_32)).toInt(),
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        dialog?.window?.apply {
+//            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
+//            setLayout(
+//                    (getScreenWidth(requireActivity()).width - resources.getDimension(R.dimen.size_32)).toInt(),
+//                    ViewGroup.LayoutParams.WRAP_CONTENT
+//            )
+//
+//        }
+//    }
 
 
     private fun initView() {

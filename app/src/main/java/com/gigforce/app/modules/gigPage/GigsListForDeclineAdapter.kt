@@ -115,17 +115,17 @@ class GigsListForDeclineAdapter constructor(
 
         fun bindTo(gig: Gig) {
 
-            if (!gig.companyLogo.isNullOrBlank()) {
+            if (!gig.getFullCompanyLogo().isNullOrBlank()) {
 
-                if (gig.companyLogo!!.startsWith("http", true)) {
+                if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                     Glide.with(context)
-                        .load(gig.companyLogo)
+                        .load(gig.getFullCompanyLogo())
                         .into(companyLogoIV)
                 } else {
                     FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .reference
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener {
 
@@ -135,10 +135,10 @@ class GigsListForDeclineAdapter constructor(
                         }
                 }
             } else {
-                val companyInitials = if (gig.companyName.isNullOrBlank())
+                val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                     "C"
                 else
-                    gig.companyName!![0].toString().toUpperCase()
+                    gig.getFullCompanyName()!![0].toString().toUpperCase()
                 val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
@@ -146,7 +146,7 @@ class GigsListForDeclineAdapter constructor(
                 companyLogoIV.setImageDrawable(drawable)
             }
 
-            gigTitleTv.text = gig.title
+            gigTitleTv.text = gig.getGigTitle()
 
             gigTimingTV.text = if (gig.endDateTime != null)
                 "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${

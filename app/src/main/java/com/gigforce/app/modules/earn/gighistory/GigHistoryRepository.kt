@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import java.util.*
 
 
 class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
@@ -14,48 +15,38 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
     var listener: ListenerRegistration? = null
     var onGoingListener: ListenerRegistration? = null
     override fun getOnGoingGigs(
-        responseCallbacks: DataCallbacks.ResponseCallbacks,
-        initialLoading: Boolean
+            responseCallbacks: DataCallbacks.ResponseCallbacks,
+            initialLoading: Boolean
     ) {
 
-        onGoingListener = getCollectionReference().whereEqualTo("gigerId", getUID())
-            .whereGreaterThanOrEqualTo("startDateTime",
-                getStartOfDay()
-            )
-            .whereLessThanOrEqualTo("startDateTime",
-                getEndOfDay()
-            )
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                responseCallbacks.onGoingGigsResponse(
-                    querySnapshot,
-                    firebaseFirestoreException,
-                    initialLoading
-                );
-
-            }
+        onGoingListener = getCollectionReference()
+                .whereEqualTo("gigerId", getUID())
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    responseCallbacks.onGoingGigsResponse(
+                            querySnapshot,
+                            firebaseFirestoreException,
+                            initialLoading
+                    )
+                }
     }
 
 
     override fun getPastGigs(
-        responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: DataCallbacks.ResponseCallbacks,
+            lastVisible: DocumentSnapshot?,
+            limit: Long
     ) {
 
         val gigQuery =
-            if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
-                .whereLessThan("startDateTime",
-                    getEndOfDay()
-                )
-                .orderBy("startDateTime", Query.Direction.DESCENDING).startAfter(lastVisible)
-                .limit(limit)
-            else
-                getCollectionReference().whereEqualTo("gigerId", getUID())
-                    .whereLessThan("startDateTime",
-                        getEndOfDay()
-                    )
-                    .orderBy("startDateTime", Query.Direction.DESCENDING)
-                    .limit(limit)
+                if (lastVisible != null) getCollectionReference()
+                        .whereEqualTo("gigerId", getUID())
+                        .orderBy("endDateTime", Query.Direction.DESCENDING)
+                        .startAfter(lastVisible)
+                        .limit(limit)
+                else
+                    getCollectionReference().whereEqualTo("gigerId", getUID())
+                            .orderBy("endDateTime", Query.Direction.DESCENDING)
+                            .limit(limit)
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
             responseCallbacks.pastGigsResponse(querySnapshot, firebaseFirestoreException);
@@ -66,30 +57,23 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
 
     override fun getUpComingGigs(
-        responseCallbacks: DataCallbacks.ResponseCallbacks,
-        lastVisible: DocumentSnapshot?,
-        limit: Long
+            responseCallbacks: DataCallbacks.ResponseCallbacks,
+            lastVisible: DocumentSnapshot?,
+            limit: Long
     ) {
 
         val gigQuery =
-            if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
-                .whereGreaterThan("startDateTime",
-                    getEndOfDay()
-                )
-                .orderBy("startDateTime", Query.Direction.ASCENDING).startAfter(lastVisible)
-                .limit(limit)
-            else
-                getCollectionReference().whereEqualTo("gigerId", getUID())
-                    .whereGreaterThan("startDateTime",
-                        getEndOfDay()
-                    )
-                    .orderBy("startDateTime", Query.Direction.ASCENDING)
-                    .limit(limit)
+                if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
+                        .orderBy("startDateTime", Query.Direction.ASCENDING)
+                        .startAfter(lastVisible)
+                        .limit(limit)
+                else
+                    getCollectionReference().whereEqualTo("gigerId", getUID())
+                            .orderBy("startDateTime", Query.Direction.ASCENDING)
+                            .limit(limit)
 
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             responseCallbacks.upcomingGigsResponse(querySnapshot, firebaseFirestoreException);
-
-
         }
     }
 
@@ -104,37 +88,37 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
 
     override fun observeDocumentChanges(responseCallbacks: DataCallbacks.ResponseCallbacks) {
         getCollectionReference().whereEqualTo("gigerId", getUID())
-            .addSnapshotListener { snapshots, e ->
-                if (e != null) {
-                    return@addSnapshotListener
-                }
-                for (dc in snapshots!!.documentChanges) {
-                    when (dc.type) {
+                .addSnapshotListener { snapshots, e ->
+                    if (e != null) {
+                        return@addSnapshotListener
+                    }
+                    for (dc in snapshots!!.documentChanges) {
+                        when (dc.type) {
 //                        DocumentChange.Type.ADDED -> {
 //                            responseCallbacks.docChange(DocumentChange.Type.ADDED, dc)
 //                        }
-                        DocumentChange.Type.MODIFIED -> {
-                            responseCallbacks.docChange(DocumentChange.Type.MODIFIED, dc)
-                        }
-                        DocumentChange.Type.REMOVED -> {
-                            responseCallbacks.docChange(DocumentChange.Type.REMOVED, dc)
+                            DocumentChange.Type.MODIFIED -> {
+                                responseCallbacks.docChange(DocumentChange.Type.MODIFIED, dc)
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                responseCallbacks.docChange(DocumentChange.Type.REMOVED, dc)
+                            }
                         }
                     }
                 }
-            }
     }
 
     override fun checkGigsCount(responseCallbacks: DataCallbacks.ResponseCallbacks) {
         getCollectionReference().whereEqualTo("gigerId", getUID())
-            .limit(1).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                responseCallbacks.gigsCountResponse(querySnapshot, firebaseFirestoreException);
-            }
+                .limit(1).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    responseCallbacks.gigsCountResponse(querySnapshot, firebaseFirestoreException);
+                }
 
     }
 
 
     override fun getCollectionName() =
-        COLLECTION_NAME
+            COLLECTION_NAME
 
     companion object {
         private const val COLLECTION_NAME = "Gigs"

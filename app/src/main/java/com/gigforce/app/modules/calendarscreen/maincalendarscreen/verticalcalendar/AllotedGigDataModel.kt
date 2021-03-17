@@ -14,7 +14,7 @@ class AllotedGigDataModel : BaseFirestoreDataModel {
             data.date = calendarObj.get(Calendar.DATE)
             data.month = calendarObj.get(Calendar.MONTH)
             data.year = calendarObj.get(Calendar.YEAR)
-            data.title = gig.title
+            data.title = gig.getGigTitle()
             data.gigDetails = ArrayList<GigsDetail>()
             data.available = true
             return data

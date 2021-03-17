@@ -97,29 +97,15 @@
         android:paddingBottom="10dp">
 
 
-        <TextView
-            android:id="@+id/gig_status_tv"
+        <com.gigforce.app.modules.gigPage2.views.GigStatusCardView
+            android:id="@+id/gig_status_card_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black_85"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
+          />
 
-        <ImageView
-            android:id="@+id/gig_status_iv"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="4dp"
-            android:textColor="@color/black_85"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/gig_status_tv"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
 
 
         <TextView

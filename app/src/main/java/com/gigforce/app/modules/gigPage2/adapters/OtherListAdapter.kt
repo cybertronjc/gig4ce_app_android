@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2
+package com.gigforce.app.modules.gigPage2.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -38,7 +38,7 @@ class OtherOptionsAdapter(
                 R.layout.recycler_item_other_option,
                 parent,
                 false
-            ), viewType
+            )
         )
     }
 
@@ -51,8 +51,7 @@ class OtherOptionsAdapter(
 
     override fun getItemCount() = otherOptions.size
 
-    inner class TimeLineViewHolder(itemView: View, viewType: Int) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class TimeLineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)

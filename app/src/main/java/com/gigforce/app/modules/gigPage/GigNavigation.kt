@@ -7,25 +7,41 @@ import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 
 object GigNavigation {
 
-    fun openGigAttendancePage(navController: NavController, gigId : String ){
-        openGigAttendancePage(navController, Bundle().apply {
+    fun openGigAttendancePage(navController: NavController,
+                              openNewGigPage: Boolean,
+                              gigId: String) {
+        openGigAttendancePage(navController, openNewGigPage, Bundle().apply {
             this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gigId)
         })
     }
 
-    fun openGigAttendancePage(navController: NavController, extras : Bundle?){
-        navController.navigate(R.id.gigAttendancePageFragment, extras)
-        //navController.navigate(R.id.gigPage2Fragment, bundle)
+    fun openGigAttendancePage(navController: NavController,
+                              openNewGigPage: Boolean,
+                              extras: Bundle?) {
+
+        if (openNewGigPage)
+            navController.navigate(R.id.gigPage2Fragment, extras)
+        else
+            navController.navigate(R.id.gigAttendancePageFragment, extras)
     }
 
-    fun openGigMainPage(navController: NavController, gigId : String){
-        openGigMainPage(navController, Bundle().apply {
+    fun openGigMainPage(navController: NavController,
+                        openNewGigPage: Boolean,
+                        gigId: String) {
+
+        openGigMainPage(navController, openNewGigPage, Bundle().apply {
             this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gigId)
         })
+
     }
 
-    fun openGigMainPage(navController: NavController, bundle  : Bundle?){
-        navController.navigate(R.id.presentGigPageFragment, bundle)
-        //navController.navigate(R.id.gigPage2Fragment, bundle)
+    fun openGigMainPage(navController: NavController,
+                        openNewGigPage: Boolean,
+                        bundle: Bundle?) {
+
+        if (openNewGigPage)
+            navController.navigate(R.id.gigPage2Fragment, bundle)
+        else
+            navController.navigate(R.id.presentGigPageFragment, bundle)
     }
 }

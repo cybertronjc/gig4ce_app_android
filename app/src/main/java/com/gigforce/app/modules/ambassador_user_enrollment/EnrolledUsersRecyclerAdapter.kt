@@ -76,24 +76,24 @@ class EnrolledUsersRecyclerAdapter constructor(
         }
 
         fun bindValues(user: EnrolledUser) {
-            if (user.profilePic.isBlank()) {
+            if (user.profilePic.isNullOrBlank()) {
                 Glide.with(applicationContext).load(R.drawable.avatar).into(userImageIV)
             } else {
 
-                if (user.profileAvatarThumbnail.isNotBlank()) {
+                if (!user.profileAvatarThumbnail.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
                         .reference
                         .child("profile_pics")
-                        .child(user.profileAvatarThumbnail)
+                        .child(user.profileAvatarThumbnail!!)
 
                     GlideApp.with(applicationContext)
                         .load(profilePicRef)
                         .into(userImageIV)
-                } else if (user.profilePic.isNotBlank()) {
+                } else if (!user.profilePic.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
                         .reference
                         .child("profile_pics")
-                        .child(user.profilePic)
+                        .child(user.profilePic!!)
 
                     GlideApp.with(applicationContext)
                         .load(profilePicRef)

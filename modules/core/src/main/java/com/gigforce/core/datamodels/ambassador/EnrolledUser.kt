@@ -36,11 +36,11 @@ data class EnrolledUser(
 
         @get:PropertyName("profilePic")
         @set:PropertyName("profilePic")
-        var profilePic: String = "",
+        var profilePic: String? = null,
 
         @get:PropertyName("profilePic_thumbnail")
         @set:PropertyName("profilePic_thumbnail")
-        var profileAvatarThumbnail: String = "",
+        var profileAvatarThumbnail: String? = null,
 
         @get:PropertyName("enrollmentStepsCompleted")
         @set:PropertyName("enrollmentStepsCompleted")

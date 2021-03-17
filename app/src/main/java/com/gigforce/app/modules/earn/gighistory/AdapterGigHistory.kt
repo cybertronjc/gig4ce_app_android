@@ -13,6 +13,7 @@ import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.ItemDecorationOnGoingGigs
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
@@ -127,26 +128,31 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 else -> {
                     val viewHolderGigDetails = holder as ViewHolderGigDetails
                     val gig = scheduledGigs?.get(position - 2)
+                    val gigStatus = GigStatus.fromGig(gig!!)
+                    holder.itemView.gig_status_card.setGigData(gigStatus)
 
-                    if (gig?.isCheckInAndCheckOutMarked() == true) {
-                        holder.itemView.tv_completed_gig_hist.text =
-                                holder.itemView.context.getString(R.string.completed)
-                        holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_applied,
-                                0,
-                                0,
-                                0
-                        )
-                    } else {
-                        holder.itemView.tv_completed_gig_hist.text =
-                                holder.itemView.context.getString(R.string.pending)
-                        holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_status_pending,
-                                0,
-                                0,
-                                0
-                        )
-                    }
+                    //start- removed during merging
+//                    if (gig?.isCheckInAndCheckOutMarked() == true) {
+//                        holder.itemView.tv_completed_gig_hist.text =
+//                            holder.itemView.context.getString(R.string.completed)
+//                        holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+//                            R.drawable.ic_applied,
+//                            0,
+//                            0,
+//                            0
+//                        )
+//                    } else {
+//                        holder.itemView.tv_completed_gig_hist.text =
+//                            holder.itemView.context.getString(R.string.pending)
+//                        holder.itemView.tv_completed_gig_hist.setCompoundDrawablesWithIntrinsicBounds(
+//                            R.drawable.ic_status_pending,
+//                            0,
+//                            0,
+//                            0
+//                        )
+//                    }
+
+// end
 
 
 //                gig?.attendance?.checkInMarked?.let { checkInMarked ->
@@ -180,8 +186,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     viewHolderGigDetails.itemView.tv_date_gig_hist.isSelected = true
                     viewHolderGigDetails.itemView.rl_on_going_gig_hist.visibility = View.GONE
                     viewHolderGigDetails.itemView.rl_scheduled_gig_hist.visibility = View.VISIBLE
-                    holder.itemView.tv_designation_rv_gig_hist.text = gig.title
-                    holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.companyName}"
+                    holder.itemView.tv_designation_rv_gig_hist.text = gig.getGigTitle()
+                    holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.getFullCompanyName()}"
                     holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
                     holder.itemView.tv_rating_rv_gig_hist.text = gig.gigRating.toString()
                     holder.itemView.tv_time_rv_gig_hist.text = ""
@@ -224,21 +230,17 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             gig: Gig,
             viewHolderGigDetails: ViewHolderGigDetails
     ) {
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(viewHolderGigDetails.itemView.context)
-                        .load(gig.companyLogo)
-                        .placeholder(
-                            getCircularProgressDrawable(
-                                viewHolderGigDetails.itemView.context
-                            )
-                        )
+                        .load(gig.getFullCompanyLogo())
+                        .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
                         .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
             } else {
                 FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .reference
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -253,10 +255,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(

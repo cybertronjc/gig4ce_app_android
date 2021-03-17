@@ -7,7 +7,6 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'dagger.hilt.android.plugin'
 
-
 android {
 
     signingConfigs {
@@ -25,6 +24,12 @@ android {
             keyPassword 'gig4ce'
         }
 
+        staging {
+            storeFile file('../keystore/gigforcestaging.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
+        }
 
         //        production {
 //            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
@@ -76,7 +81,6 @@ android {
         production {
             dimension "default"
             signingConfig signingConfigs.production
-//            buildConfigField "String", 'BUILD_TYPE', '"prod"'
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -94,7 +98,20 @@ android {
             dimension "default"
             versionNameSuffix '-Dev'
             signingConfig signingConfigs.debug
-//            buildConfigField "String", 'BUILD_TYPE', '"dev"'
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+        }
+
+        staging {
+            dimension "default"
+            versionNameSuffix '-staging'
+            signingConfig signingConfigs.staging
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -137,9 +154,6 @@ dependencies {
     implementation project(path: ':modules:user_profile')
     implementation project(path: ':modules:wallet')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
-
-
-
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     //implementation 'com.android.support.constraint:constraint-layout:1.1.3'

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2
+package com.gigforce.app.modules.gigPage2.bottomsheets
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +15,8 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details.*
@@ -90,7 +92,7 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                 }
             })
 
-        viewModel.watchGig(gigId, false)
+        viewModel.watchGig(gigId)
     }
 
     private fun showGigdetailsLoading() {
@@ -108,29 +110,19 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun showGigDetails(gig: Gig) {
+        val gigStatus = GigStatus.fromGig(gig)
 
         gig_single_day_attendance_details_error.gone()
         gig_single_day_attendance_details_progress_bar.gone()
         gig_single_day_attendance_details_layout.visible()
 
-        val gigStartDateTime = gig.startDateTime!!.toLocalDateTime()
+        val gigStartDateTime = gig.startDateTime.toLocalDateTime()
         val dayName =
             gigStartDateTime.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
         att_date_day.text = dayName + "\n" + gigStartDateTime.dayOfMonth.toString()
 
-
-        if (gig.isPastGig()) {
-            gig_status_tv.text = "Completed"
-            gig_status_iv.setImageResource(R.drawable.round_pink)
-        } else if (gig.isPresentGig()) {
-            gig_status_tv.text = "Ongoing"
-            gig_status_iv.setImageResource(R.drawable.round_green)
-        } else if (gig.isUpcomingGig()) {
-            gig_status_tv.text = "Upcoming"
-            gig_status_iv.setImageResource(R.drawable.round_yellow)
-
-            regularise_layout.gone()
-        }
+        gig_status_card_view.setGigData(gigStatus)
+        regularise_layout.gone()
 
         if (gig.isCheckInAndCheckOutMarked()) {
             punch_in_time.text = "Punch In\n${timeFormatter.format(gig.attendance!!.checkInTime)}"

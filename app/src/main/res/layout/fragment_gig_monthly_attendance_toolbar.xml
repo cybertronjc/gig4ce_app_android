@@ -30,6 +30,7 @@
         android:layout_marginEnd="16dp"
           app:srcCompat="@drawable/ic_ellipses"
         app:tint="@color/white"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,31 +75,6 @@
         app:layout_constraintStart_toStartOf="@id/gig_title_tv"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/company_star_logo_tv"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:textSize="12sp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="4dp"
-          app:srcCompat="@drawable/ic_star"
-        app:layout_constraintTop_toBottomOf="@id/gig_company_name_tv"
-        app:layout_constraintStart_toStartOf="@id/gig_title_tv"
-        tools:text="\ufeff@ Procter &amp; Gamble" />
-
-    <TextView
-        android:id="@+id/company_rating_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="6dp"
-        android:layout_marginStart="4dp"
-          app:srcCompat="@drawable/ic_star"
-        android:text="-"
-        app:layout_constraintTop_toBottomOf="@id/gig_company_name_tv"
-        app:layout_constraintStart_toEndOf="@id/company_star_logo_tv"
-        tools:text="4.3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -98,22 +98,30 @@ fun Spinner.selectItemWithText(text: String) {
     }
 }
 
-fun Date.toLocalDate() : LocalDate{
+fun Date.toLocalDate(): LocalDate {
     return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 }
 
-fun Timestamp.toLocalDateTime() : LocalDateTime{
+fun Date?.toFirebaseTimeStamp(): Timestamp? {
 
-   return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    return if (this == null)
+        null
+    else
+        Timestamp(this)
 }
 
-fun Timestamp.toLocalDate() : LocalDate{
+fun Timestamp.toLocalDateTime(): LocalDateTime {
+
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
+fun Timestamp.toLocalDate(): LocalDate {
     return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 }
 
 fun Timestamp.toDisplayText(): String {
     val date = this.toDate()
-    return if(DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat("dd MMM, hh:mm a").format(date)
+    return if (DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat("dd MMM, hh:mm a").format(date)
 }
 
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
@@ -159,9 +167,9 @@ fun ChipGroup.selectChipWithText(vararg text: String) {
                 val chip = this.getChildAt(i) as Chip
 
                 if (chip.text.toString().trim().equals(
-                        other = it,
-                        ignoreCase = true
-                    )
+                                other = it,
+                                ignoreCase = true
+                        )
                 ) {
                     chip.isChecked = true
                 }

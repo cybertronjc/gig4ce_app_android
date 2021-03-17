@@ -493,7 +493,7 @@
 
     <style name="squareImageView" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10%</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="circleImageView" parent="">
@@ -512,6 +512,7 @@
         <item name="android:textColor">@color/attendance_chip_text_colors</item>
         <item name="chipStrokeColor">@color/attendance_chip_stroke_colors</item>
     </style>
+
 
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>

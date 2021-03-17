@@ -5,8 +5,12 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.core.utils.EventLogs.getOrThrow
+import com.gigforce.app.modules.gigPage.models.JobProfileFull
+import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -24,42 +28,130 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         getCollectionReference().document(gigId).update(markAttendance.tableName, markAttendance)
     }
 
+    suspend fun markCheckIn(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkInTime: Timestamp,
+            checkInTimeAccToUser: Timestamp? = null,
+            remarks: String? = null
+    ) {
+
+        val attendanceUpdateMap: Map<String, Any?> = if (checkInTimeAccToUser == null) {
+            mapOf(
+                    "attendance.checkInAddress" to locationPhysicalAddress,
+                    "attendance.checkInImage" to image,
+                    "attendance.checkInLat" to latitude,
+                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInMarked" to true,
+                    "attendance.checkInTime" to checkInTime,
+                    "gigStatus" to GigStatus.ONGOING.getStatusString()
+            )
+        } else {
+            mapOf(
+                    "attendance.checkInAddress" to locationPhysicalAddress,
+                    "attendance.checkInImage" to image,
+                    "attendance.checkInLat" to latitude,
+                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInMarked" to true,
+                    "attendance.checkInTime" to checkInTime,
+                    "regularisationRequest.requestedOn" to Timestamp.now(),
+                    "regularisationRequest.regularisationSettled" to false,
+                    "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
+                    "regularisationRequest.checkOutTimeAccToUser" to null,
+                    "regularisationRequest.remarksFromUser" to remarks,
+                    "regularisationRequest.remarksFromManager" to null,
+                    "gigStatus" to GigStatus.ONGOING.getStatusString()
+            )
+        }
+
+        getCollectionReference()
+                .document(gigId)
+                .updateOrThrow(attendanceUpdateMap)
+    }
+
+    suspend fun markCheckOut(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkOutTime: Timestamp,
+            checkOutTimeAccToUser: Timestamp? = null,
+            remarks: String? = null
+    ) {
+
+        val attendanceUpdateMap: Map<String, Any?> = if (checkOutTimeAccToUser == null) {
+            mapOf(
+                    "attendance.checkOutAddress" to locationPhysicalAddress,
+                    "attendance.checkOutImage" to image,
+                    "attendance.checkOutLat" to latitude,
+                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutMarked" to true,
+                    "attendance.checkOutTime" to checkOutTime,
+                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
+            )
+        } else {
+            mapOf(
+                    "attendance.checkOutAddress" to locationPhysicalAddress,
+                    "attendance.checkOutImage" to image,
+                    "attendance.checkOutLat" to latitude,
+                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutMarked" to true,
+                    "attendance.checkOutTime" to checkOutTime,
+                    "regularisationRequest.requestedOn" to Timestamp.now(),
+                    "regularisationRequest.regularisationSettled" to false,
+                    "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
+                    "regularisationRequest.remarksFromUser" to remarks,
+                    "regularisationRequest.remarksFromManager" to null,
+                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
+            )
+        }
+
+        getCollectionReference()
+                .document(gigId)
+                .updateOrThrow(attendanceUpdateMap)
+
+    }
+
     suspend fun getGig(gigId: String) = suspendCoroutine<Gig> { cont ->
         getCollectionReference()
-            .document(gigId)
-            .get()
-            .addOnSuccessListener {
+                .document(gigId)
+                .get()
+                .addOnSuccessListener {
 
-                runCatching {
-                    val gig = it.toObject(Gig::class.java)
-                    gig?.gigId = it.id
-                    gig!!
-                }.onSuccess {
-                    cont.resume(it)
-                }.onFailure {
+                    runCatching {
+                        val gig = it.toObject(Gig::class.java)
+                        gig?.gigId = it.id
+                        gig!!
+                    }.onSuccess {
+                        cont.resume(it)
+                    }.onFailure {
+                        cont.resumeWithException(it)
+                    }
+                }
+                .addOnFailureListener {
                     cont.resumeWithException(it)
                 }
-            }
-            .addOnFailureListener {
-                cont.resumeWithException(it)
-            }
     }
 
     suspend fun getTodaysUpcomingGigs(date: LocalDate): List<Gig> {
 
         val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         val querySnap =
-            getCurrentUserGigs()
-            .whereGreaterThan("startDateTime", dateFull)
-            .getOrThrow()
+                getCurrentUserGigs()
+                        .whereGreaterThan("startDateTime", dateFull)
+                        .getOrThrow()
 
         val tomorrow = date.plusDays(1)
         return extractGigs(querySnap)
-            .filter {
-                it.startDateTime!! > Timestamp.now()
-                        && (it.endDateTime == null
-                        || it.endDateTime!!.toLocalDate().isBefore(tomorrow))
-            }
+                .filter {
+                    it.startDateTime!! > Timestamp.now()
+                            && (it.endDateTime == null
+                            || it.endDateTime!!.toLocalDate().isBefore(tomorrow))
+                }
 
     }
 
@@ -72,6 +164,15 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             }
         }
         return userGigs
+    }
+
+     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+        val getJobProfileQuery = db.collection("Job_Profiles")
+                .document(jobId)
+                .get()
+                .await()
+
+       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
     }
 
     companion object {

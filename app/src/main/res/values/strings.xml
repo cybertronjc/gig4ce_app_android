@@ -933,9 +933,9 @@
     <string name="submit_all_caps">SUBMIT</string>
     <string name="yes_i_confirm_that_i_want_to_decline_this_gig">Yes, I confirm that I want to decline this gig.</string>
     <string name="reason">Reason</string>
-    <string name="this_gig_is_unsuitable_for_me">This gig is unsuitable for me</string>
-    <string name="i_can_t_reach_the_location_today">I can’t reach the location today</string>
-    <string name="i_m_on_sick_leave_today">I’m on sick leave today</string>
+    <string name="this_gig_is_unsuitable_for_me">This gig is unsuitable for me.</string>
+    <string name="i_can_t_reach_the_location_today">I can’t reach the location.</string>
+    <string name="i_m_on_sick_leave_today">I’m on sick leave.</string>
     <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">Please let us know your reason, why are you declining this gig.</string>
     <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
     <string name="i_am_on_leave_today">I am on leave today</string>
@@ -1306,12 +1306,15 @@
         <item>Work more to earn more</item>
 
     </string-array>
+    <string name="people_to_except">People To Except</string>
 
     <string name="i_will_do_it_later"><u>I will do it later</u></string>
     <string name="upload_documents">Upload Documents</string>
     <string name="send_invite_link">Send Invite Link</string>
     <string name="chat">Chat</string>
     <string name="call">Call</string>
+    <string name="feedback">Feedback</string>
+
     <string name="enter_driving_license_number">Enter Driving License Number</string>
     <string name="keep_learning">Keep Learning !!!</string>
     <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>

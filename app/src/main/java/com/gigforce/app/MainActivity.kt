@@ -113,7 +113,12 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, intent.extras)
+                GigNavigation.openGigAttendancePage(navController,false, intent.extras)
+            }
+            NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
+                Log.d("MainActivity", "redirecting to attendance page 2")
+                navController.popAllBackStates()
+                GigNavigation.openGigAttendancePage(navController,true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")

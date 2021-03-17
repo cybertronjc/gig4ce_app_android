@@ -288,7 +288,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates.stopLocationUpdates(requireActivity())
+        locationUpdates.stopLocationUpdates()
     }
 
     override fun onResume() {
@@ -325,7 +325,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun locationReceiver(location: Location?) {
-
     }
 
     override fun lastLocationReceiver(location: Location?) {

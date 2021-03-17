@@ -35,6 +35,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
@@ -61,6 +62,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
@@ -413,27 +415,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         } else if (userGpsDialogActionCount == 0) {
             requestPermissionForGPS()
         } else {
-            if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
-                val markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                0.0,
-                                0.0,
-                                selfieImg,
-                                ""
-                        )
-                viewModel.markAttendance(markAttendance, gigId)
+            viewModel.markAttendance(
+                    latitude = 0.0,
+                    longitude = 0.0,
+                    locationPhysicalAddress = "",
+                    image = selfieImg,
+                    checkInTimeAccToUser = Timestamp.now(),
+                    remarks = ""
+            )
 
-            } else {
-                gig!!.attendance!!.setCheckout(
-                        true, Date(), 0.0,
-                        0.0, selfieImg,
-                        ""
-                )
-                viewModel.markAttendance(gig!!.attendance!!, gigId)
-
-            }
         }
     }
 
@@ -463,28 +453,15 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
 
             val ifAttendanceMarked = it.attendance?.checkInMarked ?: false
 
-            if (!ifAttendanceMarked) {
-                val markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                latitude,
-                                longitude,
-                                selfieImg,
-                                locationAddress
-                        )
-                viewModel.markAttendance(markAttendance, gigId)
-            } else {
-                it.attendance?.setCheckout(
-                        true,
-                        Date(),
-                        latitude,
-                        longitude,
-                        selfieImg,
-                        locationAddress
-                )
-                viewModel.markAttendance(it.attendance!!, gigId)
-            }
+            viewModel.markAttendance(
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationAddress,
+                    image = selfieImg,
+                    checkInTimeAccToUser = Timestamp.now(),
+                    remarks = ""
+            )
+
 
         } ?: run {
             FirebaseCrashlytics.getInstance().log("Gig not found : GigAttendance Page Fragment")
@@ -519,37 +496,37 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
             if (!gig?.gigContactDetails!!.contactNumberString.contains("+91")) {
                 viewModel.checkIfTeamLeadersProfileExists("+91" + gig.gigContactDetails!!.contactNumber)
 
-            }else{
+            } else {
                 viewModel.checkIfTeamLeadersProfileExists(gig?.gigContactDetails?.contactNumberString
                         ?: "")
             }
 
         }
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
-                        .load(gig.companyLogo)
+                Glide.with(requireContext())
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable())
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .reference
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
-                            GlideApp.with(requireContext())
+                            Glide.with(requireContext())
                                     .load(fileUri)
                                     .placeholder(getCircularProgressDrawable())
                                     .into(companyLogoIV)
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -561,7 +538,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         if (!gig.bannerImage.isNullOrBlank()) {
             if (gig.bannerImage!!.startsWith("http", true)) {
 
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                         .load(gig.bannerImage)
                         .placeholder(getCircularProgressDrawable())
                         .into(gigBannerImageIV)
@@ -572,7 +549,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
-                            GlideApp.with(requireContext())
+                            Glide.with(requireContext())
                                     .load(fileUri)
                                     .placeholder(getCircularProgressDrawable())
                                     .into(gigBannerImageIV)
@@ -581,9 +558,9 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         }
 
 
-        tv_title_gig_page.text = gig.title
-        roleNameTV.text = gig.title
-        companyNameTV.text = "@ ${gig.companyName}"
+        tv_title_gig_page.text = gig.getGigTitle()
+        roleNameTV.text = gig.getGigTitle()
+        companyNameTV.text = "@ ${gig.getFullCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
         paymentAmountTV.text = if (gig.gigAmount != 0.0) "Rs. ${gig.gigAmount}" else "N/A"
@@ -1010,7 +987,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
         if (it.startsWith("http", true)) {
             gigItem.tag = it
 
-            GlideApp.with(requireContext())
+            Glide.with(requireContext())
                     .load(it)
                     .placeholder(getCircularProgressDrawable())
                     .into(locationImageView)
@@ -1021,7 +998,7 @@ class GigPageFragment : BaseFragment(), View.OnClickListener, Toolbar.OnMenuItem
                     .downloadUrl
                     .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
+                        Glide.with(requireContext())
                                 .load(fileUri)
                                 .placeholder(getCircularProgressDrawable())
                                 .into(locationImageView)

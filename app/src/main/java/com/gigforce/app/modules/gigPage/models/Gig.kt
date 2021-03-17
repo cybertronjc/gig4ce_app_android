@@ -1,11 +1,14 @@
 package com.gigforce.app.modules.gigPage.models
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.gigforce.app.core.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -13,97 +16,226 @@ import java.util.concurrent.TimeUnit
 
 @Keep
 data class Gig(
-        var tag: String = "",
-        @DocumentId var gigId: String = "",
-        var gigerId: String = "",
-        var title: String = "",
-        var bannerImage: String? = null,
-        var address: String = "",
-        var latitude: Double? = null,
-        var longitude: Double? = null,
 
-        var gigAmount: Double = 0.0,
-        var invoiceGenerationDate: Timestamp? = null,
-        var paymentStatus: String = "Processing",
+    @get:PropertyName("tag")
+    @set:PropertyName("tag")
+    var tag: String = "",
 
-        var startDateTime: Timestamp? = null,
-        var endDateTime: Timestamp? = null,
+    @DocumentId
+    @get:PropertyName("gigId")
+    @set:PropertyName("gigId")
+    var gigId: String = "",
 
-        var checkInBeforeTimeBufferInMins: Long = 60,
-        var checkInAfterTimeBufferInMins: Long = 60,
-        var checkOutBeforeTimeBufferInMins: Long = 60,
-        var checkOutAfterTimeBufferInMins: Long = 60,
+    @get:PropertyName("gigerId")
+    @set:PropertyName("gigerId")
+    var gigerId: String = "",
 
-        var gigStatus: String = "upcoming",
-        var companyLogo: String? = null,
-        var companyName: String? = null,
+    @get:PropertyName("title")
+    @set:PropertyName("title")
+    var title: String = "",
 
-        @get:PropertyName("isGigActivated")
-        @set:PropertyName("isGigActivated")
-        var isGigActivated: Boolean = true, //TODO change this
+    @get:PropertyName("description")
+    @set:PropertyName("description")
+    var description: String = "",
 
-        @get:PropertyName("isFavourite")
-        @set:PropertyName("isFavourite")
-        var isFavourite: Boolean = false,
+    @get:PropertyName("bannerImage")
+    @set:PropertyName("bannerImage")
+    var bannerImage: String? = null,
 
-        @get:PropertyName("isGigCompleted")
-        @set:PropertyName("isGigCompleted")
-        var isGigCompleted: Boolean = false,
+    @get:PropertyName("address")
+    @set:PropertyName("address")
+    var address: String = "",
 
-        @get:PropertyName("isPaymentDone")
-        @set:PropertyName("isPaymentDone")
-        var isPaymentDone: Boolean = false,
+    @get:PropertyName("geoPoint")
+    @set:PropertyName("geoPoint")
+    var geoPoint: GeoPoint? = null,
 
-        @get:PropertyName("isMonthlyGig")
-        @set:PropertyName("isMonthlyGig")
-        var isMonthlyGig: Boolean = false,
+    @get:PropertyName("latitude")
+    @set:PropertyName("latitude")
+    var latitude: Double? = null,
 
-        @get:PropertyName("isFullDay")
-        @set:PropertyName("isFullDay")
-        var isFullDay: Boolean = false,
+    @get:PropertyName("longitude")
+    @set:PropertyName("longitude")
+    var longitude: Double? = null,
 
-        var gigRating: Float = 0.0F,
-        var gigUserFeedback: String? = null,
-        var gigUserFeedbackAttachments: List<String> = emptyList(),
-        var locationPictures: List<String> = emptyList(),
+    @get:PropertyName("gigAmount")
+    @set:PropertyName("gigAmount")
+    var gigAmount: Double = 0.0,
 
-        var ratingUserReceived: Float = -1.0F,
-        var feedbackUserReceived: String? = null,
-        var ratingUserReceivedAttachments: List<String> = emptyList(),
+    @get:PropertyName("invoiceGenerationDate")
+    @set:PropertyName("invoiceGenerationDate")
+    var invoiceGenerationDate: Timestamp? = null,
 
-        var gigType: String? = null,
-        var gigHighlights: List<String> = emptyList(),
-        var gigRequirements: List<String> = emptyList(),
-        var gigResponsibilities: List<String> = listOf(
-                "Deliver excellent service to ensure high levels of customer satisfaction.",
-                "Motivate the sales team to meet sales objectives by training and mentoring staff.",
-                "Create business strategies to attract new customers, expand store traffic, and enhance profitability."
-        ),
-        var attendance: GigAttendance? = null,
-        var gigContactDetails: GigContactDetails? = null,
+    @get:PropertyName("paymentStatus")
+    @set:PropertyName("paymentStatus")
+    var paymentStatus: String = "Processing",
 
-        var declinedBy: String? = null,
-        var declineReason: String? = null,
+    @get:PropertyName("cancellationReason")
+    @set:PropertyName("cancellationReason")
+    var cancellationReason: String = "",
 
-        var regularisationRequest: GigRegularisationRequest? = null,
-        @field:Exclude var chatInfo: Map<String, Any>? = null
+    @get:PropertyName("companyName")
+    @set:PropertyName("companyName")
+    var companyName: String? = null,
+
+    @get:PropertyName("companyLogo")
+    @set:PropertyName("companyLogo")
+    var companyLogo: String? = null,
+
+    @get:PropertyName("startDateTime")
+    @set:PropertyName("startDateTime")
+    var startDateTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkInBeforeSlot")
+    @set:PropertyName("checkInBeforeSlot")
+    var checkInBeforeTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkInBeforeBuffer")
+    @set:PropertyName("checkInBeforeBuffer")
+    var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkInAfterBuffer")
+    @set:PropertyName("checkInAfterBuffer")
+    var checkInAfterBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkInAfterSlot")
+    @set:PropertyName("checkInAfterSlot")
+    var checkInAfterTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("endDateTime")
+    @set:PropertyName("endDateTime")
+    var endDateTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkOutBeforeSlot")
+    @set:PropertyName("checkOutBeforeSlot")
+    var checkOutBeforeTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkOutBeforeBuffer")
+    @set:PropertyName("checkOutBeforeBuffer")
+    var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkOutAfterBuffer")
+    @set:PropertyName("checkOutAfterBuffer")
+    var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("checkOutAfterSlot")
+    @set:PropertyName("checkOutAfterSlot")
+    var checkOutAfterTime: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("agencyContact")
+    @set:PropertyName("agencyContact")
+    var agencyContact: ContactPerson? = null,
+
+    @get:PropertyName("businessContact")
+    @set:PropertyName("businessContact")
+    var businessContact: ContactPerson? = null,
+
+    @get:PropertyName("assignedOn")
+    @set:PropertyName("assignedOn")
+    var assignedOn: Timestamp = Timestamp.now(),
+
+    var checkInBeforeTimeBufferInMins: Long = 60,
+    var checkInAfterTimeBufferInMins: Long = 60,
+    var checkOutBeforeTimeBufferInMins: Long = 60,
+    var checkOutAfterTimeBufferInMins: Long = 60,
+
+    @get:PropertyName("gigStatus")
+    @set:PropertyName("gigStatus")
+    var gigStatus: String = "upcoming",
+
+    @get:PropertyName("isGigActivated")
+    @set:PropertyName("isGigActivated")
+    var isGigActivated: Boolean = true, //TODO change this
+
+    @get:PropertyName("isFavourite")
+    @set:PropertyName("isFavourite")
+    var isFavourite: Boolean = false,
+
+    @get:PropertyName("isGigCompleted")
+    @set:PropertyName("isGigCompleted")
+    var isGigCompleted: Boolean = false,
+
+    @get:PropertyName("isPaymentDone")
+    @set:PropertyName("isPaymentDone")
+    var isPaymentDone: Boolean = false,
+
+    @get:PropertyName("isMonthlyGig")
+    @set:PropertyName("isMonthlyGig")
+    var isMonthlyGig: Boolean = false,
+
+    @get:PropertyName("isFullDay")
+    @set:PropertyName("isFullDay")
+    var isFullDay: Boolean = false,
+
+
+    @get:PropertyName("gigOrderId")
+    @set:PropertyName("gigOrderId")
+    var gigOrderId: String = "",
+
+    @get:PropertyName("profile")
+    @set:PropertyName("profile")
+    var profile: JobProfile = JobProfile(),
+
+    @get:PropertyName("legalEntity")
+    @set:PropertyName("legalEntity")
+    var legalEntity: LegalEntity? = null,
+
+    var keywords: List<String> = emptyList(),
+
+    var gigRating: Float = 0.0F,
+    var gigUserFeedback: String? = null,
+    var gigUserFeedbackAttachments: List<String> = emptyList(),
+    var locationPictures: List<String> = emptyList(),
+
+    var ratingUserReceived: Float = -1.0F,
+    var feedbackUserReceived: String? = null,
+    var ratingUserReceivedAttachments: List<String> = emptyList(),
+
+    var gigType: String? = null,
+    var gigHighlights: List<String> = emptyList(),
+    var gigRequirements: List<String> = emptyList(),
+    var gigResponsibilities: List<String> = listOf(),
+    var attendance: GigAttendance? = null,
+    var gigContactDetails: GigContactDetails? = null,
+
+    @get:PropertyName("declinedBy")
+    @set:PropertyName("declinedBy")
+    var declinedBy: String? = null,
+
+    @get:PropertyName("declineReason")
+    @set:PropertyName("declineReason")
+    var declineReason: String? = null,
+
+    var payoutDetails: String? = null,
+
+    @get:PropertyName("isNewGig")
+    @set:PropertyName("isNewGig")
+    var isNewGig: Boolean? = null,
+
+    @get:PropertyName("regularisationRequest")
+    @set:PropertyName("regularisationRequest")
+    var regularisationRequest: GigRegularisationRequest? = null,
+
+    @field:Exclude
+    var chatInfo: Map<String, Any>? = null
+
 ) {
 
     @get:Exclude
     @set:Exclude
     var startHour: Int = 0
-        get() = startDateTime!!.toLocalDateTime().hour
+        get() = startDateTime.toLocalDateTime().hour
 
     @get:Exclude
     @set:Exclude
     var startMinute: Int = 0
-        get() = startDateTime!!.toLocalDateTime().minute
+        get() = startDateTime.toLocalDateTime().minute
 
     @get:Exclude
     @set:Exclude
     var duration: Float = 0.0F
         get() {
-            val diffInMilliSecs = endDateTime!!.toDate().time - startDateTime!!.toDate().time
+            val diffInMilliSecs = endDateTime.toDate().time - startDateTime.toDate().time
             val minutes = TimeUnit.MINUTES.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
             val hours = TimeUnit.HOURS.convert(diffInMilliSecs, TimeUnit.MILLISECONDS)
 
@@ -114,7 +246,7 @@ data class Gig(
     fun isGigOfToday(): Boolean {
 
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isEqual(currentDate)
     }
@@ -122,7 +254,7 @@ data class Gig(
     @Exclude
     fun isGigOfFuture(): Boolean {
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isAfter(currentDate)
     }
@@ -131,7 +263,7 @@ data class Gig(
     fun isGigOfPastDay(): Boolean {
 
         val gigDate =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val currentDate = LocalDate.now()
         return gigDate.isBefore(currentDate)
     }
@@ -145,6 +277,7 @@ data class Gig(
     fun isCheckInOrCheckOutMarked(): Boolean {
         return isCheckInMarked() || isCheckOutMarked()
     }
+
 
     @Exclude
     fun isCheckInMarked(): Boolean {
@@ -165,7 +298,7 @@ data class Gig(
             if (isCheckInAndCheckOutMarked())
                 return true
 
-            val gigCheckInTime = startDateTime!!.toLocalDateTime()
+            val gigCheckInTime = startDateTime.toLocalDateTime()
             val maxCheckInTime = gigCheckInTime.plusMinutes(checkInAfterTimeBufferInMins)
             if (LocalDateTime.now().isAfter(maxCheckInTime) && isCheckInMarked().not()) {
                 //User Has Exceeded max check in time and hasn't marked check-in yet
@@ -175,10 +308,10 @@ data class Gig(
             return if (endDateTime != null) {
 
                 val gigCheckOutTime =
-                        endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                    endDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
+                        .toLocalDateTime()
                 val maxCheckOutTime =
-                        gigCheckOutTime.plusMinutes(checkOutAfterTimeBufferInMins) //1 Hour window for checkout after gig time expires
+                    gigCheckOutTime.plusMinutes(checkOutAfterTimeBufferInMins) //1 Hour window for checkout after gig time expires
                 LocalDateTime.now().isAfter(maxCheckOutTime)
             } else {
                 false // If end time not given gig will be considered full day gig (present gig)
@@ -193,19 +326,19 @@ data class Gig(
             return false
 
         val gigCheckInTime =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
-                        .toLocalDateTime()
+            startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusMinutes(checkInBeforeTimeBufferInMins)
         val maxCheckInTime = gigCheckInTime.plusMinutes(checkInAfterTimeBufferInMins)
         val currentTime = LocalDateTime.now()
         val validCheckInTime =
-                (currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)) || isCheckInMarked()
+            (currentTime.isAfter(minCheckInTime) && currentTime.isBefore(maxCheckInTime)) || isCheckInMarked()
 
         return if (endDateTime != null) {
 
             val gigCheckOutTime =
-                    endDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
-                            .toLocalDateTime()
+                endDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime()
 
 //            if (gigCheckOutTime.isBefore(currentTime)) {
 //                return false
@@ -222,8 +355,8 @@ data class Gig(
     fun isUpcomingGig(): Boolean {
 
         val gigCheckInTime =
-                startDateTime!!.toDate().toInstant().atZone(ZoneId.systemDefault())
-                        .toLocalDateTime()
+            startDateTime.toDate().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
         val minCheckInTime = gigCheckInTime.minusMinutes(checkInBeforeTimeBufferInMins)
         val currentTime = LocalDateTime.now()
 
@@ -235,6 +368,38 @@ data class Gig(
         return regularisationRequest != null
     }
 
+    @Exclude
+    fun getGigTitle(): String {
+        return profile.title ?: title
+    }
+
+    @Exclude
+    fun openNewGig(): Boolean {
+        return legalEntity != null
+    }
+
+    @Exclude
+    fun getFullCompanyName(): String? {
+
+        if (legalEntity != null) {
+            return legalEntity?.tradingName ?: legalEntity?.name
+        } else {
+            return companyName
+        }
+    }
+
+    @Exclude
+    fun getFullCompanyLogo(): String? {
+
+        if (legalEntity != null) {
+            return legalEntity?.logo
+        } else {
+            return companyLogo
+        }
+    }
+
+
+    @Exclude
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
         val obj = other as? Gig
@@ -242,3 +407,72 @@ data class Gig(
 
     }
 }
+
+
+@Parcelize
+data class LegalEntity(
+
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String? = null,
+
+    @get:PropertyName("logo")
+    @set:PropertyName("logo")
+    var logo: String? = null,
+
+    @get:PropertyName("name")
+    @set:PropertyName("name")
+    var name: String? = null,
+
+    @get:PropertyName("tradingName")
+    @set:PropertyName("tradingName")
+    var tradingName: String? = null
+) : Parcelable {
+
+
+}
+
+@Parcelize
+data class JobProfile(
+
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String? = null,
+
+    @get:PropertyName("title")
+    @set:PropertyName("title")
+    var title: String? = null
+) : Parcelable
+
+
+@Parcelize
+data class ContactPerson(
+
+    @get:PropertyName("uid")
+    @set:PropertyName("uid")
+    var uid: String? = null,
+
+    @get:PropertyName("name")
+    @set:PropertyName("name")
+    var name: String? = null,
+
+    @get:PropertyName("designation")
+    @set:PropertyName("designation")
+    var designation: String? = null,
+
+    @get:PropertyName("profilePicture")
+    @set:PropertyName("profilePicture")
+    var profilePicture: String? = null,
+
+    @get:PropertyName("primary_no")
+    @set:PropertyName("primary_no")
+    var contactNumber: String? = null,
+
+    @get:PropertyName("secondary_no")
+    @set:PropertyName("secondary_no")
+    var secondaryContactNo: String? = null,
+
+    @get:PropertyName("company_name")
+    @set:PropertyName("company_name")
+    var companyName: String? = null
+) : Parcelable

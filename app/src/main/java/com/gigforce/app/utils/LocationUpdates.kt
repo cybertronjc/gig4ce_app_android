@@ -8,12 +8,14 @@ import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.gigforce.common_ui.utils.BsLocationAccess
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 
 class LocationUpdates {
@@ -22,9 +24,7 @@ class LocationUpdates {
         this.UPDATE_INTERVAL_IN_MILLISECONDS = interval;
     }
 
-    private val locationAccessDialog: BsLocationAccess by lazy {
-        BsLocationAccess()
-    }
+
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -105,16 +105,16 @@ class LocationUpdates {
     }
 
     fun showLocationDialog(context: AppCompatActivity) {
-        if (locationAccessDialog.dialog == null || locationAccessDialog.dialog?.isShowing == false) {
-            locationAccessDialog.isCancelable = false
+        try {
+
+             val locationAccessDialog = BsLocationAccess()
             locationAccessDialog.show(
-                context.supportFragmentManager,
-                BsLocationAccess::class.simpleName
+                    context.supportFragmentManager,
+                    BsLocationAccess::class.simpleName
             )
-
-
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
     }
 
     private fun createLocationCallbacks(context: AppCompatActivity) {
@@ -145,22 +145,27 @@ class LocationUpdates {
                     }
                     // ...
                 }
-                checkForLocationAccessDialog()
+                checkForLocationAccessDialog(context)
             }
         }
     }
 
-    fun checkForLocationAccessDialog() {
-        if (locationAccessDialog.dialog != null && locationAccessDialog.dialog?.isShowing == true) {
-            locationAccessDialog.dismiss()
-        }
+    fun checkForLocationAccessDialog(
+            context : AppCompatActivity
+    ) {
 
+        try {
+            val fragment = context.supportFragmentManager.findFragmentByTag(BsLocationAccess::class.simpleName) as BsLocationAccess
+            fragment.dismiss()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation(context: Activity) {
         if (checkPermissions(context)) {
-            checkForLocationAccessDialog()
+            checkForLocationAccessDialog(context as AppCompatActivity)
             mFusedLocationClient!!.lastLocation
                 .addOnSuccessListener(context) { location: Location? ->
                     // Got last known location. In some rare situations this can be null.
@@ -180,59 +185,78 @@ class LocationUpdates {
      * runtime permission has been granted.
      */
     private fun startLocationUpdates(context: Activity) {
-        // Begin by checking if the device has the necessary location settings.
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(
-            mLocationRequest!!
-        )
-        val client = LocationServices.getSettingsClient(context)
-        val task = client.checkLocationSettings(builder.build())
-        task.addOnSuccessListener(context) { locationSettingsResponse: LocationSettingsResponse? ->
-            // All location settings are satisfied. The client can initialize
-            // location requests here.
-            // ...
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return@addOnSuccessListener
-            }
-            mFusedLocationClient!!.requestLocationUpdates(
-                mLocationRequest,
-                mLocationCallback,
-                null /* Looper */
+        try {
+
+
+            // Begin by checking if the device has the necessary location settings.
+            val builder = LocationSettingsRequest.Builder().addLocationRequest(
+                    mLocationRequest!!
             )
-        }
-        task.addOnFailureListener(context) { e: Exception? ->
-            if (e is ResolvableApiException) {
-                // Location settings are not satisfied, but this can be fixed
-                // by showing the user a dialog.
-                try {
-                    // Show the dialog by calling startResolutionForResult(),
-                    // and check the result in onActivityResult().
-                    e.startResolutionForResult(context, REQUEST_CHECK_SETTINGS)
-                } catch (sendEx: SendIntentException) {
-                    // Ignore the error.
+            val client = LocationServices.getSettingsClient(context)
+            val task = client.checkLocationSettings(builder.build())
+            task.addOnSuccessListener(context) { locationSettingsResponse: LocationSettingsResponse? ->
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+                if (ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return@addOnSuccessListener
+                }
+                mFusedLocationClient!!.requestLocationUpdates(
+                        mLocationRequest,
+                        mLocationCallback,
+                        null /* Looper */
+                )
+            }
+            task.addOnFailureListener(context) { e: Exception? ->
+                if (e is ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        e.startResolutionForResult(context, REQUEST_CHECK_SETTINGS)
+                    } catch (sendEx: SendIntentException) {
+                        // Ignore the error.
+                    }
                 }
             }
+
+        } catch (e : Exception){
+            e.printStackTrace()
         }
     }
 
     /**
      * Removes location updates from the FusedLocationApi.
      */
-    fun stopLocationUpdates(context: Activity?) {
+    fun stopLocationUpdates() {
 
+        try {
 
-        // It is a good practice to remove location requests when the activity is in a paused or
-        // stopped state. Doing so helps battery performance and is especially
-        // recommended in applications that request frequent location updates.
-        if (mFusedLocationClient != null && mLocationCallback != null) {
-            mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
-                .addOnCompleteListener(context!!) { }
+            // It is a good practice to remove location requests when the activity is in a paused or
+            // stopped state. Doing so helps battery performance and is especially
+            // recommended in applications that request frequent location updates.
+            if (mFusedLocationClient != null && mLocationCallback != null) {
+                mFusedLocationClient!!.removeLocationUpdates(mLocationCallback)
+                        .addOnCompleteListener {
+                            Log.d(TAG, "[Success] removeLocationUpdates")
+                        }.addOnFailureListener {
+                            Log.e(TAG, "[Error] removeLocationUpdates", it)
+                            FirebaseCrashlytics.getInstance().apply {
+                                log("[Error] removeLocationUpdates")
+                                recordException(it)
+                            }
+                        }
+            }
+        } catch (e : Exception){
+            e.printStackTrace()
         }
     }
 
@@ -241,7 +265,7 @@ class LocationUpdates {
         // Within {@code onPause()}, we remove location updates. Here, we resume receiving
         // location updates if the user has requested them.
         if (checkPermissions(context)) {
-            checkForLocationAccessDialog()
+            checkForLocationAccessDialog(context as AppCompatActivity)
             getLastKnownLocation(context)
             startLocationUpdates(context)
         } else {

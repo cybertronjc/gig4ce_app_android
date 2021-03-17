@@ -90,7 +90,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
-                android:text="@string/i_am_on_leave_today" />
+                android:text="I have some personal work." />
 
             <RadioButton
                 android:id="@+id/reason_cant_reach_location"
