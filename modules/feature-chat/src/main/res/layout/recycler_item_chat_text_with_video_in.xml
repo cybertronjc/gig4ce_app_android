@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxWidth="190dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
@@ -34,19 +36,21 @@
                 android:layout_marginTop="4dp"
                 android:textColor="@color/lipstick"
                 android:textSize="16sp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
                 tools:text="Himanshu" />
 
 
             <FrameLayout
                 android:id="@+id/thumbnail_layout"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="196dp"
+                android:layout_height="196dp"
                 android:layout_below="@id/user_name_tv">
 
                 <com.gigforce.common_ui.views.GigforceImageView
                     android:id="@+id/iv_image"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
+                    android:layout_width="196dp"
+                    android:layout_height="196dp"
                     android:scaleType="centerCrop"
 
                     app:layout_constraintStart_toStartOf="parent"
@@ -124,6 +128,7 @@
                 android:layout_marginEnd="2dp"
                 android:ellipsize="end"
                 android:maxWidth="178dp"
+                android:letterSpacing="0"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:textSize="16sp"

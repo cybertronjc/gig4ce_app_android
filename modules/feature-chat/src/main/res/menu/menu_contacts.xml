@@ -5,14 +5,13 @@
     <item
         android:id="@+id/action_new_group"
         android:orderInCategory="100"
-        android:title="New Group"
-        android:visible="false"
+        android:title="New group"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/action_invite_friends"
         android:orderInCategory="100"
-        android:title="Invite A Friend"
+        android:title="Invite a friend"
         app:showAsAction="collapseActionView" />
     <item
         android:id="@+id/action_referesh"

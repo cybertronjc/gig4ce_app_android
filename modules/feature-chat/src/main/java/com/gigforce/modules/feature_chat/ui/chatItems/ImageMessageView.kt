@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
@@ -36,6 +37,7 @@ abstract class ImageMessageView(
         attrs
 ), View.OnClickListener {
 
+    private lateinit var senderNameTV: TextView
     private lateinit var imageView: ImageView
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
@@ -62,6 +64,7 @@ abstract class ImageMessageView(
 
     private fun findViews() {
 
+        senderNameTV = this.findViewById(R.id.user_name_tv)
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
@@ -121,6 +124,7 @@ abstract class ImageMessageView(
 
         if (msg.thumbnailBitmap != null) {
             handleImageUploading()
+            loadThumbnail(msg)
         } else {
 
             val downloadedFile = returnFileIfAlreadyDownloadedElseNull()
@@ -128,12 +132,6 @@ abstract class ImageMessageView(
                 handleImageDownloaded(downloadedFile)
             } else {
                 loadThumbnail(msg)
-
-//                if (msg.attachmentCurrentlyBeingDownloaded) {
-//                    handleDownloadInProgress()
-//                } else {
-//                    handleImageNotDownloaded()
-//                }
             }
         }
     }
@@ -158,6 +156,10 @@ abstract class ImageMessageView(
 
     override fun onBind(msg: ChatMessage) {
         textViewTime.text = msg.timestamp?.toDisplayText()
+
+        senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+        senderNameTV.text = msg.senderInfo.name
+
         handleImage(msg)
         setReceivedStatus(msg)
     }

@@ -7,6 +7,8 @@ interface IChatNavigation : INavigation {
 
     fun navigateToChatList()
 
+    fun navigateBackToChatListIfExistElseOneStepBack()
+
     fun navigateToChatPage(
         chatType: String,
         otherUserId: String,
@@ -27,6 +29,16 @@ interface IChatNavigation : INavigation {
 
     fun openFullScreenVideoDialogFragment(
         uri: Uri
+    )
+
+    fun openInviteAFriendFragment()
+
+    fun openGroupDetailsPage(
+            groupId : String
+    )
+
+    fun openGroupMediaList(
+            groupId : String
     )
 
 

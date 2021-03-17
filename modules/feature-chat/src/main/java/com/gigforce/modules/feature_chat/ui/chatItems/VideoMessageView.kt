@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.views.GigforceImageView
@@ -102,12 +103,14 @@ abstract class VideoMessageView(
         videoLength.text = convertMicroSecondsToNormalFormat(msg.videoLength)
         textViewTime.text = msg.timestamp?.toDisplayText()
 
+        senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+        senderNameTV.text = msg.senderInfo.name
+
         loadThumbnail(msg)
 
         when (msg.flowType) {
             "in" -> {
                 receivedStatusIV.gone()
-                senderNameTV.text = msg.senderInfo.name
             }
             "out" -> {
                 receivedStatusIV.visible()

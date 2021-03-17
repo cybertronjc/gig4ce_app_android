@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -21,6 +24,19 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="2dp">
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/lipstick"
+                android:textSize="16sp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                tools:text="Himanshu" />
 
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -41,6 +57,7 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:text=""
+                android:letterSpacing="0"
                 android:textColor="#333333" />
 
             <TextView

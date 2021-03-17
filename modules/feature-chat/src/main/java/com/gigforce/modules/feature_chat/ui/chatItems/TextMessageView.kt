@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
@@ -21,6 +22,7 @@ abstract class TextMessageView(
 ) :  RelativeLayout(context, attrs),
         IViewHolder {
 
+    private lateinit var senderNameTV: TextView
     private lateinit var msgView:TextView
     private lateinit var timeView:TextView
     private lateinit var receivedStatusIV : ImageView
@@ -44,6 +46,7 @@ abstract class TextMessageView(
     }
 
     fun loadViews(){
+        senderNameTV = this.findViewById(R.id.user_name_tv)
         msgView = this.findViewById(R.id.tv_msgValue)
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
@@ -52,6 +55,10 @@ abstract class TextMessageView(
     override fun bind(data: Any?) {
         data?.let {
             val msg = it as ChatMessage
+
+            senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+            senderNameTV.text = msg.senderInfo.name
+
             msgView.setText(msg.content)
             timeView.setText(msg.timestamp?.toDisplayText())
             setReceivedStatus(msg)

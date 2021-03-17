@@ -91,7 +91,8 @@ class ChatGroupRepository constructor(
                     chatType = ChatConstants.CHAT_TYPE_GROUP,
                     groupId = group.id,
                     groupName = groupName,
-                    lastMsgTimestamp = Timestamp.now()
+                    lastMsgTimestamp = Timestamp.now(),
+                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
                 )
             )
         }
@@ -130,7 +131,8 @@ class ChatGroupRepository constructor(
                     groupId = groupId,
                     groupName = groupInfo.name,
                     lastMsgTimestamp = Timestamp.now(),
-                    removedFromGroup = false
+                    removedFromGroup = false,
+                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
                 )
             )
         }
@@ -207,7 +209,6 @@ class ChatGroupRepository constructor(
         createMessageEntry(groupId, message)
     }
 
-
     suspend fun sendNewImageMessage(
         groupId: String,
         message: ChatMessage,
@@ -215,8 +216,10 @@ class ChatGroupRepository constructor(
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         val file = imageUri.toFile()
-        val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
-            val imageInBytes = ImageUtils.convertToByteArray(message.thumbnailBitmap!!)
+        val thumbnail = message.thumbnailBitmap?.copy(message.thumbnailBitmap?.config, true)
+
+        val thumbnailPathOnServer = if (thumbnail != null) {
+            val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
                 "thumb-${file.name}",
                 imageInBytes,
@@ -289,8 +292,9 @@ class ChatGroupRepository constructor(
             file.toUri()
         }
 
-        val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
-            val imageInBytes = ImageUtils.convertToByteArray(message.thumbnailBitmap!!)
+        val thumbnail = message.thumbnailBitmap?.copy(message.thumbnailBitmap?.config, true)
+        val thumbnailPathOnServer = if (thumbnail != null) {
+            val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
                 "thumb-$newFileName",
                 imageInBytes,

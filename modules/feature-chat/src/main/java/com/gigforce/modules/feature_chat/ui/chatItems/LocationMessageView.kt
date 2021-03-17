@@ -12,6 +12,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
@@ -36,6 +37,7 @@ abstract class LocationMessageView(
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
     private lateinit var receivedStatusIV: ImageView
+    private lateinit var senderNameTV: TextView
 
 //    @Inject
 //    lateinit var navigation: IChatNavigation
@@ -61,6 +63,7 @@ abstract class LocationMessageView(
 
     private fun findViews() {
 
+        senderNameTV = this.findViewById(R.id.user_name_tv)
         imageView = this.findViewById(R.id.iv_image)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
         cardView = this.findViewById(R.id.cv_msgContainer)
@@ -113,6 +116,10 @@ abstract class LocationMessageView(
         data?.let {
             val msg = it as ChatMessage
             message = msg
+
+            senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+            senderNameTV.text = msg.senderInfo.name
+
             locationAddressTV.setText("\uD83D\uDCCD ${msg.locationPhysicalAddress}")
             textViewTime.setText(msg.timestamp?.toDisplayText())
             loadThumbnail(msg)

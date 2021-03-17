@@ -1,5 +1,6 @@
 package com.gigforce.app.notification
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -16,7 +17,6 @@ import androidx.core.graphics.drawable.IconCompat
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.core.toBundle
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
@@ -29,7 +29,7 @@ import java.util.*
 import kotlin.random.Random
 
 class ChatNotificationHandler constructor(
-    private val context: Context
+        private val context: Context
 ) {
 
     private val firebaseStorage: FirebaseStorage by lazy {
@@ -37,11 +37,11 @@ class ChatNotificationHandler constructor(
     }
 
     fun handleChatNotification(
-        remoteMessage: RemoteMessage
+            remoteMessage: RemoteMessage
     ) = GlobalScope.launch {
 
         val isGroupMessage =
-            remoteMessage.data.getOrDefault("is_group_conversation", "false") == "true"
+                remoteMessage.data.getOrDefault("is_group_conversation", "false") == "true"
         if (isGroupMessage) {
             handleGroupNotification(remoteMessage)
         } else {
@@ -50,7 +50,7 @@ class ChatNotificationHandler constructor(
     }
 
     private suspend fun handleDirectChatMessage(
-        remoteMessage: RemoteMessage
+            remoteMessage: RemoteMessage
     ) {
         val person = createPerson(remoteMessage)
         val message = remoteMessage.notification?.body ?: ""
@@ -59,29 +59,29 @@ class ChatNotificationHandler constructor(
         val chatHeaderId: String = remoteMessage.data.getOrDefault("chat_header_id", "")
 
         val notificationMessage = NotificationCompat
-            .MessagingStyle
-            .Message(
-                message,
-                Date().time,
-                person
-            )
+                .MessagingStyle
+                .Message(
+                        message,
+                        Date().time,
+                        person
+                )
 
         if (fullImagePath != null)
             notificationMessage.setData("image/*", Uri.parse(fullImagePath))
 
         val notificationBuilder =
-            NotificationCompat.Builder(context, NotificationChannels.CHANNEL_CHAT_ID)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(Color.parseColor("#D72467"))
-                .setStyle(
-                    NotificationCompat
-                        .MessagingStyle(person)
-                        .addMessage(notificationMessage)
+                NotificationCompat.Builder(context, NotificationChannels.CHANNEL_CHAT_ID)
+                        .setSmallIcon(R.drawable.ic_notification_icon)
+                        .setColor(Color.parseColor("#D72467"))
+                        .setStyle(
+                                NotificationCompat
+                                        .MessagingStyle(person)
+                                        .addMessage(notificationMessage)
 
-                )
-                .setAutoCancel(true)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setOnlyAlertOnce(true)
+                        )
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                        .setOnlyAlertOnce(true)
+                        .setAutoCancel(true)
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null
@@ -95,23 +95,24 @@ class ChatNotificationHandler constructor(
         }
 
         notificationBuilder.setContentIntent(
-            createPendingIntentForChat(
-                NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE,
-                remoteMessage.data
-            )
+                createPendingIntentForChat(
+                        NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE,
+                        remoteMessage.data
+                )
         )
 
         val notification = notificationBuilder.build()
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
         NotificationHelper(context).createUrgentPriorityNotification(
-            CHAT_NOTIF_REQUEST_CODE,
-            notification
+                CHAT_NOTIF_REQUEST_CODE,
+                notification
 
         )
     }
 
     private fun createPendingIntentForChat(
-        clickAction: String,
-        data: Map<String, String>
+            clickAction: String,
+            data: Map<String, String>
     ): PendingIntent? {
 
         val dataBundle = data.toBundle()
@@ -123,12 +124,12 @@ class ChatNotificationHandler constructor(
 
         return TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(
-                Intent(
-                    context,
-                    MainActivity::class.java
-                ).apply {
-                    putExtras(dataBundle)
-                })
+                    Intent(
+                            context,
+                            MainActivity::class.java
+                    ).apply {
+                        putExtras(dataBundle)
+                    })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }
@@ -150,21 +151,21 @@ class ChatNotificationHandler constructor(
         }
 
         return Person.Builder()
-            .setIcon(
-                if (senderProfilePicture != null)
-                    IconCompat.createWithBitmap(senderProfilePicture)
-                else
-                    IconCompat.createWithResource(context, R.drawable.ic_user)
+                .setIcon(
+                        if (senderProfilePicture != null)
+                            IconCompat.createWithBitmap(senderProfilePicture)
+                        else
+                            IconCompat.createWithResource(context, R.drawable.ic_user)
 
-            )
-            .setName(senderName)
-            .setKey(senderId)
-            .setImportant(true)
-            .build()
+                )
+                .setName(senderName)
+                .setKey(senderId)
+                .setImportant(true)
+                .build()
     }
 
     private fun handleGroupNotification(
-        remoteMessage: RemoteMessage
+            remoteMessage: RemoteMessage
     ) = GlobalScope.launch {
 
         val person = createPerson(remoteMessage)
@@ -174,29 +175,29 @@ class ChatNotificationHandler constructor(
         val chatHeaderId: String = remoteMessage.data.getOrDefault("chat_header_id", "")
 
         val notificationMessage = NotificationCompat
-            .MessagingStyle
-            .Message(
-                message,
-                Date().time,
-                person
-            )
+                .MessagingStyle
+                .Message(
+                        message,
+                        Date().time,
+                        person
+                )
 
         if (fullImagePath != null)
             notificationMessage.setData("image/*", Uri.parse(fullImagePath))
 
         val notificationBuilder =
-            NotificationCompat.Builder(context, NotificationChannels.CHANNEL_CHAT_ID)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(Color.parseColor("#D72467"))
-                .setStyle(
-                    NotificationCompat
-                        .MessagingStyle(person)
-                        .addMessage(notificationMessage)
+                NotificationCompat.Builder(context, NotificationChannels.CHANNEL_CHAT_ID)
+                        .setSmallIcon(R.drawable.ic_notification_icon)
+                        .setColor(Color.parseColor("#D72467"))
+                        .setStyle(
+                                NotificationCompat
+                                        .MessagingStyle(person)
+                                        .addMessage(notificationMessage)
 
-                )
-                .setAutoCancel(true)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                .setOnlyAlertOnce(true)
+                        )
+                        .setAutoCancel(true)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                        .setOnlyAlertOnce(true)
 
         Log.d("ChatImage", fullImagePath)
         var imageBitmap: Bitmap? = null
@@ -210,42 +211,43 @@ class ChatNotificationHandler constructor(
         }
 
         notificationBuilder.setContentIntent(
-            createPendingIntentForChat(
-                NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE,
-                remoteMessage.data
-            )
+                createPendingIntentForChat(
+                        NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE,
+                        remoteMessage.data
+                )
         )
 
         val notification = notificationBuilder.build()
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
         NotificationHelper(context).createUrgentPriorityNotification(
-            CHAT_NOTIF_REQUEST_CODE,
-            notification
+                CHAT_NOTIF_REQUEST_CODE,
+                notification
 
         )
     }
 
     private fun showTextMessageReceivedNotification(
-        text: String
+            text: String
     ) {
 
     }
 
     private fun showImageMessageReceivedNotification(
-        thumbnailFullUrl: String,
-        fullImageUrl: String
+            thumbnailFullUrl: String,
+            fullImageUrl: String
     ) {
 
     }
 
     private fun showDocumentMessageReceivedNotification(
-        documentName: String
+            documentName: String
     ) {
 
     }
 
     private fun showVideoMessageReceivedNotification(
-        videoName: String,
-        thumbnailFullUrl: String
+            videoName: String,
+            thumbnailFullUrl: String
     ) {
 
     }

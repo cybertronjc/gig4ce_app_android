@@ -11,10 +11,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ChatHeadersViewModel constructor(
-    private val chatRepository: ChatRepository = ChatRepository()
-): ViewModel() {
+        private val chatRepository: ChatRepository = ChatRepository()
+) : ViewModel() {
 
     private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
     val chatHeaders: LiveData<List<ChatHeader>> = _chatHeaders
@@ -32,56 +34,58 @@ class ChatHeadersViewModel constructor(
 
     fun startWatchingChatHeaders() {
         val reference = firebaseDB
-            .collection("chats")
-            .document(uid)
-            .collection("headers")
-            .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
+                .collection("chats")
+                .document(uid)
+                .collection("headers")
+                .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
 
         chatHeadersSnapshotListener = reference
-            .addSnapshotListener { querySnapshot, exception ->
-                exception?.let {
-                    Log.e("chatheaders/viewmodel", exception.message!!)
-                    return@addSnapshotListener
-                }
-                querySnapshot?.let {
-                    Log.e("chat/header/viewmodel", "Data Loaded from Server")
-
-                    val messages = it.documents.map { docSnap ->
-                        docSnap.toObject(ChatHeader::class.java)!!.apply {
-                            this.id = docSnap.id
-                        }
+                .addSnapshotListener { querySnapshot, exception ->
+                    exception?.let {
+                        Log.e("chatheaders/viewmodel", exception.message!!)
+                        return@addSnapshotListener
                     }
+                    querySnapshot?.let {
+                        Log.e("chat/header/viewmodel", "Data Loaded from Server")
 
-                    _chatHeaders.postValue(messages)
-
-                    var unreadMessageCount = 0
-                    messages.forEach { chatHeader ->
-                        unreadMessageCount += chatHeader.unseenCount
-
-                        if (chatHeader.unseenCount != 0) {
-
-                            setMessagesAsDeliveredForChat(
-                                chatHeader.id,
-                                chatHeader.chatType
-                            )
+                        val messages = it.documents.map { docSnap ->
+                            docSnap.toObject(ChatHeader::class.java)!!.apply {
+                                this.id = docSnap.id
+                            }
                         }
-                    }
 
-                    _unreadMessageCount.postValue(unreadMessageCount)
+                        _chatHeaders.postValue(messages)
+
+                        var unreadMessageCount = 0
+                        messages.forEach { chatHeader ->
+                            unreadMessageCount += chatHeader.unseenCount
+
+                            if (chatHeader.unseenCount != 0) {
+
+                                if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+                                    setMessagesAsDeliveredForChat(
+                                            chatHeader.id,
+                                            chatHeader.otherUserId
+                                    )
+                                }
+                            }
+                        }
+                        _unreadMessageCount.postValue(unreadMessageCount)
+                    }
                 }
-            }
     }
 
     private fun setMessagesAsDeliveredForChat(
-        id: String,
-        chatType: String
-    ) {
+            chatHeader: String,
+            otherUserId: String
+    ) = GlobalScope.launch {
 
-        if (chatType == ChatConstants.CHAT_TYPE_USER) {
+        try {
 
-           // chatRepository.sentMessagesSentMessageAsDelivered(id)
-        } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                chatRepository.sentMessagesSentMessageAsDelivered(chatHeader, otherUserId)
 
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

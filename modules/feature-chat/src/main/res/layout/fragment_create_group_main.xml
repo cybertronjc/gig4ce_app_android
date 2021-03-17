@@ -34,6 +34,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:minHeight="40dp"
+            android:maxLength="25"
             android:textSize="22sp" />
 
         <LinearLayout

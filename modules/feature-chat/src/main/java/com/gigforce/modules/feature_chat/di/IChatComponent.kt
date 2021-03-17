@@ -1,7 +1,9 @@
 package com.gigforce.modules.feature_chat.di
 
 import com.gigforce.modules.feature_chat.screens.ChatHeadersFragment
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.modules.feature_chat.screens.ContactsFragment
+import com.gigforce.modules.feature_chat.screens.GroupDetailsFragment
 import com.gigforce.modules.feature_chat.ui.ChatListItem
 import com.gigforce.modules.feature_chat.ui.chatItems.ImageMessageView
 import com.gigforce.modules.feature_chat.ui.chatItems.VideoMessageView
@@ -22,6 +24,12 @@ interface IChatComponent {
     fun inject(item: ChatHeadersFragment)
 
     // Classes that can be injected by this Component
+    fun inject(item: ChatPageFragment)
+
+    // Classes that can be injected by this Component
+    fun inject(item: GroupDetailsFragment)
+
+    // Classes that can be injected by this Component
     fun inject(item: ContactsFragment)
 
     // Classes that can be injected by this Component
@@ -29,6 +37,8 @@ interface IChatComponent {
 
     // Classes that can be injected by this Component
     fun inject(item: VideoMessageView)
+
+
 
 
 

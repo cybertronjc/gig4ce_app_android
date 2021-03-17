@@ -11,8 +11,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="14dp"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_attachment_grey"
         />
@@ -39,8 +39,8 @@
         android:background="@null"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_baseline_send_24"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
         >
     </ImageButton>
 

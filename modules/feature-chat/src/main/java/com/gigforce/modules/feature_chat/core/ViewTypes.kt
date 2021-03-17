@@ -42,5 +42,9 @@ class ViewTypes {
 
         const val GROUP_IN_LOCATION = 10505
         const val GROUP_OUT_LOCATION = 10605
+
+
+        const val GROUP_DETAILS_MEDIA = 11501
+        const val GROUP_DETAILS_GROUP_MEMBER = 11601
     }
 }

@@ -13,7 +13,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.OpenableColumns
+import android.text.format.DateUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -22,6 +24,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -29,10 +32,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
-import com.gigforce.common_ui.rv.VerticalItemDecorator
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.PermissionUtils
 import com.gigforce.core.StringConstants
@@ -45,6 +49,8 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.core.IChatNavigation
+import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.VideoInfo
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -53,13 +59,19 @@ import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModel
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.android.synthetic.main.fragment_chat.*
 import java.io.File
 import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class ChatPageFragment : Fragment(),
-    PopupMenu.OnMenuItemClickListener,
-    ImageCropCallback {
+        PopupMenu.OnMenuItemClickListener,
+        ImageCropCallback {
+
+    @Inject
+    lateinit var navigation: IChatNavigation
 
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
@@ -75,8 +87,8 @@ class ChatPageFragment : Fragment(),
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by lazy {
         ViewModelProvider(
-            this,
-            GroupChatViewModelFactory(requireContext())
+                this,
+                GroupChatViewModelFactory(requireContext())
         ).get(GroupChatViewModel::class.java)
     }
 
@@ -99,11 +111,11 @@ class ChatPageFragment : Fragment(),
             val imageFile = File(chatLocalDirectoryReferenceManager.imagesDirectoryRef, newFileName)
 
             return ImageCropOptions
-                .Builder()
-                .shouldOpenImageCrop(true)
-                .setShouldEnableFaceDetector(false)
-                .setOutputFileUri(imageFile.toUri())
-                .build()
+                    .Builder()
+                    .shouldOpenImageCrop(true)
+                    .setShouldEnableFaceDetector(false)
+                    .setOutputFileUri(imageFile.toUri())
+                    .build()
         }
 
     //-------------------------------------
@@ -123,9 +135,18 @@ class ChatPageFragment : Fragment(),
 
     private var selectedOperation = -1
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        (this.requireContext().applicationContext as ChatModuleProvider)
+                .provideChatModule()
+                .inject(this)
+        navigation.context = requireContext()
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_chat, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -144,9 +165,9 @@ class ChatPageFragment : Fragment(),
             if (receiverUserId == null) {
 
                 CrashlyticsLogger.e(
-                    TAG,
-                    "Checking for neccessary data at startup",
-                    IllegalArgumentException("Chat type is one-one chat but receiverUserId was null")
+                        TAG,
+                        "Checking for neccessary data at startup",
+                        IllegalArgumentException("Chat type is one-one chat but receiverUserId was null")
                 )
                 throw IllegalArgumentException("Chat type is one-one chat but receiverUserId was null")
             }
@@ -166,11 +187,12 @@ class ChatPageFragment : Fragment(),
 
         if (chatType == ChatConstants.CHAT_TYPE_USER) {
             viewModel.setRequiredDataAndStartListeningToMessages(
-                otherUserId = receiverUserId!!,
-                headerId = chatHeaderOrGroupId,
-                otherUserName = receiverName,
-                otherUserProfilePicture = receiverPhotoUrl
+                    otherUserId = receiverUserId!!,
+                    headerId = chatHeaderOrGroupId,
+                    otherUserName = receiverName,
+                    otherUserProfilePicture = receiverPhotoUrl
             )
+            adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
         } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
             groupChatViewModel.setGroupId(chatHeaderOrGroupId!!)
@@ -179,40 +201,83 @@ class ChatPageFragment : Fragment(),
         }
     }
 
+    private fun adjustUiAccToOneToOneChat() {
+        tv_lastSeenValue.visible()
+        tv_lastSeenValue.text = "Offline"
+    }
+
     private fun adjustUiAccToGroupChat() {
         toolbarOverflowBtn.gone()
+        tv_lastSeenValue.visible()
+        tv_lastSeenValue.text = "Tap to open details"
+
+        tv_lastSeenValue.setOnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@setOnClickListener
+
+            if(chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.openGroupDetailsPage(
+                        groupId
+                )
+            }
+        }
+
+        toolbarTitle.setOnClickListener {
+            val groupId = chatHeaderOrGroupId ?: return@setOnClickListener
+
+            if(chatType == ChatConstants.CHAT_TYPE_GROUP) {
+                navigation.openGroupDetailsPage(
+                        groupId
+                )
+            }
+        }
     }
 
     private fun subscribeChatGroupViewModel() {
         groupChatViewModel
-            .outputs
-            .groupInfo
-            .observe(viewLifecycleOwner, Observer {
+                .outputs
+                .groupInfo
+                .observe(viewLifecycleOwner, Observer {
 
-                showGroupDetails(it)
-            })
+                    showGroupDetails(it)
+                })
+
+        groupChatViewModel.outputs
+                .groupInfo
+                .observe(viewLifecycleOwner, Observer {
+
+
+                    if (it.groupDeactivated) {
+                        userBlockedOrRemovedLayout.visible()
+                        userBlockedOrRemovedLayout.text = "This group is deactivated by admin"
+                        chatFooter.gone()
+                    } else {
+                        userBlockedOrRemovedLayout.gone()
+                        chatFooter.visible()
+                    }
+                })
+
 
         groupChatViewModel
-            .outputs
-            .messages
-            .observe(viewLifecycleOwner, Observer {
+                .outputs
+                .messages
+                .observe(viewLifecycleOwner, Observer {
 
-                chatRecyclerView.collection = it
-                chatRecyclerView.smoothScrollToLastPosition()
-            })
+                    chatRecyclerView.collection = it
+                    chatRecyclerView.smoothScrollToLastPosition()
+                })
 
         groupChatViewModel
-            .inputs
-            .getGroupInfoAndStartListeningToMessages()
+                .inputs
+                .getGroupInfoAndStartListeningToMessages()
     }
 
     private fun showGroupDetails(group: ChatGroup) {
         toolbarTitle.text = group.name
 
         if (group.groupAvatarThumbnail.isNotBlank()) {
-            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail)
+            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail,R.drawable.ic_group)
         } else if (group.groupAvatar.isNotBlank()) {
-            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail)
+            toolbarUserImageIV.loadImageFromFirebase(group.groupAvatarThumbnail,R.drawable.ic_group)
         } else {
             toolbarUserImageIV.loadImage(R.drawable.ic_group)
         }
@@ -224,8 +289,13 @@ class ChatPageFragment : Fragment(),
         toolBackBtn = view.findViewById(R.id.iv_backArrowInChat)
 
         chatFooter = view.findViewById(R.id.chat_footer)
+
         chatRecyclerView = view.findViewById(R.id.rv_chat_messages)
-        chatRecyclerView.addItemDecoration(VerticalItemDecorator(20))
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.stackFromEnd = true
+        chatRecyclerView.layoutManager = layoutManager
+
+        //chatRecyclerView.addItemDecoration(VerticalItemDecorator(5))
 
         toolbarUserImageIV = view.findViewById(R.id.user_image_iv)
 
@@ -236,7 +306,7 @@ class ChatPageFragment : Fragment(),
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)
-                ?: throw IllegalArgumentException("please provide INTENT_EXTRA_CHAT_TYPE in intent extra")
+                    ?: throw IllegalArgumentException("please provide INTENT_EXTRA_CHAT_TYPE in intent extra")
             fromClientActivation = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             receiverPhotoUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
             receiverName = it.getString(INTENT_EXTRA_OTHER_USER_NAME) ?: ""
@@ -273,71 +343,120 @@ class ChatPageFragment : Fragment(),
     private fun init() {
         initIntent()
         initListeners()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, BackPressHandler())
+    }
+
+
+    private inner class BackPressHandler() : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            navigation.navigateBackToChatListIfExistElseOneStepBack()
+        }
     }
 
     private fun subscribeOneToOneViewModel() {
 
         viewModel.otherUserInfo
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                if (it.name.isNullOrBlank()) {
-                    toolbarTitle.text = it.mobile
-                } else {
-                    toolbarTitle.text = it.name
-                }
+                    if (it.name.isNullOrBlank()) {
+                        toolbarTitle.text = it.mobile
+                    } else {
+                        toolbarTitle.text = it.name
+                    }
 
-                if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
-                    toolbarUserImageIV.loadImageFromFirebase(it.imageThumbnailPathInStorage!!)
-                } else if (!it.imagePathInStorage.isNullOrBlank()) {
-                    toolbarUserImageIV.loadImageFromFirebase(it.imagePathInStorage!!)
-                } else {
-                    toolbarUserImageIV.loadImage(R.drawable.ic_user)
-                }
-            })
+                    if (!it.imageThumbnailPathInStorage.isNullOrBlank()) {
+
+                        if (Patterns.WEB_URL.matcher(it.imageThumbnailPathInStorage!!).matches()) {
+
+                            Glide.with(requireContext())
+                                    .load(Uri.parse(it.imageThumbnailPathInStorage!!))
+                                    .placeholder(R.drawable.ic_user)
+                                    .error(R.drawable.ic_user)
+                                    .into(toolbarUserImageIV)
+                        } else {
+
+                            val profilePathRef = if (it.imageThumbnailPathInStorage!!.startsWith("profile_pics/"))
+                                it.imageThumbnailPathInStorage!!
+                            else
+                                "profile_pics/${it.imageThumbnailPathInStorage}"
+
+                            toolbarUserImageIV.loadImageFromFirebase(profilePathRef,R.drawable.ic_user,R.drawable.ic_user)
+                        }
+                    } else if (!it.imagePathInStorage.isNullOrBlank()) {
+
+                        if (Patterns.WEB_URL.matcher(it.imagePathInStorage!!).matches()) {
+
+                            Glide.with(requireContext())
+                                    .load(Uri.parse(it.imagePathInStorage!!))
+                                    .placeholder(R.drawable.ic_user)
+                                    .error(R.drawable.ic_user)
+                                    .into(toolbarUserImageIV)
+                        } else {
+
+                            val profilePathRef = if (it.imagePathInStorage!!.startsWith("profile_pics/"))
+                                it.imagePathInStorage!!
+                            else
+                                "profile_pics/${it.imagePathInStorage}"
+                            toolbarUserImageIV.loadImageFromFirebase(profilePathRef,R.drawable.ic_user,R.drawable.ic_user)
+                        }
+
+                    } else {
+                        toolbarUserImageIV.loadImage(R.drawable.ic_user)
+                    }
+                })
 
         viewModel.messages
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                chatRecyclerView.collection = it
-                chatRecyclerView.smoothScrollToLastPosition()
-            })
+                    chatRecyclerView.collection = it
+                    chatRecyclerView.smoothScrollToLastPosition()
+                })
 
         viewModel.headerInfo
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                if (it.isBlocked) {
-                    userBlockedOrRemovedLayout.visible()
-                    userBlockedOrRemovedLayout.text = "You've blocked this contact"
-                    chatFooter.gone()
-                } else {
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
-                }
-
-                if (it.isOtherUserOnline) {
-                    lastSeenTV.visible()
-                    lastSeenTV.text = "Online"
-                } else {
-                    if (it.lastUserStatusActivityAt != 0L) {
-                        lastSeenTV.visible()
-
-                        val timeStamp = Timestamp(it.lastUserStatusActivityAt)
-                        val date = Date(timeStamp.time)
-                        lastSeenTV.text = "Last Seen At: ${date.toDisplayText()}"
+                    if (it.isBlocked) {
+                        userBlockedOrRemovedLayout.visible()
+                        userBlockedOrRemovedLayout.text = "You've blocked this contact"
+                        chatFooter.gone()
                     } else {
-                        lastSeenTV.gone()
-                        lastSeenTV.text = null
+                        userBlockedOrRemovedLayout.gone()
+                        chatFooter.visible()
                     }
-                }
-            })
+
+                    if (it.isOtherUserOnline) {
+                        lastSeenTV.visible()
+                        lastSeenTV.text = "Online"
+                    } else {
+                        if (it.lastUserStatusActivityAt != 0L) {
+                            lastSeenTV.visible()
+
+                            val timeStamp = Timestamp(it.lastUserStatusActivityAt)
+                            val date = Date(timeStamp.time)
+
+                            var timeToDisplayText = ""
+                            timeToDisplayText = if (DateUtils.isToday(date.time)) {
+                                "Last Seen Today At: ${date.toDisplayText()}"
+                            } else {
+                                "Last Seen ${SimpleDateFormat("MMM dd yyyy").format(date)}"
+                            }
+
+                            lastSeenTV.text = timeToDisplayText
+                        } else {
+                            lastSeenTV.visible()
+                            lastSeenTV.text = "Offline"
+                        }
+                    }
+                })
     }
 
     private fun showErrorDialog(error: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Message")
-            .setMessage(error)
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setTitle("Message")
+                .setMessage(error)
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
     }
 
     private fun initIntent() {
@@ -373,7 +492,7 @@ class ChatPageFragment : Fragment(),
                 popUp.isAccessible = true
                 val menu = popUp.get(popUpMenu)
                 menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(menu, true)
+                        .invoke(menu, true)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -387,7 +506,7 @@ class ChatPageFragment : Fragment(),
         popUp.setOnMenuItemClickListener(this)
         popUp.inflate(R.menu.menu_chat_toolbar)
         popUp.menu.findItem(R.id.action_block).title =
-            if (chatFooter.isVisible) "Block" else "UnBlock"
+                if (chatFooter.isVisible) "Block" else "UnBlock"
         popUp.show()
     }
 
@@ -398,9 +517,9 @@ class ChatPageFragment : Fragment(),
         }
         R.id.action_report -> {
             ReportUserDialogFragment.launch(
-                viewModel.headerId,
-                viewModel.otherUserId,
-                childFragmentManager
+                    viewModel.headerId,
+                    viewModel.otherUserId,
+                    childFragmentManager
             )
             true
         }
@@ -416,8 +535,8 @@ class ChatPageFragment : Fragment(),
         }
         R.id.action_location -> {
             startActivityForResult(
-                Intent(requireContext(), CaptureLocationActivity::class.java),
-                REQUEST_GET_LOCATION
+                    Intent(requireContext(), CaptureLocationActivity::class.java),
+                    REQUEST_GET_LOCATION
             )
             true
         }
@@ -448,12 +567,12 @@ class ChatPageFragment : Fragment(),
     private fun askForStoragePermission() {
         Log.v(TAG, "Permission Required. Requesting Permission")
         requestPermissions(
-            arrayOf(
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
         )
     }
 
@@ -489,7 +608,7 @@ class ChatPageFragment : Fragment(),
     private fun manageNewMessageToContact() {
         chatFooter.btn_send.setOnClickListener {
             if (validateNewMessageTask()) {
-                val message = chatFooter.et_message.text.toString()
+                val message = chatFooter.et_message.text.toString().capitalize().trim()
                 chatFooter.et_message.setText("")
 
 
@@ -510,16 +629,16 @@ class ChatPageFragment : Fragment(),
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PermissionUtils.reqCodePerm
-            && PermissionUtils.permissionsGrantedCheck(grantResults)
+                && PermissionUtils.permissionsGrantedCheck(grantResults)
         ) {
             toolbarTitle.text =
-                checkForContact(receiverMobileNumber, receiverName!!) //todo check it
+                    checkForContact(receiverMobileNumber, receiverName!!) //todo check it
         }
 
 
@@ -545,9 +664,9 @@ class ChatPageFragment : Fragment(),
                 }
             } else
                 Toast.makeText(
-                    requireContext(),
-                    "Please grant storage permission, to pick files",
-                    Toast.LENGTH_SHORT
+                        requireContext(),
+                        "Please grant storage permission, to pick files",
+                        Toast.LENGTH_SHORT
                 ).show()
         }
     }
@@ -557,7 +676,7 @@ class ChatPageFragment : Fragment(),
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             PermissionUtils.reqCodePerm -> toolbarTitle.text =
-                checkForContact(receiverMobileNumber, receiverName!!)
+                    checkForContact(receiverMobileNumber, receiverName!!)
             REQUEST_PICK_DOCUMENT -> if (resultCode == Activity.RESULT_OK) {
                 // Get the Uri of the selected file
                 val uri = data?.data ?: return
@@ -568,16 +687,16 @@ class ChatPageFragment : Fragment(),
 
                 if (chatType == ChatConstants.CHAT_TYPE_USER)
                     viewModel.sendNewDocumentMessage(
-                        requireContext(),
-                        "",
-                        displayName,
-                        uri
+                            requireContext(),
+                            "",
+                            displayName,
+                            uri
                     )
                 else
                     groupChatViewModel.sendNewDocumentMessage(
-                        text = "",
-                        fileName = displayName ?: "Document",
-                        uri = uri
+                            text = "",
+                            fileName = displayName ?: "Document",
+                            uri = uri
                     )
 
 
@@ -591,11 +710,11 @@ class ChatPageFragment : Fragment(),
                 if (resultCode == Activity.RESULT_OK) {
 
                     cameraAndGalleryIntegrator.parseResults(
-                        requestCode,
-                        resultCode,
-                        data,
-                        imageCropOptions,
-                        this@ChatPageFragment
+                            requestCode,
+                            resultCode,
+                            data,
+                            imageCropOptions,
+                            this@ChatPageFragment
                     )
                 }
             }
@@ -609,17 +728,17 @@ class ChatPageFragment : Fragment(),
 
                 if (chatType == ChatConstants.CHAT_TYPE_USER)
                     viewModel.sendNewVideoMessage(
-                        requireContext(),
-                        "",
-                        videoInfo,
-                        uri
+                            requireContext(),
+                            "",
+                            videoInfo,
+                            uri
                     )
                 else
                     groupChatViewModel.sendNewVideoMessage(
-                        context = requireContext(),
-                        text = "",
-                        videoInfo = videoInfo,
-                        uri = uri
+                            context = requireContext(),
+                            text = "",
+                            videoInfo = videoInfo,
+                            uri = uri
                     )
             }
             REQUEST_GET_LOCATION -> {
@@ -632,36 +751,36 @@ class ChatPageFragment : Fragment(),
 
     private fun sendLocationMessage(data: Intent?) {
         val latitude =
-            data!!.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LATITUDE, 0.0)
+                data!!.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LATITUDE, 0.0)
         val longitude =
-            data.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LONGITUDE, 0.0)
+                data.getDoubleExtra(CaptureLocationActivity.INTENT_EXTRA_LONGITUDE, 0.0)
         val address =
-            data.getStringExtra(CaptureLocationActivity.INTENT_EXTRA_PHYSICAL_ADDRESS)
-                ?: ""
+                data.getStringExtra(CaptureLocationActivity.INTENT_EXTRA_PHYSICAL_ADDRESS)
+                        ?: ""
         val imageFile: File? =
-            data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
+                data.getSerializableExtra(CaptureLocationActivity.INTENT_EXTRA_MAP_IMAGE_FILE) as File?
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendLocationMessage(
-                latitude,
-                longitude,
-                address,
-                imageFile
+                    latitude,
+                    longitude,
+                    address,
+                    imageFile
             )
         else {
             groupChatViewModel.sendLocationMessage(
-                latitude,
-                longitude,
-                address,
-                imageFile
+                    latitude,
+                    longitude,
+                    address,
+                    imageFile
             )
         }
     }
 
     private fun getDisplayName(
-        uriString: String,
-        uri: Uri,
-        myFile: File
+            uriString: String,
+            uri: Uri,
+            myFile: File
     ): String? {
         if (uriString.startsWith("content://")) {
             var cursor: Cursor? = null
@@ -681,9 +800,9 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun getVideoInfo(
-        uriString: String,
-        uri: Uri,
-        myFile: File
+            uriString: String,
+            uri: Uri,
+            myFile: File
     ): VideoInfo {
         var fileName = ""
         var fileSize = 0L
@@ -714,7 +833,7 @@ class ChatPageFragment : Fragment(),
             val retriever = MediaMetadataRetriever()
             retriever.setDataSource(requireContext(), uri)
             val duration =
-                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                    retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             retriever.release()
             duration?.toLong() ?: 0L
         } catch (e: Exception) {
@@ -725,81 +844,81 @@ class ChatPageFragment : Fragment(),
         val mMMR = MediaMetadataRetriever()
         mMMR.setDataSource(requireContext(), uri)
         val thumbnail: Bitmap? =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
-                mMMR.getScaledFrameAtTime(
-                    -1,
-                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                    196,
-                    196
-                )
-            } else {
-                try {
-                    val bigThumbnail = mMMR.frameAtTime
-                    val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+                    mMMR.getScaledFrameAtTime(
+                            -1,
+                            MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
+                            196,
+                            196
+                    )
+                } else {
+                    try {
+                        val bigThumbnail = mMMR.frameAtTime
+                        val smallThumbnail = ThumbnailUtils.extractThumbnail(bigThumbnail, 196, 196)
 
-                    if (!bigThumbnail!!.isRecycled)
-                        bigThumbnail.recycle()
+                        if (!bigThumbnail!!.isRecycled)
+                            bigThumbnail.recycle()
 
-                    smallThumbnail
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
+                        smallThumbnail
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
                 }
-            }
         mMMR.release()
 
         return VideoInfo(
-            name = fileName,
-            duration = videoLength,
-            size = fileSize,
-            thumbnail = thumbnail
+                name = fileName,
+                duration = videoLength,
+                size = fileSize,
+                thumbnail = thumbnail
         )
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+                requireContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-            requireContext(),
-            android.Manifest.permission.CAMERA
+                requireContext(),
+                android.Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun checkForContact(number: String?, name: String): String {
         var nameFromDB = name
         return if (number != null && number.length >= 10 && PermissionUtils.checkForPermissionFragment(
-                this,
-                PermissionUtils.reqCodePerm,
-                Manifest.permission.READ_CONTACTS
-            )
+                        this,
+                        PermissionUtils.reqCodePerm,
+                        Manifest.permission.READ_CONTACTS
+                )
         ) {
             val lookupUri = Uri.withAppendedPath(
-                ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
-                Uri.encode(number)
+                    ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                    Uri.encode(number)
             )
             val mPhoneNumberProjection = arrayOf<String>(
-                ContactsContract.PhoneLookup._ID,
-                ContactsContract.PhoneLookup.NUMBER,
-                ContactsContract.PhoneLookup.DISPLAY_NAME
+                    ContactsContract.PhoneLookup._ID,
+                    ContactsContract.PhoneLookup.NUMBER,
+                    ContactsContract.PhoneLookup.DISPLAY_NAME
             )
             val cur: Cursor? = requireActivity().contentResolver.query(
-                lookupUri,
-                mPhoneNumberProjection,
-                null,
-                null,
-                null
+                    lookupUri,
+                    mPhoneNumberProjection,
+                    null,
+                    null,
+                    null
             )
             cur.use { cur ->
                 if (cur?.moveToFirst() == true) {
                     nameFromDB =
-                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
+                            cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY))
 
                 }
             }
@@ -827,13 +946,13 @@ class ChatPageFragment : Fragment(),
 
         if (chatType == ChatConstants.CHAT_TYPE_USER)
             viewModel.sendNewImageMessage(
-                text = "",
-                uri = uri
+                    text = "",
+                    uri = uri
             )
         else {
             groupChatViewModel.sendNewImageMessage(
-                text = "",
-                uri = uri
+                    text = "",
+                    uri = uri
             )
         }
     }
@@ -855,7 +974,7 @@ class ChatPageFragment : Fragment(),
 
         private const val DOC = "application/msword"
         private const val DOCX =
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         private const val PDF = "application/pdf"
         private const val XLS = "application/vnd.ms-excel"
     }

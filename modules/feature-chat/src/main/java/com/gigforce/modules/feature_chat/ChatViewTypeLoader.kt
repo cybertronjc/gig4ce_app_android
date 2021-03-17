@@ -43,6 +43,8 @@ class ChatViewTypeLoader(): IViewTypeLoader {
             ViewTypes.GROUP_IN_LOCATION -> GroupInLocationMessageView(context, null)
             ViewTypes.GROUP_OUT_LOCATION -> GroupOutLocationMessageView(context, null)
 
+            ViewTypes.GROUP_DETAILS_GROUP_MEMBER -> TODO()
+            ViewTypes.GROUP_DETAILS_MEDIA -> TODO()
             else -> null
         }
     }

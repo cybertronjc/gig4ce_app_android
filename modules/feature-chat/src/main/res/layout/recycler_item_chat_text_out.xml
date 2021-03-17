@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_msgContainer"
@@ -12,6 +13,8 @@
         android:maxWidth="@dimen/chat_item_max_length"
         app:cardBackgroundColor="@color/lipstick_2"
         app:cardCornerRadius="@dimen/chat_item_corner_radius"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:cardElevation="@dimen/chat_item_card_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,15 +24,27 @@
             android:maxWidth="@dimen/chat_item_max_length"
             android:padding="10dp">
 
+
+            <TextView
+                android:id="@+id/user_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
             <TextView
                 android:id="@+id/tv_msgValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="How are you my brother"
+                tools:text="How are you my brother"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:linksClickable="true"
                 android:autoLink="web"
+                android:letterSpacing="0"
+                android:fontFamily="@font/lato"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

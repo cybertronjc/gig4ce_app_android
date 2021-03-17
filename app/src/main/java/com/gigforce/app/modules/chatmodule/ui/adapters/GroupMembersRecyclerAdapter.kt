@@ -33,7 +33,7 @@ class GroupMembersRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMemberViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item_group_member, parent, false)
+            .inflate(R.layout.recycler_item_group_member_2, parent, false)
         return GroupMemberViewHolder(view)
     }
 

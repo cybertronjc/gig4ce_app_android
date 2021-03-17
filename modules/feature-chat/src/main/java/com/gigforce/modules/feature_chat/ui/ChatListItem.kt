@@ -1,6 +1,8 @@
 package com.gigforce.modules.feature_chat.ui
 
 import android.content.Context
+import android.net.Uri
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -18,13 +20,14 @@ import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.IChatNavigation
 import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
+import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
 class ChatListItem(context: Context?) :
-    RelativeLayout(context),
-    IViewHolder,
-    View.OnClickListener {
+        RelativeLayout(context),
+        IViewHolder,
+        View.OnClickListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
@@ -37,6 +40,7 @@ class ChatListItem(context: Context?) :
     private lateinit var lastMessageType: ImageView
     private lateinit var unseenMessageCountIV: ImageView
     private lateinit var userOnlineIV: ImageView
+    private lateinit var statusIV: ImageView
 
     private val storage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -61,6 +65,7 @@ class ChatListItem(context: Context?) :
         userOnlineIV = this.findViewById(R.id.user_online_iv)
         lastMessageType = this.findViewById(R.id.last_message_type_iv)
         unseenMessageCountIV = this.findViewById(R.id.unseen_msg_count_iv)
+        statusIV = this.findViewById(R.id.tv_received_status)
     }
 
     private var dObj: ChatListItemDataObject? = null
@@ -72,11 +77,12 @@ class ChatListItem(context: Context?) :
             dObj?.let { chatHeader ->
 
                 userOnlineIV.isVisible = chatHeader.isOtherUserOnline
+                statusIV.isVisible = chatHeader.lastMsgFlowType == ChatConstants.FLOW_TYPE_OUT && chatHeader.chatType == ChatConstants.CHAT_TYPE_USER
 
                 if (chatHeader.unreadCount != 0) {
                     val drawable = TextDrawable.builder().buildRound(
-                        chatHeader.unreadCount.toString(),
-                        ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+                            chatHeader.unreadCount.toString(),
+                            ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
                     unseenMessageCountIV.setImageDrawable(drawable)
                 } else {
@@ -87,12 +93,25 @@ class ChatListItem(context: Context?) :
 
                     textViewName.text = chatHeader.title
                     if (chatHeader.profilePath.isNotBlank()) {
-                        val profilePathRef = storage.reference.child(chatHeader.profilePath)
 
-                        Glide.with(context)
-                            .load(profilePathRef)
-                            .placeholder(R.drawable.ic_user)
-                            .into(contextImageView)
+                        if (Patterns.WEB_URL.matcher(chatHeader.profilePath).matches()) {
+
+                            Glide.with(context)
+                                    .load(Uri.parse(chatHeader.profilePath))
+                                    .placeholder(R.drawable.ic_user)
+                                    .into(contextImageView)
+                        } else {
+
+                            val profilePathRef = if (chatHeader.profilePath.startsWith("profile_pics/"))
+                                storage.reference.child(chatHeader.profilePath)
+                            else
+                                storage.reference.child("profile_pics/${chatHeader.profilePath}")
+
+                            Glide.with(context)
+                                    .load(profilePathRef)
+                                    .placeholder(R.drawable.ic_user)
+                                    .into(contextImageView)
+                        }
                     } else {
 
                         Glide.with(context).load(R.drawable.ic_user).into(contextImageView)
@@ -110,29 +129,35 @@ class ChatListItem(context: Context?) :
 
                         val profilePathRef = storage.reference.child(chatHeader.profilePath)
                         Glide.with(context).load(profilePathRef).placeholder(R.drawable.ic_group)
-                            .into(contextImageView)
+                                .into(contextImageView)
                     }
                 }
 
+                val messagePrefix = if(chatHeader.senderName.isNotBlank())  "${chatHeader.senderName} :" else ""
                 when (chatHeader.lastMessageType) {
                     ChatConstants.MESSAGE_TYPE_TEXT -> {
                         lastMessageType.gone()
-                        txtSubtitle.text = chatHeader.subtitle
+                        txtSubtitle.text = "$messagePrefix ${chatHeader.subtitle}"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
                         lastMessageType.visible()
                         lastMessageType.setImageResource(R.drawable.ic_play)
-                        txtSubtitle.text = "Video"
+                        txtSubtitle.text = "$messagePrefix Video"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
                         lastMessageType.visible()
                         lastMessageType.setImageResource(R.drawable.ic_document_outlined)
-                        txtSubtitle.text = "Document"
+                        txtSubtitle.text = "$messagePrefix Document"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
                         lastMessageType.visible()
-                        lastMessageType.setImageResource(R.drawable.ic_document_outlined)
-                        txtSubtitle.text = "Image"
+                        lastMessageType.setImageResource(R.drawable.ic_photo_landscape)
+                        txtSubtitle.text = "$messagePrefix Image"
+                    }
+                    ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
+                        lastMessageType.visible()
+                        lastMessageType.setImageResource(R.drawable.ic_location_grey)
+                        txtSubtitle.text = "$messagePrefix Location"
                     }
                     else -> {
                         //   lastMessageType.gone()
@@ -141,7 +166,36 @@ class ChatListItem(context: Context?) :
                 }
 
                 textViewTime.text = chatHeader.timeDisplay
+                setReceivedStatus(chatHeader.status)
             }
+        }
+    }
+
+    private fun setReceivedStatus(status: Int) = when (status) {
+        ChatConstants.MESSAGE_STATUS_NOT_SENT -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending_grey)
+                    .into(statusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_DELIVERED_TO_SERVER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_sent_grey)
+                    .into(statusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_delivered_grey)
+                    .into(statusIV)
+        }
+        ChatConstants.MESSAGE_STATUS_READ_BY_USER -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_seen)
+                    .into(statusIV)
+        }
+        else -> {
+            Glide.with(context)
+                    .load(R.drawable.ic_msg_pending)
+                    .into(statusIV)
         }
     }
 
@@ -149,11 +203,11 @@ class ChatListItem(context: Context?) :
         dObj?.let {
 
             navigation.navigateToChatPage(
-                chatType = it.chatType,
-                otherUserId = it.profileId,
-                headerId = it.id,
-                otherUserName = it.title,
-                otherUserProfilePicture = it.profilePath
+                    chatType = it.chatType,
+                    otherUserId = it.profileId,
+                    headerId = it.id,
+                    otherUserName = it.title,
+                    otherUserProfilePicture = it.profilePath
             )
         }
     }

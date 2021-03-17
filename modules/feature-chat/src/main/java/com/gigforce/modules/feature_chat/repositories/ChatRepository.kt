@@ -3,6 +3,7 @@ package com.gigforce.modules.feature_chat.repositories
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gigforce.core.date.DateHelper
@@ -23,36 +24,42 @@ import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
 class ChatRepository constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager()
 //    ,
 //    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : BaseChatRepository(),
-    IChatService {
+        IChatService {
 
     private val userChatCollectionRef: DocumentReference by lazy {
         FirebaseFirestore.getInstance()
-            .collection(ChatGroupRepository.COLLECTION_CHATS)
-            .document(getUID())
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(getUID())
     }
 
     private val userReportedCollectionRef: CollectionReference by lazy {
         FirebaseFirestore.getInstance()
-            .collection(ChatGroupRepository.COLLECTION_CHAT_REPORTED_USER)
+                .collection(ChatGroupRepository.COLLECTION_CHAT_REPORTED_USER)
+    }
+
+    private fun getChatHeaderCollectionRef(userId: String): DocumentReference {
+        return FirebaseFirestore.getInstance()
+                .collection(ChatGroupRepository.COLLECTION_CHATS)
+                .document(userId)
     }
 
     private fun getChatMessagesCollectionRef(
-        headerId: String
+            headerId: String
     ) = userChatCollectionRef
-        .collection(COLLECTION_CHAT_HEADERS)
-        .document(headerId)
-        .collection(COLLECTION_CHATS_MESSAGES)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(headerId)
+            .collection(COLLECTION_CHATS_MESSAGES)
 
     suspend fun getChatHeader(chatHeaderId: String): ChatHeader {
         val docRef = userChatCollectionRef
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(chatHeaderId)
-            .getOrThrow()
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(chatHeaderId)
+                .getOrThrow()
 
         return docRef.toObject(ChatHeader::class.java)!!.apply {
             id = docRef.id
@@ -65,28 +72,28 @@ class ChatRepository constructor(
     }
 
     override suspend fun sendTextMessage(
-        chatHeaderId: String,
-        message: ChatMessage
+            chatHeaderId: String,
+            message: ChatMessage
     ) {
 
         getChatMessagesCollectionRef(chatHeaderId)
-            .addOrThrow(message)
+                .addOrThrow(message)
     }
 
     override suspend fun sendLocationMessage(
-        chatHeaderId: String,
-        message: ChatMessage,
-        bitmap: Bitmap?
+            chatHeaderId: String,
+            message: ChatMessage,
+            bitmap: Bitmap?
     ) {
 
         val attachmentPathOnServer = if (bitmap != null) {
             val imageInBytes = ImageUtils.convertToByteArray(bitmap)
             uploadChatAttachment(
-                fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
-                file = imageInBytes,
-                headerId = chatHeaderId,
-                isGroupChatMessage = false,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
+                    fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
+                    file = imageInBytes,
+                    headerId = chatHeaderId,
+                    isGroupChatMessage = false,
+                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
             )
         } else {
             null
@@ -94,51 +101,53 @@ class ChatRepository constructor(
 
         message.attachmentPath = attachmentPathOnServer
         getChatMessagesCollectionRef(chatHeaderId)
-            .addOrThrow(message)
+                .addOrThrow(message)
     }
 
     override suspend fun sendImageMessage(
-        chatHeaderId: String,
-        message: ChatMessage,
-        imageUri: Uri
+            chatHeaderId: String,
+            message: ChatMessage,
+            imageUri: Uri
     ) {
         //todo check if need compression
 
         val file = imageUri.toFile()
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
-            val imageInBytes = ImageUtils.convertToByteArray(message.thumbnailBitmap!!)
+            val thumbnail = message.thumbnailBitmap!!.copy(message.thumbnailBitmap?.config, true)
+
+            val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                fileNameWithExtension = "thumb-${file.name}",
-                file = imageInBytes,
-                headerId = chatHeaderId,
-                isGroupChatMessage = false,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+                    fileNameWithExtension = "thumb-${file.name}",
+                    file = imageInBytes,
+                    headerId = chatHeaderId,
+                    isGroupChatMessage = false,
+                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
             )
         } else {
             null
         }
 
         val pathOnServer = uploadChatAttachment(
-            fileNameWithExtension = file.name,
-            file = imageUri,
-            headerId = chatHeaderId,
-            isGroupChatMessage = false,
-            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+                fileNameWithExtension = file.name,
+                file = imageUri,
+                headerId = chatHeaderId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
         )
 
         message.thumbnail = thumbnailPathOnServer
         message.attachmentPath = pathOnServer
 
         getChatMessagesCollectionRef(chatHeaderId)
-            .addOrThrow(message)
+                .addOrThrow(message)
     }
 
     override suspend fun sendVideoMessage(
-        context: Context,
-        chatHeaderId: String,
-        message: ChatMessage,
-        uri: Uri,
-        videoInfo: VideoInfo
+            context: Context,
+            chatHeaderId: String,
+            message: ChatMessage,
+            uri: Uri,
+            videoInfo: VideoInfo
     ) {
 
         val newFileName = if (videoInfo.name.isBlank()) {
@@ -159,8 +168,8 @@ class ChatRepository constructor(
         val shouldCompressVideo = shouldCompressVideo(videoInfo)
         val compressedFileUri = if (shouldCompressVideo) {
             val transcodedFile = File(
-                videosDirectoryRef,
-                newFileName
+                    videosDirectoryRef,
+                    newFileName
             )
             transcodeVideo(context, uri, transcodedFile)
             transcodedFile.toUri()
@@ -172,39 +181,44 @@ class ChatRepository constructor(
         }
 
         val thumbnailPathOnServer = if (message.thumbnailBitmap != null) {
-            val imageInBytes = ImageUtils.convertToByteArray(message.thumbnailBitmap!!)
+            val thumbnail = message.thumbnailBitmap!!.copy(
+                    message.thumbnailBitmap?.config,
+                    message.thumbnailBitmap!!.isMutable
+            )
+
+            val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                "thumb-$newFileName",
-                imageInBytes,
-                chatHeaderId,
-                isGroupChatMessage = false,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
+                    "thumb-$newFileName",
+                    imageInBytes,
+                    chatHeaderId,
+                    isGroupChatMessage = false,
+                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
             )
         } else {
             null
         }
 
         val pathOnServer = uploadChatAttachment(
-            newFileName,
-            compressedFileUri,
-            chatHeaderId,
-            isGroupChatMessage = false,
-            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
+                newFileName,
+                compressedFileUri,
+                chatHeaderId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
         )
 
         message.attachmentPath = pathOnServer
         message.thumbnail = thumbnailPathOnServer
 
         getChatMessagesCollectionRef(chatHeaderId)
-            .addOrThrow(message)
+                .addOrThrow(message)
     }
 
     override suspend fun sendDocumentMessage(
-        context: Context,
-        chatHeaderId: String,
-        message: ChatMessage,
-        fileName: String,
-        uri: Uri
+            context: Context,
+            chatHeaderId: String,
+            message: ChatMessage,
+            fileName: String,
+            uri: Uri
     ) {
 
         val newFileName = if (fileName.isBlank()) {
@@ -218,16 +232,16 @@ class ChatRepository constructor(
         FileUtils.copyFile(context.applicationContext, fileName, uri, documentFile)
 
         val pathOnServer = uploadChatAttachment(
-            fileNameWithExtension = newFileName,
-            file = uri,
-            headerId = chatHeaderId,
-            isGroupChatMessage = false,
-            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
+                fileNameWithExtension = newFileName,
+                file = uri,
+                headerId = chatHeaderId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
         )
         message.attachmentPath = pathOnServer
 
         getChatMessagesCollectionRef(headerId = chatHeaderId)
-            .addOrThrow(message)
+                .addOrThrow(message)
     }
 
 
@@ -256,53 +270,53 @@ class ChatRepository constructor(
 //    }
 
     override suspend fun createHeaders(
-        otherUserId: String
+            otherUserId: String
     ) {
         TODO("Not yet implemented")
     }
 
     override suspend fun getHeaderFromHeaders(
-        userId: String
+            userId: String
     ) {
         TODO("Not yet implemented")
     }
 
     override suspend fun reportAndBlockUser(
-        otherUserId: String,
-        reason: String
+            otherUserId: String,
+            reason: String
     ) {
 
     }
 
     suspend fun reportAndBlockUser(
-        chatHeaderId: String,
-        otherUserId: String,
-        reason: String
+            chatHeaderId: String,
+            otherUserId: String,
+            reason: String
     ) {
         userChatCollectionRef
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(chatHeaderId)
-            .updateOrThrow("isBlocked", true)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(chatHeaderId)
+                .updateOrThrow("isBlocked", true)
 
         userReportedCollectionRef
-            .addOrThrow(
-                ChatReportedUser(
-                    id = null,
-                    reportedUserUid = otherUserId,
-                    reportedBy = getUID(),
-                    reportedOn = Timestamp.now(),
-                    reportingReason = reason
+                .addOrThrow(
+                        ChatReportedUser(
+                                id = null,
+                                reportedUserUid = otherUserId,
+                                reportedBy = getUID(),
+                                reportedOn = Timestamp.now(),
+                                reportingReason = reason
+                        )
                 )
-            )
 
     }
 
     override suspend fun blockOrUnblockUser(chatHeaderId: String) {
         val chatHeader = getChatHeader(chatHeaderId)
         userChatCollectionRef
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(chatHeaderId)
-            .updateOrThrow("isBlocked", !chatHeader.isBlocked)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(chatHeaderId)
+                .updateOrThrow("isBlocked", !chatHeader.isBlocked)
     }
 
     override suspend fun setMessagesAsRead(unreadMessages: List<ChatMessage>) {
@@ -312,21 +326,31 @@ class ChatRepository constructor(
             val senderId = unreadMessage.senderInfo.id
             val headerId = unreadMessage.headerId
 
-            val chatMessageCollection = FirebaseFirestore.getInstance()
-                .collection(ChatGroupRepository.COLLECTION_CHATS)
-                .document(senderId)
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(headerId)
-                .collection(COLLECTION_CHATS_MESSAGES)
+
+            val headerRef = FirebaseFirestore.getInstance()
+                    .collection(ChatGroupRepository.COLLECTION_CHATS)
+                    .document(senderId)
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(headerId)
+
+            val chatMessageCollection = headerRef
+                    .collection(COLLECTION_CHATS_MESSAGES)
 
             val batch = db.batch()
+
+            batch.update(
+                    headerRef, mapOf(
+                    "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
+            )
+            )
+
             unreadMessages.forEach {
 
                 val messageRef = chatMessageCollection.document(it.senderMessageId)
                 batch.update(
-                    messageRef, mapOf(
+                        messageRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_READ_BY_USER
-                    )
+                )
                 )
             }
 
@@ -350,10 +374,10 @@ class ChatRepository constructor(
 
     suspend fun getDetailsOfUserFromContacts(otherUserId: String): ContactModel {
         val contactRef = db.collection(COLLECTION_CHATS)
-            .document(getUID())
-            .collection(COLLECTION_CHATS_CONTACTS)
-            .document(otherUserId)
-            .getOrThrow()
+                .document(getUID())
+                .collection(COLLECTION_CHATS_CONTACTS)
+                .document(otherUserId)
+                .getOrThrow()
 
         return if (contactRef.exists()) {
             contactRef.toObject(ContactModel::class.java)!!.apply {
@@ -361,17 +385,44 @@ class ChatRepository constructor(
             }
         } else {
             ContactModel(
-                id = otherUserId
+                    id = otherUserId
             )
         }
     }
 
     suspend fun sentMessagesSentMessageAsDelivered(
-        headerId: String
+            headerId: String,
+            otherUserId: String
     ) {
 
+        val headerRef = getChatHeaderCollectionRef(otherUserId)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(headerId)
 
+        val chatCollectionRef = headerRef.collection(COLLECTION_CHATS_MESSAGES)
+        val querySnap = chatCollectionRef
+                .whereLessThan("status", ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER)
+                .getOrThrow()
 
+        Log.d("ChatRepo","Other User - $otherUserId, header-id - $headerId")
+        if (querySnap.size() > 0) {
+
+            val batch = db.batch()
+            batch.update(headerRef, mapOf(
+                    "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+            ))
+
+            querySnap.documents.forEach {
+
+                Log.d("ChatRepo","Message Id - ${it.id}")
+                val messageDocRef = chatCollectionRef.document(it.id)
+                batch.update(messageDocRef, mapOf(
+                        "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
+                ))
+            }
+
+            batch.commitOrThrow()
+        }
     }
 
     companion object {

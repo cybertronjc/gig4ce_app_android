@@ -18,6 +18,7 @@
             android:background="@android:color/white"
             android:minHeight="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back_24"
+            app:menu="@menu/menu_chat_list"
             app:title="Chats" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -25,6 +26,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.gigforce.core.recyclerView.CoreRecyclerView
+            android:id="@+id/rv_chat_headers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/no_chat_layout"
@@ -61,6 +67,8 @@
                 android:layout_height="wrap_content"
                 android:textStyle="normal"
                 android:textSize="16sp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginTop="24dp"
                 android:textColor="@color/gray_400"
                 android:gravity="center_horizontal"
@@ -68,26 +76,23 @@
                 />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/contacts_btn"
+                android:id="@+id/go_to_contacts_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:text="Contacts"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="38dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 app:strokeColor="@color/colorPrimary"/>
 
 
         </LinearLayout>
 
 
-        <com.gigforce.core.recyclerView.CoreRecyclerView
-            android:id="@+id/rv_chat_headers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/contactsFab"

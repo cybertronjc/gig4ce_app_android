@@ -13,11 +13,11 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.storage.FirebaseStorage
 
 class GigforceImageView(
-    context: Context,
-    attrs: AttributeSet
+        context: Context,
+        attrs: AttributeSet
 ) : ShapeableImageView(
-    context,
-    attrs
+        context,
+        attrs
 ) {
     @DrawableRes
     private var _errorImage: Int? = null
@@ -29,23 +29,35 @@ class GigforceImageView(
         FirebaseStorage.getInstance()
     }
 
-    private val drawableCrossFadeFactory : DrawableCrossFadeFactory by lazy {
+    private val drawableCrossFadeFactory: DrawableCrossFadeFactory by lazy {
         DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()
     }
 
     fun loadImageFromFirebase(
-        firebasePath: String
+            firebasePath: String,
+            @DrawableRes placeHolder: Int = -1,
+            @DrawableRes error: Int = -1
     ) {
         val pathRef = firebaseStorage.reference.child(firebasePath)
 
-        Glide.with(context)
-            .load(pathRef)
-            .error(getErrorImage())
-            .into(this)
+        var requestManager = Glide.with(context).load(pathRef)
+
+        if (placeHolder != -1) {
+            requestManager = requestManager.placeholder(placeHolder)
+        }
+
+        if (error != -1) {
+            requestManager = requestManager.error(error)
+        } else {
+            requestManager = requestManager.error(getErrorImage())
+        }
+
+        requestManager.into(this)
     }
 
+
     fun loadImageIfUrlElseTryFirebaseStorage(
-        urlOrFirebasePath: String
+            urlOrFirebasePath: String
     ) {
 
         val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
@@ -57,32 +69,32 @@ class GigforceImageView(
     }
 
     fun loadImage(
-        image: Uri
+            image: Uri
     ) {
 
         Glide.with(context)
-            .load(image)
-            .error(getErrorImage())
-            .into(this)
+                .load(image)
+                .error(getErrorImage())
+                .into(this)
     }
 
     fun loadImage(
-        @DrawableRes image: Int
+            @DrawableRes image: Int
     ) {
 
         Glide.with(context)
-            .load(image)
-            .error(getErrorImage())
-            .into(this)
+                .load(image)
+                .error(getErrorImage())
+                .into(this)
     }
 
     fun loadImage(
-         image : Bitmap
+            image: Bitmap
     ) {
 
         Glide.with(context)
-            .load(image)
-            .error(getErrorImage())
-            .into(this)
+                .load(image)
+                .error(getErrorImage())
+                .into(this)
     }
 }

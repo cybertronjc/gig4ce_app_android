@@ -912,6 +912,14 @@
         android:id="@+id/viewFullScreenVideoDialogFragment"
         android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
         android:label="ViewFullScreenVideoDialogFragment" />
+    <fragment
+        android:id="@+id/groupDetailsFragment2"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupDetailsFragment"
+        android:label="GroupDetailsFragment" />
+    <fragment
+        android:id="@+id/groupMediaListFragment2"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupMediaListFragment2"
+        android:label="GroupMediaListFragment2" />
 
 
 </navigation>

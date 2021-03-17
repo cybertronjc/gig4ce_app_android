@@ -6,9 +6,12 @@ import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -23,7 +26,9 @@ import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 
 
@@ -32,6 +37,14 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
+
+    private val firebaseAuth : FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
+    private val chatHeadersViewModel : ChatHeadersViewModel by lazy {
+        ViewModelProvider(this).get(ChatHeadersViewModel::class.java)
+    }
 
     fun getNavController(): NavController {
         return this.navController
@@ -86,6 +99,14 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
                 proceedWithNormalNavigation()
             }
         }
+
+        if(firebaseAuth.currentUser != null){
+            lookForNewChatMessages()
+        }
+    }
+
+    private fun lookForNewChatMessages() {
+        chatHeadersViewModel.startWatchingChatHeaders()
     }
 
     private fun handleDeepLink() {

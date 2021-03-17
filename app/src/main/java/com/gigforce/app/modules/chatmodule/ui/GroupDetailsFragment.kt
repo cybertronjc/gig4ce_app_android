@@ -36,11 +36,13 @@ import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
+import com.gigforce.modules.feature_chat.core.IChatNavigation
 import kotlinx.android.synthetic.main.fragment_chat_group_details.*
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 class GroupDetailsFragment : BaseFragment(),
@@ -48,6 +50,9 @@ class GroupDetailsFragment : BaseFragment(),
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
     OnGroupMembersClickListener,
     OnContactsSelectedListener {
+
+    @Inject
+    lateinit var navigation: IChatNavigation
 
     private val viewModel: GroupChatViewModel by lazy {
         ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
@@ -81,7 +86,7 @@ class GroupDetailsFragment : BaseFragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.fragment_chat_group_details, inflater, container)
+        return inflateView(R.layout.fragment_chat_group_details_2, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

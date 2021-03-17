@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
@@ -30,6 +30,8 @@ class ContactsRecyclerAdapter(
 
     private var selectedContacts: MutableList<ContactModel> = mutableListOf()
     private val contactsFilter = ContactsFilter()
+
+    private var createNewGroup: Boolean = false
 
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -75,7 +77,7 @@ class ContactsRecyclerAdapter(
     ) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener,
             View.OnLongClickListener {
-        private var contactAvatarIV: ImageView = itemView.findViewById(R.id.user_image_iv)
+        private var contactAvatarIV: GigforceImageView = itemView.findViewById(R.id.user_image_iv)
         private var contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
         private var contactLastLiveTV: TextView = itemView.findViewById(R.id.last_online_time_tv)
         private val contactSelectedTick: View = itemView.findViewById(R.id.user_selected_layout)
@@ -87,11 +89,14 @@ class ContactsRecyclerAdapter(
 
         fun bindValues(contact: ContactModel) {
             contactNameTV.text = contact.name
-            contactLastLiveTV.text = contact.mobile
+            contactLastLiveTV.text = "+91-${contact.mobile}"
 
             if (!contact.imageThumbnailPathInStorage.isNullOrBlank()) {
 
-                val profilePathRef = firebaseStorage.reference.child(contact.imageThumbnailPathInStorage!!)
+                val profilePathRef = if (contact.imageThumbnailPathInStorage!!.startsWith("profile_pics/"))
+                    firebaseStorage.reference.child(contact.imageThumbnailPathInStorage!!)
+                else
+                    firebaseStorage.reference.child("profile_pics/${contact.imageThumbnailPathInStorage!!}")
 
                 Glide.with(context)
                         .load(profilePathRef)
@@ -99,12 +104,17 @@ class ContactsRecyclerAdapter(
                         .into(contactAvatarIV)
             } else if (!contact.imagePathInStorage.isNullOrBlank()) {
 
-                val profilePathRef = firebaseStorage.reference.child(contact.imagePathInStorage!!)
+                val profilePathRef = if (contact.imagePathInStorage!!.startsWith("profile_pics/"))
+                    firebaseStorage.reference.child(contact.imagePathInStorage!!)
+                else
+                    firebaseStorage.reference.child("profile_pics/${contact.imagePathInStorage!!}")
 
                 Glide.with(context)
                         .load(profilePathRef)
                         .placeholder(R.drawable.ic_user)
                         .into(contactAvatarIV)
+            } else if (!contact.imageUrl.isNullOrBlank()) {
+                contactAvatarIV.loadImageIfUrlElseTryFirebaseStorage(contact.imageUrl!!)
             } else {
                 requestManager
                         .load(R.drawable.ic_user)
@@ -121,7 +131,7 @@ class ContactsRecyclerAdapter(
 
         override fun onClick(v: View?) {
 
-            if (selectedContacts.isNotEmpty()) {
+            if (selectedContacts.isNotEmpty() || createNewGroup) {
                 val pos = adapterPosition
                 val contact = filteredContactsList[pos]
                 if (selectedContacts.contains(contact)) {
@@ -155,8 +165,30 @@ class ContactsRecyclerAdapter(
                 notifyItemChanged(pos)
                 onContactClickListener.onContactSelected(selectedContacts.size)
             }
+
+            if (selectedContacts.isNullOrEmpty()) {
+                stateCreateGroup(true)
+            }
+
             return true
         }
+    }
+
+    fun stateCreateGroup(createGroup: Boolean) {
+        createNewGroup = createGroup
+    }
+
+    fun isStateCreateGroup(): Boolean {
+        return createNewGroup
+    }
+
+    fun getSelectedItems(): MutableList<ContactModel> {
+        return selectedContacts
+    }
+
+    fun clearSelectedContacts() {
+        selectedContacts.clear()
+        notifyDataSetChanged()
     }
 
     fun getCircularProgressDrawable(): CircularProgressDrawable {
@@ -168,6 +200,7 @@ class ContactsRecyclerAdapter(
     }
 
     override fun getFilter(): Filter = contactsFilter
+
 
     private inner class ContactsFilter : Filter() {
 

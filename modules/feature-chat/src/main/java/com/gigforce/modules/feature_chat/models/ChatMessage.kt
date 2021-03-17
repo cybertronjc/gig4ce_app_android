@@ -5,6 +5,7 @@ import com.gigforce.core.DataViewObject
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
@@ -125,12 +126,15 @@ class ChatMessage(
                 else -> -1
             }
         } else if (this.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+
+            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
             return when (this.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.flowType == "in") ViewTypes.GROUP_IN_TEXT else ViewTypes.GROUP_OUT_TEXT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.flowType == "in") ViewTypes.GROUP_IN_IMAGE else ViewTypes.GROUP_OUT_IMAGE
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.flowType == "in") ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.flowType == "in") ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.flowType == "in") ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
+                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_TEXT else ViewTypes.GROUP_OUT_TEXT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_IMAGE else ViewTypes.GROUP_OUT_IMAGE
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
                 else -> -1
             }
         }

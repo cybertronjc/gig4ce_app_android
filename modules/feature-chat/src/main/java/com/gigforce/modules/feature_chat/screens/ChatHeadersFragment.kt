@@ -1,11 +1,15 @@
 package com.gigforce.modules.feature_chat.screens
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,10 +22,11 @@ import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatHeader
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
 import javax.inject.Inject
+
 
 /**
  * A simple [Fragment] subclass.
@@ -36,15 +41,16 @@ class ChatHeadersFragment : Fragment() {
 
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
-    private lateinit var contactsButton: MaterialButton
+    private lateinit var contactsButton: Button
     private lateinit var toolbar: Toolbar
+    private lateinit var coreRecyclerView: CoreRecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (this.requireContext().applicationContext as ChatModuleProvider)
-            .provideChatModule()
-            .inject(this)
+                .provideChatModule()
+                .inject(this)
         navigation.context = requireContext()
     }
 
@@ -61,38 +67,49 @@ class ChatHeadersFragment : Fragment() {
     private fun setCollectionData(list: ArrayList<ChatHeader>) {
         noChatsLayout.isVisible = list.isEmpty()
 
-        ChatListFragment@ this.view?.findViewById<CoreRecyclerView>(R.id.rv_chat_headers)?.collection =
-            ArrayList(list.map {
-                ChatListItemDataObject(
-                    id = it.id,
-                    title = it.otherUser?.name ?: "",
-                    subtitle = it.lastMsgText,
-                    timeDisplay = "2 min",
-                    type = it.chatType,
-                    profilePath = "",
-                    unreadCount = it.unseenCount,
-                    profileId = it.otherUserId,
-                    isOtherUserOnline = it.isOtherUserOnline,
-                    groupName = it.groupName,
-                    groupAvatar = it.groupAvatar,
-                    lastMessage = it.lastMsgText,
-                    lastMessageType = it.lastMessageType,
-                    chatType = it.chatType
+        coreRecyclerView.collection =
+                ArrayList(list.map {
 
-                )
-            })
+                    var timeToDisplayText = ""
+                    it.lastMsgTimestamp?.let {
+                        val chatDate = it.toDate()
+                        timeToDisplayText = if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(chatDate) else SimpleDateFormat("dd MMM").format(chatDate)
+                    }
+
+                    ChatListItemDataObject(
+                            id = it.id,
+                            title = it.otherUser?.name ?: "",
+                            subtitle = it.lastMsgText,
+                            timeDisplay = timeToDisplayText,
+                            type = it.chatType,
+                            profilePath = it.otherUser?.profilePic ?: "",
+                            unreadCount = it.unseenCount,
+                            profileId = it.otherUserId,
+                            isOtherUserOnline = it.isOtherUserOnline,
+                            groupName = it.groupName,
+                            groupAvatar = it.groupAvatar,
+                            lastMessage = it.lastMsgText,
+                            lastMessageType = it.lastMessageType,
+                            lastMsgFlowType = it.lastMsgFlowType,
+                            chatType = it.chatType,
+                            status = it.status,
+                            senderName = it.senderName
+                    )
+                })
 
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findViews(view)
+        initListeners()
         setObserver(this.viewLifecycleOwner)
         super.onViewCreated(view, savedInstanceState)
     }
@@ -103,10 +120,12 @@ class ChatHeadersFragment : Fragment() {
             navigation.navigateToContactsPage()
         }
 
+        coreRecyclerView = view.findViewById(R.id.rv_chat_headers)
         noChatsLayout = view.findViewById(R.id.no_chat_layout)
-        contactsButton = view.findViewById(R.id.contacts_btn)
+        contactsButton = view.findViewById(R.id.go_to_contacts_btn)
         toolbar = view.findViewById(R.id.toolbar)
 
+        contactsButton.isEnabled = true
         contactsButton.setOnClickListener {
             navigation.navigateToContactsPage()
         }
@@ -115,4 +134,49 @@ class ChatHeadersFragment : Fragment() {
             activity?.onBackPressed()
         }
     }
+
+    private fun initListeners() {
+
+        val searchMenuItem = toolbar.menu.findItem(R.id.action_search)
+        val searchView: SearchView = searchMenuItem.actionView as SearchView
+
+        val v = searchView.findViewById<View>(androidx.appcompat.R.id.search_plate)
+        v.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.transparent))
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                if (!searchView.isIconified) {
+                    searchView.isIconified = true;
+                }
+                searchMenuItem.collapseActionView();
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                if (newText.isNullOrBlank()) {
+                    coreRecyclerView.resetFilter()
+                } else {
+                    coreRecyclerView.filter {
+
+                        val item = it as ChatListItemDataObject
+                        item.groupName.contains(
+                                newText, true
+                        ) || item.title.contains(
+                                newText, true
+                        ) || item.subtitle.contains(
+                                newText, true
+                        )
+
+                    }
+                }
+                return false
+            }
+        }
+        )
+
+    }
+
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -63,6 +64,15 @@ class LoginViewModel() : ViewModel() {
 
 
     fun sendVerificationCode(phoneNumber: String) {
+//        val phoneNumberOptions = PhoneAuthOptions.newBuilder()
+//                .setPhoneNumber(phoneNumber)
+//                .setActivity(activity!!)
+//                .requireSmsValidation(true)
+//                .setTimeout(60, TimeUnit.SECONDS)
+//                .setCallbacks(callbacks)
+//                .build()
+//
+//        PhoneAuthProvider.verifyPhoneNumber(phoneNumberOptions)
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber, // Phone number to verify
                 60, // Timeout duration
@@ -85,6 +95,8 @@ class LoginViewModel() : ViewModel() {
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.d(TAG, "signInWithCredential:success")
+
+
                     } else {
                         Log.w(TAG, "signInWithCredential:failure", it.exception)
                         liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))

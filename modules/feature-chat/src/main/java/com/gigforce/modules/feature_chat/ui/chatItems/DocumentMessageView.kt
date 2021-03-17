@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
@@ -35,6 +36,7 @@ abstract class DocumentMessageView(
 
     //Views
     private lateinit var linearLayout: ConstraintLayout
+    private lateinit var senderNameTV: TextView
     private lateinit var textView: TextView
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
@@ -49,6 +51,7 @@ abstract class DocumentMessageView(
     }
 
     private fun findViews() {
+        senderNameTV = this.findViewById(R.id.user_name_tv)
         linearLayout = this.findViewById(R.id.ll_msgContainer)
         textView = this.findViewById(R.id.tv_file_name)
         textViewTime = this.findViewById(R.id.tv_msgTimeValue)
@@ -63,6 +66,9 @@ abstract class DocumentMessageView(
     }
 
     override fun onBind(msg: ChatMessage) {
+
+        senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
+        senderNameTV.text = msg.senderInfo.name
 
         if (msg.attachmentPath.isNullOrBlank()) {
             handleDocumentUploading()

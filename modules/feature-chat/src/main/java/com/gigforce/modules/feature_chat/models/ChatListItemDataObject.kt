@@ -22,6 +22,11 @@ data class ChatListItemDataObject(
     val groupAvatar: String,
 
     val lastMessage: String,
-    val lastMessageType: String
+    val lastMessageType: String,
+    val lastMsgFlowType: String,
+
+    val senderName : String,
+
+    val status : Int
 
 ): SimpleDataViewObject(ViewTypes.CHAT_HEADER) {}
