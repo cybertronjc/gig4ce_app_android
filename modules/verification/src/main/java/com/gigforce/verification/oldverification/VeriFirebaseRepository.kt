@@ -1,9 +1,11 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.util.Log
 import com.gigforce.core.datamodels.verification.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class VeriFirebaseRepository {
 

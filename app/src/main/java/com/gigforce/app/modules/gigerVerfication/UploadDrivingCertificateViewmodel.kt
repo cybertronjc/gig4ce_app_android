@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.models.JpApplication
-import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.utils.Lse
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

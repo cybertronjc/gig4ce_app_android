@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewcontact_redundant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="contact"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/add_veri_contact_redundant_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Address"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/textViewcontact_redundant"
+        app:layout_constraintTop_toBottomOf="@+id/textViewcontact_redundant" />
+
+    <EditText
+        android:id="@+id/add_veri_contact_redundant_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="phone"
+        android:importantForAutofill="no"
+        android:inputType="phone"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_contact_redundant_address"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_contact_redundant_address" />
+
+    <EditText
+        android:id="@+id/add_veri_contact_redundant_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_contact_redundant_phone"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_contact_redundant_phone" />
+
+    <Button
+        android:id="@+id/add_veri_contact_redundant_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/cancel_text"
+        app:layout_constraintStart_toStartOf="@+id/add_veri_contact_redundant_email"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_contact_redundant_email" />
+
+    <Button
+        android:id="@+id/add_veri_contact_redundant_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/save_text"
+        app:layout_constraintStart_toEndOf="@+id/add_veri_contact_redundant_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/add_veri_contact_redundant_email" />
+</androidx.constraintlayout.widget.ConstraintLayout>

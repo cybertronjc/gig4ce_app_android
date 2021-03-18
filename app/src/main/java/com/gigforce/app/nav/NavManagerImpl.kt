@@ -7,8 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
+import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
@@ -17,8 +18,7 @@ import javax.inject.Inject
 
 class NavManagerImpl @Inject constructor(
     @ActivityContext val context: Context
-    ) : BaseNavigationImpl()
-{
+) : BaseNavigationImpl() {
 
     override fun getNavController(): NavController {
         return (context as MainActivity).getNavController()
@@ -29,11 +29,11 @@ class NavManagerImpl @Inject constructor(
     }
 
     override fun registerAllRoutes() {
-        this.registerRoute("referrals",R.id.referrals_fragment)
-        this.registerRoute("login",R.id.Login)
-        this.registerRoute("bottom_sheet",R.id.bsFragment)
+        this.registerRoute("referrals", R.id.referrals_fragment)
+        this.registerRoute("login", R.id.Login)
+        this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
-        this.registerRoute("main_home_screen",R.id.mainHomeScreen)
+        this.registerRoute("main_home_screen", R.id.mainHomeScreen)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
@@ -46,13 +46,12 @@ class NavManagerImpl @Inject constructor(
     }
 
 
-
-    private fun registerForWalletAndPayouts(){
-        val moduleName:String = "wallet"
+    private fun registerForWalletAndPayouts() {
+        val moduleName: String = "wallet"
         this.registerRoute("${moduleName}/main", R.id.walletBalancePage)
     }
 
-    override fun navigateToDocViewerActivity(activity:Activity,url:String){
+    override fun navigateToDocViewerActivity(activity: Activity, url: String) {
         val docIntent = Intent(
             activity,
             DocViewerActivity::class.java
@@ -64,7 +63,12 @@ class NavManagerImpl @Inject constructor(
         activity.startActivity(docIntent)
     }
 
-    override fun navigateToPlayVideoDialogFragment(fragment:Fragment,lessonId:String,shouldShowFeedbackDialog:Boolean){
+
+    override fun navigateToPlayVideoDialogFragment(
+        fragment: Fragment,
+        lessonId: String,
+        shouldShowFeedbackDialog: Boolean
+    ) {
         PlayVideoDialogFragment.launch(
             childFragmentManager = fragment.childFragmentManager,
             lessonId = lessonId,
@@ -74,12 +78,30 @@ class NavManagerImpl @Inject constructor(
         )
     }
 
-    override fun navigateToPlayVideoDialogWithUrl(fragment:Fragment,lessonId:String,shouldShowFeedbackDialog:Boolean){
+    override fun navigateToPlayVideoDialogWithUrl(
+        fragment: Fragment,
+        lessonId: String,
+        shouldShowFeedbackDialog: Boolean
+    ) {
         PlayVideoDialogWithUrl.launch(
             childFragmentManager = fragment.childFragmentManager,
             lessonId = lessonId,
             moduleId = "",
             shouldShowFeedbackDialog = shouldShowFeedbackDialog
         )
+    }
+
+    override fun navigateToPhotoCrop(intent: Intent, requestCode: Int, fragment: Fragment) {
+        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
+        if (intent.hasExtra("uid"))
+            photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
+        photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
+        photoCropIntent.putExtra("folder", intent.getStringExtra("folder"))
+        photoCropIntent.putExtra("detectFace", 0)
+        if (intent.hasExtra("file"))
+            photoCropIntent.putExtra("file", intent.getStringExtra("file"))
+
+        fragment.startActivityForResult(intent, requestCode)
     }
 }

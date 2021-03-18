@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.os.Build
 import android.os.Bundle
@@ -9,17 +9,21 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
-import com.gigforce.app.R
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.Bank
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_verification_bank.view.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BankUpload : Fragment() {
     companion object {
-        fun newInstance() = BankUpload()
+        fun newInstance() =
+            BankUpload()
     }
 
     lateinit var viewModel: VerificationViewModel
@@ -43,13 +47,16 @@ class BankUpload : Fragment() {
 
     lateinit var match: Matcher
 
+    @Inject
+    lateinit var navigation: INavigation
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout = inflater.inflate(R.layout.layout_verification_bank, container,false)
+        layout = inflater.inflate(R.layout.layout_verification_bank, container, false)
         layout?.pbBarBank?.setProgress(80, true)
         return layout
     }
@@ -132,7 +139,8 @@ class BankUpload : Fragment() {
 
         layout?.button_veri_bank_back?.setOnClickListener {
             //resetLayout() //CHECK
-            findNavController().navigate(R.id.uploadDropDown)
+//            findNavController().navigate(R.id.uploadDropDown)
+            navigation.navigateTo("verification/uploadDropDown")
         }
 
         layout?.button_veri_bank_save?.setOnClickListener {
@@ -162,7 +170,9 @@ class BankUpload : Fragment() {
                 saveNewBanks()
                 //resetLayout() //CHECK
                 layout?.pbBarBank?.setProgress(60, true)
-                findNavController().navigate(R.id.panUpload)
+//                findNavController().navigate(R.id.panUpload)
+                navigation.navigateTo("verification/panUpload")
+
             }
         }
 

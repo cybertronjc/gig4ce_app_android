@@ -298,7 +298,7 @@
         android:label="AddExperienceBottomSheet" />
     <fragment
         android:id="@+id/verification"
-        android:name="com.gigforce.app.modules.verification.Verification"
+        android:name="com.gigforce.verification.oldverification.Verification"
         android:label="Verification">
         <action
             android:id="@+id/action_verification_to_aadhaarUpload"
@@ -318,7 +318,7 @@
 
     <fragment
         android:id="@+id/panUpload"
-        android:name="com.gigforce.app.modules.verification.PanUpload"
+        android:name="com.gigforce.verification.oldverification.PanUpload"
         android:label="PanUpload">
         <action
             android:id="@+id/action_panUpload_to_verificationDone"
@@ -326,7 +326,7 @@
     </fragment>
     <fragment
         android:id="@+id/aadhaarUpload"
-        android:name="com.gigforce.app.modules.verification.AadhaarUpload"
+        android:name="com.gigforce.verification.oldverification.AadhaarUpload"
         android:label="AadhaarUpload">
         <action
             android:id="@+id/action_aadhaarUpload_to_uploadDropDown"
@@ -367,11 +367,11 @@
     </dialog>
     <fragment
         android:id="@+id/verificationDone"
-        android:name="com.gigforce.app.modules.verification.VerificationDone"
+        android:name="com.gigforce.verification.oldverification.VerificationDone"
         android:label="VerificationDone" />
     <fragment
         android:id="@+id/bankUpload2"
-        android:name="com.gigforce.app.modules.verification.BankUpload"
+        android:name="com.gigforce.verification.oldverification.BankUpload"
         android:label="BankUpload">
         <action
             android:id="@+id/action_bankUpload2_to_panUpload"
@@ -379,7 +379,7 @@
     </fragment>
     <fragment
         android:id="@+id/uploadDropDown"
-        android:name="com.gigforce.app.modules.verification.AlternateAddressUpload"
+        android:name="com.gigforce.verification.oldverification.AlternateAddressUpload"
         android:label="UploadDropDown">
         <action
             android:id="@+id/action_uploadDropDown_to_bankUpload2"

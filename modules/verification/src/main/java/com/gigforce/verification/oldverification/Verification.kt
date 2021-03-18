@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.os.Build
 import android.os.Bundle
@@ -11,11 +11,11 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.gigforce.app.R
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.base.validation.Regexes
 import com.gigforce.core.datamodels.verification.Address
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_verification.view.*
 import java.util.regex.Matcher
@@ -24,7 +24,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class Verification: Fragment() {
     companion object {
-        fun newInstance() = Verification()
+        fun newInstance() =
+            Verification()
     }
 
     var layout: View? = null

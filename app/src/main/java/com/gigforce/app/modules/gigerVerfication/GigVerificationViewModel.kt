@@ -6,13 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
-import com.gigforce.core.di.repo.UserEnrollmentRepository
-import com.gigforce.app.utils.Lse
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.*
-import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.core.utils.EventLogs.setOrThrow
+import com.gigforce.core.utils.Lse
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,13 +55,16 @@ data class GigerVerificationStatus(
         const val STATUS_DOCUMENT_UPLOADED = -1
     }
 }
+
 @HiltViewModel
 open class GigVerificationViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    private val gigerVerificationRepository: GigerVerificationRepository = GigerVerificationRepository()
+    private val gigerVerificationRepository: GigerVerificationRepository =
+        GigerVerificationRepository()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(buildConfig = buildConfig)
+    private val userEnrollmentRepository: UserEnrollmentRepository =
+        UserEnrollmentRepository(buildConfig = buildConfig)
 
     var redirectToNextStep: Boolean = false
 

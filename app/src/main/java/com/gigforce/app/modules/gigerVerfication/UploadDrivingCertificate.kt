@@ -8,20 +8,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lse
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlFrontImageHolder
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlNoRB
@@ -34,8 +38,10 @@ import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_act
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.progressBar
 import kotlinx.android.synthetic.main.layout_upload_driving_certificate.*
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
+import javax.inject.Inject
 
-class UploadDrivingCertificate : BaseFragment() {
+@AndroidEntryPoint
+class UploadDrivingCertificate : Fragment() {
 
     private lateinit var mTitle: String
     private lateinit var mType: String
@@ -44,12 +50,19 @@ class UploadDrivingCertificate : BaseFragment() {
 
     private var dlFrontImagePath: Uri? = null
     private var currentlyClickingImageOfSide: DrivingLicenseSides? = null
+    @Inject
+    lateinit var navigation: INavigation
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_fragment_upload_driving_certificate, inflater, container)
+        return inflater.inflate(
+            R.layout.layout_fragment_upload_driving_certificate,
+            container,
+            false
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,16 +92,24 @@ class UploadDrivingCertificate : BaseFragment() {
     private fun initClicks() {
 
         tv_schedule_test.setOnClickListener {
-            popBackState()
-            navigate(
-                R.id.fragment_doc_sub,
-                bundleOf(
+            navigation.popBackStack()
+            navigation.navigateTo(
+                "client_activation/doc_sub_doc", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
 
                     StringConstants.TITLE.value to mTitle,
                     StringConstants.TYPE.value to mType
                 )
             )
+//            navigate(
+//                R.id.fragment_doc_sub,
+//                bundleOf(
+//                    StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+//
+//                    StringConstants.TITLE.value to mTitle,
+//                    StringConstants.TYPE.value to mType
+//                )
+//            )
         }
     }
 
@@ -140,7 +161,7 @@ class UploadDrivingCertificate : BaseFragment() {
         }
 
         iv_back_application_client_activation.setOnClickListener {
-            popBackState()
+            navigation.popBackStack()
         }
 
 
@@ -246,7 +267,7 @@ class UploadDrivingCertificate : BaseFragment() {
 
     private fun documentUploaded() {
         showToast(getString(R.string.dl_details_uploaded))
-        popBackState()
+        navigation.popBackStack()
     }
 
 

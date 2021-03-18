@@ -10,34 +10,40 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lse
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import javax.inject.Inject
 
 enum class AadharCardSides {
     FRONT_SIDE,
     BACK_SIDE
 }
 
-class AddAadharCardInfoFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
@@ -51,12 +57,14 @@ class AddAadharCardInfoFragment : BaseFragment() {
     private var aadharBackImagePath: Uri? = null
     private var currentlyClickingImageOfSide: AadharCardSides? = null
 
+    @Inject
+    lateinit var navigation: INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_add_aadhar_card_info, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_add_aadhar_card_info, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -416,13 +424,13 @@ class AddAadharCardInfoFragment : BaseFragment() {
         gigerVerificationStatus?.let {
 
             if (!it.dlCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigation.navigateTo("verification/addDrivingLicenseInfoFragment")
             } else if (!it.bankDetailsUploaded) {
-                navigate(R.id.addBankDetailsInfoFragment)
+                navigation.navigateTo("verification/addBankDetailsInfoFragment")
             } else if (!it.selfieVideoUploaded) {
-                navigate(R.id.addSelfieVideoFragment)
+                navigation.navigateTo("verification/addSelfieVideoFragment")
             } else if (!it.panCardDetailsUploaded) {
-                navigate(R.id.addPanCardInfoFragment)
+                navigation.navigateTo("verification/addPanCardInfoFragment")
             } else {
                 showDetailsUploaded()
             }
@@ -459,32 +467,36 @@ class AddAadharCardInfoFragment : BaseFragment() {
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+//        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
 
     }
 
     private fun openCameraAndGalleryOptionForBackSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+//        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -495,11 +507,11 @@ class AddAadharCardInfoFragment : BaseFragment() {
 
                 if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
                     aadharFrontImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showFrontAadharCard(aadharFrontImagePath!!)
                 } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
                     aadharBackImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showBackAadharCard(aadharBackImagePath!!)
                 }
 

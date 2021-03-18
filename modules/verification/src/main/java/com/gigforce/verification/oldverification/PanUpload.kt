@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -17,25 +17,27 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.gigforce.app.R
-import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.common_ui.utils.UtilMethods.encodeImageToBase64
 import com.gigforce.core.datamodels.verification.PANDocData
 import com.gigforce.core.datamodels.verification.PostDataPAN
-import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.verification.oldverification.service.RetrofitFactory
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.verification.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification_pancard.*
 import kotlinx.android.synthetic.main.layout_verification_pancard.view.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class PanUpload: Fragment() {
     companion object {
         fun newInstance() = PanUpload()
@@ -55,6 +57,7 @@ class PanUpload: Fragment() {
     private  lateinit  var uriFront: Uri
     private  lateinit  var uriBack: Uri
 
+    @Inject lateinit var navigation : INavigation
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +88,8 @@ class PanUpload: Fragment() {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         panFront = layout.findViewById(R.id.Pan_front)
         panBack = layout.findViewById(R.id.Pan_back)
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+//        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra("purpose","verification")
         photoCropIntent.putExtra("uid",viewModel.uid)
         photoCropIntent.putExtra("folder", "/verification/pan/")
@@ -93,7 +97,8 @@ class PanUpload: Fragment() {
         photoCropIntent.putExtra("detectFace",0)
         panFront.setOnClickListener {
             photoCropIntent.putExtra("file", "panfront.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+//            startActivityForResult(photoCropIntent, PHOTO_CROP)
+            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
         }
         panBack.setOnClickListener {
             if(panFront.drawable==null) {
@@ -104,19 +109,23 @@ class PanUpload: Fragment() {
             }
             else {
                 photoCropIntent.putExtra("file", "panback.jpg")
-                startActivityForResult(photoCropIntent, PHOTO_CROP)
+//                startActivityForResult(photoCropIntent, PHOTO_CROP)
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
+
             }
         }
 
         buttonPan2.setOnClickListener {
-            findNavController().navigate(R.id.bankUpload2);
+//            findNavController().navigate(R.id.bankUpload2);
+            navigation.navigateTo("verification/bankUpload2")
         }
 
         buttonPan1.setOnClickListener {
             //if() docs are not uploaded
             if(docUploaded==1)
             {
-                findNavController().navigate(R.id.verificationDone)
+//                findNavController().navigate(R.id.verificationDone)
+                navigation.navigateTo("verification/verificationDone")
             }
             else {
                 Toast.makeText(

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -17,26 +17,28 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
-import com.gigforce.app.R
-import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.verification.oldverification.service.RetrofitFactory
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.datamodels.verification.OCRDocsData
 import com.gigforce.core.datamodels.verification.PostDataOCRs
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.verification.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.*
 import kotlinx.android.synthetic.main.layout_verification_aadhaar.view.*
 import java.io.ByteArrayOutputStream
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AadhaarUpload : Fragment() {
 
     private lateinit var storage: FirebaseStorage
@@ -52,7 +54,7 @@ class AadhaarUpload : Fragment() {
 
     private lateinit var uriFront: Uri
     private lateinit var uriBack: Uri
-
+    @Inject lateinit var navigation : INavigation
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -70,11 +72,16 @@ class AadhaarUpload : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tvAadhaarNo.setOnClickListener { findNavController().navigate(R.id.uploadDropDown) }
+        tvAadhaarNo.setOnClickListener {
+//            findNavController().navigate(R.id.uploadDropDown)
+            navigation.navigateTo("verification/uploadDropDown")
+        }
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         AadhaarFront = layout?.findViewById(R.id.Aadhaar_front)!!
         AadhaarBack = layout?.findViewById(R.id.Aadhaar_back)!!
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+
+//        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra("purpose", "verification")
         photoCropIntent.putExtra("uid", viewModel.uid)
         photoCropIntent.putExtra("fbDir", "/verification/aadhaar/")
@@ -83,24 +90,28 @@ class AadhaarUpload : Fragment() {
 
         AadhaarFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+//            startActivityForResult(photoCropIntent, PHOTO_CROP)
+            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
         }
         AadhaarBack.setOnClickListener {
             if (AadhaarFront.drawable == null) {
                 showToast("Please upload the front side first!")
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
-                startActivityForResult(photoCropIntent, PHOTO_CROP)
+//                startActivityForResult(photoCropIntent, PHOTO_CROP)
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
             }
         }
 
         buttonAadhaar2.setOnClickListener {
-            findNavController().navigate(R.id.verification)
+//            findNavController().navigate(R.id.verification)
+            navigation.navigateTo("verification")
         }
 
         buttonAadhaar1.setOnClickListener {
             if (docUploaded == 1) {
-                findNavController().navigate(R.id.uploadDropDown)
+//                findNavController().navigate(R.id.uploadDropDown)
+                navigation.navigateTo("verification/uploadDropDown")
             } else {
                 showToast("Please upload the Aadhaar before proceeding")
             }

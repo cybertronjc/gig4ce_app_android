@@ -9,27 +9,33 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.DateHelper
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_selfie_play_selfie_video.*
 import kotlinx.android.synthetic.main.fragment_add_selfie_video.*
 import java.io.File
+import javax.inject.Inject
 
-
-class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener,
+@AndroidEntryPoint
+class AddSelfieVideoFragment : Fragment(), CaptureVideoFragmentEventListener,
+    IOnBackPressedOverride,
     PlaySelfieVideoFragmentEventListener {
 
     private val viewModel: SelfiVideoViewModel by viewModels()
@@ -41,10 +47,12 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
     private val firebaseStorage = FirebaseStorage.getInstance()
     private var gigerVerificationStatus: GigerVerificationStatus? = null
 
+    @Inject
+    lateinit var navigation : INavigation
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_add_selfie_video, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_add_selfie_video, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -171,13 +179,13 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
         gigerVerificationStatus?.let {
 
             if (!it.panCardDetailsUploaded) {
-                navigate(R.id.addPanCardInfoFragment)
+                navigation.navigateTo("verification/addPanCardInfoFragment")
             } else if (!it.aadharCardDetailsUploaded) {
-                navigate(R.id.addAadharCardInfoFragment)
+                navigation.navigateTo("verification/addAadharCardInfoFragment")
             } else if (!it.dlCardDetailsUploaded) {
-                navigate(R.id.addDrivingLicenseInfoFragment)
+                navigation.navigateTo("verification/addDrivingLicenseInfoFragment")
             } else if (!it.bankDetailsUploaded) {
-                navigate(R.id.addBankDetailsInfoFragment)
+                navigation.navigateTo("verification/addBankDetailsInfoFragment")
             } else {
                 showDetailsUploaded()
             }
@@ -216,7 +224,7 @@ class AddSelfieVideoFragment : BaseFragment(), CaptureVideoFragmentEventListener
             object : SlideToActView.OnSlideCompleteListener {
 
                 override fun onSlideComplete(view: SlideToActView) {
-                    requireContext()?.let {
+                    requireContext().let {
                         val transcodedFile = File(
                             it.filesDir,
                             "vid_${DateHelper.getFullDateTimeStamp()}.mp4"

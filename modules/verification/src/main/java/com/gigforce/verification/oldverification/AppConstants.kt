@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 object AppConstants{
     const val IDFY_BASE_URL = "https://eve.idfy.com/v3/tasks/"

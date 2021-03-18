@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,8 @@ import com.google.firebase.firestore.EventListener
 
 class VerificationViewModel: ViewModel() {
 
-    var veriFirebaseRepository = VeriFirebaseRepository()
+    var veriFirebaseRepository =
+        VeriFirebaseRepository()
     var veriData: MutableLiveData<KYCdata> = MutableLiveData<KYCdata>()
     val uid: String
 

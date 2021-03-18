@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.verification
+package com.gigforce.verification.oldverification
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,27 +16,30 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.gigforce.app.R
-import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.modules.verification.service.RetrofitFactory
+import com.gigforce.verification.oldverification.service.RetrofitFactory
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.datamodels.verification.*
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.verification.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_verification_dropdown.*
 import kotlinx.android.synthetic.main.layout_verification_dropdown.view.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
     companion object {
-        fun newInstance() = AlternateAddressUpload()
+        fun newInstance() =
+            AlternateAddressUpload()
     }
 
     private lateinit var storage: FirebaseStorage
@@ -87,6 +90,8 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
     private lateinit var uriFront: Uri
     private lateinit var uriBack: Uri
 
+    @Inject lateinit var navigation:INavigation
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,7 +132,8 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
         viewModel = ViewModelProviders.of(this).get(VerificationViewModel::class.java)
         ddFront = layout.findViewById(R.id.VeriDD_front)
         ddBack = layout.findViewById(R.id.VeriDD_back)
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+//        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra("purpose", "verification")
         photoCropIntent.putExtra("uid", viewModel.uid)
         photoCropIntent.putExtra("detectFace", 0)
@@ -188,7 +194,8 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
 
         ddFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
-            startActivityForResult(photoCropIntent, PHOTO_CROP)
+//            startActivityForResult(photoCropIntent, PHOTO_CROP)
+            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
         }
         ddBack.setOnClickListener {
             if (ddFront.drawable == null) {
@@ -199,7 +206,8 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
                 ).show()
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
-                startActivityForResult(photoCropIntent, PHOTO_CROP)
+//                startActivityForResult(photoCropIntent, PHOTO_CROP)
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
             }
         }
 
@@ -219,13 +227,16 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
 //        }
 
         buttonVeriDD2.setOnClickListener {
-            findNavController().navigate(R.id.aadhaarUpload)
+            navigation.navigateTo("verification/aadhaarUpload")
+
+//            findNavController().navigate(R.id.aadhaarUpload)
         }
 
         buttonVeriDD1.setOnClickListener {
             //if() docs are not uploaded
             if (docUploaded == 1) {
-                findNavController().navigate(R.id.bankUpload2)
+                navigation.navigateTo("verification/bankUpload2")
+//                findNavController().navigate(R.id.bankUpload2)
             } else {
                 Toast.makeText(
                     this.context,
