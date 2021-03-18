@@ -1,8 +1,11 @@
 package com.gigforce.modules.feature_chat.ui.chatItems
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -14,13 +17,14 @@ import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 
+
 abstract class TextMessageView(
         val type: MessageFlowType,
         val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
 ) :  RelativeLayout(context, attrs),
-        IViewHolder {
+        IViewHolder, View.OnLongClickListener {
 
     private lateinit var senderNameTV: TextView
     private lateinit var msgView:TextView
@@ -50,6 +54,8 @@ abstract class TextMessageView(
         msgView = this.findViewById(R.id.tv_msgValue)
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
+
+        msgView.setOnLongClickListener(this)
     }
 
     override fun bind(data: Any?) {
@@ -91,6 +97,16 @@ abstract class TextMessageView(
                     .load(R.drawable.ic_msg_pending)
                     .into(receivedStatusIV)
         }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+
+        if(v is TextView) {
+
+            val clip: ClipData = ClipData.newPlainText("Copy", v.text)
+            (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(clip)
+        }
+        return true
     }
 
 }

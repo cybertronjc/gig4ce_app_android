@@ -24,7 +24,9 @@ import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.google.firebase.storage.FirebaseStorage
 import javax.inject.Inject
 
-class ChatListItem(context: Context?) :
+class ChatListItem(
+    context: Context
+) :
         RelativeLayout(context),
         IViewHolder,
         View.OnClickListener {
@@ -85,7 +87,19 @@ class ChatListItem(context: Context?) :
                             ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                     )
                     unseenMessageCountIV.setImageDrawable(drawable)
+                    textViewName.setTextColor(
+                        ResourcesCompat.getColor(context.resources,
+                        R.color.lipstick,
+                            null
+                            )
+                    )
                 } else {
+                    textViewName.setTextColor(
+                        ResourcesCompat.getColor(context.resources,
+                            R.color.dove_grey,
+                            null
+                        )
+                    )
                     unseenMessageCountIV.setImageDrawable(null)
                 }
 

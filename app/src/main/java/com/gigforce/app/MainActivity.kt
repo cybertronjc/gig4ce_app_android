@@ -1,17 +1,19 @@
 package com.gigforce.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -21,6 +23,8 @@ import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.notification.ChatNotificationHandler
+import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
@@ -30,6 +34,7 @@ import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.RemoteMessage
 
 
 class MainActivity : AppCompatActivity(), NavFragmentsData {
@@ -38,16 +43,32 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
 
-    private val firebaseAuth : FirebaseAuth by lazy {
+    private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
 
-    private val chatHeadersViewModel : ChatHeadersViewModel by lazy {
+    private val chatHeadersViewModel: ChatHeadersViewModel by lazy {
         ViewModelProvider(this).get(ChatHeadersViewModel::class.java)
     }
 
     fun getNavController(): NavController {
         return this.navController
+    }
+
+    private val chatNotificationHandler: ChatNotificationHandler by lazy {
+        ChatNotificationHandler(applicationContext)
+    }
+
+    private val intentFilters = IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+    private val notificationIntentRecevier = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+                    ?: return
+
+            if (navController.currentDestination?.id != R.id.chatPageFragment)
+                chatNotificationHandler.handleChatNotification(remoteMessage)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +85,8 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationIntentRecevier, intentFilters)
 
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
@@ -100,7 +123,7 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
             }
         }
 
-        if(firebaseAuth.currentUser != null){
+        if (firebaseAuth.currentUser != null) {
             lookForNewChatMessages()
         }
     }
@@ -197,6 +220,11 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
         navController.popAllBackStates()
         navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
     }
 
     override fun onBackPressed() {

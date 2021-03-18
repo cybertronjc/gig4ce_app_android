@@ -2,7 +2,9 @@ package com.gigforce.modules.feature_chat.screens
 
 import android.Manifest
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -154,10 +156,18 @@ class ChatPageFragment : Fragment(),
         getDataFromIntents(arguments, savedInstanceState)
         validateIfRequiredDataIsAvailable()
 
+        cancelAnyNotificationIfShown()
         findViews(view)
         init()
         manageNewMessageToContact()
         checkForChatTypeAndSubscribeToRespectiveViewModel()
+    }
+
+    private fun cancelAnyNotificationIfShown() {
+        val mNotificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        mNotificationManager.cancel(67)
     }
 
     private fun validateIfRequiredDataIsAvailable() {

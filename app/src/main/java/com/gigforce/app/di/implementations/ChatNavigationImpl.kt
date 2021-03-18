@@ -32,8 +32,7 @@ class ChatNavigationImpl @Inject constructor() : BaseNavigationImpl(),
                 this.getBackStackEntry(R.id.chatListFragment)
                 this.popBackStack(R.id.chatListFragment,false)
             } catch (e: Exception) {
-
-                this.popBackStack()
+                this.navigateUp()
             }
         }
     }

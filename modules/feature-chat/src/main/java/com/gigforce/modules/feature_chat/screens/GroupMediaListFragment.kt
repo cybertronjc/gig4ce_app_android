@@ -43,6 +43,7 @@ class GroupMediaListFragment2 : Fragment(),
     private lateinit var groupId: String
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
+            requireContext(),
             appDirectoryFileRef,
             Glide.with(requireContext()),
             this

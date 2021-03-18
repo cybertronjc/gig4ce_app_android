@@ -25,9 +25,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lse
-import com.gigforce.modules.feature_chat.DownloadCompleted
-import com.gigforce.modules.feature_chat.DownloadStarted
-import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.IChatNavigation
@@ -49,24 +46,28 @@ import javax.inject.Inject
 
 
 class GroupDetailsFragment : Fragment(),
-        PopupMenu.OnMenuItemClickListener,
-        GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
-        GroupMembersRecyclerAdapter.OnGroupMembersClickListener,
-        OnContactsSelectedListener {
+    PopupMenu.OnMenuItemClickListener,
+    GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
+    GroupMembersRecyclerAdapter.OnGroupMembersClickListener,
+    OnContactsSelectedListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
 
     private val viewModel: GroupChatViewModel by lazy {
-        ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
+        ViewModelProvider(
+            this,
+            GroupChatViewModelFactory(requireContext())
+        ).get(GroupChatViewModel::class.java)
     }
     private lateinit var groupId: String
     private val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
-                appDirectoryFileRef,
-                Glide.with(requireContext()),
-                this
+            requireContext(),
+            appDirectoryFileRef,
+            Glide.with(requireContext()),
+            this
         )
     }
 
@@ -76,8 +77,8 @@ class GroupDetailsFragment : Fragment(),
 
     private val groupMembersRecyclerAdapter: GroupMembersRecyclerAdapter by lazy {
         GroupMembersRecyclerAdapter(
-                Glide.with(requireContext()),
-                this
+            Glide.with(requireContext()),
+            this
         )
     }
 
@@ -89,15 +90,15 @@ class GroupDetailsFragment : Fragment(),
         super.onCreate(savedInstanceState)
 
         (this.requireContext().applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
+            .provideChatModule()
+            .inject(this)
         navigation.context = requireContext()
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_chat_group_details_2, container, false)
     }
@@ -132,12 +133,12 @@ class GroupDetailsFragment : Fragment(),
 
     private fun initRecycler() {
         val layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         media_recyclerview.layoutManager = layoutManager
         media_recyclerview.adapter = groupMediaRecyclerAdapter
 
         val membersLayoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         user_list_recyclerview.layoutManager = membersLayoutManager
         user_list_recyclerview.adapter = groupMembersRecyclerAdapter
     }
@@ -145,9 +146,9 @@ class GroupDetailsFragment : Fragment(),
     private fun subscribeViewModel() {
 
         viewModel
-                .groupInfo
-                .observe(viewLifecycleOwner, Observer {
-                    showGroupDetails(it)
+            .groupInfo
+            .observe(viewLifecycleOwner, Observer {
+                showGroupDetails(it)
 
 //                    when (it) {
 //                        Lce.Loading -> {
@@ -170,7 +171,7 @@ class GroupDetailsFragment : Fragment(),
 //                            group_chat_error.text = it.error
 //                        }
 //                    }
-                })
+            })
 
 //        viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
 //            it ?: return@Observer
@@ -189,26 +190,26 @@ class GroupDetailsFragment : Fragment(),
 //        })
 
         viewModel.deactivatingGroup
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lse.Loading -> {
+                when (it) {
+                    Lse.Loading -> {
 
-                        }
-                        Lse.Success -> {
+                    }
+                    Lse.Success -> {
 
-                        }
-                        is Lse.Error -> {
+                    }
+                    is Lse.Error -> {
 //                            UtilMethods.hideLoading()
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setMessage(it.error)
-                                    .setTitle("Unable to activate/deactivate group")
-                                    .setPositiveButton("Okay") { _, _ -> }
-                                    .show()
-                        }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(it.error)
+                            .setTitle("Unable to activate/deactivate group")
+                            .setPositiveButton("Okay") { _, _ -> }
+                            .show()
                     }
-                })
+                }
+            })
 
         viewModel.setGroupId(groupId)
         viewModel.startWatchingGroupDetails()
@@ -216,7 +217,8 @@ class GroupDetailsFragment : Fragment(),
 
     private fun showGroupDetails(content: ChatGroup) {
         group_name_tv.text = content.name
-        group_creation_date_tv.text = "Created On : ${dateFormatter.format(content.creationDetails!!.createdOn.toDate())}"
+        group_creation_date_tv.text =
+            "Created On : ${dateFormatter.format(content.creationDetails!!.createdOn.toDate())}"
 
         media_count_tv.text = content.groupMedia.size.toString()
         gigers_count_tv.text = content.groupMembers.size.toString()
@@ -236,7 +238,7 @@ class GroupDetailsFragment : Fragment(),
         }
 
         groupMembersRecyclerAdapter.setData(
-                membersList.plus(nonMgrMembers)
+            membersList.plus(nonMgrMembers)
         )
 
         showOrHideAddGroupOption(content)
@@ -289,11 +291,11 @@ class GroupDetailsFragment : Fragment(),
 
         Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(
-                    FileProvider.getUriForFile(
-                            requireContext(),
-                            "com.gigforce.app.provider",
-                            file
-                    ), "application/pdf"
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.gigforce.app.provider",
+                    file
+                ), "application/pdf"
             )
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -330,10 +332,10 @@ class GroupDetailsFragment : Fragment(),
             viewModel.deactivateOrActivateGroup()
         }
 
-        media_forward_iv.setOnClickListener {
+        media_title_layout.setOnClickListener {
 
             navigation.openGroupMediaList(
-                    groupId
+                groupId
             )
         }
 
@@ -346,20 +348,24 @@ class GroupDetailsFragment : Fragment(),
             layout.addView(groupNameEt)
 
             MaterialAlertDialogBuilder(requireContext())
-                    .setMessage("Enter a new group name")
-                    .setTitle("Change group name")
-                    .setView(layout)
-                    .setPositiveButton("Okay") { _, _ ->
+                .setMessage("Enter a new group name")
+                .setTitle("Change group name")
+                .setView(layout)
+                .setPositiveButton("Okay") { _, _ ->
 
-                        if (groupNameEt.length() == 0) {
-                            Toast.makeText(requireContext(), "Please enter a valid group name", Toast.LENGTH_SHORT).show()
-                        } else {
-                            viewModel.changeGroupName(groupNameEt.text.toString().capitalize())
-                        }
+                    if (groupNameEt.length() == 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Please enter a valid group name",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        viewModel.changeGroupName(groupNameEt.text.toString().capitalize())
                     }
-                    .setNegativeButton("Cancel") { _, _ ->
+                }
+                .setNegativeButton("Cancel") { _, _ ->
 
-                    }.show()
+                }.show()
         }
     }
 
@@ -369,11 +375,11 @@ class GroupDetailsFragment : Fragment(),
             contactLongPressed?.let {
 
                 navigation.navigateToChatPage(
-                        chatType = ChatConstants.CHAT_TYPE_USER,
-                        otherUserId = it.uid!!,
-                        headerId = "",
-                        otherUserName = it.name ?: "",
-                        otherUserProfilePicture = it.imageUrl ?: ""
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    otherUserId = it.uid!!,
+                    headerId = "",
+                    otherUserName = it.name ?: "",
+                    otherUserProfilePicture = it.imageUrl ?: ""
                 )
             }
             contactLongPressed = null
@@ -392,10 +398,10 @@ class GroupDetailsFragment : Fragment(),
     }
 
     override fun onChatMediaClicked(
-            position: Int,
-            fileDownloaded: Boolean,
-            fileIfDownloaded: File?,
-            media: GroupMedia
+        position: Int,
+        fileDownloaded: Boolean,
+        fileIfDownloaded: File?,
+        media: GroupMedia
     ) {
 
         if (fileDownloaded) {
@@ -403,15 +409,15 @@ class GroupDetailsFragment : Fragment(),
             when (media.attachmentType) {
                 ChatConstants.ATTACHMENT_TYPE_IMAGE -> {
                     ViewFullScreenImageDialogFragment.showImage(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
+                        childFragmentManager,
+                        fileIfDownloaded?.toUri()!!
                     )
 
                 }
                 ChatConstants.ATTACHMENT_TYPE_VIDEO -> {
                     ViewFullScreenVideoDialogFragment.launch(
-                            childFragmentManager,
-                            fileIfDownloaded?.toUri()!!
+                        childFragmentManager,
+                        fileIfDownloaded?.toUri()!!
                     )
                 }
                 ChatConstants.ATTACHMENT_TYPE_DOCUMENT -> {
@@ -421,7 +427,7 @@ class GroupDetailsFragment : Fragment(),
 
         } else {
             //Start downloading the file
-          viewModel.downloadAndSaveFile(appDirectoryFileRef, position, media)
+            viewModel.downloadAndSaveFile(appDirectoryFileRef, position, media)
         }
     }
 
@@ -438,11 +444,11 @@ class GroupDetailsFragment : Fragment(),
     override fun onChatIconClicked(position: Int, contact: ContactModel) {
 
         navigation.navigateToChatPage(
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                otherUserId = contact.uid!!,
-                headerId = "",
-                otherUserName = contact.name ?: "",
-                otherUserProfilePicture = contact.imageUrl ?: ""
+            chatType = ChatConstants.CHAT_TYPE_USER,
+            otherUserId = contact.uid!!,
+            headerId = "",
+            otherUserName = contact.name ?: "",
+            otherUserProfilePicture = contact.imageUrl ?: ""
         )
 
     }

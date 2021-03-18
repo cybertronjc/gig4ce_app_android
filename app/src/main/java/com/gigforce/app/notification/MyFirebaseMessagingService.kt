@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
+import androidx.core.os.bundleOf
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.MainActivity
 import com.gigforce.app.core.toBundle
 import com.google.firebase.auth.FirebaseAuth
@@ -74,7 +76,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             val isChatMessage = remoteMessage.data.getOrDefault(IS_CHAT_MESSAGE, "false") == "true"
             if (isChatMessage) {
-                handleChatNotifications(remoteMessage)
+
+               val intent  =  Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
+                    putExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE , remoteMessage)
+                }
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                //handleChatNotifications(remoteMessage)
             } else {
 
                 val pendingIntent = if (remoteMessage.data.isNotEmpty()) {
@@ -100,7 +107,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun handleChatNotifications(remoteMessage: RemoteMessage) {
-        chatNotificationHandler.handleChatNotification(remoteMessage)
+
 //        NotificationHelper(applicationContext).createUrgentPriorityNotification("s","S")
     }
 
@@ -137,5 +144,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         const val IS_CHAT_MESSAGE = "is_chat_message"
         const val CHANNEL_ID_CHAt = "chat_messages"
+
+        const val INTENT_EXTRA_REMOTE_MESSAGE = "remote_message"
     }
 }

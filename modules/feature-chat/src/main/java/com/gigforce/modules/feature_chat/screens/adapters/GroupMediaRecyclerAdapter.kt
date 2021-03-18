@@ -1,11 +1,14 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.views.GigforceImageView
@@ -20,9 +23,10 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class GroupMediaRecyclerAdapter(
-        private val refToGigForceAttachmentDirectory: File,
-        private val requestManager: RequestManager,
-        private val onGroupMediaClickListener: OnGroupMediaClickListener
+    private val context: Context,
+    private val refToGigForceAttachmentDirectory: File,
+    private val requestManager: RequestManager,
+    private val onGroupMediaClickListener: OnGroupMediaClickListener
 ) : RecyclerView.Adapter<GroupMediaRecyclerAdapter.GroupMediaViewHolder>() {
 
     private var groupMedia: List<GroupMedia> = emptyList()
@@ -30,19 +34,19 @@ class GroupMediaRecyclerAdapter(
     private val uid: String by lazy { FirebaseAuth.getInstance().currentUser!!.uid }
 
     private var imagesDirectoryRef: File =
-            File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_IMAGES)
 
     private var videosDirectoryRef: File =
-            File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_VIDEOS)
 
     private var documentsDirectoryRef: File =
-            File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
+        File(refToGigForceAttachmentDirectory, ChatConstants.DIRECTORY_DOCUMENTS)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMediaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-                R.layout.recycler_item_group_media_2,
-                parent,
-                false
+            R.layout.recycler_item_group_media_2,
+            parent,
+            false
         )
         return GroupMediaViewHolder(view)
     }
@@ -75,14 +79,17 @@ class GroupMediaRecyclerAdapter(
     }
 
     inner class GroupMediaViewHolder(
-            itemView: View
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener {
+        View.OnClickListener {
 
         private var thumbnailIV: GigforceImageView = itemView.findViewById(R.id.thumbnail_imageview)
-        private var playDownloadIconIV: ImageView = itemView.findViewById(R.id.play_download_icon_iv)
-        private var playDownloadOverlayIV: ImageView = itemView.findViewById(R.id.play_download_overlay_iv)
-        private val attachmentDownloadingProgressBar: ProgressBar = itemView.findViewById(R.id.attachment_downloading_pb)
+        private var playDownloadIconIV: ImageView =
+            itemView.findViewById(R.id.play_download_icon_iv)
+        private var playDownloadOverlayIV: ImageView =
+            itemView.findViewById(R.id.play_download_overlay_iv)
+        private val attachmentDownloadingProgressBar: ProgressBar =
+            itemView.findViewById(R.id.attachment_downloading_pb)
         private var videoLengthLayout: View = itemView.findViewById(R.id.video_length_layout)
         private val videoLength: TextView = itemView.findViewById(R.id.video_length_tv)
         private val attachmentTypeIcon: ImageView = itemView.findViewById(R.id.attachment_type_icon)
@@ -96,10 +103,10 @@ class GroupMediaRecyclerAdapter(
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
 
             val downloadedFile =
-                    returnFileAlreadyDownloadedElseNull(
-                            groupMedia.attachmentType,
-                            fileName
-                    )
+                returnFileAlreadyDownloadedElseNull(
+                    groupMedia.attachmentType,
+                    fileName
+                )
             val fileHasBeenDownloaded = downloadedFile != null
 
             if (fileHasBeenDownloaded) {
@@ -117,8 +124,9 @@ class GroupMediaRecyclerAdapter(
                     playDownloadOverlayIV.visible()
                     playDownloadIconIV.visible()
                     videoLengthLayout.visible()
+
                     videoLength.text =
-                            convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
+                        convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
                     requestManager.load(R.drawable.ic_play).into(attachmentTypeIcon)
 
                     if (groupMedia.thumbnail != null)
@@ -126,15 +134,15 @@ class GroupMediaRecyclerAdapter(
 
                     requestManager.load(R.drawable.ic_play_2).into(playDownloadIconIV)
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
-                    //Need work
-                    playDownloadOverlayIV.visible()
-                    playDownloadIconIV.visible()
+                    requestManager.load(R.drawable.ic_document_background)
+                        .into(thumbnailIV)
 
-                    videoLengthLayout.visible()
+                    videoLengthLayout.gone()
                     videoLength.text = ""
-                    requestManager.load(R.drawable.ic_document_outlined).into(attachmentTypeIcon)
-                    thumbnailIV.setImageDrawable(null)
-                    requestManager.load(R.drawable.ic_document_gradient).into(playDownloadIconIV)
+
+                    playDownloadOverlayIV.gone()
+                    playDownloadIconIV.setImageDrawable(null)
+                    attachmentDownloadingProgressBar.gone()
                 } else {
                     throw IllegalArgumentException("other types not supperted yet")
                 }
@@ -161,7 +169,7 @@ class GroupMediaRecyclerAdapter(
 
                     videoLengthLayout.visible()
                     videoLength.text =
-                            convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
+                        convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
 
                     requestManager.load(R.drawable.ic_play).into(attachmentTypeIcon)
 
@@ -180,17 +188,15 @@ class GroupMediaRecyclerAdapter(
                     }
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                     //Need work
+                    requestManager.load(R.drawable.ic_document_background)
+                        .into(playDownloadOverlayIV)
 
                     videoLengthLayout.gone()
                     videoLength.text = ""
-                    requestManager.load(R.drawable.ic_document_gradient).into(playDownloadOverlayIV)
-                    requestManager.load(downloadedFile).into(thumbnailIV)
-                    requestManager.load(R.drawable.ic_play).into(attachmentTypeIcon)
-                    requestManager.load(R.drawable.ic_document_outlined).into(attachmentTypeIcon)
-                    thumbnailIV.setImageDrawable(null)
 
                     if (isFileDownloading) {
-                        playDownloadOverlayIV.gone()
+                        playDownloadOverlayIV.visible()
+                        playDownloadIconIV.setImageDrawable(null)
                         attachmentDownloadingProgressBar.visible()
                     } else {
                         attachmentDownloadingProgressBar.gone()
@@ -209,37 +215,37 @@ class GroupMediaRecyclerAdapter(
 
             if (videoAttachmentLength > 3600000) {
                 return String.format(
-                        "%02d:%02d:%02d",
-                        TimeUnit.MILLISECONDS.toHours(videoAttachmentLength),
-                        TimeUnit.MILLISECONDS.toMinutes(videoAttachmentLength) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(videoAttachmentLength)
-                        ),
-                        TimeUnit.MILLISECONDS.toSeconds(videoAttachmentLength) -
-                                TimeUnit.MINUTES.toSeconds(
-                                        TimeUnit.MILLISECONDS.toMinutes(
-                                                videoAttachmentLength
-                                        )
+                    "%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(videoAttachmentLength),
+                    TimeUnit.MILLISECONDS.toMinutes(videoAttachmentLength) - TimeUnit.HOURS.toMinutes(
+                        TimeUnit.MILLISECONDS.toHours(videoAttachmentLength)
+                    ),
+                    TimeUnit.MILLISECONDS.toSeconds(videoAttachmentLength) -
+                            TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(
+                                    videoAttachmentLength
                                 )
+                            )
                 )
             } else {
                 return String.format(
-                        "%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(videoAttachmentLength) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(videoAttachmentLength)
-                        ),
-                        TimeUnit.MILLISECONDS.toSeconds(videoAttachmentLength) -
-                                TimeUnit.MINUTES.toSeconds(
-                                        TimeUnit.MILLISECONDS.toMinutes(
-                                                videoAttachmentLength
-                                        )
+                    "%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(videoAttachmentLength) - TimeUnit.HOURS.toMinutes(
+                        TimeUnit.MILLISECONDS.toHours(videoAttachmentLength)
+                    ),
+                    TimeUnit.MILLISECONDS.toSeconds(videoAttachmentLength) -
+                            TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(
+                                    videoAttachmentLength
                                 )
+                            )
                 )
             }
         }
 
         private fun returnFileAlreadyDownloadedElseNull(
-                type: String,
-                fileName: String
+            type: String,
+            fileName: String
         ): File? {
             if (type == ChatConstants.ATTACHMENT_TYPE_IMAGE) {
 
@@ -275,16 +281,16 @@ class GroupMediaRecyclerAdapter(
             val fileName: String = FirebaseUtils.extractFilePath(attachmentPath)
 
             val downloadedFile =
-                    returnFileAlreadyDownloadedElseNull(
-                            groupMedia.attachmentType,
-                            fileName
-                    )
+                returnFileAlreadyDownloadedElseNull(
+                    groupMedia.attachmentType,
+                    fileName
+                )
 
             onGroupMediaClickListener.onChatMediaClicked(
-                    position = pos,
-                    fileDownloaded = downloadedFile != null,
-                    fileIfDownloaded = downloadedFile,
-                    media = groupMedia
+                position = pos,
+                fileDownloaded = downloadedFile != null,
+                fileIfDownloaded = downloadedFile,
+                media = groupMedia
             )
         }
     }
@@ -292,10 +298,10 @@ class GroupMediaRecyclerAdapter(
 
     interface OnGroupMediaClickListener {
         fun onChatMediaClicked(
-                position: Int,
-                fileDownloaded: Boolean,
-                fileIfDownloaded: File?,
-                media: GroupMedia
+            position: Int,
+            fileDownloaded: Boolean,
+            fileIfDownloaded: File?,
+            media: GroupMedia
         )
     }
 }

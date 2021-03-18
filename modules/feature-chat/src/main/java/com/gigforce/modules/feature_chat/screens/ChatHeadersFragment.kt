@@ -1,5 +1,8 @@
 package com.gigforce.modules.feature_chat.screens
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
@@ -103,7 +106,14 @@ class ChatHeadersFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        cancelAnyNotificationIfShown()
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
+    }
+
+    private fun cancelAnyNotificationIfShown() {
+        val mNotificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.cancel(67)
     }
 
 
@@ -111,6 +121,10 @@ class ChatHeadersFragment : Fragment() {
         findViews(view)
         initListeners()
         setObserver(this.viewLifecycleOwner)
+
+        if (!isStoragePermissionGranted())
+            askForStoragePermission()
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -179,4 +193,31 @@ class ChatHeadersFragment : Fragment() {
 
     }
 
+    private fun askForStoragePermission() {
+        Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
+        requestPermissions(
+                arrayOf(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CAMERA
+                ),
+                23
+        )
+    }
+
+    private fun isStoragePermissionGranted(): Boolean {
+
+        return ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 }

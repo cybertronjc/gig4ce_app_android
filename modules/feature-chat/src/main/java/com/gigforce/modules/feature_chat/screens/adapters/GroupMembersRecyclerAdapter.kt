@@ -126,7 +126,7 @@ class GroupMembersRecyclerAdapter(
             val mobileText = if(contact.mobile.startsWith("+91"))
                 contact.mobile
             else
-                "+91${contact.mobile}"
+                "+${contact.mobile}"
 
             uidTV.text = mobileText
             isUserManagerView.isVisible = contact.isUserGroupManager
