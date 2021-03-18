@@ -16,8 +16,8 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest.*

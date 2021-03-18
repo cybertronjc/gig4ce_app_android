@@ -29,8 +29,8 @@ import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoF
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ml.vision.FirebaseVision

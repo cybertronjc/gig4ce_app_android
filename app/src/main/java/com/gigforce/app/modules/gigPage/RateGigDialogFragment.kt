@@ -20,8 +20,8 @@ import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

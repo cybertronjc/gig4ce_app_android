@@ -13,8 +13,11 @@ sealed class Lce<out T> : Serializable {
 
     companion object {
 
-        fun <T> content(content: T): Lce<T> = Content(content)
-        fun <T> loading(): Lce<T> = Loading
-        fun <T> error(error: String): Lce<T> = Error(error)
+        fun <T> content(content: T): Lce<T> =
+            Content(content)
+        fun <T> loading(): Lce<T> =
+            Loading
+        fun <T> error(error: String): Lce<T> =
+            Error(error)
     }
 }

@@ -19,7 +19,7 @@ import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.core.datamodels.profile.Experience
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

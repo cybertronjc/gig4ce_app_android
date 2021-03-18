@@ -43,7 +43,7 @@ import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.gigforce.app.utils.LocationUtils
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.VerticalItemDecorator

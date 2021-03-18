@@ -16,12 +16,11 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.ContactPerson
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_gig_contact_person_details.*
-import java.util.*
 
 
 class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
@@ -165,7 +164,7 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
                             message_card_view.visible()
 
                             if (it.content != null) {
-                                startChatScreen(it.content.id!!)
+                                startChatScreen(it.content!!.id!!)
                             } else {
                                 MaterialAlertDialogBuilder(requireContext())
                                         .setTitle("Alert")

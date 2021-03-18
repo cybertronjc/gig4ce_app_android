@@ -25,7 +25,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profile
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage

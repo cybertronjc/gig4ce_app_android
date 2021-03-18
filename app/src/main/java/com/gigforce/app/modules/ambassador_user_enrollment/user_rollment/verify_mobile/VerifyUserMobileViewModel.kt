@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM

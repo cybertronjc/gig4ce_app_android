@@ -20,7 +20,7 @@ import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.gigforce.common_ui.core.TextDrawable
 import com.google.firebase.storage.FirebaseStorage

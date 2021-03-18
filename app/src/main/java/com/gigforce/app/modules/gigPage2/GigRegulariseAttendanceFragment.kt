@@ -14,8 +14,8 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

@@ -16,7 +16,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_report_user.*
 import kotlinx.android.synthetic.main.fragment_report_user_main.*

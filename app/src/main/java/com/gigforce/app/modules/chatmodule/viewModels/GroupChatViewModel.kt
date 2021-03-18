@@ -15,13 +15,10 @@ import com.gigforce.app.modules.chatmodule.models.*
 import com.gigforce.app.modules.chatmodule.repository.ChatContactsRepository
 import com.gigforce.app.modules.chatmodule.repository.ChatGroupRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.utils.*
 import com.gigforce.core.retrofit.GeneratePaySlipService
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.utils.*
 import com.gigforce.core.utils.EventLogs.getDownloadUrlOrThrow
-import com.gigforce.core.utils.FileUtils
-import com.gigforce.core.utils.FirebaseUtils
-import com.gigforce.core.utils.ImageUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration

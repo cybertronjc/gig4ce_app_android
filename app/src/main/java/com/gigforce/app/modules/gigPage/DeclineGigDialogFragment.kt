@@ -15,8 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.Lse
-import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*

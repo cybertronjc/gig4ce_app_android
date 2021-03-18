@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.chatmodule.models.ContactModel
 import com.gigforce.app.modules.chatmodule.repository.ChatContactsRepository
-import com.gigforce.app.utils.Lse
-import com.google.firebase.auth.FirebaseAuth
+import com.gigforce.core.utils.Lse
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch

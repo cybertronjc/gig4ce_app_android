@@ -154,10 +154,10 @@ class BSCalendarScreenFragment : BaseFragment() {
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
                     when (it) {
-                        com.gigforce.app.utils.Lce.Loading -> {
+                        Lce.Loading -> {
                         }
-                        is com.gigforce.app.utils.Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
-                        is com.gigforce.app.utils.Lce.Error -> {
+                        is Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
+                        is Lce.Error -> {
                         }
                     }
                 })

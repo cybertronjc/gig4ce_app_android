@@ -45,7 +45,6 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.*
@@ -53,7 +52,7 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.core.utils.DateHelper
-import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.Lce
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory

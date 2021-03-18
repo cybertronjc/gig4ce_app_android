@@ -44,7 +44,7 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

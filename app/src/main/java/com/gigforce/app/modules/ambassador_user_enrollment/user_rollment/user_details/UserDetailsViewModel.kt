@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.gigforce.common_ui.configrepository.AppConfigurationRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State

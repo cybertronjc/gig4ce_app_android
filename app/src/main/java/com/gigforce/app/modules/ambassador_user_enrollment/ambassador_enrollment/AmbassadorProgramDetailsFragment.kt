@@ -31,7 +31,7 @@ import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragmen
 import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
-//import com.gigforce.app.utils.Lce
+//import com.gigforce.core.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.core.utils.Lce

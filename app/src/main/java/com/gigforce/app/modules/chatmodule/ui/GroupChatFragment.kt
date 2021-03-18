@@ -44,6 +44,7 @@ import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.utils.*
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.core.utils.Lce
 import com.google.firebase.auth.FirebaseAuth
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_group_chat.*

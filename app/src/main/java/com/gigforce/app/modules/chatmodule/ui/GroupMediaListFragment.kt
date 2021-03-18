@@ -24,7 +24,7 @@ import com.gigforce.app.modules.chatmodule.models.ChatGroup
 import com.gigforce.app.modules.chatmodule.models.GroupMedia
 import com.gigforce.app.modules.chatmodule.ui.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.app.modules.chatmodule.viewModels.GroupChatViewModel
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.utils.Lce
 import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.app.utils.ViewFullScreenVideoDialogFragment
 import com.vinners.cmi.ui.activity.GroupChatViewModelFactory

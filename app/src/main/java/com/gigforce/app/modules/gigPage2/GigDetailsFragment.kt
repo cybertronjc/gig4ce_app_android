@@ -33,7 +33,7 @@ import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragmen
 import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
-//import com.gigforce.app.utils.Lce
+//import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.core.utils.Lce
@@ -134,9 +134,9 @@ class GigDetailsFragment : BaseFragment(),
         viewModel.gigDetails
                 .observe(viewLifecycleOwner, Observer {
                     when (it) {
-                        com.gigforce.app.utils.Lce.Loading -> showGigDetailsAsLoading()
-                        is com.gigforce.app.utils.Lce.Content -> setGigDetailsOnView(it.content)
-                        is com.gigforce.app.utils.Lce.Error -> showErrorWhileLoadingGigData(it.error)
+                        Lce.Loading -> showGigDetailsAsLoading()
+                        is Lce.Content -> setGigDetailsOnView(it.content)
+                        is Lce.Error -> showErrorWhileLoadingGigData(it.error)
                     }
                 })
 
