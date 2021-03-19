@@ -92,6 +92,7 @@ class ContactsFragment : DialogFragment(),
     private val onBackPressCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
 
+            hideSoftKeyboard()
             if (shouldReturnToPreviousScreen)
                 dismiss()
             else {
@@ -104,7 +105,7 @@ class ContactsFragment : DialogFragment(),
                     contactsToolbarSubTitle.visible()
 
                     searchET.text = null
-                    hideSoftKeyboard()
+
                 } else if (contactsAdapter.isStateCreateGroup()) {
 
                     contactsAdapter.stateCreateGroup(false)
@@ -115,7 +116,6 @@ class ContactsFragment : DialogFragment(),
                     selectedUserCountTV.text = "0 Contact(s) Selected"
 
                     createGroupFab.gone()
-                    hideSoftKeyboard()
                 } else {
 
                     isEnabled = false

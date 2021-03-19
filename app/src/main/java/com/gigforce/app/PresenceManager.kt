@@ -53,7 +53,15 @@ class PresenceManager : LifecycleObserver {
                         lastUpdatedOn = Date().time,
                         appStatus = APP_STATUS_DISCONNECTED
                     )
-                )
+                )?.addOnFailureListener {
+                    usrRef?.setValue(
+                            PresenceData(
+                                    status = OFFLINE,
+                                    lastUpdatedOn = Date().time,
+                                    appStatus = APP_STATUS_DISCONNECTED
+                            )
+                    )
+                }
 
                 Firebase.database.getReference(".info/connected")
                     .addValueEventListener(object : ValueEventListener {
@@ -100,7 +108,16 @@ class PresenceManager : LifecycleObserver {
                     lastUpdatedOn = Date().time,
                     appStatus = APP_STATUS_INACTIVE
                 )
-            )
+            )?.addOnFailureListener {
+
+                usrRef?.setValue(
+                        PresenceData(
+                                status = OFFLINE,
+                                lastUpdatedOn = Date().time,
+                                appStatus = APP_STATUS_INACTIVE
+                        )
+                )
+            }
         }
     }
 
@@ -113,7 +130,16 @@ class PresenceManager : LifecycleObserver {
                     lastUpdatedOn = Date().time,
                     appStatus = APP_STATUS_ACTIVE
                 )
-            )
+            )?.addOnFailureListener {
+
+                usrRef?.setValue(
+                        PresenceData(
+                                status = ONLINE,
+                                lastUpdatedOn = Date().time,
+                                appStatus = APP_STATUS_ACTIVE
+                        )
+                )
+            }
         }
     }
 

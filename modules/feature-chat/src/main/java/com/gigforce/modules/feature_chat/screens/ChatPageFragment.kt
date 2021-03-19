@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -360,6 +361,7 @@ class ChatPageFragment : Fragment(),
     private inner class BackPressHandler() : OnBackPressedCallback(true) {
 
         override fun handleOnBackPressed() {
+            hideSoftKeyboard()
             navigation.navigateBackToChatListIfExistElseOneStepBack()
         }
     }
@@ -938,6 +940,13 @@ class ChatPageFragment : Fragment(),
         }
     } //
 
+    fun hideSoftKeyboard() {
+
+        val activity = activity ?: return
+
+        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+    }
 
     //
     //-----------------------------
