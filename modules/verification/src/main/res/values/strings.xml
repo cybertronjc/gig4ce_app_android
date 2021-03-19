@@ -26,4 +26,238 @@
     <string name="cancel_text">Cancel</string>
     <string name="okay_text_cap">OKAY</string>
 
+    <string name="upload_aadhar_card_front_side">Upload Aadhar Card(Front Side)</string>
+    <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
+    <string name="upload_aadhar_card_back_side">Upload Aadhar Card(Back Side)</string>
+    <string name="update">UPDATE</string>
+    <string name="alert">Alert</string>
+    <string name="okay">OKAY</string>
+
+
+    <string name="you_are_reuploading_aadhar">You are re-uploading your Aadhar details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="select_or_capture_both_sides_of_aadhar">Select or capture both sides of Aadhar Card</string>
+    <string name="enter_valid_aadhar_no">Enter Valid Aadhar Card No</string>
+    <string name="video_uploaded">Video Uploaded</string>
+    <string name="why_we_need_this_dl">Uploading either Driver’s license or Aadhar card is mandatory for profile verification. A Driver’s license helps verify your name, date of birth, address, and other details.</string>
+    <string name="dl_image_front_side">Driving License (Front Side)</string>
+    <string name="dl_image_back_side">Driving License (Back Side)</string>
+    <string name="dl_details_uploaded">Driving License Details Uploaded</string>
+    <string name="reuploading_driving_license">You are re-uploading your Driving License details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="capture_both_sides_dl">Select or capture both sides of Driving License</string>
+    <string name="enter_valid_dl">Enter Valid Driving License</string>
+    <string name="select_dl_state">Select Driving License State</string>
+    <string name="why_we_need_this_bank">The bank details are mandatory to approve and send payments from gigs to your account. It also helps verify your name, address, date of birth, and other details.</string>
+    <string name="enter_valid_ifsc">Enter Valid IfSC Code</string>
+    <string name="enter_bank_name">Enter Bank Name</string>
+    <string name="bank_name_too_short">Bank name is too short</string>
+    <string name="enter_valid_acc_no">Enter A Valid Account No</string>
+    <string name="click_or_select_bank_passbook">Click Or Select your Passbook Image first</string>
+    <string name="your_are_reuploading_bank_details">You are re-uploading your Bank details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="bank_details_uploaded">Bank details Uploaded</string>
+    <string name="cancel">CANCEL</string>
+    <string name="why_do_we_need_this">Why we need this ?</string>
+    <string name="license_number_with_colon">License Number :</string>
+    <string name="address_with_colon">Address :</string>
+    <string name="license_validity_with_colon">License Validity :</string>
+    <string name="gender_with_colon">Gender :</string>
+    <string name="aadhar_number_with_colon">Aadhar Number :</string>
+    <string name="bank_account_details">Bank Account Details</string>
+    <string name="do_you_have_bank_passbook">Do you have Bank Passbook ?</string>
+    <string name="yes_i_have_bank_passbook">Yes, I have Bank Passbook</string>
+    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Passbook</string>
+    <string name="cif_number_with_colon">CIF Number :</string>
+    <string name="account_number_with_colon">Account Number :</string>
+    <string name="ifsc_with_colon">IFSC :</string>
+    <string name="upload_bank_passbook">Upload Cheque/Bank Passbook (Front page)</string>
+    <string name="upload_bank_passbook_sublabel">Please upload your Bank Passbook for\nyour verification</string>
+    <string name="edit">Edit</string>
+    <string name="name">Name</string>
+
+
+    <string name="aadhar_card_front_image">Aadhar Card (Front Image)</string>
+    <string name="aadhar_card_back_image">Aadhar Card (Back Image)</string>
+    <string name="why_we_need_this_aadhar">Uploading either Aadhar or Driver’s license is mandatory for profile verification. Aadhar card helps verify your name, date of birth, address, and other details.</string>
+    <string name="aadhar_card_details_uploaded">Aadhaar Card Details Uploaded</string>
+    <string name="bank_passbook_front_image">Bank Passbook/Cheque (Front Image)</string>
+    <string name="bank_details_updated">Bank Details Updated</string>
+
+
+    <string name="upload_your_driving_license">Please upload your Driving License for\nyour verification.</string>
+    <string name="upload_driving_license_back_side">Upload Driving License (Back Side)</string>
+    <string name="upload_driving_license_front_side">Upload Driving License (Front Side)</string>
+    <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhar Card</string>
+    <string name="yes_i_have_aadhar_card">Yes, I have Aadhar Card</string>
+    <string name="do_you_have_aadhar_card">Do you have Aadhar Card ?</string>
+    <string name="reupload"><u>Reupload</u></string>
+    <string name="save_all_caps">SAVE</string>
+    <string name="upload_pan_card">Upload Pan Card</string>
+    <string name="please_confirm_the_following_information">Please confirm the following information</string>
+    <string name="name_with_colon">Name :</string>
+    <string name="father_s_name_with_colon">Father\'s Name :</string>
+    <string name="date_of_birth">Date Of Birth :</string>
+    <string name="pan_with_colon">Permanent Account Number :</string>
+    <string name="yes_i_confirm_the_data_is_correct">Yes, I confirm the data is correct.</string>
+    <string name="please_upload_your_pan">Please upload your Pan Card for\nyour verification</string>
+    <string name="pan_card_image">Pan Card Image</string>
+
+
+    <string name="you_are_reuploading_pan_card">You are re-uploading your PAN details. They will be verified once again, which may take up to 7 days.</string>
+    <string name="enter_valid_pan">Enter Valid PAN Card No</string>
+    <string name="click_select_pan_image">Click Or Select your Pan card Image first</string>
+    <string name="pan_details_uploaded">Pan Card Details Uploaded</string>
+    <string name="unable_to_capture_image">Unable to capture image</string>
+    <string name="got_it">Got it</string>
+    <string name="why_do_we_need_this_pan">A PAN card is mandatory for profile verification. It helps verify your name and date of birth and also helps with payments to your wallet.</string>
+    <string name="how_to_record_selfie_video">How to Record Selfie Video?</string>
+    <string name="how_to_rec_selfie_video_content">\nRecord a 10-second video of yourself\nFace the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
+    <string name="video_recorded">Video Recorded</string>
+
+    <string name="download_contracts_exists">Downloaded Contract Already Exists!!!!</string>
+    <string name="field">Field*</string>
+    <string name="upload_education_certificate">Upload Education Certificate</string>
+    <string name="please_add_cert">Please upload your Education certificate for activation of this role</string>
+    <string name="activities_and_socities">Activities and socities*</string>
+    <string name="new_experience">New Experience</string>
+    <string name="title_madatory">Title*</string>
+    <string name="i_am_fresher">I am Fresher</string>
+    <string name="back_cap">Back</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="have_dl">Has Driving License for more than 1 year?</string>
+    <string name="own_a_bike">Own a bike/car?</string>
+    <string name="ready_to_work_6_days">Ready to work 6 days a week?</string>
+    <string name="ready_to_join_immediately">Ready to Join immediately?</string>
+    <string name="ready_to_wotk_on_field">Ready to work on field?</string>
+
+    <string name="selfie_video">Selfie Video *</string>
+    <string name="tap_to_upload">Tap To Upload</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="driving_license">Driving License</string>
+    <string name="aadhar_card">Aadhar Card *</string>
+    <string name="pan_card">PAN Card</string>
+    <string name="do_you_have_pan_card">Do you have PAN Card ?</string>
+    <string name="yes_i_have_pan_card">Yes, I have Pan Card.</string>
+    <string name="no_i_don_t_have_pan_card">No, I don\'t have Pan Card.</string>
+    <string name="do_you_have_driving_license">Do you have Driving License ?</string>
+    <string name="yes_i_have_driving_license">Yes, I have Driving License</string>
+    <string name="no_i_don_t_have_driving_license">No, I don\'t have Driving License</string>
+
+    <string name="date_of_birth_without_colon">Date Of Birth</string>
+    <string name="gender_wo_colon">Gender</string>
+    <string name="address_line">Address Line</string>
+    <string name="father_s_name">Father\'s Name</string>
+    <string name="cif_number">CIF Number</string>
+    <string name="account_number">Account Number</string>
+    <string name="license_validity">License Validity</string>
+    <string name="permanent_account_number">Permanent Account Number</string>
+    <string name="upload_document">Upload Document</string>
+    <string name="from_camera">From Camera</string>
+    <string name="from_gallery">From Gallery</string>
+    <string name="uploaded">Uploaded</string>
+    <string name="perm_not_granted">Permissions not granted!!</string>
+    <string name="unsigned">Unsigned</string>
+    <string name="signed">Signed</string>
+
+
+    <string name="upload_driving_certificate">Upload Driving Certificate</string>
+    <string name="to_verify_your_automatic_cars_driving_skills_we_need_a_driving_test_clearance_certificate_from_registered_driving_school">To verify your Automatic cars Driving skills, we need a Driving test clearance certificate from registered Driving School.</string>
+    <string name="schedule_test">Schedule test</string>
+    <string name="note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test">Note: It is mandatory to submit required docs at time of Driving test</string>
+    <string name="upload_driving_cert">Upload Driving Certificate</string>
+    <string name="please_upload_driving_cert">Please upload your Driving Certificate your verification.</string>
+    <string name="choose_address">Choose Address</string>
+    <string name="select_a_partner_school_address_to_driving_test_certification_and_doc_submission">Select a Partner School Address to Driving test certification and Doc submission</string>
+    <string name="select_preferred_time_slot">Select preferred Time Slot</string>
+    <string name="done">Done</string>
+    <string name="cancel_lower_case">Cancel</string>
+    <string name="no_time_slot">No Time Slot Selected</string>
+    <string name="okay_lower_case">Okay</string>
+    <string name="checkout">Checkout</string>
+    <string name="driving_test_details">Driving Test Details</string>
+    <string name="all_set_for_test">All Set for Driving Test</string>
+    <string name="change_slot">Change Slot</string>
+    <string name="i_will_submit_dl_and_cheque_in_same_centre_only">I will submit DL and cheque in same centre only</string>
+    <string name="confirm">Confirm</string>
+    <string name="schedule_driving_test">Schedule Driving Test</string>
+    <string name="driving_test_certification_and_doc_submission">Driving test certification and Doc submission</string>
+    <string name="i_have_completed_my_driving_test">I have completed my driving test.</string>
+    <string name="i_have_submitted_bank_cheque_and_original_dl">I have submitted bank cheque and original DL.</string>
+    <string name="i_have_collected_21north_kit">I have collected 21North kit.</string>
+    <string name="i_have_collect_receipt_of_my_documents">I have collect receipt of my documents.</string>
+    <string name="giger_verification_desc">We need to verify your information. Please submit the documents below to process giger verification</string>
+    <string name="giger_verification">Giger Verification</string>
+    <string name="aadhar_number_eg_444433332222">Aadhar Number* (Eg: 444433332222)</string>
+    <string name="please_provide_the_following_information">Please provide the following information.</string>
+    <string name="document_under_verification_">Document Under Verification</string>
+    <string name="under_verification">Under Verification</string>
+    <string name="err_driving_license">Error : Uploaded Image is not a Driving License Image</string>
+    <string name="please_provide_following_details">Please provide following details.</string>
+    <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC* (Eg: SBIN0000572, BKID0000048)</string>
+
+
+
+    <string name="ifsc">IFSC *</string>
+    <string name="bank_name">Bank Name *</string>
+    <string name="account_no">Account No *</string>
+    <string name="ifsc_code">IFSC Code :</string>
+    <string name="bank_name_with_colon">Bank Name :</string>
+    <string name="bank_account_no">Bank Account No :</string>
+    <string name="aadhar_number">Aadhar Number *</string>
+    <string name="state_pascal_case">State</string>
+    <string name="driving_license_number">Driving License Number *</string>
+    <string name="driving_license_front_image">Driving License (Front Image)</string>
+    <string name="driving_license_back_image">Driving License (Back Image)</string>
+    <string name="dl_state_w_colon">DL State :</string>
+    <string name="dl_no_w_colon">DL No :</string>
+    <string name="pan_number">PAN number *</string>
+
+    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">Record a 10-second video of yourself Face the camera and say “Hi, I’m (your name) and I like to do (mention 2 things you like to do.)</string>
+    <string name="pan_number_eg_bttps4444a">PAN Number (Eg: BTTPS4444A)</string>
+    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">Driving Licence Number * (Accepted formats of DL are as follows: RJ0520091048627. For other formats please call your supervisor for help)</string>
+    <string name="account_number_eg_10_16_digit_number_30000011111111111">Account number* (Eg: 10-16 digit number : 30000011111111111)</string>
+
+    <string name="dl_hint_square_bracket">Driving License Number*\n(Accepted DL formats are : RJ-13/DLC/12/123456, RJ1320120123456, RJ-052009123456, and GJ18N2012123456. For other formats please call your supervisor for help.)</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">Camera and Audio Permission Required To Record Video</string>
+    <string name="go_to_settings">Go To Settings</string>
+
+    <string name="pincode_not_correct">Pincode is not correct!!</string>
+    <string name="first_line_">First Line</string>
+    <string name="second_line_">Second Line</string>
+    <string name="area_">Area</string>
+    <string name="city_">City</string>
+    <string name="state_">State</string>
+    <string name="pincode_">Pincode</string>
+    <string name="location">Location</string>
+    <string name="add_address">Add Address</string>
+    <string name="add_current_address">Add Current Address</string>
+    <string name="around_current_address">20 Km Around the Current Address</string>
+    <string name="same_as_permanent_address">Same as Permanent Address</string>
+    <string name="address_proof">ADDRESS PROOF</string>
+    <string name="current_address">Current Address</string>
+    <string name="first_line">First Line</string>
+    <string name="second_line">Second Line</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="pincode">Pincode</string>
+
+
+    <string name="area">Area</string>
+    <string name="permanent_address">Permanent Address</string>
+    <string name="address_proof_smalls">Adhaar Card</string>
+    <string name="document_under_verification">Document Under Verification</string>
+    <string name="save">SAVE</string>
+    <string name="preferred_locations">Preferred Locations</string>
+    <string name="select_area">Select Area</string>
+
+    <string name="let_s_go">Let\'s Go</string>
+    <string name="thank_you">Thank You !</string>
+    <string name="documents_uploaded_long">As your documents will get verified, you will be able to start your gigs.</string>
+
+    <string name="next">NEXT</string>
+    <string name="submit_documents">Submit documents</string>
+    <string name="enter_driving_license_number">Enter Driving License Number</string>
+    <string name="driving_license_is_mandatory_for_the_driver_role_you_will_not_be_eligible_to_submit_application">Driving License is mandatory for the Driver role. You will not be eligible to submit application.</string>
+    <string name="submit">Submit</string>
+    <string name="upload_driving_license">Upload Driving License</string>
+
 </resources>

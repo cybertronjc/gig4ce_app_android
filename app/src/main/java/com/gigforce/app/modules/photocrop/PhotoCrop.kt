@@ -24,7 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import com.gigforce.app.R
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
@@ -87,7 +87,7 @@ class PhotoCrop : AppCompatActivity() {
     private lateinit var purpose: String
     private var outputFile: File? = null
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+//    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 

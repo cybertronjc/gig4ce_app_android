@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.gigforce.client_activation.client_activation.models.JobProfile
-import com.gigforce.client_activation.client_activation.models.JpApplication
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.Media
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.datamodels.learning.LessonModel

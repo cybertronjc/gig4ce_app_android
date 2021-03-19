@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp

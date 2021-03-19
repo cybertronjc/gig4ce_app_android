@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.models.Dependency
+import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
 

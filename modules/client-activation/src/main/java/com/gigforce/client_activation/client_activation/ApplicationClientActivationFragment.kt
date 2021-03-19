@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.models.Dependency
-import com.gigforce.client_activation.client_activation.models.JpApplication
+import com.gigforce.core.datamodels.client_activation.Dependency
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast

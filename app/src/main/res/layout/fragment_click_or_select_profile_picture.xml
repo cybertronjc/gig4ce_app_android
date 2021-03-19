@@ -10,7 +10,7 @@
     android:paddingTop="16dp"
     android:paddingRight="24dp"
     android:paddingBottom="32dp"
-    tools:context=".modules.gigerVerfication.SelectImageSourceBottomSheet">
+    tools:context="com.gigforce.verification.gigerVerfication.SelectImageSourceBottomSheet">
 
     <TextView
         android:id="@+id/change_photo_label"

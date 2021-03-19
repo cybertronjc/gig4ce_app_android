@@ -36,8 +36,8 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip

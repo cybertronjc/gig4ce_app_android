@@ -19,7 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.gigerVerfication.*
+import com.gigforce.verification.gigerVerfication.*
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.utils.Lse
@@ -262,8 +262,8 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
                     if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
-                        if (it.panCardDetails.userHasPanCard != null) {
-                            if (it.panCardDetails.userHasPanCard!!) {
+                        if (it.panCardDetails!!.userHasPanCard != null) {
+                            if (it.panCardDetails!!.userHasPanCard!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)

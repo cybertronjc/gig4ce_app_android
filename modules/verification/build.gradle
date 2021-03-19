@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -59,7 +59,7 @@ dependencies {
     //Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
-
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 //Moshi
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
@@ -123,4 +123,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha02"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+    // swipe button
+    implementation "com.ncorti:slidetoact:0.8.0"
+
+    //Camera View
+    implementation 'com.otaliastudios:cameraview:2.6.2'
+    //Transcoder for compressing video files
+    implementation 'com.otaliastudios:transcoder:0.9.1'
+
 }

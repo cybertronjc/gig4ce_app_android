@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.models.JpApplication
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.Media
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants

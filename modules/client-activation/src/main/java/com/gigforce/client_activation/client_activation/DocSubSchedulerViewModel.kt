@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.models.*
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

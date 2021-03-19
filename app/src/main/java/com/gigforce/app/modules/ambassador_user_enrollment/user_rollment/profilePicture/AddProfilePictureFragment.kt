@@ -25,7 +25,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp

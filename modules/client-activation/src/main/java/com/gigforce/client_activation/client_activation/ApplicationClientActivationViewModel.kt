@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.client_activation.client_activation.models.Dependency
-import com.gigforce.client_activation.client_activation.models.JpApplication
+import com.gigforce.core.datamodels.client_activation.Dependency
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
 import com.gigforce.core.datamodels.profile.ProfileData

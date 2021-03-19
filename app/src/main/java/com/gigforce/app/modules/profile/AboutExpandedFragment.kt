@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.core.datamodels.profile.ContactEmail

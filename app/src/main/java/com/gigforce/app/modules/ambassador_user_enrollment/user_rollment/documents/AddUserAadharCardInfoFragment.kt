@@ -19,9 +19,9 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.utils.Lse
@@ -309,7 +309,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
-                    it.aadharCardDataModel.userHasAadharCard?.let { it1 ->
+                    it.aadharCardDataModel!!.userHasAadharCard?.let { it1 ->
                         if (it1) {
                             setDataOnViewLayout(it)
                         } else {

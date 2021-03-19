@@ -7,6 +7,7 @@ import com.gigforce.client_activation.client_activation.models.*
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.datamodels.ambassador.VerifyOtpResponse
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository

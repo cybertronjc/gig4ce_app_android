@@ -153,6 +153,7 @@ dependencies {
     implementation project(path: ':modules:profile')
     implementation project(path: ':modules:user_profile')
     implementation project(path: ':modules:wallet')
+    implementation project(path: ':modules:verification')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'

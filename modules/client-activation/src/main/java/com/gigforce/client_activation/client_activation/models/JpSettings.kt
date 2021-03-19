@@ -2,6 +2,7 @@ package com.gigforce.client_activation.client_activation.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.gigforce.core.datamodels.client_activation.Dependency
 
 data class JpSettings(
         var requiredFeatures: List<Dependency>? = null,

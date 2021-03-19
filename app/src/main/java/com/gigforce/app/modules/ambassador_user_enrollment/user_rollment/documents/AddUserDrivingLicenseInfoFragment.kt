@@ -23,12 +23,12 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.VerificationValidations
-import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
-import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -340,8 +340,8 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                     progressBar.gone()
 
                     if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                        if (it.drivingLicenseDataModel.userHasDL != null) {
-                            if (it.drivingLicenseDataModel.userHasDL!!) {
+                        if (it.drivingLicenseDataModel!!.userHasDL != null) {
+                            if (it.drivingLicenseDataModel!!.userHasDL!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
