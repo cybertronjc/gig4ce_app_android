@@ -9,7 +9,7 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage.models.JobProfile
+import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
@@ -108,17 +108,18 @@ class CalendarHomeScreenViewModel : ViewModel() {
 
         @get:PropertyName("profile")
         @set:PropertyName("profile")
-        var profile: JobProfile? = JobProfile()
+        var profile: JobProfile? =
+            JobProfile()
 
 
         constructor(
-                duration: Int,
-                gigStatus: String,
-                gigerId: String,
-                startDateTime: Date,
-                endDateTime: Date?,
-                profile: JobProfile?,
-                legacyTitle: String?
+            duration: Int,
+            gigStatus: String,
+            gigerId: String,
+            startDateTime: Date,
+            endDateTime: Date?,
+            profile: JobProfile?,
+            legacyTitle: String?
         ) {
             this.duration = duration
             this.gigStatus = gigStatus

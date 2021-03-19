@@ -7,8 +7,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage.models.DocChange
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.DocChange
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.ItemDecorationOnGoingGigs
 import com.gigforce.common_ui.utils.PushDownAnim
@@ -227,8 +227,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
     private fun setBrandLogo(
-            gig: Gig,
-            viewHolderGigDetails: ViewHolderGigDetails
+        gig: Gig,
+        viewHolderGigDetails: ViewHolderGigDetails
     ) {
         if (!gig.getFullCompanyLogo().isNullOrBlank()) {
             if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
@@ -363,8 +363,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun addOnGoingGigs(
-            onGoingGigs: List<Gig>?,
-            scheduledGigsLoaded: Boolean
+        onGoingGigs: List<Gig>?,
+        scheduledGigsLoaded: Boolean
     ) {
         this.onGoingGigs?.clear()
         this.onGoingGigs?.addAll(onGoingGigs!!)

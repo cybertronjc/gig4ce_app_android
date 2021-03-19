@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage.models
+package com.gigforce.core.datamodels.gigpage
 
 
 import com.gigforce.core.datamodels.City

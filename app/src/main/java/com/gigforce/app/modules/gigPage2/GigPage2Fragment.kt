@@ -30,8 +30,8 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.*
-import com.gigforce.app.modules.gigPage.models.ContactPerson
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.ContactPerson
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener

@@ -3,7 +3,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable

@@ -1,6 +1,5 @@
-package com.gigforce.app.modules.gigPage.models
+package com.gigforce.core.datamodels.gigpage
 
-import androidx.annotation.Keep
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName

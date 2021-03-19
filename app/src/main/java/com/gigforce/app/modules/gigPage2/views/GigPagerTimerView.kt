@@ -1,22 +1,17 @@
 package com.gigforce.app.modules.gigPage2.views
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.CountDownTimer
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp

@@ -14,7 +14,7 @@ import com.gigforce.app.core.invisible
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.core.utils.Lce

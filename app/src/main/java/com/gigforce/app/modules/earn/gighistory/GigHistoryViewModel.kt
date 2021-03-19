@@ -2,17 +2,15 @@ package com.gigforce.app.modules.earn.gighistory
 
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
-import com.gigforce.app.modules.gigPage.models.DocChange
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.DocChange
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
-import java.time.LocalDateTime
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         ViewModel(), DataCallbacks.ResponseCallbacks {
@@ -157,7 +155,8 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     override fun docChange(docChangeType: DocumentChange.Type, change: DocumentChange) {
         val obj = change.document.toObject(Gig::class.java)
         obj.gigId = change.document.id
-        observableDocChange.value = DocChange(docChangeType, obj)
+        observableDocChange.value =
+            DocChange(docChangeType, obj)
     }
 
 

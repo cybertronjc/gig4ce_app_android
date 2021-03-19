@@ -20,7 +20,7 @@ import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.gigPage.GigsRepository
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
@@ -314,9 +314,9 @@ class RosterDayViewModel constructor(
     }
 
     fun toggleHourUnavailable(
-            context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
-            startDateTime: LocalDateTime, endDateTime: LocalDateTime,
-            viewModelCustomPreference: CustomPreferencesViewModel) {
+        context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
+        startDateTime: LocalDateTime, endDateTime: LocalDateTime,
+        viewModelCustomPreference: CustomPreferencesViewModel) {
         viewModelCustomPreference.markUnavaialbleTimeSlots(
                 UnavailableDataModel(startDateTime.toDate, endDateTime.toDate))
     }
@@ -332,11 +332,11 @@ class RosterDayViewModel constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun showGigsTodayWarning(
-            context: Context,
-            upcomingGigs: ArrayList<Gig>,
-            upcomingGigsCount: Int,
-            gigParentView: ConstraintLayout,
-            activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
+        context: Context,
+        upcomingGigs: ArrayList<Gig>,
+        upcomingGigsCount: Int,
+        gigParentView: ConstraintLayout,
+        activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
     ): Boolean {
         var flag = false
 

@@ -71,6 +71,26 @@ fun Spinner.selectItemWithText(text: String) {
     }
 }
 
+fun Date.toLocalDate(): LocalDate {
+    return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
+fun Date?.toFirebaseTimeStamp(): Timestamp? {
+
+    return if (this == null)
+        null
+    else
+        Timestamp(this)
+}
+
+fun Timestamp.toLocalDateTime(): LocalDateTime {
+
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
+fun Timestamp.toLocalDate(): LocalDate {
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+}
 
 fun Timestamp.toDisplayText(): String {
     val date = this.toDate()

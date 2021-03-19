@@ -2,10 +2,10 @@ package com.gigforce.app.modules.gigPage
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.utils.EventLogs.getOrThrow
-import com.gigforce.app.modules.gigPage.models.JobProfileFull
+import com.gigforce.core.datamodels.gigpage.JobProfileFull
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.core.extensions.updateOrThrow
 import com.google.firebase.Timestamp

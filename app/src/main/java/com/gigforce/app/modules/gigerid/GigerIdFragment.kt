@@ -17,13 +17,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.utils.getScreenShot
 import com.gigforce.core.utils.*
-import com.gigforce.app.modules.gigPage.models.GigOrder
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat

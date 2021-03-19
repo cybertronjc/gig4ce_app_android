@@ -38,8 +38,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.core.TextDrawable
@@ -481,14 +481,14 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         } else {
             if (gig!!.attendance == null || !gig!!.attendance!!.checkInMarked) {
                 var markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                0.0,
-                                0.0,
-                                selfieImg,
-                                ""
-                        )
+                    GigAttendance(
+                        true,
+                        Date(),
+                        0.0,
+                        0.0,
+                        selfieImg,
+                        ""
+                    )
 //                viewModel.markAttendance(markAttendance, gigId)
 
             } else {
@@ -527,14 +527,14 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
             if (!ifAttendanceMarked) {
                 val markAttendance =
-                        GigAttendance(
-                                true,
-                                Date(),
-                                latitude,
-                                longitude,
-                                selfieImg,
-                                locationAddress
-                        )
+                    GigAttendance(
+                        true,
+                        Date(),
+                        latitude,
+                        longitude,
+                        selfieImg,
+                        locationAddress
+                    )
 //                viewModel.markAttendance(markAttendance, gigId)
             } else {
                 it.attendance?.setCheckout(

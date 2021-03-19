@@ -1,8 +1,8 @@
-package com.gigforce.app.modules.gigPage.models
+package com.gigforce.core.datamodels.gigpage
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.gigforce.app.core.toLocalDateTime
+import com.gigforce.core.extensions.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
