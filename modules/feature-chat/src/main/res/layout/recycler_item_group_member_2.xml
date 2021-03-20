@@ -39,6 +39,7 @@
         android:src="@drawable/ic_chat"
         android:scaleY="0.5"
         android:scaleX="0.5"
+        app:tint="@color/lipstick"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/chat_overlay"
         app:layout_constraintEnd_toEndOf="@+id/chat_overlay"

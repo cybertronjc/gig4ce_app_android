@@ -188,7 +188,7 @@ class GroupMediaRecyclerAdapter(
                     }
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                     //Need work
-                    requestManager.load(R.drawable.ic_document_background)
+                    requestManager.load(R.drawable.ic_document_media_list)
                         .into(playDownloadOverlayIV)
 
                     videoLengthLayout.gone()

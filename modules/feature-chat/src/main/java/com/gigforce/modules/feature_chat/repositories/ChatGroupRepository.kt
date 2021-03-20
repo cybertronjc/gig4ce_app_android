@@ -340,7 +340,7 @@ class ChatGroupRepository constructor(
             uri,
             groupId,
             isGroupChatMessage = true,
-            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
         )
         message.attachmentPath = pathOnServer
 

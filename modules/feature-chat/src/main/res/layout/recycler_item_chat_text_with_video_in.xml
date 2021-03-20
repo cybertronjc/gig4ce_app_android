@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:cardBackgroundColor="#d6d6d6"
+        app:cardBackgroundColor="@color/chat_incoming_mesage_background_color"
         app:cardCornerRadius="@dimen/chat_item_corner_radius"
         app:cardElevation="0dp">
 
@@ -130,6 +130,7 @@
                 android:maxWidth="178dp"
                 android:letterSpacing="0"
                 android:maxLines="1"
+                android:visibility="gone"
                 android:scrollHorizontally="true"
                 android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent"

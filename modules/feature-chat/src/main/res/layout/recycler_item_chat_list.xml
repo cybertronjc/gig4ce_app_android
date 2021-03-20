@@ -74,46 +74,55 @@
         app:layout_constraintTop_toBottomOf="@id/txt_time"
         tools:text="now" />
 
-    <ImageView
-        android:id="@+id/tv_received_status"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"
-
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/iv_profile"
-        app:layout_constraintTop_toBottomOf="@id/txt_title"
-        />
-
-    <ImageView
-        android:id="@+id/last_message_type_iv"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/tv_received_status"
-        app:layout_constraintTop_toBottomOf="@id/txt_title"
-        app:tint="@android:color/black" />
-
-    <TextView
-        android:id="@+id/txt_subtitle"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:orientation="horizontal"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="16dp"
-        android:textColor="@color/dust_grey"
-        android:fontFamily="@font/lato"
-        android:maxLines="1"
-        android:scrollHorizontally="true"
-        android:ellipsize="end"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/unseen_msg_count_iv"
-        app:layout_constraintStart_toEndOf="@id/last_message_type_iv"
+        android:gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/iv_profile"
         app:layout_constraintTop_toBottomOf="@id/txt_title"
-        tools:text="Last messsage that I sent" />
+        app:layout_constraintEnd_toStartOf="@id/unseen_msg_count_iv"
+        >
+
+
+        <ImageView
+            android:id="@+id/tv_received_status"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_msg_pending_grey"
+            />
+
+        <ImageView
+            android:id="@+id/last_message_type_iv"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_chat_document_2"
+            app:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/txt_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/dust_grey"
+            android:fontFamily="@font/lato"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            tools:text="Last messsage that I sent" />
+
+
+    </LinearLayout>
+
+
 
 
     <View

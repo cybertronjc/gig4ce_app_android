@@ -9,15 +9,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.IChatNavigation
@@ -36,7 +36,7 @@ import javax.inject.Inject
  * Use the [ChatHeadersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ChatHeadersFragment : Fragment() {
+class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener {
 
     @Inject
     lateinit var navigation: IChatNavigation
@@ -45,15 +45,15 @@ class ChatHeadersFragment : Fragment() {
     private lateinit var contactsFab: FloatingActionButton
     private lateinit var noChatsLayout: View
     private lateinit var contactsButton: Button
-    private lateinit var toolbar: Toolbar
+    private lateinit var toolbar: GigforceToolbar
     private lateinit var coreRecyclerView: CoreRecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (this.requireContext().applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
+            .provideChatModule()
+            .inject(this)
         navigation.context = requireContext()
     }
 
@@ -71,40 +71,43 @@ class ChatHeadersFragment : Fragment() {
         noChatsLayout.isVisible = list.isEmpty()
 
         coreRecyclerView.collection =
-                ArrayList(list.map {
+            ArrayList(list.map {
 
-                    var timeToDisplayText = ""
-                    it.lastMsgTimestamp?.let {
-                        val chatDate = it.toDate()
-                        timeToDisplayText = if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(chatDate) else SimpleDateFormat("dd MMM").format(chatDate)
-                    }
+                var timeToDisplayText = ""
+                it.lastMsgTimestamp?.let {
+                    val chatDate = it.toDate()
+                    timeToDisplayText =
+                        if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(
+                            chatDate
+                        ) else SimpleDateFormat("dd MMM").format(chatDate)
+                }
 
-                    ChatListItemDataObject(
-                            id = it.id,
-                            title = it.otherUser?.name ?: "",
-                            subtitle = it.lastMsgText,
-                            timeDisplay = timeToDisplayText,
-                            type = it.chatType,
-                            profilePath = it.otherUser?.profilePic ?: "",
-                            unreadCount = it.unseenCount,
-                            profileId = it.otherUserId,
-                            isOtherUserOnline = it.isOtherUserOnline,
-                            groupName = it.groupName,
-                            groupAvatar = it.groupAvatar,
-                            lastMessage = it.lastMsgText,
-                            lastMessageType = it.lastMessageType,
-                            lastMsgFlowType = it.lastMsgFlowType,
-                            chatType = it.chatType,
-                            status = it.status,
-                            senderName = it.senderName
-                    )
-                })
+                ChatListItemDataObject(
+                    id = it.id,
+                    title = it.otherUser?.name ?: "",
+                    subtitle = it.lastMsgText,
+                    timeDisplay = timeToDisplayText,
+                    type = it.chatType,
+                    profilePath = it.otherUser?.profilePic ?: "",
+                    unreadCount = it.unseenCount,
+                    profileId = it.otherUserId,
+                    isOtherUserOnline = it.isOtherUserOnline,
+                    groupName = it.groupName,
+                    groupAvatar = it.groupAvatar,
+                    lastMessage = it.lastMsgText,
+                    lastMessageType = it.lastMessageType,
+                    lastMsgFlowType = it.lastMsgFlowType,
+                    chatType = it.chatType,
+                    status = it.status,
+                    senderName = it.senderName
+                )
+            })
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         cancelAnyNotificationIfShown()
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
@@ -144,80 +147,78 @@ class ChatHeadersFragment : Fragment() {
             navigation.navigateToContactsPage()
         }
 
-        toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
-        }
+        toolbar.showTitle("Chats")
+        toolbar.hideActionMenu()
+        toolbar.setBackButtonListener(View.OnClickListener {
+
+            if (toolbar.isSearchCurrentlyShown) {
+                hideSoftKeyboard()
+            } else {
+                activity?.onBackPressed()
+            }
+        })
     }
 
     private fun initListeners() {
 
-        val searchMenuItem = toolbar.menu.findItem(R.id.action_search)
-        val searchView: SearchView = searchMenuItem.actionView as SearchView
-
-        val v = searchView.findViewById<View>(androidx.appcompat.R.id.search_plate)
-        v.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.transparent))
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-                if (!searchView.isIconified) {
-                    searchView.isIconified = true;
-                }
-                searchMenuItem.collapseActionView();
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-
-                if (newText.isNullOrBlank()) {
-                    coreRecyclerView.resetFilter()
-                } else {
-                    coreRecyclerView.filter {
-
-                        val item = it as ChatListItemDataObject
-                        item.groupName.contains(
-                                newText, true
-                        ) || item.title.contains(
-                                newText, true
-                        ) || item.subtitle.contains(
-                                newText, true
-                        )
-
-                    }
-                }
-                return false
-            }
-        }
-        )
-
+        toolbar.showSearchOption("Search Chats")
+        toolbar.setOnSearchTextChangeListener(this)
     }
 
     private fun askForStoragePermission() {
         Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
         requestPermissions(
-                arrayOf(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.CAMERA
-                ),
-                23
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ),
+            23
         )
     }
 
     private fun isStoragePermissionGranted(): Boolean {
 
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.CAMERA
+            requireContext(),
+            android.Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onSearchTextChanged(newText: String) {
+
+        if (newText.isBlank()) {
+            coreRecyclerView.resetFilter()
+        } else {
+            coreRecyclerView.filter {
+
+                val item = it as ChatListItemDataObject
+                item.groupName.contains(
+                    newText, true
+                ) || item.title.contains(
+                    newText, true
+                ) || item.subtitle.contains(
+                    newText, true
+                )
+
+            }
+        }
+    }
+
+    fun hideSoftKeyboard() {
+
+        val activity = activity ?: return
+
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
     }
 }

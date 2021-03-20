@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/chat_item_margin"
-        app:cardBackgroundColor="@color/lipstick_2"
+        app:cardBackgroundColor="@color/chat_outgoing_mesage_background_color"
         app:cardCornerRadius="@dimen/chat_item_corner_radius"
         app:cardElevation="@dimen/chat_item_card_elevation"
         >

@@ -5,10 +5,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
@@ -23,39 +22,44 @@ abstract class TextMessageView(
         val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
-) :  RelativeLayout(context, attrs),
-        IViewHolder, View.OnLongClickListener {
+) : RelativeLayout(context, attrs),
+        IViewHolder, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
 
+    private lateinit var containerView: View
     private lateinit var senderNameTV: TextView
-    private lateinit var msgView:TextView
-    private lateinit var timeView:TextView
-    private lateinit var receivedStatusIV : ImageView
+    private lateinit var msgView: TextView
+    private lateinit var timeView: TextView
+    private lateinit var receivedStatusIV: ImageView
 
     init {
         setDefault()
         inflate()
     }
 
-    fun setDefault(){
+    fun setDefault() {
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         this.layoutParams = params
     }
 
-    fun inflate(){
-        if(type == MessageFlowType.IN)
+    fun inflate() {
+        val view = if (type == MessageFlowType.IN)
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_in, this, true)
         else
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_out, this, true)
-        loadViews()
+        loadViews(view)
     }
 
-    fun loadViews(){
+    fun loadViews(
+            view: View
+    ) {
         senderNameTV = this.findViewById(R.id.user_name_tv)
         msgView = this.findViewById(R.id.tv_msgValue)
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
 
-        msgView.setOnLongClickListener(this)
+        containerView = this.findViewById(R.id.ll_msgContainer)
+        containerView.setOnLongClickListener(this)
+        //  msgView.setCustomSelectionActionModeCallback(CustomSelectionCallback(msgView, context))
     }
 
     override fun bind(data: Any?) {
@@ -101,11 +105,20 @@ abstract class TextMessageView(
 
     override fun onLongClick(v: View?): Boolean {
 
-        if(v is TextView) {
+        val popUpMenu = PopupMenu(context, v)
+        popUpMenu.setOnMenuItemClickListener(this)
+        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+        popUpMenu.show()
 
-            val clip: ClipData = ClipData.newPlainText("Copy", v.text)
-            (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(clip)
-        }
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+
+        val clip: ClipData = ClipData.newPlainText("Copy", msgView.text)
+        (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(clip)
+        Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+
         return true
     }
 

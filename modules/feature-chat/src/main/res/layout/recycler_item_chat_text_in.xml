@@ -12,11 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_gravity="left"
-        app:cardBackgroundColor="#d6d6d6"
+        app:cardBackgroundColor="@color/chat_incoming_mesage_background_color"
         app:cardElevation="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-
         app:cardCornerRadius="@dimen/chat_item_corner_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/chat_item_max_length"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            >
 
 
             <TextView
@@ -50,8 +52,7 @@
                 android:id="@+id/tv_msgValue"
                 android:linksClickable="true"
                 android:autoLink="web"
-                android:clickable="true"
-                android:focusable="true"
+                android:textColorLink="@android:color/white"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
                 app:layout_constraintTop_toBottomOf="@id/user_name_tv"

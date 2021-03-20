@@ -8,4 +8,6 @@
     <color name="dove_grey">#646464</color>
     <color name="red">#FF0000</color>
 
+    <color name="chat_incoming_mesage_background_color">#ffd9e6</color>
+    <color name="chat_outgoing_mesage_background_color">#e42c64</color>
 </resources>

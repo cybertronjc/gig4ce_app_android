@@ -245,7 +245,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="normal"
-                    app:layout_constraintEnd_toStartOf="@id/media_forward_iv"
+                    app:layout_constraintEnd_toStartOf="@id/gigers_forward_iv"
                     app:layout_constraintTop_toBottomOf="@id/group_details_divider_2"
                     tools:text="8" />
 

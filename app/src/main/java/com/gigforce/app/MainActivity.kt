@@ -20,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
+import com.gigforce.app.core.printDebugLog
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
@@ -82,6 +83,10 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
+
+        intent?.extras?.let {
+            it.printDebugLog("printDebugLog")
+        }
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
@@ -191,6 +196,9 @@ class MainActivity : AppCompatActivity(), NavFragmentsData {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         navController.handleDeepLink(intent)
+        intent?.extras?.let {
+            it.printDebugLog("printDebugLog")
+        }
 
         if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()

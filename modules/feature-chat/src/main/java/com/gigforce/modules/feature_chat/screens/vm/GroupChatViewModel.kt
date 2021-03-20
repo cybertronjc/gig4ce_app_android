@@ -393,8 +393,6 @@ class GroupChatViewModel constructor(
             grpMessages?.add(message)
             _groupMessages.postValue(grpMessages)
 
-            val groupMembers = groupDetails?.groupMembers
-                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
             chatGroupRepository.sendNewDocumentMessage(
                     groupId,
                     message,

@@ -155,22 +155,22 @@ class ChatListItem(
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
                         lastMessageType.visible()
-                        lastMessageType.setImageResource(R.drawable.ic_play)
+                        lastMessageType.setImageResource(R.drawable.ic_chat_video_2)
                         txtSubtitle.text = "$messagePrefix Video"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
                         lastMessageType.visible()
-                        lastMessageType.setImageResource(R.drawable.ic_document_outlined)
+                        lastMessageType.setImageResource(R.drawable.ic_chat_document_2)
                         txtSubtitle.text = "$messagePrefix Document"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
                         lastMessageType.visible()
-                        lastMessageType.setImageResource(R.drawable.ic_photo_landscape)
+                        lastMessageType.setImageResource(R.drawable.ic_chat_image_2)
                         txtSubtitle.text = "$messagePrefix Image"
                     }
                     ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
                         lastMessageType.visible()
-                        lastMessageType.setImageResource(R.drawable.ic_location_grey)
+                        lastMessageType.setImageResource(R.drawable.ic_chat_location_2)
                         txtSubtitle.text = "$messagePrefix Location"
                     }
                     else -> {
