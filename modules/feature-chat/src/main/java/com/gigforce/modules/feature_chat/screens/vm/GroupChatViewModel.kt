@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.util.Log
+import android.util.Patterns
 import android.util.Size
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -638,7 +639,12 @@ class GroupChatViewModel constructor(
                         throw IllegalArgumentException("other types not supported yet")
                     }
 
-                    firebaseStorage.getReferenceFromUrl(downloadLink).getFileOrThrow(fileRef)
+                    if(Patterns.WEB_URL.matcher(downloadLink).matches()){
+                        firebaseStorage.getReferenceFromUrl(downloadLink).getFileOrThrow(fileRef)
+                    } else{
+                        firebaseStorage.getReference(downloadLink).getFileOrThrow(fileRef)
+                    }
+
                     _chatAttachmentDownloadState.value = DownloadCompleted(position)
                     _chatAttachmentDownloadState.value = null
 

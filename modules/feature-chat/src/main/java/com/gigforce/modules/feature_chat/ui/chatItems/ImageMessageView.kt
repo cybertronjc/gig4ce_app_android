@@ -132,6 +132,7 @@ abstract class ImageMessageView(
                 handleImageDownloaded(downloadedFile)
             } else {
                 loadThumbnail(msg)
+                handleImageNotDownloaded()
             }
         }
     }

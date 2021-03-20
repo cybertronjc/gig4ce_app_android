@@ -25,6 +25,9 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lse
+import com.gigforce.modules.feature_chat.DownloadCompleted
+import com.gigforce.modules.feature_chat.DownloadStarted
+import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.IChatNavigation
@@ -173,21 +176,21 @@ class GroupDetailsFragment : Fragment(),
 //                    }
             })
 
-//        viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
-//            it ?: return@Observer
-//
-//            when (it) {
-//                is DownloadStarted -> {
-//                    groupMediaRecyclerAdapter.setItemAsDownloading(it.index)
-//                }
-//                is DownloadCompleted -> {
-//                    groupMediaRecyclerAdapter.notifyItemChanged(it.index)
-//                }
-//                is ErrorWhileDownloadingAttachment -> {
-//                    groupMediaRecyclerAdapter.setItemAsNotDownloading(it.index)
-//                }
-//            }
-//        })
+        viewModel.chatAttachmentDownloadState.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            when (it) {
+                is DownloadStarted -> {
+                    groupMediaRecyclerAdapter.setItemAsDownloading(it.index)
+                }
+                is DownloadCompleted -> {
+                    groupMediaRecyclerAdapter.notifyItemChanged(it.index)
+                }
+                is ErrorWhileDownloadingAttachment -> {
+                    groupMediaRecyclerAdapter.setItemAsNotDownloading(it.index)
+                }
+            }
+        })
 
         viewModel.deactivatingGroup
             .observe(viewLifecycleOwner, Observer {

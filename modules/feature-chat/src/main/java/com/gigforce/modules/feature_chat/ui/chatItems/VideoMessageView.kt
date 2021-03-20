@@ -125,11 +125,7 @@ abstract class VideoMessageView(
             if (downloadedFile != null) {
                 handleVideoDownloaded()
             } else {
-//                if (msg.attachmentCurrentlyBeingDownloaded) {
-//                    handleDownloadInProgress()
-//                } else {
-//                    handleVideoNotDownloaded()
-//                }
+                    handleVideoNotDownloaded()
             }
         }
     }
