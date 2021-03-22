@@ -24,6 +24,24 @@ abstract class BaseNavigationImpl(): INavigation {
              navController.navigate(this.navMap[dest]!!, args, navOptions)
     }
 
+    override fun popBackStack() {
+        val navController = getNavController()
+        navController.popBackStack()
+    }
+
+    override fun popBackStack(des: String, inclusive: Boolean) {
+        val navController = getNavController()
+        if(this.navMap.containsKey(des))
+            navController.popBackStack(this.navMap[des]!!,inclusive)
+    }
+
+    override fun getBackStackEntry(des: String) {
+        val navController = getNavController()
+        if(this.navMap.containsKey(des))
+            navController.getBackStackEntry(this.navMap[des]!!)
+    }
+
+
     fun registerRoute(dest:String, destResId:Int){
         if(this.navMap.containsKey(dest)){
             Log.w("Base/Nav", "Overriding existing nav key registration")

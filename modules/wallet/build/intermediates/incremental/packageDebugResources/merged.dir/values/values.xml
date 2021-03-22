@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="app_green">#468800</color>
+    <color name="app_red">#E02020</color>
+    <color name="gray_color">#6d7278</color>
+    <color name="grey_c7">#c7c7c7</color>
+    <dimen name="size_1">1dp</dimen>
+    <dimen name="size_36">36dp</dimen>
+    <string name="current_month">Current Month</string>
+    <string name="earning_info"><b>Earning:</b> Sum of the amount received for gigs completed in this month + Sum of the amount yet to be received for completed gigs in this month</string>
+    <string name="explore_now">Explore Now</string>
+    <string name="giger">Giger</string>
+    <string name="invoice_generated_info"><b>Invoice generated:</b> The gig where a receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
+    <string name="invoice_info"><b>Invoice:</b> The receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
+    <string name="looks_like_you_have_not_explored_much">Looks like you have not explored much</string>
+    <string name="money_received_info"><b>Money Received:</b> The amount received in the gigforce wallet from the client for the completed gigs.</string>
+    <string name="money_withdrawn_info"><em>Money Withdrawn:</em> The amount transferred from the gigforce wallet to the giger’s account.</string>
+    <string name="monthly_earning_info"><b>Monthly earning:</b> Total of the amount received in a month  and the amount pending to be paid for completed gigs. </string>
+    <string name="monthly_goal">Monthly Goal</string>
+    <string name="monthly_goal_info"><b>Monthly goal or monthly earning goal:</b> a goal set by the user for monthly earning. This is the basis for showing giger’s </string>
+    <string name="no_transactions_yet">No transactions yet</string>
+    <string name="payment_due_info"><b>Payment disputed / Payment due:</b> The amount to be paid for a completed gig that is not approved by the client.</string>
+    <string name="pending_invoice_info"><b>Pending invoice:</b> The gigs which are completed but the invoice is not generated.</string>
+    <string name="received">Received</string>
+    <string name="sample_info"><b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+    <string name="see_all">See All</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="transactions">Transactions</string>
+    <string name="w_my_wallet">My wallet</string>
+    <string name="w_my_wallet_balance">My Wallet Balance</string>
+    <string name="wallet_balance_info">Wallet balance: Sum of the amount received in gigforce wallet till date - Sum of amount subtracted from the wallet via any transfers till date</string>
+    <string name="withdrawn">Withdrawn</string>
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#d16f6f</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/transparent</item>
+        <item name="tint">@android:color/transparent</item>
+        <item name="tintMode">add</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+    <style name="LatoBold14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:lineSpacingExtra">5.1sp</item>
+    </style>
+    <style name="LatoBold16" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#d9000000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="LatoBold18" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#ca0071</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="LatoBold24">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="LatoBold28" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#d9000000</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+    <style name="LatoRegular12Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="LatoRegular14Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="LatoRegular16Black">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">19.1sp</item>
+        <item name="android:textColor">#222222</item>
+    </style>
+    <style name="LatoRegular20Black">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#d9000000</item>
+    </style>
+    <style name="LatoRegularCardText12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textColor">#6f6f6f</item>
+    </style>
+    <style name="LatoWhite16" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#fefefe</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="LatoWhite28" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#fefefe</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+    <style name="LatoWhiteHeading">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:lineSpacingExtra">20.9sp</item>
+    </style>
+    <style name="LatoWhiteRegular">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+    <style name="LipstickCardBottom">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#d72467</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+    <declare-styleable name="HelpRow">
+        <attr format="integer" name="icon_help"/>
+        <attr format="string" name="content_help"/>
+    </declare-styleable>
+</resources>
