@@ -18,11 +18,9 @@ class NewContactsViewModel constructor(
 
     private var contactsChangeListener: ListenerRegistration? = null
 
-    init {
-        startListeningForContactChanges()
-    }
 
-    private fun startListeningForContactChanges() {
+
+    fun startListeningForContactChanges() {
 
         contactsChangeListener = chatContactsRepository
             .getUserContacts()

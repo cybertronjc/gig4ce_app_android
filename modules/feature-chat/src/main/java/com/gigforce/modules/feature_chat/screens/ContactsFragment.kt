@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -69,6 +71,7 @@ class ContactsFragment : DialogFragment(),
     private lateinit var searchET: EditText
 
     private lateinit var noContactsLayout: View
+    private lateinit var contactsSyncingLayout: View
     private lateinit var askPermissionView: View
     private lateinit var toolbarOverflowMenu: View
     private lateinit var searchGigersLayout: View
@@ -153,6 +156,7 @@ class ContactsFragment : DialogFragment(),
         contactRecyclerView = view.findViewById(R.id.rv_contactsList)
         backArrow = view.findViewById(R.id.back_arrow)
         createGroupLayout = view.findViewById(R.id.create_group_layout)
+        contactsSyncingLayout = view.findViewById(R.id.contactsSyncingLayout)
         createGroupLabel = view.findViewById(R.id.create_group_label)
         contactsToolbarLabel = view.findViewById(R.id.textView101)
         contactsToolbarSubTitle = view.findViewById(R.id.tv_sub_heading_contacts_list)
@@ -345,7 +349,6 @@ class ContactsFragment : DialogFragment(),
                 .observe(viewLifecycleOwner, Observer {
                     showContactsOnView(it)
                 })
-
     }
 
     private fun showContactsAsSyncing() {
@@ -374,13 +377,35 @@ class ContactsFragment : DialogFragment(),
     private fun showContactsOnView(it: List<ContactModel>) {
         val contacts = it ?: return
 
-        contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
-        contactsAdapter.setData(contacts)
-
         if (it.isEmpty()) {
-            noContactsLayout.visible()
+
+            val cursor = CursorLoader(requireContext(),
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            ).loadInBackground()
+            val totalContactList = cursor?.count ?: 0
+
+            if (totalContactList != 0) {
+                //Show Syncing Layout
+                contactsAdapter.setData(emptyList())
+                noContactsLayout.gone()
+                contactsSyncingLayout.visible()
+            } else {
+                contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+
+                contactsAdapter.setData(contacts)
+                noContactsLayout.visible()
+                contactsSyncingLayout.gone()
+            }
         } else {
+            contactsSyncingLayout.gone()
             noContactsLayout.gone()
+
+            contactsToolbarSubTitle.text = "${contacts.size} Contact(s)"
+            contactsAdapter.setData(contacts)
         }
 
         refreshingUserHorizontalProgressBar.gone()
@@ -420,6 +445,7 @@ class ContactsFragment : DialogFragment(),
             showPermissionLayout()
         } else {
             startLoaderForGettingContacts()
+            viewModelNew.startListeningForContactChanges()
         }
     }
 
