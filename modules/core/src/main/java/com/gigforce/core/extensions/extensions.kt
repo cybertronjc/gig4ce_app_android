@@ -7,13 +7,8 @@ import android.os.IBinder
 import android.os.Parcelable
 import android.text.format.DateUtils
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.firebase.Timestamp
@@ -94,7 +89,9 @@ fun Timestamp.toLocalDate(): LocalDate {
 
 fun Timestamp.toDisplayText(): String {
     val date = this.toDate()
-    return if(DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat("dd MMM, hh:mm a").format(date)
+    return if (DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat(
+        "dd MMM, hh:mm a"
+    ).format(date)
 }
 
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {

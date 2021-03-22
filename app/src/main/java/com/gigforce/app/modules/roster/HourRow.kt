@@ -3,15 +3,13 @@ package com.gigforce.app.modules.roster
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.item_roster_day.view.*
 
-class HourRow: MaterialCardView  {
-    constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+class HourRow : MaterialCardView {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
         View.inflate(context, R.layout.item_roster_day, this)
@@ -24,17 +22,14 @@ class HourRow: MaterialCardView  {
         }
 
     var hour: Int = 0
-        set (value) {
+        set(value) {
             field = value
-            this.tag= "hour_$value"
+            this.tag = "hour_$value"
         }
 
     var clicked: Boolean = false
 
     var minute: Int = 0
-        set(value) {
-            field = value
-        }
 
     var isDisabled = false
         set(value) {

@@ -13,14 +13,14 @@ import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.google.android.material.card.MaterialCardView
 
 class GigStatusCardView(
-        context: Context,
-        attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : MaterialCardView(
-        context,
-        attrs
+    context,
+    attrs
 ) {
 
-    private lateinit var statusCardView : MaterialCardView
+    private lateinit var statusCardView: MaterialCardView
 
     private lateinit var gigStatusIV: ImageView
     private lateinit var gigStatusTV: TextView
@@ -28,9 +28,9 @@ class GigStatusCardView(
     init {
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(
-                R.layout.fragment_gig_page_2_status_card_view,
-                this,
-                true
+            R.layout.fragment_gig_page_2_status_card_view,
+            this,
+            true
         )
         findViews(view)
     }
@@ -47,9 +47,9 @@ class GigStatusCardView(
         gigStatusTV.text = status.getStatusCapitalized()
         Glide.with(context).load(status.getIconForStatus()).into(gigStatusIV)
         statusCardView.strokeColor = ResourcesCompat.getColor(
-                context.resources,
-                status.getColorForStatus(),
-                null
+            context.resources,
+            status.getColorForStatus(),
+            null
         )
     }
 }

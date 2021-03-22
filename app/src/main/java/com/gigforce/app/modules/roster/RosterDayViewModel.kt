@@ -15,15 +15,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
-import com.gigforce.app.core.toDate
-import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.gigPage.GigsRepository
-import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.toDate
+import com.gigforce.core.extensions.toLocalDate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,7 +38,7 @@ import kotlin.collections.HashMap
 
 @RequiresApi(Build.VERSION_CODES.O)
 class RosterDayViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository()
+    private val gigsRepository: GigsRepository = GigsRepository()
 ) : ViewModel() {
 
     var currentDateTime: MutableLiveData<LocalDateTime> = MutableLiveData(LocalDateTime.now())
@@ -47,7 +47,8 @@ class RosterDayViewModel constructor(
 
     var showDeclineGigDialog: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var userPref: MutableLiveData<PreferencesDataModel> = MutableLiveData<PreferencesDataModel>()
+    private var userPref: MutableLiveData<PreferencesDataModel> =
+        MutableLiveData<PreferencesDataModel>()
     var preferencesRepository = PreferencesRepository()
 
 //    var dayContext: Context? = null
@@ -95,64 +96,65 @@ class RosterDayViewModel constructor(
         var endDate = cal.time
 
         db.collection(collection)
-                .whereEqualTo("gigerId", uid)
-                .whereGreaterThanOrEqualTo("startDateTime", startDate)
-                .whereLessThanOrEqualTo("startDateTime", endDate)
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    val tag = getTagFromDate(datetime)
-                    var added = ArrayList<Gig>()
-                    var removed = ArrayList<Gig>()
-                    var modified = ArrayList<Gig>()
+            .whereEqualTo("gigerId", uid)
+            .whereGreaterThanOrEqualTo("startDateTime", startDate)
+            .whereLessThanOrEqualTo("startDateTime", endDate)
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                val tag = getTagFromDate(datetime)
+                var added = ArrayList<Gig>()
+                var removed = ArrayList<Gig>()
+                var modified = ArrayList<Gig>()
 
-                    querySnapshot?.documentChanges?.forEach {
-                        when (it.type) {
-                            DocumentChange.Type.ADDED -> {
-                                val gig = it.document.toObject(Gig::class.java)
-                                added.add(gig)
+                querySnapshot?.documentChanges?.forEach {
+                    when (it.type) {
+                        DocumentChange.Type.ADDED -> {
+                            val gig = it.document.toObject(Gig::class.java)
+                            added.add(gig)
 //                            allGigs[tag]!!.value!!.add(gig)
 //                            allGigs[tag]!!.value = allGigs[tag]!!.value
-                            }
-                            DocumentChange.Type.REMOVED -> {
-                                val gig = it.document.toObject(Gig::class.java)
-                                removed.add(gig)
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            val gig = it.document.toObject(Gig::class.java)
+                            removed.add(gig)
 //                            allGigs[tag]!!.value!!.remove(gig)
 //                            allGigs[tag]!!.value = allGigs[tag]!!.value
-                            }
-                            DocumentChange.Type.MODIFIED -> {
-                                val gig = it.document.toObject(Gig::class.java)
-                                modified.add(gig)
-                            }
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            val gig = it.document.toObject(Gig::class.java)
+                            modified.add(gig)
                         }
                     }
-                    allGigs[tag]!!.value!!.addAll(added)
-                    allGigs[tag]!!.value!!.removeAll(removed)
-
-                    var modifiedKeys = ArrayList<String>()
-                    modified.forEach {
-                        modifiedKeys.add(it.gigId)
-                    }
-                    allGigs[tag]!!.value!!.removeIf {
-                        modifiedKeys.contains(it.gigId)
-                    }
-                    allGigs[tag]!!.value!!.addAll(modified)
-
-                    allGigs[tag]!!.value = allGigs[tag]!!.value
-
                 }
+                allGigs[tag]!!.value!!.addAll(added)
+                allGigs[tag]!!.value!!.removeAll(removed)
+
+                var modifiedKeys = ArrayList<String>()
+                modified.forEach {
+                    modifiedKeys.add(it.gigId)
+                }
+                allGigs[tag]!!.value!!.removeIf {
+                    modifiedKeys.contains(it.gigId)
+                }
+                allGigs[tag]!!.value!!.addAll(modified)
+
+                allGigs[tag]!!.value = allGigs[tag]!!.value
+
+            }
     }
 
 
     fun preferenceListener() {
-        preferencesRepository.getDBCollection().addSnapshotListener { document, firebaseFirestoreException ->
-            document?.let {
-                userPref.postValue(it.toObject(PreferencesDataModel::class.java))
+        preferencesRepository.getDBCollection()
+            .addSnapshotListener { document, firebaseFirestoreException ->
+                document?.let {
+                    userPref.postValue(it.toObject(PreferencesDataModel::class.java))
+                }
             }
-        }
     }
 
     fun resetDayTimeAvailability(
-            viewModelCustomPreference: CustomPreferencesViewModel, parentView: ConstraintLayout,
-            config: ConfigDataModel?
+        viewModelCustomPreference: CustomPreferencesViewModel, parentView: ConstraintLayout,
+        config: ConfigDataModel?
     ) {
         val date = currentDateTime.value!!
 
@@ -168,7 +170,8 @@ class RosterDayViewModel constructor(
     }
 
     private fun setDayAvailability(
-            date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel): Boolean {
+        date: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel
+    ): Boolean {
         var dayAvailable = false
         // check from preferences
         userPref.value?.let {
@@ -196,8 +199,9 @@ class RosterDayViewModel constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setHourAvailability(
-            activeDateTime: LocalDateTime, dayAvailable: Boolean, parentView: ConstraintLayout,
-            viewModelCustomPreference: CustomPreferencesViewModel, config: ConfigDataModel?) {
+        activeDateTime: LocalDateTime, dayAvailable: Boolean, parentView: ConstraintLayout,
+        viewModelCustomPreference: CustomPreferencesViewModel, config: ConfigDataModel?
+    ) {
         val actualDateTime = LocalDateTime.now()
         if (isSameDate(activeDateTime, actualDateTime)) {
             todayHourActive(parentView, actualDateTime)
@@ -216,8 +220,9 @@ class RosterDayViewModel constructor(
     }
 
     private fun switchHourAvailability(
-            activeDateTime: LocalDateTime, parentView: ConstraintLayout,
-            viewModelCustomPreference: CustomPreferencesViewModel) {
+        activeDateTime: LocalDateTime, parentView: ConstraintLayout,
+        viewModelCustomPreference: CustomPreferencesViewModel
+    ) {
         viewModelCustomPreference.customPreferencesDataModel.unavailable.filter {
             it.date == activeDateTime.toDate
         }.forEach {
@@ -227,7 +232,10 @@ class RosterDayViewModel constructor(
         }
     }
 
-    private fun switchDefaultHourAvailability(parentView: ConstraintLayout, config: ConfigDataModel?) {
+    private fun switchDefaultHourAvailability(
+        parentView: ConstraintLayout,
+        config: ConfigDataModel?
+    ) {
         var selectedSlots: ArrayList<Int> = ArrayList()
         config?.let {
             userPref.value?.let { pref ->
@@ -241,16 +249,20 @@ class RosterDayViewModel constructor(
                 Log.d("RosterDayViewModel", idx.toString())
                 if (!selectedSlots.contains(idx + 1)) {
                     selectedHourInactive(
-                            parentView,
-                            it.time_slots[idx].start_time_slot!!,
-                            it.time_slots[idx].end_time_slot!!)
+                        parentView,
+                        it.time_slots[idx].start_time_slot!!,
+                        it.time_slots[idx].end_time_slot!!
+                    )
                 }
 
             }
         }
     }
 
-    private fun confirmCancellation(activeDateTime: LocalDateTime, viewModelCustomPreference: CustomPreferencesViewModel) {
+    private fun confirmCancellation(
+        activeDateTime: LocalDateTime,
+        viewModelCustomPreference: CustomPreferencesViewModel
+    ) {
 
         Log.d("SwitchDayAvailability", "Cancellation is confirmed")
         isDayAvailable.postValue(false)
@@ -262,8 +274,9 @@ class RosterDayViewModel constructor(
     }
 
     fun switchDayAvailability(
-            context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
-            viewModelCustomPreference: CustomPreferencesViewModel) = viewModelScope.launch {
+        context: Context, parentView: ConstraintLayout, currentDayAvailability: Boolean,
+        viewModelCustomPreference: CustomPreferencesViewModel
+    ) = viewModelScope.launch {
 //        try {
 //            viewModelCustomPreference.customPreferencesDataModel
 //        } catch (e:UninitializedPropertyAccessException) {
@@ -284,11 +297,18 @@ class RosterDayViewModel constructor(
             // make inactive
 
 
-            val upcomingActiveGigs = gigsRepository.getTodaysUpcomingGigs(activeDateTime.toLocalDate())
+            val upcomingActiveGigs =
+                gigsRepository.getTodaysUpcomingGigs(activeDateTime.toLocalDate())
 
             Log.d("SwitchDayAvailability", "Trying to mark inactive")
             val confirmCancellation = if (upcomingActiveGigs.size > 0) showGigsTodayWarning(
-                    context, upcomingGigs, upcomingActiveGigs.size, parentView, activeDateTime, viewModelCustomPreference) else true
+                context,
+                upcomingGigs,
+                upcomingActiveGigs.size,
+                parentView,
+                activeDateTime,
+                viewModelCustomPreference
+            ) else true
 
             if (confirmCancellation) {
 
@@ -316,13 +336,19 @@ class RosterDayViewModel constructor(
     fun toggleHourUnavailable(
         context: Context, parentView: ConstraintLayout, upcomingGigs: ArrayList<Gig>,
         startDateTime: LocalDateTime, endDateTime: LocalDateTime,
-        viewModelCustomPreference: CustomPreferencesViewModel) {
+        viewModelCustomPreference: CustomPreferencesViewModel
+    ) {
         viewModelCustomPreference.markUnavaialbleTimeSlots(
-                UnavailableDataModel(startDateTime.toDate, endDateTime.toDate))
+            UnavailableDataModel(startDateTime.toDate, endDateTime.toDate)
+        )
     }
 
 
-    private fun selectedHourInactive(parentView: ConstraintLayout, startDateTime: Date, endDateTime: Date) {
+    private fun selectedHourInactive(
+        parentView: ConstraintLayout,
+        startDateTime: Date,
+        endDateTime: Date
+    ) {
         for (idx in 1..24) {
             val widget = parentView.findViewWithTag<HourRow>("hour_$idx")
             if (widget.hour <= endDateTime.hours && widget.hour >= startDateTime.hours)
@@ -348,9 +374,7 @@ class RosterDayViewModel constructor(
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.gigs_today_warning_dialog)
 
-        dialog.dialog_content.setText(
-                "You have $upcomingGigsCount Gig(s) active on the day. Please cancel them individually."
-        )
+        dialog.dialog_content.text = "You have $upcomingGigsCount Gig(s) active on the day. Please cancel them individually."
 
         dialog.cancel.setOnClickListener {
             flag = false
@@ -370,7 +394,11 @@ class RosterDayViewModel constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun showReasonForGigCancel(context: Context, upcomingGigs: ArrayList<Gig>, gigParentView: ConstraintLayout): Boolean {
+    private fun showReasonForGigCancel(
+        context: Context,
+        upcomingGigs: ArrayList<Gig>,
+        gigParentView: ConstraintLayout
+    ): Boolean {
         var flag = false
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -494,44 +522,44 @@ class RosterDayViewModel constructor(
         fullDayGig.forEach {
             if (it.isPastGig()) {
                 val widget = CompletedGigCard(
-                        topBar!!.context,
-                        title = it.getGigTitle(),
-                        gigSuccess = it.isGigCompleted,
-                        paymentSuccess = it.isPaymentDone,
-                        rating = it.gigRating,
-                        amount = it.gigAmount,
-                        duration = 0.0F,
-                        cardHeight = itemHeight.px,
-                        isFullDay = true,
-                        gigId = it.gigId,
-                        isNewgigPage = it.openNewGig()
+                    topBar!!.context,
+                    title = it.getGigTitle(),
+                    gigSuccess = it.isGigCompleted,
+                    paymentSuccess = it.isPaymentDone,
+                    rating = it.gigRating,
+                    amount = it.gigAmount,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true,
+                    gigId = it.gigId,
+                    isNewgigPage = it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
                 // TODO: Implement current day gig card
                 val widget = CurrentGigCard(
-                        topBar!!.context,
-                        title = it.getGigTitle() ?: "",
-                        startHour = it.startHour,
-                        startMinute = it.startMinute,
-                        duration = 0.0F,
-                        cardHeight = itemHeight.px,
-                        isFullDay = true,
-                        gigId = it.gigId,
-                        isNewGigPage =  it.openNewGig()
+                    topBar!!.context,
+                    title = it.getGigTitle(),
+                    startHour = it.startHour,
+                    startMinute = it.startMinute,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true,
+                    gigId = it.gigId,
+                    isNewGigPage = it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
                 val widget = UpcomingGigCard(
-                        topBar!!.context,
-                        title = it.getGigTitle(),
-                        startHour = it.startHour,
-                        startMinute = it.startMinute,
-                        duration = 0.0F,
-                        cardHeight = itemHeight.px,
-                        isFullDay = true,
-                        gigId = it.gigId,
-                        isNewGigPage = it.openNewGig()
+                    topBar!!.context,
+                    title = it.getGigTitle(),
+                    startHour = it.startHour,
+                    startMinute = it.startMinute,
+                    duration = 0.0F,
+                    cardHeight = itemHeight.px,
+                    isFullDay = true,
+                    gigId = it.gigId,
+                    isNewGigPage = it.openNewGig()
                 )
                 topBar!!.fullDayGigCard = widget
             } else {
@@ -546,12 +574,12 @@ class RosterDayViewModel constructor(
         val gigs = getFilteredGigs(date, "upcoming")
 
         nestedScrollView?.let {
-            gigs?.let { it1 ->
+            gigs.let { it1 ->
                 if (it1.size != 0) {
                     val sortedUpcomingGigs = gigs.sortedBy { gig -> gig.startHour }
                     it.scrollTo(
-                            0,
-                            ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px
+                        0,
+                        ((sortedUpcomingGigs[0].startHour - 4) * itemHeight).px
                     )
                 } else {
                     it.scrollTo(0, (8 * itemHeight).px)

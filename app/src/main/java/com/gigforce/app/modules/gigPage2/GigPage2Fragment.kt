@@ -24,14 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toFirebaseTimeStamp
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.*
-import com.gigforce.core.datamodels.gigpage.ContactPerson
-import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
@@ -43,11 +37,17 @@ import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
-import com.gigforce.core.utils.Lce
 import com.gigforce.app.utils.LocationUtils
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.core.datamodels.gigpage.ContactPerson
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toFirebaseTimeStamp
+import com.gigforce.core.extensions.toLocalDateTime
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
@@ -69,13 +69,13 @@ import java.time.LocalDateTime
 import java.util.*
 
 class GigPage2Fragment : BaseFragment(),
-        OtherOptionClickListener,
-        PopupMenu.OnMenuItemClickListener,
-        DeclineGigDialogFragmentResultListener,
-        GigPeopleToExpectAdapterClickListener,
-        PermissionRequiredBottomSheet.PermissionBottomSheetActionListener,
-        LocationUpdates.LocationUpdateCallbacks,
-        EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener {
+    OtherOptionClickListener,
+    PopupMenu.OnMenuItemClickListener,
+    DeclineGigDialogFragmentResultListener,
+    GigPeopleToExpectAdapterClickListener,
+    PermissionRequiredBottomSheet.PermissionBottomSheetActionListener,
+    LocationUpdates.LocationUpdateCallbacks,
+    EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener {
 
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
@@ -97,8 +97,8 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_2, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,7 +129,7 @@ class GigPage2Fragment : BaseFragment(),
 
         if (::gigId.isLateinit.not()) {
             FirebaseCrashlytics.getInstance()
-                    .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+                .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             FirebaseCrashlytics.getInstance().log("GigPage2Fragment: No Gig id found")
         }
 
@@ -141,9 +141,9 @@ class GigPage2Fragment : BaseFragment(),
         details_label.setOnClickListener {
             Log.d(TAG, "Opening Details Page for gig ${viewModel.currentGig?.gigId}")
             navigate(
-                    R.id.gigDetailsFragment, bundleOf(
+                R.id.gigDetailsFragment, bundleOf(
                     GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-            )
+                )
             )
         }
 
@@ -151,20 +151,22 @@ class GigPage2Fragment : BaseFragment(),
 
             val gig = viewModel.currentGig ?: return@setOnClickListener
             if (gig.latitude != null && gig.longitude != 0.0) {
-                val uri = "http://maps.google.com/maps?q=loc:${gig.latitude},${gig.longitude} (Gig Location)"
+                val uri =
+                    "http://maps.google.com/maps?q=loc:${gig.latitude},${gig.longitude} (Gig Location)"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 requireContext().startActivity(intent)
             } else if (gig.geoPoint != null) {
-                val uri = "http://maps.google.com/maps?q=loc:${gig.geoPoint!!.latitude},${gig.geoPoint!!.longitude} (Gig Location)"
+                val uri =
+                    "http://maps.google.com/maps?q=loc:${gig.geoPoint!!.latitude},${gig.geoPoint!!.longitude} (Gig Location)"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 requireContext().startActivity(intent)
             }
         }
 
         people_to_expect_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         people_to_expect_rv.addItemDecoration(VerticalItemDecorator(30))
         people_to_expect_rv.adapter = peopleToExpectAdapter
@@ -181,9 +183,9 @@ class GigPage2Fragment : BaseFragment(),
 
         expand_iv.setOnClickListener {
             navigate(
-                    R.id.gigDetailsFragment, bundleOf(
+                R.id.gigDetailsFragment, bundleOf(
                     GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-            )
+                )
             )
         }
 
@@ -206,8 +208,10 @@ class GigPage2Fragment : BaseFragment(),
             viewModel.currentGig?.let {
 
                 val status = GigStatus.fromGig(it)
-                popupMenu.menu.findItem(R.id.action_decline_gig).isVisible = status == GigStatus.UPCOMING
-                popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
+                popupMenu.menu.findItem(R.id.action_decline_gig).isVisible =
+                    status == GigStatus.UPCOMING
+                popupMenu.menu.findItem(R.id.action_feedback)
+                    .setVisible(status == GigStatus.COMPLETED)
             }
 
             popupMenu.setOnMenuItemClickListener(this@GigPage2Fragment)
@@ -215,34 +219,34 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         checkInCheckOutSliderBtn?.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+            object : SlideToActView.OnSlideCompleteListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
-                        val gig = viewModel.currentGig ?: return
+                override fun onSlideComplete(view: SlideToActView) {
+                    val gig = viewModel.currentGig ?: return
 
-                        if (isNecessaryPermissionGranted()) {
+                    if (isNecessaryPermissionGranted()) {
 
-                            if (!gig.isCheckInAndCheckOutMarked()) {
-                                if (imageClickedPath != null) {
+                        if (!gig.isCheckInAndCheckOutMarked()) {
+                            if (imageClickedPath != null) {
 
-                                    if (location == null) {
-                                        showAlertDialog("Please wait while your current location is captured")
-                                    } else {
-                                        checkForLateOrEarlyCheckIn()
-                                    }
+                                if (location == null) {
+                                    showAlertDialog("Please wait while your current location is captured")
                                 } else {
-                                    startCameraForCapturingSelfie()
+                                    checkForLateOrEarlyCheckIn()
                                 }
                             } else {
-                                //Start regularisation
-                                startRegularisation()
+                                startCameraForCapturingSelfie()
                             }
                         } else {
-                            checkInCheckOutSliderBtn?.resetSlider()
-                            showPermissionRequiredAndTheirReasonsDialog()
+                            //Start regularisation
+                            startRegularisation()
                         }
+                    } else {
+                        checkInCheckOutSliderBtn?.resetSlider()
+                        showPermissionRequiredAndTheirReasonsDialog()
                     }
                 }
+            }
     }
 
     override fun onResume() {
@@ -269,7 +273,7 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCheckInOrCheckOutProcess(
-            checkInTimeAccToUser: Timestamp? = null
+        checkInTimeAccToUser: Timestamp? = null
     ) {
 
         if (location == null) {
@@ -283,61 +287,61 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         val locationPhysicalAddress = LocationUtils.getPhysicalAddressFromLocation(
-                context = requireContext(),
-                latitude = location!!.latitude,
-                longitude = location!!.longitude
+            context = requireContext(),
+            latitude = location!!.latitude,
+            longitude = location!!.longitude
         )
 
         viewModel.markAttendance(
-                latitude = location!!.latitude,
-                longitude = location!!.longitude,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = imageClickedPath!!,
-                checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = "test"
+            latitude = location!!.latitude,
+            longitude = location!!.longitude,
+            locationPhysicalAddress = locationPhysicalAddress,
+            image = imageClickedPath!!,
+            checkInTimeAccToUser = checkInTimeAccToUser,
+            remarks = "test"
         )
     }
 
     private fun showAlertDialog(message: String) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage(message)
-                .setPositiveButton("Okay") { _, _ -> }
-                .show()
+            .setTitle("Alert")
+            .setMessage(message)
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
     }
 
     private fun initViewModel() {
         viewModel.gigDetails
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lce.Loading -> showGigDetailsAsLoading()
-                        is Lce.Content -> setGigDetailsOnView(it.content)
-                        is Lce.Error -> showErrorWhileLoadingGigData(it.error)
-                    }
-                })
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> showGigDetailsAsLoading()
+                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Error -> showErrorWhileLoadingGigData(it.error)
+                }
+            })
 
         viewModel.markingAttendanceState
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> {
-                        }
-                        is Lce.Content -> {
+                when (it) {
+                    Lce.Loading -> {
+                    }
+                    is Lce.Content -> {
 
-                            if (it.content == AttendanceType.CHECK_OUT) {
-                                showToast("Checkout Marked.")
-                                showFeedbackBottomSheet()
-                            } else {
-                                showToast("Check-in marked")
-                            }
-                        }
-                        is Lce.Error -> {
-                            showAlertDialog("Error while marking attendance, $it")
-                        }
-                        else -> {
+                        if (it.content == AttendanceType.CHECK_OUT) {
+                            showToast("Checkout Marked.")
+                            showFeedbackBottomSheet()
+                        } else {
+                            showToast("Check-in marked")
                         }
                     }
-                })
+                    is Lce.Error -> {
+                        showAlertDialog("Error while marking attendance, $it")
+                    }
+                    else -> {
+                    }
+                }
+            })
 
         viewModel.watchGig(gigId, true)
     }
@@ -391,7 +395,7 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun showAttendanceSliderButton(
-            gig: Gig
+        gig: Gig
     ) {
 
         checkInCheckOutSliderBtn.visible()
@@ -405,7 +409,7 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun hideAttendanceSliderButton(
-            gig: Gig
+        gig: Gig
     ) {
         checkInCheckOutSliderBtn.gone()
     }
@@ -416,18 +420,18 @@ class GigPage2Fragment : BaseFragment(),
             if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                        .load(gig.getFullCompanyLogo())
-                        .placeholder(getCircularProgressDrawable())
-                        .into(company_logo_iv)
+                    .load(gig.getFullCompanyLogo())
+                    .placeholder(getCircularProgressDrawable())
+                    .into(company_logo_iv)
             } else {
                 val imageRef = FirebaseStorage.getInstance()
-                        .reference
-                        .child(gig.getFullCompanyLogo()!!)
+                    .reference
+                    .child(gig.getFullCompanyLogo()!!)
 
                 Glide.with(requireContext())
-                        .load(imageRef)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(company_logo_iv)
+                    .load(imageRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(company_logo_iv)
             }
         } else {
             val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
@@ -436,8 +440,8 @@ class GigPage2Fragment : BaseFragment(),
                 gig.getFullCompanyName()!![0].toString().toUpperCase()
 
             val drawable = TextDrawable.builder().buildRound(
-                    companyInitials,
-                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
             )
 
             company_logo_iv.setImageDrawable(drawable)
@@ -449,11 +453,11 @@ class GigPage2Fragment : BaseFragment(),
         gig_type.text = if (gig.isFullDay) ": Full time" else ": Part time"
 
         gig_duration.text =
-                ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
-                timeFormatter.format(
-                        gig.endDateTime.toDate()
-                )
-                }"
+            ": ${timeFormatter.format(gig.startDateTime.toDate())} - ${
+            timeFormatter.format(
+                gig.endDateTime.toDate()
+            )
+            }"
 
         if ((gig.latitude != null && gig.longitude != 0.0) || gig.geoPoint != null) {
             Glide.with(requireContext()).load(R.drawable.map_demo).into(image_view)
@@ -464,7 +468,7 @@ class GigPage2Fragment : BaseFragment(),
         gig_address_tv.text = gig.address
 
         if (gig.businessContact != null ||
-                gig.agencyContact != null
+            gig.agencyContact != null
         ) {
             people_to_expect_layout.visible()
             divider_below_people_to_expect.visible()
@@ -504,25 +508,25 @@ class GigPage2Fragment : BaseFragment(),
 
         val optionList = if (status == GigStatus.UPCOMING) {
             listOf(
-                    IDENTITY_CARD,
-                    ATTENDANCE_HISTORY,
-                    DECLINE_GIG
+                IDENTITY_CARD,
+                ATTENDANCE_HISTORY,
+                DECLINE_GIG
             )
         } else {
             listOf(
-                    IDENTITY_CARD,
-                    ATTENDANCE_HISTORY
+                IDENTITY_CARD,
+                ATTENDANCE_HISTORY
             )
         }
 
         other_options_recycler_view.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         val adapter = OtherOptionsAdapter(
-                requireContext(),
-                optionList
+            requireContext(),
+            optionList
         ).apply {
             setListener(this@GigPage2Fragment)
         }
@@ -536,8 +540,8 @@ class GigPage2Fragment : BaseFragment(),
             ID_IDENTITY_CARD -> {
                 navigate(R.id.giger_id_fragment, Bundle().apply {
                     this.putString(
-                            GigPageFragment.INTENT_EXTRA_GIG_ID,
-                            viewModel.currentGig?.gigId
+                        GigPageFragment.INTENT_EXTRA_GIG_ID,
+                        viewModel.currentGig?.gigId
                     )
                 })
             }
@@ -546,17 +550,17 @@ class GigPage2Fragment : BaseFragment(),
 
                 val currentDate = LocalDate.now()
                 navigate(
-                        R.id.gigMonthlyAttendanceFragment, bundleOf(
+                    R.id.gigMonthlyAttendanceFragment, bundleOf(
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
-                                currentDate.year,
-                                currentDate.monthValue,
-                                1
+                            currentDate.year,
+                            currentDate.monthValue,
+                            1
                         ),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
                         GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
-                )
+                    )
                 )
             }
             ID_DECLINE_GIG -> {
@@ -593,10 +597,10 @@ class GigPage2Fragment : BaseFragment(),
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Cannot decline past or ongoing gig")
-                            .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
-                            .show()
+                        .setTitle("Alert")
+                        .setMessage("Cannot decline past or ongoing gig")
+                        .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
+                        .show()
 
                     return true
                 }
@@ -623,14 +627,14 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (
-                    PermissionUtils.permissionsGrantedCheck(grantResults)
+                PermissionUtils.permissionsGrantedCheck(grantResults)
             ) {
                 locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
             }
@@ -656,8 +660,8 @@ class GigPage2Fragment : BaseFragment(),
     private fun startCameraForCapturingSelfie() {
         val intent = Intent(context, AttendanceImageCaptureActivity::class.java)
         startActivityForResult(
-                intent,
-                GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+            intent,
+            GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
         )
     }
 
@@ -673,7 +677,7 @@ class GigPage2Fragment : BaseFragment(),
                 }
             }
             LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
-                    requireActivity() as AppCompatActivity
+                requireActivity() as AppCompatActivity
             )
             else -> {
             }
@@ -683,9 +687,9 @@ class GigPage2Fragment : BaseFragment(),
 
     override fun onPeopleToExpectClicked(option: ContactPerson) {
         navigate(
-                R.id.gigContactPersonBottomSheet, bundleOf(
+            R.id.gigContactPersonBottomSheet, bundleOf(
                 GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
-        )
+            )
         )
     }
 
@@ -698,10 +702,13 @@ class GigPage2Fragment : BaseFragment(),
 
     override fun onChatWithManagerClicked(manager: ContactPerson) {
 
-        navigate(R.id.chatScreenFragment, bundleOf(
+        navigate(
+            R.id.chatScreenFragment, bundleOf(
                 ChatFragment.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
                 ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
-                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name))
+                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name
+            )
+        )
     }
 
     override fun onPermissionOkayClicked() {
@@ -710,21 +717,21 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun askForRequiredPermissions() {
         requestPermissions(
-                arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), REQUEST_PERMISSIONS
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), REQUEST_PERMISSIONS
         )
     }
 
     private fun showPermissionRequiredAndTheirReasonsDialog() {
         PermissionRequiredBottomSheet.launch(
-                childFragmentManager = childFragmentManager,
-                permissionBottomSheetActionListener = this,
-                permissionWithReason = PERMISSION_AND_REASONS
+            childFragmentManager = childFragmentManager,
+            permissionBottomSheetActionListener = this,
+            permissionWithReason = PERMISSION_AND_REASONS
         )
     }
 
@@ -742,42 +749,43 @@ class GigPage2Fragment : BaseFragment(),
 
         val currentTime = LocalDateTime.now()
         if (!gig.isCheckInMarked() && currentTime.isAfter(gig.checkInBeforeTime.toLocalDateTime())
-                && currentTime.isBefore(gig.checkInBeforeBufferTime.toLocalDateTime())
+            && currentTime.isBefore(gig.checkInBeforeBufferTime.toLocalDateTime())
         ) {
             //Early CheckIn
             val earlyCheckInTime = timeFormatter.format(gig.startDateTime.toDate())
             EarlyOrLateCheckInBottomSheet.launchEarlyCheckInBottomSheet(
-                    childFragmentManager,
-                    earlyCheckInTime,
-                    this
+                childFragmentManager,
+                earlyCheckInTime,
+                this
             )
         } else if (!gig.isCheckInMarked() && currentTime.isAfter(gig.checkInAfterBufferTime.toLocalDateTime())) {
 
             //Early CheckIn
             val earlyCheckInTime = timeFormatter.format(gig.startDateTime.toDate())
             EarlyOrLateCheckInBottomSheet.launchLateCheckInBottomSheet(
-                    childFragmentManager,
-                    earlyCheckInTime,
-                    this
+                childFragmentManager,
+                earlyCheckInTime,
+                this
             )
         } else if (!gig.isCheckOutMarked() &&
-                currentTime.isAfter(gig.checkInAfterTime.toLocalDateTime()) &&
-                currentTime.isBefore(gig.checkOutBeforeBufferTime.toLocalDateTime())) {
+            currentTime.isAfter(gig.checkInAfterTime.toLocalDateTime()) &&
+            currentTime.isBefore(gig.checkOutBeforeBufferTime.toLocalDateTime())
+        ) {
             //Early CheckIn
             val earlyCheckInTime = timeFormatter.format(gig.endDateTime.toDate())
             EarlyOrLateCheckInBottomSheet.launchEarlyCheckOutBottomSheet(
-                    childFragmentManager,
-                    earlyCheckInTime,
-                    this
+                childFragmentManager,
+                earlyCheckInTime,
+                this
             )
         } else if (!gig.isCheckOutMarked() && currentTime.isAfter(gig.checkOutAfterBufferTime.toLocalDateTime())) {
 
             //Early CheckIn
             val earlyCheckInTime = timeFormatter.format(gig.endDateTime.toDate())
             EarlyOrLateCheckInBottomSheet.launchLateCheckOutBottomSheet(
-                    childFragmentManager,
-                    earlyCheckInTime,
-                    this
+                childFragmentManager,
+                earlyCheckInTime,
+                this
             )
         } else {
             startCheckInOrCheckOutProcess()
@@ -785,10 +793,10 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     override fun onCheckInOkayClicked(
-            checkInOrCheckOutTimeAccToUser: Date?
+        checkInOrCheckOutTimeAccToUser: Date?
     ) {
         startCheckInOrCheckOutProcess(
-                checkInOrCheckOutTimeAccToUser.toFirebaseTimeStamp()
+            checkInOrCheckOutTimeAccToUser.toFirebaseTimeStamp()
         )
     }
 
@@ -802,24 +810,24 @@ class GigPage2Fragment : BaseFragment(),
     private fun isNecessaryPermissionGranted(): Boolean {
 
         return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
+            requireContext(),
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -837,27 +845,27 @@ class GigPage2Fragment : BaseFragment(),
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
 
         private val IDENTITY_CARD = OtherOption(
-                id = ID_IDENTITY_CARD,
-                name = "Identity Card",
-                icon = R.drawable.ic_identity_card
+            id = ID_IDENTITY_CARD,
+            name = "Identity Card",
+            icon = R.drawable.ic_identity_card
         )
 
         private val ATTENDANCE_HISTORY = OtherOption(
-                id = ID_ATTENDANCE_HISTORY,
-                name = "Attendance History",
-                icon = R.drawable.ic_attendance
+            id = ID_ATTENDANCE_HISTORY,
+            name = "Attendance History",
+            icon = R.drawable.ic_attendance
         )
 
         private val DECLINE_GIG = OtherOption(
-                id = ID_DECLINE_GIG,
-                name = "Decline Gig",
-                icon = R.drawable.ic_gig_decline
+            id = ID_DECLINE_GIG,
+            name = "Decline Gig",
+            icon = R.drawable.ic_gig_decline
         )
 
         private val PERMISSION_AND_REASONS: HashMap<String, String> = hashMapOf(
-                "LOCATION" to "To Capture Location For CheckIn",
-                "CAMERA" to "To Click Image for CheckIn",
-                "STORAGE" to "To Store Image captured while CheckIn"
+            "LOCATION" to "To Capture Location For CheckIn",
+            "CAMERA" to "To Click Image for CheckIn",
+            "STORAGE" to "To Store Image captured while CheckIn"
         )
     }
 
