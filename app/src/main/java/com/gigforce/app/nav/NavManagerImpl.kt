@@ -25,7 +25,10 @@ class NavManagerImpl @Inject constructor(
     override fun getNavController(): NavController {
         return (context as MainActivity).getNavController()
     }
-
+    
+    override fun getActivity(): Activity {
+        return context as MainActivity
+    }
     override fun registerAllRoutes() {
         this.registerRoute("profile", R.id.profileFragment)
         this.registerRoute("bottom_sheet",R.id.bsFragment)
