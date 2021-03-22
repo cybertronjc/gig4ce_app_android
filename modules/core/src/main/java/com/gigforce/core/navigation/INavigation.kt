@@ -18,5 +18,6 @@ interface INavigation {
     fun navigateToPlayVideoDialogFragment(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPlayVideoDialogWithUrl(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPhotoCrop(intent : Intent, requestCode:Int, fragment: Fragment)
+    fun navigateUp()
 
 }
