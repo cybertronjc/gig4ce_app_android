@@ -56,6 +56,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -446,10 +447,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 val agencyContact =
                                     upcomingGigs[viewHolder.adapterPosition].agencyContact ?: return@setOnClickListener
                                 navigate(
-                                    R.id.chatScreenFragment, bundleOf(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
+                                    R.id.chatPageFragment, bundleOf(
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
                                     )
                             }
 
@@ -460,20 +461,20 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     val bundle = Bundle()
                                     val map = upcomingGigs[viewHolder.adapterPosition].chatInfo
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
                                         (AppConstants.IMAGE_URL as String)
                                     )
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
                                         (AppConstants.CONTACT_NAME as String)
                                     )
 
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID,
+                                        ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,
                                         map?.get("chatHeaderId") as String
                                     )
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID,
                                         map?.get("otherUserId") as String
                                     )
                                     bundle.putString(
@@ -484,7 +485,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                         StringConstants.FROM_CLIENT_ACTIVATON.value,
                                         map?.get(StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean
                                     )
-                                    navigate(R.id.chatScreenFragment, bundle)
+                                    navigate(R.id.chatPageFragment, bundle)
                                 }
 
                             } else {

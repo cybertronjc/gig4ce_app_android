@@ -187,16 +187,20 @@ class MainActivity : AppCompatActivity(),
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.chatScreenFragment,
-                    intent.extras
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE, ChatConstants.CHAT_TYPE_USER)
+                    }
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.groupChatFragment,
-                    intent.extras
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE, ChatConstants.CHAT_TYPE_GROUP)
+                    }
                 )
             }
             else -> {

@@ -31,6 +31,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_
 import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -267,15 +268,15 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun openChat(enrollUser: EnrolledUser) {
         val bundle = Bundle()
 
-        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, enrollUser.profileAvatarThumbnail)
-        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
+        bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE, enrollUser.profileAvatarThumbnail)
+        bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
 
-        bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
-        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID,enrollUser.id)
+        bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
+        bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID,enrollUser.id)
 
         bundle.putString(StringConstants.MOBILE_NUMBER.value, enrollUser.mobileNumber)
         bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
-        navigate(R.id.chatScreenFragment, bundle)
+        navigate(R.id.chatPageFragment, bundle)
     }
 
     override fun onDestroy() {

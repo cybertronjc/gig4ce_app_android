@@ -70,7 +70,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             rv_gigs_gig_history.smoothScrollToPosition(0)
         }
         iv_chat_gig_his.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
         iv_back_tb_gig_history.setOnClickListener {
             popBackState()

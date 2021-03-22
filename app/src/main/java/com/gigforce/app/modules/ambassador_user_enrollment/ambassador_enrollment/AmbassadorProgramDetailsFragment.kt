@@ -357,7 +357,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
         return when (item.itemId) {
             R.id.action_help -> {
-                navigate(R.id.contactScreenFragment)
+                navigate(R.id.chatListFragment)
                 true
             }
             R.id.action_share -> {

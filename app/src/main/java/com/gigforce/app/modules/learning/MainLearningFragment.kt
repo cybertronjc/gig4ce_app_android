@@ -415,7 +415,7 @@ class MainLearningFragment : BaseFragment() {
 
     private fun listener() {
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
         cardView.setOnClickListener {
             navigate(R.id.profileFragment)
