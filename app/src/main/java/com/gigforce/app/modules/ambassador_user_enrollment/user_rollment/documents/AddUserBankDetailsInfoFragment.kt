@@ -154,8 +154,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
-                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
-                    (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
+                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB
+//                    &&
+//                    (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
                 )
                     enableSubmitButton()
                 else
@@ -252,16 +253,16 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                             return
                         }
 
-                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.click_or_select_bank_passbook))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
-                        }
+//                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+//
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert))
+//                                .setMessage(getString(R.string.click_or_select_bank_passbook))
+//                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                .show()
+//                            passbookSubmitSliderBtn.resetSlider()
+//                            return
+//                        }
 
                         val accNo = accountNoEditText.text.toString()
                         val bankName =

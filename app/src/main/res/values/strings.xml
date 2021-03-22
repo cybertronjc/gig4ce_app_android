@@ -1296,7 +1296,7 @@
     <string name="enter_user_s_mobile_number">Enter User’s mobile number</string>
     <string name="we_will_send_an_otp_on_this_number">We will send an OTP on this number.</string>
     <string name="country_code">+91-</string>
-    <string name="enter_code_sent_on_mobile">Enter code sent to User’s number</string>
+    <string name="enter_code_sent_on_mobile">Enter verification Id sent to User’s number</string>
     <string name="pin_code">Pin Code</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="address_line_2">Address Line 2</string>
