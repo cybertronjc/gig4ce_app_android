@@ -22,15 +22,12 @@ class ChatNavigation(
 
     fun navigateBackToChatListIfExistElseOneStepBack() {
 
-//        (this.context as MainActivity).getNavController().apply {
-//
-//            try {
-//                this.getBackStackEntry(R.id.chatListFragment)
-//                this.popBackStack(R.id.chatListFragment, false)
-//            } catch (e: Exception) {
-//                this.navigateUp()
-//            }
-//        }
+        try {
+            iNavigation.getBackStackEntry("chats/chatList")
+            iNavigation.popBackStack("chats/chatList",false)
+        } catch (e: Exception) {
+            iNavigation.navigateUp()
+        }
     }
 
     fun navigateToGroupChat(headerId: String) {
