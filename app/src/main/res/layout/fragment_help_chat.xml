@@ -33,7 +33,7 @@
                 android:focusable="true"
                 android:scaleX="0.75"
                 android:scaleY="0.75"
-                android:src="@drawable/ic_arrow_back_black"
+                  app:srcCompat="@drawable/ic_arrow_back_black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +45,7 @@
                 android:layout_marginTop="6dp"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
-                android:src="@drawable/logo_gig_force_v_2_small"
+                  app:srcCompat="@drawable/logo_gig_force_v_2_small"
                 app:layout_constraintStart_toEndOf="@id/helpChatBackButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,7 +87,7 @@
                 android:focusable="true"
                 android:scaleX="0.75"
                 android:scaleY="0.75"
-                android:src="@drawable/ic_ellipses"
+                  app:srcCompat="@drawable/ic_ellipses"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -862,7 +862,7 @@
                         android:layout_height="152dp"
                         android:layout_marginTop="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/map_demo" />
+                          app:srcCompat="@drawable/map_demo" />
 
                 </LinearLayout>
 
@@ -960,7 +960,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="11dp"
-            android:src="@drawable/ic_emoji" />
+              app:srcCompat="@drawable/ic_emoji" />
 
         <EditText
             android:layout_width="0dp"
@@ -980,14 +980,14 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="13dp"
-            android:src="@drawable/ic_plus_icon" />
+              app:srcCompat="@drawable/ic_plus_icon" />
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="11dp"
             android:layout_marginEnd="13dp"
-            android:src="@drawable/ic_send" />
+              app:srcCompat="@drawable/ic_send" />
 
 
     </LinearLayout>

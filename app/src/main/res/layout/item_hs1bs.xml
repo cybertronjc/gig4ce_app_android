@@ -15,7 +15,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="33dp"
-                android:src="@android:drawable/ic_lock_idle_alarm"
+                  app:srcCompat="@android:drawable/ic_lock_idle_alarm"
                 android:scaleType="fitXY"
                 android:id="@+id/iv"/>
 

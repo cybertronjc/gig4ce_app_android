@@ -17,11 +17,11 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.recycler_row_gig_list_for_decline.view.*
 import java.text.SimpleDateFormat
 
-interface GigsListForDeclineAdapterListener{
+interface GigsListForDeclineAdapterListener {
 
-    fun onCallClicked(gig : Gig)
+    fun onCallClicked(gig: Gig)
 
-    fun onMessageClicked(gig : Gig)
+    fun onMessageClicked(gig: Gig)
 }
 
 class GigsListForDeclineAdapter constructor(
@@ -31,11 +31,11 @@ class GigsListForDeclineAdapter constructor(
     private var gigSelectionListener: ((Gig) -> Unit)? = null
     private lateinit var mLayoutInflater: LayoutInflater
     private var mGigs: List<Gig> = emptyList()
-    private var mSelectedGigIndexes : MutableList<Int> = mutableListOf()
+    private var mSelectedGigIndexes: MutableList<Int> = mutableListOf()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
-    private lateinit var mGigsListForDeclineAdapterListener : GigsListForDeclineAdapterListener
+    private lateinit var mGigsListForDeclineAdapterListener: GigsListForDeclineAdapterListener
 
-    fun setGigsListForDeclineAdapterListener(gigsListForDeclineAdapterListener : GigsListForDeclineAdapterListener){
+    fun setGigsListForDeclineAdapterListener(gigsListForDeclineAdapterListener: GigsListForDeclineAdapterListener) {
         this.mGigsListForDeclineAdapterListener = gigsListForDeclineAdapterListener
     }
 
@@ -43,12 +43,12 @@ class GigsListForDeclineAdapter constructor(
         this.gigSelectionListener = listener
     }
 
-    val selectedGigCount : Int get() = mSelectedGigIndexes.size
+    val selectedGigCount: Int get() = mSelectedGigIndexes.size
 
     fun getSelectedGig(): List<Gig> {
         return if (mSelectedGigIndexes.isEmpty())
             emptyList()
-        else{
+        else {
             val selectedGigs = mutableListOf<Gig>()
             mSelectedGigIndexes.forEach {
                 selectedGigs.add(mGigs[it])
@@ -115,17 +115,17 @@ class GigsListForDeclineAdapter constructor(
 
         fun bindTo(gig: Gig) {
 
-            if (!gig.companyLogo.isNullOrBlank()) {
+            if (!gig.getFullCompanyLogo().isNullOrBlank()) {
 
-                if (gig.companyLogo!!.startsWith("http", true)) {
+                if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                     Glide.with(context)
-                        .load(gig.companyLogo)
+                        .load(gig.getFullCompanyLogo())
                         .into(companyLogoIV)
                 } else {
                     FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .reference
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener {
 
@@ -135,10 +135,10 @@ class GigsListForDeclineAdapter constructor(
                         }
                 }
             } else {
-                val companyInitials = if (gig.companyName.isNullOrBlank())
+                val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                     "C"
                 else
-                    gig.companyName!![0].toString().toUpperCase()
+                    gig.getFullCompanyName()!![0].toString().toUpperCase()
                 val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
@@ -146,26 +146,33 @@ class GigsListForDeclineAdapter constructor(
                 companyLogoIV.setImageDrawable(drawable)
             }
 
-            gigTitleTv.text = gig.title
+            gigTitleTv.text = gig.getGigTitle()
 
-            gigTimingTV.text = if (gig.endDateTime != null)
-                "${timeFormatter.format(gig.startDateTime!!.toDate())} - ${
-                    timeFormatter.format(
-                        gig.endDateTime!!.toDate()
-                    )
-                }"
-            else
-                "${timeFormatter.format(gig.startDateTime!!.toDate())} - "
+            gigTimingTV.text = "${timeFormatter.format(gig.startDateTime.toDate())} - ${
+                timeFormatter.format(gig.endDateTime.toDate())
+            }"
 
-            contactPersonNameTV.text = gig.gigContactDetails?.contactName
-            callCard.isVisible = gig.gigContactDetails?.contactNumberString.isNullOrEmpty()
+            contactPersonNameTV.text = if (gig.openNewGig()) {
+                gig.agencyContact?.name
+            } else {
+                gig.gigContactDetails?.contactName
+            }
+
+            callCard.isVisible = if (gig.openNewGig()) {
+                !gig.agencyContact?.contactNumber.isNullOrEmpty()
+            } else {
+                !gig.gigContactDetails?.contactNumberString.isNullOrEmpty()
+            }
+
+
+            messageCardView.isVisible = gig.agencyContact?.uid != null
         }
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
 
             if (isChecked) {
                 mSelectedGigIndexes.add(adapterPosition)
-            }else{
+            } else {
                 mSelectedGigIndexes.remove(adapterPosition)
             }
 
@@ -173,7 +180,7 @@ class GigsListForDeclineAdapter constructor(
         }
 
         override fun onClick(v: View?) {
-            v?: return
+            v ?: return
             val position = adapterPosition
 
             val gig = mGigs[position]

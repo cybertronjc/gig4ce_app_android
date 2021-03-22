@@ -39,10 +39,12 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.modules.learning.LearningConstants
@@ -53,20 +55,9 @@ import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ambassador_layout
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.join_as_amb_label
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_progress_bar
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -81,7 +72,7 @@ class BSCalendarScreenFragment : BaseFragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
-    private val profileViewModel : ProfileViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -116,7 +107,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text ==  getString(R.string.open)) {
+            if (amb_join_open_btn.text == getString(R.string.open)) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
             } else {
                 navigate(R.id.ambassadorProgramDetailsFragment)
@@ -136,19 +127,19 @@ class BSCalendarScreenFragment : BaseFragment() {
                 }
             })
 
-        mainLearningViewModel
-            .allAssessments
-            .observe(viewLifecycleOwner, Observer {
-
-                when (it) {
-                    Lce.Loading -> showAssessmentProgress()
-                    is Lce.Content -> showAssessments(it.content)
-                    is Lce.Error -> showAssessmentError(it.error)
-                }
-            })
-
-
-        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
+//        mainLearningViewModel
+//                .allAssessments
+//                .observe(viewLifecycleOwner, Observer {
+//
+//                    when (it) {
+//                        Lce.Loading -> showAssessmentProgress()
+//                        is Lce.Content -> showAssessments(it.content)
+//                        is Lce.Error -> showAssessmentError(it.error)
+//                    }
+//                })
+//
+//
+//        mainLearningViewModel.getAssessmentsFromAllAssignedCourses()
         learningViewModel.getRoleBasedCourses()
 
     }
@@ -419,7 +410,11 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
+                        GigNavigation.openGigMainPage(
+                            findNavController(),
+                            gig.openNewGig(),
+                            gig.gigId
+                        )
 //                    showKYCAndHideUpcomingLayout(
 //                        true
 //                    )
@@ -428,49 +423,137 @@ class BSCalendarScreenFragment : BaseFragment() {
                         val lp = getView(viewHolder, R.id.card_view).layoutParams
                         lp.height = lp.height
                         lp.width = itemWidth
-                        getView(viewHolder, R.id.card_view).layoutParams = lp
+                        var ivContact = getImageView(viewHolder, R.id.iv_call) as ImageView
+
+                        ivContact.setImageResource(R.drawable.fui_ic_phone_white_24dp)
+                        ivContact.setColorFilter(
+                            ContextCompat.getColor(
+                                viewHolder.itemView.context,
+                                R.color.lipstick
+                            ), android.graphics.PorterDuff.Mode.SRC_IN
+                        );
+
+                        getImageView(
+                            viewHolder,
+                            R.id.iv_message
+                        ).setImageResource(R.drawable.ic_chat)
+
+                        if (obj.openNewGig() && obj.agencyContact?.uid != null) {
+
+                            getView(viewHolder, R.id.messageCardView).visible()
+                            getView(viewHolder, R.id.messageCardView).setOnClickListener {
+                                val bundle = Bundle()
+                                val agencyContact =
+                                    upcomingGigs[viewHolder.adapterPosition].agencyContact ?: return@setOnClickListener
+                                navigate(
+                                    R.id.chatScreenFragment, bundleOf(
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
+                                    )
+                            }
+
+                        } else if (obj?.gigContactDetails != null && obj?.gigContactDetails?.contactNumber != null) {
+                            if (obj?.chatInfo?.isNullOrEmpty() == false) {
+                                getView(viewHolder, R.id.messageCardView).visible()
+                                getView(viewHolder, R.id.messageCardView).setOnClickListener {
+                                    val bundle = Bundle()
+                                    val map = upcomingGigs[viewHolder.adapterPosition].chatInfo
+                                    bundle.putString(
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
+                                        (AppConstants.IMAGE_URL as String)
+                                    )
+                                    bundle.putString(
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME,
+                                        (AppConstants.CONTACT_NAME as String)
+                                    )
+
+                                    bundle.putString(
+                                        ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID,
+                                        map?.get("chatHeaderId") as String
+                                    )
+                                    bundle.putString(
+                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID,
+                                        map?.get("otherUserId") as String
+                                    )
+                                    bundle.putString(
+                                        StringConstants.MOBILE_NUMBER.value,
+                                        map?.get(StringConstants.MOBILE_NUMBER.value) as String
+                                    )
+                                    bundle.putBoolean(
+                                        StringConstants.FROM_CLIENT_ACTIVATON.value,
+                                        map?.get(StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean
+                                    )
+                                    navigate(R.id.chatScreenFragment, bundle)
+                                }
+
+                            } else {
+
+                                getView(viewHolder, R.id.messageCardView).gone()
+                            }
+                        } else {
+                            getView(viewHolder, R.id.messageCardView).gone()
+                        }
 
                         getView(viewHolder, R.id.card_view).layoutParams = lp
-                        getTextView(viewHolder, R.id.textView41).text = obj?.title
-                        getTextView(viewHolder, R.id.contactPersonTV).text =
-                            obj?.gigContactDetails?.contactName
+                        getView(viewHolder, R.id.card_view).layoutParams = lp
+                        getTextView(viewHolder, R.id.textView41).text = obj?.getGigTitle()
+                        getTextView(viewHolder, R.id.contactPersonTV).text = if (obj.openNewGig())
+                            obj?.agencyContact?.name
+                        else
+                            obj.gigContactDetails?.contactName
+
+                        val gigStatus = GigStatus.fromGig(obj!!)
+                        when (gigStatus) {
+                            GigStatus.UPCOMING,
+                            GigStatus.DECLINED,
+                            GigStatus.CANCELLED,
+                            GigStatus.COMPLETED,
+                            GigStatus.MISSED -> {
+
+                                getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Check In"
+                            }
+                            GigStatus.ONGOING,
+                            GigStatus.PENDING,
+                            GigStatus.NO_SHOW -> {
+
+                                getView(viewHolder, R.id.checkInTV).setOnClickListener(
+                                    CheckInClickListener(
+                                        upcoming_gig_rv,
+                                        position
+                                    )
+                                )
+
+                                if (obj.isCheckInAndCheckOutMarked()) {
+                                    getView(viewHolder, R.id.checkInTV).isEnabled = false
+                                    (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                        "Checked Out"
+                                } else if (obj.isCheckInMarked()) {
+                                    getView(viewHolder, R.id.checkInTV).isEnabled = true
+                                    (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                        getString(R.string.check_out)
+                                } else {
+                                    getView(viewHolder, R.id.checkInTV).isEnabled = true
+                                    (getView(viewHolder, R.id.checkInTV) as Button).text =
+                                        getString(R.string.check_in)
+                                }
+                            }
+                        }
 
                         if (obj!!.isGigOfToday()) {
 
                             val gigTiming = if (obj.endDateTime != null)
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - ${
-                                timeFormatter.format(
-                                    obj.endDateTime!!.toDate()
-                                )
+                                    timeFormatter.format(
+                                        obj.endDateTime!!.toDate()
+                                    )
                                 }"
                             else
                                 "${timeFormatter.format(obj.startDateTime!!.toDate())} - "
                             getTextView(viewHolder, R.id.textView67).text = gigTiming
-                            getView(viewHolder, R.id.checkInTV).setOnClickListener(
-                                CheckInClickListener(
-                                    upcoming_gig_rv,
-                                    position
-                                )
-                            )
-
-                            if (!obj.isPresentGig()) {
-                                getView(viewHolder, R.id.checkInTV).isEnabled = false
-                            } else if (obj.isCheckInAndCheckOutMarked()) {
-                                getView(viewHolder, R.id.checkInTV).isEnabled = false
-                                (getView(viewHolder, R.id.checkInTV) as Button).text = "Checked Out"
-                            } else if (obj.isCheckInMarked()) {
-                                getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text =
-                                    getString(R.string.check_out)
-                            } else {
-                                getView(viewHolder, R.id.checkInTV).isEnabled = true
-                                (getView(viewHolder, R.id.checkInTV) as Button).text =
-                                    getString(R.string.check_in)
-                            }
 
                         } else {
-                            getView(viewHolder, R.id.checkInTV).isEnabled = false
-
                             val date = DateHelper.getDateInDDMMYYYY(obj.startDateTime!!.toDate())
                             getTextView(viewHolder, R.id.textView67).text = date
                         }
@@ -480,8 +563,16 @@ class BSCalendarScreenFragment : BaseFragment() {
                         )
 
                         val callView = getView(viewHolder, R.id.callCardView)
-                        if (!obj.gigContactDetails?.contactNumberString.isNullOrEmpty()) {
+                        if (obj.gigContactDetails?.contactNumber != null) {
 
+                            callView.visible()
+                            callView.setOnClickListener(
+                                CallClickListener(
+                                    upcoming_gig_rv,
+                                    position
+                                )
+                            )
+                        } else if (!obj.agencyContact?.contactNumber.isNullOrEmpty()) {
 
                             callView.visible()
                             callView.setOnClickListener(
@@ -494,23 +585,20 @@ class BSCalendarScreenFragment : BaseFragment() {
                             callView.gone()
                         }
 
-                        getView(viewHolder, R.id.messageCardView).setOnClickListener(
-                            ChatClickListener(upcoming_gig_rv, position)
-                        )
+
                         val companyLogoIV = getImageView(viewHolder, R.id.companyLogoIV)
+                        if (!obj.getFullCompanyLogo().isNullOrBlank()) {
 
-                        if (!obj.companyLogo.isNullOrBlank()) {
-
-                            if (obj.companyLogo!!.startsWith("http", true)) {
+                            if (obj.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                                 Glide.with(requireContext())
-                                    .load(obj.companyLogo)
+                                    .load(obj.getFullCompanyLogo())
                                     .into(companyLogoIV)
 
                             } else {
                                 FirebaseStorage.getInstance()
-                                    .getReference("companies_gigs_images")
-                                    .child(obj.companyLogo!!)
+                                    .reference
+                                    .child(obj.getFullCompanyLogo()!!)
                                     .downloadUrl
                                     .addOnSuccessListener {
 
@@ -520,10 +608,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     }
                             }
                         } else {
-                            val companyInitials = if (obj.companyName.isNullOrBlank())
+                            val companyInitials = if (obj.getFullCompanyName().isNullOrBlank())
                                 "C"
                             else
-                                obj.companyName!![0].toString().toUpperCase()
+                                obj.getFullCompanyName()!![0].toString().toUpperCase()
                             val drawable = TextDrawable.builder().buildRound(
                                 companyInitials,
                                 ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -534,6 +622,10 @@ class BSCalendarScreenFragment : BaseFragment() {
 
                     })!!
             recyclerGenericAdapter.setList(upcomingGigs)
+            viewModel.getTeamLeadInfo(upcomingGigs)
+            viewModel.observableChatInfo.observe(viewLifecycleOwner, Observer {
+                recyclerGenericAdapter.notifyItemChanged(upcomingGigs.indexOf(it))
+            })
             recyclerGenericAdapter.setLayout(R.layout.upcoming_gig_item)
             upcoming_gig_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
@@ -564,7 +656,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            GigNavigation.openGigAttendancePage(findNavController(), gig.gigId)
+            GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), gig.gigId)
         }
     }
 
@@ -572,16 +664,27 @@ class BSCalendarScreenFragment : BaseFragment() {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
 
-            if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
-            val intent = Intent(
-                Intent.ACTION_DIAL,
-                Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
-            )
-            startActivity(intent)
+            if (gig.gigContactDetails?.contactNumber != null &&
+                gig.gigContactDetails?.contactNumber != 0L
+            ) {
+
+                val intent = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", gig.gigContactDetails?.contactNumber.toString(), null)
+                )
+                startActivity(intent)
+            } else if (!gig.agencyContact?.contactNumber.isNullOrEmpty()) {
+                val intent = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", gig.agencyContact?.contactNumber, null)
+                )
+                startActivity(intent)
+            }
         }
     }
 
-    inner class ChatClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
+    open inner class ChatClickListener(val rv: RecyclerView, var position: Int) :
+        View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
             navigate(R.id.fakeGigContactScreenFragment)
@@ -660,8 +763,14 @@ class BSCalendarScreenFragment : BaseFragment() {
         datalist.add(FeatureModel("Profile", R.drawable.profile, R.id.profileFragment))
         datalist.add(FeatureModel("Learning", R.drawable.learning, R.id.mainLearningFragment))
         datalist.add(FeatureModel("Settings", R.drawable.settings, R.id.settingFragment))
-        datalist.add(FeatureModel("Chat", R.drawable.ic_homescreen_chat, R.id.contactScreenFragment))
-        datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.chatListFragment))
+        datalist.add(
+            FeatureModel(
+                "Chat",
+                R.drawable.ic_homescreen_chat,
+                R.id.chatListFragment
+            )
+        )
+        // datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.nav_graph_chat))
 
 //        datalist.add(
 //            FeatureModel(
@@ -670,7 +779,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 //                R.id.landinghomefragment
 //            )
 //        )
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
+//        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(
             FeatureModel(
                 "Verification",
@@ -928,11 +1037,11 @@ class BSCalendarScreenFragment : BaseFragment() {
                         tv_subtitle_role.text = gig?.job_description?.get(0)
                     }
                     cv_role.setOnClickListener {
-                            navigate(
-                                R.id.fragment_role_details, bundleOf(
-                                    StringConstants.ROLE_ID.value to gig?.id!!
-                                )
+                        navigate(
+                            R.id.fragment_role_details, bundleOf(
+                                StringConstants.ROLE_ID.value to gig?.id!!
                             )
+                        )
                     }
                 }
             })
@@ -951,18 +1060,20 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initializeClientActivation() {
-        landingScreenViewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { jobProfile ->
+        landingScreenViewModel.observableJobProfile.observe(
+            viewLifecycleOwner,
+            Observer { jobProfile ->
 
 
-            run {
-                jobProfile?.let {
-                    showClientActivations(jobProfile)
+                run {
+                    jobProfile?.let {
+                        showClientActivations(jobProfile)
+                    }
+
                 }
 
-            }
 
-
-        })
+            })
         landingScreenViewModel.getJobProfile()
 
     }

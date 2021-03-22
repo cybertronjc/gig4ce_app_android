@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/size_16"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_close"
+          app:srcCompat="@drawable/ic_close"
         android:tint="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/size_16"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_share_24"
+          app:srcCompat="@drawable/ic_baseline_share_24"
         android:tint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/lipstick"
-                android:paddingBottom="@dimen/size_53"
+                android:paddingBottom="@dimen/size_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -113,7 +113,7 @@
 
                     <TextView
                         android:id="@+id/tv_giger_location_giger_id"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/size_19"
                         android:layout_marginTop="@dimen/size_8"
@@ -123,7 +123,7 @@
                         android:text="Hyderabad, India"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_14"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
                         app:layout_constraintTop_toBottomOf="@+id/tv_designation_giger_id" />
 
@@ -143,21 +143,6 @@
                         app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
                         app:layout_constraintTop_toBottomOf="@+id/tv_giger_location_giger_id" />
 
-                    <TextView
-                        android:id="@+id/tv_email_giger_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/size_19"
-                        android:layout_marginTop="@dimen/size_12"
-                        android:drawableStart="@drawable/ic_email_giger_id"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="Dustin.putnam@gmail.com"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/font_12"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_giger_name_giger_id"
-                        app:layout_constraintStart_toEndOf="@+id/cv_profile_pic"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_contact_giger_id" />
 
                 </LinearLayout>
 
@@ -201,7 +186,7 @@
                     android:layout_width="@dimen/size_24"
                     android:layout_height="19dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/giglogo"
+                      app:srcCompat="@drawable/giglogo"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="@dimen/size_4" />
             </FrameLayout>

@@ -19,9 +19,9 @@ import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.GlideApp
 import com.gigforce.app.utils.PaginationScrollListener
 import com.gigforce.app.utils.ViewModelProviderFactory
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_gig_history.*
 
@@ -75,6 +75,12 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         iv_back_tb_gig_history.setOnClickListener {
             popBackState()
         }
+
+        cv_profile_image_gig_his.setOnClickListener {
+            navigate(R.id.profileFragment)
+        }
+
+
     }
 
     private fun setupRecycler() {
@@ -126,9 +132,9 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
             viewModel.isLoading = false
         })
         viewModel.observableShowExplore.observe(viewLifecycleOwner, Observer {
-            val dialog = NoGigsDialog();
-            dialog.setCallbacks(this)
-            dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
+//            val dialog = NoGigsDialog();
+//            dialog.setCallbacks(this)
+//            dialog.show(parentFragmentManager, NoGigsDialog::class.java.name)
         })
         viewModel.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it!!)
@@ -166,7 +172,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun openGigDetails(gig: Gig) {
-        GigNavigation.openGigMainPage(findNavController(), gig.gigId)
+        GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
     }
 
 

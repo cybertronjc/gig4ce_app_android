@@ -77,7 +77,8 @@
         <TextView
             android:id="@+id/tv_refer_rejection_dialog"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="@dimen/size_15"
             android:layout_marginTop="@dimen/size_22"
@@ -85,7 +86,6 @@
             android:background="@drawable/gradient_onboarding_progressbar_gradient"
             android:fontFamily="@font/lato"
             android:gravity="center"
-            android:minHeight="@dimen/size_36"
 
             android:text="@string/refer_a_friend"
             android:textColor="@color/white"

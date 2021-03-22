@@ -186,6 +186,16 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
             )
         }
 
+        ambsd_pan_edit_skip_btn.setOnClickListener {
+
+            navigate(
+                R.id.addUserAadharCardInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                )
+            )
+        }
+
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())

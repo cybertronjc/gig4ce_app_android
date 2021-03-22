@@ -2,7 +2,9 @@ package com.gigforce.app.modules.gigerid
 
 import android.view.View
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage.models.GigAndGigOrder
 import com.gigforce.app.modules.gigerid.models.URLQrCode
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.PermissionUtils
@@ -10,13 +12,14 @@ import com.gigforce.app.utils.SingleLiveEvent
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.launch
 
 class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) : ViewModel(),
     GigerIDCallbacks.ResponseCallbacks {
-    private val _observableGigDetails: SingleLiveEvent<Gig> by lazy {
-        SingleLiveEvent<Gig>();
+    private val _observableGigDetails: SingleLiveEvent<GigAndGigOrder> by lazy {
+        SingleLiveEvent<GigAndGigOrder>();
     }
-    val observableGigDetails: SingleLiveEvent<Gig> get() = _observableGigDetails
+    val observableGigDetails: SingleLiveEvent<GigAndGigOrder> get() = _observableGigDetails
     private val _observableURLS: SingleLiveEvent<URLQrCode> by lazy {
         SingleLiveEvent<URLQrCode>();
     }
@@ -122,8 +125,8 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
             observableError.value = error.message
         } else {
             val gigDetails = querySnapshot?.toObject(Gig::class.java)
-            observableGigDetails.value = gigDetails
-            fileNameToShare += gigDetails?.gigId
+//            observableGigDetails.value = gigDetails
+//            fileNameToShare += gigDetails?.gigId
         }
     }
 
@@ -141,8 +144,15 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
         gigerIDCallbacks.getURls(this)
     }
 
-    fun getGigDetails(string: String?) {
-        gigerIDCallbacks.getGigDetails(string!!, this)
+    fun getGigDetails(string: String?) = viewModelScope.launch{
+
+       try {
+           val gigAndGigOrder =  gigerIDCallbacks.getGigAndGigOrderDetails(string!!)
+           observableGigDetails.value = gigAndGigOrder
+           fileNameToShare += gigAndGigOrder.gig.gigId
+       } catch (e: Exception) {
+           observableError.value = e.message
+       }
     }
 
 }

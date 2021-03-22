@@ -47,7 +47,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.app.utils.AppConstants
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.configrepository.ConfigRepository
@@ -136,7 +136,9 @@ class CalendarHomeScreen : BaseFragment(),
             }
         })
         arrCalendarDependent =
-            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+//            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
+        arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
         listener()
@@ -149,8 +151,8 @@ class CalendarHomeScreen : BaseFragment(),
             if(currentAppVersion.contains("Dev")){
                 currentAppVersion = currentAppVersion?.split("-")[0]
             }
-            var appVersion = currentAppVersion?.split(".")?.toTypedArray()
-            var serverAPPVersion =
+            val appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            val serverAPPVersion =
                 latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
             if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
                 FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
@@ -830,7 +832,7 @@ class CalendarHomeScreen : BaseFragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            "You have $gigOnDay active on this day. These gigs will get cancelled as well."
+            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

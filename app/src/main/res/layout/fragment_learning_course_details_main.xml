@@ -30,7 +30,7 @@
                 android:focusable="true"
                 android:scaleX="0.75"
                 android:scaleY="0.75"
-                android:src="@drawable/ic_arrow_back_black"
+                  app:srcCompat="@drawable/ic_arrow_back_black"
                 app:tint="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -102,7 +102,7 @@
             android:layout_height="16dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_wifi"
+              app:srcCompat="@drawable/ic_wifi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoDescTV" />
 
@@ -129,7 +129,7 @@
             android:layout_height="12dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_play"
+              app:srcCompat="@drawable/ic_play"
             app:tint="@color/black"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +157,7 @@
             android:layout_height="16dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_receipt_outlined"
+              app:srcCompat="@drawable/ic_receipt_outlined"
             app:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/complitionStatusTv" />
@@ -306,6 +306,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:minHeight="@dimen/size_36"
             android:text="@string/see_more"
             app:strokeColor="@color/colorPrimary"
             android:layout_marginEnd="15dp"
@@ -372,6 +373,7 @@
             android:id="@+id/assessmentSeeMoreButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
+            android:minHeight="@dimen/size_36"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/see_more"

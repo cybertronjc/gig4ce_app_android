@@ -18,15 +18,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatHeader
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -36,10 +37,16 @@ import javax.inject.Inject
  * Use the [ChatHeadersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
+
+    private val chatNavigation : ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
     private val viewModel: ChatHeadersViewModel by viewModels()
 
     private lateinit var contactsFab: FloatingActionButton
@@ -47,15 +54,6 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private lateinit var contactsButton: Button
     private lateinit var toolbar: GigforceToolbar
     private lateinit var coreRecyclerView: CoreRecyclerView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        (this.requireContext().applicationContext as ChatModuleProvider)
-            .provideChatModule()
-            .inject(this)
-        navigation.context = requireContext()
-    }
 
     private fun setObserver(owner: LifecycleOwner) {
         Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
@@ -134,7 +132,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private fun findViews(view: View) {
         contactsFab = view.findViewById(R.id.contactsFab)
         contactsFab.setOnClickListener {
-            navigation.navigateToContactsPage()
+
+            chatNavigation.navigateToContactsPage()
         }
 
         coreRecyclerView = view.findViewById(R.id.rv_chat_headers)
@@ -144,7 +143,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
         contactsButton.isEnabled = true
         contactsButton.setOnClickListener {
-            navigation.navigateToContactsPage()
+
+            chatNavigation.navigateToContactsPage()
         }
 
         toolbar.showTitle("Chats")

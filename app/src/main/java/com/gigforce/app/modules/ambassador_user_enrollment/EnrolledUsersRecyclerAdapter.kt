@@ -18,7 +18,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.utils.CustomTypeFaceSpan
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.IconPowerMenuItem
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -76,24 +76,24 @@ class EnrolledUsersRecyclerAdapter constructor(
         }
 
         fun bindValues(user: EnrolledUser) {
-            if (user.profilePic.isBlank()) {
+            if (user.profilePic.isNullOrBlank()) {
                 Glide.with(applicationContext).load(R.drawable.avatar).into(userImageIV)
             } else {
 
-                if (user.profileAvatarThumbnail.isNotBlank()) {
+                if (!user.profileAvatarThumbnail.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
                         .reference
                         .child("profile_pics")
-                        .child(user.profileAvatarThumbnail)
+                        .child(user.profileAvatarThumbnail!!)
 
                     GlideApp.with(applicationContext)
                         .load(profilePicRef)
                         .into(userImageIV)
-                } else if (user.profilePic.isNotBlank()) {
+                } else if (!user.profilePic.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
                         .reference
                         .child("profile_pics")
-                        .child(user.profilePic)
+                        .child(user.profilePic!!)
 
                     GlideApp.with(applicationContext)
                         .load(profilePicRef)

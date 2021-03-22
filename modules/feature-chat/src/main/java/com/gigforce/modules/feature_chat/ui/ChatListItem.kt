@@ -9,21 +9,25 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.TextDrawable
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatListItem(
     context: Context
 ) :
@@ -32,7 +36,11 @@ class ChatListItem(
         View.OnClickListener {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
+
+    private val chatNavigation :ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
     //Views
     private lateinit var contextImageView: ImageView
@@ -50,8 +58,6 @@ class ChatListItem(
 
     init {
 
-        (this.context.applicationContext as ChatModuleProvider).provideChatModule().inject(this)
-        this.navigation.context = this.context
         LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_list, this, true)
         this.findViewById<View>(R.id.contactItemRoot).setOnClickListener(this)
 
@@ -216,12 +222,12 @@ class ChatListItem(
     override fun onClick(v: View?) {
         dObj?.let {
 
-            navigation.navigateToChatPage(
-                    chatType = it.chatType,
-                    otherUserId = it.profileId,
-                    headerId = it.id,
-                    otherUserName = it.title,
-                    otherUserProfilePicture = it.profilePath
+            chatNavigation.navigateToChatPage(
+                chatType = it.chatType,
+                otherUserId = it.profileId,
+                headerId = it.id,
+                otherUserName = it.title,
+                otherUserProfilePicture = it.profilePath
             )
         }
     }

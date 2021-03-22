@@ -22,8 +22,10 @@ class LandingScreenViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
     private val preferencesRepository: PreferencesRepository = PreferencesRepository()
 ) : ViewModel(), LandingScreenCallbacks.ResponseCallbacks {
+
     private var allTips: List<Tip>? = arrayListOf()
     private var callbacks: LandingScreenCallbacks? = null
+
     private val _observerRole: SingleLiveEvent<List<Role>> by lazy {
         SingleLiveEvent<List<Role>>();
     }
@@ -33,7 +35,6 @@ class LandingScreenViewModel constructor(
         SingleLiveEvent<ArrayList<JobProfile>>();
     }
     val observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> get() = _observableJobProfile
-
 
     companion object {
 

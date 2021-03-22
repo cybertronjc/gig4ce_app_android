@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
 import com.gigforce.core.IDataViewTypeGetter
 import com.gigforce.core.ICoreViewHolderFactory
-import com.gigforce.core.di.CoreComponentProvider
 import java.lang.IllegalArgumentException
-import javax.inject.Inject
 
 open class CoreRecyclerAdapter(
-    context: Context
+    context: Context,
+    val iViewTypeFinder: ICoreViewHolderFactory
 ) : RecyclerView.Adapter<CoreViewHolder>(){
 
     companion object {
@@ -23,8 +22,8 @@ open class CoreRecyclerAdapter(
         }*/
     }
 
-    @Inject
-    lateinit var iViewTypeFinder: ICoreViewHolderFactory
+//    @Inject
+//    lateinit var iViewTypeFinder: ICoreViewHolderFactory
 
     // This Collection will not change on search
     private var _originalCollection: List<Any> = ArrayList()
@@ -36,10 +35,6 @@ open class CoreRecyclerAdapter(
             _originalCollection = value
             this.notifyDataSetChanged()
         }
-
-    init {
-        (context.applicationContext as CoreComponentProvider).provide().inject(this)
-    }
 
     override fun getItemViewType(position: Int): Int {
         val data = collection.get(position)

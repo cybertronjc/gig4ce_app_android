@@ -46,7 +46,7 @@
                 android:layout_width="@dimen/size_35"
                 android:layout_height="@dimen/size_33"
                 android:layout_margin="@dimen/size_16"
-                android:src="@drawable/p_g_logo"
+                  app:srcCompat="@drawable/p_g_logo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -188,8 +188,8 @@
                     android:textColor="@color/warm_grey"
                     android:textSize="@dimen/font_12" />
 
-                <TextView
-                    android:id="@+id/tv_completed_gig_hist"
+                <com.gigforce.app.modules.gigPage2.views.GigStatusCardView
+                    android:id="@+id/gig_status_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

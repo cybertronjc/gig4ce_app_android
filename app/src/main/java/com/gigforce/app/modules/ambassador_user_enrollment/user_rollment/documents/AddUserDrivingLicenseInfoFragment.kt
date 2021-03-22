@@ -205,7 +205,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
+                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
 
                                 MaterialAlertDialogBuilder(requireContext())
                                         .setTitle(getString(R.string.alert))
@@ -260,6 +260,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                     userName = userName,
                     fragmentManager = childFragmentManager,
                     okayClickListener = this@AddUserDrivingLicenseInfoFragment
+            )
+        }
+
+        ambsd_dl_edit_skip_btn.setOnClickListener {
+
+            UserDetailsFilledDialogFragment.launch(
+                userId = userId,
+                userName = userName,
+                fragmentManager = childFragmentManager,
+                okayClickListener = this@AddUserDrivingLicenseInfoFragment
             )
         }
 

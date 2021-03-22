@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -24,14 +23,15 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application
-        android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_app_icon_with_grad"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/GigforceTheme"
+        android:name=".MainApplication"
+        android:largeHeap="true"
         tools:replace="android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -49,8 +49,15 @@
         -->
 
         <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value"
+            />
+
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCNgKMbX24olXyDp4xSa_UZZET0VPK2ZOE" />
+
 
         <!--        <meta-data-->
         <!--            android:name="CLEVERTAP_ACCOUNT_ID"-->
@@ -89,7 +96,7 @@
         <service
             android:name="com.gigforce.modules.feature_chat.service.SyncContactsService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"/>
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
@@ -118,7 +125,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".utils.DocViewerActivity"
@@ -147,14 +153,9 @@
             </intent-filter>
         </activity>
 
-        <!--        android:windowSoftInputMode="stateVisible|adjustPan"-->
-
         <activity
             android:name=".MainActivity"
-            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden"
-
-            >
-
+            android:configChanges="layoutDirection|locale|orientation|screenSize|keyboardHidden">
             <nav-graph android:value="@navigation/nav_graph" />
 
             <intent-filter>
@@ -165,6 +166,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.gigforce.app.gig.open_gig_attendance_page" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.gigforce.app.gig.open_gig_page_2" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
@@ -179,7 +184,6 @@
                 <action android:name="com.gigforce.app.chats.open_group_chat" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
         <meta-data

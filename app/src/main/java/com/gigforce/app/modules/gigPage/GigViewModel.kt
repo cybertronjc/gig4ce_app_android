@@ -6,13 +6,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.core.toDate
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigAttendance
-import com.gigforce.app.modules.gigPage.models.GigRegularisationRequest
+import com.gigforce.app.modules.gigPage2.models.AttendanceType
+import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
+import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -32,7 +37,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
         private val gigsRepository: GigsRepository = GigsRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : ViewModel() {
 
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
@@ -40,6 +46,10 @@ class GigViewModel constructor(
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
 
     var currentGig: Gig? = null
+
+    private val currentUser: FirebaseUser by lazy {
+        FirebaseAuth.getInstance().currentUser!!
+    }
 
     private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
     val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
@@ -58,37 +68,121 @@ class GigViewModel constructor(
                 }
     }
 
+    private val _markingAttendanceState = MutableLiveData<Lce<AttendanceType>>()
+    val markingAttendanceState: LiveData<Lce<AttendanceType>> get() = _markingAttendanceState
 
-    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
-        gigsRepository.markAttendance(markAttendance, gigId)
+    fun markAttendance(
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkInTimeAccToUser: Timestamp?,
+            remarks: String?
+    ) = viewModelScope.launch {
+        val gig = currentGig ?: return@launch
+
+        if (!gig.isCheckInMarked()) {
+
+            markCheckIn(
+                    gigId = gig.gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkInTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+        } else if (!gig.isCheckOutMarked()) {
+
+            markCheckOut(
+                    gigId = gig.gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkOutTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+        } else {
+            FirebaseCrashlytics.getInstance().apply {
+                log("GigViewModel : Gig Id - ${gig.gigId}")
+                recordException(IllegalStateException("GigViewModel : markAttendance called but check-in and checkout both are marked"))
+            }
+        }
+    }
+
+    private suspend fun markCheckIn(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkInTimeAccToUser: Timestamp?,
+            remarks: String?
+    ) {
+        _markingAttendanceState.postValue(Lce.loading())
+
+        try {
+            gigsRepository.markCheckIn(
+                    gigId = gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkInTime = Timestamp.now(),
+                    checkInTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks
+            )
+            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
+        } catch (e: Exception) {
+            _markingAttendanceState.postValue(Lce.error(e.toString()))
+        }
+    }
+
+    private suspend fun markCheckOut(
+            gigId: String,
+            latitude: Double,
+            longitude: Double,
+            locationPhysicalAddress: String,
+            image: String,
+            checkOutTimeAccToUser: Timestamp?,
+            remarks: String?
+    ) {
+        _markingAttendanceState.postValue(Lce.loading())
+
+        try {
+            gigsRepository.markCheckOut(
+                    gigId = gigId,
+                    latitude = latitude,
+                    longitude = longitude,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkOutTime = Timestamp.now(),
+                    checkOutTimeAccToUser = checkOutTimeAccToUser,
+                    remarks = remarks
+            )
+            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_OUT))
+        } catch (e: Exception) {
+            _markingAttendanceState.postValue(Lce.error(e.toString()))
+        }
     }
 
     private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
         val userGigs: MutableList<Gig> = extractGigs(querySnapshot)
 
-        val currentDate = Date()
         val upcomingGigs = userGigs.filter {
-
-            if (it.endDateTime != null) {
-                it.endDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
-            } else {
-                it.startDateTime!!.toDate().time > currentDate.time && !it.isCheckInAndCheckOutMarked()
-            }
+            val gigStatus = GigStatus.fromGig(it)
+            gigStatus == GigStatus.UPCOMING || gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
         }.sortedBy {
-            it.startDateTime!!.seconds
+            it.startDateTime.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
-        val userGigs: MutableList<Gig> = mutableListOf()
-        querySnapshot.documents.forEach { t ->
-            t.toObject(Gig::class.java)?.let {
-                it.gigId = t.id
-                userGigs.add(it)
-            }
-        }
-        return userGigs
+        return querySnapshot.documents.map { t ->
+            t.toObject(Gig::class.java)!!
+        }.toMutableList()
     }
 
 
@@ -99,7 +193,7 @@ class GigViewModel constructor(
     private val _gigDetails = MutableLiveData<Lce<Gig>>()
     val gigDetails: LiveData<Lce<Gig>> get() = _gigDetails
 
-    fun watchGig(gigId: String, shouldConvertToDownloadLink: Boolean = false) {
+    fun watchGig(gigId: String, shouldGetContactdetails: Boolean = false) {
         _gigDetails.value = Lce.loading()
         mWatchUpcomingRepoRegistration = gigsRepository
                 .getCollectionReference()
@@ -107,14 +201,66 @@ class GigViewModel constructor(
                 .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
                     if (documentSnapshot != null) {
-                        extractGigData(documentSnapshot)
+                        extractGigData(documentSnapshot, shouldGetContactdetails)
                     } else {
                         _gigDetails.value = Lce.error(firebaseFirestoreException!!.message!!)
                     }
                 }
     }
 
-    private fun extractGigData(documentSnapshot: DocumentSnapshot) = viewModelScope.launch {
+    fun getGigWithDetails(gigId: String) = viewModelScope.launch {
+        _gigDetails.value = Lce.loading()
+        Log.d("GigViewModel", "Fetching gig details ")
+
+        try {
+            val getGigQuery = gigsRepository
+                    .getCollectionReference()
+                    .document(gigId)
+                    .get().await()
+
+            val gig = getGigQuery.toObject(Gig::class.java)!!
+            val jobDetails = gigsRepository.getJobDetails(gig.profile.id!!)
+
+            gig.bannerImage = jobDetails.illustrationImage
+
+            val jobRequirementsMatch = jobDetails.info.find { it.title == "requirements" }
+            if (jobRequirementsMatch != null) {
+                gig.gigRequirements = jobRequirementsMatch.pointsData
+            }
+
+            val jobResponsibilitiesMatch = jobDetails.info.find { it.title == "responsibilities" }
+            if (jobResponsibilitiesMatch != null) {
+                gig.gigResponsibilities = jobResponsibilitiesMatch.pointsData
+            }
+
+            val jobDescriptionMatch = jobDetails.info.find { it.title == "description" }
+            if (jobDescriptionMatch != null) {
+                gig.description = jobDescriptionMatch.pointsData.firstOrNull() ?: ""
+            }
+
+            val jobPayoutMatch = jobDetails.info.find { it.title == "payout" }
+            if (jobPayoutMatch != null) {
+                gig.payoutDetails = jobPayoutMatch.pointsData.firstOrNull() ?: ""
+            }
+
+            val keywordsMatch = jobDetails.info.find { it.title == "keywords" }
+            if (keywordsMatch != null) {
+                gig.keywords = keywordsMatch.pointsData
+            }
+
+            Log.d("GigViewModel", "Gig : $gig")
+            _gigDetails.value = Lce.content(gig)
+        } catch (e: Exception) {
+            Log.e("GigViewModel", "Error while retriving gig details", e)
+            e.printStackTrace()
+            _gigDetails.value = Lce.error(e.message!!)
+        }
+    }
+
+    private fun extractGigData(
+            documentSnapshot: DocumentSnapshot,
+            shouldGetContactdetails: Boolean = false
+    ) = viewModelScope.launch {
         runCatching {
             val gig = documentSnapshot.toObject(Gig::class.java) ?: throw IllegalArgumentException()
             gig.gigId = documentSnapshot.id
@@ -123,14 +269,64 @@ class GigViewModel constructor(
             val gigAttachmentWithLinks = gig.gigUserFeedbackAttachments.map {
                 getDownloadLinkFor("gig_feedback_images", it)
             }
+
+            if (shouldGetContactdetails && gig.businessContact != null && gig.businessContact!!.uid != null) {
+
+               val profile = profileFirebaseRepository.getProfileDataIfExist(gig.businessContact!!.uid)
+                profile?.let {
+                    gig.businessContact?.profilePicture = if(!it.profileAvatarThumbnail.isNullOrBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarThumbnail}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
+                    } else if(profile.profileAvatarName.isNotBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarName}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
+                    } else{
+                        ""
+                    }
+                }
+            }
+
+            if (shouldGetContactdetails && gig.agencyContact != null && gig.agencyContact!!.uid != null) {
+
+                val profile = profileFirebaseRepository.getProfileDataIfExist(gig.agencyContact!!.uid)
+                profile?.let {
+                    gig.agencyContact?.profilePicture = if(!it.profileAvatarThumbnail.isNullOrBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarThumbnail}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
+                    } else if(profile.profileAvatarName.isNotBlank()){
+
+                        try {
+                            firebaseStorage.reference.child("profile_pics/${it.profileAvatarName}").getDownloadUrlOrThrow().toString()
+                        } catch (e: Exception) {
+                            ""
+                        }
+                    } else{
+                        ""
+                    }
+                }
+            }
+
             gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
             gig
         }.onSuccess {
             _gigDetails.value = Lce.content(it)
         }.onFailure {
-            _gigDetails.value = Lce.error(it.message!!)
+            it.message?.let { it1 -> _gigDetails.value = Lce.error(it1) }
         }
     }
+
 
     suspend fun getDownloadLinkFor(folder: String, file: String) =
             suspendCoroutine<String> { cont ->
@@ -217,14 +413,15 @@ class GigViewModel constructor(
         _submitGigRatingState.value = Lse.loading()
 
         try {
-            val gig = gigsRepository.getGig(gigId)
-            gig.gigRating = rating
-            gig.gigUserFeedback = feedback
-
-            gig.gigUserFeedbackAttachments = uploadFilesAndReturnNamesOnServer(files)
             gigsRepository.getCollectionReference()
                     .document(gigId)
-                    .setOrThrow(gig)
+                    .updateOrThrow(
+                            mapOf(
+                                    "gigRating" to rating,
+                                    "gigUserFeedback" to feedback,
+                                    "gigUserFeedbackAttachments" to files
+                            )
+                    )
 
             _submitGigRatingState.value = Lse.success()
         } catch (e: Exception) {
@@ -296,11 +493,15 @@ class GigViewModel constructor(
 
         try {
             val gig = getGigNow(gigId)
-            gig.declinedBy = gig.gigerId
-            gig.declineReason = reason
-            gig.gigerId = ""
 
-            gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+            gigsRepository
+                    .getCollectionReference()
+                    .document(gig.gigId)
+                    .updateOrThrow(mapOf(
+                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                            "declinedBy" to gig.gigerId,
+                            "declineReason" to reason
+                    ))
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
@@ -318,11 +519,14 @@ class GigViewModel constructor(
             gigIds.forEach {
 
                 val gig = getGigNow(it)
-                gig.declinedBy = gig.gigerId
-                gig.declineReason = reason
-                gig.gigerId = ""
-
-                gigsRepository.getCollectionReference().document(gig.gigId).setOrThrow(gig)
+                gigsRepository
+                        .getCollectionReference()
+                        .document(gig.gigId)
+                        .updateOrThrow(mapOf(
+                                "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                                "declinedBy" to gig.gigerId,
+                                "declineReason" to reason
+                        ))
             }
 
             _declineGig.value = Lse.success()
@@ -353,10 +557,9 @@ class GigViewModel constructor(
                     val tomorrow = date.plusDays(1)
 
                     if (querySnapshot != null) {
-                        val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                            it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                                    .isBefore(tomorrow))
-                        }
+                        val todaysUpcomingGigs = extractGigs(querySnapshot)/*.filter {
+                            it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
+                        }*/
                         _todaysGigs.value = Lce.content(todaysUpcomingGigs)
                     } else {
                         _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
@@ -377,10 +580,9 @@ class GigViewModel constructor(
                     .getOrThrow()
 
             val tomorrow = date.plusDays(1)
-            val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                it.startDateTime!! > Timestamp.now() && (it.endDateTime == null || it.endDateTime!!.toLocalDate()
-                        .isBefore(tomorrow))
-            }
+            val todaysUpcomingGigs = extractGigs(querySnapshot)/*.filter {
+                it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
+            }*/
             _todaysGigs.value = Lce.content(todaysUpcomingGigs)
             _todaysGigs.value = null
         } catch (e: Exception) {
@@ -393,23 +595,32 @@ class GigViewModel constructor(
     private val _monthlyGigs = MutableLiveData<Lce<List<Gig>>>()
     val monthlyGigs: LiveData<Lce<List<Gig>>> get() = _monthlyGigs
 
-    fun getGigsForMonth(companyName: String, month: Int, year: Int) = viewModelScope.launch {
+    fun getGigsForMonth(
+            gigOrderId: String,
+            month: Int,
+            year: Int
+    ) = viewModelScope.launch {
 
         val monthStart = LocalDateTime.of(year, month, 1, 0, 0)
-        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1);
+        val monthEnd = monthStart.plusMonths(1).withDayOfMonth(1).minusDays(1)
 
         try {
             _monthlyGigs.value = Lce.loading()
             val querySnap = gigsRepository
                     .getCurrentUserGigs()
-//                .whereGreaterThan("startDateTime", monthStart)
-//                .whereLessThan("startDateTime", monthEnd)
-                    .whereEqualTo("companyName", companyName)
+                    .whereEqualTo("gigerId", currentUser.uid)
+                    .whereEqualTo("gigOrderId", gigOrderId)
+                    .whereGreaterThan("startDateTime", monthStart.toDate)
+                    .whereLessThan("startDateTime", monthEnd.toDate)
                     .getOrThrow()
 
             val gigs = extractGigs(querySnap)
             _monthlyGigs.value = Lce.content(gigs)
         } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().apply {
+                recordException(e)
+            }
+            e.printStackTrace()
             _monthlyGigs.value = Lce.error(e.message!!)
         }
     }
@@ -425,20 +636,22 @@ class GigViewModel constructor(
         _requestAttendanceRegularisation.value = Lse.loading()
 
         try {
-            val gigRegularisationRequest = GigRegularisationRequest().apply {
-                checkInTime = punchInTime
-                checkOutTime = punchOutTime
-                requestedOn = Timestamp.now()
-            }
-
-            gigsRepository.getCollectionReference()
-                    .document(gigId)
-                    .updateOrThrow("regularisationRequest", gigRegularisationRequest)
-
-            _requestAttendanceRegularisation.value = Lse.success()
+//            val gigRegularisationRequest = GigRegularisationRequest().apply {
+//                checkInTime = punchInTime
+//                checkOutTime = punchOutTime
+//                requestedOn = Timestamp.now()
+//            }
+//
+//            gigsRepository.getCollectionReference()
+//                    .document(gigId)
+//                    .updateOrThrow("regularisationRequest", gigRegularisationRequest)
+//
+//            _requestAttendanceRegularisation.value = Lse.success()
         } catch (e: Exception) {
-            _requestAttendanceRegularisation.value = Lse.error(e.message
-                    ?: "Unable to submit regularisation attendance")
+            _requestAttendanceRegularisation.value = Lse.error(
+                    e.message
+                            ?: "Unable to submit regularisation attendance"
+            )
         }
     }
 
@@ -448,10 +661,13 @@ class GigViewModel constructor(
     fun checkIfTeamLeadersProfileExists(loginMobile: String) = viewModelScope.launch {
         checkForChatProfile(loginMobile)
     }
+
     suspend fun checkForChatProfile(loginMobile: String) {
         try {
 
-            val profiles = gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile).get().await()
+            val profiles =
+                    gigsRepository.db.collection("Profiles").whereEqualTo("loginMobile", loginMobile)
+                            .get().await()
             if (!profiles.documents.isNullOrEmpty()) {
                 val toObject = profiles.documents[0].toObject(ProfileData::class.java)
                 toObject?.id = profiles.documents[0].id
@@ -466,6 +682,4 @@ class GigViewModel constructor(
     fun getUid(): String {
         return gigsRepository.getUID()
     }
-
-
 }

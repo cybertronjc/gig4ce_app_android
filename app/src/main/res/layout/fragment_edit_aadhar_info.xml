@@ -36,7 +36,7 @@
             android:layout_marginEnd="19dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_cross_grey"
+              app:srcCompat="@drawable/ic_cross_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,8 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/black"
             android:text="Rahul Jain"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nameLabel" />
 
@@ -74,8 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:enabled="false"
-            android:textColor="@color/black"
             android:text="11/09/1990"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/selectDobButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dobLabel" />
@@ -104,11 +104,11 @@
             android:id="@+id/genderSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
+            android:entries="@array/gender_values"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:enabled="false"
             android:textColor="@color/black"
-            android:entries="@array/gender_values"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/genderLabel" />
 
@@ -127,8 +127,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/black"
             android:text="234576249238"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/aadharLabel" />
 
@@ -147,8 +147,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/black"
             android:text="House no 3601"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addressLineLabel" />
 
@@ -185,8 +185,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/black"
                 android:text="Preet Vihar"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/locationET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -197,8 +197,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/black"
                 android:text="New Delhi"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/areaET"
                 app:layout_constraintTop_toBottomOf="@id/locationLabel" />
@@ -238,8 +238,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/black"
                 android:text="Delhi"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/pinET"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stateLabel" />
@@ -265,6 +265,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="33dp"
+            android:minHeight="@dimen/size_36"
             android:text="@string/update"
             app:layout_constraintTop_toBottomOf="@id/statePinLayout" />
 

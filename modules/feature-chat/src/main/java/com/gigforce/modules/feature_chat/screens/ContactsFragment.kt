@@ -29,10 +29,10 @@ import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener
@@ -42,16 +42,21 @@ import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class ContactsFragment : DialogFragment(),
         PopupMenu.OnMenuItemClickListener,
         OnContactClickListener, CreateGroupDialogFragment.CreateGroupDialogFragmentListener {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
+
+    private val chatNavigation : ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
     private val viewModelNew: NewContactsViewModel by lazy {
         ViewModelProvider(
@@ -497,7 +502,8 @@ class ContactsFragment : DialogFragment(),
             dismiss()
         } else {
 
-            navigation.navigateToChatPage(
+
+            chatNavigation.navigateToChatPage(
                     otherUserId = contact.uid!!,
                     headerId = contact.headerId ?: "",
                     otherUserName = contact.name ?: "",
@@ -518,11 +524,6 @@ class ContactsFragment : DialogFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (this.requireContext().applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
-        navigation.context = requireContext()
-
         setStyle(
                 STYLE_NORMAL,
                 android.R.style.Theme_Light_NoTitleBar_Fullscreen
@@ -540,7 +541,8 @@ class ContactsFragment : DialogFragment(),
                 true
             }
             R.id.action_invite_friends -> {
-                navigation.openInviteAFriendFragment()
+
+                chatNavigation.openInviteAFriendFragment()
                 true
             }
             else -> {
@@ -577,7 +579,7 @@ class ContactsFragment : DialogFragment(),
 
     override fun onGroupCreated(groupId: String) {
 
-        navigation.navigateToGroupChat(
+        chatNavigation.navigateToGroupChat(
                 headerId = groupId
         )
     }

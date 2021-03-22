@@ -34,7 +34,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/assessment_dialog_background"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/bg_dialog_top"
+                      app:srcCompat="@drawable/bg_dialog_top"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -146,9 +146,10 @@
         <TextView
             android:id="@+id/tv_action_assess_dialog"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_12"
             android:layout_marginTop="@dimen/size_23"
+            android:minHeight="@dimen/size_36"
             android:layout_marginEnd="@dimen/size_12"
             android:layout_marginBottom="@dimen/size_16"
             android:background="@drawable/pink_border"

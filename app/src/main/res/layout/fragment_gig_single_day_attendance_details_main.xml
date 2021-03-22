@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:src="@drawable/ic_star"
+              app:srcCompat="@drawable/ic_star"
             android:textColor="#ffffff"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
             android:layout_height="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_star"
+              app:srcCompat="@drawable/ic_star"
             android:textColor="#ffffff"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/company_rating_tv"
@@ -97,29 +97,15 @@
         android:paddingBottom="10dp">
 
 
-        <TextView
-            android:id="@+id/gig_status_tv"
+        <com.gigforce.app.modules.gigPage2.views.GigStatusCardView
+            android:id="@+id/gig_status_card_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black_85"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
+          />
 
-        <ImageView
-            android:id="@+id/gig_status_iv"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="4dp"
-            android:textColor="@color/black_85"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/gig_status_tv"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
 
 
         <TextView
@@ -153,7 +139,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/warning_icon_" />
+              app:srcCompat="@drawable/warning_icon_" />
 
         <TextView
             android:id="@+id/regularisation_text"
@@ -168,7 +154,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+              app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
     </LinearLayout>
 

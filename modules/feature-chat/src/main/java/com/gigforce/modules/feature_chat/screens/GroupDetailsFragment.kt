@@ -13,6 +13,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,14 +25,10 @@ import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
-import com.gigforce.modules.feature_chat.DownloadCompleted
-import com.gigforce.modules.feature_chat.DownloadStarted
-import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
-import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.*
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.models.GroupMedia
@@ -41,13 +38,14 @@ import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main_2.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class GroupDetailsFragment : Fragment(),
     PopupMenu.OnMenuItemClickListener,
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
@@ -55,7 +53,11 @@ class GroupDetailsFragment : Fragment(),
     OnContactsSelectedListener {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
+
+    private val chatNavigation : ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
     private val viewModel: GroupChatViewModel by lazy {
         ViewModelProvider(
@@ -88,15 +90,7 @@ class GroupDetailsFragment : Fragment(),
     private val appDirectoryFileRef: File by lazy {
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        (this.requireContext().applicationContext as ChatModuleProvider)
-            .provideChatModule()
-            .inject(this)
-        navigation.context = requireContext()
-    }
+    
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -337,7 +331,7 @@ class GroupDetailsFragment : Fragment(),
 
         media_title_layout.setOnClickListener {
 
-            navigation.openGroupMediaList(
+            chatNavigation.openGroupMediaList(
                 groupId
             )
         }
@@ -377,7 +371,8 @@ class GroupDetailsFragment : Fragment(),
 
             contactLongPressed?.let {
 
-                navigation.navigateToChatPage(
+
+                chatNavigation.navigateToChatPage(
                     chatType = ChatConstants.CHAT_TYPE_USER,
                     otherUserId = it.uid!!,
                     headerId = "",
@@ -446,7 +441,8 @@ class GroupDetailsFragment : Fragment(),
 
     override fun onChatIconClicked(position: Int, contact: ContactModel) {
 
-        navigation.navigateToChatPage(
+
+        chatNavigation.navigateToChatPage(
             chatType = ChatConstants.CHAT_TYPE_USER,
             otherUserId = contact.uid!!,
             headerId = "",

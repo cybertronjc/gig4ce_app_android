@@ -43,7 +43,7 @@
                 android:layout_height="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_toStartOf="@id/documentUploadLabelTV"
-                android:src="@drawable/ic_attachment_pink" />
+                  app:srcCompat="@drawable/ic_attachment_pink" />
 
             <TextView
                 android:id="@+id/documentUploadSubLabelTV"

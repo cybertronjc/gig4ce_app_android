@@ -20,7 +20,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.models.*
 import com.gigforce.app.modules.verification.service.RetrofitFactory
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

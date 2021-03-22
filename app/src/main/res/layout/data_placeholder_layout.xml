@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shimmer_card"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/size_16"
+    android:layout_marginTop="@dimen/size_16"
+    android:layout_marginBottom="@dimen/size_16"
+    android:padding="@dimen/size_16">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_controller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="horizontal"
+        shimmer:duration="100">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/size_16">
+
+            <View
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/view_bottom"
+                android:layout_marginBottom="@dimen/size_8"
+                android:background="@color/background" />
+
+
+            <View
+                android:id="@+id/view_bottom"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/placeholderTextHeight"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/size_8"
+
+                android:background="@color/background" />
+
+
+        </RelativeLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</androidx.cardview.widget.CardView>

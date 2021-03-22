@@ -17,6 +17,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.StringConstants
@@ -80,6 +81,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
                 }
                 viewModel.checkIfTeamLeadersProfileExists(it.number)
                 initMappedUser(it)
+
             }
 
 
@@ -88,11 +90,15 @@ class DocsSubSchedulerFragment : BaseFragment() {
             contact_card.visible()
             textView147.setOnClickListener { view ->
                 val bundle = Bundle()
-                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
-                bundle.putString(AppConstants.CONTACT_NAME, it.name)
-                bundle.putString("chatHeaderId", "")
-                bundle.putString("forUserId", viewModel.getUid())
-                bundle.putString("otherUserId", it.id)
+//                bundle.putString(AppConstants.IMAGE_URL, it.profileAvatarName)
+//                bundle.putString(AppConstants.CONTACT_NAME, it.name)
+
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, it.profileAvatarName)
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME, it.name)
+
+                bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
+                bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, it.id)
+
                 bundle.putString(StringConstants.MOBILE_NUMBER.value, it.loginMobile)
                 bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
                 navigate(R.id.chatScreenFragment, bundle)
@@ -256,7 +262,8 @@ class DocsSubSchedulerFragment : BaseFragment() {
                                             StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
                                             StringConstants.TITLE.value to mTitle,
                                             StringConstants.TYPE.value to mType,
-                                            StringConstants.MOBILE_NUMBER.value to it
+                                            StringConstants.MOBILE_NUMBER.value to it,
+                                            StringConstants.MOBILE_NUMBERS.value to viewModel?.gfmappedUserObj?.numbers
                                     )
                             )
                         }

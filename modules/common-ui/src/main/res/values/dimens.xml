@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    font data/-->
+    <dimen name="font16">16sp</dimen>
+    <dimen name="font14">14sp</dimen>
+    <dimen name="font18">18sp</dimen>
+    <dimen name="font10">10sp</dimen>
+    <dimen name="font12">12sp</dimen>
+
+
+    <dimen name="sp_sm3">12sp</dimen>
+    <dimen name="sp_sm2">14sp</dimen>
+    <dimen name="sp_sm1">16sp</dimen>
+    <dimen name="sp_normal">18sp</dimen>
+    <dimen name="sp_large">22sp</dimen>
+    <dimen name="sp_xl1">26sp</dimen>
+    <dimen name="sp_xl2">30sp</dimen>
+    <dimen name="sp_xl3">34sp</dimen>
+
+    <!--    size -->
+    <dimen name="size16">16dp</dimen>
+    <dimen name="size8">8dp</dimen>
+    <dimen name="size4">4dp</dimen>
+
+    <dimen name="dp_xsm2">4dp</dimen>
+    <dimen name="dp_xsm1">8dp</dimen>
+    <dimen name="dp_sm3">12dp</dimen>
+    <dimen name="dp_sm2">14dp</dimen>
+    <dimen name="dp_sm1">16dp</dimen>
+    <dimen name="dp_normal">18dp</dimen>
+    <dimen name="dp_large">22dp</dimen>
+    <dimen name="dp_xl1">26dp</dimen>
+    <dimen name="dp_xl2">30dp</dimen>
+    <dimen name="dp_xl3">34dp</dimen>
+    <dimen name="dp_xl4">40dp</dimen>
+    <dimen name="dp_xl5">50dp</dimen>
+</resources>

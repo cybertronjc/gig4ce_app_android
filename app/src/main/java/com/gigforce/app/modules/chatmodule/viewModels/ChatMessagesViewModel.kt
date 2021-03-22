@@ -49,7 +49,7 @@ class ChatMessagesViewModel constructor(
     var headerId: String = ""
     var otherUserName: String? = null
     var otherUserProfilePicture: String? = null
-    lateinit var forUserId: String
+    var forUserId: String = uid
     lateinit var otherUserId: String
 
     private var _messages = MutableLiveData<List<Message>>()

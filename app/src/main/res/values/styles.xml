@@ -12,13 +12,13 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textViewStyle">@style/AppTheme.TextStyle</item>
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
-        <item name="android:letterSpacing">0.0</item>
+        <item name="android:letterSpacing">0</item>
 <!--        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>-->
 <!--        <item name="android:scrollbars">vertical</item>-->
 <!--        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>-->
 <!--        <item name="android:scrollbarStyle">outsideOverlay</item>-->
         <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
-        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowBackground">@color/bg</item>
         <!--        <item name="android:popupMenuStyle">@style/PopupMenu</item>-->
     </style>
 
@@ -489,7 +489,7 @@
 
     <style name="squareImageView" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10%</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="circleImageView" parent="">
@@ -508,6 +508,7 @@
         <item name="android:textColor">@color/attendance_chip_text_colors</item>
         <item name="chipStrokeColor">@color/attendance_chip_stroke_colors</item>
     </style>
+
 
     <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>
@@ -536,6 +537,7 @@
         <item name="android:textColor">@color/app_chip_text_colors_2</item>
         <item name="chipStrokeColor">@color/app_chip_stroke_colors_2</item>
         <item name="chipBackgroundColor">@color/app_chip_bck_colors_2</item>
+        <item name="rippleColor">@android:color/transparent</item>
         <item name="strokeWidth">1dp</item>
     </style>
 
@@ -550,10 +552,21 @@
         <item name="cornerSize">10%</item>
     </style>
 
+    <style name="CalendarRvStyle">
+        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:color">#80e9e9e9</item>
+
+
+    </style>
+
     <style name="ShapeAppearanceOverlay.MyApp.Button.RoundEdged" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
     <style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Dark">
         <!-- if using android.widget.PopupMenu -->
         <item name="android:popupMenuStyle">@style/PopupMenuTheme</item>
@@ -563,6 +576,11 @@
 
     <style name="PopupMenuTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:popupBackground">@drawable/bg_pop_up_menu_enrolled_users</item>
+    </style>
+
+    <style name="PopUpMenuWithOffset" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:dropDownHorizontalOffset">-16dp</item>
+
     </style>
 
     <style name="DialogTheme" parent="AppTheme">

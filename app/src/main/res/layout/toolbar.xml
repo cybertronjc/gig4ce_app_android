@@ -28,7 +28,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/back_button"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_arrow_back_24" />
+                  app:srcCompat="@drawable/ic_arrow_back_24" />
 
             <TextView
                 android:id="@+id/tv_title_toolbar"
@@ -49,7 +49,7 @@
                 android:layout_height="@dimen/size_24"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_three_dots"
+                  app:srcCompat="@drawable/ic_three_dots"
                 android:visibility="gone"
                 app:tint="@color/black" />
 

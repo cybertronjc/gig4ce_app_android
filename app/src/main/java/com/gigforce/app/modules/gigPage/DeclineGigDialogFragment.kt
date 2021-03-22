@@ -55,6 +55,7 @@ class DeclineGigDialogFragment : DialogFragment() {
         }
     }
 
+
     private val viewModel: GigViewModel by viewModels()
 
     private var gigId: String? = null
@@ -92,7 +93,6 @@ class DeclineGigDialogFragment : DialogFragment() {
     }
 
 
-
     private fun initViewModel() {
         viewModel.declineGig.observe(viewLifecycleOwner, Observer {
 
@@ -118,23 +118,23 @@ class DeclineGigDialogFragment : DialogFragment() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-
-            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
-
-            setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        dialog?.window?.apply {
+//            setBackgroundDrawableResource(R.drawable.dialog_round_bg)
+//            setLayout(
+//                    (getScreenWidth(requireActivity()).width - resources.getDimension(R.dimen.size_32)).toInt(),
+//                    ViewGroup.LayoutParams.WRAP_CONTENT
+//            )
+//
+//        }
+//    }
 
 
     private fun initView() {
 
         reason_radio_group.setOnCheckedChangeListener { _, checkedId ->
+            submitBtn.isEnabled = true
 
             if (checkedId == R.id.reason_others) {
                 reason_label.visible()
@@ -145,16 +145,12 @@ class DeclineGigDialogFragment : DialogFragment() {
             }
         }
 
-        confirm_decline_cb.setOnCheckedChangeListener { _, isChecked ->
-            submitBtn.isEnabled = isChecked
-        }
 
         submitBtn.setOnClickListener {
 
             val checkedRadioButtonId = reason_radio_group.checkedRadioButtonId
             if (checkedRadioButtonId == -1) {
 
-                confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")
                     .setMessage("Please select the reason")
@@ -166,7 +162,6 @@ class DeclineGigDialogFragment : DialogFragment() {
                 && reason_et.text.isNullOrBlank()
             ) {
 
-                confirm_decline_cb.isChecked = false
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Alert")
                     .setMessage("Please type the reason")

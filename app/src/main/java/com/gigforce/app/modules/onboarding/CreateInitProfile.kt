@@ -18,7 +18,7 @@ import com.gigforce.app.modules.onboarding.controls.OBTextView
 import com.gigforce.app.modules.onboarding.controls.OBToggleButton
 import com.gigforce.app.modules.onboarding.controls.ViewChanger
 import com.gigforce.app.modules.onboarding.models.UserData
-import com.gigforce.app.utils.GlideApp
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_confirm_otp.*

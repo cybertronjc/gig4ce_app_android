@@ -166,7 +166,6 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     }
 
     private fun getDocumentsUploadedByGigerDetails(userId: String) {
-
         gigerVerificationViewModel.getVerificationStatus(userId)
     }
 }

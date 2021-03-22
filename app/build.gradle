@@ -5,8 +5,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+
     signingConfigs {
         debug {
             storeFile file('../keystore/gigforceapp.jks')
@@ -22,6 +24,12 @@ android {
             keyPassword 'gig4ce'
         }
 
+        staging {
+            storeFile file('../keystore/gigforcestaging.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
+        }
 
         //        production {
 //            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
@@ -37,8 +45,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 78
-        versionName "1.26.9"
+        versionCode 84
+        versionName "1.27.5"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -97,6 +105,20 @@ android {
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
         }
+
+        staging {
+            dimension "default"
+            versionNameSuffix '-staging'
+            signingConfig signingConfigs.staging
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+        }
     }
 
     lintOptions {
@@ -120,8 +142,15 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':modules:feature-chat')
+
     implementation project(path: ':modules:core')
+    implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:feature-chat')
+    implementation project(path: ':modules:app-giger')
+    implementation project(path: ':modules:learning')
+    implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:profile')
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
@@ -169,7 +198,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
     // implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
-    implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation 'com.android.support:appcompat-v7:'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
@@ -177,7 +206,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
-    def nav_version = "2.3.0"
+    def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
@@ -209,6 +238,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-functions:19.1.0'
+
+
     implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
 
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
@@ -307,8 +338,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
 
-    implementation 'com.google.dagger:dagger:2.31'
-    kapt 'com.google.dagger:dagger-compiler:2.31'
+    //implementation 'com.google.dagger:dagger:2.31'
+    //kapt 'com.google.dagger:dagger-compiler:2.31'
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Rx
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
@@ -317,11 +351,14 @@ dependencies {
     // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-rc03'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-rc01'
 
     implementation 'com.google.android:flexbox:2.0.1'
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
     implementation "com.github.skydoves:powermenu:2.1.9"
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // Facebook Integration
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
 }

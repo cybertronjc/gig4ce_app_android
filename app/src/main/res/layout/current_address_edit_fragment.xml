@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:outlineSpotShadowColor="@color/black"
-            android:src="@drawable/ic_arrow_back_black"
+              app:srcCompat="@drawable/ic_arrow_back_black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/textView100"
             app:layout_constraintBottom_toBottomOf="@id/textView100"/>
@@ -170,12 +170,13 @@
     <TextView
         android:id="@+id/button2"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="23dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
         android:text="@string/save_"
         android:textSize="14sp"
+        android:minHeight="@dimen/size_36"
         android:textColor="@color/colorPrimary"
         android:gravity="center"
         android:fontFamily="@font/lato"

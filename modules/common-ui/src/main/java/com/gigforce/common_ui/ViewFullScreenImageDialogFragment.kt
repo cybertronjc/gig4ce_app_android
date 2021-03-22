@@ -16,8 +16,8 @@ class ViewFullScreenImageDialogFragment : DialogFragment() {
     companion object {
         private const val TAG = "ViewFullScreenImageDialogFragment"
 
-        private const val INTENT_EXTRA_IMAGE_URI = "image_uri"
-        private const val INTENT_EXTRA_IMAGE_PATH = "image_path"
+         const val INTENT_EXTRA_IMAGE_URI = "image_uri"
+        const val INTENT_EXTRA_IMAGE_PATH = "image_path"
 
         @JvmStatic
         fun showImage(fragmentManager: FragmentManager, file: File) {

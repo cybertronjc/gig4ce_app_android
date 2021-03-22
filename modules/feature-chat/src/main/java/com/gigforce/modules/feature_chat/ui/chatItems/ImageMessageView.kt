@@ -15,18 +15,19 @@ import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 abstract class ImageMessageView(
         val type: MessageFlowType,
         val messageType: MessageType,
@@ -37,6 +38,13 @@ abstract class ImageMessageView(
         attrs
 ), View.OnClickListener {
 
+    @Inject
+    lateinit var navigation : INavigation
+
+    private val chatNavigation : ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
+
     private lateinit var senderNameTV: TextView
     private lateinit var imageView: ImageView
     private lateinit var textViewTime: TextView
@@ -46,20 +54,12 @@ abstract class ImageMessageView(
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
     private lateinit var receivedStatusIV: ImageView
 
-    @Inject
-    lateinit var navigation: IChatNavigation
-
 
     init {
         setDefault()
         inflate()
         findViews()
         setOnClickListeners()
-
-        (this.context.applicationContext as ChatModuleProvider)
-                .provideChatModule()
-                .inject(this)
-        navigation.context = context
     }
 
     private fun findViews() {
@@ -177,7 +177,7 @@ abstract class ImageMessageView(
         val file = returnFileIfAlreadyDownloadedElseNull()
 
         if (file != null) {
-            navigation.openFullScreenImageViewDialogFragment(file.toUri())
+            chatNavigation.openFullScreenImageViewDialogFragment(file.toUri())
         } else {
             downloadAttachment()
         }

@@ -1,13 +1,9 @@
 package com.gigforce.app.modules.roster
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
@@ -26,7 +22,6 @@ import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.gigPage.models.Gig
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
-import kotlinx.android.synthetic.main.earning_fragment.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -74,14 +69,14 @@ class RosterDayFragment : RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewModelCustomPreference =
-            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                CustomPreferencesViewModel::class.java
-            )
+                ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                        CustomPreferencesViewModel::class.java
+                )
         //attachHourViewAdapter()
         rosterViewModel.currentDateTime.value = rosterViewModel.currentDateTime.value
         Log.d("RosterDayFragment", rosterViewModel.currentDateTime.value.toString())
@@ -118,7 +113,7 @@ class RosterDayFragment : RosterBaseFragment() {
 
         initializeMonthTV(calendar, false)
 
-        rosterViewModel.dayContext = requireContext()
+//        rosterViewModel.dayContext = requireContext()
 //        arrCalendarDependent =
 //            arrayOf(calendar_top_cl, mark_unavailable_bs)
 
@@ -153,9 +148,9 @@ class RosterDayFragment : RosterBaseFragment() {
 
             getDayTimesChild()?.let {
                 rosterViewModel.resetDayTimeAvailability(
-                    viewModelCustomPreference,
-                    getDayTimesChild()!!,
-                    configDataModel
+                        viewModelCustomPreference,
+                        getDayTimesChild()!!,
+                        configDataModel
                 )
             }
 
@@ -173,22 +168,25 @@ class RosterDayFragment : RosterBaseFragment() {
 //        })
 
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
-            viewLifecycleOwner, Observer {
-                getDayTimesChild()?.let {
-                    rosterViewModel.resetDayTimeAvailability(
+                viewLifecycleOwner, Observer {
+            getDayTimesChild()?.let {
+                rosterViewModel.resetDayTimeAvailability(
                         viewModelCustomPreference,
                         getDayTimesChild()!!,
                         configDataModel
-                    )
-                }
+                )
             }
+        }
         )
         calendarView.setGigData(arrMainHomeDataModel!!)
     }
 
     private fun attachTopBarMenu() {
         top_bar.more_bottom.setOnClickListener {
-            val popupMenu: PopupMenu = PopupMenu(requireContext(), more_bottom)
+            val themeWrapper = ContextThemeWrapper(requireContext(), R.style.PopUpMenuWithOffset)
+            val popupMenu: PopupMenu = PopupMenu(themeWrapper, more_bottom)
+            popupMenu.gravity = Gravity.END
+
             popupMenu.menuInflater.inflate(R.menu.roster_menu, popupMenu.menu)
 
 
@@ -197,9 +195,9 @@ class RosterDayFragment : RosterBaseFragment() {
                     R.id.location_preference -> {
                         navigate(R.id.locationFragment)
                     }
-                    R.id.decline_gigs ->{
+                    R.id.decline_gigs -> {
                         navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
-                            GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
+                                GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
                         ))
                     }
                     R.id.settings -> {
@@ -268,7 +266,7 @@ class RosterDayFragment : RosterBaseFragment() {
         })
 
         calendarView.setMonthChangeListener(object :
-            CalendarView.MonthChangeAndDateClickedListener {
+                CalendarView.MonthChangeAndDateClickedListener {
             override fun onMonthChange(monthModel: CalendarView.MonthModel) {
                 var calendar = Calendar.getInstance()
                 calendar.set(Calendar.MONTH, monthModel.currentMonth)
@@ -310,22 +308,22 @@ class RosterDayFragment : RosterBaseFragment() {
         top_bar.available_toggle.setOnClickListener {
 
 
-                rosterViewModel.switchDayAvailability(
+            rosterViewModel.switchDayAvailability(
                     requireContext(), getDayTimesChild()!!,
 
                     rosterViewModel.isDayAvailable.value!!, viewModelCustomPreference
-                )
-                rosterViewModel.resetDayTimeAvailability(
+            )
+            rosterViewModel.resetDayTimeAvailability(
                     viewModelCustomPreference, getDayTimesChild()!!, configDataModel
-                )
+            )
 
         }
 
         rosterViewModel.showDeclineGigDialog.observe(viewLifecycleOwner, Observer {
 
-                            navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
+            navigate(R.id.gigsListForDeclineBottomSheet, bundleOf(
                     GigsListForDeclineBottomSheet.INTEN_EXTRA_DATE to activeDateTime.toLocalDate()
-                ))
+            ))
 
         })
 
@@ -341,14 +339,14 @@ class RosterDayFragment : RosterBaseFragment() {
         if (monthModel == null) return
         var millisecond = activeDateTime.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
         var activeDateTimeClone =
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond), ZoneId.systemDefault())
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(millisecond), ZoneId.systemDefault())
         var selectedDay = monthModel.days.get(0)
         if (activeDateTimeClone.year < monthModel.year || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue < selectedDay.month + 1) || (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth < selectedDay.date)) {
             for (index in 1..365) {
                 activeDateTimeClone = activeDateTimeClone.plusDays(1)
                 if (activeDateTimeClone.year == selectedDay.year && activeDateTimeClone.monthValue == selectedDay.month + 1 && activeDateTimeClone.dayOfMonth == selectedDay.date) {
                     hourview_viewpager.setCurrentItem(
-                        hourview_viewpager.currentItem + index
+                            hourview_viewpager.currentItem + index
                     )
                     activeDateTime = activeDateTimeClone
                     rosterViewModel.currentDateTime.setValue(activeDateTime)
@@ -363,7 +361,7 @@ class RosterDayFragment : RosterBaseFragment() {
                     activeDateTime = activeDateTimeClone
                     rosterViewModel.currentDateTime.setValue(activeDateTime)
                     hourview_viewpager.setCurrentItem(
-                        (hourview_viewpager.currentItem - index)
+                            (hourview_viewpager.currentItem - index)
                     )
                     break
                 }
@@ -373,7 +371,7 @@ class RosterDayFragment : RosterBaseFragment() {
 
     private fun changeMonthCalendarVisibility() {
         calendar_top_cl.visibility =
-            if (calendar_top_cl.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                if (calendar_top_cl.visibility == View.VISIBLE) View.GONE else View.VISIBLE
     }
 
     private fun setCustomPreference() {
@@ -387,7 +385,7 @@ class RosterDayFragment : RosterBaseFragment() {
     private fun attachDayAvailabilityObserver() {
         rosterViewModel.isDayAvailable.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             top_bar.isAvailable = it
-            Log.d("ROsterAvail","called")
+            Log.d("ROsterAvail", "called")
             timesAvailableSwitchUpdated++
 
 //                        if(!it) {
@@ -402,42 +400,42 @@ class RosterDayFragment : RosterBaseFragment() {
 
     private fun attachTopBarMonthChangeListener() {
         top_bar.month_selector.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // TODO("Not yet implemented")
-                }
-
-                @RequiresApi(Build.VERSION_CODES.O)
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val monthGap = position - (activeDateTime.monthValue - 1)
-                    val newDateTime: LocalDateTime
-                    val dateDifference: Int
-
-                    if (monthGap == 0)
-                        return
-
-                    newDateTime = if (monthGap < 0) {
-                        activeDateTime.minusMonths((-1 * monthGap).toLong())
-                    } else {
-                        activeDateTime.plusMonths(monthGap.toLong())
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        // TODO("Not yet implemented")
                     }
 
-                    dateDifference =
-                        java.time.Duration.between(activeDateTime, newDateTime).toDays().toInt()
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                    ) {
+                        val monthGap = position - (activeDateTime.monthValue - 1)
+                        val newDateTime: LocalDateTime
+                        val dateDifference: Int
 
-                    hourview_viewpager.setCurrentItem(
-                        (hourview_viewpager.currentItem + dateDifference)
-                    )
-                    activeDateTime = newDateTime
+                        if (monthGap == 0)
+                            return
 
-                    rosterViewModel.currentDateTime.setValue(activeDateTime)
+                        newDateTime = if (monthGap < 0) {
+                            activeDateTime.minusMonths((-1 * monthGap).toLong())
+                        } else {
+                            activeDateTime.plusMonths(monthGap.toLong())
+                        }
+
+                        dateDifference =
+                                java.time.Duration.between(activeDateTime, newDateTime).toDays().toInt()
+
+                        hourview_viewpager.setCurrentItem(
+                                (hourview_viewpager.currentItem + dateDifference)
+                        )
+                        activeDateTime = newDateTime
+
+                        rosterViewModel.currentDateTime.setValue(activeDateTime)
+                    }
                 }
-            }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

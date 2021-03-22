@@ -27,7 +27,8 @@ class CompletedGigCard(
     var title: String = "",
     var isFullDay: Boolean = false,
     var gigId: String = "",
-    var isMonthlyGig: Boolean = false
+    var isMonthlyGig: Boolean = false,
+    var isNewgigPage : Boolean
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
@@ -98,7 +99,7 @@ class CompletedGigCard(
             cardHeight = 70.px
 
         this.setOnClickListener {
-            GigNavigation.openGigMainPage(findNavController(), gigId)
+            GigNavigation.openGigMainPage(findNavController(),isNewgigPage, gigId)
         }
     }
 }

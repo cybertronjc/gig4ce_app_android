@@ -45,12 +45,12 @@ import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.core.IChatNavigation
-import com.gigforce.modules.feature_chat.di.ChatModuleProvider
 import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.VideoInfo
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
@@ -59,6 +59,7 @@ import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModel
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat.*
 import java.io.File
 import java.sql.Timestamp
@@ -66,12 +67,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ChatPageFragment : Fragment(),
     PopupMenu.OnMenuItemClickListener,
     ImageCropCallback {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
+
+    private val chatNavigation: ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
@@ -137,11 +143,6 @@ class ChatPageFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (this.requireContext().applicationContext as ChatModuleProvider)
-            .provideChatModule()
-            .inject(this)
-        navigation.context = requireContext()
     }
 
     override fun onCreateView(
@@ -230,9 +231,7 @@ class ChatPageFragment : Fragment(),
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.openGroupDetailsPage(
-                    groupId
-                )
+                chatNavigation.openGroupDetailsPage(groupId)
             }
         })
 
@@ -241,7 +240,8 @@ class ChatPageFragment : Fragment(),
             val groupId = chatHeaderOrGroupId ?: return@OnClickListener
 
             if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
-                navigation.openGroupDetailsPage(
+
+                chatNavigation.openGroupDetailsPage(
                     groupId
                 )
             }
@@ -375,7 +375,7 @@ class ChatPageFragment : Fragment(),
 
         override fun handleOnBackPressed() {
             hideSoftKeyboard()
-            navigation.navigateBackToChatListIfExistElseOneStepBack()
+            chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
         }
     }
 
@@ -553,7 +553,6 @@ class ChatPageFragment : Fragment(),
             }
         }
     }
-
 
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {

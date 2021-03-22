@@ -190,7 +190,9 @@ class GroupChatViewModel constructor(
     private fun compareGroupMessagesWithContactsAndEmit() {
         grpMessages!!.forEach { groupMessage ->
 
-            val matchInContact = userContacts!!.find { groupMessage.senderInfo!!.id == it.uid }
+            val matchInContact = userContacts!!.find {
+                groupMessage.senderInfo!!.id == it.uid
+            }
 
             if (matchInContact != null) {
                 groupMessage.senderInfo!!.name = if (matchInContact.name.isNullOrBlank()) {

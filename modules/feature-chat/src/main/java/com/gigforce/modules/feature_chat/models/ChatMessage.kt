@@ -1,7 +1,7 @@
 package com.gigforce.modules.feature_chat.models
 
 import android.graphics.Bitmap
-import com.gigforce.core.DataViewObject
+import com.gigforce.core.SimpleDVM
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
@@ -111,7 +111,10 @@ class ChatMessage(
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
 
-) : DataViewObject(),
+) : SimpleDVM(
+        defaultViewType = -1,
+        onClickNavPath = null
+),
     IMediaMessage {
 
     override fun getViewType(): Int {

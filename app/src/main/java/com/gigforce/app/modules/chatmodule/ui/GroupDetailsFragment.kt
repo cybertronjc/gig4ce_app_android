@@ -36,7 +36,8 @@ import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
-import com.gigforce.modules.feature_chat.core.IChatNavigation
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat_group_details.*
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main.*
 import java.io.File
@@ -45,6 +46,7 @@ import java.util.*
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class GroupDetailsFragment : BaseFragment(),
     PopupMenu.OnMenuItemClickListener,
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
@@ -52,7 +54,7 @@ class GroupDetailsFragment : BaseFragment(),
     OnContactsSelectedListener {
 
     @Inject
-    lateinit var navigation: IChatNavigation
+    lateinit var navigation: INavigation
 
     private val viewModel: GroupChatViewModel by lazy {
         ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
@@ -407,11 +409,14 @@ class GroupDetailsFragment : BaseFragment(),
 
     override fun onChatIconClicked(position: Int, contact: ContactModel) {
         val bundle = Bundle()
-        bundle.putString(AppConstants.IMAGE_URL, contact.imageUrl)
-        bundle.putString(AppConstants.CONTACT_NAME, contact.name)
-        bundle.putString("chatHeaderId", "")
-        bundle.putString("forUserId", currentUserUid)
-        bundle.putString("otherUserId", contact.uid)
+//        bundle.putString(AppConstants.IMAGE_URL, contact.imageUrl)
+//        bundle.putString(AppConstants.CONTACT_NAME, contact.name)
+
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE, contact.imageUrl)
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_NAME,  contact.name)
+
+        bundle.putString(ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
+        bundle.putString(ChatFragment.INTENT_EXTRA_OTHER_USER_ID, contact.uid)
         navigate(R.id.chatScreenFragment, bundle)
     }
 

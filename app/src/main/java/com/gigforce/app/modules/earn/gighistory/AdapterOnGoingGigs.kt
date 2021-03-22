@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage.models.Gig
 import com.gigforce.app.utils.*
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
@@ -55,8 +56,8 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
 
         val gig = onGoingGigs?.get(position)
 
-        holder.itemView.tv_designation_rv_gig_hist.text = gig?.title
-        holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.companyName}"
+        holder.itemView.tv_designation_rv_gig_hist.text = gig?.getGigTitle()
+        holder.itemView.tv_gig_venue_rv_gig_his.text = "@${gig?.getFullCompanyName()}"
         holder.itemView.tv_gig_venue_rv_gig_his.isSelected = true
         holder.itemView.tv_rating_rv_gig_hist.text = gig?.gigRating.toString()
         holder.itemView.tv_punch_in_time_rv_gig_hist.text = "--:--"
@@ -94,17 +95,17 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
             gig: Gig,
             viewHolderGigDetails: ViewHolder
     ) {
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(viewHolderGigDetails.itemView.context)
-                        .load(gig.companyLogo)
+                        .load(gig.getFullCompanyLogo())
                         .placeholder(getCircularProgressDrawable(viewHolderGigDetails.itemView.context))
                         .into(viewHolderGigDetails.itemView.iv_brand_rv_gig_hist)
             } else {
                 FirebaseStorage.getInstance()
                         .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
 
@@ -115,10 +116,10 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(

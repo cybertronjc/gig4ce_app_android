@@ -207,8 +207,9 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         }
 
         seeMoreBtn.setOnClickListener {
+            val gig = viewModel.currentGig?: return@setOnClickListener
 
-            GigNavigation.openGigMainPage(findNavController(), Bundle().apply {
+            GigNavigation.openGigMainPage(findNavController(), gig.openNewGig(),Bundle().apply {
                 this.putString(GigPageFragment.INTENT_EXTRA_GIG_ID, gigId)
                 this.putBoolean(GigPageFragment.INTENT_EXTRA_COMING_FROM_CHECK_IN, true)
             })
@@ -241,15 +242,14 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
         arguments?.let {
             gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
             Log.d("GigAttendancePageFrg", "Args : Showing Data for $gigId")
-        } ?: run {
-            savedInstanceState?.let {
-                gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
-                Log.d("GigAttendancePageFrg", "Saved Ins : Showing Data for $gigId")
-            }?.run {
-                FirebaseCrashlytics.getInstance().log("GigAttendancePageFragment getData method : savedInstanceState and arguments found null")
-                FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
-            }
         }
+
+        savedInstanceState?.let {
+            gigId = it.getString(INTENT_EXTRA_GIG_ID)!!
+            Log.d("GigAttendancePageFrg", "Saved Ins : Showing Data for $gigId")
+        }
+
+
     }
 
     private fun initViewModel(savedInstanceState: Bundle?) {
@@ -269,21 +269,21 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
 
     private fun setGigDetailsOnView(gig: Gig) {
         this.gig = gig
-        roleNameTV.text = gig.title
-        companyNameTV.text = "@ ${gig.companyName}"
+        roleNameTV.text = gig.getGigTitle()
+        companyNameTV.text = "@ ${gig.getFullCompanyName()}"
         gigTypeTV.text = gig.gigType
         gigIdTV.text = "Gig Id : ${gig.gigId}"
 
-        if (!gig.companyLogo.isNullOrBlank()) {
-            if (gig.companyLogo!!.startsWith("http", true)) {
+        if (!gig.getFullCompanyLogo().isNullOrBlank()) {
+            if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                        .load(gig.companyLogo)
+                        .load(gig.getFullCompanyLogo())
                         .into(companyLogoIV)
             } else {
                 FirebaseStorage.getInstance()
                         .getReference("companies_gigs_images")
-                        .child(gig.companyLogo!!)
+                        .child(gig.getFullCompanyLogo()!!)
                         .downloadUrl
                         .addOnSuccessListener { fileUri ->
                             Glide.with(requireContext())
@@ -292,10 +292,10 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         }
             }
         } else {
-            val companyInitials = if (gig.companyName.isNullOrBlank())
+            val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
                 "C"
             else
-                gig.companyName!![0].toString().toUpperCase()
+                gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
                     companyInitials,
                     ResourcesCompat.getColor(resources, R.color.lipstick, null)
@@ -489,7 +489,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                                 selfieImg,
                                 ""
                         )
-                viewModel.markAttendance(markAttendance, gigId)
+//                viewModel.markAttendance(markAttendance, gigId)
 
             } else {
                 gig!!.attendance!!.setCheckout(
@@ -497,7 +497,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         0.0, selfieImg,
                         ""
                 )
-                viewModel.markAttendance(gig!!.attendance!!, gigId)
+//                viewModel.markAttendance(gig!!.attendance!!, gigId)
 
             }
         }
@@ -535,7 +535,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                                 selfieImg,
                                 locationAddress
                         )
-                viewModel.markAttendance(markAttendance, gigId)
+//                viewModel.markAttendance(markAttendance, gigId)
             } else {
                 it.attendance?.setCheckout(
                         true,
@@ -545,7 +545,7 @@ class GigAttendancePageFragment : BaseFragment(), PopupMenu.OnMenuItemClickListe
                         selfieImg,
                         locationAddress
                 )
-                viewModel.markAttendance(it.attendance!!, gigId)
+//                viewModel.markAttendance(it.attendance!!, gigId)
             }
 
         } ?: run {

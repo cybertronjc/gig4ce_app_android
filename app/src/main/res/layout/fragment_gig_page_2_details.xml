@@ -68,6 +68,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginTop="@dimen/size_15"
                             android:layout_marginEnd="@dimen/size_16"
+                            android:visibility="gone"
                             android:layout_marginBottom="@dimen/size_8"
 
                             app:srcCompat="@drawable/ic_three_dots"
@@ -90,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_gig_type"
+                      app:srcCompat="@drawable/bg_gig_type"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -115,8 +116,9 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_star"
+                      app:srcCompat="@drawable/ic_star"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
                     tools:text="4.3" />
@@ -127,9 +129,10 @@
                     android:layout_height="16dp"
                     android:layout_marginTop="14dp"
                     android:layout_marginEnd="6dp"
-                    android:src="@drawable/ic_star"
+                      app:srcCompat="@drawable/ic_star"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/company_rating_tv"
                     app:layout_constraintTop_toBottomOf="@+id/gigBannerImageIV"
                     tools:text="\ufeff@ Procter &amp; Gamble" />
@@ -193,7 +196,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator31" />
 
@@ -251,7 +254,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator32" />
 
@@ -308,7 +311,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator33" />
 
@@ -352,7 +355,8 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                android:visibility="gone"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator34" />
 
@@ -368,6 +372,7 @@
                 android:text="Others"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/gig_others_iv"
                 app:layout_constraintTop_toBottomOf="@id/separator34" />
 
@@ -379,6 +384,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/gig_others_label" />
 
 
@@ -388,6 +394,7 @@
                 android:layout_height="1.5dp"
                 android:layout_marginTop="16dp"
                 android:background="#c0c0c0"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/gig_others_container" />
 
             <ImageView
@@ -396,7 +403,8 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_credit_card"
+                android:visibility="gone"
+                  app:srcCompat="@drawable/ic_credit_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/separator35" />
 
@@ -413,6 +421,7 @@
                 android:text="Frequently Asked Questions"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/gig_faq_iv"
                 app:layout_constraintTop_toBottomOf="@id/separator35" />
 
@@ -424,6 +433,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/gig_faq_label" />
 
 

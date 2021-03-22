@@ -34,6 +34,10 @@
         android:label="AddLanguageBottomSheetFragment" />
 
     <fragment
+        android:id="@+id/bsFragment"
+        android:name="com.gigforce.giger_app.screens.FeaturesBSFragment" />
+
+    <fragment
         android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
@@ -731,7 +735,7 @@
         android:label="GigRegulariseAttendanceFragment" />
     <dialog
         android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.GigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
         android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
@@ -807,6 +811,13 @@
         android:name="com.gigforce.app.modules.client_activation.GigActivationFragment"
         android:label="fragment_gig_activation"
         tools:layout="@layout/layout_fragment_activation_gig" />
+
+    <fragment
+        android:id="@+id/application_submitted_fragment"
+        android:name="com.gigforce.app.modules.client_activation.ApplicationSubmittedFragment"
+        android:label="fragment_application_submitted"
+        tools:layout="@layout/fragment_application_submitted"
+        />
 
     <fragment
         android:id="@+id/fragment_upload_cert"
@@ -886,6 +897,10 @@
         android:id="@+id/addUserCurrentAddressFragment"
         android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
+    <dialog
+        android:id="@+id/gigContactPersonBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
+        android:label="GigContactPersonBottomSheet" />
 
     <fragment
         android:id="@+id/chatListFragment"
