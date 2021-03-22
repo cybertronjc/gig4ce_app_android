@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cameraViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/cameraMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.otaliastudios.cameraview.CameraView
+            android:id="@+id/cameraView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:keepScreenOn="true"
+            android:orientation="vertical"
+            app:cameraAudio="on"
+            app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
+            app:cameraEngine="camera2"
+            app:cameraExperimental="true"
+            app:cameraFacing="front"
+            app:cameraFlash="auto"
+            app:cameraGestureTap="autoFocus"
+            app:cameraMode="video"
+            app:cameraPlaySounds="true"
+            app:cameraPreview="glSurface"
+            app:elevation="5dp" />
+
+        <LinearLayout
+            android:id="@+id/cameraControlsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:background="#51000000"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/recordVideoButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                  app:srcCompat="@drawable/ic_record" />
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/recordingTimerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/cameraControlsLayout"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="7dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#51000000"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+
+                      app:srcCompat="@drawable/ic_record" />
+
+                <TextView
+                    android:id="@+id/countDownTimerTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/lato"
+
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/cameraPermissionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="@string/camera_and_audtio_permission_required_to_access_camera"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/askCameraPermission"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/go_to_settings"
+            android:textColor="@android:color/white"
+            app:strokeColor="@android:color/white" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
