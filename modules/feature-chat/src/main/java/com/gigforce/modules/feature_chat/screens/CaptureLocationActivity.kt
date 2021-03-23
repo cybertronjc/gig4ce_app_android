@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_capture_location.*
 import java.io.File
 
 
@@ -45,7 +46,6 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var physicalAddressTV: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var locationIV: ImageView
-    private lateinit var toolbar: Toolbar
     private var googleMap: GoogleMap? = null
 
     private var marker = MarkerOptions()
@@ -133,8 +133,14 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun initView() {
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+
+        share_iv.setOnClickListener {
+            sendResultsBack()
+        }
+
+        back_arrow.setOnClickListener {
+            onBackPressed()
+        }
 
         progressBar = findViewById(R.id.progress_bar)
         locationIV = findViewById(R.id.locationIconIV)
@@ -148,29 +154,10 @@ class CaptureLocationActivity : AppCompatActivity(), OnMapReadyCallback,
         viewModel = ViewModelProvider(this).get(CaptureLocationViewModel::class.java)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_location, menu)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-    }
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
         this.googleMap = googleMap
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-
-//            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
-//                this
-//            )
-        }
     }
 
     override fun locationReceiver(location: Location?) {

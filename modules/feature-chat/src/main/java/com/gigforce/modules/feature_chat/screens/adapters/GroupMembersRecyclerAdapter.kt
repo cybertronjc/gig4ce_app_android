@@ -121,14 +121,23 @@ class GroupMembersRecyclerAdapter(
         }
 
         fun bindValues(contact: ContactModel) {
-            contactNameTV.text = contact.name
 
             val mobileText = if(contact.mobile.startsWith("+91"))
                 contact.mobile
             else
                 "+${contact.mobile}"
+            val mobileWith91 = mobileText.substring(0, 3) + "-" + mobileText.substring(3)
 
-            uidTV.text = mobileText
+            if(contact.name.isNullOrBlank()){
+                contactNameTV.text = mobileWith91
+                uidTV.text = ""
+            } else {
+                contactNameTV.text = contact.name
+                uidTV.text = mobileWith91
+            }
+
+
+
             isUserManagerView.isVisible = contact.isUserGroupManager
             val isUserTheCurrentUser = contact.uid == currentUserUid
             if(isUserTheCurrentUser){

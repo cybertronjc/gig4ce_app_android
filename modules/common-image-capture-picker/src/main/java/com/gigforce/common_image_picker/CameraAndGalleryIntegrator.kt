@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import android.util.Size
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -176,8 +178,10 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
                 imageCropOptions.outputFileUri!!
             )
         }
-        uCrop.withAspectRatio(1F, 1F)
-        uCrop.withMaxResultSize(1920, 1080)
+
+        val size = getImageDimensions(uri)
+        uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
+
         uCrop.withOptions(getCropOptions())
 
         if (fragment != null) {
@@ -186,6 +190,17 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             uCrop.start(activity as AppCompatActivity)
         }
     }
+
+    private fun getImageDimensions(uri: Uri): Size {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(File(uri.path).absolutePath, options)
+        val imageHeight: Int = options.outHeight
+        val imageWidth: Int = options.outWidth
+        return Size(imageWidth, imageHeight)
+    }
+
+
 
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()

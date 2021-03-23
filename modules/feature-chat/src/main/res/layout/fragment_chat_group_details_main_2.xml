@@ -13,7 +13,9 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:paddingBottom="5dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cv_contactDetails"
@@ -102,10 +104,11 @@
                     android:layout_marginEnd="16dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
+                    app:tint="@color/lipstick"
                     android:src="@drawable/ic_edit"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@android:color/black" />
+                   />
 
 
                 <LinearLayout
@@ -135,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginTop="16dp"
-                    android:background="#d8d8d8"
+                    android:background="#f2f2f2"
                     app:layout_constraintTop_toBottomOf="@id/group_deactivated_container" />
 
                 <LinearLayout
@@ -154,8 +157,9 @@
                         android:layout_marginStart="16dp"
                         android:fontFamily="@font/lato"
                         android:paddingTop="16dp"
-                        android:paddingBottom="10dp"
+                        android:paddingBottom="20dp"
                         android:text="Media"
+                        android:lineHeight="17sp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -196,8 +200,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/media_title_layout" />
 
 
@@ -205,8 +209,7 @@
                     android:id="@+id/group_details_divider_2"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#d8d8d8"
+                    android:background="#f2f2f2"
                     app:layout_constraintTop_toBottomOf="@id/media_recyclerview" />
 
 
@@ -287,7 +290,6 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
-                    android:background="#10888888"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -318,6 +320,7 @@
                         android:text="Add new Giger "
                         android:textColor="@android:color/black"
                         android:textSize="14sp"
+                        android:lineHeight="17sp"
                         android:textStyle="normal" />
 
                 </LinearLayout>

@@ -8,6 +8,7 @@
     <item
         android:id="@+id/action_remove_user"
         android:title="Remove from group"
+        android:visible="false"
         app:showAsAction="collapseActionView" />
 
 </menu>

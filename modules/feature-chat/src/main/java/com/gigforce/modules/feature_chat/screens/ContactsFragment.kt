@@ -54,7 +54,7 @@ class ContactsFragment : DialogFragment(),
     @Inject
     lateinit var navigation: INavigation
 
-    private val chatNavigation : ChatNavigation by lazy {
+    private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
 
@@ -470,8 +470,15 @@ class ContactsFragment : DialogFragment(),
                 }
             }
 
-            if (allPermsGranted)
+            if (allPermsGranted) {
+
+                if (contactsAdapter.itemCount == 0) {
+                    contactsSyncingLayout.visible()
+                }
+
+                viewModelNew.startListeningForContactChanges()
                 startLoaderForGettingContacts()
+            }
         }
     }
 
@@ -502,12 +509,11 @@ class ContactsFragment : DialogFragment(),
             dismiss()
         } else {
 
-
             chatNavigation.navigateToChatPage(
                     otherUserId = contact.uid!!,
                     headerId = contact.headerId ?: "",
                     otherUserName = contact.name ?: "",
-                    otherUserProfilePicture = contact.imagePathInStorage ?: "",
+                    otherUserProfilePicture = contact.getUserProfileImageUrlOrPath() ?: "",
                     chatType = ChatConstants.CHAT_TYPE_USER
             )
         }

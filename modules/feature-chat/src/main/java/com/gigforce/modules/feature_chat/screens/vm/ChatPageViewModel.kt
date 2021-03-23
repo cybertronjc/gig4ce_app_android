@@ -713,6 +713,7 @@ class ChatPageViewModel constructor(
         if (headerId.isBlank()) {
             return@launch
         }
+        Log.d(TAG, "CHAT 2 Setting count to Zero for $headerId")
 
         try {
             firebaseDB.collection("chats")

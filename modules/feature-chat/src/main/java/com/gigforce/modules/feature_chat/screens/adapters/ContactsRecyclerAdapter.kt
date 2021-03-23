@@ -89,7 +89,9 @@ class ContactsRecyclerAdapter(
 
         fun bindValues(contact: ContactModel) {
             contactNameTV.text = contact.name
-            contactLastLiveTV.text = "+${contact.mobile}"
+
+            val mobileWith91 = "+${contact.mobile}"
+            contactLastLiveTV.text = mobileWith91.substring(0, 3) + "-" + mobileWith91.substring(3)
 
             if (!contact.imageThumbnailPathInStorage.isNullOrBlank()) {
 

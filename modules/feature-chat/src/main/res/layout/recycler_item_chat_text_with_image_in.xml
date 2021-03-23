@@ -89,11 +89,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 android:text="NA"
-                android:textColor="@color/dust_grey"
+                android:textColor="#333333"
                 android:textSize="8sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -222,6 +222,8 @@ class GroupChatViewModel constructor(
                         setMessagesUnseenCountToZero()
 
                 }
+
+        Log.d(TAG,"userGroupHeaderChangeListener attached")
     }
 
     private fun startWatchingGroupMessages() {
@@ -502,6 +504,7 @@ class GroupChatViewModel constructor(
 
     fun setMessagesUnseenCountToZero() = GlobalScope.launch {
         try {
+            Log.d(TAG, "CHAT 2, Setting count to Zero for $groupId")
             chatGroupRepository.setUnseenMessagecountToZero(groupId)
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
@@ -668,6 +671,11 @@ class GroupChatViewModel constructor(
 
         groupContactsListener?.remove()
         groupContactsListener = null
+
+        userGroupHeaderChangeListener?.remove()
+        userGroupHeaderChangeListener = null
+
+        Log.d(TAG,"userGroupHeaderChangeListener detached")
     }
 
     companion object {
