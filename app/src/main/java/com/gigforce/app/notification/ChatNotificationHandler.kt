@@ -155,7 +155,7 @@ class ChatNotificationHandler constructor(
                         if (senderProfilePicture != null)
                             IconCompat.createWithBitmap(senderProfilePicture)
                         else
-                            IconCompat.createWithResource(context, R.drawable.ic_user)
+                            IconCompat.createWithResource(context, R.drawable.ic_user_2)
 
                 )
                 .setName(senderName)

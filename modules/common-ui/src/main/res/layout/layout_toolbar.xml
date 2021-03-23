@@ -116,7 +116,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/toolbar_image_iv"
+            app:layout_constraintStart_toEndOf="@id/back_arrow"
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText

@@ -57,25 +57,47 @@ class GigforceImageView(
 
 
     fun loadImageIfUrlElseTryFirebaseStorage(
-            urlOrFirebasePath: String
+            urlOrFirebasePath: String,
+            @DrawableRes placeHolder: Int = -1,
+            @DrawableRes error: Int = -1
     ) {
 
         val isUrl = Patterns.WEB_URL.matcher(urlOrFirebasePath).matches()
         if (isUrl) {
-            loadImage(Uri.parse(urlOrFirebasePath))
+            loadImage(
+                    Uri.parse(urlOrFirebasePath),
+                    placeHolder,
+                    error
+            )
         } else {
-            loadImageFromFirebase(urlOrFirebasePath)
+            loadImageFromFirebase(
+                    urlOrFirebasePath,
+                    placeHolder,
+                    error
+            )
         }
     }
 
     fun loadImage(
-            image: Uri
+            image: Uri,
+            @DrawableRes placeHolder: Int = -1,
+            @DrawableRes error: Int = -1
     ) {
 
-        Glide.with(context)
+        var requestManager = Glide.with(context)
                 .load(image)
-                .error(getErrorImage())
-                .into(this)
+
+        if (placeHolder != -1) {
+            requestManager = requestManager.placeholder(placeHolder)
+        }
+
+        if (error != -1) {
+            requestManager = requestManager.error(error)
+        } else {
+            requestManager = requestManager.error(getErrorImage())
+        }
+
+        requestManager.into(this)
     }
 
     fun loadImage(

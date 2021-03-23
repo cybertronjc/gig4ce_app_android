@@ -102,7 +102,7 @@ class ContactsRecyclerAdapter(
 
                 Glide.with(context)
                         .load(profilePathRef)
-                        .placeholder(R.drawable.ic_user)
+                        .placeholder(R.drawable.ic_user_2)
                         .into(contactAvatarIV)
             } else if (!contact.imagePathInStorage.isNullOrBlank()) {
 
@@ -113,14 +113,14 @@ class ContactsRecyclerAdapter(
 
                 Glide.with(context)
                         .load(profilePathRef)
-                        .placeholder(R.drawable.ic_user)
+                        .placeholder(R.drawable.ic_user_2)
                         .into(contactAvatarIV)
             } else if (!contact.imageUrl.isNullOrBlank()) {
                 contactAvatarIV.loadImageIfUrlElseTryFirebaseStorage(contact.imageUrl!!)
             } else {
                 requestManager
-                        .load(R.drawable.ic_user)
-                        .placeholder(R.drawable.ic_user)
+                        .load(R.drawable.ic_user_2)
+                        .placeholder(R.drawable.ic_user_2)
                         .into(contactAvatarIV)
             }
 

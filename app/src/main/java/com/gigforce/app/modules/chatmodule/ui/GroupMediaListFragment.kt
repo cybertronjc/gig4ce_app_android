@@ -43,7 +43,7 @@ class GroupMediaListFragment : BaseFragment(),
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
             appDirectoryFileRef,
-            initGlide(R.drawable.ic_user,R.drawable.ic_user)!!,
+            initGlide(R.drawable.ic_user_2,R.drawable.ic_user_2)!!,
             this
         )
     }

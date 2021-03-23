@@ -133,6 +133,12 @@ class GroupChatViewModel constructor(
     override val groupInfo: LiveData<ChatGroup> = _groupInfo
 
     fun startWatchingGroupDetails() {
+
+        if(groupDetailsListener != null){
+            Log.d(TAG,"already a listener attached,no-op")
+            return
+        }
+
         groupDetailsListener = chatGroupRepository.getGroupDetailsRef(groupId)
                 .addSnapshotListener { data, error ->
 
@@ -205,6 +211,11 @@ class GroupChatViewModel constructor(
     }
 
     private fun startWatchingUserGroupHeader() {
+        if(userGroupHeaderChangeListener != null){
+            Log.d(TAG,"already a listener attached,no-op")
+            return
+        }
+
         userGroupHeaderChangeListener = chatGroupRepository
                 .userGroupHeaderRef(groupId)
                 .addSnapshotListener { value, error ->
@@ -227,6 +238,11 @@ class GroupChatViewModel constructor(
     }
 
     private fun startWatchingGroupMessages() {
+        if(groupMessagesListener != null){
+            Log.d(TAG,"already a listener attached,no-op")
+            return
+        }
+
         groupMessagesListener = chatGroupRepository
                 .groupMessagesRef(groupId)
                 .orderBy("timestamp", Query.Direction.ASCENDING)

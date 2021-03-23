@@ -364,12 +364,13 @@ class ChatPageViewModel constructor(
         }
 
         var userName = contactModel?.name
-        if (userName == null) {
-            userName = contactModel?.mobile
+        if (userName == null && !contactModel?.mobile.isNullOrBlank()) {
+            userName = "+" + contactModel?.mobile?.substring(0, 2) + "-" + contactModel?.mobile?.substring(2)
         }
 
         if (userName == null) {
             userName = currentUser.phoneNumber
+            userName = userName?.substring(0, 3) + "-" + userName?.substring(3)
         }
 
         val chatHeader = ChatHeader(

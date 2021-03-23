@@ -134,7 +134,7 @@ class GroupMembersRecyclerAdapter(
             if (contact.imageUrl != null) {
                 requestManager.load(contact.imageUrl!!).into(contactAvatarIV)
             } else {
-                requestManager.load(R.drawable.ic_user).into(contactAvatarIV)
+                requestManager.load(R.drawable.ic_user_2).into(contactAvatarIV)
             }
         }
 

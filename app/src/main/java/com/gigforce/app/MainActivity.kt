@@ -87,8 +87,11 @@ class MainActivity : AppCompatActivity(),
             val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
                     ?: return
 
-            if (navController.currentDestination?.id != R.id.chatPageFragment ||
-                    navController.currentDestination?.id != R.id.chatListFragment   )
+//
+            //
+
+            if (navController.currentDestination?.label != "fragment_chat_list" &&
+                    navController.currentDestination?.label  != "fragment_chat_page")
                 chatNotificationHandler.handleChatNotification(remoteMessage)
         }
     }

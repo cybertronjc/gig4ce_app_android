@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.TextDrawable
@@ -21,8 +20,6 @@ import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
-import com.gigforce.modules.feature_chat.models.ChatMessage
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -118,7 +115,7 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(Uri.parse(chatHeader.profilePath))
-                                    .placeholder(R.drawable.ic_user)
+                                    .placeholder(R.drawable.ic_user_2)
                                     .into(contextImageView)
                         } else {
 
@@ -129,12 +126,12 @@ class ChatListItem(
 
                             Glide.with(context)
                                     .load(profilePathRef)
-                                    .placeholder(R.drawable.ic_user)
+                                    .placeholder(R.drawable.ic_user_2)
                                     .into(contextImageView)
                         }
                     } else {
 
-                        Glide.with(context).load(R.drawable.ic_user).into(contextImageView)
+                        Glide.with(context).load(R.drawable.ic_user_2).into(contextImageView)
                     }
 
                 } else if (chatHeader.type == ChatConstants.CHAT_TYPE_GROUP) {

@@ -165,7 +165,7 @@ class GigforceToolbar(
             @DrawableRes errorImage: Int = -1
     ) {
         toolbarImageView.visibility = View.VISIBLE
-        toolbarImageView.loadImageFromFirebase(
+        toolbarImageView.loadImageIfUrlElseTryFirebaseStorage(
                 image,
                 placeHolder,
                 errorImage

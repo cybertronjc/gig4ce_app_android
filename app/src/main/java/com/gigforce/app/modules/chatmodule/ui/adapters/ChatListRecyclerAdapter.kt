@@ -88,9 +88,9 @@ class ChatListRecyclerAdapter(
                 val userAvatarUrl = chatHeader.otherUser?.profilePic
                 if (userAvatarUrl.isNullOrBlank()) {
                     //Show Default User avatar
-                    requestManager.load(R.drawable.ic_user).into(circleImageView)
+                    requestManager.load(R.drawable.ic_user_2).into(circleImageView)
                 } else {
-                    requestManager.load(userAvatarUrl).placeholder(R.drawable.ic_user).into(circleImageView)
+                    requestManager.load(userAvatarUrl).placeholder(R.drawable.ic_user_2).into(circleImageView)
                 }
 
             } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {

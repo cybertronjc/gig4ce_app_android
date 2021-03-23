@@ -1,18 +1,14 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
-import android.net.Uri
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
@@ -177,7 +173,7 @@ class GroupMembersRecyclerAdapter(
                 }
 
             } else {
-                requestManager.load(R.drawable.ic_user).into(contactAvatarIV)
+                requestManager.load(R.drawable.ic_user_2).into(contactAvatarIV)
             }
 
         }
