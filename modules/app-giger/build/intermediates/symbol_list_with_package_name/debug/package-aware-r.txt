@@ -1889,6 +1889,7 @@ drawable googleg_standard_color_18
 drawable gradient_button
 drawable ic_ambassador_icon
 drawable ic_arrow_back_24
+drawable ic_arrow_back_white
 drawable ic_arrow_forward
 drawable ic_baseline_play_circle_outline_24_
 drawable ic_chat
@@ -1949,6 +1950,7 @@ drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
 drawable test_custom_background
+drawable toolbar_search_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 font lato

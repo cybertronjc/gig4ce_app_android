@@ -1888,6 +1888,7 @@ int drawable googleg_standard_color_18 0x0
 int drawable gradient_button 0x0
 int drawable ic_ambassador_icon 0x0
 int drawable ic_arrow_back_24 0x0
+int drawable ic_arrow_back_white 0x0
 int drawable ic_arrow_forward 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
 int drawable ic_chat 0x0
@@ -1948,6 +1949,7 @@ int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
 int drawable test_custom_background 0x0
+int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
 int font lato 0x0
