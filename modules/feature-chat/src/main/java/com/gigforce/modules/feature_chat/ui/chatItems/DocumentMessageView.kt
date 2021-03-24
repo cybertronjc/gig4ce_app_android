@@ -1,10 +1,13 @@
 package com.gigforce.modules.feature_chat.ui.chatItems
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -156,7 +159,7 @@ abstract class DocumentMessageView(
                             context,
                             "com.gigforce.app.provider",
                             file
-                    ), "application/pdf"
+                    ), getMimeType(Uri.fromFile(file))
             )
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -166,6 +169,19 @@ abstract class DocumentMessageView(
                 Toast.makeText(context, "Unable to open", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    open fun getMimeType(uri: Uri): String? {
+        var mimeType: String? = null
+        mimeType = if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            val cr: ContentResolver = context.getContentResolver()
+            cr.getType(uri)
+        } else {
+            val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString())
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+        }
+        return mimeType
     }
 
     private fun downloadAttachment() = GlobalScope.launch {

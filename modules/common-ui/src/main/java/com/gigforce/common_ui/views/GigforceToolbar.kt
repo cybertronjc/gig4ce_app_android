@@ -38,6 +38,7 @@ class GigforceToolbar(
 
     private var searchTextChangeListener: SearchTextChangeListener? = null
     private var optionMenuClickListener: PopupMenu.OnMenuItemClickListener? = null
+    private var onBackClickListener: View.OnClickListener? = null
 
     private var subtitleEnabled = false
 
@@ -71,18 +72,22 @@ class GigforceToolbar(
 
     val isSearchCurrentlyShown: Boolean get() = searchLayout.isVisible
 
-    fun setBackButtonListener(listener: View.OnClickListener) = backButton.setOnClickListener {
+    fun setBackButtonListener(listener: View.OnClickListener) {
+        onBackClickListener = listener
 
-        listener.onClick(it)
+        backButton.setOnClickListener {
+            listener.onClick(it)
 
-        if (isSearchCurrentlyShown) {
-            hideSearchOption()
-            titleTV.visible()
+            if (isSearchCurrentlyShown) {
+                hideSearchOption()
+                searchEditText.setText("")
+                titleTV.visible()
 
-            if (subtitleEnabled) {
-                showSubtitle(null)
-            } else {
-                hideSubTitle()
+                if (subtitleEnabled) {
+                    showSubtitle(null)
+                } else {
+                    hideSubTitle()
+                }
             }
         }
     }
@@ -97,6 +102,8 @@ class GigforceToolbar(
 
             if (searchLayout.isVisible) {
 
+                onBackClickListener?.onClick(it)
+                searchEditText.setText("")
                 showTitle(null)
 
                 if (subtitleEnabled)
@@ -105,6 +112,8 @@ class GigforceToolbar(
                     subTitleTV.gone()
 
                 searchLayout.gone()
+
+
 
             } else {
                 hideTitle()

@@ -392,6 +392,7 @@ class GroupChatViewModel constructor(
     }
 
     fun sendNewDocumentMessage(
+            context: Context,
             text: String = "",
             fileName: String,
             uri: Uri
@@ -413,6 +414,7 @@ class GroupChatViewModel constructor(
             _groupMessages.postValue(grpMessages)
 
             chatGroupRepository.sendNewDocumentMessage(
+                    context,
                     groupId,
                     message,
                     fileName,

@@ -756,6 +756,7 @@ class ChatPageFragment : Fragment(),
                     )
                 else
                     groupChatViewModel.sendNewDocumentMessage(
+                            context = requireContext(),
                             text = "",
                             fileName = displayName ?: "Document",
                             uri = uri
