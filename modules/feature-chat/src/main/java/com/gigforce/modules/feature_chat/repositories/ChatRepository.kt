@@ -1,9 +1,11 @@
 package com.gigforce.modules.feature_chat.repositories
 
+import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.gigforce.core.date.DateHelper
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
+
 
 class ChatRepository constructor(
         private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
@@ -221,11 +224,7 @@ class ChatRepository constructor(
             uri: Uri
     ) {
 
-        val newFileName = if (fileName.isBlank()) {
-            "${getUID()}-${DateHelper.getFullDateTimeStamp()}"
-        } else {
-            "${getUID()}-${DateHelper.getFullDateTimeStamp()}-$fileName"
-        }
+        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context,uri)}"
 
         val documentsDirectoryRef = chatLocalDirectoryReferenceManager.documentsDirectoryRef
         val documentFile = File(documentsDirectoryRef, newFileName)
@@ -243,31 +242,6 @@ class ChatRepository constructor(
         getChatMessagesCollectionRef(headerId = chatHeaderId)
                 .addOrThrow(message)
     }
-
-
-    //    private suspend fun sendTextMessage(
-//            chatHeaderId: String,
-//            message: ChatMessage
-//    ) {
-//        getChatMessagesCollectionRef(chatHeaderId)
-//                .document(message.id)
-//                .setOrThrow(message)
-
-    //todo : check
-//        //Update Header for current User
-//        firebaseDB.collection("chats")
-//                .document(uid)
-//                .collection("headers")
-//                .document(headerId)
-//                .updateOrThrow(
-//                        mapOf(
-//                                "lastMessageType" to ChatMessage.MESSAGE_TYPE_TEXT,
-//                                "lastMsgText" to text,
-//                                "lastMsgTimestamp" to Timestamp.now(),
-//                                "unseenCount" to 0
-//                        )
-//                )
-//    }
 
     override suspend fun createHeaders(
             otherUserId: String
@@ -404,7 +378,7 @@ class ChatRepository constructor(
                 .whereLessThan("status", ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER)
                 .getOrThrow()
 
-        Log.d("ChatRepo","Other User - $otherUserId, header-id - $headerId")
+        Log.d("ChatRepo", "Other User - $otherUserId, header-id - $headerId")
         if (querySnap.size() > 0) {
 
             val batch = db.batch()
@@ -414,7 +388,7 @@ class ChatRepository constructor(
 
             querySnap.documents.forEach {
 
-                Log.d("ChatRepo","Message Id - ${it.id}")
+                Log.d("ChatRepo", "Message Id - ${it.id}")
                 val messageDocRef = chatCollectionRef.document(it.id)
                 batch.update(messageDocRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
@@ -422,6 +396,22 @@ class ChatRepository constructor(
             }
 
             batch.commitOrThrow()
+        }
+    }
+
+    fun getExtensionFromUri(
+            context: Context,
+            uri: Uri
+    ): String? {
+
+        return if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme)) {
+            val cr: ContentResolver = context.getContentResolver()
+            val mimeType = cr.getType(uri)
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        } else {
+            val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         }
     }
 
