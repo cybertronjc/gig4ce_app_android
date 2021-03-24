@@ -24,6 +24,8 @@
     <color name="pink">#E91E63</color>
 
     <color name="lipstick">#d72467</color>
+    <color name="lipstick_2">#e42c64</color>
+
 
     <!-- Theme Colors -->
     <color name="colorPrimary">@color/brandColor1</color>

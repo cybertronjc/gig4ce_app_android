@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/circleImageView"
-        tools:srcCompat="@drawable/ic_user" />
+        tools:srcCompat="@drawable/ic_user_2" />
 
     <View
         android:id="@+id/online_pink_circle"
@@ -81,6 +81,7 @@
         android:layout_marginTop="6dp"
         app:srcCompat="@drawable/ic_play"
         app:tint="@color/black"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@id/contact_image_view"
         app:layout_constraintTop_toBottomOf="@id/tv_nameValue"/>
 

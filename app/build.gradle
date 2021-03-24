@@ -224,9 +224,9 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
 
     // firebase SDKs
-    implementation 'com.google.firebase:firebase-core:17.4.4'
+    implementation 'com.google.firebase:firebase-core:18.0.2'
     implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
     // implementation 'com.google.firebase:firebase-auth:19.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-firestore:21.5.0'
@@ -357,7 +357,7 @@ dependencies {
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
     implementation "com.github.skydoves:powermenu:2.1.9"
-    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Facebook Integration
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'

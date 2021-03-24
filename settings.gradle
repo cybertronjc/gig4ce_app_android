@@ -1,3 +1,4 @@
+include ':modules:common-image-capture-picker'
 include ':modules:profile'
 include ':modules:client-activation'
 include ':modules:learning'

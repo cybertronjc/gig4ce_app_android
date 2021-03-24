@@ -19,14 +19,32 @@ class ViewTypes {
         const val IN_IMAGE = 10102
         const val OUT_IMAGE = 10202
 
-        private const val VIEW_TYPE_DATE = 0
+        const val IN_VIDEO = 10103
+        const val OUT_VIDEO = 10203
 
-        private const val VIEW_TYPE_CHAT_IMAGE = 2
-        private const val VIEW_TYPE_CHAT_VIDEO = 3
-        private const val VIEW_TYPE_CHAT_LOCATION = 4
-        private const val VIEW_TYPE_CHAT_CONTACT = 5
-        private const val VIEW_TYPE_CHAT_AUDIO = 6
-        private const val VIEW_TYPE_CHAT_DOCUMENT = 7
-        private const val VIEW_TYPE_MESSAGE_TYPE_NOT_SUPPORTED = 8
+        const val IN_DOCUMENT = 10104
+        const val OUT_DOCUMENT = 10204
+
+        const val IN_LOCATION = 10105
+        const val OUT_LOCATION = 10205
+
+        const val GROUP_IN_TEXT = 10501
+        const val GROUP_OUT_TEXT = 10601
+
+        const val GROUP_IN_IMAGE = 10502
+        const val GROUP_OUT_IMAGE = 10602
+
+        const val GROUP_IN_VIDEO = 10503
+        const val GROUP_OUT_VIDEO = 10603
+
+        const val GROUP_IN_DOCUMENT = 10504
+        const val GROUP_OUT_DOCUMENT = 10604
+
+        const val GROUP_IN_LOCATION = 10505
+        const val GROUP_OUT_LOCATION = 10605
+
+
+        const val GROUP_DETAILS_MEDIA = 11501
+        const val GROUP_DETAILS_GROUP_MEMBER = 11601
     }
 }

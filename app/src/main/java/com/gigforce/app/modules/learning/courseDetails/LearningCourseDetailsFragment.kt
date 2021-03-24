@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -33,9 +32,9 @@ import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.learning.models.Module
 import com.gigforce.app.modules.learning.slides.SlidesFragment
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
 import kotlinx.android.synthetic.main.fragment_learning_course_details_main.*
@@ -65,7 +64,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         savedInstanceState?.let {
             FROM_CLIENT_ACTIVATION =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
 
@@ -73,7 +72,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
         arguments?.let {
             FROM_CLIENT_ACTIVATION =
-                it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
+                    it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
 
@@ -107,37 +106,37 @@ class LearningCourseDetailsFragment : BaseFragment() {
         ViewCompat.setNestedScrollingEnabled(learning_details_assessments_rv, false)
 
         learning_details_lessons_rv.layoutManager = LinearLayoutManager(
-            requireContext(),
-            RecyclerView.VERTICAL,
-            false
+                requireContext(),
+                RecyclerView.VERTICAL,
+                false
         )
 
         mAdapter.setOnLearningVideoActionListener {
             when (it.type) {
                 CourseContent.TYPE_ASSESSMENT -> {
                     navigate(
-                        R.id.assessment_fragment, bundleOf(
+                            R.id.assessment_fragment, bundleOf(
                             AssessmentFragment.INTENT_LESSON_ID to it.id,
                             AssessmentFragment.INTENT_MODULE_ID to it.moduleId
-                        )
+                    )
                     )
                 }
                 CourseContent.TYPE_SLIDE -> {
                     navigate(
-                        R.id.slidesFragment,
-                        bundleOf(
-                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
-                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
-                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
-                        )
+                            R.id.slidesFragment,
+                            bundleOf(
+                                    SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+                                    SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
+                                    SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
+                            )
                     )
                 }
                 CourseContent.TYPE_VIDEO -> {
                     PlayVideoDialogFragment.launch(
-                        childFragmentManager = childFragmentManager,
-                        moduleId = it.moduleId,
-                        lessonId = it.id,
-                        shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
+                            childFragmentManager = childFragmentManager,
+                            moduleId = it.moduleId,
+                            lessonId = it.id,
+                            shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
                     )
 
 //                    navigate(
@@ -163,68 +162,68 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
             if (viewModel.currentlySelectedModule != null) {
                 navigate(
-                    R.id.assessmentListFragment, bundleOf(
+                        R.id.assessmentListFragment, bundleOf(
                         AssessmentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
                         AssessmentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
-                    )
+                )
                 )
             }
         }
 
         lessonsSeeMoreButton.setOnClickListener {
             navigate(
-                R.id.courseContentListFragment,
-                bundleOf(
-                    CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
-                    CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
-                )
+                    R.id.courseContentListFragment,
+                    bundleOf(
+                            CourseContentListFragment.INTENT_EXTRA_COURSE_ID to viewModel.currentlySelectedModule?.courseId,
+                            CourseContentListFragment.INTENT_EXTRA_MODULE_ID to viewModel.currentlySelectedModule?.id
+                    )
             )
         }
     }
 
     private fun initViewModel() {
         viewModel
-            .courseDetails
-            .observe(viewLifecycleOwner, Observer {
+                .courseDetails
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showCourseDetailsAsLoading()
-                    is Lce.Content -> showCourseDetails(it.content)
-                    is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showCourseDetailsAsLoading()
+                        is Lce.Content -> showCourseDetails(it.content)
+                        is Lce.Error -> showErrorInLoadingCourseDetails(it.error)
+                    }
+                })
 
         viewModel.courseModules
-            .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showModulesAsLoading()
-                    is Lce.Content -> showModulesOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingModules(it.error)
-                }
-            })
-
-        viewModel
-            .courseLessons
-            .observe(viewLifecycleOwner, Observer {
-
-                when (it) {
-                    Lce.Loading -> showLessonsAsLoading()
-                    is Lce.Content -> showLessonsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingLessons(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showModulesAsLoading()
+                        is Lce.Content -> showModulesOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingModules(it.error)
+                    }
+                })
 
         viewModel
-            .courseAssessments
-            .observe(viewLifecycleOwner, Observer {
+                .courseLessons
+                .observe(viewLifecycleOwner, Observer {
 
-                when (it) {
-                    Lce.Loading -> showAssessmentsAsLoading()
-                    is Lce.Content -> showAssessmentsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingAssessments(it.error)
-                }
-            })
+                    when (it) {
+                        Lce.Loading -> showLessonsAsLoading()
+                        is Lce.Content -> showLessonsOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingLessons(it.error)
+                    }
+                })
+
+        viewModel
+                .courseAssessments
+                .observe(viewLifecycleOwner, Observer {
+
+                    when (it) {
+                        Lce.Loading -> showAssessmentsAsLoading()
+                        is Lce.Content -> showAssessmentsOnView(it.content)
+                        is Lce.Error -> showErrorInLoadingAssessments(it.error)
+                    }
+                })
     }
 
     private fun showCourseDetails(course: Course) {
@@ -236,23 +235,23 @@ class LearningCourseDetailsFragment : BaseFragment() {
             if (course.coverPicture!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                    .load(course.coverPicture)
-                    .placeholder(getCircularProgressDrawable())
-                    .error(R.drawable.ic_learning_default_back)
-                    .into(videoThumnailIV)
+                        .load(course.coverPicture)
+                        .placeholder(getCircularProgressDrawable())
+                        .error(R.drawable.ic_learning_default_back)
+                        .into(videoThumnailIV)
             } else {
                 FirebaseStorage.getInstance()
-                    .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                    .child(course.coverPicture!!)
-                    .downloadUrl
-                    .addOnSuccessListener { fileUri ->
+                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                        .child(course.coverPicture!!)
+                        .downloadUrl
+                        .addOnSuccessListener { fileUri ->
 
-                        GlideApp.with(requireContext())
-                            .load(fileUri)
-                            .placeholder(getCircularProgressDrawable())
-                            .error(R.drawable.ic_learning_default_back)
-                            .into(videoThumnailIV)
-                    }
+                            GlideApp.with(requireContext())
+                                    .load(fileUri)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .error(R.drawable.ic_learning_default_back)
+                                    .into(videoThumnailIV)
+                        }
             }
         } else {
             GlideApp.with(requireContext())
@@ -359,12 +358,12 @@ class LearningCourseDetailsFragment : BaseFragment() {
     private fun loadModulesInfoInView() {
 
         val moduleNo =
-            if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
-                viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
-            } else 0
+                if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
+                    viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
+                } else 0
 
         levelTV.text =
-            "Module $moduleNo Of ${viewModel.currentModules?.size}"
+                "Module $moduleNo Of ${viewModel.currentModules?.size}"
 
         var lessonsCompleted = 0
         var totalLessons = 0
@@ -391,14 +390,14 @@ class LearningCourseDetailsFragment : BaseFragment() {
         }
 
         complitionStatusTv.text =
-            "$lessonsCompleted/$totalLessons Lessons Completed"
+                "$lessonsCompleted/$totalLessons Lessons Completed"
         assessmentCountTv.text =
-            if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                "0 Assessments"
-            else if (assignmentsCompleted == 1)
-                "$assignmentsCompleted/$totalAssignments Assessment Completed"
-            else
-                "$assignmentsCompleted/$totalAssignments Assessments Completed"
+                if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
+                    "0 Assessments"
+                else if (assignmentsCompleted == 1)
+                    "$assignmentsCompleted/$totalAssignments Assessment Completed"
+                else
+                    "$assignmentsCompleted/$totalAssignments Assessments Completed"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -450,128 +449,120 @@ class LearningCourseDetailsFragment : BaseFragment() {
         // model will change when integrated with DB
 
         recyclerGenericAdapter =
-            RecyclerGenericAdapter<Module>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    //navigate(R.id.learningVideoFragment)
-                    val module = item as Module
-                    viewModel.currentlySelectedModule = module
+                RecyclerGenericAdapter<Module>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                            //navigate(R.id.learningVideoFragment)
+                            val module = item as Module
+                            viewModel.currentlySelectedModule = module
 
-                    viewModel.getCourseLessonsAndAssessments(
-                        courseId = mCourseId,
-                        moduleId = module.id
-                    )
-
-                    course_details_main_layout.post {
-                        course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
-                    }
-
-                    var oldPostion = viewModel.currentlySelectedModulePosition
-                    viewModel.currentlySelectedModulePosition = position
-
-                    if (oldPostion != viewModel.currentlySelectedModulePosition) {
-                        recyclerGenericAdapter?.notifyItemChanged(oldPostion)
-                        recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
-                        linearLayoutManager?.scrollToPositionWithOffset(
-                            viewModel.currentlySelectedModulePosition,
-                            40
-                        )
-//                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
-                    }
-                },
-                RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.title
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = "${obj.lessonsCompleted} / ${obj.totalLessons} Completed"
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-
-
-                    var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
-                    var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
-
-                    if (obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons) {
-                        completedPercTV.text = "100%"
-                        completedPercTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.green,
-                                null
+                            viewModel.getCourseLessonsAndAssessments(
+                                    courseId = mCourseId,
+                                    moduleId = module.id
                             )
-                        )
-                        completedIV.setImageResource(R.drawable.ic_successful_green_tick)
-                    } else {
-                        val completedPercentage =
-                            if (obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
 
-                        completedPercTV.setTextColor(
-                            ResourcesCompat.getColor(
-                                resources,
-                                R.color.app_orange,
-                                null
-                            )
-                        )
-                        completedPercTV.text = "$completedPercentage%"
-                        completedIV.setImageResource(R.drawable.ic_clock_orange)
-                    }
+                            course_details_main_layout.post {
+                                course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
+                            }
 
+                            var oldPostion = viewModel.currentlySelectedModulePosition
+                            viewModel.currentlySelectedModulePosition = position
 
-                    var borderView = getView(viewHolder, R.id.borderFrameLayout)
-                    if (viewModel.currentlySelectedModulePosition == position) {
-                        //Set Module as selected
-                        borderView.visible()
-                    } else {
-                        borderView.gone()
-                    }
-
-                    if (!obj.coverPicture.isNullOrBlank()) {
-                        if (obj.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj.coverPicture)
-                                .thumbnail(
-                                    GlideApp.with(requireContext()).load(R.drawable.ic_loading)
+                            if (oldPostion != viewModel.currentlySelectedModulePosition) {
+                                recyclerGenericAdapter?.notifyItemChanged(oldPostion)
+                                recyclerGenericAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
+                                linearLayoutManager?.scrollToPositionWithOffset(
+                                        viewModel.currentlySelectedModulePosition,
+                                        40
                                 )
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
+//                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
+                            }
+                        },
+                        RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
+                            var view = getView(viewHolder, R.id.card_view)
+                            val lp = view.layoutParams
+                            lp.height = lp.height
+                            lp.width = itemWidth
+                            view.layoutParams = lp
+
+                            var title = getTextView(viewHolder, R.id.title_)
+                            title.text = obj?.title
+
+                            var subtitle = getTextView(viewHolder, R.id.title)
+                            subtitle.text = "${obj.lessonsCompleted} / ${obj.totalLessons} Completed"
+
+                            var img = getImageView(viewHolder, R.id.learning_img)
+
+
+                            var completedIV = getImageView(viewHolder, R.id.module_completed_iv)
+                            var completedPercTV = getTextView(viewHolder, R.id.module_completed_perc_tv)
+
+                            if (obj.totalLessons != 0 && obj.lessonsCompleted == obj.totalLessons) {
+                                completedPercTV.text = "100%"
+                                completedPercTV.setTextColor(
+                                        ResourcesCompat.getColor(
+                                                resources,
+                                                R.color.green,
+                                                null
+                                        )
+                                )
+                                completedIV.setImageResource(R.drawable.ic_successful_green_tick)
+                            } else {
+                                val completedPercentage =
+                                        if (obj.totalLessons != 0) (obj.lessonsCompleted * 100) / obj.totalLessons else 0
+
+                                completedPercTV.setTextColor(
+                                        ResourcesCompat.getColor(
+                                                resources,
+                                                R.color.app_orange,
+                                                null
+                                        )
+                                )
+                                completedPercTV.text = "$completedPercentage%"
+                                completedIV.setImageResource(R.drawable.ic_clock_orange)
+                            }
+
+
+                            var borderView = getView(viewHolder, R.id.borderFrameLayout)
+                            if (viewModel.currentlySelectedModulePosition == position) {
+                                //Set Module as selected
+                                borderView.visible()
+                            } else {
+                                borderView.gone()
+                            }
+
+                            if (!obj.coverPicture.isNullOrBlank()) {
+                                if (obj.coverPicture!!.startsWith("http", true)) {
 
                                     GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .thumbnail(
-                                            GlideApp.with(requireContext())
-                                                .load(R.drawable.ic_loading)
-                                        )
-                                        .error(R.drawable.ic_learning_default_back)
-                                        .into(img)
-                                }
-                        }
-                    } else {
-                        GlideApp.with(requireContext())
-                            .load(R.drawable.ic_learning_default_back)
-                            .into(img)
-                    }
+                                            .load(obj.coverPicture)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                } else {
+                                   val childRef =  FirebaseStorage.getInstance()
+                                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                            .child(obj.coverPicture!!)
 
-                })
+                                    GlideApp.with(requireContext())
+                                            .load(childRef)
+                                            .placeholder(getCircularProgressDrawable())
+                                            .error(R.drawable.ic_learning_default_back)
+                                            .into(img)
+                                }
+                            } else {
+                                GlideApp.with(requireContext())
+                                        .load(R.drawable.ic_learning_default_back)
+                                        .into(img)
+                            }
+
+                        })
         recyclerGenericAdapter?.list = content
         recyclerGenericAdapter?.setLayout(R.layout.recycler_item_course_module)
         linearLayoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.HORIZONTAL,
-            false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
         )
         learning_details_modules_rv.layoutManager = linearLayoutManager
         learning_details_modules_rv.adapter = recyclerGenericAdapter
@@ -579,8 +570,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
         Handler().postDelayed({
             if (viewModel.currentlySelectedModulePosition != 0)
                 linearLayoutManager?.scrollToPositionWithOffset(
-                    viewModel.currentlySelectedModulePosition,
-                    40
+                        viewModel.currentlySelectedModulePosition,
+                        40
                 )
         }, 200)
 
@@ -627,56 +618,56 @@ class LearningCourseDetailsFragment : BaseFragment() {
     private fun showAssessments(content: List<CourseContent>) {
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-            RecyclerGenericAdapter<CourseContent>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                RecyclerGenericAdapter<CourseContent>(
+                        activity?.applicationContext,
+                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
 
-                    val assessment = item as CourseContent
+                            val assessment = item as CourseContent
 
-                    navigate(
-                        R.id.assessment_fragment, bundleOf(
-                            AssessmentFragment.INTENT_LESSON_ID to assessment.id,
-                            AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
-                        )
-                    )
+                            navigate(
+                                    R.id.assessment_fragment, bundleOf(
+                                    AssessmentFragment.INTENT_LESSON_ID to assessment.id,
+                                    AssessmentFragment.INTENT_MODULE_ID to assessment.moduleId
+                            )
+                            )
 
-                },
-                RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
+                        },
+                        RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
 
-                    getTextView(viewHolder, R.id.title).text = obj?.title
-                    getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
+                            getTextView(viewHolder, R.id.title).text = obj?.title
+                            getTextView(viewHolder, R.id.time).text = obj?.videoLengthString
 
 
-                    if (obj.completed) {
-                        getTextView(viewHolder, R.id.status).text = "COMPLETED"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as ImageView).setImageResource(R.drawable.assessment_line_done)
-                    } else {
+                            if (obj.completed) {
+                                getTextView(viewHolder, R.id.status).text = "COMPLETED"
+                                getTextView(
+                                        viewHolder,
+                                        R.id.status
+                                ).setBackgroundResource(R.drawable.rect_assessment_status_completed)
+                                (getView(
+                                        viewHolder,
+                                        R.id.side_bar_status
+                                ) as ImageView).setImageResource(R.drawable.assessment_line_done)
+                            } else {
 
-                        getTextView(viewHolder, R.id.status).text = "PENDING"
-                        getTextView(
-                            viewHolder,
-                            R.id.status
-                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-                        (getView(
-                            viewHolder,
-                            R.id.side_bar_status
-                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
-                    }
+                                getTextView(viewHolder, R.id.status).text = "PENDING"
+                                getTextView(
+                                        viewHolder,
+                                        R.id.status
+                                ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
+                                (getView(
+                                        viewHolder,
+                                        R.id.side_bar_status
+                                ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
+                            }
 
-                })
+                        })
         recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
         learning_details_assessments_rv.layoutManager = LinearLayoutManager(
-            activity?.applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false
         )
         learning_details_assessments_rv.adapter = recyclerGenericAdapter
 

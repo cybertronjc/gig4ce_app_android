@@ -41,6 +41,7 @@ class NavManagerImpl @Inject constructor(
         NavForChatModule(this)
         NavForClientActivatonModule(this)
         NavForVerificationModule(this)
+        NavForCommonModule(this)
     }
 
     private fun registerForWalletAndPayouts(){

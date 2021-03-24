@@ -7,6 +7,10 @@ data class UserInfo(
     @set:PropertyName("id")
     var id: String = "",
 
+    @get:PropertyName("mobileNo")
+    @set:PropertyName("mobileNo")
+    var mobileNo: String = "",
+
     @get:PropertyName("name")
     @set:PropertyName("name")
     var name: String = "",

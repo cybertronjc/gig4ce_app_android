@@ -15,6 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.extensions.gone
 import kotlinx.android.synthetic.main.fragment_help_video.*
 
 
@@ -37,11 +38,16 @@ class HelpVideosFragment : BaseFragment() {
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        shimmerFrameLayout.startShimmer()
     }
 
     private fun initViewModel() {
         viewModel.helpVideos
             .observe(viewLifecycleOwner, Observer {
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.gone()
                 setHelpVideosOnView(it)
             })
 
@@ -67,10 +73,11 @@ class HelpVideosFragment : BaseFragment() {
                         requireContext().startActivity(webIntent)
                     }
                 },
+
                 RecyclerGenericAdapter.ItemInterface<HelpVideo> { obj, viewHolder, position ->
 
                     var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
-                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getShimmerDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
                     titleTV.text = obj?.videoTitle

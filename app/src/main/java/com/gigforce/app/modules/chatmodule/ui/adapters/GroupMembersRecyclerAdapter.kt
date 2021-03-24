@@ -33,7 +33,7 @@ class GroupMembersRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMemberViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item_group_member, parent, false)
+            .inflate(R.layout.recycler_item_group_member_2, parent, false)
         return GroupMemberViewHolder(view)
     }
 
@@ -134,7 +134,7 @@ class GroupMembersRecyclerAdapter(
             if (contact.imageUrl != null) {
                 requestManager.load(contact.imageUrl!!).into(contactAvatarIV)
             } else {
-                requestManager.load(R.drawable.ic_user).into(contactAvatarIV)
+                requestManager.load(R.drawable.ic_user_2).into(contactAvatarIV)
             }
         }
 

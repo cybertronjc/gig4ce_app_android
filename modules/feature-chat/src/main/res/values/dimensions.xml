@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="chat_video_image_item_max_length">190dp</dimen>
+    <dimen name="chat_document_item_max_length">200dp</dimen>
+    <dimen name="chat_item_max_length">240dp</dimen>
+    <dimen name="chat_item_corner_radius">4dp</dimen>
+    <dimen name="chat_item_card_elevation">0dp</dimen>
+    <dimen name="chat_item_margin">16dp</dimen>
+</resources>

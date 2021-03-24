@@ -160,7 +160,7 @@ class ReferralsFragment : BaseFragment() {
                         }
 
                     })
-                if (AppConstants.UNLOCK_FEATURE) {
+
                     PushDownAnim.setPushDownAnimTo(tv_share_now_referral_frag)
                         .setOnClickListener(View.OnClickListener {
                             pb_referrals_frag.visible()
@@ -183,9 +183,7 @@ class ReferralsFragment : BaseFragment() {
 
                             }
                         })
-                } else {
-                    showToast("This is under development. Please check again in a few days.")
-                }
+
                 viewModel.observableReferralErr.observe(viewLifecycleOwner, Observer {
                     showToast(it!!)
                 })

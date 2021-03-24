@@ -40,9 +40,9 @@ object NotificationChannels {
         get() =
             run {
                 val channel = NotificationChannel(
-                    CHANNEL_CHAT_ID,
-                    CHANNEL_CHAT,
-                    NotificationManager.IMPORTANCE_HIGH
+                        CHANNEL_CHAT_ID,
+                        CHANNEL_CHAT,
+                        NotificationManager.IMPORTANCE_HIGH
                 )
 
                 channel.enableLights(true)

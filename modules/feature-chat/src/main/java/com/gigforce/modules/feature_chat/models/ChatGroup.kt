@@ -17,6 +17,10 @@ data class ChatGroup(
     @set:PropertyName("groupAvatar")
     var groupAvatar: String = "",
 
+    @get:PropertyName("groupAvatarThumbnail")
+    @set:PropertyName("groupAvatarThumbnail")
+    var groupAvatarThumbnail: String = "",
+
     @get:PropertyName("groupMedia")
     @set:PropertyName("groupMedia")
     var groupMedia: List<GroupMedia> = emptyList(),

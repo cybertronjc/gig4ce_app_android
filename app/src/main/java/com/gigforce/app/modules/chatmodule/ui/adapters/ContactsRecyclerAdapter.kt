@@ -92,11 +92,11 @@ class ContactsRecyclerAdapter(
             if (contact.imageUrl != null) {
                 requestManager
                     .load(contact.imageUrl!!)
-                    .placeholder(R.drawable.ic_user).error(R.drawable.ic_user)
+                    .placeholder(R.drawable.ic_user_2).error(R.drawable.ic_user_2)
                     .into(contactAvatarIV)
             } else {
                 requestManager
-                    .load(R.drawable.ic_user).placeholder(R.drawable.ic_user)
+                    .load(R.drawable.ic_user_2).placeholder(R.drawable.ic_user_2)
                     .into(contactAvatarIV)
             }
 

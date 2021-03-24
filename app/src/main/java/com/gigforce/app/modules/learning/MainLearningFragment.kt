@@ -223,6 +223,7 @@ class MainLearningFragment : BaseFragment() {
         learning_based_horizontal_progress.gone()
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
+
         stopShimmer(learning_based_horizontal_progress as LinearLayout)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -414,7 +415,7 @@ class MainLearningFragment : BaseFragment() {
 
     private fun listener() {
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
         cardView.setOnClickListener {
             navigate(R.id.profileFragment)

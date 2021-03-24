@@ -1,54 +1,224 @@
 package com.gigforce.modules.feature_chat.screens
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
+import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
+import com.gigforce.modules.feature_chat.models.ChatHeader
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import javax.inject.Inject
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ChatHeadersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ChatHeadersFragment : Fragment() {
+@AndroidEntryPoint
+class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener {
 
-    val viewModel: ChatHeadersViewModel by viewModels<ChatHeadersViewModel>()
+    @Inject
+    lateinit var navigation: INavigation
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val chatNavigation : ChatNavigation by lazy {
+        ChatNavigation(navigation)
+    }
 
-        viewModel.chatHeaders.observe(this, Observer {
-            ChatListFragment@this.view?.findViewById<CoreRecyclerView>(R.id.rv_chat_headers)?.collection =
-                ArrayList(it.map {
-                    ChatListItemDataObject(
-                        id = it.id,
-                        title = it.otherUser?.name ?: "",
-                        subtitle = it.lastMsgText,
-                        timeDisplay = "2 min",
-                        type = it.chatType,
-                        profilePath = "",
-                        unreadCount = it.unseenCount
-                    )
-                })
+    private val viewModel: ChatHeadersViewModel by viewModels()
+
+    private lateinit var contactsFab: FloatingActionButton
+    private lateinit var noChatsLayout: View
+    private lateinit var contactsButton: Button
+    private lateinit var toolbar: GigforceToolbar
+    private lateinit var coreRecyclerView: CoreRecyclerView
+
+    private fun setObserver(owner: LifecycleOwner) {
+        Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
+        viewModel.chatHeaders.observe(owner, Observer {
+            Log.d("chat/header/fragment", "Observer Triggered")
+            Log.d("chat/header/fragment", it.toString())
+            this.setCollectionData(ArrayList(it))
         })
 
-        arguments?.let {
+    }
 
-        }
+    private fun setCollectionData(list: ArrayList<ChatHeader>) {
+        noChatsLayout.isVisible = list.isEmpty()
+
+        coreRecyclerView.collection =
+            ArrayList(list.map {
+
+                var timeToDisplayText = ""
+                it.lastMsgTimestamp?.let {
+                    val chatDate = it.toDate()
+                    timeToDisplayText =
+                        if (DateUtils.isToday(chatDate.time)) SimpleDateFormat("hh:mm aa").format(
+                            chatDate
+                        ) else SimpleDateFormat("dd MMM").format(chatDate)
+                }
+
+                ChatListItemDataObject(
+                    id = it.id,
+                    title = it.otherUser?.name ?: "",
+                    subtitle = it.lastMsgText,
+                    timeDisplay = timeToDisplayText,
+                    type = it.chatType,
+                    profilePath = it.otherUser?.profilePic ?: "",
+                    unreadCount = it.unseenCount,
+                    profileId = it.otherUserId,
+                    isOtherUserOnline = it.isOtherUserOnline,
+                    groupName = it.groupName,
+                    groupAvatar = it.groupAvatar,
+                    lastMessage = it.lastMsgText,
+                    lastMessageType = it.lastMessageType,
+                    lastMsgFlowType = it.lastMsgFlowType,
+                    chatType = it.chatType,
+                    status = it.status,
+                    senderName = it.senderName
+                )
+            })
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        cancelAnyNotificationIfShown()
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
+    }
+
+    private fun cancelAnyNotificationIfShown() {
+        val mNotificationManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.cancel(67)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        findViews(view)
+        initListeners()
+        setObserver(this.viewLifecycleOwner)
+
+        if (!isStoragePermissionGranted())
+            askForStoragePermission()
+
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun findViews(view: View) {
+        contactsFab = view.findViewById(R.id.contactsFab)
+        contactsFab.setOnClickListener {
+
+            chatNavigation.navigateToContactsPage()
+        }
+
+        coreRecyclerView = view.findViewById(R.id.rv_chat_headers)
+        noChatsLayout = view.findViewById(R.id.no_chat_layout)
+        contactsButton = view.findViewById(R.id.go_to_contacts_btn)
+        toolbar = view.findViewById(R.id.toolbar)
+
+        contactsButton.isEnabled = true
+        contactsButton.setOnClickListener {
+
+            chatNavigation.navigateToContactsPage()
+        }
+
+        toolbar.showTitle("Chats")
+        toolbar.hideActionMenu()
+        toolbar.setBackButtonListener(View.OnClickListener {
+
+            if (toolbar.isSearchCurrentlyShown) {
+                hideSoftKeyboard()
+            } else {
+                activity?.onBackPressed()
+            }
+        })
+    }
+
+    private fun initListeners() {
+
+        toolbar.showSearchOption("Search Chats")
+        toolbar.setOnSearchTextChangeListener(this)
+    }
+
+    private fun askForStoragePermission() {
+        Log.v(ChatPageFragment.TAG, "Permission Required. Requesting Permission")
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+            ),
+            23
+        )
+    }
+
+    private fun isStoragePermissionGranted(): Boolean {
+
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onSearchTextChanged(newText: String) {
+
+        if (newText.isBlank()) {
+            coreRecyclerView.resetFilter()
+        } else {
+            coreRecyclerView.filter {
+
+                val item = it as ChatListItemDataObject
+                item.groupName.contains(
+                    newText, true
+                ) || item.title.contains(
+                    newText, true
+                ) || item.subtitle.contains(
+                    newText, true
+                )
+
+            }
+        }
+    }
+
+    fun hideSoftKeyboard() {
+
+        val activity = activity ?: return
+
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
     }
 }

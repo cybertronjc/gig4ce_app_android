@@ -496,6 +496,8 @@ class GroupChatViewModel constructor(
 
     fun setMessagesUnseenCountToZero() = GlobalScope.launch {
         try {
+
+            Log.d(TAG, "CHAT 1, Setting count to Zero for $groupId")
             chatGroupRepository.setUnseenMessagecountToZero(groupId)
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)

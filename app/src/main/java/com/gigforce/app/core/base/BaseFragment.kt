@@ -3,6 +3,7 @@ package com.gigforce.app.core.base
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.app.R
 import com.gigforce.app.core.base.dialog.AppDialogsImp
@@ -409,12 +412,34 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         utilAndValidationInterface.updateResources(language)
     }
 
-    fun getCircularProgressDrawable(): CircularProgressDrawable {
-        val circularProgressDrawable = CircularProgressDrawable(requireContext())
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 20f
-        circularProgressDrawable.start()
-        return circularProgressDrawable
+    fun getCircularProgressDrawable(): Drawable {
+//        val circularProgressDrawable = CircularProgressDrawable(requireContext())
+//        circularProgressDrawable.strokeWidth = 5f
+//        circularProgressDrawable.centerRadius = 20f
+//        circularProgressDrawable.start()
+//        return circularProgressDrawable
+
+
+        return getShimmerDrawable()
+    }
+
+    fun getShimmerDrawable() : ShimmerDrawable{
+
+
+
+        val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+            .setDuration(1800) // how long the shimmering animation takes to do one full sweep
+            .setBaseAlpha(0.9f) //the alpha of the underlying children
+            .setHighlightAlpha(1.0f) // the shimmer alpha amount
+            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+            .setAutoStart(true)
+            .build()
+
+
+// This is the placeholder for the imageView
+        return ShimmerDrawable().apply {
+            setShimmer(shimmer)
+        }
     }
 
     fun hideSoftKeyboard() {
@@ -442,7 +467,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
                     resources.getDimensionPixelSize(shimmerModel.marginBottom))
             view.layoutParams = layoutParams
             val shimmerLayout = view.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
-            shimmerLayout.startShimmerAnimation()
+            shimmerLayout.startShimmer()
         }
     }
 
@@ -450,7 +475,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         for (i in 0 until view.childCount) {
             val nestedView = view.getChildAt(i)
             val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
-            shimmerLayout.stopShimmerAnimation()
+            shimmerLayout.stopShimmer()
 
         }
         view.removeAllViews()

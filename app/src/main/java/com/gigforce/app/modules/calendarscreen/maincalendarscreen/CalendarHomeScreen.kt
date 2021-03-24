@@ -214,7 +214,7 @@ class CalendarHomeScreen : BaseFragment(),
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
         month_year.setOnClickListener(View.OnClickListener {
             changeVisibilityCalendarView()
@@ -832,7 +832,7 @@ class CalendarHomeScreen : BaseFragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            "You have $gigOnDay active on this day. These gigs will get cancelled as well."
+            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

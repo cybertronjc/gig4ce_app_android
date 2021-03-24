@@ -2,6 +2,7 @@ package com.gigforce.app.modules.chatmodule.models
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class ChatHeader(
@@ -66,7 +67,10 @@ data class ChatHeader(
     @set:PropertyName("groupDeactivated")
     var groupDeactivated: Boolean = false
 
-) : BaseFirestoreDataModel(tableName = "headers")
+) : BaseFirestoreDataModel(tableName = "headers"){
+
+
+}
 
 data class UserInfo(
     @get:PropertyName("id")

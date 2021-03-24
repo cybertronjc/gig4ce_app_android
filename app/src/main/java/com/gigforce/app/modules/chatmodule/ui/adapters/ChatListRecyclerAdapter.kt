@@ -31,7 +31,7 @@ class ChatListRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.chat_header_item, parent, false)
+                .inflate(R.layout.chat_header_item, parent, true)
 
         return ContactViewHolder(
                 view,
@@ -88,9 +88,9 @@ class ChatListRecyclerAdapter(
                 val userAvatarUrl = chatHeader.otherUser?.profilePic
                 if (userAvatarUrl.isNullOrBlank()) {
                     //Show Default User avatar
-                    requestManager.load(R.drawable.ic_user).into(circleImageView)
+                    requestManager.load(R.drawable.ic_user_2).into(circleImageView)
                 } else {
-                    requestManager.load(userAvatarUrl).placeholder(R.drawable.ic_user).into(circleImageView)
+                    requestManager.load(userAvatarUrl).placeholder(R.drawable.ic_user_2).into(circleImageView)
                 }
 
             } else if (chatHeader.chatType == ChatConstants.CHAT_TYPE_GROUP) {

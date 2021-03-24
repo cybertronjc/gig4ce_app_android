@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.PushDownAnim
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -124,9 +127,10 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
                         }
                     }
                 }
-        PushDownAnim.setPushDownAnimTo(tv_okay_no_gigs_present).setOnClickListener(View.OnClickListener {
-            dismiss()
-        })
+        PushDownAnim.setPushDownAnimTo(tv_okay_no_gigs_present)
+                .setOnClickListener(View.OnClickListener {
+                    dismiss()
+                })
     }
 
     private fun initViewModel() {
@@ -137,7 +141,9 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
 
                             when (it) {
                                 Lce.Loading -> showTodaysGigsLoading()
-                                is Lce.Content -> showTodaysGig(it.content)
+                                is Lce.Content -> showTodaysGig(it.content.filter {
+                                    GigStatus.fromGig(it) != GigStatus.DECLINED
+                                })
                                 is Lce.Error -> showError(it.error)
                             }
                         })
@@ -174,12 +180,13 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
             content.size == 1 -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
-                "Alright, No new Gigs will be asssigned to you this day. However, you have 1 gig assigned to you"
+                "Alright, No new Gigs will be assigned to you this day. However, you have already 1 gig assigned"
             }
             else -> {
                 gig_error.gone()
                 decline_slider_btn.visible()
-                "Alright, No new Gigs will be asssigned to you this day. However, you have ${content.size} gigs assigned to you"
+
+                "Alright, No new Gigs will be assigned to you this day. However, you have already ${content.size} gigs assigned"
             }
         }
 
@@ -223,15 +230,35 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
     }
 
     override fun onCallClicked(gig: Gig) {
-        if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) return
+        if (gig.openNewGig()) {
+
+            if (gig.agencyContact?.contactNumber.isNullOrEmpty())
+                return
+        } else if (gig.gigContactDetails?.contactNumberString.isNullOrEmpty()) {
+            return
+        }
+
+        val contactNumber = if (gig.openNewGig()) {
+            gig.agencyContact?.contactNumber
+        } else {
+            gig.gigContactDetails?.contactNumberString
+        }
+
         val intent = Intent(
                 Intent.ACTION_DIAL,
-                Uri.fromParts("tel", gig.gigContactDetails?.contactNumber?.toString(), null)
+                Uri.fromParts("tel", contactNumber, null)
         )
         startActivity(intent)
     }
 
     override fun onMessageClicked(gig: Gig) {
-        findNavController().navigate(R.id.fakeGigContactScreenFragment)
+
+        findNavController().navigate(
+                R.id.chatScreenFragment, bundleOf(
+                ChatFragment.INTENT_EXTRA_OTHER_USER_ID to gig.agencyContact!!.uid,
+                ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to gig.agencyContact!!.profilePicture,
+                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to gig.agencyContact!!.name
+        )
+        )
     }
 }

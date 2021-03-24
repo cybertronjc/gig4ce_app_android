@@ -615,6 +615,7 @@ class ChatMessagesViewModel constructor(
             return@launch
         }
 
+        Log.d(TAG, "CHAT 1, Setting count to Zero for $headerId")
         try {
             firebaseDB.collection("chats")
                 .document(uid)

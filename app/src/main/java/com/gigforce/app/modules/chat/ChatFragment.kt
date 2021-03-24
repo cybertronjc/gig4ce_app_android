@@ -20,7 +20,7 @@ class ChatFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_chat_dep, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

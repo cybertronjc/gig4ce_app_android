@@ -43,7 +43,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_group_chat.*
 import kotlinx.android.synthetic.main.fragment_group_chat_main.*
 import java.io.File
@@ -95,7 +95,7 @@ class GroupChatFragment : BaseFragment(),
         GroupChatRecyclerAdapter(
                 requireContext(),
                 appDirectoryFileRef,
-                initGlide(R.drawable.ic_user, R.drawable.ic_user)!!,
+                initGlide(R.drawable.ic_user_2, R.drawable.ic_user_2)!!,
                 this
         )
     }

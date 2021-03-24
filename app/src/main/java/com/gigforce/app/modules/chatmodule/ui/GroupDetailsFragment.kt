@@ -14,7 +14,6 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,19 +35,26 @@ import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.vinners.cmi.ui.activity.GroupChatViewModelFactory
+import com.gigforce.app.modules.chatmodule.viewModels.factories.GroupChatViewModelFactory
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat_group_details.*
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class GroupDetailsFragment : BaseFragment(),
     PopupMenu.OnMenuItemClickListener,
     GroupMediaRecyclerAdapter.OnGroupMediaClickListener,
     OnGroupMembersClickListener,
     OnContactsSelectedListener {
+
+    @Inject
+    lateinit var navigation: INavigation
 
     private val viewModel: GroupChatViewModel by lazy {
         ViewModelProvider(this, GroupChatViewModelFactory(requireContext())).get(GroupChatViewModel::class.java)
@@ -58,7 +64,7 @@ class GroupDetailsFragment : BaseFragment(),
     private val groupMediaRecyclerAdapter: GroupMediaRecyclerAdapter by lazy {
         GroupMediaRecyclerAdapter(
             appDirectoryFileRef,
-            initGlide(R.drawable.ic_user,R.drawable.ic_user)!!,
+            initGlide(R.drawable.ic_user_2,R.drawable.ic_user_2)!!,
             this
         )
     }
@@ -69,7 +75,7 @@ class GroupDetailsFragment : BaseFragment(),
 
     private val groupMembersRecyclerAdapter: GroupMembersRecyclerAdapter by lazy {
         GroupMembersRecyclerAdapter(
-            initGlide(R.drawable.ic_user,R.drawable.ic_user)!!,
+            initGlide(R.drawable.ic_user_2,R.drawable.ic_user_2)!!,
             this
         )
     }
@@ -82,7 +88,7 @@ class GroupDetailsFragment : BaseFragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.fragment_chat_group_details, inflater, container)
+        return inflateView(R.layout.fragment_chat_group_details_2, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

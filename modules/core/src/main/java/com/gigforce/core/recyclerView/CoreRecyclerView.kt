@@ -61,4 +61,21 @@ open class CoreRecyclerView(
         set(value) {
             this.coreAdapter.collection = value
         }
+
+    fun filter(predicate: (Any) -> Boolean) {
+        this.coreAdapter.filter(predicate)
+    }
+
+    fun smoothScrollToLastPosition() {
+        if (adapter == null)
+            return
+
+        if (adapter!!.itemCount != 0) {
+            smoothScrollToPosition(adapter!!.itemCount - 1)
+        }
+    }
+
+    fun resetFilter() {
+        this.coreAdapter.resetFilter()
+    }
 }

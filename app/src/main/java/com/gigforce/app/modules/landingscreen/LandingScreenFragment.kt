@@ -119,7 +119,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val notificationToken = FirebaseInstanceId.getInstance().getToken()
+
         viewModel = ViewModelProvider(this).get(LandingScreenViewModel::class.java)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
@@ -153,6 +153,8 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
         }
+
+//        chat_icon_iv.performClick()
 
     }
 
@@ -760,7 +762,7 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
 
         contact_us.setOnClickListener {
@@ -886,18 +888,15 @@ class LandingScreenFragment : BaseFragment() {
                                                 .error(R.drawable.ic_learning_default_back)
                                                 .into(img)
                                     } else {
-                                        FirebaseStorage.getInstance()
+                                      val imageRef =   FirebaseStorage.getInstance()
                                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                                                 .child(obj!!.coverPicture!!)
-                                                .downloadUrl
-                                                .addOnSuccessListener { fileUri ->
 
-                                                    GlideApp.with(requireContext())
-                                                            .load(fileUri)
-                                                            .placeholder(getCircularProgressDrawable())
-                                                            .error(R.drawable.ic_learning_default_back)
-                                                            .into(img)
-                                                }
+                                        GlideApp.with(requireContext())
+                                                .load(imageRef)
+                                                .placeholder(getCircularProgressDrawable())
+                                                .error(R.drawable.ic_learning_default_back)
+                                                .into(img)
                                     }
                                 } else {
 

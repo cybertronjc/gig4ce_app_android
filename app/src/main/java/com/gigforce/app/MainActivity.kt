@@ -1,7 +1,9 @@
 package com.gigforce.app
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,27 +13,39 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
+import com.gigforce.app.core.printDebugLog
 import com.gigforce.app.modules.gigPage.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
  import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.notification.ChatNotificationHandler
+import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.NavFragmentsData
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
@@ -43,7 +57,15 @@ class MainActivity : AppCompatActivity(),
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
 
-    fun getNavController():NavController{
+    private val firebaseAuth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+
+    private val chatHeadersViewModel: ChatHeadersViewModel by lazy {
+        ViewModelProvider(this).get(ChatHeadersViewModel::class.java)
+    }
+
+    fun getNavController(): NavController {
         return this.navController
     }
 
@@ -52,6 +74,26 @@ class MainActivity : AppCompatActivity(),
 
     override fun getINavigation(): INavigation {
         return navigation
+    }
+
+    private val chatNotificationHandler: ChatNotificationHandler by lazy {
+        ChatNotificationHandler(applicationContext)
+    }
+
+    private val intentFilters = IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+    private val notificationIntentRecevier = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+                    ?: return
+
+//
+            //
+
+            if (navController.currentDestination?.label != "fragment_chat_list" &&
+                    navController.currentDestination?.label  != "fragment_chat_page")
+                chatNotificationHandler.handleChatNotification(remoteMessage)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,8 +108,15 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
 
+        intent?.extras?.let {
+            it.printDebugLog("printDebugLog")
+        }
+
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationIntentRecevier, intentFilters)
+
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
                 navController.popBackStack()
@@ -104,6 +153,14 @@ class MainActivity : AppCompatActivity(),
                 proceedWithNormalNavigation()
             }
         }
+
+        if (firebaseAuth.currentUser != null) {
+            lookForNewChatMessages()
+        }
+    }
+
+    private fun lookForNewChatMessages() {
+        chatHeadersViewModel.startWatchingChatHeaders()
     }
 
     private fun handleDeepLink() {
@@ -134,16 +191,20 @@ class MainActivity : AppCompatActivity(),
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.chatScreenFragment,
-                    intent.extras
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE, ChatConstants.CHAT_TYPE_USER)
+                    }
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.groupChatFragment,
-                    intent.extras
+                    R.id.chatPageFragment,
+                    intent.extras.apply {
+                        this?.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE, ChatConstants.CHAT_TYPE_GROUP)
+                    }
                 )
             }
             else -> {
@@ -165,6 +226,9 @@ class MainActivity : AppCompatActivity(),
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         navController.handleDeepLink(intent)
+        intent?.extras?.let {
+            it.printDebugLog("printDebugLog")
+        }
 
         if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
@@ -194,6 +258,11 @@ class MainActivity : AppCompatActivity(),
         navController.popAllBackStates()
         navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
     }
 
     override fun onBackPressed() {

@@ -611,7 +611,7 @@ class ChatFragment : BaseFragment(),
                     selectedOperation = -1
                 }
             } else
-                showToast("Please grant storage permission, to pick files")
+                showToast("Please grant storage permission to pick files")
         }
     }
 

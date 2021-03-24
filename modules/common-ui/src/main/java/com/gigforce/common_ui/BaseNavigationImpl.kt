@@ -56,4 +56,8 @@ abstract class BaseNavigationImpl(): INavigation {
             hasBackStack = navController.popBackStack()
         }
     }
+
+    override fun navigateUp() {
+        getNavController().navigateUp()
+    }
  }
