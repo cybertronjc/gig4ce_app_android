@@ -110,28 +110,28 @@ class AddUserExperienceFragment : BaseFragment() {
 
         currently_work_here_checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            if (isChecked) {
-                end_date_tv.text = getString(R.string.current)
-            } else {
-                if (endDate != null) {
-                    end_date_tv.setText(dateFormatter.format(endDate!!.time))
-                } else
-                    end_date_tv.setText(null)
-            }
+//            if (isChecked) {
+//                end_date_tv.text = getString(R.string.current)
+//            } else {
+//                if (endDate != null) {
+//                    end_date_tv.setText(dateFormatter.format(endDate!!.time))
+//                } else
+//                    end_date_tv.setText(null)
+//            }
         }
 
         submitBtn.setOnClickListener {
             validateDataAndSubmit()
         }
 
-        start_date_tv.setOnClickListener {
-            showStartDateMonthYearPicker()
-        }
-
-        end_date_tv.setOnClickListener {
-            // showEndDatePicker()
-            showEndDateMonthYearPicker()
-        }
+//        start_date_tv.setOnClickListener {
+//            showStartDateMonthYearPicker()
+//        }
+//
+//        end_date_tv.setOnClickListener {
+//            // showEndDatePicker()
+//            showEndDateMonthYearPicker()
+//        }
 
         ic_back_iv.setOnClickListener {
             showGoBackConfirmationDialog()
@@ -187,16 +187,17 @@ class AddUserExperienceFragment : BaseFragment() {
                 company_name_error.text = null
             }
 
-            if (startDate == null) {
-
-                start_date_error.visible()
-                start_date_error.text = getString(R.string.please_select_start_date)
-
-                return
-            } else {
-                start_date_error.gone()
-                start_date_error.text = null
-            }
+            //todo fix
+//            if (startDate == null) {
+//
+//                start_date_error.visible()
+//                start_date_error.text = getString(R.string.please_select_start_date)
+//
+//                return
+//            } else {
+//                start_date_error.gone()
+//                start_date_error.text = null
+//            }
 
             if (endDate == null && !currently_work_here_checkbox.isChecked) {
                 currently_working_error.visible()
@@ -209,17 +210,6 @@ class AddUserExperienceFragment : BaseFragment() {
                 currently_working_error.text = null
             }
 
-            if (total_exp_chipgroup.checkedChipId == -1) {
-
-                total_exp_error.visible()
-                total_exp_error.text = "Please Select Experience"
-
-                return
-            } else {
-
-                total_exp_error.gone()
-                total_exp_error.text = null
-            }
 
 
             if (helper_exec_question_layout.isVisible && helper_weight_chipgroup.checkedChipId == -1) {
@@ -247,16 +237,6 @@ class AddUserExperienceFragment : BaseFragment() {
             ""
         }
 
-        val earning: Double = if (doHaveAndExp && earning_et.text.isNotBlank()) {
-            earning_et.text.toString().toDouble()
-        } else {
-            0.0
-        }
-        val totalExperience = if (doHaveAndExp && total_exp_chipgroup.checkedChipId != -1) {
-            total_exp_chipgroup.findViewById<Chip>(total_exp_chipgroup.checkedChipId).text.toString()
-        } else {
-            ""
-        }
 
         val driverQuestionOwnVehicle: List<String> = if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
             val driverOwnedVehicles: MutableList<String> = mutableListOf()
@@ -271,18 +251,6 @@ class AddUserExperienceFragment : BaseFragment() {
             emptyList()
         }
 
-        val driverQuestionCanDriveVehicles: List<String> = if (driver_question_layout.isVisible && vehicle_can_drive_chipgroup.checkedChipIds.isNotEmpty()) {
-            val driverCanDriveVehicles: MutableList<String> = mutableListOf()
-
-            vehicle_can_drive_chipgroup.checkedChipIds.forEach {
-                val vehicle = vehicle_can_drive_chipgroup.findViewById<Chip>(it).text.toString()
-                driverCanDriveVehicles.add(vehicle)
-            }
-
-            driverCanDriveVehicles
-        } else {
-            emptyList()
-        }
 
         val deliveryExecQuestionOwnVehicles: List<String> = if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
             val deliveryVehiclesOwn: MutableList<String> = mutableListOf()
@@ -314,12 +282,9 @@ class AddUserExperienceFragment : BaseFragment() {
                 endDate = if (currently_work_here_checkbox.isChecked) null else endDate,
                 currentExperience = currently_work_here_checkbox.isChecked,
                 role = role,
-                earningPerMonth = earning,
-                totalExperence = totalExperience,
 
                 driverQuestionOwnVehicle = "",
                 driverQuestionVehiclesOwn = driverQuestionOwnVehicle,
-                driverQuestionVehiclesCanDrive = driverQuestionCanDriveVehicles,
 
                 deliveryExecQuestionOwnVehicle = "",
                 deliveryQuestionVehiclesOwn = deliveryExecQuestionOwnVehicles,
@@ -435,15 +400,14 @@ class AddUserExperienceFragment : BaseFragment() {
                 startDate = it.startDate
                 endDate = it.endDate
 
-                if (startDate != null)
-                    start_date_tv.setText(dateFormatter.format(it.startDate))
-
-                if (endDate != null)
-                    end_date_tv.setText(dateFormatter.format(it.endDate))
+                //todo
+//                if (startDate != null)
+//                    start_date_tv.setText(dateFormatter.format(it.startDate))
+//
+//                if (endDate != null)
+//                    end_date_tv.setText(dateFormatter.format(it.endDate))
 
                 currently_work_here_checkbox.isChecked = it.currentExperience
-                earning_et.setText(it.earningPerMonth.toString())
-                total_exp_chipgroup.selectChipWithText(it.totalExperence)
             }
         }
 
@@ -456,9 +420,11 @@ class AddUserExperienceFragment : BaseFragment() {
             role_spinner.visible()
             what_was_your_role_label.visible()
 
+
+
             populateRoleSpinner(
                     mutableListOf(
-                            "Car", "Truck", "Bus", "Autorickshaw"
+                            "Car Driver", "Electric Vehicle", "2 wheeler", "Commercial Vehicle"
                     )
             )
 
@@ -475,11 +441,9 @@ class AddUserExperienceFragment : BaseFragment() {
                         driverOwnVehicleList.add(it.driverQuestionOwnVehicle)
                         driver_own_vehicle_chipgroup.selectChipsWithText(driverOwnVehicleList)
 
-                        vehicle_can_drive_chipgroup.selectChipsWithText(it.driverQuestionVehiclesCanDrive)
                     } else {
 
                         driver_own_vehicle_chipgroup.selectChipsWithText(it.driverQuestionVehiclesOwn)
-                        vehicle_can_drive_chipgroup.selectChipsWithText(it.driverQuestionVehiclesCanDrive)
                     }
                 }
             }
@@ -490,9 +454,11 @@ class AddUserExperienceFragment : BaseFragment() {
             role_spinner.visible()
             what_was_your_role_label.visible()
 
+
+
             populateRoleSpinner(
                     mutableListOf(
-                            "Food Parcel", "Luggage parcel", "Documents parcel"
+                            "Food Delivery","Grocery Delivery","Ecommerce delivery"
                     )
             )
 
@@ -536,6 +502,28 @@ class AddUserExperienceFragment : BaseFragment() {
                         helper_weight_chipgroup.check(R.id.option_weight_no)
                 }
             }
+        } else if (content == "Sales") {
+            driver_question_layout.gone()
+            delivery_exec_question_layout.gone()
+            helper_exec_question_layout.gone()
+            role_spinner.visible()
+            what_was_your_role_label.visible()
+
+            populateRoleSpinner(
+                    mutableListOf(
+                            "Retails", "Fintech" ,"SaaS"
+                    )
+            )
+
+            experienceData?.let {
+
+                if (it.title == "Sales") {
+
+                    if (it.haveExperience) {
+                        role_spinner.selectItemWithText(it.role)
+                    }
+                }
+            }
         } else {
             driver_question_layout.gone()
             delivery_exec_question_layout.gone()
@@ -543,6 +531,7 @@ class AddUserExperienceFragment : BaseFragment() {
             role_spinner.gone()
             what_was_your_role_label.gone()
         }
+
     }
 
     override fun onBackPressed(): Boolean {
@@ -611,7 +600,7 @@ class AddUserExperienceFragment : BaseFragment() {
                     newCal.set(Calendar.MILLISECOND, 0)
 
                     startDate = newCal.time
-                    this@AddUserExperienceFragment.start_date_tv.setText(dateFormatter.format(newCal.time))
+//                    this@AddUserExperienceFragment.start_date_tv.setText(dateFormatter.format(newCal.time))
                 }
             }.show(childFragmentManager, "MonthYearPickerDialogFragment")
         } else {
@@ -649,7 +638,7 @@ class AddUserExperienceFragment : BaseFragment() {
                     newCal.set(Calendar.MILLISECOND, 0)
 
                     startDate = newCal.time
-                    this@AddUserExperienceFragment.start_date_tv.setText(dateFormatter.format(newCal.time))
+//                    this@AddUserExperienceFragment.start_date_tv.setText(dateFormatter.format(newCal.time))
                 }
             }.show(childFragmentManager, "MonthYearPickerDialogFragment")
 
@@ -701,7 +690,7 @@ class AddUserExperienceFragment : BaseFragment() {
                 newCal.set(Calendar.MILLISECOND, 0)
 
                 endDate = newCal.time
-                this@AddUserExperienceFragment.end_date_tv.setText(dateFormatter.format(newCal.time))
+//                this@AddUserExperienceFragment.end_date_tv.setText(dateFormatter.format(newCal.time))
             }
         }.show(childFragmentManager, "MonthYearPickerDialogFragment")
     }

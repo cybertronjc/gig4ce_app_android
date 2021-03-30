@@ -25,7 +25,6 @@ import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_de
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.VerificationValidations
 import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
 import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
@@ -143,25 +142,13 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
             if (checkedId == R.id.dlYesRB) {
                 showDLImageAndInfoLayout()
-
-                if (confirmDLDataCB.isChecked
-                        && ((dlSubmitSliderBtn.text == getString(R.string.update)
-                                || (dlFrontImagePath != null && dlBackImagePath != null)))
-                ) {
-                    enableSubmitButton()
-                } else
-                    disableSubmitButton()
+                enableSubmitButton()
 
             } else if (checkedId == R.id.dlNoRB) {
                 hideDLImageAndInfoLayout()
 
                 dlSubmitSliderBtn.visible()
-                confirmDLDataCB.visible()
-
-                if (confirmDLDataCB.isChecked)
-                    enableSubmitButton()
-                else
-                    disableSubmitButton()
+                enableSubmitButton()
 
             } else {
                 hideDLImageAndInfoLayout()
@@ -169,22 +156,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             }
         }
 
-        confirmDLDataCB.setOnCheckedChangeListener { _, isChecked ->
 
-            if (isChecked) {
-
-                if (dlYesRB.isChecked
-                        && ((dlSubmitSliderBtn.text == getString(R.string.update)
-                                || (dlFrontImagePath != null && dlBackImagePath != null)))
-                )
-                    enableSubmitButton()
-                else if (dlNoRB.isChecked)
-                    enableSubmitButton()
-                else
-                    disableSubmitButton()
-            } else
-                disableSubmitButton()
-        }
 
         dlSubmitSliderBtn.onSlideCompleteListener =
                 object : SlideToActView.OnSlideCompleteListener {
@@ -205,17 +177,17 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
-
-                                MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle(getString(R.string.alert))
-                                        .setMessage(getString(R.string.enter_valid_dl))
-                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                        .show()
-
-                                dlSubmitSliderBtn.resetSlider()
-                                return
-                            }
+//                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.enter_valid_dl))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//
+//                                dlSubmitSliderBtn.resetSlider()
+//                                return
+//                            }
 
                             if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
@@ -266,10 +238,10 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         ambsd_dl_edit_skip_btn.setOnClickListener {
 
             UserDetailsFilledDialogFragment.launch(
-                userId = userId,
-                userName = userName,
-                fragmentManager = childFragmentManager,
-                okayClickListener = this@AddUserDrivingLicenseInfoFragment
+                    userId = userId,
+                    userName = userName,
+                    fragmentManager = childFragmentManager,
+                    okayClickListener = this@AddUserDrivingLicenseInfoFragment
             )
         }
 
@@ -323,13 +295,13 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         )
     }
 
-    private fun showGoBackConfirmationDialog(){
+    private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
     }
 
     private fun goBackToUsersList() {
@@ -464,16 +436,9 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                     showBackDrivingLicense(dlBackImagePath!!)
                 }
 
-                if (confirmDLDataCB.isChecked
-                        && dlFrontImagePath != null
-                        && dlBackImagePath != null
-                ) {
-                    enableSubmitButton()
-                }
-
+                enableSubmitButton()
                 if (dlFrontImagePath != null && dlBackImagePath != null && dlSubmitSliderBtn.isGone) {
                     dlSubmitSliderBtn.visible()
-                    confirmDLDataCB.visible()
                 }
             } else {
                 MaterialAlertDialogBuilder(requireContext())

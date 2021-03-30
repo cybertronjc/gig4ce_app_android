@@ -243,18 +243,13 @@ class AddCurrentAddressFragment : BaseFragment() {
         val state = (state_spinner.selectedItem as State).name
         val city = (city_spinner.selectedItem as City).name
 
-        var progress = arround_current_add_seekbar.progress
-        if (progress < 5) progress = 5
-
         viewModel.updateUserCurrentAddressDetails(
                 uid = userId,
                 pinCode = pin_code_et.text.toString(),
                 addressLine1 = address_line_1_et.text.toString(),
                 addressLine2 = address_line_2_et.text.toString(),
                 state = state,
-                city = city,
-                preferredDistanceInKm = progress,
-                readyToChangeLocationForWork = ready_to_change_location_chipgroup.checkedChipId == R.id.chip_location_change_yes
+                city = city
         )
     }
 

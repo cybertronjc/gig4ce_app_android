@@ -88,7 +88,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_horizontal"
                     android:lineSpacingExtra="4sp"
-                    android:text="User Current Address"
+                    android:text="User Local Address"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -311,66 +311,6 @@
 
 
 
-            <TextView
-                android:id="@+id/pref_distance_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:text="Preferred distance from current address"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/state_error" />
-
-            <SeekBar
-                android:id="@+id/arround_current_add_seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
-                android:max="60"
-                android:min="5"
-                android:progressTint="@color/colorPrimary"
-                android:thumbTint="@color/colorPrimary"
-                app:layout_constraintTop_toBottomOf="@id/pref_distance_label" />
-
-            <TextView
-                android:id="@+id/minDistanceTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing="0.05"
-                android:text="5 KM"
-                android:textColor="#787993"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
-                app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
-
-            <TextView
-                android:id="@+id/maxDistanceTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing="0.05"
-                android:text="60 KM"
-                android:textColor="#787993"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
-                app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
-
-            <TextView
-                android:id="@+id/seekbardependent"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="0dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
-                app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
-                app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
 
 
             <TextView
@@ -386,7 +326,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/seekbardependent" />
+                app:layout_constraintTop_toBottomOf="@id/state_error" />
 
             <TextView
                 android:id="@+id/migrant_error"
@@ -537,140 +477,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/ready_to_change_location_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:text="Are you ready to migrate in nearby cities?"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/permanent_address_layout" />
 
-            <TextView
-                android:id="@+id/ready_to_migrate_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                android:visibility="gone"
-                android:layout_marginStart="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_label"
-                tools:text="Some Error" />
-
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/ready_to_change_location_chipgroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
-                app:chipSpacingHorizontal="14dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/ready_to_migrate_error"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_location_change_yes"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Yes, I am ready"
-                    app:chipStrokeWidth="1dp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_location_change_no"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="No, I am not" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-
-            <TextView
-                android:id="@+id/how_do_you_came_to_know_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:text="How do you came to know about your current job ?"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ready_to_change_location_chipgroup" />
-
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/how_do_you_came_to_know_chipgroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
-                app:chipSpacingHorizontal="14dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/how_do_you_came_to_know_label"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/how_do_you_came_to_know_local_vendor"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Local Vendor"
-                    app:chipStrokeWidth="1dp"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/how_do_you_came_to_know_self"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="Self" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/how_do_you_came_to_know_friends_relative"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="Friends/ Relative" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/how_do_you_came_to_know_others"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="Others" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/how_do_you_came_to_know_not_working_right_now"
-                    style="@style/AppSingleChoiceChip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipStrokeWidth="1dp"
-                    android:text="Not Working Right Now" />
-
-            </com.google.android.material.chip.ChipGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

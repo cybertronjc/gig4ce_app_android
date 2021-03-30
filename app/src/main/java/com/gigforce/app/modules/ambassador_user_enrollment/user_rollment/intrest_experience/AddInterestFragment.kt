@@ -95,6 +95,18 @@ class AddUserInterestFragment : BaseFragment() {
                 return@setOnClickListener
             }
 
+            if (interest_chipgroup.checkedChipIds.size > 3) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("You can select only max 3 Chips")
+                        .setPositiveButton(
+                                getString(R.string.okay).capitalize()
+                        ) { _, _ -> }.show()
+
+                return@setOnClickListener
+            }
+
+
             submitInterests()
         }
 

@@ -48,9 +48,8 @@ class UserDetailsViewModel constructor(
             uid: String,
             phoneNumber: String,
             name: String,
-            dateOfBirth: Date,
+            dateOfBirth: Date?,
             gender: String,
-            pinCode: String,
             highestQualification: String
     ) = viewModelScope.launch {
 
@@ -62,8 +61,7 @@ class UserDetailsViewModel constructor(
                     name = name,
                     dateOfBirth = dateOfBirth,
                     gender = gender,
-                    highestQualification = highestQualification,
-                    pincode = pinCode
+                    highestQualification = highestQualification
             )
             enrolledUserListRepository.updateUserProfileName(uid, name)
           //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
@@ -85,11 +83,8 @@ class UserDetailsViewModel constructor(
             addressLine2: String,
             state: String,
             city: String,
-            preferredDistanceInKm: Int,
-            readyToChangeLocationForWork: Boolean,
             homeCity: String = "",
-            homeState: String = "",
-            howDidYouCameToKnowOfCurrentJob: String = ""
+            homeState: String = ""
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
@@ -102,11 +97,8 @@ class UserDetailsViewModel constructor(
                     addressLine2 = addressLine2,
                     state = state,
                     city = city,
-                    preferredDistanceInKm = preferredDistanceInKm,
-                    readyToChangeLocationForWork = readyToChangeLocationForWork,
                     homeCity = homeCity,
-                    homeState = homeState,
-                    howDidYouCameToKnowOfCurrentJob = howDidYouCameToKnowOfCurrentJob
+                    homeState = homeState
             )
 
             if (uid != null)

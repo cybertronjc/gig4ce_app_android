@@ -308,7 +308,7 @@
                         android:layout_marginStart="4dp"
                         android:fontFamily="@font/lato"
                         android:lineSpacingExtra="3sp"
-                        android:text="@string/join_us_as_an_ambassador"
+                        android:text="@string/ambassador_program"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -343,7 +343,7 @@
                         android:minHeight="@dimen/size_36"
 
                         android:lineSpacingExtra="3sp"
-                        android:text="@string/join_now"
+                        android:text="@string/open"
                         android:textAllCaps="false"
                         android:textColor="@color/lipstick"
                         android:textSize="14sp"

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SeekBar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -17,7 +16,6 @@ import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectChipWithText
 import com.gigforce.app.core.selectItemWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
@@ -29,23 +27,9 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
-import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.address_line_1_et
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.address_line_2_et
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.arround_current_add_seekbar
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.city_spinner
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.ic_back_iv
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.pin_code_et
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.pin_code_okay_iv
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.ready_to_change_location_chipgroup
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.ready_to_change_location_label
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.seekbardependent
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.state_spinner
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.submitBtn
 import java.util.*
 
 class AddUserCurrentAddressFragment : BaseFragment() {
@@ -115,23 +99,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             }
         }
 
-        arround_current_add_seekbar.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val value =
-                        (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
-                seekbardependent.text = progress.toString() + " " + getString(R.string.km)
-                seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
-                //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-
         submitBtn.setOnClickListener {
             validateDataAndSubmit()
         }
@@ -186,6 +153,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             private fun filterPermanentCitiesByStateAndSetOnCities(id: String) {
                 val cities = viewModel.cities.filter {
                     it.stateCode == id
+                }.sortedBy {
+                    it.name
                 }.toMutableList().apply {
                     add(0, City(name = "Select District"))
                 }
@@ -210,19 +179,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             if (checkedId == R.id.migrant_no) {
                 permanent_address_layout.gone()
 
-                ready_to_change_location_label.visible()
-                ready_to_change_location_chipgroup.visible()
-
-                how_do_you_came_to_know_label.gone()
-                how_do_you_came_to_know_chipgroup.gone()
             } else {
                 permanent_address_layout.visible()
 
-                ready_to_change_location_label.gone()
-                ready_to_change_location_chipgroup.gone()
-
-                how_do_you_came_to_know_label.visible()
-                how_do_you_came_to_know_chipgroup.visible()
             }
         }
 
@@ -238,32 +197,32 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     }
 
     private fun validateDataAndSubmit() {
-        if (pin_code_et.text.isBlank() || pin_code_et.text.toString().toInt() < 10_00_00) {
-            pin_code_error.visible()
-            pin_code_error.text = "Provide a valid Pin Code"
-            return
-        } else {
-            pin_code_error.gone()
-            pin_code_error.text = null
-        }
-
-        if (address_line_1_et.text.isBlank()) {
-            address_line_1_error.visible()
-            address_line_1_error.text = "Please provide House No/ Street No"
-            return
-        } else {
-            address_line_1_error.gone()
-            address_line_1_error.text = null
-        }
-
-        if (address_line_2_et.text.isBlank()) {
-            address_line_2_error.visible()
-            address_line_2_error.text = "Please provide Area / Village / Town"
-            return
-        } else {
-            address_line_2_error.gone()
-            address_line_2_error.text = null
-        }
+//        if (pin_code_et.text.isBlank() || pin_code_et.text.toString().toInt() < 10_00_00) {
+//            pin_code_error.visible()
+//            pin_code_error.text = "Provide a valid Pin Code"
+//            return
+//        } else {
+//            pin_code_error.gone()
+//            pin_code_error.text = null
+//        }
+//
+//        if (address_line_1_et.text.isBlank()) {
+//            address_line_1_error.visible()
+//            address_line_1_error.text = "Please provide House No/ Street No"
+//            return
+//        } else {
+//            address_line_1_error.gone()
+//            address_line_1_error.text = null
+//        }
+//
+//        if (address_line_2_et.text.isBlank()) {
+//            address_line_2_error.visible()
+//            address_line_2_error.text = "Please provide Area / Village / Town"
+//            return
+//        } else {
+//            address_line_2_error.gone()
+//            address_line_2_error.text = null
+//        }
 
         if (state_spinner.childCount == 0 || state_spinner.selectedItemPosition == 0) {
             state_error.visible()
@@ -302,14 +261,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             permanent_city_error.text = null
         }
 
-        if (ready_to_change_location_chipgroup.isVisible && ready_to_change_location_chipgroup.checkedChipId == -1) {
-            ready_to_migrate_error.visible()
-            ready_to_migrate_error.text = "Select If you are ready to migrate"
-            return
-        } else {
-            ready_to_migrate_error.gone()
-            ready_to_migrate_error.text = null
-        }
 
         val state = (state_spinner.selectedItem as State).name
         val city = (city_spinner.selectedItem as City).name
@@ -325,14 +276,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             homeCity = city
         }
 
-        val howDidYouCameToKnowAboutJob = if (how_do_you_came_to_know_chipgroup.isVisible && how_do_you_came_to_know_chipgroup.checkedChipId != -1) {
-            how_do_you_came_to_know_chipgroup.findViewById<Chip>(how_do_you_came_to_know_chipgroup.checkedChipId).text.toString()
-        } else {
-            ""
-        }
-
-        var progress = arround_current_add_seekbar.progress
-        if (progress < 5) progress = 5
 
         viewModel.updateUserCurrentAddressDetails(
                 uid = userId,
@@ -341,11 +284,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 addressLine2 = address_line_2_et.text.toString(),
                 state = state,
                 city = city,
-                preferredDistanceInKm = progress,
-                readyToChangeLocationForWork = ready_to_change_location_chipgroup.checkedChipId == R.id.chip_location_change_yes,
                 homeCity = homeCity,
-                homeState = homeState,
-                howDidYouCameToKnowOfCurrentJob = howDidYouCameToKnowAboutJob
+                homeState = homeState
         )
     }
 
@@ -477,47 +417,28 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
             state_spinner.selectItemWithText(this.state)
             city_spinner.selectItemWithText(this.city)
-            arround_current_add_seekbar.progress = this.preferred_distance
         }
 
         if (content.address.isCurrentAddressAndPermanentAddressTheSame()) {
             localite_migrant_chipgroup.check(R.id.migrant_no)
             permanent_address_layout.gone()
 
-            how_do_you_came_to_know_label.gone()
-            how_do_you_came_to_know_chipgroup.gone()
-
-            ready_to_change_location_label.visible()
-            ready_to_change_location_chipgroup.visible()
-
-            if (content.readyToChangeLocationForWork) {
-                ready_to_change_location_chipgroup.check(R.id.chip_location_change_yes)
-            } else {
-                ready_to_change_location_chipgroup.check(R.id.chip_location_change_no)
-            }
         } else {
             localite_migrant_chipgroup.check(R.id.migrant_yes)
             permanent_address_layout.visible()
 
             permanent_state_spinner.selectItemWithText(content.address.home.state)
             permanent_city_spinner.selectItemWithText(content.address.home.city)
-
-            ready_to_change_location_label.gone()
-            ready_to_change_location_chipgroup.gone()
-
-            how_do_you_came_to_know_label.visible()
-            how_do_you_came_to_know_chipgroup.visible()
-
-            if (content.howYouCameToKnowAboutCurrentJob != null) {
-                how_do_you_came_to_know_chipgroup.selectChipWithText(content.howYouCameToKnowAboutCurrentJob!!)
-            }
         }
     }
 
     private fun populateStateAndCitySpinner() {
-        val states = viewModel.states.sortedWith(compareBy { it.name }).toMutableList().apply {
-            add(0, State(name = "Select State"))
-        }
+        val states = viewModel
+                .states
+                .sortedWith(compareBy { it.name })
+                .toMutableList().apply {
+                    add(0, State(name = "Select State"))
+                }
 
         val adapter: ArrayAdapter<State> =
                 ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, states)
@@ -571,9 +492,12 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 .setPositiveButton("Okay") { _, _ -> }
                 .show()
     }
+
     private fun filterCitiesByStateAndSetOnCities(id: String) {
         val cities = viewModel.cities.filter {
             it.stateCode == id
+        }.sortedBy {
+            it.name
         }.toMutableList().apply {
             add(0, City(name = getString(R.string.select_district)))
         }
@@ -587,8 +511,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         city_spinner.adapter = cityAdapter
     }
-
-
 
 
 }

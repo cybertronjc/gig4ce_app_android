@@ -51,17 +51,20 @@ class VerifyUserMobileViewModel constructor(
             fullAddress: String
     ) = viewModelScope.launch {
 
+        _createProfile.value = Lce.content(CreateUserResponse(
+                phoneNumber = "3443",
+                uid = "PMtcGc3h0h8Ub9ZKRvlH",
+                error = null
+        ))
+
+        return@launch
+
         try {
             _createProfile.value = Lce.loading()
 
             val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
             if (mode == EnrollmentConstants.MODE_EDIT) {
                 if (verifyOtpResponse.isVerified) {
-                    _createProfile.value = Lce.content(CreateUserResponse(
-                            phoneNumber = mobile,
-                            uid = null,
-                            error = null
-                    ))
 
                     if (userId != null) {
                         userEnrollmentRepository.addEditLocationInLocationLogs(
@@ -71,6 +74,12 @@ class VerifyUserMobileViewModel constructor(
                                 fullAddress = fullAddress
                         )
                     }
+
+                    _createProfile.value = Lce.content(CreateUserResponse(
+                            phoneNumber = mobile,
+                            uid = userId,
+                            error = null
+                    ))
                 } else {
                     _createProfile.value = Lce.error("Otp does not match")
                 }

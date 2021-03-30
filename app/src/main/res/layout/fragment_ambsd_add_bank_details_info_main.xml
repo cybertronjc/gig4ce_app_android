@@ -330,20 +330,6 @@
             app:strokeWidth="1dp" />
 
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/bankDetailsDataConfirmationCB"
-            style="@style/Theme.CheckBoxLipstickPink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:layout_marginBottom="18dp"
-            android:fontFamily="@font/lato"
-            android:letterSpacing="0"
-            android:text="@string/yes_i_confirm_the_data_is_correct"
-            app:layout_constraintBottom_toTopOf="@id/passbookSubmitSliderBtn"
-            app:layout_constraintTop_toBottomOf="@id/bankImageEditErrorMessage"
-            app:layout_constraintVertical_bias="0.98"
-            tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

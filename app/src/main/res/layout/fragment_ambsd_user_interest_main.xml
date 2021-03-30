@@ -106,13 +106,6 @@
             app:chipStrokeWidth="1dp" />
 
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_bike_rider"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bike Rider"
-            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_delivery_executive"
@@ -123,6 +116,14 @@
             app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_tele_calling"
+            style="@style/AppSingleChoiceChip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tele calling"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_warehouse_helper"
             style="@style/AppSingleChoiceChip2"
             android:layout_width="wrap_content"
@@ -130,13 +131,6 @@
             android:text="Warehouse Helper"
             app:chipStrokeWidth="1dp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_operator"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Operator"
-            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_technician"
@@ -147,6 +141,14 @@
             app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_interest_sales"
+            style="@style/AppSingleChoiceChip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sales"
+            app:chipStrokeWidth="1dp" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_supervisor"
             style="@style/AppSingleChoiceChip2"
             android:layout_width="wrap_content"
@@ -154,30 +156,10 @@
             android:text="Supervisor/Manager"
             app:chipStrokeWidth="1dp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_Inspector"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Inspector"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_tele_calling"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tele calling"
-            app:chipStrokeWidth="1dp" />
 
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_factory_worker"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Factory Worker"
-            app:chipStrokeWidth="1dp" />
+
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_security"
@@ -194,6 +176,10 @@
             android:layout_height="wrap_content"
             android:text="Cleaner"
             app:chipStrokeWidth="1dp" />
+
+
+
+
 
 
     </com.google.android.material.chip.ChipGroup>

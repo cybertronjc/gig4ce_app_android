@@ -24,27 +24,30 @@
         android:text="@string/skip"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="14dp"
-        android:background="@drawable/gradient_button"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:minHeight="@dimen/size_36"
         android:text="@string/submit_all_caps"
-        android:textColor="@color/white"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/lipstick"
         app:layout_constraintBottom_toTopOf="@id/skip_btn" />
 
     <ProgressBar
+        android:id="@+id/submit_progress_bar"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +133,7 @@
                 android:layout_marginTop="38dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Full Name"
+                android:text="Full Name *"
                 android:textColor="#707070"
                 android:textSize="12sp"
                 android:textStyle="normal"
@@ -252,7 +255,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Gender"
+                android:text="Gender *"
                 android:textColor="#707070"
                 android:textSize="12sp"
                 android:textStyle="normal"
@@ -293,6 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Male"
+                    android:checked="true"
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
@@ -314,67 +318,7 @@
             </com.google.android.material.chip.ChipGroup>
 
 
-            <TextView
-                android:id="@+id/pin_code_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:text="Pincode"
-                android:textColor="#707070"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gender_chip_group" />
 
-
-            <EditText
-                android:id="@+id/pin_code_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/rectangle_round_grey"
-                android:fontFamily="@font/lato"
-                android:inputType="number"
-                android:lineSpacingExtra="3sp"
-                android:maxLength="6"
-                android:minHeight="36dp"
-                android:paddingStart="8dp"
-                android:textColor="#333333"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/pin_code_label" />
-
-            <ImageView
-                android:id="@+id/pin_okay_iv"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="14dp"
-                  app:srcCompat="@drawable/ic_done"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/pin_code_et"
-                app:layout_constraintEnd_toEndOf="@id/pin_code_et"
-                app:layout_constraintTop_toTopOf="@id/pin_code_et" />
-
-            <TextView
-                android:id="@+id/pincode_error_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/lato"
-                android:lineSpacingExtra="3sp"
-                android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pin_code_et"
-                tools:text="Some Error" />
 
 
             <TextView
@@ -385,12 +329,12 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="Highest Qualification"
+                android:text="Highest Qualification *"
                 android:textColor="#707070"
                 android:textSize="12sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pincode_error_tv" />
+                app:layout_constraintTop_toBottomOf="@id/gender_chip_group" />
 
 
             <TextView
