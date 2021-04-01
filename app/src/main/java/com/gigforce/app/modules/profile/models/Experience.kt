@@ -22,6 +22,6 @@ data class Experience(
 
     var deliveryExecQuestionOwnVehicle: String = "",
     var deliveryQuestionVehiclesOwn: List<String> = emptyList(),
-    var helperComfortableLiftingHeavyWeights: Boolean = false
+    var experienceInMonths : Int = 0
 ) : BaseFirestoreDataModel(tableName = "experiences") {
 }

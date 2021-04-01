@@ -17,30 +17,32 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="14dp"
-        android:minHeight="@dimen/size_36"
+
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip"
+        android:text="@string/skip_underline"
+        android:textColor="@color/warm_grey"
+        android:textAllCaps="false"
+        android:minHeight="0dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:minHeight="@dimen/size_36"
-        android:background="@drawable/gradient_button"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
         android:text="@string/next"
-        android:textColor="@color/white"
+        app:strokeColor="@color/lipstick"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@id/skip_btn" />
 
 
@@ -252,7 +254,7 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                android:background="@drawable/rectangle_round_grey"
+                android:background="@drawable/spinner_background_rectangle_round_grey"
                 app:layout_constraintEnd_toStartOf="@+id/city_spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
@@ -281,7 +283,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/rectangle_round_grey"
+                android:background="@drawable/spinner_background_rectangle_round_grey"
                 android:fontFamily="@font/lato"
                 android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
@@ -416,7 +418,7 @@
                     android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
-                    android:background="@drawable/rectangle_round_grey"
+                    android:background="@drawable/spinner_background_rectangle_round_grey"
                     app:layout_constraintEnd_toStartOf="@+id/permanent_city_spinner"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
@@ -445,7 +447,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/rectangle_round_grey"
+                    android:background="@drawable/spinner_background_rectangle_round_grey"
                     android:fontFamily="@font/lato"
                     android:paddingStart="10dp"
                     android:lineSpacingExtra="3sp"

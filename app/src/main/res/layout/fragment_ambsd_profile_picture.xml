@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="10dp"
     android:orientation="vertical">
 
 
@@ -112,7 +113,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageView13"
         app:layout_constraintTop_toTopOf="@+id/imageView13" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,15 +121,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:background="@drawable/gradient_button"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
-        android:minHeight="@dimen/size_36"
         android:gravity="center"
         android:text="@string/next"
         android:visibility="visible"
-        android:textColor="@color/white"
+        app:strokeColor="@color/lipstick"
+        app:strokeWidth="1dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         app:layout_constraintBottom_toTopOf="@id/skipButton"
     />
 
@@ -139,14 +139,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
-        android:minHeight="@dimen/size_36"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="14dp"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip"
+        android:text="@string/skip_underline"
+        android:textColor="@color/warm_grey"
+        android:textAllCaps="false"
+        android:minHeight="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         />

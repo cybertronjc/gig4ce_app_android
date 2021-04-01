@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -117,7 +116,6 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
             getString(R.string.bank_passbook_front_image)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
-            passbookSubmitSliderBtn.resetSlider()
 
             if (checkedId == R.id.passbookYesRB) {
                 showPassbookImageLayout()
@@ -128,8 +126,8 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                 hidePassbookImageAndInfoLayout()
 
                 passbookSubmitSliderBtn.visible()
-                    enableSubmitButton()
-                      } else {
+                enableSubmitButton()
+            } else {
                 hidePassbookImageAndInfoLayout()
                 disableSubmitButton()
             }
@@ -168,24 +166,21 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 //            navigate(R.id.editBankDetailsInfoBottomSheet)
 //        }
 
-        passbookSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-                override fun onSlideComplete(view: SlideToActView) {
+        passbookSubmitSliderBtn.setOnClickListener {
 
-                    if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
+            if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
 
-                        val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
-                        if (!VerificationValidations.isIfSCValid(ifsc)) {
+                val ifsc = ifscEditText.text.toString().toUpperCase(Locale.getDefault())
+                if (!VerificationValidations.isIfSCValid(ifsc)) {
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_ifsc))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_ifsc))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
-                        }
+                    return@setOnClickListener
+                }
 
 //                        if (bankNameEditText.text.isNullOrBlank()) {
 //
@@ -211,17 +206,16 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 //                            return
 //                        }
 
-                        if (accountNoEditText.text.toString().length < 4) {
+                if (accountNoEditText.text.toString().length < 4) {
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_acc_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_acc_no))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
-                        }
+                    return@setOnClickListener
+                }
 
 //                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
 //
@@ -234,33 +228,32 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 //                            return
 //                        }
 
-                        val accNo = accountNoEditText.text.toString()
-                        val bankName =
-                            bankNameEditText.text.toString().capitalize(Locale.getDefault())
+                val accNo = accountNoEditText.text.toString()
+                val bankName =
+                    bankNameEditText.text.toString().capitalize(Locale.getDefault())
 
-                        viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = true,
-                            passbookImagePath = clickedImagePath,
-                            ifscCode = ifsc,
-                            bankName = bankName,
-                            accountNo = accNo,
-                            userId = userId
-                        )
+                viewModel.updateBankPassbookImagePath(
+                    userHasPassBook = true,
+                    passbookImagePath = clickedImagePath,
+                    ifscCode = ifsc,
+                    bankName = bankName,
+                    accountNo = accNo,
+                    userId = userId
+                )
 
-                    } else if (passbookNoRB.isChecked) {
+            } else if (passbookNoRB.isChecked) {
 
-                        viewModel.updateBankPassbookImagePath(
-                            userHasPassBook = false,
-                            passbookImagePath = null,
-                            ifscCode = null,
-                            bankName = null,
-                            accountNo = null,
-                            userId = userId
-                        )
-                    }
-                }
+                viewModel.updateBankPassbookImagePath(
+                    userHasPassBook = false,
+                    passbookImagePath = null,
+                    ifscCode = null,
+                    bankName = null,
+                    accountNo = null,
+                    userId = userId
+                )
             }
 
+        }
 
         ambsd_passbook_edit_skip_btn.setOnClickListener {
 
@@ -328,7 +321,6 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         progressBar.visibility = View.GONE
         bankViewLayout.visibility = View.GONE
         bankEditLayout.visibility = View.VISIBLE
-        passbookSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -338,7 +330,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun documentsUploaded() {
-        showToast(getString(R.string.bank_details_uploaded))
+
+        if (passbookYesRB.isChecked)
+            showToast(getString(R.string.bank_details_uploaded))
 
         navigate(
             R.id.addUserPanCardInfoFragment, bundleOf(
@@ -358,7 +352,8 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     }
 
     private fun goBackToUsersList() {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        findNavController().navigateUp()
+//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
     override fun onBackPressed(): Boolean {
@@ -414,10 +409,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun disableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = false
 
-        passbookSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        passbookSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+//        passbookSubmitSliderBtn.outerColor =
+//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+//        passbookSubmitSliderBtn.innerColor =
+//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showPassbookImageLayout() {
@@ -436,10 +431,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun enableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = true
 
-        passbookSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        passbookSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+//        passbookSubmitSliderBtn.outerColor =
+//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+//        passbookSubmitSliderBtn.innerColor =
+//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
 

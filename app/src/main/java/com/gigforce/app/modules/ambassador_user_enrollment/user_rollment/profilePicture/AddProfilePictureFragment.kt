@@ -453,7 +453,9 @@ class AddProfilePictureFragment : BaseFragment(),
             onBackPressed()
             return
         }
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+
+        findNavController().navigateUp()
+        //findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
 

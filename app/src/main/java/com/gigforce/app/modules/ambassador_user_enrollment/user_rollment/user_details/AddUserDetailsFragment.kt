@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,12 +20,15 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.michaldrabik.classicmaterialtimepicker.CmtpDateDialogFragment
+import com.michaldrabik.classicmaterialtimepicker.OnDatePickedListener
+import com.michaldrabik.classicmaterialtimepicker.model.CmtpDate
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddUserDetailsFragment : BaseFragment() {
+class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
 
     private val viewModel: UserDetailsViewModel by viewModels()
 
@@ -37,33 +39,44 @@ class AddUserDetailsFragment : BaseFragment() {
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-    private val dateOfBirthPicker: DatePickerDialog by lazy {
+//    private val dateOfBirthPicker: DatePickerDialog by lazy {
+//
+//        val cal = Calendar.getInstance()
+//        DatePickerDialog(
+//                requireContext(),
+//                { _, year, month, dayOfMonth ->
+//
+//                    val newCal = Calendar.getInstance()
+//                    newCal.set(Calendar.YEAR, year)
+//                    newCal.set(Calendar.MONTH, month)
+//                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+//                    newCal.set(Calendar.HOUR_OF_DAY, 0)
+//                    newCal.set(Calendar.MINUTE, 0)
+//                    newCal.set(Calendar.SECOND, 0)
+//                    newCal.set(Calendar.MILLISECOND, 0)
+//
+//                    dateOfBirth = newCal.time
+//                    date_of_birth_et.text = dateFormatter.format(newCal.time)
+//
+//                    dob_okay_iv.visible()
+//                    dob_error_tv.gone()
+//                    dob_error_tv.text = null
+//                },
+//                1995,
+//                cal.get(Calendar.MONTH),
+//                cal.get(Calendar.DAY_OF_MONTH)
+//        )
+//    }
+
+    private val dateOfBirthPicker: CmtpDateDialogFragment by lazy {
 
         val cal = Calendar.getInstance()
-        DatePickerDialog(
-                requireContext(),
-                { _, year, month, dayOfMonth ->
+        CmtpDateDialogFragment.newInstance().apply {
 
-                    val newCal = Calendar.getInstance()
-                    newCal.set(Calendar.YEAR, year)
-                    newCal.set(Calendar.MONTH, month)
-                    newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    newCal.set(Calendar.HOUR_OF_DAY, 0)
-                    newCal.set(Calendar.MINUTE, 0)
-                    newCal.set(Calendar.SECOND, 0)
-                    newCal.set(Calendar.MILLISECOND, 0)
-
-                    dateOfBirth = newCal.time
-                    date_of_birth_et.text = dateFormatter.format(newCal.time)
-
-                    dob_okay_iv.visible()
-                    dob_error_tv.gone()
-                    dob_error_tv.text = null
-                },
-                1995,
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-        )
+            this.setInitialDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1 , 1995)
+            this.setCustomYearRange(1950, cal.get(Calendar.YEAR))
+            this.setOnDatePickedListener(this@AddUserDetailsFragment)
+        }
     }
 
     override fun onCreateView(
@@ -123,9 +136,7 @@ class AddUserDetailsFragment : BaseFragment() {
         }
 
         date_of_birth_et.setOnClickListener {
-
-            dateOfBirthPicker.datePicker.maxDate = Date().time
-            dateOfBirthPicker.show()
+            dateOfBirthPicker.show(childFragmentManager, "CmtpDateDialogFragment")
         }
 
         submitBtn.setOnClickListener {
@@ -314,5 +325,25 @@ class AddUserDetailsFragment : BaseFragment() {
 
     private fun goBackToUsersList() {
         findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+    }
+
+    override fun onDatePicked(date: CmtpDate) {
+
+        val newCal = Calendar.getInstance()
+        newCal.set(Calendar.YEAR, date.year)
+        newCal.set(Calendar.MONTH, date.month - 1)
+        newCal.set(Calendar.DAY_OF_MONTH, date.day)
+        newCal.set(Calendar.HOUR_OF_DAY, 0)
+        newCal.set(Calendar.MINUTE, 0)
+        newCal.set(Calendar.SECOND, 0)
+        newCal.set(Calendar.MILLISECOND, 0)
+
+
+        dateOfBirth = newCal.time
+        date_of_birth_et.text = dateFormatter.format(newCal.time)
+
+        dob_okay_iv.visible()
+        dob_error_tv.gone()
+        dob_error_tv.text = null
     }
 }

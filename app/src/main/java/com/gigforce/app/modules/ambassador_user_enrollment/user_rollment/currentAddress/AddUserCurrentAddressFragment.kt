@@ -482,7 +482,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     }
 
     private fun goBackToUsersList() {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        findNavController().navigateUp()
+//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
     private fun showAlertDialog(title: String, message: String) {

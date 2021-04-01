@@ -156,12 +156,11 @@
         android:layout_marginTop="@dimen/size_22"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_16"
-        app:cardBackgroundColor="@color/light_pink">
+        app:cardBackgroundColor="#c6ddf3">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:padding="16dp">
 
 
@@ -182,7 +181,7 @@
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/ambassador_program"
+                android:text="Register and Earn"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -198,9 +197,10 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/more_you_create_profiles_more_you_earn"
+                android:text="Create more Profiles to
+Earn more"
                 android:textColor="#d9000000"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="@+id/amb_join_open_btn"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
@@ -218,7 +218,7 @@
                 android:textColor="@color/lipstick"
                 android:lineSpacingExtra="3sp"
                 android:gravity="center_horizontal"
-                android:text="@string/open"
+                android:text="Create Now"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

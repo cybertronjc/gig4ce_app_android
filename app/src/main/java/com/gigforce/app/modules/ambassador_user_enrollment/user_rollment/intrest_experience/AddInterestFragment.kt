@@ -235,6 +235,7 @@ class AddUserInterestFragment : BaseFragment() {
     }
 
     private fun goBackToUsersList() {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        findNavController().navigateUp()
+//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 }

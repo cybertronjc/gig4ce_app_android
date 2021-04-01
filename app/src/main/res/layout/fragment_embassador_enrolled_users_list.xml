@@ -71,21 +71,12 @@
                     app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_interest_bike_rider"
+                    android:id="@+id/chip_my_details"
                     style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:text="@string/sourcing"
-                    app:chipStrokeWidth="1dp" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_interest_delivery_executive"
-                    style="@style/RoundedSquaredChips"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/managing_gigs"
+                    android:text="My Details"
                     app:chipStrokeWidth="1dp" />
 
 

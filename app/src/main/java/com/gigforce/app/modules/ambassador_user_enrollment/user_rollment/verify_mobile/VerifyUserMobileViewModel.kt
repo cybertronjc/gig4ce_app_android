@@ -10,11 +10,13 @@ import com.gigforce.app.modules.ambassador_user_enrollment.models.RegisterMobile
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.utils.Lce
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.launch
 
 class VerifyUserMobileViewModel constructor(
         private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+        private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 ) : ViewModel() {
 
     private val _checkMobileNo = MutableLiveData<Lce<RegisterMobileNoResponse>>()
@@ -51,51 +53,65 @@ class VerifyUserMobileViewModel constructor(
             fullAddress: String
     ) = viewModelScope.launch {
 
-        _createProfile.value = Lce.content(CreateUserResponse(
-                phoneNumber = "3443",
-                uid = "PMtcGc3h0h8Ub9ZKRvlH",
-                error = null
-        ))
-
-        return@launch
-
         try {
             _createProfile.value = Lce.loading()
 
-            val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
-            if (mode == EnrollmentConstants.MODE_EDIT) {
-                if (verifyOtpResponse.isVerified) {
+            var ambassadorMasterOtp = ""
+            ambassadorMasterOtp = firebaseRemoteConfig.getString("Ambassador_master_otp")
 
-                    if (userId != null) {
-                        userEnrollmentRepository.addEditLocationInLocationLogs(
-                                userId = userId,
+            if (otp == ambassadorMasterOtp && mode == EnrollmentConstants.MODE_EDIT) {
+                //
+                _createProfile.value = Lce.content(CreateUserResponse(
+                        phoneNumber = mobile,
+                        uid = null,
+                        error = null
+                ))
+
+                if (userId != null) {
+                    userEnrollmentRepository.addEditLocationInLocationLogs(
+                            userId = userId,
+                            latitude = latitude,
+                            longitude = longitude,
+                            fullAddress = fullAddress,
+                            editedUsingMasterOtp = true
+                    )
+                }
+
+            } else {
+                val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
+                if (mode == EnrollmentConstants.MODE_EDIT) {
+                    if (verifyOtpResponse.isVerified) {
+                        _createProfile.value = Lce.content(CreateUserResponse(
+                                phoneNumber = mobile,
+                                uid = null,
+                                error = null
+                        ))
+
+                        if (userId != null) {
+                            userEnrollmentRepository.addEditLocationInLocationLogs(
+                                    userId = userId,
+                                    latitude = latitude,
+                                    longitude = longitude,
+                                    fullAddress = fullAddress
+                            )
+                        }
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
+                    }
+                } else {
+                    if (verifyOtpResponse.isVerified) {
+                        val profile = profileFirebaseRepository.getProfileData()
+                        val response = userEnrollmentRepository.createUser(
+                                mobile = mobile,
+                                enrolledByName = profile.name,
                                 latitude = latitude,
                                 longitude = longitude,
                                 fullAddress = fullAddress
                         )
+                        _createProfile.value = Lce.content(response)
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
                     }
-
-                    _createProfile.value = Lce.content(CreateUserResponse(
-                            phoneNumber = mobile,
-                            uid = userId,
-                            error = null
-                    ))
-                } else {
-                    _createProfile.value = Lce.error("Otp does not match")
-                }
-            } else {
-                if (verifyOtpResponse.isVerified) {
-                    val profile = profileFirebaseRepository.getProfileData()
-                    val response = userEnrollmentRepository.createUser(
-                            mobile = mobile,
-                            enrolledByName = profile.name,
-                            latitude = latitude,
-                            longitude = longitude,
-                            fullAddress = fullAddress
-                    )
-                    _createProfile.value = Lce.content(response)
-                } else {
-                    _createProfile.value = Lce.error("Otp does not match")
                 }
             }
 

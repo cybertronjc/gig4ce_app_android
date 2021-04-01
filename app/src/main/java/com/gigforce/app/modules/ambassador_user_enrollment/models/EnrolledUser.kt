@@ -118,5 +118,9 @@ data class LocationLog(
 
         @get:PropertyName("addedOn")
         @set:PropertyName("addedOn")
-        var addedOn: Timestamp = Timestamp.now()
+        var addedOn: Timestamp = Timestamp.now(),
+
+        @get:PropertyName("editedUsingMasterOtp")
+        @set:PropertyName("editedUsingMasterOtp")
+        var editedUsingMasterOtp: Boolean = false,
 )
