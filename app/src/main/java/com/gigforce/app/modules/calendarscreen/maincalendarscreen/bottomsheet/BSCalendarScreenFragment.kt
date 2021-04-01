@@ -56,6 +56,7 @@ import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
@@ -448,6 +449,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     upcomingGigs[viewHolder.adapterPosition].agencyContact ?: return@setOnClickListener
                                 navigate(
                                     R.id.chatPageFragment, bundleOf(
+                                        ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
