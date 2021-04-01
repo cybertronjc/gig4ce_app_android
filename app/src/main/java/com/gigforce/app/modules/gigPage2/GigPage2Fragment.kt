@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage.models.ContactPerson
 import com.gigforce.app.modules.gigPage.models.Gig
@@ -41,6 +40,7 @@ import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
@@ -693,9 +693,11 @@ class GigPage2Fragment : BaseFragment(),
     override fun onChatWithManagerClicked(manager: ContactPerson) {
 
         navigate(R.id.chatPageFragment, bundleOf(
+                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
                 ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
-            ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
-            ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name))
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name)
+        )
     }
 
     override fun onPermissionOkayClicked() {

@@ -309,7 +309,12 @@ class ChatPageViewModel constructor(
             createHeaderInOtherUsersCollection()
         }
 
-        saveHeaderIdToContact(otherUserId, headerId)
+        try {
+            saveHeaderIdToContact(otherUserId, headerId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         initForHeader()
     }
 
@@ -382,7 +387,7 @@ class ChatPageViewModel constructor(
                 otherUser = UserInfo(
                         id = uid,
                         name = userName ?: "",
-                        profilePic = fullPath ,
+                        profilePic = fullPath,
                         type = "user"
                 ),
                 lastMsgFlowType = ""

@@ -126,9 +126,9 @@ class RosterDayViewModel constructor(
                         }
                     }
 
-                    added.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
-                    removed.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
-                    modified.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED }
+                    added.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED && GigStatus.fromGig(it) != GigStatus.CANCELLED }
+                    removed.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED  && GigStatus.fromGig(it) != GigStatus.CANCELLED }
+                    modified.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED && GigStatus.fromGig(it) != GigStatus.CANCELLED }
 
                     allGigs[tag]!!.value!!.addAll(added)
                     allGigs[tag]!!.value!!.removeAll(removed)
