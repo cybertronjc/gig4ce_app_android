@@ -1294,7 +1294,7 @@
     <string name="what_does_a_ambassador_do">What does a Ambassador do ?</string>
     <string name="you_have_to_onboard_potential_gigers_on_gigforce_app_by_creating_their_app_you_will_be_paid_based_on_the_number_of_profiles_created">You have to onboard potential Gigers on Gigforce app by creating their profile. You will be paid based on the number of Profiles created</string>
     <string name="enter_user_s_mobile_number">Enter User’s mobile number</string>
-    <string name="we_will_send_an_otp_on_this_number">We will send an OTP on this number.</string>
+    <string name="we_will_send_an_otp_on_this_number">We will send an Verification ID on this number.</string>
     <string name="country_code">+91-</string>
     <string name="enter_code_sent_on_mobile">Enter verification Id sent to User’s number</string>
     <string name="pin_code">Pin Code</string>
