@@ -361,4 +361,6 @@ dependencies {
 
     // Facebook Integration
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+
+    implementation 'com.mixpanel.android:mixpanel-android:5.+'
 }
