@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.docume
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,7 +28,6 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info_view.*
@@ -50,9 +50,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_add_bank_details_info, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,12 +87,16 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
     private fun initViews() {
         passbookImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_bank_passbook)
+                getString(R.string.upload_bank_passbook)
         passbookImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_bank_passbook_sublabel)
+                getString(R.string.upload_bank_passbook_sublabel)
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+        toolbar_layout.apply {
+            showTitle(getString(R.string.upload_bank_details))
+            hideActionMenu()
+            setBackButtonListener {
+                showGoBackConfirmationDialog()
+            }
         }
 
         helpIconIV.setOnClickListener {
@@ -103,7 +107,7 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
             showWhyWeNeedThisDialog()
         }
 
-        passbookSubmitSliderBtn.isEnabled = false
+        disableSubmitButton()
         passbookImageHolder.uploadDocumentCardView.setOnClickListener {
             showCameraAndGalleryOption()
         }
@@ -113,7 +117,7 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         }
 
         passbookImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.bank_passbook_front_image)
+                getString(R.string.bank_passbook_front_image)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -137,28 +141,28 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         editLayout.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.your_are_reuploading_bank_details))
-                .setPositiveButton(getString(R.string.okay)) { _, _ ->
+                    .setTitle(getString(R.string.alert))
+                    .setMessage(getString(R.string.your_are_reuploading_bank_details))
+                    .setPositiveButton(getString(R.string.okay)) { _, _ ->
 
-                    bankViewLayout.gone()
-                    bankEditLayout.visible()
+                        bankViewLayout.gone()
+                        bankEditLayout.visible()
 
-                    setDataOnEditLayout(bankDetailsDataModel)
-                    passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
-                    passbookSubmitSliderBtn.isEnabled = true
-                }
-                .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                .show()
+                        setDataOnEditLayout(bankDetailsDataModel)
+                        passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
+                       enableSubmitButton()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
         }
 
         ambsd_bank_skip_btn.setOnClickListener {
 
             navigate(
-                R.id.addUserPanCardInfoFragment, bundleOf(
+                    R.id.addUserPanCardInfoFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                     EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
+            )
             )
         }
 
@@ -174,10 +178,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                 if (!VerificationValidations.isIfSCValid(ifsc)) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_ifsc))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_ifsc))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
 
                     return@setOnClickListener
                 }
@@ -209,10 +213,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                 if (accountNoEditText.text.toString().length < 4) {
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_acc_no))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
+                            .setTitle(getString(R.string.alert))
+                            .setMessage(getString(R.string.enter_valid_acc_no))
+                            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                            .show()
 
                     return@setOnClickListener
                 }
@@ -230,26 +234,26 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
                 val accNo = accountNoEditText.text.toString()
                 val bankName =
-                    bankNameEditText.text.toString().capitalize(Locale.getDefault())
+                        bankNameEditText.text.toString().capitalize(Locale.getDefault())
 
                 viewModel.updateBankPassbookImagePath(
-                    userHasPassBook = true,
-                    passbookImagePath = clickedImagePath,
-                    ifscCode = ifsc,
-                    bankName = bankName,
-                    accountNo = accNo,
-                    userId = userId
+                        userHasPassBook = true,
+                        passbookImagePath = clickedImagePath,
+                        ifscCode = ifsc,
+                        bankName = bankName,
+                        accountNo = accNo,
+                        userId = userId
                 )
 
             } else if (passbookNoRB.isChecked) {
 
                 viewModel.updateBankPassbookImagePath(
-                    userHasPassBook = false,
-                    passbookImagePath = null,
-                    ifscCode = null,
-                    bankName = null,
-                    accountNo = null,
-                    userId = userId
+                        userHasPassBook = false,
+                        passbookImagePath = null,
+                        ifscCode = null,
+                        bankName = null,
+                        accountNo = null,
+                        userId = userId
                 )
             }
 
@@ -258,61 +262,61 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         ambsd_passbook_edit_skip_btn.setOnClickListener {
 
             navigate(
-                R.id.addUserPanCardInfoFragment, bundleOf(
+                    R.id.addUserPanCardInfoFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                     EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
+            )
             )
         }
     }
 
     private fun showWhyWeNeedThisDialog() {
         WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_bank)
+                childFragmentManager = childFragmentManager,
+                title = getString(R.string.why_do_we_need_this),
+                content = getString(R.string.why_we_need_this_bank)
         )
     }
 
     private fun initViewModel() {
 
         viewModel.gigerVerificationStatus
-            .observe(viewLifecycleOwner, Observer {
-                this.gigerVerificationStatus = it
-                this.bankDetailsDataModel = it.bankUploadDetailsDataModel
-                progressBar.gone()
+                .observe(viewLifecycleOwner, Observer {
+                    this.gigerVerificationStatus = it
+                    this.bankDetailsDataModel = it.bankUploadDetailsDataModel
+                    progressBar.gone()
 
-                if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
+                    if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
-                    if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                        if (it.bankUploadDetailsDataModel.userHasPassBook) {
-                            setDataOnViewLayout(it)
+                        if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
+                            if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                                setDataOnViewLayout(it)
+                            } else {
+                                setDataOnEditLayout(null)
+                                passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
+                            }
                         } else {
+                            //Uncheck both and hide capture layout
                             setDataOnEditLayout(null)
-                            passbookAvailaibilityOptionRG.check(R.id.passbookNoRB)
+                            passbookAvailaibilityOptionRG.clearCheck()
+                            hidePassbookImageAndInfoLayout()
                         }
                     } else {
-                        //Uncheck both and hide capture layout
+
                         setDataOnEditLayout(null)
                         passbookAvailaibilityOptionRG.clearCheck()
                         hidePassbookImageAndInfoLayout()
                     }
-                } else {
-
-                    setDataOnEditLayout(null)
-                    passbookAvailaibilityOptionRG.clearCheck()
-                    hidePassbookImageAndInfoLayout()
-                }
-            })
+                })
 
         viewModel.documentUploadState
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lse.Loading -> showLoadingState()
-                    Lse.Success -> documentsUploaded()
-                    is Lse.Error -> errorOnUploadingDocuments(it.error)
-                }
-            })
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        Lse.Loading -> showLoadingState()
+                        Lse.Success -> documentsUploaded()
+                        is Lse.Error -> errorOnUploadingDocuments(it.error)
+                    }
+                })
 
         viewModel.getVerificationStatus()
     }
@@ -323,10 +327,10 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         bankEditLayout.visibility = View.VISIBLE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(error)
-            .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(error)
+                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                .show()
     }
 
     private fun documentsUploaded() {
@@ -335,20 +339,20 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
             showToast(getString(R.string.bank_details_uploaded))
 
         navigate(
-            R.id.addUserPanCardInfoFragment, bundleOf(
+                R.id.addUserPanCardInfoFragment, bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                 EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
+        )
         )
     }
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.alert))
-            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-            .setNegativeButton(getString(R.string.no)) { _, _ -> }
-            .show()
+                .setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
     }
 
     private fun goBackToUsersList() {
@@ -376,8 +380,8 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
         val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+                PhotoCrop.INTENT_EXTRA_PURPOSE,
+                PhotoCrop.PURPOSE_VERIFICATION
         )
         photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
         photoCropIntent.putExtra("folder", "verification")
@@ -392,16 +396,16 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
             if (resultCode == Activity.RESULT_OK) {
                 clickedImagePath =
-                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
                 showPassbookInfoCard(clickedImagePath!!)
                 enableSubmitButton()
 
             } else {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.alert))
-                    .setMessage(getString(R.string.unable_to_capture_image))
-                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                    .show()
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.unable_to_capture_image))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
             }
         }
     }
@@ -409,10 +413,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun disableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = false
 
-//        passbookSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        passbookSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+        passbookSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        )
     }
 
     private fun showPassbookImageLayout() {
@@ -431,10 +434,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
     private fun enableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = true
 
-//        passbookSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        passbookSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        passbookSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        )
     }
 
 
@@ -443,9 +445,9 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         passbookImageHolder.uploadImageLayout.visibility = View.VISIBLE
 
         Glide.with(requireContext())
-            .load(panInfoPath)
-            .placeholder(getCircularProgressDrawable())
-            .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
+                .load(panInfoPath)
+                .placeholder(getCircularProgressDrawable())
+                .into(passbookImageHolder.uploadImageLayout.clickedImageIV)
     }
 
     private fun setDataOnViewLayout(gigVerificationStatus: GigerVerificationStatus) {
@@ -456,11 +458,11 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
         statusTV.text = bankDetails.verifiedString
         statusTV.setTextColor(
-            ResourcesCompat.getColor(
-                resources,
-                gigVerificationStatus.getColorCodeForStatus(bankDetails.state),
-                null
-            )
+                ResourcesCompat.getColor(
+                        resources,
+                        gigVerificationStatus.getColorCodeForStatus(bankDetails.state),
+                        null
+                )
         )
 
 
@@ -468,20 +470,20 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
             if (bankDetails.passbookImagePath.startsWith("http", true)) {
                 Glide.with(requireContext()).load(bankDetails.passbookImagePath)
-                    .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
+                        .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
             } else {
                 firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(bankDetails.passbookImagePath)
-                    .downloadUrl.addOnSuccessListener {
-                        Glide.with(requireContext())
-                            .load(it)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(bankViewImageIV)
-                    }.addOnFailureListener {
-                        print("ee")
-                    }
+                        .reference
+                        .child("verification")
+                        .child(bankDetails.passbookImagePath)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext())
+                                    .load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(bankViewImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
             }
         }
         bankViewImageErrorMessage.gone()
@@ -529,14 +531,14 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                 showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
             } else {
                 firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(bankData.passbookImagePath)
-                    .downloadUrl.addOnSuccessListener {
-                        showPassbookInfoCard(it)
-                    }.addOnFailureListener {
-                        print("ee")
-                    }
+                        .reference
+                        .child("verification")
+                        .child(bankData.passbookImagePath)
+                        .downloadUrl.addOnSuccessListener {
+                            showPassbookInfoCard(it)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
             }
         }
     }

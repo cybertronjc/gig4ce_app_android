@@ -103,7 +103,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             validateDataAndSubmit()
         }
 
-        ic_back_iv.setOnClickListener {
+        toolbar_layout.showTitle("User Local Address")
+        toolbar_layout.hideActionMenu()
+        toolbar_layout.setBackButtonListener {
             showGoBackConfirmationDialog()
         }
 
@@ -162,7 +164,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 val permanentCityAdapter: ArrayAdapter<City> =
                         ArrayAdapter(
                                 requireContext(),
-                                android.R.layout.simple_spinner_item,
+                                R.layout.layout_spinner_item,
                                 cities
                         )
                 permanentCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -441,7 +443,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                 }
 
         val adapter: ArrayAdapter<State> =
-                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, states)
+                ArrayAdapter(requireContext(), R.layout.layout_spinner_item, states)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         state_spinner.adapter = adapter
         permanent_state_spinner.adapter = adapter
@@ -450,7 +452,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             add(0, City(name = "Select District"))
         }
         val cityAdapter: ArrayAdapter<City> =
-                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
+                ArrayAdapter(requireContext(), R.layout.layout_spinner_item, cities)
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         city_spinner.adapter = cityAdapter
         permanent_city_spinner.adapter = cityAdapter
@@ -506,7 +508,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         val cityAdapter: ArrayAdapter<City> =
                 ArrayAdapter<City>(
                         requireContext(),
-                        android.R.layout.simple_spinner_item,
+                        R.layout.layout_spinner_item,
                         cities
                 )
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

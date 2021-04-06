@@ -25,6 +25,10 @@ import com.michaldrabik.classicmaterialtimepicker.OnDatePickedListener
 import com.michaldrabik.classicmaterialtimepicker.model.CmtpDate
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.skip_btn
+import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.submitBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.toolbar_layout
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -143,8 +147,13 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
             validateDataAndsubmit()
         }
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+
+        toolbar_layout.apply {
+            showTitle(getString(R.string.user_details))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
 
         skip_btn.setOnClickListener {
@@ -292,7 +301,7 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
             submitBtn.text = "Update"
         } else {
             skip_btn.gone()
-            submitBtn.text = "Submit"
+            submitBtn.text = "Next"
         }
     }
 

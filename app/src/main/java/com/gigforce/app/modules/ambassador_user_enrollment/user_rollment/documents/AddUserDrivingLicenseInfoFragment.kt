@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.docume
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,7 +35,10 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.progressBar
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -124,10 +128,15 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             getString(R.string.upload_driving_license_back_side)
         dlBackImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_your_driving_license)
-        dlSubmitSliderBtn.isEnabled = false
+        disableSubmitButton()
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+
+        toolbar_layout.apply {
+            showTitle(getString(R.string.upload_driving_license_details))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
 
 
@@ -251,7 +260,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
-                    dlSubmitSliderBtn.isEnabled = true
+                    enableSubmitButton()
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -462,19 +471,17 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private fun enableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = true
 
-//        dlSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        dlSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        dlSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                        ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                )
     }
 
     private fun disableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = false
 
-//        dlSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        dlSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+        dlSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        )
     }
 
     private fun showImageInfoLayout() {

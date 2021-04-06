@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.docume
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -105,7 +106,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharBackImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_your_aadhar_card)
 
-        aadharSubmitSliderBtn.isEnabled = false
+        disableSubmitButton()
 
         ambsd_aadhar_aahdar_skip_btn.setOnClickListener {
 
@@ -118,7 +119,10 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
         }
 
-        ic_back_iv.setOnClickListener {
+        toolbar_layout.showTitle(getString(R.string.upload_aadhar_details))
+        toolbar_layout.hideActionMenu()
+        toolbar_layout.setBackButtonListener{
+
             showGoBackConfirmationDialog()
         }
 
@@ -186,7 +190,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
                     setDataOnEditLayout(aadharCardDataModel)
                     aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
-                    aadharSubmitSliderBtn.isEnabled = true
+                    enableSubmitButton()
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -419,19 +423,18 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     private fun enableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = true
 
-//        aadharSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        aadharSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        aadharSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        )
     }
 
     private fun disableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = false
 
-//        aadharSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        aadharSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+        aadharSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        )
+
     }
 
     private fun showImageInfoLayout() {

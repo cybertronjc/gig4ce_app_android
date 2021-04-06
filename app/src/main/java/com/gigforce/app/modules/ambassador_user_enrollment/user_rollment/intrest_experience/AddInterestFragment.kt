@@ -22,6 +22,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.skip_btn
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.submitBtn
 
 class AddUserInterestFragment : BaseFragment() {
 
@@ -120,8 +122,12 @@ class AddUserInterestFragment : BaseFragment() {
             ))
         }
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+        toolbar_layout.apply {
+            showTitle(getString(R.string.add_interest))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
     }
 

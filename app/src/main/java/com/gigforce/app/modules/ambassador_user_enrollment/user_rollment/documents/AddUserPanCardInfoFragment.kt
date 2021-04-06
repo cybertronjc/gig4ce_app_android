@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.docume
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,7 +27,10 @@ import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -88,10 +92,14 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private fun initViews() {
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
-        panSubmitSliderBtn.isEnabled = false
+        disableSubmitButton()
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+        toolbar_layout.apply {
+            showTitle(getString(R.string.upload_pan_details))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
 
         helpIconIV.setOnClickListener {
@@ -163,7 +171,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
                     setDataOnEditLayout(panCardDataModel)
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
-                    panSubmitSliderBtn.isEnabled = true
+                    enableSubmitButton()
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -364,19 +372,18 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private fun enableSubmitButton() {
         panSubmitSliderBtn.isEnabled = true
 
-//        panSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-//        panSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        panSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        )
     }
 
     private fun disableSubmitButton() {
         panSubmitSliderBtn.isEnabled = false
 
-//        panSubmitSliderBtn.outerColor =
-//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-//        panSubmitSliderBtn.innerColor =
-//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+        panSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+        )
+
     }
 
     override fun onImageSourceSelected(source: ImageSource) {
