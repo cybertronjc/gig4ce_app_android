@@ -8,6 +8,8 @@ import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.view.*
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,8 +20,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.utils.CustomTypeFaceSpan
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.IconPowerMenuItem
+import com.gigforce.core.utils.GlideApp
+import com.gigforce.modules.feature_chat.models.ContactModel
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.skydoves.powermenu.CustomPowerMenu
@@ -30,16 +33,20 @@ import java.time.LocalDate
 
 
 class EnrolledUsersRecyclerAdapter constructor(
-    private val applicationContext: Context,
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-) : RecyclerView.Adapter<EnrolledUsersRecyclerAdapter.EnrolledUserViewHolder>() {
+        private val applicationContext: Context,
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+) : RecyclerView.Adapter<EnrolledUsersRecyclerAdapter.EnrolledUserViewHolder>(),
+        Filterable {
 
-    private var enrolledUsers: List<EnrolledUser> = emptyList()
+    private var mFilteredUsersList: List<EnrolledUser> = emptyList()
+    private var mOriginalUsersList: List<EnrolledUser> = emptyList()
+
     private lateinit var enrolledUsersRecyclerAdapterClickListener: EnrolledUsersRecyclerAdapterClickListener
+    private val filter = EnrolledUserFilter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EnrolledUserViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item_enrolled_user, parent, false)
+                .inflate(R.layout.recycler_item_enrolled_user, parent, false)
         return EnrolledUserViewHolder(view)
     }
 
@@ -48,26 +55,62 @@ class EnrolledUsersRecyclerAdapter constructor(
     }
 
     override fun getItemCount(): Int {
-        return enrolledUsers.size
+        return mFilteredUsersList.size
     }
 
     override fun onBindViewHolder(holder: EnrolledUserViewHolder, position: Int) {
-        holder.bindValues(enrolledUsers[position])
+        holder.bindValues(mFilteredUsersList[position])
     }
 
     fun setData(users: List<EnrolledUser>) {
-        enrolledUsers = users
+        mFilteredUsersList = users
+        mOriginalUsersList = users
         notifyDataSetChanged()
     }
 
+    override fun getFilter(): Filter {
+       return filter
+    }
+
+    private inner class EnrolledUserFilter : Filter() {
+
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val charString = constraint.toString()
+
+            if (charString.isEmpty()) {
+                mFilteredUsersList = mOriginalUsersList
+            } else {
+                val filteredList: MutableList<EnrolledUser> = mutableListOf()
+                for (user in mOriginalUsersList) {
+                    if (user.name.contains(
+                                    charString,
+                                    true
+                            ) || user.mobileNumber.contains(charString, true)
+                    )
+                        filteredList.add(user)
+                }
+                mFilteredUsersList = filteredList
+            }
+
+            val filterResults = FilterResults()
+            filterResults.values = mFilteredUsersList
+            return filterResults
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            mFilteredUsersList= results?.values as List<EnrolledUser>
+            notifyDataSetChanged()
+        }
+    }
+
     inner class EnrolledUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+            View.OnClickListener {
         private val userImageIV: ImageView = itemView.findViewById(R.id.image_view)
         private val statusImageIV: ImageView = itemView.findViewById(R.id.status_iv)
         private val nameTv: TextView = itemView.findViewById(R.id.user_name_tv)
         private val userAddedTimeTV: TextView = itemView.findViewById(R.id.user_added_time)
         private val ivOptionsEnrollUser: ImageView =
-            itemView.findViewById(R.id.iv_options_rv_enrolled_users)
+                itemView.findViewById(R.id.iv_options_rv_enrolled_users)
 
 
         init {
@@ -82,22 +125,22 @@ class EnrolledUsersRecyclerAdapter constructor(
 
                 if (!user.profileAvatarThumbnail.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
-                        .reference
-                        .child("profile_pics")
-                        .child(user.profileAvatarThumbnail!!)
+                            .reference
+                            .child("profile_pics")
+                            .child(user.profileAvatarThumbnail!!)
 
                     GlideApp.with(applicationContext)
-                        .load(profilePicRef)
-                        .into(userImageIV)
+                            .load(profilePicRef)
+                            .into(userImageIV)
                 } else if (!user.profilePic.isNullOrBlank()) {
                     val profilePicRef: StorageReference = firebaseStorage
-                        .reference
-                        .child("profile_pics")
-                        .child(user.profilePic!!)
+                            .reference
+                            .child("profile_pics")
+                            .child(user.profilePic!!)
 
                     GlideApp.with(applicationContext)
-                        .load(profilePicRef)
-                        .into(userImageIV)
+                            .load(profilePicRef)
+                            .into(userImageIV)
                 }
             }
 
@@ -109,15 +152,15 @@ class EnrolledUsersRecyclerAdapter constructor(
             } else {
                 //
                 val daysDiff = Duration.between(
-                    userEnrolledDate.atStartOfDay(),
-                    LocalDate.now().atStartOfDay()
+                        userEnrolledDate.atStartOfDay(),
+                        LocalDate.now().atStartOfDay()
                 ).toDays()
                 userAddedTimeTV.text =
-                    "${itemView.resources.getString(R.string.added)} $daysDiff ${
-                        itemView.resources.getString(
-                            R.string.days_ago
-                        )
-                    }"
+                        "${itemView.resources.getString(R.string.added)} $daysDiff ${
+                            itemView.resources.getString(
+                                    R.string.days_ago
+                            )
+                        }"
             }
 
             if (user.enrollmentStepsCompleted.allStepsCompleted()) {
@@ -131,10 +174,10 @@ class EnrolledUsersRecyclerAdapter constructor(
             val font = Typeface.createFromAsset(itemView.context.assets, "fonts/Lato-Regular.ttf")
             val mNewTitle = SpannableString(mi.getTitle())
             mNewTitle.setSpan(
-                CustomTypeFaceSpan("", font, Color.BLACK),
-                0,
-                mNewTitle.length,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    CustomTypeFaceSpan("", font, Color.BLACK),
+                    0,
+                    mNewTitle.length,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             mi.setTitle(mNewTitle)
         }
@@ -144,83 +187,83 @@ class EnrolledUsersRecyclerAdapter constructor(
 
             if (view.id == R.id.iv_options_rv_enrolled_users) {
                 val wrapper: ContextThemeWrapper = ContextThemeWrapper(
-                    view.context,
-                    R.style.CustomPopupTheme
+                        view.context,
+                        R.style.CustomPopupTheme
                 )
                 val context = view.context
                 var customPowerMenu: CustomPowerMenu<*, *>? = null
                 customPowerMenu =
-                    CustomPowerMenu.Builder(context, IconMenuAdapter())
-                        .addItem(
-                            IconPowerMenuItem(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.ic_icon_edit_enrollment_menu
-                                )!!, "Edit"
-                            )
-                        )
-                        .addItem(
-                            IconPowerMenuItem(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.ic_call_menu_enrollment
-                                )!!, "Call"
-                            )
-                        )
-                        .addItem(
-                            IconPowerMenuItem(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.ic_menu_icon_chat
-                                )!!, "Chat"
-                            )
-                        ).setShowBackground(false)
-                        .setOnMenuItemClickListener(object :
-                            OnMenuItemClickListener<IconPowerMenuItem> {
-                            override fun onItemClick(position: Int, item: IconPowerMenuItem?) {
-                                when (position) {
-                                    0 -> enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(
-                                        enrolledUsers[adapterPosition]
-                                    )
-                                    1 -> {
-                                        val intent = Intent(
-                                            Intent.ACTION_DIAL,
-                                            Uri.fromParts(
-                                                "tel",
-                                                enrolledUsers[adapterPosition].mobileNumber,
-                                                null
-                                            )
+                        CustomPowerMenu.Builder(context, IconMenuAdapter())
+                                .addItem(
+                                        IconPowerMenuItem(
+                                                ContextCompat.getDrawable(
+                                                        context,
+                                                        R.drawable.md_transparent
+                                                )!!, "Edit"
                                         )
-                                        itemView.context.startActivity(intent)
+                                )
+                                .addItem(
+                                        IconPowerMenuItem(
+                                                ContextCompat.getDrawable(
+                                                        context,
+                                                        R.drawable.md_transparent
+                                                )!!, "Call"
+                                        )
+                                )
+                                .addItem(
+                                        IconPowerMenuItem(
+                                                ContextCompat.getDrawable(
+                                                        context,
+                                                        R.drawable.md_transparent
+                                                )!!, "Chat"
+                                        )
+                                ).setShowBackground(false)
+                                .setOnMenuItemClickListener(object :
+                                        OnMenuItemClickListener<IconPowerMenuItem> {
+                                    override fun onItemClick(position: Int, item: IconPowerMenuItem?) {
+                                        when (position) {
+                                            0 -> enrolledUsersRecyclerAdapterClickListener.onUserEditButtonclicked(
+                                                    mFilteredUsersList[adapterPosition]
+                                            )
+                                            1 -> {
+                                                val intent = Intent(
+                                                        Intent.ACTION_DIAL,
+                                                        Uri.fromParts(
+                                                                "tel",
+                                                                mFilteredUsersList[adapterPosition].mobileNumber,
+                                                                null
+                                                        )
+                                                )
+                                                itemView.context.startActivity(intent)
+                                            }
+                                            2 -> enrolledUsersRecyclerAdapterClickListener.openChat(
+                                                    mFilteredUsersList[adapterPosition]
+                                            )
+
+
+                                        }
+                                        customPowerMenu?.dismiss()
                                     }
-                                    2 -> enrolledUsersRecyclerAdapterClickListener.openChat(
-                                        enrolledUsers[adapterPosition]
-                                    )
+                                })
+                                .setAnimation(MenuAnimation.DROP_DOWN)
+                                .setMenuRadius(
+                                        view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                                )
+                                .setMenuShadow(
+                                        view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                                )
 
-
-                                }
-                                customPowerMenu?.dismiss()
-                            }
-                        })
-                        .setAnimation(MenuAnimation.DROP_DOWN)
-                        .setMenuRadius(
-                            view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                        )
-                        .setMenuShadow(
-                            view.resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
-                        )
-
-                        .build()
+                                .build()
                 customPowerMenu.showAsDropDown(
-                    view,
-                    -((customPowerMenu.contentViewWidth - view.resources.getDimensionPixelSize(
-                        R.dimen.size_24
-                    )
-                            )),
-                    -(view.resources.getDimensionPixelSize(
-                        R.dimen.size_24
-                    )
-                            )
+                        view,
+                        -((customPowerMenu.contentViewWidth - view.resources.getDimensionPixelSize(
+                                R.dimen.size_24
+                        )
+                                )),
+                        -(view.resources.getDimensionPixelSize(
+                                R.dimen.size_24
+                        )
+                                )
                 )
 
 
@@ -253,7 +296,7 @@ class EnrolledUsersRecyclerAdapter constructor(
 //                popup.show()
 
             } else {
-                enrolledUsersRecyclerAdapterClickListener.onUserClicked(enrolledUsers[adapterPosition])
+                enrolledUsersRecyclerAdapterClickListener.onUserClicked(mFilteredUsersList[adapterPosition])
             }
         }
     }

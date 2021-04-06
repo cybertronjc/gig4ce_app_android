@@ -244,7 +244,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/submit"
+        android:text="@string/next_camel_case"
+        android:textAllCaps="false"
         app:strokeColor="@color/colorPrimary"
         app:strokeWidth="1dp" />
 

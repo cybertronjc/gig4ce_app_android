@@ -310,9 +310,9 @@
     <string name="gender_with_colon">Gender :</string>
     <string name="aadhar_number_with_colon">Aadhar Number :</string>
     <string name="bank_account_details">Bank Account Details</string>
-    <string name="do_you_have_bank_passbook">Do you have Bank Passbook ?</string>
-    <string name="yes_i_have_bank_passbook">Yes, I have Bank Passbook</string>
-    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Passbook</string>
+    <string name="do_you_have_bank_passbook">Do you have Bank Account ?</string>
+    <string name="yes_i_have_bank_passbook">Yes, I have Bank Account</string>
+    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Account</string>
     <string name="cif_number_with_colon">CIF Number :</string>
     <string name="account_number_with_colon">Account Number :</string>
     <string name="ifsc_with_colon">IFSC :</string>
@@ -1296,7 +1296,7 @@
     <string name="enter_user_s_mobile_number">Enter User’s mobile number</string>
     <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
     <string name="country_code">+91-</string>
-    <string name="enter_code_sent_on_mobile">Enter verification Id sent to User’s number</string>
+    <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
     <string name="pin_code">Pin Code</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="address_line_2">Address Line 2</string>
@@ -1341,4 +1341,5 @@
     <string name="please_enter_it_below">Please enter it below.</string>
     <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
     <string name="bank_details_updated">Bank Details Updated</string>
+    <string name="cancel_underlined"><u>Cancel</u></string>
 </resources>

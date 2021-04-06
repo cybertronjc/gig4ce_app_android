@@ -40,7 +40,11 @@ class AmbassadorEnrollViewModel constructor(
                             }
                         }
 
-                        _enrolledUsers.postValue(enrolledUsers)
+                        _enrolledUsers.postValue(
+                                enrolledUsers.sortedByDescending {
+                                    it.enrolledOn.seconds
+                                })
+//                        _enrolledUsers.postValue(null)
                     }
                 }
     }
@@ -62,7 +66,7 @@ class AmbassadorEnrollViewModel constructor(
                 enrolledUser.mobileNumber = userMobileNo
             }
 
-            if(userMobileNo.startsWith("+91")){
+            if (userMobileNo.startsWith("+91")) {
                 userMobileNo = userMobileNo.substring(3)
             }
 

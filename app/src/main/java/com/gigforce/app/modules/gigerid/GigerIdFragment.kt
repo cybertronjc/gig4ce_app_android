@@ -116,7 +116,7 @@ class GigerIdFragment : BaseFragment() {
         })
         viewModelGigerID.observableURLS.observe(viewLifecycleOwner, Observer {
             genQrCode(
-                    it?.base_url + it?.qr_code_scanner?.qrcode + viewModelGigerID.observableUserProfileDataSuccess.value?.id
+                    "https://gigforce.in/users/" + viewModelGigerID.observableUserProfileDataSuccess.value?.id
             )
         })
     }

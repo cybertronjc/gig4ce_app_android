@@ -164,8 +164,7 @@
                         android:id="@+id/stateLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="2dp"
                         android:text="@string/state_pascal_case"
                         android:textSize="12sp"
                         android:lineHeight="15sp"
@@ -179,12 +178,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:paddingBottom="10dp"
                         android:textColor="@color/black"
                         android:paddingStart="6dp"
                         android:background="@drawable/spinner_background_rectangle_round_grey"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/genderLabel" />
+                        app:layout_constraintTop_toBottomOf="@id/stateLabel" />
 
                     <TextView
                         android:id="@+id/dlStateEditErrorMessage"
@@ -210,6 +210,7 @@
                         android:fontFamily="@font/lato"
                         android:textColor="@color/warm_grey"
                         android:lineHeight="15sp"
+                        android:visibility="gone"
                         android:text="@string/dl_hint_square_bracket"
                         android:textSize="12sp" />
 
@@ -218,13 +219,14 @@
                         android:id="@+id/drivingLicenseEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="12dp"
                         android:imeActionLabel="Done"
                         android:imeOptions="actionGo"
                         android:inputType="textNoSuggestions"
                         android:letterSpacing="0"
                         android:maxLength="25"
                         android:maxLines="1"
+                        android:hint="Enter driving license number"
                         android:textAllCaps="true"
                         android:textSize="@dimen/font_14"
                         android:paddingTop="4dp"
@@ -325,7 +327,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/submit"
+        android:text="@string/next_camel_case"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@id/ambsd_dl_edit_skip_btn"
         app:strokeColor="@color/colorPrimary"
         app:strokeWidth="1dp" />

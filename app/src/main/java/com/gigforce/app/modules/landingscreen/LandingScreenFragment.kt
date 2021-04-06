@@ -374,23 +374,14 @@ class LandingScreenFragment : BaseFragment() {
     private fun observers() {
         // load user data
         viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
-//        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
-//            profile = profileObs!!
-//            val profile: ProfileData = profileObs
-//
-//            displayImage(profile.profileAvatarName)
-//            if (profile.name != null && !profile.name.equals(""))
-//                profile_name.text = profile.name
-//
-//            ambassador_layout.visible()
-//            if (profile.isUserAmbassador) {
-//                join_as_amb_label.text = getString(R.string.ambassador_program)
-//                amb_join_open_btn.text =
-//            } else {
-//                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
-//                amb_join_open_btn.text = getString(R.string.join_now)
-//            }
-//        })
+        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+            profile = profileObs!!
+            val profile: ProfileData = profileObs
+
+            displayImage(profile.profileAvatarName)
+            if (profile.name != null && !profile.name.equals(""))
+                profile_name.text = profile.name
+        })
 
         verificationViewModel
                 .gigerVerificationStatus

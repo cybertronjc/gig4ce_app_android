@@ -22,12 +22,15 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.core.extensions.selectChipWithText
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AddUserExperienceFragment : BaseFragment() {
@@ -40,6 +43,7 @@ class AddUserExperienceFragment : BaseFragment() {
 
     //To be used in case of edit
     private var currentInterestName: String? = null
+    private var vechiclesOwn : Array<String> = emptyArray()
     private val dateFormatter = SimpleDateFormat("MM/yyyy", Locale.getDefault())
 
     override fun onCreateView(
@@ -79,6 +83,7 @@ class AddUserExperienceFragment : BaseFragment() {
         arguments?.let {
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             currentInterestName = it.getString(INTENT_EXTRA_CURRENT_INTEREST_NAME)
+            vechiclesOwn = it.getStringArray(INTENT_EXTRA_VEHICLES_CAN_DRIVE) ?: emptyArray()
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
             pincode = it.getString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE) ?: return@let
@@ -87,6 +92,7 @@ class AddUserExperienceFragment : BaseFragment() {
         savedInstanceState?.let {
             mode = it.getInt(EnrollmentConstants.INTENT_EXTRA_MODE)
             currentInterestName = it.getString(INTENT_EXTRA_CURRENT_INTEREST_NAME)
+            vechiclesOwn = it.getStringArray(INTENT_EXTRA_VEHICLES_CAN_DRIVE) ?: emptyArray()
 
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
             userName = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_NAME) ?: return@let
@@ -101,6 +107,7 @@ class AddUserExperienceFragment : BaseFragment() {
         outState.putString(EnrollmentConstants.INTENT_EXTRA_PIN_CODE, pincode)
         outState.putInt(EnrollmentConstants.INTENT_EXTRA_MODE, mode)
         outState.putString(INTENT_EXTRA_CURRENT_INTEREST_NAME, currentInterestName)
+        outState.putStringArray(INTENT_EXTRA_VEHICLES_CAN_DRIVE,vechiclesOwn)
     }
 
     private fun initListeners() {
@@ -134,8 +141,13 @@ class AddUserExperienceFragment : BaseFragment() {
 //            showEndDateMonthYearPicker()
 //        }
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+
+        toolbar_layout.apply {
+            showTitle(getString(R.string.add_experience))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
 
         skip_btn.setOnClickListener {
@@ -325,13 +337,46 @@ class AddUserExperienceFragment : BaseFragment() {
                                     )
                                 )
                             } else {
+
+                                val driverQuestionOwnVehicle: List<String> =
+                                        if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+                                            val driverOwnedVehicles: MutableList<String> = mutableListOf()
+
+                                            driver_own_vehicle_chipgroup.checkedChipIds.forEach {
+                                                val vehicle =
+                                                        driver_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+                                                driverOwnedVehicles.add(vehicle)
+                                            }
+
+                                            driverOwnedVehicles
+                                        } else {
+                                            emptyList()
+                                        }
+
+
+//                                val deliveryExecQuestionOwnVehicles: List<String> =
+//                                        if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+//                                            val deliveryVehiclesOwn: MutableList<String> = mutableListOf()
+//
+//                                            delivery_exec_own_vehicle_chipgroup.checkedChipIds.forEach {
+//                                                val vehicle =
+//                                                        delivery_exec_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+//                                                deliveryVehiclesOwn.add(vehicle)
+//                                            }
+//
+//                                            deliveryVehiclesOwn
+//                                        } else {
+//                                            emptyList()
+//                                        }
+
                                 navigate(
                                     R.id.addUserExperienceFragment, bundleOf(
                                         EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                                         EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
                                         EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
                                         INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
-                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode,
+                                        INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
                                     )
                                 )
                             }
@@ -370,6 +415,10 @@ class AddUserExperienceFragment : BaseFragment() {
             color(ResourcesCompat.getColor(resources, R.color.colorPrimary, null)) {
                 append(" $content ?")
             }
+        }
+
+        if (content == "Delivery Executive") {
+           delivery_exec_own_vehicle_chipgroup.selectChipsWithText(vechiclesOwn.toList())
         }
 
         experienceData?.let {
@@ -562,6 +611,7 @@ class AddUserExperienceFragment : BaseFragment() {
 
     companion object {
         const val INTENT_EXTRA_CURRENT_INTEREST_NAME = "currentInterestName"
+        const val INTENT_EXTRA_VEHICLES_CAN_DRIVE = "vechiles_can_drive"
     }
 
 }

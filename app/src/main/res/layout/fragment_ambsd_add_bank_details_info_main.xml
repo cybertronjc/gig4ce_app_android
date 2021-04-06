@@ -137,7 +137,7 @@
                     android:id="@+id/topSeaparator"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="6dp"
                     android:background="#cdccd1" />
 
 
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="-0.01"
                     android:lineHeight="17sp"
@@ -170,6 +170,7 @@
                         android:fontFamily="@font/lato"
                         android:textColor="@color/warm_grey"
                         android:lineHeight="15sp"
+                        android:layout_marginTop="6dp"
                         android:text="@string/ifsc_eg_sbin0000572_bkid0000048"
                         android:textSize="12sp" />
 
@@ -212,6 +213,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/lato"
                         android:text="@string/bank_name"
+                        android:visibility="gone"
                         android:lineHeight="15sp"
                         android:textColor="@color/warm_grey"
                         android:textSize="12sp" />
@@ -231,6 +233,7 @@
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
                         android:paddingStart="6dp"
+                        android:visibility="gone"
                         android:background="@drawable/rectangle_round_grey" />
 
                     <TextView
@@ -252,7 +255,7 @@
                         android:id="@+id/accNoLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:fontFamily="@font/lato"
                         android:lineHeight="15sp"
                         android:textColor="@color/warm_grey"
@@ -335,7 +338,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/submit"
+        android:text="@string/next_camel_case"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/ambsd_passbook_edit_skip_btn"
         app:strokeColor="@color/colorPrimary"
         app:strokeWidth="1dp" />

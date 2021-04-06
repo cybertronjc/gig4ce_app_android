@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="18dp"
-    android:paddingTop="8dp"
+    android:paddingTop="12dp"
     android:paddingBottom="8dp">
 
 
@@ -46,10 +46,10 @@
 
     <ImageView
         android:id="@+id/status_iv"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_toLeftOf="@id/user_name_tv"
-          app:srcCompat="@drawable/ic_done" />
+        app:srcCompat="@drawable/ic_done" />
 
     <TextView
         android:id="@+id/user_added_time"

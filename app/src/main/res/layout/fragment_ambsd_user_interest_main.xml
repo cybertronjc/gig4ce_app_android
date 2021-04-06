@@ -5,46 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    >
+    android:paddingBottom="10dp">
 
 
-    <LinearLayout
+    <com.gigforce.common_ui.views.GigforceToolbar
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lipstick_two"
-        android:gravity="center_vertical"
-        android:minHeight="72dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ic_back_iv"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/lato"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="4sp"
-            android:text="@string/add_interest"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="normal" />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_margin="16dp">
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+ >
 
         <ImageView
             android:layout_width="80dp"
@@ -65,36 +40,41 @@
     </LinearLayout>
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="@font/lato"
-        android:lineSpacingExtra="3sp"
-        android:text="@string/select_jobs_you_are_interested_in"
-        android:textColor="#333333"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="36dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/lato"
-        android:lineHeight="17sp"
-        android:lineSpacingExtra="3sp"
-        android:text="( Select Max 3 )"
-        android:textColor="#333333"
-        android:textSize="14sp"
-        android:textStyle="normal" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/select_jobs_you_are_interested_in"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_italic"
+            android:lineHeight="19sp"
+            android:lineSpacingExtra="3sp"
+            android:text="  (max 3)"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/interest_chipgroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
         app:chipSpacingHorizontal="14dp">
@@ -106,7 +86,6 @@
             android:layout_height="wrap_content"
             android:text="Driving"
             app:chipStrokeWidth="1dp" />
-
 
 
         <com.google.android.material.chip.Chip
@@ -159,10 +138,6 @@
             app:chipStrokeWidth="1dp" />
 
 
-
-
-
-
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_interest_security"
             style="@style/AppSingleChoiceChip2"
@@ -180,28 +155,24 @@
             app:chipStrokeWidth="1dp" />
 
 
-
-
-
-
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:enabled="true"
-        android:fontFamily="@font/lato_bold"
+        android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next"
-        app:strokeWidth="1dp"
+        android:text="@string/next_camel_case"
+        android:textAllCaps="false"
         app:strokeColor="@color/lipstick"
-       />
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skip_btn"
@@ -215,10 +186,10 @@
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip_underline"
-        android:textColor="@color/warm_grey"
-        android:textAllCaps="false"
         android:minHeight="0dp"
+        android:text="@string/skip_underline"
+        android:textAllCaps="false"
+        android:textColor="@color/warm_grey"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 

@@ -16,6 +16,8 @@ import com.gigforce.common_ui.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.CornerFamily
 
 class GigforceToolbar(
         context: Context,
@@ -26,6 +28,7 @@ class GigforceToolbar(
 ) {
 
     private lateinit var backButton: ImageView
+    private lateinit var rootCardView: MaterialCardView
     private lateinit var toolbarImageView: GigforceImageView
 
     private lateinit var titleTV: TextView
@@ -41,6 +44,7 @@ class GigforceToolbar(
     private var onBackClickListener: View.OnClickListener? = null
 
     private var subtitleEnabled = false
+    private var searchListenerCalledFirstTime = false
 
     @MenuRes
     private var menu: Int = -1
@@ -56,6 +60,14 @@ class GigforceToolbar(
     }
 
     private fun findViews(view: View?) = view?.let { nnView ->
+//        rootCardView = nnView.findViewById(R.id.root_cardview)
+//        rootCardView.shapeAppearanceModel = rootCardView.shapeAppearanceModel
+//                .toBuilder()
+//                .setTopLeftCornerSize(10.0f)
+//                .setTopRightCornerSize(10.0f)
+//                .setBottomLeftCorner(CornerFamily.ROUNDED,40.0f)
+//                .setBottomRightCorner(CornerFamily.ROUNDED,40.0f)
+//                .build()
 
         backButton = nnView.findViewById(R.id.back_arrow)
 
@@ -114,7 +126,6 @@ class GigforceToolbar(
                 searchLayout.gone()
 
 
-
             } else {
                 hideTitle()
                 hideSubTitle()
@@ -123,6 +134,11 @@ class GigforceToolbar(
         }
 
         searchEditText.onTextChanged {
+            if (!searchListenerCalledFirstTime) {
+                searchListenerCalledFirstTime = true
+                return@onTextChanged
+            }
+
             searchTextChangeListener?.onSearchTextChanged(it)
         }
     }
@@ -250,6 +266,10 @@ class GigforceToolbar(
             listener: SearchTextChangeListener
     ) {
         this.searchTextChangeListener = listener
+    }
+
+    fun getOnSearchTextChangeListener(): SearchTextChangeListener? {
+        return this.searchTextChangeListener
     }
 
     interface SearchTextChangeListener {

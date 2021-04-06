@@ -35,7 +35,8 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
             validateDataAndsubmit()
         }
 
-        ic_back_iv.setOnClickListener {
+        toolbar_layout.hideActionMenu()
+        toolbar_layout.setBackButtonListener{
             activity?.onBackPressed()
         }
     }

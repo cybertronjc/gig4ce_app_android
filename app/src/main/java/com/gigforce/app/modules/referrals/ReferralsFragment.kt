@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,7 +36,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 
-class ReferralsFragment : BaseFragment() {
+class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener {
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ReferralFragmentViewModel(ModelReferralFragmentViewModel()))
@@ -44,63 +45,88 @@ class ReferralsFragment : BaseFragment() {
         ViewModelProvider(this, viewModelFactory).get(ReferralFragmentViewModel::class.java)
     }
 
+    private var referralLink : String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflateView(R.layout.fragment_referrals, inflater, container)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            referralLink = it.getString(INTENT_EXTRA_REFERRAL_LINK) ?: return@let
+        }
+
+        savedInstanceState?.let {
+            referralLink = it.getString(INTENT_EXTRA_REFERRAL_LINK) ?: return@let
+        }
+
         initUI();
         initObservers();
         initClicks();
         profileViewModel.getProfileData()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(INTENT_EXTRA_REFERRAL_LINK, referralLink)
+    }
+
     private fun initClicks() {
 
-        iv_back_referrals_frag.setOnClickListener {
-            popBackState()
+        ll_top.apply {
+            showTitle(getString(R.string.refer_your_friends))
+            hideActionMenu()
+            setBackButtonListener{
+                popBackState()
+            }
         }
-
     }
 
     private fun initObservers() {
 
         profileViewModel.userProfileData.observe(viewLifecycleOwner, Observer { profileData ->
             run {
-                PushDownAnim.setPushDownAnimTo(iv_copy_link_referrals_frag)
+                PushDownAnim.setPushDownAnimTo(send_direct_message_layout)
                     .setOnClickListener(View.OnClickListener {
-                        pb_referrals_frag.visible()
-                        Firebase.dynamicLinks.shortLinkAsync {
-                            longLink =
-                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
-                        }.addOnSuccessListener { result ->
-                            // Short link created
-                            if (context == null) return@addOnSuccessListener
-                            val shortLink = result.shortLink
-                            showToast(getString(R.string.link_copied));
-                            val clipboard: ClipboardManager? =
-                                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-                            val clip = ClipData.newPlainText(
-                                "url",
-                                "${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}"
+
+
+                        if(referralLink != null){
+                            EnterPhoneNumberForReferralDialogFragment.launch(
+                                    referralLink!!,
+                                    this@ReferralsFragment,
+                                    childFragmentManager
                             )
-                            clipboard?.setPrimaryClip(clip)
-                            pb_referrals_frag.gone()
+                        } else {
 
-                        }.addOnFailureListener {
-                            // Error
-                            // ...
-                            if (context == null) return@addOnFailureListener
-                            showToast(it.message!!);
-                            pb_referrals_frag.gone()
+                            pb_referrals_frag.visible()
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                if (context == null) return@addOnSuccessListener
+                                val shortLink = result.shortLink
+                                pb_referrals_frag.gone()
+
+                                EnterPhoneNumberForReferralDialogFragment.launch(
+                                        "${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}",                                        this@ReferralsFragment,
+                                        childFragmentManager
+                                )
+
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                if (context == null) return@addOnFailureListener
+                                showToast(it.message!!);
+                                pb_referrals_frag.gone()
 
 
+                            }
                         }
 
 //                        val clipboard: ClipboardManager? =
@@ -112,65 +138,53 @@ class ReferralsFragment : BaseFragment() {
 //                        clipboard?.setPrimaryClip(clip)
 
                     })
-                PushDownAnim.setPushDownAnimTo(iv_whatsapp_referrals_frag)
+                PushDownAnim.setPushDownAnimTo(send_via_whatsapp_layout)
                     .setOnClickListener(View.OnClickListener {
-                        pb_referrals_frag.visible()
 
-                        Firebase.dynamicLinks.shortLinkAsync {
-                            longLink =
-                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
-                        }.addOnSuccessListener { result ->
-                            if (context == null) return@addOnSuccessListener
-                            // Short link created
-                            val shortLink = result.shortLink
+                        if(referralLink != null){
+                            shareViaWhatsApp(referralLink!!)
+                        } else {
 
-                            shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
-                            pb_referrals_frag.gone()
-
-                        }.addOnFailureListener {
-                            if (context == null) return@addOnFailureListener
-                            // Error
-                            // ...
-                            showToast(it.message!!)
-                            pb_referrals_frag.gone()
-                        }
-
-                    })
-                PushDownAnim.setPushDownAnimTo(iv_more_referrals_frag)
-                    .setOnClickListener(View.OnClickListener {
-                        pb_referrals_frag.visible()
-
-                        Firebase.dynamicLinks.shortLinkAsync {
-                            longLink =
-                                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
-                        }.addOnSuccessListener { result ->
-                            // Short link created
-                            if (context == null) return@addOnSuccessListener
-
-                            val shortLink = result.shortLink
-                            shareToAnyApp(shortLink.toString())
-
-
-                        }.addOnFailureListener {
-                            // Error
-                            // ...
-                            if (context == null) return@addOnFailureListener
-                            showToast(it.message!!);
-
-                        }
-
-                    })
-
-                    PushDownAnim.setPushDownAnimTo(tv_share_now_referral_frag)
-                        .setOnClickListener(View.OnClickListener {
                             pb_referrals_frag.visible()
 
                             Firebase.dynamicLinks.shortLinkAsync {
                                 longLink =
-                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                            }.addOnSuccessListener { result ->
+                                if (context == null) return@addOnSuccessListener
+                                // Short link created
+                                val shortLink = result.shortLink
+
+                                shareViaWhatsApp("${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}")
+                                pb_referrals_frag.gone()
+
+                            }.addOnFailureListener {
+                                if (context == null) return@addOnFailureListener
+                                // Error
+                                // ...
+                                showToast(it.message!!)
+                                pb_referrals_frag.gone()
+                            }
+                        }
+
+                    })
+                PushDownAnim.setPushDownAnimTo(send_via_other_apps)
+                    .setOnClickListener(View.OnClickListener {
+
+                        if(referralLink != null){
+                            shareToAnyApp(referralLink!!)
+
+                        } else {
+
+                            pb_referrals_frag.visible()
+
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                             }.addOnSuccessListener { result ->
                                 // Short link created
                                 if (context == null) return@addOnSuccessListener
+
                                 val shortLink = result.shortLink
                                 shareToAnyApp(shortLink.toString())
 
@@ -182,7 +196,10 @@ class ReferralsFragment : BaseFragment() {
                                 showToast(it.message!!);
 
                             }
-                        })
+                        }
+                    })
+
+
 
                 viewModel.observableReferralErr.observe(viewLifecycleOwner, Observer {
                     showToast(it!!)
@@ -191,7 +208,7 @@ class ReferralsFragment : BaseFragment() {
                     iv_one_referrals_frag.visibility = View.GONE
                     iv_two_referrals_frag.visibility = View.GONE
                     tv_more_items_referrals_frag.visibility = View.GONE
-                    rv_successful_recommendation_referrals_frag.visibility = View.VISIBLE
+                    rv_successful_recommendation_referrals_frag.isVisible  = it?.size ?: 0 != 0
                     it?.elementAtOrNull(0)?.let { first ->
                         iv_one_referrals_frag.visibility = View.VISIBLE
                         displayImage(first.profileAvatarName, iv_one_referrals_frag)
@@ -349,5 +366,13 @@ class ReferralsFragment : BaseFragment() {
                 .apply(RequestOptions().circleCrop())
                 .into(imageView)
         }
+    }
+
+    companion object{
+        const val INTENT_EXTRA_REFERRAL_LINK = "referral_link"
+    }
+
+    override fun linkSent() {
+
     }
 }

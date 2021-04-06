@@ -17,40 +17,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <LinearLayout
+            <com.gigforce.common_ui.views.GigforceToolbar
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lipstick_two"
-                android:gravity="center_vertical"
-                android:minHeight="72dp"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/ic_back_iv"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:scaleX="0.6"
-                    android:scaleY="0.6"
-                      app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/lato"
-                    android:gravity="center_horizontal"
-                    android:lineSpacingExtra="4sp"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/enter_mobile_label"
@@ -106,9 +77,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submitBtn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -117,11 +87,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="14dp"
         android:fontFamily="@font/lato_bold"
+        android:background="@drawable/gradient_button"
         android:gravity="center"
-        android:text="@string/submit_all_caps"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
         android:visibility="visible"
-        app:strokeColor="@color/lipstick"
-        app:strokeWidth="1dp"
         app:layout_constraintTop_toBottomOf="@id/ambsd_guildliness_on_success_container" />
 
     <ProgressBar
