@@ -111,9 +111,9 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
 
     private fun initView(view: View) {
 
-        createGroupMainLayout = view.findViewById(R.id.createGroupMain)
+        createGroupMainLayout = view.findViewById(R.id.invite_direct_main)
         progressBar = view.findViewById(R.id.progressBar)
-        groupNameET = view.findViewById(R.id.group_name_et)
+        groupNameET = view.findViewById(R.id.phone_number_et)
 
         submitBtn = view.findViewById(R.id.create_button)
 
@@ -129,7 +129,7 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
                     .show()
             }
 
-            sendSmsViewModel.sendSms(phoneNumber, inviteLink)
+            sendSmsViewModel.sendAmbassadorInviteLink(phoneNumber, inviteLink)
         }
     }
 

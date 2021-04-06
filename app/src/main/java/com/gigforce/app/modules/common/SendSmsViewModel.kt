@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.common.models.SendSmsRequest
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.Lse
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.retrofit.RetrofitFactory
@@ -21,9 +20,51 @@ class SendSmsViewModel(
     private val _sendSms: MutableLiveData<Lse> = MutableLiveData()
     val sendSms: LiveData<Lse> = _sendSms
 
-    fun sendSms(
+    fun sendEnrollmentCompleteSms(
+            userId: String,
+            userName: String
+    ) = viewModelScope.launch {
+        _sendSms.postValue(Lse.loading())
+
+        try {
+
+            val profile = profileFirebaseRepository.getProfileDataIfExist(userId = userId)
+            if (profile == null) {
+                _sendSms.postValue(Lse.success())
+                return@launch
+            }
+
+            val sendSmsRequest = SendSmsRequest(
+                    phoneNumber = profile!!.loginMobile,
+                    message = "",
+                    type = "user_enrollment_completion",
+                    userName = userName,
+                    enrollAmbassadorShareLink = null
+            )
+            val sendMessageResponse = sendSmsService.sendSms(
+                    BuildConfig.SEND_SMS_URL,
+                    sendSmsRequest
+            )
+
+            if (!sendMessageResponse.isSuccessful) {
+                throw Exception(sendMessageResponse.message())
+            } else {
+                val response = sendMessageResponse.body()!!.first()
+                if (response.error != null) {
+                    throw Exception(response.error)
+                } else {
+                    _sendSms.postValue(Lse.success())
+                }
+            }
+        } catch (e: Exception) {
+            _sendSms.postValue(Lse.error(e.toString()))
+            CrashlyticsLogger.e("SendSmsViewModel", "While sending sms by phone number", e)
+        }
+    }
+
+    fun sendAmbassadorInviteLink(
             phoneNumber: String,
-            message: String
+            enrollAmbassadorLink: String
     ) = viewModelScope.launch {
         _sendSms.postValue(Lse.loading())
 
@@ -34,9 +75,13 @@ class SendSmsViewModel(
                 "+91$phoneNumber"
             }
 
+//            val profile  = profileFirebaseRepository.getProfileDataIfExist(userId = userUid)
             val sendSmsRequest = SendSmsRequest(
                     phoneNumber = serialisedNo,
-                    message = message
+                    message = "",
+                    type = "ambassador_enroll_though_link",
+                    userName = null,
+                    enrollAmbassadorShareLink = enrollAmbassadorLink
             )
             val sendMessageResponse = sendSmsService.sendSms(
                     BuildConfig.SEND_SMS_URL,
@@ -55,40 +100,7 @@ class SendSmsViewModel(
             }
         } catch (e: Exception) {
             _sendSms.postValue(Lse.error(e.toString()))
-            CrashlyticsLogger.e("SendSmsViewModel","While sending sms by phone number",e)
-        }
-    }
-
-    fun sendSmsByUid(
-            userUid: String,
-            message: String
-    ) = viewModelScope.launch {
-        _sendSms.postValue(Lse.loading())
-
-        try {
-            val profile  = profileFirebaseRepository.getProfileDataIfExist(userId = userUid)
-            val sendSmsRequest = SendSmsRequest(
-                    phoneNumber = profile!!.loginMobile,
-                    message = message
-            )
-            val sendMessageResponse = sendSmsService.sendSms(
-                    BuildConfig.SEND_SMS_URL,
-                    sendSmsRequest
-            )
-
-            if (!sendMessageResponse.isSuccessful) {
-                throw Exception(sendMessageResponse.message())
-            } else {
-                val response = sendMessageResponse.body()!!.first()
-                if (response.error != null) {
-                    throw Exception(response.error)
-                } else {
-                    _sendSms.postValue(Lse.success())
-                }
-            }
-        } catch (e: Exception) {
-            _sendSms.postValue(Lse.error(e.toString()))
-            CrashlyticsLogger.e("SendSmsViewModel","While sending sms by uid",e)
+            CrashlyticsLogger.e("SendSmsViewModel", "While sending sms by uid", e)
         }
     }
 

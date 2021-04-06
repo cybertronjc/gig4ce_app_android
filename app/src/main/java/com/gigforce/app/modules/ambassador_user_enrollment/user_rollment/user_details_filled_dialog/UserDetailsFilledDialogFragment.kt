@@ -176,7 +176,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     }
 
     private fun sendSmsToEnrolledUser() {
-        sendSmsViewModel.sendSmsByUid(userId, "") //todo  :
+        sendSmsViewModel.sendEnrollmentCompleteSms(userId, userName)
     }
 
     private fun showAtLeastOneDocumentNecessaryCard() {

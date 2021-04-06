@@ -9,4 +9,13 @@ data class SendSmsRequest(
 
         @SerializedName("message")
         val message: String,
+
+        @SerializedName("type")
+        val type: String,
+
+        @SerializedName("userName")
+        val userName: String? = null,
+
+        @SerializedName("enrollAmbassadorShareLink")
+        val enrollAmbassadorShareLink: String? = null,
 )

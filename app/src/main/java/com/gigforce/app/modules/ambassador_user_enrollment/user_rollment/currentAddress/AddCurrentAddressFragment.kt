@@ -63,7 +63,6 @@ class AddCurrentAddressFragment : BaseFragment() {
             seekbardependent.gone()
             maxDistanceTV.gone()
             minDistanceTV.gone()
-            toolbar_text.text = getString(R.string.add_current_address)
         } else {
             breifing_layout.visible()
             ready_to_change_location_chipgroup.visible()
@@ -73,7 +72,6 @@ class AddCurrentAddressFragment : BaseFragment() {
             seekbardependent.visible()
             maxDistanceTV.visible()
             minDistanceTV.visible()
-            toolbar_text.text = getString(R.string.user_local_address)
         }
     }
 
@@ -103,6 +101,24 @@ class AddCurrentAddressFragment : BaseFragment() {
     }
 
     private fun initListeners() {
+
+        toolbar_layout.apply {
+
+            showTitle(getString(R.string.user_local_address))
+            hideActionMenu()
+            setBackButtonListener{
+
+                if (userId == null) {
+                    if (cameFromEnrollment) {
+                        onBackPressed()
+                        return@setBackButtonListener
+                    }
+                    activity?.onBackPressed()
+                } else {
+                    showGoBackConfirmationDialog()
+                }
+            }
+        }
         pin_code_et.textChanged {
             pin_code_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
             if (pin_code_okay_iv.isVisible) {
@@ -134,17 +150,6 @@ class AddCurrentAddressFragment : BaseFragment() {
             validateDataAndSubmit()
         }
 
-        ic_back_iv.setOnClickListener {
-            if (userId == null) {
-                if (cameFromEnrollment) {
-                    onBackPressed()
-                    return@setOnClickListener
-                }
-                activity?.onBackPressed()
-            } else {
-                showGoBackConfirmationDialog()
-            }
-        }
 
         state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 

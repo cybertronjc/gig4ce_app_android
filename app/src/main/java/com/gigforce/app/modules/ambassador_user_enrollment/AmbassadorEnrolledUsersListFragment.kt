@@ -352,12 +352,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         return dynamicLink.uri
     }
 
-    fun shareToAnyApp(url: String) {
+    private fun shareToAnyApp(url: String) {
 
         val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
         navigate(
             R.id.referrals_fragment, bundleOf(
-                ReferralsFragment.INTENT_EXTRA_REFERRAL_LINK to shareMessage
+                ReferralsFragment.INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT to shareMessage,
+                ReferralsFragment.INTENT_EXTRA_REFERRAL_LINK to url
             )
         )
     }

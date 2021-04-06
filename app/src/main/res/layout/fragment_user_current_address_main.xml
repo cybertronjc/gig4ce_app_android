@@ -95,13 +95,26 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/pin_code_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Pin code"
+                android:layout_marginTop="42dp"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/breifing_layout" />
 
             <EditText
                 android:id="@+id/pin_code_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="42dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:paddingStart="8dp"
                 android:maxLength="6"
@@ -114,7 +127,7 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/breifing_layout" />
+                app:layout_constraintTop_toBottomOf="@id/pin_code_label" />
 
             <ImageView
                 android:id="@+id/pin_code_okay_iv"
@@ -143,6 +156,19 @@
                 app:layout_constraintTop_toBottomOf="@id/pin_code_et"
                 tools:text="Some Error" />
 
+            <TextView
+                android:id="@+id/address_line_1_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="House No/ Street No"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pin_code_error" />
 
 
             <EditText
@@ -150,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
                 android:hint="House No/ Street No"
@@ -161,7 +187,7 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/pin_code_error" />
+                app:layout_constraintTop_toBottomOf="@id/address_line_1_label" />
 
             <TextView
                 android:id="@+id/address_line_1_error"
@@ -179,6 +205,20 @@
                 app:layout_constraintTop_toBottomOf="@id/address_line_1_et"
                 tools:text="Some Error" />
 
+            <TextView
+                android:id="@+id/address_line_2_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Area / Village / Town"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_line_1_error" />
+
             <EditText
                 android:id="@+id/address_line_2_et"
                 android:layout_width="match_parent"
@@ -195,7 +235,7 @@
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintTop_toBottomOf="@id/address_line_1_error" />
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_label" />
 
 
             <TextView
@@ -214,6 +254,21 @@
                 app:layout_constraintTop_toBottomOf="@id/address_line_2_et"
                 tools:text="Some Error" />
 
+            <TextView
+                android:id="@+id/state_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="State"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toStartOf="@+id/city_spinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
+
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/state_spinner"
@@ -231,7 +286,7 @@
                 android:background="@drawable/spinner_background_rectangle_round_grey"
                 app:layout_constraintEnd_toStartOf="@+id/city_spinner"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
+                app:layout_constraintTop_toBottomOf="@id/state_label" />
 
 
             <TextView
@@ -250,6 +305,23 @@
                 app:layout_constraintTop_toBottomOf="@id/state_spinner"
                 tools:text="Some Error" />
 
+
+            <TextView
+                android:id="@+id/district_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="District"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/state_spinner"
+                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
+
+
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/city_spinner"
                 android:layout_width="0dp"
@@ -267,7 +339,7 @@
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/state_spinner"
-                app:layout_constraintTop_toBottomOf="@id/address_line_2_error" />
+                app:layout_constraintTop_toBottomOf="@id/district_label" />
 
             <TextView
                 android:id="@+id/city_error"
@@ -378,6 +450,22 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
 
+                <TextView
+                    android:id="@+id/permanent_state_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="State"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black_three"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toStartOf="@+id/permanent_city_spinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
+
+
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/permanent_state_spinner"
@@ -395,7 +483,7 @@
                     android:background="@drawable/spinner_background_rectangle_round_grey"
                     app:layout_constraintEnd_toStartOf="@+id/permanent_city_spinner"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
+                    app:layout_constraintTop_toBottomOf="@id/permanent_state_label" />
 
                 <TextView
                     android:id="@+id/permanent_state_error"
@@ -412,6 +500,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/permanent_state_spinner"
                     tools:text="Some Error" />
+
+                <TextView
+                    android:id="@+id/permanent_city_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="District"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black_three"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/permanent_state_spinner"
+                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
 
 
                 <androidx.appcompat.widget.AppCompatSpinner
@@ -431,7 +534,7 @@
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/permanent_state_spinner"
-                    app:layout_constraintTop_toBottomOf="@id/permanent_address_label" />
+                    app:layout_constraintTop_toBottomOf="@id/permanent_state_label" />
 
                 <TextView
                     android:id="@+id/permanent_city_error"

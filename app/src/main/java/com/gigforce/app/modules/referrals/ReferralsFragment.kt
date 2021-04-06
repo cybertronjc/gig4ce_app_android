@@ -36,7 +36,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 
-class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener {
+class ReferralsFragment : BaseFragment(),
+    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener {
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ReferralFragmentViewModel(ModelReferralFragmentViewModel()))
@@ -45,7 +46,8 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
         ViewModelProvider(this, viewModelFactory).get(ReferralFragmentViewModel::class.java)
     }
 
-    private var referralLink : String? = null
+    private var referralLink: String? = null
+    private var referralLinkWithText: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +61,12 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             referralLink = it.getString(INTENT_EXTRA_REFERRAL_LINK) ?: return@let
+            referralLinkWithText = it.getString(INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT) ?: return@let
         }
 
         savedInstanceState?.let {
             referralLink = it.getString(INTENT_EXTRA_REFERRAL_LINK) ?: return@let
+            referralLinkWithText = it.getString(INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT) ?: return@let
         }
 
         initUI();
@@ -74,6 +78,7 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(INTENT_EXTRA_REFERRAL_LINK, referralLink)
+        outState.putString(INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT, referralLinkWithText)
     }
 
     private fun initClicks() {
@@ -81,7 +86,7 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
         ll_top.apply {
             showTitle(getString(R.string.refer_your_friends))
             hideActionMenu()
-            setBackButtonListener{
+            setBackButtonListener {
                 popBackState()
             }
         }
@@ -95,18 +100,18 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
                     .setOnClickListener(View.OnClickListener {
 
 
-                        if(referralLink != null){
+                        if (referralLink != null) {
                             EnterPhoneNumberForReferralDialogFragment.launch(
-                                    referralLink!!,
-                                    this@ReferralsFragment,
-                                    childFragmentManager
+                                referralLink!!,
+                                this@ReferralsFragment,
+                                childFragmentManager
                             )
                         } else {
 
                             pb_referrals_frag.visible()
                             Firebase.dynamicLinks.shortLinkAsync {
                                 longLink =
-                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                             }.addOnSuccessListener { result ->
                                 // Short link created
                                 if (context == null) return@addOnSuccessListener
@@ -114,8 +119,9 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
                                 pb_referrals_frag.gone()
 
                                 EnterPhoneNumberForReferralDialogFragment.launch(
-                                        "${getString(R.string.looking_for_dynamic_working_hours)} ${shortLink.toString()}",                                        this@ReferralsFragment,
-                                        childFragmentManager
+                                    shortLink.toString(),
+                                    this@ReferralsFragment,
+                                    childFragmentManager
                                 )
 
                             }.addOnFailureListener {
@@ -141,15 +147,15 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
                 PushDownAnim.setPushDownAnimTo(send_via_whatsapp_layout)
                     .setOnClickListener(View.OnClickListener {
 
-                        if(referralLink != null){
-                            shareViaWhatsApp(referralLink!!)
+                        if (referralLinkWithText != null) {
+                            shareViaWhatsApp(referralLinkWithText!!)
                         } else {
 
                             pb_referrals_frag.visible()
 
                             Firebase.dynamicLinks.shortLinkAsync {
                                 longLink =
-                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                             }.addOnSuccessListener { result ->
                                 if (context == null) return@addOnSuccessListener
                                 // Short link created
@@ -171,8 +177,8 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
                 PushDownAnim.setPushDownAnimTo(send_via_other_apps)
                     .setOnClickListener(View.OnClickListener {
 
-                        if(referralLink != null){
-                            shareToAnyApp(referralLink!!)
+                        if (referralLinkWithText != null) {
+                            shareToAnyApp(referralLinkWithText!!)
 
                         } else {
 
@@ -180,7 +186,7 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
 
                             Firebase.dynamicLinks.shortLinkAsync {
                                 longLink =
-                                        Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
                             }.addOnSuccessListener { result ->
                                 // Short link created
                                 if (context == null) return@addOnSuccessListener
@@ -208,7 +214,7 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
                     iv_one_referrals_frag.visibility = View.GONE
                     iv_two_referrals_frag.visibility = View.GONE
                     tv_more_items_referrals_frag.visibility = View.GONE
-                    rv_successful_recommendation_referrals_frag.isVisible  = it?.size ?: 0 != 0
+                    rv_successful_recommendation_referrals_frag.isVisible = it?.size ?: 0 != 0
                     it?.elementAtOrNull(0)?.let { first ->
                         iv_one_referrals_frag.visibility = View.VISIBLE
                         displayImage(first.profileAvatarName, iv_one_referrals_frag)
@@ -368,7 +374,8 @@ class ReferralsFragment : BaseFragment(), EnterPhoneNumberForReferralDialogFragm
         }
     }
 
-    companion object{
+    companion object {
+        const val INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT = "referral_link_with_text"
         const val INTENT_EXTRA_REFERRAL_LINK = "referral_link"
     }
 

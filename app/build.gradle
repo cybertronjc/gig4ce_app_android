@@ -87,7 +87,7 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
-            buildConfigField "String", 'SEND_SMS_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
 
         }
 
@@ -106,7 +106,7 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
-            buildConfigField "String", 'SEND_SMS_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
 
         }
 
@@ -122,7 +122,7 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
-            buildConfigField "String", 'SEND_SMS_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
 
         }
     }
