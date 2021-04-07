@@ -98,7 +98,6 @@ data class EnrollmentStepsCompleted(
     fun allStepsCompleted() = aadharDetailsUploaded
             || panDetailsUploaded
             || drivingLicenseDetailsUploaded
-            || bankDetailsUploaded
 
 }
 

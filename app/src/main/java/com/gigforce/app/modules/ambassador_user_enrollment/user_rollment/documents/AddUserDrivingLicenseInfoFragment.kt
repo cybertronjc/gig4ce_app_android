@@ -457,6 +457,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     }
 
     private fun showDLImageAndInfoLayout() {
+        topSeaparator2.visible()
         dlBackImageHolder.visibility = View.VISIBLE
         dlFrontImageHolder.visibility = View.VISIBLE
         showImageInfoLayout()

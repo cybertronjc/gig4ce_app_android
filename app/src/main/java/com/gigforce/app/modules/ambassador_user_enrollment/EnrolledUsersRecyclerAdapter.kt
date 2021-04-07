@@ -120,7 +120,7 @@ class EnrolledUsersRecyclerAdapter constructor(
 
         fun bindValues(user: EnrolledUser) {
             if (user.profilePic.isNullOrBlank()) {
-                Glide.with(applicationContext).load(R.drawable.avatar).into(userImageIV)
+                Glide.with(applicationContext).load(R.drawable.ic_user_2).into(userImageIV)
             } else {
 
                 if (!user.profileAvatarThumbnail.isNullOrBlank()) {

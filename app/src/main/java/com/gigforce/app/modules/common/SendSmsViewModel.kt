@@ -36,7 +36,7 @@ class SendSmsViewModel(
 
             val sendSmsRequest = SendSmsRequest(
                     phoneNumber = profile!!.loginMobile,
-                    message = "",
+                    message = "Hi",
                     type = "user_enrollment_completion",
                     userName = userName,
                     enrollAmbassadorShareLink = null
@@ -78,7 +78,7 @@ class SendSmsViewModel(
 //            val profile  = profileFirebaseRepository.getProfileDataIfExist(userId = userUid)
             val sendSmsRequest = SendSmsRequest(
                     phoneNumber = serialisedNo,
-                    message = "",
+                    message = "Hi",
                     type = "ambassador_enroll_though_link",
                     userName = null,
                     enrollAmbassadorShareLink = enrollAmbassadorLink

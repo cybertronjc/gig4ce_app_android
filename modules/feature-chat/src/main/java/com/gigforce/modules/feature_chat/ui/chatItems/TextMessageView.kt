@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.DisplayUtil
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
@@ -47,6 +48,7 @@ abstract class TextMessageView(
         else
             LayoutInflater.from(context).inflate(R.layout.recycler_item_chat_text_out, this, true)
         loadViews(view)
+
     }
 
     fun loadViews(
@@ -59,7 +61,10 @@ abstract class TextMessageView(
 
         containerView = this.findViewById(R.id.ll_msgContainer)
         containerView.setOnLongClickListener(this)
-        //  msgView.setCustomSelectionActionModeCallback(CustomSelectionCallback(msgView, context))
+
+        val screenWidth = DisplayUtil.getScreenWidthInPx(context)
+        val maxWidth = (screenWidth * 0.80).toInt()
+        msgView.maxWidth = maxWidth
     }
 
     override fun bind(data: Any?) {
@@ -68,7 +73,6 @@ abstract class TextMessageView(
 
             senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = msg.senderInfo.name
-
             msgView.setText(msg.content)
             timeView.setText(msg.timestamp?.toDisplayText())
             setReceivedStatus(msg)

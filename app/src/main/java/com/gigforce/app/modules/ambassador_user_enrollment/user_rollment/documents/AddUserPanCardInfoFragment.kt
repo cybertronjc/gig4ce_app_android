@@ -361,6 +361,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     }
 
     private fun showPanImageLayout() {
+        topSeaparator2.visible()
         panImageHolder.visibility = View.VISIBLE
     }
 

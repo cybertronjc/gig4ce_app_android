@@ -45,6 +45,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.bank_details_check_iv
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.bank_details_layout
@@ -333,6 +334,8 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
     }
 
+
+
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
@@ -408,6 +411,8 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
+//        StatusBarUtil.setDarkMode(requireActivity())
+        StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(resources,R.color.lipstick_two,null))
         locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates.setLocationUpdateCallbacks(this)
     }

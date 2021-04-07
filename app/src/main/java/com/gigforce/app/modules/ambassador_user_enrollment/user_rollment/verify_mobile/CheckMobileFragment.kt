@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
@@ -11,6 +12,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.verification.UtilMethods
 import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
 

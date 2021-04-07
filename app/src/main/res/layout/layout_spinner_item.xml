@@ -7,6 +7,9 @@
     android:textSize="16sp"
     android:fontFamily="@font/lato"
     android:gravity="left"
-    android:textColor="@color/warm_grey_two"
-    android:padding="5dip"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:textColor="#333333"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
     />

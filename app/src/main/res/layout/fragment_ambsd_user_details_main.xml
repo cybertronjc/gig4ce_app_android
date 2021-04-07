@@ -16,7 +16,7 @@
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="12dp"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
@@ -24,13 +24,15 @@
         android:textColor="@color/warm_grey"
         android:textAllCaps="false"
         android:minHeight="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="46dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -38,7 +40,6 @@
         android:enabled="true"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:minHeight="@dimen/size_36"
         android:text="@string/next_camel_case"
         app:strokeWidth="1dp"
         android:textAllCaps="false"

@@ -55,6 +55,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
+import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import com.riningan.widget.ExtendedBottomSheetBehavior.BottomSheetCallback
 import com.riningan.widget.ExtendedBottomSheetBehavior.STATE_COLLAPSED
@@ -143,6 +144,14 @@ class CalendarHomeScreen : BaseFragment(),
         initializeViews()
         listener()
         observers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(),
+                ResourcesCompat.getColor(resources,R.color.white,null)
+        )
     }
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {

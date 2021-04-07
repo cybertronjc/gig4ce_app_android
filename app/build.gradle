@@ -208,7 +208,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
-    implementation 'com.jaeger.statusbarutil:library:1.4.0'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.1'
     // Navigation library

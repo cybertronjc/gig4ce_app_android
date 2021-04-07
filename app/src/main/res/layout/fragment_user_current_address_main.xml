@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="12dp"
 
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
@@ -25,6 +24,8 @@
         android:textColor="@color/warm_grey"
         android:textAllCaps="false"
         android:minHeight="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 
@@ -32,7 +33,7 @@
         android:id="@+id/submitBtn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
@@ -120,7 +121,6 @@
                 android:maxLength="6"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="Pin Code"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
                 android:inputType="number"
@@ -179,7 +179,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/lato"
-                android:hint="House No/ Street No"
                 android:paddingStart="8dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:lineSpacingExtra="3sp"
@@ -228,7 +227,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rectangle_round_grey"
                 android:fontFamily="@font/lato"
-                android:hint="Area / Village / Town"
                 android:paddingStart="8dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
@@ -280,7 +278,6 @@
                 android:hint="State"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
-                android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:background="@drawable/spinner_background_rectangle_round_grey"
@@ -334,7 +331,6 @@
                 android:paddingStart="10dp"
                 android:lineSpacingExtra="3sp"
                 android:minHeight="36dp"
-                android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -412,6 +408,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="I am Localite"
+                    android:checked="true"
                     app:chipStrokeWidth="1dp"/>
 
                 <com.google.android.material.chip.Chip
@@ -477,7 +474,6 @@
                     android:hint="State"
                     android:lineSpacingExtra="3sp"
                     android:minHeight="36dp"
-                    android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:background="@drawable/spinner_background_rectangle_round_grey"
@@ -529,7 +525,6 @@
                     android:paddingStart="10dp"
                     android:lineSpacingExtra="3sp"
                     android:minHeight="36dp"
-                    android:textColor="#333333"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -11,6 +11,7 @@
         android:id="@+id/toolbar_filter_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -303,7 +304,7 @@
 
         <LinearLayout
             android:id="@+id/no_users_enrolled_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
@@ -344,7 +345,7 @@
 
             <Button
                 android:id="@+id/create_profile_btn"
-                android:layout_width="282dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_24"
@@ -352,7 +353,7 @@
                 android:layout_marginBottom="@dimen/size_12"
                 android:background="@drawable/gradient_button"
                 android:letterSpacing="0"
-                android:minHeight="@dimen/size_36"
+                android:minHeight="@dimen/size_44"
                 android:paddingTop="@dimen/size_8"
                 android:paddingBottom="@dimen/size_8"
                 android:text="@string/create_profile"
@@ -362,7 +363,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/share_link_cl"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="44dp"
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_4"

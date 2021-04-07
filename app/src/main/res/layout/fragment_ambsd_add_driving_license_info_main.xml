@@ -259,6 +259,7 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="12dp"
                 android:background="#cdccd1"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/dlInfoLayout" />
 
             <include
@@ -305,7 +306,7 @@
                 android:letterSpacing="0"
                 android:textColor="@color/app_red"
                 android:textSize="12sp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dlBackImageHolder"
                 tools:text="Error : Uploaded Image is not a Driving License Image" />
@@ -324,7 +325,7 @@
         android:id="@+id/dlSubmitSliderBtn"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/next_camel_case"
@@ -340,11 +341,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="12dp"
         android:minHeight="0dp"
         android:textColor="@color/black_666"
         android:textAllCaps="false"
         android:text="@string/skip_underline"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

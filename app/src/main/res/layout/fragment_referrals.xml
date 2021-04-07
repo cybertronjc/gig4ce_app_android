@@ -178,8 +178,9 @@
                     android:textStyle="normal" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="24dp"
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
                     app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
@@ -209,14 +210,15 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Send Via Whatsapp"
+                    android:text="Send via Whatsapp"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="24dp"
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
                     app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
@@ -246,14 +248,15 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato"
                     android:lineSpacingExtra="3sp"
-                    android:text="Send Via Other Apps"
+                    android:text="Send via other apps"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="24dp"
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
                     app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>

@@ -167,7 +167,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                                 R.layout.layout_spinner_item,
                                 cities
                         )
-                permanentCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 permanent_city_spinner.adapter = permanentCityAdapter
             }
 
@@ -444,7 +443,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
         val adapter: ArrayAdapter<State> =
                 ArrayAdapter(requireContext(), R.layout.layout_spinner_item, states)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         state_spinner.adapter = adapter
         permanent_state_spinner.adapter = adapter
 
@@ -453,7 +451,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         }
         val cityAdapter: ArrayAdapter<City> =
                 ArrayAdapter(requireContext(), R.layout.layout_spinner_item, cities)
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         city_spinner.adapter = cityAdapter
         permanent_city_spinner.adapter = cityAdapter
 
@@ -511,7 +508,6 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                         R.layout.layout_spinner_item,
                         cities
                 )
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         city_spinner.adapter = cityAdapter
     }
 

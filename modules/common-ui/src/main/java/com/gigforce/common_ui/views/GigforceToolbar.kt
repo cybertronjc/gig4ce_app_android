@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -17,7 +19,6 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.shape.CornerFamily
 
 class GigforceToolbar(
         context: Context,
@@ -130,6 +131,9 @@ class GigforceToolbar(
                 hideTitle()
                 hideSubTitle()
                 searchLayout.visible()
+
+                searchEditText.requestFocus()
+                openSoftKeyboard(searchEditText)
             }
         }
 
@@ -148,6 +152,8 @@ class GigforceToolbar(
 
         titleTV.visible()
         subTitleTV.visible()
+
+
     }
 
     fun getOptionMenuViewForAnchor(): View {
@@ -270,6 +276,15 @@ class GigforceToolbar(
 
     fun getOnSearchTextChangeListener(): SearchTextChangeListener? {
         return this.searchTextChangeListener
+    }
+
+    fun openSoftKeyboard(view: View) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInputFromWindow(
+                view.applicationWindowToken,
+                InputMethod.SHOW_FORCED,
+                0
+        )
     }
 
     interface SearchTextChangeListener {

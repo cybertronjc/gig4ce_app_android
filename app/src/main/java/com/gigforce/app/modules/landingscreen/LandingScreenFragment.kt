@@ -75,6 +75,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+import com.jaeger.library.StatusBarUtil
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 
 import java.util.*
@@ -813,6 +814,15 @@ class LandingScreenFragment : BaseFragment() {
 
 
         learningViewModel.getRoleBasedCourses()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        ))
     }
 
     private fun showLearningAsLoading() {
