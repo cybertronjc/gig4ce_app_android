@@ -92,6 +92,8 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
             viewModel.getCourseDetailsAndModules(mCourseId)
         }
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

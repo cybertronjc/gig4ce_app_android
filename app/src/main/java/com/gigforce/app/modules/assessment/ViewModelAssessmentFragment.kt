@@ -10,7 +10,8 @@ import com.google.firebase.firestore.QuerySnapshot
 
 data class observableDialogResultWrapper(
     var result: Boolean,
-    var nextNextLessonId: String?
+    var nextNextLessonId: String?,
+    var isPassed : Boolean?=false
 )
 
 class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : ViewModel(),
@@ -48,13 +49,13 @@ class ViewModelAssessmentFragment(private val modelCallbacks: ModelCallbacks) : 
             if (scrollBounds.top < top!! && scrollBounds.bottom > bottom!!) View.GONE else View.VISIBLE
     }
 
-    fun switchAsPerState(state: Int, nextNextLessonId: String?) {
+    fun switchAsPerState(state: Int, nextNextLessonId: String?,isPassed: Boolean?=false) {
         when (state) {
             AssessmentDialog.STATE_INIT -> observableDialogInit.value = null
             AssessmentDialog.STATE_PASS -> observableDialogResult.value =
-                observableDialogResultWrapper(true, nextNextLessonId)
+                observableDialogResultWrapper(true, nextNextLessonId,isPassed)
             AssessmentDialog.STATE_REAPPEAR -> observableDialogResult.value =
-                observableDialogResultWrapper(false, nextNextLessonId)
+                observableDialogResultWrapper(false, nextNextLessonId,isPassed)
         }
     }
 

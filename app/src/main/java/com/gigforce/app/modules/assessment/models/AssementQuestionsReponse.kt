@@ -10,5 +10,5 @@ data class AssementQuestionsReponse(
     var level: Int = 1,
     var assessment_image: String = "",
     var timeTakenInMillis: Long = 0,
-    var passing_percentage: Int = 50
+    var passing_percentage: Int = 100
 )
