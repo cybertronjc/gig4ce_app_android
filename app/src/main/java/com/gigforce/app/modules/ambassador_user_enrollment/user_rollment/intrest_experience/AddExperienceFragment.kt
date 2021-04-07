@@ -50,8 +50,8 @@ class AddUserExperienceFragment : BaseFragment() {
     private val dateFormatter = SimpleDateFormat("MM/yyyy", Locale.getDefault())
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_add_experience, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,13 +68,13 @@ class AddUserExperienceFragment : BaseFragment() {
             if (currentInterestName == null) {
                 // Fresh start of experience edit, fetch first category
                 interestAndExperienceViewModel.getInterestDetailsOrFetchFirstOneIfInterestNameIsNull(
-                        userId,
-                        null
+                    userId,
+                    null
                 )
             } else {
                 interestAndExperienceViewModel.getInterestDetailsOrFetchFirstOneIfInterestNameIsNull(
-                        userId,
-                        currentInterestName
+                    userId,
+                    currentInterestName
                 )
             }
         } else {
@@ -86,11 +86,13 @@ class AddUserExperienceFragment : BaseFragment() {
     private fun setYearsAndStateData() {
 
         val yearsArray = resources.getStringArray(R.array.years_values)
-        val yearsSpinnerAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), R.layout.layout_spinner_item, yearsArray)
+        val yearsSpinnerAdapter: ArrayAdapter<String> =
+            ArrayAdapter(requireContext(), R.layout.layout_spinner_item, yearsArray)
         year_exp_spinner.adapter = yearsSpinnerAdapter
 
         val monthsArray = resources.getStringArray(R.array.months_values)
-        val monthsAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), R.layout.layout_spinner_item, monthsArray)
+        val monthsAdapter: ArrayAdapter<String> =
+            ArrayAdapter(requireContext(), R.layout.layout_spinner_item, monthsArray)
         months_exp_spinner.adapter = monthsAdapter
     }
 
@@ -133,8 +135,18 @@ class AddUserExperienceFragment : BaseFragment() {
 
         company_name_et.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
 
-            experience_root_scroll_view.post {
-                experience_root_scroll_view.smoothScrollBy(0, years_exp_layout.y.toInt())
+            try {
+
+                if (hasFocus) {
+                    experience_root_scroll_view.post {
+                        experience_root_scroll_view.smoothScrollBy(
+                            0,
+                            currently_work_here_checkbox.y.toInt()
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
@@ -176,8 +188,8 @@ class AddUserExperienceFragment : BaseFragment() {
 
             if (currentInterestName != null)
                 interestAndExperienceViewModel.skipCurrentExperienceAndFetchNextOne(
-                        userId,
-                        currentInterestName!!
+                    userId,
+                    currentInterestName!!
                 )
         }
     }
@@ -247,55 +259,55 @@ class AddUserExperienceFragment : BaseFragment() {
         }
 
         val experienceInMonths =
-                ((year_exp_spinner.selectedItemPosition - 1) * 12) + (months_exp_spinner.selectedItemPosition - 1)
+            ((year_exp_spinner.selectedItemPosition - 1) * 12) + (months_exp_spinner.selectedItemPosition - 1)
 
         val driverQuestionOwnVehicle: List<String> =
-                if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
-                    val driverOwnedVehicles: MutableList<String> = mutableListOf()
+            if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+                val driverOwnedVehicles: MutableList<String> = mutableListOf()
 
-                    driver_own_vehicle_chipgroup.checkedChipIds.forEach {
-                        val vehicle =
-                                driver_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
-                        driverOwnedVehicles.add(vehicle)
-                    }
-
-                    driverOwnedVehicles
-                } else {
-                    emptyList()
+                driver_own_vehicle_chipgroup.checkedChipIds.forEach {
+                    val vehicle =
+                        driver_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+                    driverOwnedVehicles.add(vehicle)
                 }
+
+                driverOwnedVehicles
+            } else {
+                emptyList()
+            }
 
 
         val deliveryExecQuestionOwnVehicles: List<String> =
-                if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
-                    val deliveryVehiclesOwn: MutableList<String> = mutableListOf()
+            if (delivery_exec_question_layout.isVisible && delivery_exec_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+                val deliveryVehiclesOwn: MutableList<String> = mutableListOf()
 
-                    delivery_exec_own_vehicle_chipgroup.checkedChipIds.forEach {
-                        val vehicle =
-                                delivery_exec_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
-                        deliveryVehiclesOwn.add(vehicle)
-                    }
-
-                    deliveryVehiclesOwn
-                } else {
-                    emptyList()
+                delivery_exec_own_vehicle_chipgroup.checkedChipIds.forEach {
+                    val vehicle =
+                        delivery_exec_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+                    deliveryVehiclesOwn.add(vehicle)
                 }
+
+                deliveryVehiclesOwn
+            } else {
+                emptyList()
+            }
 
 
         val experience = Experience(
-                haveExperience = doHaveAndExp,
-                title = currentInterestName!!,
-                employmentType = "",
-                company = company,
-                location = "",
-                currentExperience = currently_work_here_checkbox.isChecked,
-                role = role,
+            haveExperience = doHaveAndExp,
+            title = currentInterestName!!,
+            employmentType = "",
+            company = company,
+            location = "",
+            currentExperience = currently_work_here_checkbox.isChecked,
+            role = role,
 
-                driverQuestionOwnVehicle = "",
-                driverQuestionVehiclesOwn = driverQuestionOwnVehicle,
+            driverQuestionOwnVehicle = "",
+            driverQuestionVehiclesOwn = driverQuestionOwnVehicle,
 
-                deliveryExecQuestionOwnVehicle = "",
-                deliveryQuestionVehiclesOwn = deliveryExecQuestionOwnVehicles,
-                experienceInMonths = experienceInMonths
+            deliveryExecQuestionOwnVehicle = "",
+            deliveryQuestionVehiclesOwn = deliveryExecQuestionOwnVehicles,
+            experienceInMonths = experienceInMonths
         )
 
         if (mode == EnrollmentConstants.MODE_EDIT) {
@@ -307,73 +319,74 @@ class AddUserExperienceFragment : BaseFragment() {
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
-                .show()
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+            .show()
     }
 
     private fun initViewModel() {
         interestAndExperienceViewModel
-                .experience
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                    val result = it ?: return@Observer
+            .experience
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                val result = it ?: return@Observer
 
-                    when (result) {
-                        Lce.Loading -> {
+                when (result) {
+                    Lce.Loading -> {
 
-                        }
-                        is Lce.Content -> {
-                            val content = result.content ?: return@Observer
-                            showExpDetailsOnScreen(content.interestName, content.experience)
-                        }
-                        is Lce.Error -> {
-
-                        }
                     }
+                    is Lce.Content -> {
+                        val content = result.content ?: return@Observer
+                        showExpDetailsOnScreen(content.interestName, content.experience)
+                    }
+                    is Lce.Error -> {
 
-                })
+                    }
+                }
+
+            })
 
         interestAndExperienceViewModel
-                .saveExpAndReturnNextOne
-                .observe(
-                        viewLifecycleOwner,
-                        Observer {
-                            it ?: return@Observer
+            .saveExpAndReturnNextOne
+            .observe(
+                viewLifecycleOwner,
+                Observer {
+                    it ?: return@Observer
 
 
-                            when (it) {
-                                Lce.Loading -> {
-                                }
-                                is Lce.Content -> {
-                                    showToast(currentInterestName.toString() + " " + getString(R.string.experience_submitted))
+                    when (it) {
+                        Lce.Loading -> {
+                        }
+                        is Lce.Content -> {
+                            showToast(currentInterestName.toString() + " " + getString(R.string.experience_submitted))
 
-                                    if (it.content == null) {
-                                        //All Exps filled
-                                        navigate(
-                                                R.id.addUserCurrentAddressFragment, bundleOf(
-                                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                                                EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                                        )
-                                        )
+                            if (it.content == null) {
+                                //All Exps filled
+                                navigate(
+                                    R.id.addUserCurrentAddressFragment, bundleOf(
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                                    )
+                                )
+                            } else {
+
+                                val driverQuestionOwnVehicle: List<String> =
+                                    if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
+                                        val driverOwnedVehicles: MutableList<String> =
+                                            mutableListOf()
+
+                                        driver_own_vehicle_chipgroup.checkedChipIds.forEach {
+                                            val vehicle =
+                                                driver_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
+                                            driverOwnedVehicles.add(vehicle)
+                                        }
+
+                                        driverOwnedVehicles
                                     } else {
-
-                                        val driverQuestionOwnVehicle: List<String> =
-                                                if (driver_question_layout.isVisible && driver_own_vehicle_chipgroup.checkedChipIds.isNotEmpty()) {
-                                                    val driverOwnedVehicles: MutableList<String> = mutableListOf()
-
-                                                    driver_own_vehicle_chipgroup.checkedChipIds.forEach {
-                                                        val vehicle =
-                                                                driver_own_vehicle_chipgroup.findViewById<Chip>(it).text.toString()
-                                                        driverOwnedVehicles.add(vehicle)
-                                                    }
-
-                                                    driverOwnedVehicles
-                                                } else {
-                                                    emptyList()
-                                                }
+                                        emptyList()
+                                    }
 
 
 //                                val deliveryExecQuestionOwnVehicles: List<String> =
@@ -391,22 +404,22 @@ class AddUserExperienceFragment : BaseFragment() {
 //                                            emptyList()
 //                                        }
 
-                                        navigate(
-                                                R.id.addUserExperienceFragment, bundleOf(
-                                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                                                INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
-                                                EnrollmentConstants.INTENT_EXTRA_MODE to mode,
-                                                INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
-                                        )
-                                        )
-                                    }
-                                }
-                                is Lce.Error -> {
-                                }
+                                navigate(
+                                    R.id.addUserExperienceFragment, bundleOf(
+                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                                        INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
+                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode,
+                                        INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
+                                    )
+                                )
                             }
-                        })
+                        }
+                        is Lce.Error -> {
+                        }
+                    }
+                })
 
 
     }
@@ -417,9 +430,9 @@ class AddUserExperienceFragment : BaseFragment() {
 
             var chip: Chip
             chip = layoutInflater.inflate(
-                    R.layout.fragment_ambassador_role_chip,
-                    gig_chip_group,
-                    false
+                R.layout.fragment_ambassador_role_chip,
+                gig_chip_group,
+                false
             ) as Chip
             chip.text = it
             chip.id = ViewCompat.generateViewId()
@@ -458,13 +471,13 @@ class AddUserExperienceFragment : BaseFragment() {
 
                     val monthsDiff = if (it.endDate != null) {
                         ChronoUnit.MONTHS.between(
-                                it.startDate!!.toLocalDate(),
-                                it.endDate!!.toLocalDate()
+                            it.startDate!!.toLocalDate(),
+                            it.endDate!!.toLocalDate()
                         )
                     } else {
                         ChronoUnit.MONTHS.between(
-                                it.startDate!!.toLocalDate(),
-                                LocalDate.now()
+                            it.startDate!!.toLocalDate(),
+                            LocalDate.now()
                         )
                     }
 
@@ -507,9 +520,9 @@ class AddUserExperienceFragment : BaseFragment() {
 
 
             populateRoleSpinner(
-                    mutableListOf(
-                            "Car Driver", "Electric Vehicle", "2 wheeler", "Commercial Vehicle"
-                    )
+                mutableListOf(
+                    "Car Driver", "Electric Vehicle", "2 wheeler", "Commercial Vehicle"
+                )
             )
 
             experienceData?.let {
@@ -540,9 +553,9 @@ class AddUserExperienceFragment : BaseFragment() {
 
 
             populateRoleSpinner(
-                    mutableListOf(
-                            "Food Delivery", "Grocery Delivery", "Ecommerce delivery"
-                    )
+                mutableListOf(
+                    "Food Delivery", "Grocery Delivery", "Ecommerce delivery"
+                )
             )
 
             experienceData?.let {
@@ -556,7 +569,7 @@ class AddUserExperienceFragment : BaseFragment() {
                     val deliveryExecOwnVehicleList = it.deliveryQuestionVehiclesOwn.toMutableList()
                     deliveryExecOwnVehicleList.add(it.deliveryExecQuestionOwnVehicle)
                     delivery_exec_own_vehicle_chipgroup.selectChipsWithText(
-                            deliveryExecOwnVehicleList
+                        deliveryExecOwnVehicleList
                     )
                 }
             }
@@ -567,9 +580,9 @@ class AddUserExperienceFragment : BaseFragment() {
             what_was_your_role_label.visible()
 
             populateRoleSpinner(
-                    mutableListOf(
-                            "Warehouse Helper", "Cleaner"
-                    )
+                mutableListOf(
+                    "Warehouse Helper", "Cleaner"
+                )
             )
 
             experienceData?.let {
@@ -588,9 +601,9 @@ class AddUserExperienceFragment : BaseFragment() {
             what_was_your_role_label.visible()
 
             populateRoleSpinner(
-                    mutableListOf(
-                            "Retails", "Fintech", "SaaS"
-                    )
+                mutableListOf(
+                    "Retails", "Fintech", "SaaS"
+                )
             )
 
             experienceData?.let {
@@ -618,11 +631,11 @@ class AddUserExperienceFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-                .setNegativeButton(getString(R.string.no)) { _, _ -> }
-                .show()
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
     }
 
     private fun goBackToUsersList() {

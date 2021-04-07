@@ -94,8 +94,10 @@ class InterestAndExperienceViewModel constructor(
 
                         if (i == skills.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
                         } else {
                             _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            _saveExpAndReturnNextOne.value = null
                         }
                         return@launch
                     }
