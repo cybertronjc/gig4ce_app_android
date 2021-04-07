@@ -49,7 +49,7 @@ class SendSmsViewModel(
             if (!sendMessageResponse.isSuccessful) {
                 throw Exception(sendMessageResponse.message())
             } else {
-                val response = sendMessageResponse.body()!!.first()
+                val response = sendMessageResponse.body()!!
                 if (response.error != null) {
                     throw Exception(response.error)
                 } else {
@@ -91,7 +91,7 @@ class SendSmsViewModel(
             if (!sendMessageResponse.isSuccessful) {
                 throw Exception(sendMessageResponse.message())
             } else {
-                val response = sendMessageResponse.body()!!.first()
+                val response = sendMessageResponse.body()!!
                 if (response.error != null) {
                     throw Exception(response.error)
                 } else {

@@ -12,5 +12,5 @@ interface SendSmsWebService {
     suspend fun sendSms(
             @Url fullUrl: String,
             @Body postData: SendSmsRequest
-    ): Response<List<SendSmsResponse>>
+    ): Response<SendSmsResponse>
 }
