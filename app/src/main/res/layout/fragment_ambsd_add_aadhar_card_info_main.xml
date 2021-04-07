@@ -187,7 +187,10 @@
                         android:inputType="number"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
-                        android:paddingStart="6dp"
+                        android:minHeight="36dp"
+                        android:minLines="1"
+                        android:paddingStart="10dp"
+                        android:textColor="#333333"
                         android:maxLength="12"
                         android:maxLines="1" />
 

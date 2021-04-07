@@ -43,8 +43,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     private var profileData: ProfileData? = null
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_user_current_address, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,10 +112,10 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
             ) {
 
                 if (state_spinner.childCount != 0 && state_spinner.selectedItemPosition != 0) {
@@ -137,41 +137,42 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
             }
         }
-        permanent_state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        permanent_state_spinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
 
-            override fun onItemSelected(
+                override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
-            ) {
+                ) {
 
-                if (permanent_state_spinner.childCount != 0 && permanent_state_spinner.selectedItemPosition != 0) {
-                    val state = permanent_state_spinner.selectedItem as State
-                    filterPermanentCitiesByStateAndSetOnCities(state.id)
-                }
-            }
-
-            private fun filterPermanentCitiesByStateAndSetOnCities(id: String) {
-                val cities = viewModel.cities.filter {
-                    it.stateCode == id
-                }.sortedBy {
-                    it.name
-                }.toMutableList().apply {
-                    add(0, City(name = "Select District"))
+                    if (permanent_state_spinner.childCount != 0 && permanent_state_spinner.selectedItemPosition != 0) {
+                        val state = permanent_state_spinner.selectedItem as State
+                        filterPermanentCitiesByStateAndSetOnCities(state.id)
+                    }
                 }
 
-                val permanentCityAdapter: ArrayAdapter<City> =
+                private fun filterPermanentCitiesByStateAndSetOnCities(id: String) {
+                    val cities = viewModel.cities.filter {
+                        it.stateCode == id
+                    }.sortedBy {
+                        it.name
+                    }.toMutableList().apply {
+                        add(0, City(name = "Select District"))
+                    }
+
+                    val permanentCityAdapter: ArrayAdapter<City> =
                         ArrayAdapter(
-                                requireContext(),
-                                R.layout.layout_spinner_item,
-                                cities
+                            requireContext(),
+                            R.layout.layout_spinner_item,
+                            cities
                         )
-                permanent_city_spinner.adapter = permanentCityAdapter
-            }
+                    permanent_city_spinner.adapter = permanentCityAdapter
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
 
 
@@ -189,10 +190,10 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         skip_btn.setOnClickListener {
 
             navigate(
-                    R.id.addUserBankDetailsInfoFragment, bundleOf(
+                R.id.addUserBankDetailsInfoFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                     EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
+                )
             )
         }
     }
@@ -279,130 +280,130 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
 
         viewModel.updateUserCurrentAddressDetails(
-                uid = userId,
-                pinCode = pin_code_et.text.toString(),
-                addressLine1 = address_line_1_et.text.toString(),
-                addressLine2 = address_line_2_et.text.toString(),
-                state = state,
-                city = city,
-                homeCity = homeCity,
-                homeState = homeState
+            uid = userId,
+            pinCode = pin_code_et.text.toString(),
+            addressLine1 = address_line_1_et.text.toString(),
+            addressLine2 = address_line_2_et.text.toString(),
+            state = state,
+            city = city,
+            homeCity = homeCity,
+            homeState = homeState
         )
     }
 
     private fun initViewModel() {
 
         viewModel.pincodeResponse
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    when (it) {
-                        Lce.Loading -> {
-                            UtilMethods.showLoading(requireContext())
+                when (it) {
+                    Lce.Loading -> {
+                        UtilMethods.showLoading(requireContext())
 //                        allPostoffices.clear()
-                        }
-                        is Lce.Content -> {
-                            UtilMethods.hideLoading()
-                            if (it.content.status.equals("Success")) {
-                                allPostoffices = it.content.postOffice
-                                for (index in 0 until state_spinner.adapter.count) {
-                                    val item = state_spinner.adapter.getItem(index)
-                                    allPostoffices.mapIndexed { index1, postalOffice ->
-                                        if (item.toString().equals(postalOffice.state)) {
-                                            state_spinner.setSelection(index)
-                                            return@Observer
-                                        }
+                    }
+                    is Lce.Content -> {
+                        UtilMethods.hideLoading()
+                        if (it.content.status.equals("Success")) {
+                            allPostoffices = it.content.postOffice
+                            for (index in 0 until state_spinner.adapter.count) {
+                                val item = state_spinner.adapter.getItem(index)
+                                allPostoffices.mapIndexed { index1, postalOffice ->
+                                    if (item.toString().equals(postalOffice.state)) {
+                                        state_spinner.setSelection(index)
+                                        return@Observer
                                     }
                                 }
-                            } else {
-                                state_spinner.setSelection(0)
-                                city_spinner.setSelection(0)
                             }
-                        }
-                        is Lce.Error -> {
-                            UtilMethods.hideLoading()
-                            showAlertDialog("", it.error)
-//                        allPostoffices.clear()
+                        } else {
+                            state_spinner.setSelection(0)
+                            city_spinner.setSelection(0)
                         }
                     }
-                })
+                    is Lce.Error -> {
+                        UtilMethods.hideLoading()
+                        showAlertDialog("", it.error)
+//                        allPostoffices.clear()
+                    }
+                }
+            })
 
         viewModel.profile
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> {
-                            //Show init loading state
-                            user_address_main_layout.gone()
-                            address_error.gone()
-                            loading_user_address.visible()
-                        }
-                        is Lce.Content -> {
-                            loading_user_address.gone()
-                            address_error.gone()
-                            user_address_main_layout.visible()
-
-                            setUserDataOnView(it.content)
-                        }
-                        is Lce.Error -> {
-                            user_address_main_layout.gone()
-                            loading_user_address.gone()
-                            address_error.visible()
-
-                            address_error.text = it.error
-                        }
+                when (it) {
+                    Lce.Loading -> {
+                        //Show init loading state
+                        user_address_main_layout.gone()
+                        address_error.gone()
+                        loading_user_address.visible()
                     }
-                })
+                    is Lce.Content -> {
+                        loading_user_address.gone()
+                        address_error.gone()
+                        user_address_main_layout.visible()
+
+                        setUserDataOnView(it.content)
+                    }
+                    is Lce.Error -> {
+                        user_address_main_layout.gone()
+                        loading_user_address.gone()
+                        address_error.visible()
+
+                        address_error.text = it.error
+                    }
+                }
+            })
 
 
 
         viewModel.submitUserDetailsState
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    when (it) {
-                        Lse.Loading -> {
-                            // UtilMethods.showLoading(requireContext())
-                        }
-                        Lse.Success -> {
-                            // UtilMethods.hideLoading()
+                when (it) {
+                    Lse.Loading -> {
+                        // UtilMethods.showLoading(requireContext())
+                    }
+                    Lse.Success -> {
+                        // UtilMethods.hideLoading()
 
-                            if (userId == null) {
-                                showToast("Current Address Details submitted")
-                                activity?.onBackPressed()
-                            } else {
-                                showToast("User Current Address Details submitted")
-                                navigate(
-                                        R.id.addUserBankDetailsInfoFragment, bundleOf(
-                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                        if (userId == null) {
+                            showToast("Current Address Details submitted")
+                            activity?.onBackPressed()
+                        } else {
+                            showToast("User Current Address Details submitted")
+                            navigate(
+                                R.id.addUserBankDetailsInfoFragment, bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
                                 )
-                                )
-                            }
-                        }
-                        is Lse.Error -> {
-                            //  UtilMethods.hideLoading()
-                            showAlertDialog("Could not submit address info", it.error)
+                            )
                         }
                     }
-                })
+                    is Lse.Error -> {
+                        //  UtilMethods.hideLoading()
+                        showAlertDialog("Could not submit address info", it.error)
+                    }
+                }
+            })
 
         viewModel.citiesAndStateLoadState.observe(
-                viewLifecycleOwner, Observer {
+            viewLifecycleOwner, Observer {
 
-            when (it) {
-                Lse.Loading -> {
-                    UtilMethods.showLoading(requireContext())
-                }
-                Lse.Success -> {
-                    UtilMethods.hideLoading()
+                when (it) {
+                    Lse.Loading -> {
+                        UtilMethods.showLoading(requireContext())
+                    }
+                    Lse.Success -> {
+                        UtilMethods.hideLoading()
 
-                    populateStateAndCitySpinner()
-                }
-                is Lse.Error -> {
-                    UtilMethods.hideLoading()
-                    showToast("Unable to load cities and states")
+                        populateStateAndCitySpinner()
+                    }
+                    is Lse.Error -> {
+                        UtilMethods.hideLoading()
+                        showToast("Unable to load cities and states")
+                    }
                 }
             }
-        }
         )
         viewModel.loadCityAndStates()
 
@@ -420,29 +421,34 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             city_spinner.selectItemWithText(this.city)
         }
 
-        if (content.address.isCurrentAddressAndPermanentAddressTheSame()) {
-            localite_migrant_chipgroup.check(R.id.migrant_no)
-            permanent_address_layout.gone()
+        if (!content.address.current.isEmpty()) {
 
-        } else {
-            localite_migrant_chipgroup.check(R.id.migrant_yes)
-            permanent_address_layout.visible()
+            if (content.address.isCurrentAddressAndPermanentAddressTheSame()) {
+                permanent_address_layout.gone()
+                localite_migrant_chipgroup.check(R.id.migrant_no)
+            } else {
+                permanent_address_layout.visible()
+                localite_migrant_chipgroup.check(R.id.migrant_yes)
 
-            permanent_state_spinner.selectItemWithText(content.address.home.state)
-            permanent_city_spinner.selectItemWithText(content.address.home.city)
+                permanent_state_spinner.selectItemWithText(content.address.home.state)
+                permanent_city_spinner.selectItemWithText(content.address.home.city)
+            }
+
         }
+
+
     }
 
     private fun populateStateAndCitySpinner() {
         val states = viewModel
-                .states
-                .sortedWith(compareBy { it.name })
-                .toMutableList().apply {
-                    add(0, State(name = "Select State"))
-                }
+            .states
+            .sortedWith(compareBy { it.name })
+            .toMutableList().apply {
+                add(0, State(name = "Select State"))
+            }
 
         val adapter: ArrayAdapter<State> =
-                ArrayAdapter(requireContext(), R.layout.layout_spinner_item, states)
+            ArrayAdapter(requireContext(), R.layout.layout_spinner_item, states)
         state_spinner.adapter = adapter
         permanent_state_spinner.adapter = adapter
 
@@ -450,7 +456,7 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             add(0, City(name = "Select District"))
         }
         val cityAdapter: ArrayAdapter<City> =
-                ArrayAdapter(requireContext(), R.layout.layout_spinner_item, cities)
+            ArrayAdapter(requireContext(), R.layout.layout_spinner_item, cities)
         city_spinner.adapter = cityAdapter
         permanent_city_spinner.adapter = cityAdapter
 
@@ -473,11 +479,11 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Alert")
-                .setMessage("Are you sure you want to go back")
-                .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
-                .setNegativeButton("No") { _, _ -> }
-                .show()
+            .setTitle("Alert")
+            .setMessage("Are you sure you want to go back")
+            .setPositiveButton("Yes") { _, _ -> goBackToUsersList() }
+            .setNegativeButton("No") { _, _ -> }
+            .show()
     }
 
     private fun goBackToUsersList() {
@@ -487,10 +493,10 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("Okay") { _, _ -> }
-                .show()
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Okay") { _, _ -> }
+            .show()
     }
 
     private fun filterCitiesByStateAndSetOnCities(id: String) {
@@ -503,11 +509,11 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         }
 
         val cityAdapter: ArrayAdapter<City> =
-                ArrayAdapter<City>(
-                        requireContext(),
-                        R.layout.layout_spinner_item,
-                        cities
-                )
+            ArrayAdapter<City>(
+                requireContext(),
+                R.layout.layout_spinner_item,
+                cities
+            )
         city_spinner.adapter = cityAdapter
     }
 

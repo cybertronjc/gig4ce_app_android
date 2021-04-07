@@ -102,7 +102,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-
-
-
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }

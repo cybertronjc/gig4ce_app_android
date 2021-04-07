@@ -406,7 +406,6 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates.stopLocationUpdates()
     }
 
     override fun onResume() {
@@ -415,6 +414,15 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(resources,R.color.lipstick_two,null))
         locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates.setLocationUpdateCallbacks(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            locationUpdates.stopLocationUpdates()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onRequestPermissionsResult(

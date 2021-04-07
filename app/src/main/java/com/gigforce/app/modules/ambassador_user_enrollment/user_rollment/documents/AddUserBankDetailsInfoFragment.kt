@@ -317,8 +317,6 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
                         is Lse.Error -> errorOnUploadingDocuments(it.error)
                     }
                 })
-
-        viewModel.getVerificationStatus()
     }
 
     private fun errorOnUploadingDocuments(error: String) {

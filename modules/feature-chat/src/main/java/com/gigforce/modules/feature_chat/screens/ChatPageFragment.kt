@@ -28,6 +28,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -59,6 +60,7 @@ import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModel
 import com.gigforce.modules.feature_chat.ui.ChatFooter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat.*
 import java.io.File
@@ -148,6 +150,7 @@ class ChatPageFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(arguments, savedInstanceState)
         validateIfRequiredDataIsAvailable()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources,R.color.lipstick_2,null))
 
         cancelAnyNotificationIfShown()
         findViews(view)

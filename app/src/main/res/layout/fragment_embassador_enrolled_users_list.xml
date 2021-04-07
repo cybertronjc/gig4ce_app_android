@@ -128,7 +128,6 @@
                 android:id="@+id/total_complete_profile_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:background="#c6ddf3"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
@@ -240,7 +239,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/lato"
                             android:lineSpacingExtra="3sp"
-                            android:text="@string/current_address"
+                            android:text="Local Address"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:textStyle="normal" />
