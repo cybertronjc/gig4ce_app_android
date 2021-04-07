@@ -87,6 +87,8 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+
         }
 
         /**
@@ -104,6 +106,8 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+
         }
 
         staging {
@@ -118,6 +122,8 @@ android {
             buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+
         }
     }
 
@@ -202,7 +208,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
-    implementation 'com.jaeger.statusbarutil:library:1.4.0'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
@@ -361,4 +367,7 @@ dependencies {
 
     // Facebook Integration
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+    implementation 'com.google.firebase:firebase-config-ktx:20.0.3'
+    implementation 'com.github.michaldrabik:classicmaterialtimepicker:1.1.3'
+
 }

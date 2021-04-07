@@ -94,26 +94,26 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initProfileViewModel() {
-        profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
-            val profile: ProfileData = profileObs!!
-
-            ambassador_layout.visible()
-            if (profile.isUserAmbassador) {
-                join_as_amb_label.text = getString(R.string.ambassador_program)
-                amb_join_open_btn.text = getString(R.string.open)
-            } else {
-                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
-                amb_join_open_btn.text = getString(R.string.join_now)
-            }
-        })
+//        profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+//            val profile: ProfileData = profileObs!!
+//
+//            ambassador_layout.visible()
+//            if (profile.isUserAmbassador) {
+//                join_as_amb_label.text = getString(R.string.ambassador_program)
+//                amb_join_open_btn.text = getString(R.string.open)
+//            } else {
+//                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
+//                amb_join_open_btn.text = getString(R.string.join_now)
+//            }
+//        })
 
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text == getString(R.string.open)) {
+//            if (amb_join_open_btn.text == getString(R.string.open)) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
-            } else {
-                navigate(R.id.ambassadorProgramDetailsFragment)
-            }
+//            } else {
+//                navigate(R.id.ambassadorProgramDetailsFragment)
+//            }
         }
     }
 

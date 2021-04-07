@@ -3,6 +3,7 @@ package com.gigforce.app.modules.profile
 import android.util.Log
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.replace
+import com.gigforce.app.core.toFirebaseTimeStamp
 import com.gigforce.app.modules.profile.models.*
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.setOrThrow
@@ -350,9 +351,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             uid: String,
             phoneNumber: String,
             name: String,
-            dateOfBirth: Date,
+            dateOfBirth: Date?,
             gender: String,
-            pincode: String,
             highestQualification: String
     ) {
 
@@ -363,10 +363,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                     name = name,
                     gender = gender,
                     loginMobile = getNumberWithNineone(phoneNumber),
-                    address = AddressFirestoreModel(
-                            current = AddressModel(pincode = pincode)
-                    ),
-                    dateOfBirth = Timestamp(dateOfBirth),
+                    dateOfBirth = dateOfBirth?.toFirebaseTimeStamp(),
                     highestEducation = highestQualification,
                     contact = ArrayList(
                             listOf(
@@ -382,9 +379,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         } else {
             profileData.apply {
                 this.name = name
-                this.dateOfBirth = Timestamp(dateOfBirth)
+                this.dateOfBirth = dateOfBirth?.toFirebaseTimeStamp()
                 this.gender = gender
-                this.address.current.pincode = pincode
                 this.highestEducation = highestQualification
                 this.isonboardingdone = true
             }
@@ -409,11 +405,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
             addressLine2: String,
             state: String,
             city: String,
-            preferredDistanceInKm: Int,
-            readyToChangeLocationForWork: Boolean,
             homeCity: String = "",
-            homeState: String = "",
-            howDidYouCameToKnowOfCurrentJob: String = ""
+            homeState: String = ""
     ) {
         if (uid == null) {
             firebaseDB
@@ -442,11 +435,8 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                                     "address.current.city" to city,
                                     "address.home.state" to homeState,
                                     "address.home.city" to homeCity,
-                                    "address.howDidYouCameToKnowOfCurrentJob" to howDidYouCameToKnowOfCurrentJob,
                                     "address.current.empty" to false,
-                                    "address.current.preferredDistanceActive" to true,
-                                    "address.current.preferred_distance" to preferredDistanceInKm,
-                                    "readyToChangeLocationForWork" to readyToChangeLocationForWork
+                                    "address.current.preferredDistanceActive" to true
                             )
                     )
         }

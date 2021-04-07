@@ -37,7 +37,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlBackEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlFrontEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlBackImageHolder
@@ -230,7 +234,7 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)  ) {
+                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
 
                                 MaterialAlertDialogBuilder(requireContext())
                                         .setTitle(getString(R.string.alert))
@@ -273,7 +277,6 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
                         }
                     }
                 }
-
 
 
 //        tv_action_upld_dl_cl_act.setOnClickListener {
@@ -751,23 +754,10 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.dl_details_uploaded))
+
+        if (dlYesRB.isChecked)
+            showToast(getString(R.string.dl_details_uploaded))
+
         popBackState()
     }
-
-    private fun showDetailsUploaded() {
-        val view =
-                layoutInflater.inflate(R.layout.fragment_giger_verification_documents_submitted, null)
-
-        val dialog = AlertDialog.Builder(requireContext())
-                .setView(view)
-                .show()
-
-        view.findViewById<View>(R.id.verificationCompletedBtn)
-                .setOnClickListener {
-                    dialog.dismiss()
-                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-                }
-    }
-
 }

@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:maxWidth="@dimen/chat_item_max_length"
             android:paddingStart="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="5dp"
@@ -51,7 +50,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="How are you my brother" />
+                tools:text="How ar my brother" />
 
             <ImageView
                 android:id="@+id/tv_received_status"

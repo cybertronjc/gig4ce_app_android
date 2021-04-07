@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -16,6 +18,7 @@ import com.gigforce.common_ui.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
+import com.google.android.material.card.MaterialCardView
 
 class GigforceToolbar(
         context: Context,
@@ -26,6 +29,7 @@ class GigforceToolbar(
 ) {
 
     private lateinit var backButton: ImageView
+    private lateinit var rootCardView: MaterialCardView
     private lateinit var toolbarImageView: GigforceImageView
 
     private lateinit var titleTV: TextView
@@ -41,6 +45,7 @@ class GigforceToolbar(
     private var onBackClickListener: View.OnClickListener? = null
 
     private var subtitleEnabled = false
+    private var searchListenerCalledFirstTime = false
 
     @MenuRes
     private var menu: Int = -1
@@ -56,6 +61,14 @@ class GigforceToolbar(
     }
 
     private fun findViews(view: View?) = view?.let { nnView ->
+//        rootCardView = nnView.findViewById(R.id.root_cardview)
+//        rootCardView.shapeAppearanceModel = rootCardView.shapeAppearanceModel
+//                .toBuilder()
+//                .setTopLeftCornerSize(10.0f)
+//                .setTopRightCornerSize(10.0f)
+//                .setBottomLeftCorner(CornerFamily.ROUNDED,40.0f)
+//                .setBottomRightCorner(CornerFamily.ROUNDED,40.0f)
+//                .build()
 
         backButton = nnView.findViewById(R.id.back_arrow)
 
@@ -114,15 +127,22 @@ class GigforceToolbar(
                 searchLayout.gone()
 
 
-
             } else {
                 hideTitle()
                 hideSubTitle()
                 searchLayout.visible()
+
+                searchEditText.requestFocus()
+                openSoftKeyboard(searchEditText)
             }
         }
 
         searchEditText.onTextChanged {
+            if (!searchListenerCalledFirstTime) {
+                searchListenerCalledFirstTime = true
+                return@onTextChanged
+            }
+
             searchTextChangeListener?.onSearchTextChanged(it)
         }
     }
@@ -132,6 +152,8 @@ class GigforceToolbar(
 
         titleTV.visible()
         subTitleTV.visible()
+
+
     }
 
     fun getOptionMenuViewForAnchor(): View {
@@ -250,6 +272,19 @@ class GigforceToolbar(
             listener: SearchTextChangeListener
     ) {
         this.searchTextChangeListener = listener
+    }
+
+    fun getOnSearchTextChangeListener(): SearchTextChangeListener? {
+        return this.searchTextChangeListener
+    }
+
+    fun openSoftKeyboard(view: View) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInputFromWindow(
+                view.applicationWindowToken,
+                InputMethod.SHOW_FORCED,
+                0
+        )
     }
 
     interface SearchTextChangeListener {

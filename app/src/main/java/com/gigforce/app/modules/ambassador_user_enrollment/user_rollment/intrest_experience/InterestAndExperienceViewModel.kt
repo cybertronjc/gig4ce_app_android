@@ -58,6 +58,7 @@ class InterestAndExperienceViewModel constructor(
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
+            _saveExpAndReturnNextOne.value = null
         }
     }
 
@@ -78,8 +79,11 @@ class InterestAndExperienceViewModel constructor(
 
                         if (i == experienceList.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
                         } else {
                             _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value = null
+
                         }
                         return@launch
                     }
@@ -90,17 +94,24 @@ class InterestAndExperienceViewModel constructor(
 
                         if (i == skills.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
                         } else {
                             _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            _saveExpAndReturnNextOne.value = null
                         }
                         return@launch
                     }
                 }
             }
             _saveExpAndReturnNextOne.value = Lce.content(null)
+            _saveExpAndReturnNextOne.value = null
+
         } catch (e: Exception) {
+
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+            _saveExpAndReturnNextOne.value = null
+
         }
     }
 
@@ -120,8 +131,12 @@ class InterestAndExperienceViewModel constructor(
 
                         if (i == experienceList.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
+
                         } else {
+
                             _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value = null
                         }
                         return@launch
                     }
@@ -132,8 +147,12 @@ class InterestAndExperienceViewModel constructor(
 
                         if (i == skills.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
+
                         } else {
                             _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            _saveExpAndReturnNextOne.value = null
+
                         }
                         return@launch
                     }
@@ -141,9 +160,14 @@ class InterestAndExperienceViewModel constructor(
             }
 
             _saveExpAndReturnNextOne.value = Lce.content(null)
+            _saveExpAndReturnNextOne.value = null
+
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
+
             _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+            _saveExpAndReturnNextOne.value = null
+
         }
     }
 
@@ -160,12 +184,16 @@ class InterestAndExperienceViewModel constructor(
             if (pendingInts.isEmpty()) {
                 userEnrollmentRepository.setExperienceAsUploaded(userId)
                 _saveExpAndReturnNextOne.value = Lce.content(null)
+                _saveExpAndReturnNextOne.value = null
             } else {
                 _saveExpAndReturnNextOne.value = Lce.content(pendingInts.first().id)
+                _saveExpAndReturnNextOne.value = null
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
+            _saveExpAndReturnNextOne.value = null
+
         }
     }
 

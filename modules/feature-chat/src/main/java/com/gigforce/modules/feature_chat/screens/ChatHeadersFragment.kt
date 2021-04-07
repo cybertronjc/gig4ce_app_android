@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +28,7 @@ import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -108,6 +110,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         savedInstanceState: Bundle?
     ): View? {
         cancelAnyNotificationIfShown()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources,R.color.lipstick_2,null))
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
     }
 

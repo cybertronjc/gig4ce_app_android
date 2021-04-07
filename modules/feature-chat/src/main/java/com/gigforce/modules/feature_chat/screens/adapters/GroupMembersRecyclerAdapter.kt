@@ -18,10 +18,10 @@ import com.gigforce.modules.feature_chat.models.ContactModel
 import com.google.firebase.auth.FirebaseAuth
 
 class GroupMembersRecyclerAdapter(
-    private val requestManager: RequestManager,
-    private val onContactClickListener: OnGroupMembersClickListener
+        private val requestManager: RequestManager,
+        private val onContactClickListener: OnGroupMembersClickListener
 ) : RecyclerView.Adapter<GroupMembersRecyclerAdapter.GroupMemberViewHolder>(),
-    Filterable {
+        Filterable {
 
     private var isUserGroupManager: Boolean = false
     private var originalContactsList: List<ContactModel> = emptyList()
@@ -31,7 +31,7 @@ class GroupMembersRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMemberViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_item_group_member_2, parent, false)
+                .inflate(R.layout.recycler_item_group_member_2, parent, false)
         return GroupMemberViewHolder(view)
     }
 
@@ -49,9 +49,9 @@ class GroupMembersRecyclerAdapter(
 
     fun setData(contacts: List<ContactModel>) {
 //        if (originalContactsList.isEmpty()) {
-            this.originalContactsList = contacts
-            this.filteredContactsList = contacts
-            notifyDataSetChanged()
+        this.originalContactsList = contacts
+        this.filteredContactsList = contacts
+        notifyDataSetChanged()
 //        } else {
 //            val result = DiffUtil.calculateDiff(
 //                ContactsDiffUtilCallback(
@@ -78,9 +78,9 @@ class GroupMembersRecyclerAdapter(
                 val filteredList: MutableList<ContactModel> = mutableListOf()
                 for (contact in originalContactsList) {
                     if (contact.name?.contains(
-                            charString,
-                            true
-                        ) == true || contact.mobile.contains(charString, true)
+                                    charString,
+                                    true
+                            ) == true || contact.mobile.contains(charString, true)
                     )
                         filteredList.add(contact)
                 }
@@ -100,9 +100,9 @@ class GroupMembersRecyclerAdapter(
 
 
     inner class GroupMemberViewHolder(
-        itemView: View
+            itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-        View.OnLongClickListener, View.OnClickListener {
+            View.OnLongClickListener, View.OnClickListener {
 
         private var contactAvatarIV: GigforceImageView = itemView.findViewById(R.id.user_image_iv)
         private var contactNameTV: TextView = itemView.findViewById(R.id.user_name_tv)
@@ -118,13 +118,16 @@ class GroupMembersRecyclerAdapter(
 
         fun bindValues(contact: ContactModel) {
 
-            val mobileText = if(contact.mobile.startsWith("+91"))
+            val mobileText = if (contact.mobile.startsWith("+91"))
                 contact.mobile
-            else
+            else if (contact.mobile.length == 10) {
+                "+91${contact.mobile}"
+            } else {
                 "+${contact.mobile}"
+            }
             val mobileWith91 = mobileText.substring(0, 3) + "-" + mobileText.substring(3)
 
-            if(contact.name.isNullOrBlank()){
+            if (contact.name.isNullOrBlank()) {
                 contactNameTV.text = mobileWith91
                 uidTV.text = ""
             } else {
@@ -136,10 +139,10 @@ class GroupMembersRecyclerAdapter(
 
             isUserManagerView.isVisible = contact.isUserGroupManager
             val isUserTheCurrentUser = contact.uid == currentUserUid
-            if(isUserTheCurrentUser){
+            if (isUserTheCurrentUser) {
                 chatOverlay.gone()
                 chatIcon.gone()
-            } else{
+            } else {
                 chatOverlay.visible()
                 chatIcon.visible()
             }
@@ -184,9 +187,9 @@ class GroupMembersRecyclerAdapter(
                 val contact = filteredContactsList[adapterPosition]
                 if (contact.uid != currentUserUid) {
                     onContactClickListener.onGroupMemberItemLongPressed(
-                        v!!,
-                        adapterPosition,
-                        contact
+                            v!!,
+                            adapterPosition,
+                            contact
                     )
                 }
             }
@@ -198,8 +201,8 @@ class GroupMembersRecyclerAdapter(
 
             if (contact.uid != currentUserUid) {
                 onContactClickListener.onChatIconClicked(
-                    adapterPosition,
-                    contact
+                        adapterPosition,
+                        contact
                 )
             }
         }

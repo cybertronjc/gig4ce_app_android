@@ -75,6 +75,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+import com.jaeger.library.StatusBarUtil
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 
 import java.util.*
@@ -381,15 +382,6 @@ class LandingScreenFragment : BaseFragment() {
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
-
-            ambassador_layout.visible()
-            if (profile.isUserAmbassador) {
-                join_as_amb_label.text = getString(R.string.ambassador_program)
-                amb_join_open_btn.text = getString(R.string.open)
-            } else {
-                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
-                amb_join_open_btn.text = getString(R.string.join_now)
-            }
         })
 
         verificationViewModel
@@ -796,14 +788,14 @@ class LandingScreenFragment : BaseFragment() {
         }
         amb_join_open_btn.setOnClickListener {
 
-            if (profile == null)
-                return@setOnClickListener
-
-            if (profile!!.isUserAmbassador) {
+//            if (profile == null)
+//                return@setOnClickListener
+//
+//            if (profile!!.isUserAmbassador) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
-            } else {
-                navigate(R.id.ambassadorProgramDetailsFragment)
-            }
+//            } else {
+//                navigate(R.id.ambassadorProgramDetailsFragment)
+//            }
         }
     }
 
@@ -822,6 +814,15 @@ class LandingScreenFragment : BaseFragment() {
 
 
         learningViewModel.getRoleBasedCourses()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        ))
     }
 
     private fun showLearningAsLoading() {

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#e42c64"
-        android:minHeight="72dp">
+        android:minHeight="56dp">
 
         <ImageView
             android:id="@+id/back_arrow"

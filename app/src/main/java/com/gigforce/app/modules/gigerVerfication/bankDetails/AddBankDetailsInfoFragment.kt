@@ -89,11 +89,16 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         passbookImageHolder.documentUploadSubLabelTV.text =
                 getString(R.string.upload_bank_passbook_sublabel)
 
-        iv_back_add_bank_details_info.setOnClickListener {
-            if (didUserCameFromAmbassadorScreen) {
-                onBackPressed()
-            } else {
-                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener{
+
+                if (didUserCameFromAmbassadorScreen) {
+                    onBackPressed()
+                } else {
+                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+                }
             }
         }
 
