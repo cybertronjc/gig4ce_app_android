@@ -3,11 +3,13 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.DisplayUtil
@@ -74,6 +76,8 @@ abstract class TextMessageView(
             senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = msg.senderInfo.name
             msgView.setText(msg.content)
+            LinkifyCompat.addLinks(msgView,Linkify.ALL)
+
             timeView.setText(msg.timestamp?.toDisplayText())
             setReceivedStatus(msg)
         }

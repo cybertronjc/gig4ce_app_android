@@ -51,7 +51,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
 
                                             val gigStatus = GigStatus.fromGig(it)
 
-                                            if (gigStatus != GigStatus.DECLINED)
+                                            if (gigStatus != GigStatus.DECLINED &&  gigStatus != GigStatus.CANCELLED)
                                                 arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it))
                                         }
                             }
