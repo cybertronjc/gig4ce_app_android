@@ -291,7 +291,6 @@
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:focusable="true"
-
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="3sp"
                     android:textColor="#333333"
@@ -308,6 +307,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:paddingStart="8dp"
                         android:background="@drawable/spinner_background_rectangle_round_grey"
                         android:layout_height="36dp"
                         />
@@ -339,6 +339,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="36dp"
+                        android:paddingStart="8dp"
                         android:background="@drawable/spinner_background_rectangle_round_grey"
                         />
 
