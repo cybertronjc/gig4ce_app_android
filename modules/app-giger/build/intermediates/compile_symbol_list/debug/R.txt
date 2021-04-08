@@ -1949,6 +1949,7 @@ int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
 int drawable test_custom_background 0x0
+int drawable toolbar_background 0x0
 int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
@@ -3335,6 +3336,7 @@ int style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year 0x0
 int style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox 0x0
 int style ShapeAppearanceOverlay_TopLeftCut 0x0
 int style ShapeAppearanceOverlay_TopRightDifferentCornerSize 0x0
+int style ShapeAppearanceOverlay_toolbar_card_custom_corners 0x0
 int style ShapeAppearance_MaterialComponents 0x0
 int style ShapeAppearance_MaterialComponents_LargeComponent 0x0
 int style ShapeAppearance_MaterialComponents_MediumComponent 0x0
@@ -3598,6 +3600,7 @@ int style Theme_MaterialComponents_Light_NoActionBar_Bridge 0x0
 int style Theme_MaterialComponents_NoActionBar 0x0
 int style Theme_MaterialComponents_NoActionBar_Bridge 0x0
 int style Theme_RadioButtonLipstickPink 0x0
+int style ToolbarCustomCardViewStyle 0x0
 int style VideoInfoCardTitle 0x0
 int style VideoInfoItemCardTitle 0x0
 int style VideoInfoItemTimeCardTitle 0x0

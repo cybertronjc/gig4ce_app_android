@@ -157,7 +157,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
 
 
         learningBackButton.setOnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -682,7 +682,7 @@ class LearningCourseDetailsFragment : BaseFragment() {
             popBackState()
             return true
         }
-        return super.onBackPressed()
+        return false
     }
 
 
