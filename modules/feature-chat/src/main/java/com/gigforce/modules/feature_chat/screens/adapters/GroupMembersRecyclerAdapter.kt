@@ -125,7 +125,7 @@ class GroupMembersRecyclerAdapter(
             } else {
                 "+${contact.mobile}"
             }
-            val mobileWith91 = mobileText.substring(0, 3) + "-" + mobileText.substring(3)
+            val mobileWith91 = if(mobileText.length > 5) mobileText.substring(0, 3) + "-" + mobileText.substring(3) else ""
 
             if (contact.name.isNullOrBlank()) {
                 contactNameTV.text = mobileWith91
