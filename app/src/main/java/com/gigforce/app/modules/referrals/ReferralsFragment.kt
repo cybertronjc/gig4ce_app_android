@@ -1,8 +1,10 @@
 package com.gigforce.app.modules.referrals
 
+import android.app.Activity
 import android.content.*
 import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -37,7 +40,7 @@ import java.io.FileOutputStream
 
 
 class ReferralsFragment : BaseFragment(),
-    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener {
+    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener,LocationUpdates.LocationUpdateCallbacks {
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(ReferralFragmentViewModel(ModelReferralFragmentViewModel()))
@@ -46,6 +49,10 @@ class ReferralsFragment : BaseFragment(),
         ViewModelProvider(this, viewModelFactory).get(ReferralFragmentViewModel::class.java)
     }
 
+    private val locationUpdates: LocationUpdates by lazy {
+        LocationUpdates()
+    }
+    private var location: Location? = null
     private var referralLink: String? = null
     private var referralLinkWithText: String? = null
 
@@ -111,7 +118,7 @@ class ReferralsFragment : BaseFragment(),
                             pb_referrals_frag.visible()
                             Firebase.dynamicLinks.shortLinkAsync {
                                 longLink =
-                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id)).toString())
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?invite=" + profileData?.id+"&is_ambassador=true&latitude=${location?.latitude ?: 0.0}&longitude=${location?.longitude ?: 0.0}")).toString())
                             }.addOnSuccessListener { result ->
                                 // Short link created
                                 if (context == null) return@addOnSuccessListener
@@ -381,5 +388,53 @@ class ReferralsFragment : BaseFragment(),
 
     override fun linkSent() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
+        locationUpdates.setLocationUpdateCallbacks(this)
+    }
+    override fun onPause() {
+        super.onPause()
+        try {
+            locationUpdates.stopLocationUpdates()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+
+            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (PermissionUtils.permissionsGrantedCheck(
+                    grantResults
+                )
+            ) {
+                locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+
+            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
+                requireActivity() as AppCompatActivity
+            )
+
+        }
+    }
+
+    override fun locationReceiver(location: Location?) {
+    }
+
+    override fun lastLocationReceiver(location: Location?) {
+        this.location = location
     }
 }
