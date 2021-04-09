@@ -202,11 +202,16 @@ class HourViewFragment : RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
         val handler = Handler() { msg ->
-            val datetime = LocalDateTime.now()
-            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-            current_time_divider.requestLayout()
+            try {
+                val datetime = LocalDateTime.now()
+                val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+                val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+                current_time_divider.requestLayout()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             true
         }
         timer.scheduleAtFixedRate(object : TimerTask() {
