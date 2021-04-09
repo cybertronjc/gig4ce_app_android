@@ -266,25 +266,24 @@ class GigPage2Fragment : BaseFragment(),
             checkInTimeAccToUser: Timestamp? = null
     ) {
 
-        if (location == null) {
-            showAlertDialog("No Location Found")
-            return
-        }
-
         if (imageClickedPath == null) {
             showAlertDialog("Image has not been captured")
             return
         }
 
-        val locationPhysicalAddress = LocationUtils.getPhysicalAddressFromLocation(
-                context = requireContext(),
-                latitude = location!!.latitude,
-                longitude = location!!.longitude
-        )
+        val locationPhysicalAddress = if(location != null) {
+            LocationUtils.getPhysicalAddressFromLocation(
+                    context = requireContext(),
+                    latitude = location!!.latitude,
+                    longitude = location!!.longitude
+            )
+        } else {
+            ""
+        }
 
         viewModel.markAttendance(
-                latitude = location!!.latitude,
-                longitude = location!!.longitude,
+                latitude = location?.latitude ?: 0.0,
+                longitude = location?.longitude ?: 0.0,
                 locationPhysicalAddress = locationPhysicalAddress,
                 image = imageClickedPath!!,
                 checkInTimeAccToUser = checkInTimeAccToUser,

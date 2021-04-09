@@ -470,6 +470,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
                                         (AppConstants.CONTACT_NAME as String)
                                     )
+                                    bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,ChatConstants.CHAT_TYPE_USER)
 
                                     bundle.putString(
                                         ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,

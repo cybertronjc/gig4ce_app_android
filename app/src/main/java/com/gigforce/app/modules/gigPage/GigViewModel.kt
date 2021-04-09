@@ -557,9 +557,9 @@ class GigViewModel constructor(
                     val tomorrow = date.plusDays(1)
 
                     if (querySnapshot != null) {
-                        val todaysUpcomingGigs = extractGigs(querySnapshot)/*.filter {
+                        val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
                             it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
-                        }*/
+                        }
                         _todaysGigs.value = Lce.content(todaysUpcomingGigs)
                     } else {
                         _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
@@ -580,9 +580,9 @@ class GigViewModel constructor(
                     .getOrThrow()
 
             val tomorrow = date.plusDays(1)
-            val todaysUpcomingGigs = extractGigs(querySnapshot)/*.filter {
+            val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
                 it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
-            }*/
+            }
             _todaysGigs.value = Lce.content(todaysUpcomingGigs)
             _todaysGigs.value = null
         } catch (e: Exception) {

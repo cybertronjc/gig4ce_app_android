@@ -21,6 +21,7 @@ import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.GFMappedUser
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_docs_sub_scheduler.*
@@ -96,6 +97,7 @@ class DocsSubSchedulerFragment : BaseFragment() {
 
                 bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE, it.profileAvatarName)
                 bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME, it.name)
+                bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,ChatConstants.CHAT_TYPE_USER)
 
                 bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
                 bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID, it.id)
