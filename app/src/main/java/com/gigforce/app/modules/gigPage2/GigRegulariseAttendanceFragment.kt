@@ -12,8 +12,8 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

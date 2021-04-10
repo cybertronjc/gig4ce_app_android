@@ -26,8 +26,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.*
-import com.gigforce.app.modules.gigPage.models.ContactPerson
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.ContactPerson
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
@@ -35,9 +35,11 @@ import com.gigforce.app.modules.gigPage2.adapters.OtherOptionsAdapter
 import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.PermissionRequiredBottomSheet
+import com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment
 import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.OtherOption
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -529,7 +531,7 @@ class GigPage2Fragment : BaseFragment(),
             ID_IDENTITY_CARD -> {
                 navigate(R.id.giger_id_fragment, Bundle().apply {
                     this.putString(
-                            GigPageFragment.INTENT_EXTRA_GIG_ID,
+                            INTENT_EXTRA_GIG_ID,
                             viewModel.currentGig?.gigId
                     )
                 })
@@ -567,7 +569,7 @@ class GigPage2Fragment : BaseFragment(),
 
         return when (item.itemId) {
             R.id.action_help -> {
-                navigate(R.id.contactScreenFragment)
+               // navigate(R.id.contactScreenFragment)
                 true
             }
             R.id.action_feedback -> {
@@ -650,7 +652,7 @@ class GigPage2Fragment : BaseFragment(),
         val intent = Intent(context, ImageCaptureActivity::class.java)
         startActivityForResult(
                 intent,
-                GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
         )
     }
 
@@ -659,7 +661,7 @@ class GigPage2Fragment : BaseFragment(),
         checkInCheckOutSliderBtn?.resetSlider()
 
         when (requestCode) {
-            GigAttendancePageFragment.REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {
+            REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     imageClickedPath = data?.getStringExtra("image_name")
                     checkForLateOrEarlyCheckIn()

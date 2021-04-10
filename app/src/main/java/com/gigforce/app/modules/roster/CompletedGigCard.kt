@@ -1,15 +1,10 @@
 package com.gigforce.app.modules.roster
 
 import android.content.Context
-import android.os.Bundle
-import android.util.AttributeSet
 import android.view.View
 import androidx.navigation.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigPageFragment
+import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
 import kotlinx.android.synthetic.main.completed_gig_card.view.gig_timing

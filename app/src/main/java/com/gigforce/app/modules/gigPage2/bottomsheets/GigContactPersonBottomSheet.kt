@@ -13,7 +13,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.models.ContactPerson
+import com.gigforce.app.modules.gigPage2.models.ContactPerson
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.Lce
 import com.gigforce.modules.feature_chat.core.ChatConstants

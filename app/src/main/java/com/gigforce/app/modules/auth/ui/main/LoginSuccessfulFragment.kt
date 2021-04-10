@@ -13,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,12 +25,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
 
@@ -123,7 +119,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ), GigPageFragment.PERMISSION_FINE_LOCATION
+                ), PERMISSION_FINE_LOCATION
             )
         }
     }
@@ -267,7 +263,7 @@ class LoginSuccessfulFragment : BaseFragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            GigPageFragment.PERMISSION_FINE_LOCATION -> {
+            PERMISSION_FINE_LOCATION -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
@@ -281,5 +277,6 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     companion object{
         const val REQUEST_CODE_TOGGLE_GPS_MANUAL = 121
+        const val PERMISSION_FINE_LOCATION = 233
     }
 }

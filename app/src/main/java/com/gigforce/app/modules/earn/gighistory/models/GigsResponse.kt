@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.earn.gighistory.models
 
 import com.gigforce.app.core.base.models.BaseResponse
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 
 
 data class GigsResponse(

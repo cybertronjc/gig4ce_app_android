@@ -19,9 +19,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
-import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import java.time.LocalDateTime
@@ -306,7 +306,7 @@ class HourViewFragment : RosterBaseFragment() {
 
                     currentCard.setOnClickListener {
                         GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
-                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }
 

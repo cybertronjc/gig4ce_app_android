@@ -1,6 +1,5 @@
 package com.gigforce.app.utils.network
 
-import com.gigforce.app.modules.chatmodule.remote.SyncContactsService
 import com.gigforce.app.modules.verification.AppConstants
 import com.gigforce.app.modules.wallet.remote.GeneratePaySlipService
 import com.google.gson.GsonBuilder
@@ -55,11 +54,4 @@ object RetrofitFactory {
         .client(client)
         .build()
         .create(GeneratePaySlipService::class.java)
-
-    fun generateSyncContactsService() = Retrofit.Builder()
-        .baseUrl(AppConstants.IDFY_BASE_URL)
-        .addConverterFactory(gsonConverter)
-        .client(client)
-        .build()
-        .create(SyncContactsService::class.java)
 }
