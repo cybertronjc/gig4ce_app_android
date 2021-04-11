@@ -39,11 +39,10 @@ import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
 import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
@@ -53,7 +52,6 @@ import com.gigforce.app.modules.learning.MainLearningViewModel
 import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.learning.models.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -470,6 +468,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
                                         (AppConstants.CONTACT_NAME as String)
                                     )
+                                    bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,ChatConstants.CHAT_TYPE_USER)
 
                                     bundle.putString(
                                         ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,
@@ -690,7 +689,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            navigate(R.id.fakeGigContactScreenFragment)
+           // navigate(R.id.fakeGigContactScreenFragment)
         }
     }
 
@@ -1008,7 +1007,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
 
         contact_us_bs_calendar_screen.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+           // navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact_bs_calendar_screen.setOnClickListener {

@@ -118,8 +118,8 @@ class LoginViewModel() : ViewModel() {
         if (currentUser != null) {
 
             FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-                val token = it.result?.token
                 if (it.isSuccessful) {
+                    val token = it.result?.token
                     registerTokenOnServer(currentUser.uid, token!!)
                 } else {
                     liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))

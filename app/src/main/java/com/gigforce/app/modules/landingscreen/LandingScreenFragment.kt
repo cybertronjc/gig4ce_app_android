@@ -35,7 +35,6 @@ import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -75,6 +74,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.jaeger.library.StatusBarUtil
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 
@@ -758,7 +758,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         contact_us.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+          //  navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {

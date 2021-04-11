@@ -13,10 +13,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.app.modules.gigPage.models.ContactPerson
+import com.gigforce.app.modules.gigPage2.models.ContactPerson
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.utils.Lce
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -191,9 +191,10 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
 
     private fun startChatScreen(id: String) {
         findNavController().navigate(R.id.chatPageFragment, bundleOf(
+                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
                 ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
-            ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to id,
-            ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to id,
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
         ))
     }
 
