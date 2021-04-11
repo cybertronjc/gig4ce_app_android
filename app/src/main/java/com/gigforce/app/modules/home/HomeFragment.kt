@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
-import com.gigforce.app.modules.chat.ChatsHomeFragment
 import com.gigforce.app.modules.calendarscreen.HomeScreenFragment
 import com.gigforce.app.core.popAllBackStates
 
@@ -88,13 +87,13 @@ class HomeFragment: Fragment(), View.OnClickListener {
 
         override fun getItemCount(): Int = 2
 
-        var fragment_chats:ChatsHomeFragment? = null
         var fragment_homeScreen: HomeScreenFragment? = null
 
         override fun createFragment(position: Int): Fragment {
             if(position == 0) {
-                fragment_chats ?: let { fragment_chats = ChatsHomeFragment() }
-                return fragment_chats!!
+//                fragment_chats ?: let { fragment_chats = ChatsHomeFragment() }
+//                return fragment_chats!!
+                TODO()
             }else{
                 fragment_homeScreen ?: let { fragment_homeScreen =
                     HomeScreenFragment()
