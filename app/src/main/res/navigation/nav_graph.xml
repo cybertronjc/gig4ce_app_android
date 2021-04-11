@@ -132,15 +132,6 @@
             android:id="@+id/action_profileFragment_to_editCoverBottomSheet"
             app:destination="@id/editCoverBottomSheet" />
     </fragment>
-    <fragment
-        android:id="@+id/chatsHomeFragment"
-        android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
-        android:label="chats_home_fragment"
-        tools:layout="@layout/fragment_chats_home">
-        <action
-            android:id="@+id/action_chatsHomeFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/landinghomefragment"

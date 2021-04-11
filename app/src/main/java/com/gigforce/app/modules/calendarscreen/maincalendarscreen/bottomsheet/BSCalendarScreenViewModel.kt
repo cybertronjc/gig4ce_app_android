@@ -2,7 +2,6 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.chat.ChatFragment
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.StringConstants
