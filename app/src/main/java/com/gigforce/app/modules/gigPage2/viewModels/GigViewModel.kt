@@ -135,8 +135,10 @@ class GigViewModel constructor(
                     remarks = remarks
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
+            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
+            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -163,8 +165,10 @@ class GigViewModel constructor(
                     remarks = remarks
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_OUT))
+            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
+            _markingAttendanceState.postValue(null)
         }
     }
 

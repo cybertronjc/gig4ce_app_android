@@ -313,6 +313,7 @@ class GigPage2Fragment : BaseFragment(),
 
         viewModel.markingAttendanceState
                 .observe(viewLifecycleOwner, Observer {
+                    it ?: return@Observer
 
                     when (it) {
                         Lce.Loading -> {
