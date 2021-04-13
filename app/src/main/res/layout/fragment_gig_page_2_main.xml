@@ -5,29 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.ncorti.slidetoact.SlideToActView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/checkInCheckOutSliderBtn"
         android:layout_width="match_parent"
         android:layout_height="69dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:elevation="5dp"
-        app:border_radius="8dp"
-        app:inner_color="@color/lipstick"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:outer_color="@color/light_pink"
-        app:slider_height="60dp"
-        app:slider_icon="@drawable/ic_arrow_forward_white"
-        app:slider_icon_color="@color/white"
-        app:text="Check - in"
-        app:text_size="16sp"
-        app:text_style="bold" />
+        android:fontFamily="@font/lato"
+        android:text="Check - in"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,9 +46,9 @@
                     android:id="@+id/gig_page_timer_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp" />
 
 
                 <View
@@ -67,22 +64,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:visibility="gone"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone" />
 
                 <View
                     android:id="@+id/divider_below_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="12dp"
-                    android:visibility="gone"
-                    android:background="#f5f7ff" />
+                    android:background="#f5f7ff"
+                    android:visibility="gone" />
 
                 <include
                     android:id="@+id/gig_type_layout"
+                    layout="@layout/fragment_gig_page_2_gig_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    layout="@layout/fragment_gig_page_2_gig_type" />
+                    android:layout_marginTop="16dp" />
 
                 <View
                     android:id="@+id/divider_below_gig_type"
@@ -92,14 +89,13 @@
                     android:layout_marginBottom="16dp"
                     android:background="#e4e4e4" />
 
-                <include
-                    layout="@layout/fragment_gig_page_2_address" />
+                <include layout="@layout/fragment_gig_page_2_address" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="12dp"
-                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="#f5f7ff" />
 
 
@@ -111,8 +107,8 @@
                     android:id="@+id/divider_below_people_to_expect"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="#e4e4e4" />
 
 

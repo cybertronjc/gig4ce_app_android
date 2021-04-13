@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -128,12 +129,11 @@ class PayslipMonthlyFragment : BaseFragment() {
     }
 
     private fun showPayslipsOnView(content: List<Payslip>) {
+        payslip_label.isVisible = content.isNotEmpty()
 
         payslip_monthly_details_error.gone()
         payslip_monthly_progress_bar.gone()
         payslip_monthly_main_layout.visible()
-
-
 
         mAdapter.updateCourseContent(content)
     }

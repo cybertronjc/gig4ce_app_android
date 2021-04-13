@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -34,6 +35,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_referrals.*
 import java.io.File
 import java.io.FileOutputStream
@@ -76,6 +78,7 @@ class ReferralsFragment : BaseFragment(),
             referralLinkWithText = it.getString(INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT) ?: return@let
         }
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
         initUI();
         initObservers();
         initClicks();
@@ -270,6 +273,10 @@ class ReferralsFragment : BaseFragment(),
         params.addRule(RelativeLayout.END_OF, R.id.iv_two_referrals_frag)
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.iv_two_referrals_frag)
         tv_more_items_referrals_frag.layoutParams = params
+
+        rv_successful_recommendation_referrals_frag.setOnClickListener {
+            navigate(R.id.ambassadorEnrolledUsersListFragment)
+        }
     }
 
     fun buildDeepLink(deepLink: Uri): Uri {
