@@ -232,7 +232,7 @@ class MultiviewsAdapter(
             )
         } else if (viewType == TimingVT) {
             return TimingVH(
-                LayoutInflater.from(context).inflate(R.layout.time_preference_item, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.onboarding_job_preference_item, parent, false)
             )
         } else { //(viewType == InterestVT)
             return InterestVH(
