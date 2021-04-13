@@ -54,7 +54,6 @@ class ExperienceFragment : Fragment() {
 
     private fun resetAll() {
         resetSelected(icon, option, imageTextCardMol)
-        resetSelected(icon1,option1, imageTextCardMol4)
         resetSelected(icon2, option2, imageTextCardMol3)
 
     }

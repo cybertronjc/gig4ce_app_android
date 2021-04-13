@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.fragments.agegroup.AgeGroupFragment
 import kotlinx.android.synthetic.main.name_gender_item.*
 
 
@@ -18,7 +19,9 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * create an instance of this fragment.
  */
 class NameGenderFragment : Fragment() {
-
+    companion object {
+        fun newInstance() = NameGenderFragment()
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,

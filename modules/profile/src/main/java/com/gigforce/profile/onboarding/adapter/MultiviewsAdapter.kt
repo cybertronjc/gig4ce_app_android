@@ -223,16 +223,16 @@ class MultiviewsAdapter(
         } else if (viewType == CurrentlyWorkingVT) {
             return CurrentlyWorkingVH(
                 LayoutInflater.from(context)
-                    .inflate(R.layout.onboarding_job_preference_item, parent, false)
+                    .inflate(R.layout.experience_item, parent, false)
             )
         } else if (viewType == WorkingDaysVT) {
             return WorkingDaysVH(
                 LayoutInflater.from(context)
-                    .inflate(R.layout.onboarding_job_preference_item, parent, false)
+                    .inflate(R.layout.experience_item, parent, false)
             )
         } else if (viewType == TimingVT) {
             return TimingVH(
-                LayoutInflater.from(context).inflate(R.layout.onboarding_job_preference_item, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.experience_item, parent, false)
             )
         } else { //(viewType == InterestVT)
             return InterestVH(
