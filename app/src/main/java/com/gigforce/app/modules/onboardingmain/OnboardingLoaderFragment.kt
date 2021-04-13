@@ -46,7 +46,8 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     private fun navigateToLandingHomeScreen() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
-        navigate(R.id.landinghomefragment)
+        navigate(R.id.onboardingNew)
+//        navigate(R.id.landinghomefragment)
     }
 
     private fun navigateToMainOnboarding() {

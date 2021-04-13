@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:fontFamily="@font/lato"
-        android:text="What’s your age group?"
+        android:text="Set Your preferences"
         android:textColor="#333333"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -18,107 +18,126 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/work_days"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/size16"
+        android:background="#f4faff"
+        android:fontFamily="@font/lato"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/size16"
+        android:text="Work Days"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        app:layout_constraintTop_toBottomOf="@+id/work_days">
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="14-18 Years"
+            android:text="Monday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="14-18 Years"
+            android:text="Tuesday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="19-23 years"
+            android:text="Wednesday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="24-28 years"
+            android:text="Thursday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="29-33 years"
+            android:text="Friday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="34-38 years"
+            android:text="Saturday"
             android:textColor="#333333"
             android:textSize="16sp"
-            android:textStyle="normal"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+
+            android:textStyle="normal" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_border"
             android:buttonTint="#d5d5d5"
             android:fontFamily="@font/lato"
-            android:text="Above 38 years"
+            android:text="Sunday"
             android:textColor="#333333"
             android:textSize="16sp"
-            style="@style/Theme.RadioButtonLipstickPink"/>
+            />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

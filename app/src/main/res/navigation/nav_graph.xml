@@ -57,6 +57,13 @@
         android:id="@+id/onboardingfragment"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingMainFragment"
         tools:layout="@layout/onboarding_main_fragment" />
+
+    <fragment
+        android:id="@+id/onboardingNew"
+        android:name="com.gigforce.profile.onboarding.OnboardingFragmentNew"
+        tools:layout="@layout/onboarding_fragment_new_fragment" />
+
+
     <fragment
         android:id="@+id/onboardingLoaderfragment"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
