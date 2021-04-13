@@ -1681,8 +1681,11 @@ dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
 dimen paddingSmall
+dimen size128
 dimen size16
+dimen size32
 dimen size4
+dimen size64
 dimen size8
 dimen slidetoact_default_area_margin
 dimen slidetoact_default_icon_margin

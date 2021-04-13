@@ -1680,8 +1680,11 @@ int dimen notification_subtext_size 0x0
 int dimen notification_top_pad 0x0
 int dimen notification_top_pad_large_text 0x0
 int dimen paddingSmall 0x0
+int dimen size128 0x0
 int dimen size16 0x0
+int dimen size32 0x0
 int dimen size4 0x0
+int dimen size64 0x0
 int dimen size8 0x0
 int dimen slidetoact_default_area_margin 0x0
 int dimen slidetoact_default_icon_margin 0x0

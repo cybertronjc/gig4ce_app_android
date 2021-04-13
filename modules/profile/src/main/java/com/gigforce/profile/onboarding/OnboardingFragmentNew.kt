@@ -67,4 +67,10 @@ class OnboardingFragmentNew : Fragment() {
 
 
 
+
+
+
+    //--------------
+
+
 }
