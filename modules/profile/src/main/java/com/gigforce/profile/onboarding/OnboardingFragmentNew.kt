@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MultiviewsAdapter
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
@@ -22,6 +25,7 @@ import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
+import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
 
 
 class OnboardingFragmentNew : Fragment() {
@@ -43,6 +47,21 @@ class OnboardingFragmentNew : Fragment() {
     var adapter: MultiviewsAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpViewForOnboarding()
+
+        Glide.with(requireContext()).load(R.drawable.gif_hello).into(hi_there_image)
+        onboarding_get_started_btn.setOnClickListener {
+
+            onboarding_greeting_layout.gone()
+            setUpViewForOnboarding()
+        }
+
+    }
+
+    private fun setUpViewForOnboarding() {
+        onboarding_root_layout.visible()
+        next.visible()
+
         viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)
         disableViewPagerScroll()
         onboarding_pager.offscreenPageLimit = 3
@@ -56,7 +75,7 @@ class OnboardingFragmentNew : Fragment() {
 
         }
 
-        onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -74,8 +93,6 @@ class OnboardingFragmentNew : Fragment() {
             steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
 
         })
-
-
     }
 
     private fun disableViewPagerScroll() {
