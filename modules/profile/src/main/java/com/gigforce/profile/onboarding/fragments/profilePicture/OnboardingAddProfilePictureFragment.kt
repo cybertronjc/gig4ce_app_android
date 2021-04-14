@@ -18,6 +18,7 @@ import com.gigforce.common_image_picker.CameraAndGalleryIntegrator
 import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.core.FragmentHelper
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
@@ -36,6 +37,7 @@ import java.util.*
 
 class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
 
+    private var viewShownFirstTime = false
     private val viewModel: OnboardingViewModel by viewModels()
 
     private val firebaseStorage: FirebaseStorage by lazy {
@@ -53,17 +55,17 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
             val imageFile = File(requireContext().filesDir, newFileName)
 
             return ImageCropOptions
-                .Builder()
-                .shouldOpenImageCrop(true)
-                .setShouldEnableFaceDetector(true)
-                .setOutputFileUri(imageFile.toUri())
-                .build()
+                    .Builder()
+                    .shouldOpenImageCrop(true)
+                    .setShouldEnableFaceDetector(true)
+                    .setOutputFileUri(imageFile.toUri())
+                    .build()
         }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_onboarding_profile_picture, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,10 +77,16 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
     }
 
     private fun getProfilePictureForUser() {
-        checkForPermissionElseShowCameraGalleryBottomSheet()
         viewModel.getProfileForUser()
     }
 
+    fun showCameraSheetIfNotShown(){
+
+        if (!viewShownFirstTime) {
+            checkForPermissionElseShowCameraGalleryBottomSheet()
+            viewShownFirstTime = true
+        }
+    }
 
     private fun initListeners() {
 
@@ -107,128 +115,128 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Okay".capitalize()) { _, _ -> }
-            .show()
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Okay".capitalize()) { _, _ -> }
+                .show()
     }
 
     private fun initViewModel() {
         viewModel.profile
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                when (it) {
-                    Lce.Loading -> {
-                        imageView13.gone()
-                        shimmerFrameLayout.visible()
-                        shimmerFrameLayout.startShimmer()
-                    }
-                    is Lce.Content -> {
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    when (it) {
+                        Lce.Loading -> {
+                            imageView13.gone()
+                            shimmerFrameLayout.visible()
+                            shimmerFrameLayout.startShimmer()
+                        }
+                        is Lce.Content -> {
 
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.gone()
-                        imageView13.visible()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
 
-                        if (it.content.hasUserUploadedProfilePicture()) {
-                            displayImage(it.content.profileAvatarName)
-                            editLayout.visible()
-                        } else {
-                            //skipButton.gone()
-                            editLayout.gone()
+                            if (it.content.hasUserUploadedProfilePicture()) {
+                                displayImage(it.content.profileAvatarName)
+                                editLayout.visible()
+                            } else {
+                                //skipButton.gone()
+                                editLayout.gone()
+                            }
+                        }
+                        is Lce.Error -> {
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
+                            Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                         }
                     }
-                    is Lce.Error -> {
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.gone()
-                        imageView13.visible()
-
-                        Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
+                })
 
         viewModel.submitUserDetailsState
-            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                it ?: return@Observer
+                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    it ?: return@Observer
 
-                when (it) {
-                    Lse.Loading -> {
+                    when (it) {
+                        Lse.Loading -> {
 
-                        imageView13.gone()
-                        shimmerFrameLayout.visible()
-                        shimmerFrameLayout.startShimmer()
+                            imageView13.gone()
+                            shimmerFrameLayout.visible()
+                            shimmerFrameLayout.startShimmer()
+                        }
+                        Lse.Success -> {
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
+                            viewModel.getProfileForUser()
+
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Profile Pic uploaded",
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        is Lse.Error -> {
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
+                            showAlertDialog("could not submit info", it.error)
+                        }
                     }
-                    Lse.Success -> {
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.gone()
-                        imageView13.visible()
-
-                        viewModel.getProfileForUser()
-
-                        Toast.makeText(
-                            requireContext(),
-                            "Profile Pic uploaded",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    is Lse.Error -> {
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.gone()
-                        imageView13.visible()
-
-                        showAlertDialog("could not submit info", it.error)
-                    }
-                }
-            })
+                })
     }
 
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
 
             val profilePicRef: StorageReference = firebaseStorage
-                .reference
-                .child("profile_pics")
-                .child(profileImg)
+                    .reference
+                    .child("profile_pics")
+                    .child(profileImg)
 
             GlideApp.with(this.requireContext())
-                .load(profilePicRef)
-                .placeholder(ShimmerHelper.getShimmerDrawable())
-                .into(imageView13)
+                    .load(profilePicRef)
+                    .placeholder(ShimmerHelper.getShimmerDrawable())
+                    .into(imageView13)
         } else {
             GlideApp.with(this.requireContext())
-                .load(R.drawable.ic_profile_avatar_pink)
-                .into(imageView13)
+                    .load(R.drawable.ic_profile_avatar_pink)
+                    .into(imageView13)
         }
     }
 
 
     private fun hasStoragePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
+                requireContext(),
+                Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
 
         requestPermissions(
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            REQUEST_STORAGE_PERMISSION
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                ),
+                REQUEST_STORAGE_PERMISSION
         )
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             REQUEST_STORAGE_PERMISSION -> {
@@ -245,9 +253,9 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
                     cameraAndGalleryIntegrator.showCameraAndGalleryBottomSheet()
                 else {
                     Toast.makeText(
-                        requireContext(),
-                        "Please Grant storage permission",
-                        Toast.LENGTH_SHORT
+                            requireContext(),
+                            "Please Grant storage permission",
+                            Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -265,11 +273,11 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
                 if (resultCode == Activity.RESULT_OK) {
 
                     cameraAndGalleryIntegrator.parseResults(
-                        requestCode,
-                        resultCode,
-                        data,
-                        imageCropOptions,
-                        this@OnboardingAddProfilePictureFragment
+                            requestCode,
+                            resultCode,
+                            data,
+                            imageCropOptions,
+                            this@OnboardingAddProfilePictureFragment
                     )
                 }
             }
@@ -283,10 +291,10 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
 
     override fun errorWhileCapturingOrPickingImage(e: Exception) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alert")
-            .setMessage("Unable to click Photo, ${e.message}")
-            .setPositiveButton("Okay") { _, _ -> }
-            .show()
+                .setTitle("Alert")
+                .setMessage("Unable to click Photo, ${e.message}")
+                .setPositiveButton("Okay") { _, _ -> }
+                .show()
 
         CrashlyticsLogger.e("ProfilePicture", "WhileClickingProfilePicture", e)
     }
@@ -294,6 +302,7 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
     override fun imageResult(uri: Uri) {
         viewModel.uploadProfilePicture(uri)
     }
+
 
 
     companion object {
@@ -306,7 +315,7 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
 
         private const val REQUEST_STORAGE_PERMISSION = 102
 
-        fun newInstance() : OnboardingAddProfilePictureFragment {
+        fun newInstance(): OnboardingAddProfilePictureFragment {
             return OnboardingAddProfilePictureFragment()
         }
     }

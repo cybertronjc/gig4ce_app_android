@@ -6,10 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".onboarding.OnboardingFragmentNew">
 
+    <include
+        android:id="@+id/onboarding_greeting_layout"
+        android:visibility="visible"
+        layout="@layout/onboarding_fragment_new_fragment_greeting_layout"/>
+
     <LinearLayout
+        android:id="@+id/onboarding_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,8 +84,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
-
         android:text="Next"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/size16"/>
 

@@ -1,4 +1,4 @@
-package com.gigforce.profile.adapters
+package com.gigforce.app.modules.language
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,28 +8,24 @@ import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import com.gigforce.profile.R
-import com.gigforce.profile.models.City
+import com.gigforce.app.R
 import com.gigforce.profile.models.CityWithImage
 
-class OnboardingMajorCityAdapter(
-        private val context: Context,
-        private val requestManager: RequestManager
-) : RecyclerView.Adapter<OnboardingMajorCityAdapter.OnboardingMajorCityViewHolder>(),
+class LanguageAdapter(
+        private val context: Context
+) : RecyclerView.Adapter<LanguageAdapter.OnboardingMajorCityViewHolder>(),
         Filterable {
 
-    private var isUserGroupManager: Boolean = false
-
-    private var originalCityList: List<CityWithImage> = emptyList()
-    private var filteredCityList: List<CityWithImage> = emptyList()
+    private var originalLanguageList: List<Language> = emptyList()
+    private var filteredLanguageList: List<Language> = emptyList()
 
     private val contactsFilter = CityFilter()
 
     private var selectedItemIndex: Int = -1
-    private var onCitySelectedListener: OnCitySelectedListener? = null
+    private var onLanguageSelectedListener: LanguageAdapterClickListener? = null
 
-    fun setOnCitySelectedListener(onCitySelectedListener: OnCitySelectedListener) {
-        this.onCitySelectedListener = onCitySelectedListener
+    fun setOnCitySelectedListener(onCitySelectedListener: LanguageAdapterClickListener) {
+        this.onLanguageSelectedListener = onCitySelectedListener
     }
 
     override fun onCreateViewHolder(
@@ -38,7 +34,7 @@ class OnboardingMajorCityAdapter(
     ): OnboardingMajorCityViewHolder {
         val view = LayoutInflater.from(
                 parent.context
-        ).inflate(R.layout.recycler_item_major_city, parent, false)
+        ).inflate(R.layout.recycler_item_language, parent, false)
         return OnboardingMajorCityViewHolder(view)
     }
 
@@ -56,18 +52,18 @@ class OnboardingMajorCityAdapter(
     }
 
     override fun getItemCount(): Int {
-        return filteredCityList.size
+        return filteredLanguageList.size
     }
 
     override fun onBindViewHolder(holder: OnboardingMajorCityViewHolder, position: Int) {
-        holder.bindValues(filteredCityList.get(position), position)
+        holder.bindValues(filteredLanguageList.get(position), position)
     }
 
-    fun setData(contacts: List<CityWithImage>) {
+    fun setData(contacts: List<Language>) {
 
         this.selectedItemIndex = -1
-        this.originalCityList = contacts
-        this.filteredCityList = contacts
+        this.originalLanguageList = contacts
+        this.filteredLanguageList = contacts
         notifyDataSetChanged()
     }
 
@@ -79,27 +75,27 @@ class OnboardingMajorCityAdapter(
             val charString = constraint.toString()
 
             if (charString.isEmpty()) {
-                filteredCityList = originalCityList
+                filteredLanguageList = originalLanguageList
             } else {
-                val filteredList: MutableList<CityWithImage> = mutableListOf()
-                for (contact in originalCityList) {
-                    if (contact.name.contains(
+                val filteredList: MutableList<Language> = mutableListOf()
+                for (contact in originalLanguageList) {
+                    if (contact.languageName.contains(
                                     charString,
                                     true
                             )
                     )
                         filteredList.add(contact)
                 }
-                filteredCityList = filteredList
+                filteredLanguageList = filteredList
             }
 
             val filterResults = FilterResults()
-            filterResults.values = filteredCityList
+            filterResults.values = filteredLanguageList
             return filterResults
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredCityList = results?.values as List<CityWithImage>
+            filteredLanguageList = results?.values as List<Language>
             notifyDataSetChanged()
         }
     }
@@ -110,27 +106,27 @@ class OnboardingMajorCityAdapter(
     ) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
 
-        private var cityNameTv: TextView = itemView.findViewById(R.id.city_name_tv)
-        private var cityImageIV: ImageView = itemView.findViewById(R.id.city_image_iv)
-        private var cityRootLayout: LinearLayout = itemView.findViewById(R.id.city_root_layout)
+        private var languageNameTV: TextView = itemView.findViewById(R.id.language_name_tv)
+        private var languageNameBigTv: TextView = itemView.findViewById(R.id.langugage_text_big)
+        private var languageRootLayout: LinearLayout = itemView.findViewById(R.id.language_root_layout)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(city: CityWithImage, position: Int) {
-            requestManager.load(city.image).into(cityImageIV)
-            cityNameTv.text = city.name
+        fun bindValues(language : Language, position: Int) {
+            languageNameTV.text = language.languageName
+            languageNameBigTv.text = language.bigTextToDisplay
 
             if (selectedItemIndex == position) {
-                cityImageIV.setColorFilter(
-                        ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
-                )
-                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
+                languageNameTV.setTextColor(ResourcesCompat.getColor(context.resources,R.color.lipstick,null))
+                languageNameBigTv.setTextColor(ResourcesCompat.getColor(context.resources,R.color.lipstick,null))
+                languageRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
 
             } else {
-                cityImageIV.setColorFilter(null)
-                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_blue)
+                languageNameTV.setTextColor(ResourcesCompat.getColor(context.resources,R.color.black,null))
+                languageNameBigTv.setTextColor(ResourcesCompat.getColor(context.resources,R.color.black,null))
+                languageRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_blue)
             }
         }
 
@@ -154,16 +150,17 @@ class OnboardingMajorCityAdapter(
 //            }
 //            notifyDataSetChanged()
 
-            val city = filteredCityList[newPosition]
-            onCitySelectedListener?.onCitySelected(
-                    City(
-                            id = city.id,
-                            name = city.name,
-                            stateCode = city.stateCode
-                    )
+            val language = filteredLanguageList[newPosition]
+            onLanguageSelectedListener?.onLanguageSelected(
+                    language
             )
         }
 
     }
 
+
+    interface LanguageAdapterClickListener{
+
+        fun onLanguageSelected(language : Language)
+    }
 }
