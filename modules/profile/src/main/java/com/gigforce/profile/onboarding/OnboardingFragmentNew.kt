@@ -14,6 +14,7 @@ import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
 import com.gigforce.profile.onboarding.fragments.experience.ExperienceFragment
 import com.gigforce.profile.onboarding.fragments.highestqulalification.HighestQualificationFragment
 import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
+import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.age_group_item.view.*
 import kotlinx.android.synthetic.main.experience_item.*
@@ -84,6 +85,7 @@ class OnboardingFragmentNew : Fragment() {
                         .text.toString()
                 var formattedString = getFormattedString(enteredName)
                 viewModel.saveUserName(formattedString.trim())
+                saveGender()
             }
             1 -> viewModel.saveAgeGroup(getSelectedAgeGroup())
             2->viewModel.saveHighestQualification(getSelectedHighestQualification())
@@ -93,6 +95,11 @@ class OnboardingFragmentNew : Fragment() {
 //            3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
 //            4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
         }
+    }
+
+    private fun saveGender() {
+        var nameGenderFragment = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as NameGenderFragment)
+        viewModel.selectYourGender(nameGenderFragment.gender)
     }
 
     private fun setInterest() {
