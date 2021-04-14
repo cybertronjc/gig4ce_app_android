@@ -123,20 +123,22 @@ class OnboardingCityAdapter(
             } else {
                 cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.black, null))
             }
-
         }
 
         override fun onClick(v: View?) {
             val city = filteredCityList[adapterPosition]
             onCitySelectedListener?.onCitySelected(city)
 
-//            if (selectedItemIndex != -1) {
-//                val tempIndex = selectedItemIndex
-//                selectedItemIndex = -1
-//            } else {
-//                selectedItemIndex = adapterPosition
-//            }
-//            notifyItemChanged(selectedItemIndex)
+            if (selectedItemIndex != -1) {
+                val tempIndex = selectedItemIndex
+                selectedItemIndex = adapterPosition
+                notifyItemChanged(tempIndex)
+                notifyItemChanged(selectedItemIndex)
+            } else {
+                selectedItemIndex = adapterPosition
+                notifyItemChanged(selectedItemIndex)
+            }
+
         }
 
     }
