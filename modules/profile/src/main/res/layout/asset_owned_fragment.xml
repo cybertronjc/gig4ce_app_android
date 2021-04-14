@@ -1,538 +1,531 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onboarding.fragments.assetsowned.AssetOwnedFragment">
-
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Assets Owned"
-        android:fontFamily="@font/lato"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:textColor="#131415"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:text="Vehicle Own"
-        android:paddingLeft="@dimen/size16"
-        android:background="#f4faff"
-        android:fontFamily="@font/lato"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2 Wheeler"
-        android:fontFamily="@font/lato"
-        android:textSize="16sp"
-        android:textColor="#131415"
-        android:layout_marginLeft="@dimen/size16"
-        android:layout_marginTop="@dimen/size16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
+    tools:context=".onboarding.fragments.assetsowned.AssetOwnedFragment"
+    android:clipToPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/two_wheeler_cl"
-        android:layout_width="327dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:background="@drawable/rect_light_blue_fill"
-        android:padding="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:layout_marginRight="1dp"
-            android:background="@drawable/rect_top_left_cornor_card"
-            app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Bicycle"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/size128">
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/imageTextCardcl_x"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Electric Bike"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_x"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@color/white"
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/lato"
+            android:text="Assets Owned"
+            android:textColor="#131415"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/icon_iv_x"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="#f4faff"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/size16"
+            android:text="Vehicle Own"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Motor Bike"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_x" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginTop="@dimen/size16"
+            android:fontFamily="@font/lato"
+            android:text="2 Wheeler"
+            android:textColor="#131415"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/two_wheeler_cl"
+            android:layout_width="327dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_fill"
+            android:padding="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/rect_top_left_cornor_card"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Bicycle"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/imageTextCardcl_x"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Electric Bike"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_x"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_x"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Motor Bike"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_x" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginTop="@dimen/size16"
+            android:fontFamily="@font/lato"
+            android:text="3 Wheeler"
+            android:textColor="#131415"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/two_wheeler_cl" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/three_wheeler_cl"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_fill"
+            android:padding="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_1"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/rect_top_left_cornor_card"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="E- rickshaw"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_1" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_2"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_1"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_2"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Auto rickshaw"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginTop="@dimen/size16"
+            android:fontFamily="@font/lato"
+            android:text="3 Wheeler"
+            android:textColor="#131415"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/three_wheeler_cl" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/three_wheeler_cl1"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_fill"
+            android:padding="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_3"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/rect_top_left_cornor_card"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_3"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Car"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_3" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_4"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_3"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_4"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Commercial Vehicle"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="#f4faff"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/size16"
+            android:text="IT Assets"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/three_wheeler_cl1" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/it_assets"
+            android:layout_width="327dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_gray_fill"
+            android:padding="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl5"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/rect_left_cornor_card"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_5"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Laptop"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_5" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_6"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_7"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl5"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_6"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Smartphone"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_6" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_7"
+                android:layout_width="0dp"
+                android:layout_height="82dp"
+                android:layout_marginLeft="1dp"
+                android:background="@drawable/rect_right_cornor_card"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_6"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv_7"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_chat"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="PC"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_7" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
-
-
-
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3 Wheeler"
-        android:fontFamily="@font/lato"
-        android:textSize="16sp"
-        android:textColor="#131415"
-        android:layout_marginLeft="@dimen/size16"
-        android:layout_marginTop="@dimen/size16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/two_wheeler_cl" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/three_wheeler_cl"
-        android:layout_width="218dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:background="@drawable/rect_light_blue_fill"
-        android:padding="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_1"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:layout_marginRight="1dp"
-            android:background="@drawable/rect_top_left_cornor_card"
-            app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="E- rickshaw"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_1" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_2"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Auto rickshaw"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_2" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3 Wheeler"
-        android:fontFamily="@font/lato"
-        android:textSize="16sp"
-        android:textColor="#131415"
-        android:layout_marginLeft="@dimen/size16"
-        android:layout_marginTop="@dimen/size16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/three_wheeler_cl" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/three_wheeler_cl1"
-        android:layout_width="218dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:background="@drawable/rect_light_blue_fill"
-        android:padding="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_3"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:layout_marginRight="1dp"
-            android:background="@drawable/rect_top_left_cornor_card"
-            app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_3"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Car"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_3" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_4"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_3"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_4"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Commercial Vehicle"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_4" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:text="IT Assets"
-        android:paddingLeft="@dimen/size16"
-        android:background="#f4faff"
-        android:fontFamily="@font/lato"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/three_wheeler_cl1" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/it_assets"
-        android:layout_width="327dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:background="@drawable/rect_gray_fill"
-        android:padding="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl5"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:layout_marginRight="1dp"
-            android:background="@drawable/rect_left_cornor_card"
-            app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_6"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_5"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Laptop"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_5" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_6"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_7"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl5"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_6"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="Smartphone"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_6" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/imageTextCardcl_7"
-            android:layout_width="0dp"
-            android:layout_height="82dp"
-            android:background="@drawable/rect_right_cornor_card"
-            android:layout_marginLeft="1dp"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_6"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/icon_iv_7"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lato"
-                android:letterSpacing="0"
-                android:text="PC"
-                android:textColor="#2e2f30"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_iv_7" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

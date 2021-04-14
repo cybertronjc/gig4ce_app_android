@@ -19,7 +19,7 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int {
-        return 6
+        return 7
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -27,10 +27,9 @@ class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
             0 -> NameGenderFragment.newInstance()
             1 -> AgeGroupFragment.newInstance()
             2 -> HighestQualificationFragment.newInstance()
-            3 -> HighestQualificationFragment.newInstance()
-            4 -> ExperienceFragment.newInstance()
-            5 -> InterestFragment.newInstance()
-            6-> JobPreferenceFragment.newInstance()
+            3 -> ExperienceFragment.newInstance()
+            4 -> InterestFragment.newInstance()
+            5-> JobPreferenceFragment.newInstance()
             else->AssetOwnedFragment.newInstance()
         }
     }
