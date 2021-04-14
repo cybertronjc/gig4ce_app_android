@@ -89,8 +89,8 @@ class OnboardingFragmentNew : Fragment() {
             }
             1 -> viewModel.saveAgeGroup(getSelectedAgeGroup())
             2->viewModel.saveHighestQualification(getSelectedHighestQualification())
-            3-> setWorkingStatus()
-            4->setInterest()
+            4-> setWorkingStatus()
+            5->setInterest()
 //            2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
 //            3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
 //            4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))

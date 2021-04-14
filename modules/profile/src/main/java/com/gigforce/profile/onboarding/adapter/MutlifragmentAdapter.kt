@@ -25,10 +25,12 @@ class MutlifragmentAdapter(activity: FragmentActivity, val fragmentInteractionLi
         fragmentArr.add(NameGenderFragment.newInstance(fragmentInteractionListener))
         fragmentArr.add(AgeGroupFragment.newInstance())
         fragmentArr.add(HighestQualificationFragment.newInstance())
+        fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance())
         fragmentArr.add(ExperienceFragment.newInstance())
         fragmentArr.add(InterestFragment.newInstance())
         fragmentArr.add(JobPreferenceFragment.newInstance())
         fragmentArr.add(AssetOwnedFragment.newInstance())
+        fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance())
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -39,22 +41,6 @@ class MutlifragmentAdapter(activity: FragmentActivity, val fragmentInteractionLi
         (return super.getItemId(position))
     }
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> NameGenderFragment.newInstance()
-            1 -> AgeGroupFragment.newInstance()
-            2 -> HighestQualificationFragment.newInstance()
-            3 -> ExperienceFragment.newInstance()
-            4 -> InterestFragment.newInstance()
-            5 -> JobPreferenceFragment.newInstance()
-            6 -> AssetOwnedFragment.newInstance()
-            7 -> OnboardingAddProfilePictureFragment.newInstance()
-            8 -> OnboardingPreferredJobLocationFragment.newInstance()
-            else -> {
-                throw IllegalStateException("fragment not defined")
-            }
-        }
-    }
 
     fun getFragment(position: Int):Fragment{
         return fragmentArr.get(position)
