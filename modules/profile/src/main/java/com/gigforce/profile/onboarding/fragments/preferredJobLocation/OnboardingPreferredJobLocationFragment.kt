@@ -61,11 +61,12 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
     }
 
     private fun initViews() {
-        major_cities_recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
-        major_cities_recyclerview.adapter = majorCitiesAdapter
 
         other_cities_recyclerview.layoutManager = LinearLayoutManager(requireContext())
         other_cities_recyclerview.adapter = cityAdapter
+
+        major_cities_recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
+        major_cities_recyclerview.adapter = majorCitiesAdapter
     }
 
     private fun getMajorCitiesAndOtherCities() {
@@ -99,6 +100,16 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
 
     private fun showMajorCities(it: List<CityWithImage>) {
         majorCitiesAdapter.setData(it)
+
+
+
+//        major_cities_recyclerview.adapter = PreferredLocationMajorCitiesAdapter(
+//                requireContext(),
+//                R.layout.recycler_item_major_city,
+//                it,
+//                glide
+//        )
+
     }
 
     override fun onCitySelected(city: City) {
