@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 
-class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<InterestDM>, val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener) :
+class AllInterestAdapter(
+    val context: Context,
+    val allInterestList: ArrayList<InterestDM>,
+    val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener
+) :
     RecyclerView.Adapter<AllInterestAdapter.ViewHolder>() {
     var adapter: AllInterestAdapter? = null
 
@@ -28,7 +32,7 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
 
     //this method is binding the data on the list
     override fun onBindViewHolder(holder: AllInterestAdapter.ViewHolder, position: Int) {
-        holder.bindItems(allInterestList.get(position),position)
+        holder.bindItems(allInterestList.get(position), position)
     }
 
     //this method is giving the size of the list
@@ -39,37 +43,21 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
     //the class is hodling the list view
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindItems(interestDM: InterestDM,position: Int) {
+        fun bindItems(interestDM: InterestDM, position: Int) {
             val icon = itemView.icon_iv as ImageView
             val interestName = itemView.interest_name as TextView
             icon.setImageResource(interestDM.image)
             interestName.text = interestDM.interestName
 
-            itemView.setOnClickListener(View.OnClickListener {
-                adapter?.notifyDataSetChanged()
-                setSelected(it.icon_iv, it.interest_name, it)
-                if(it.interest_name.text.equals("Delivery Executive")){
-                    onDeliveryExecutiveClickListener.onclick(position)
-                }
+            itemView.setOnClickListener({
+                onDeliveryExecutiveClickListener.onclick(it,position)
             })
         }
 
-        private fun setSelected(icon: ImageView, option: TextView, view: View) {
-            context.let {
-                icon.setColorFilter(ContextCompat.getColor(it, R.color.selected_image_color))
-                option.setTextColor(ContextCompat.getColor(it, R.color.selected_text_color))
-                view.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                        it,
-                        R.drawable.option_selection_border
-                    )
-                )
-            }
 
-        }
     }
 
     interface OnDeliveryExecutiveClickListener {
-        fun onclick(position: Int)
+        fun onclick(view:View,position: Int)
     }
 }

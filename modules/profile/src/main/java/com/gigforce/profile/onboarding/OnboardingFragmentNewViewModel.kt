@@ -44,13 +44,25 @@ class OnboardingFragmentNewViewModel : ViewModel() {
 
     }
 
-    fun saveInterest(selectedInterest: String) {
-        var interests = ArrayList<String>()
-        interests.add(selectedInterest)
-        profileFirebaseRepository.setData("interests", interests)
+    fun saveInterest(selectedInterest: ArrayList<String>) {
+        profileFirebaseRepository.setData("interests", selectedInterest)
+
+    }
+    fun saveJobPreference(fullTimeJob: Boolean) {
+        profileFirebaseRepository.setDataAsKeyValue("jobType", fullTimeJob)
 
     }
 
+    fun saveDaysPreference(workingDays: ArrayList<String>) {
+        profileFirebaseRepository.setData("workingDays",workingDays)
+    }
+
+    fun saveTimeSlots(timeSlots: ArrayList<String>) {
+        profileFirebaseRepository.setData("timeSlots",timeSlots)
+    }
+    fun saveAssets(assetsData: Map<String, Any>) {
+        profileFirebaseRepository.setData(assetsData)
+    }
     fun setOnboardingCompleted(
         invite: String?,
         inviteByAmbassador: String,

@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NameGenderFragment(val fragInteractionListener: OnboardingFragmentNew.FragmentInteractionListener) : Fragment() {
+class NameGenderFragment() : Fragment() {
     companion object {
-        fun newInstance(fragmentInteractionListener: OnboardingFragmentNew.FragmentInteractionListener) = NameGenderFragment(fragmentInteractionListener)
+        fun newInstance() = NameGenderFragment()
     }
     var gender = ""
     override fun onCreateView(

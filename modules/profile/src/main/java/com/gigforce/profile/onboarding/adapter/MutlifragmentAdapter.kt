@@ -14,7 +14,7 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 
-class MutlifragmentAdapter(activity: FragmentActivity, val fragmentInteractionListener: OnboardingFragmentNew.FragmentInteractionListener) : FragmentStateAdapter(activity) {
+class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int {
         return 9
@@ -22,7 +22,7 @@ class MutlifragmentAdapter(activity: FragmentActivity, val fragmentInteractionLi
 
     val fragmentArr = ArrayList<Fragment>()
     init {
-        fragmentArr.add(NameGenderFragment.newInstance(fragmentInteractionListener))
+        fragmentArr.add(NameGenderFragment.newInstance())
         fragmentArr.add(AgeGroupFragment.newInstance())
         fragmentArr.add(HighestQualificationFragment.newInstance())
         fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance())

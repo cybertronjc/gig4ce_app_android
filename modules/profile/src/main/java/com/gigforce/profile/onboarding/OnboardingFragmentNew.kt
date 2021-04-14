@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MultiviewsAdapter
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
+import com.gigforce.profile.onboarding.fragments.assetsowned.AssetOwnedFragment
 import com.gigforce.profile.onboarding.fragments.experience.ExperienceFragment
 import com.gigforce.profile.onboarding.fragments.highestqulalification.HighestQualificationFragment
 import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
+import com.gigforce.profile.onboarding.fragments.jobpreference.JobPreferenceFragment
 import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.age_group_item.view.*
@@ -43,22 +45,27 @@ class OnboardingFragmentNew : Fragment() {
         disableViewPagerScroll()
         onboarding_pager.offscreenPageLimit = 6
         activity?.let {
-            onboarding_pager.adapter = MutlifragmentAdapter(it,
-                object : FragmentInteractionListener {
-                    override fun onActionResult(result: Boolean) {
-                        enableNextButton(true)
-                    }
-                })
+            onboarding_pager.adapter = MutlifragmentAdapter(it)
 
         }
-        next.setOnClickListener(View.OnClickListener {
-            saveDataToDB(onboarding_pager.currentItem)
-            onboarding_pager.setCurrentItem(onboarding_pager.currentItem+1)
-            steps.text = "Steps ${onboarding_pager.currentItem+1}/9"
+        next.setOnClickListener {
+            if(isFragmentActionNotExists()) {
+                saveDataToDB(onboarding_pager.currentItem)
+                onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
+                steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+            }
 
-        })
+        }
 
 
+    }
+
+    private fun isFragmentActionNotExists(): Boolean {
+        var currentFragment = ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+        if(currentFragment is FragmentInteractionListener){
+            return !currentFragment.actionFound()
+        }
+        return true
     }
 
     private fun disableViewPagerScroll() {
@@ -91,10 +98,24 @@ class OnboardingFragmentNew : Fragment() {
             2->viewModel.saveHighestQualification(getSelectedHighestQualification())
             4-> setWorkingStatus()
             5->setInterest()
+            6-> setJobPreference()
+            7->setAssetsData()
 //            2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
 //            3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
 //            4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
         }
+    }
+
+    private fun setAssetsData() {
+        var assetsowned = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as AssetOwnedFragment)
+        viewModel.saveAssets(assetsowned.getAssetsData())
+    }
+
+    private fun setJobPreference() {
+        var jobPreferenceFragment = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
+        viewModel.saveJobPreference(jobPreferenceFragment.fullTimeJob)
+        viewModel.saveDaysPreference(jobPreferenceFragment.getWorkingDays())
+        viewModel.saveTimeSlots(jobPreferenceFragment.getTimeSlots())
     }
 
     private fun saveGender() {
@@ -104,7 +125,7 @@ class OnboardingFragmentNew : Fragment() {
 
     private fun setInterest() {
         var interestFragment = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as InterestFragment)
-        viewModel.saveInterest(interestFragment.selectedInterest)
+        viewModel.saveInterest(interestFragment.getselectedInterest())
     }
 
     private fun setWorkingStatus() {
@@ -153,9 +174,8 @@ class OnboardingFragmentNew : Fragment() {
     }
 
     interface FragmentInteractionListener{
-        fun onActionResult(result : Boolean)
+        fun actionFound():Boolean
     }
-
     //--------------
 
 
