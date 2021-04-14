@@ -4,13 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MultiviewsAdapter
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
+import com.gigforce.profile.onboarding.fragments.experience.ExperienceFragment
+import com.gigforce.profile.onboarding.fragments.highestqulalification.HighestQualificationFragment
+import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
+import kotlinx.android.synthetic.main.age_group_item.*
+import kotlinx.android.synthetic.main.age_group_item.view.*
+import kotlinx.android.synthetic.main.experience_item.*
+import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 
 
@@ -33,49 +40,113 @@ class OnboardingFragmentNew : Fragment() {
         super.onViewCreated(view, savedInstanceState)
                 viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)
         disableViewPagerScroll()
-//        context?.let {
-//
-//            adapter = MultiviewsAdapter(it,viewModel.getOnboardingData())
-//
-//            onboarding_rv.layoutManager = LinearLayoutManager(
-//                activity?.applicationContext,
-//                LinearLayoutManager.HORIZONTAL,
-//                false
-//            )
-//
-//            onboarding_rv.adapter = adapter
-//            var pagerHelper = PagerSnapHelper()
-//            pagerHelper.attachToRecyclerView(onboarding_rv)
-//
-//        }
-
+        onboarding_pager.offscreenPageLimit = 6
         activity?.let {
-            onboarding_rv.adapter = MutlifragmentAdapter(it)
+            onboarding_pager.adapter = MutlifragmentAdapter(it,
+                object : FragmentInteractionListener {
+                    override fun onActionResult(result: Boolean) {
+                        enableNextButton(true)
+                    }
+                })
 
         }
         next.setOnClickListener(View.OnClickListener {
-//            adapter?.let {
-//                val layoutManager =
-//                    onboarding_rv.getLayoutManager() as LinearLayoutManager
-//                val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
-//                it.validateScreen(firstVisiblePosition)
-//                if(it.itemCount>firstVisiblePosition+1) {
-//                    onboarding_rv.smoothScrollToPosition(firstVisiblePosition + 1)
-//                }
-////                (onboarding_rv.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
-////                    firstVisiblePosition,
-////                    0
-////                )
-//            }
+            saveDataToDB(onboarding_pager.currentItem)
+            onboarding_pager.setCurrentItem(onboarding_pager.currentItem+1)
+            steps.text = "Steps ${onboarding_pager.currentItem+1}/9"
 
-            onboarding_rv.setCurrentItem(onboarding_rv.currentItem+1)
         })
 
 
     }
 
     private fun disableViewPagerScroll() {
-        onboarding_rv.isUserInputEnabled = false
+        onboarding_pager.isUserInputEnabled = false
+    }
+
+    private fun enableNextButton(enable: Boolean) {
+        next.isEnabled = enable
+
+        if (enable) {
+            next.background = resources.getDrawable(R.drawable.app_gradient_button, null);
+        } else {
+            next.background = resources.getDrawable(R.drawable.app_gradient_button_disabled, null);
+        }
+
+
+    }
+
+    private fun saveDataToDB(currentItem: Int) {
+        when (currentItem) {
+            0 -> {
+                var enteredName =
+                    onboarding_pager.getChildAt(0).username
+                        .text.toString()
+                var formattedString = getFormattedString(enteredName)
+                viewModel.saveUserName(formattedString.trim())
+            }
+            1 -> viewModel.saveAgeGroup(getSelectedAgeGroup())
+            2->viewModel.saveHighestQualification(getSelectedHighestQualification())
+            3-> setWorkingStatus()
+            4->setInterest()
+//            2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
+//            3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
+//            4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
+        }
+    }
+
+    private fun setInterest() {
+        var interestFragment = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as InterestFragment)
+        viewModel.saveInterest(interestFragment.selectedInterest)
+    }
+
+    private fun setWorkingStatus() {
+        var experienceFragment = (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as ExperienceFragment)
+        var workStatus = experienceFragment.workStatus
+        viewModel.saveWorkStatus(workStatus)
+
+        var total_experience_rg = experienceFragment.total_experience_rg
+        val selectedId = total_experience_rg.getCheckedRadioButtonId()
+        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+        viewModel.saveTotalExperience(radioButton.text.toString())
+    }
+
+
+    private fun getSelectedAgeGroup(): String {
+        var radioGroup = ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)).age_group
+        val selectedId: Int = radioGroup.getCheckedRadioButtonId()
+
+        // find the radiobutton by returned id
+
+        // find the radiobutton by returned id
+        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+
+        return radioButton.text.toString()
+    }
+
+    private fun getSelectedHighestQualification():String{
+        return (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as HighestQualificationFragment).selectedHighestQualification
+    }
+
+    private fun getFormattedString(enteredName: String): String {
+        var formattedString = ""
+        var arr = enteredName.split(" ")
+        for (str in arr) {
+            try {
+                formattedString += str.substring(
+                    0,
+                    1
+                ).toUpperCase() + str.substring(1).toLowerCase()
+            } catch (e: Exception) {
+
+            }
+            formattedString += " "
+        }
+        return formattedString.trim()
+    }
+
+    interface FragmentInteractionListener{
+        fun onActionResult(result : Boolean)
     }
 
     //--------------

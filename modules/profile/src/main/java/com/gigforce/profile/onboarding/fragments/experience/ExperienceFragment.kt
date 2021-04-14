@@ -27,7 +27,8 @@ class ExperienceFragment : Fragment() {
     }
 
     private lateinit var viewModel: ExperienceViewModel
-
+    var workStatus = ""
+    var totalExperience = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,10 +46,12 @@ class ExperienceFragment : Fragment() {
         imageTextCardMol.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon, option,imageTextCardMol)
+            workStatus = "Working"
         })
         imageTextCardMol3.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon2,option2,imageTextCardMol3)
+            workStatus = "Not Working"
         })
     }
 

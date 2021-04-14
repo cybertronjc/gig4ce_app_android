@@ -19,7 +19,7 @@ class HighestQualificationFragment : Fragment() {
     }
 
     private lateinit var viewModel: HighestQualificationViewModel
-
+    var selectedHighestQualification = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,26 +37,33 @@ class HighestQualificationFragment : Fragment() {
         imageTextCardMol.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon, option, imageTextCardMol)
+            selectedHighestQualification = "<10th"
         })
         imageTextCardMol4.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon1, option1, imageTextCardMol4)
+            selectedHighestQualification = "10th pass"
         })
         imageTextCardMol3.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon2, option2, imageTextCardMol3)
+            selectedHighestQualification = "12th pass"
         })
         imageTextCardMol_.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon_, option_, imageTextCardMol_)
+            selectedHighestQualification = "Diploma"
         })
         imageTextCardMol4_.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon1_, option1_, imageTextCardMol4_)
+            selectedHighestQualification = "Graduated"
+
         })
         imageTextCardMol3_.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon2_, option2_, imageTextCardMol3_)
+            selectedHighestQualification = "Post Graduated"
         })
     }
 
@@ -93,5 +100,4 @@ class HighestQualificationFragment : Fragment() {
         }
 
     }
-
 }

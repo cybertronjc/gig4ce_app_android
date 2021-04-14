@@ -254,7 +254,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                android:text="Post Graduate"
+                android:text="Post Graduated"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"

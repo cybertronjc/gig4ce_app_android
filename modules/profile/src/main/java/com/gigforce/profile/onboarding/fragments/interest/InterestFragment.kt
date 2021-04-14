@@ -24,7 +24,7 @@ class InterestFragment : Fragment() {
 
     private lateinit var viewModel: InterestViewModel
     private var allInterestList = ArrayList<InterestDM>()
-
+    var selectedInterest = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,9 +54,10 @@ class InterestFragment : Fragment() {
                 it,
                 allInterestList,
                 object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
-                    override fun onclick() {
+                    override fun onclick(position:Int) {
                         interest_cl.gone()
                         delivery_executive_detail_cl.visible()
+                        selectedInterest = allInterestList.get(position).interestName
                     }
 
                 })
