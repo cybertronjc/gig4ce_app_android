@@ -942,6 +942,10 @@
         android:id="@+id/groupMediaListFragment2"
         android:name="com.gigforce.modules.feature_chat.screens.GroupMediaListFragment2"
         android:label="GroupMediaListFragment2" />
+    <fragment
+        android:id="@+id/onboardingPreferredJobLocationFragment"
+        android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
+        android:label="OnboardingPreferredJobLocationFragment" />
 
 
 </navigation>
