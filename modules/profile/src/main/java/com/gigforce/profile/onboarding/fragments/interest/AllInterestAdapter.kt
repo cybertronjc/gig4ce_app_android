@@ -28,7 +28,7 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
 
     //this method is binding the data on the list
     override fun onBindViewHolder(holder: AllInterestAdapter.ViewHolder, position: Int) {
-        holder.bindItems(allInterestList.get(position))
+        holder.bindItems(allInterestList.get(position),position)
     }
 
     //this method is giving the size of the list
@@ -39,7 +39,7 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
     //the class is hodling the list view
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindItems(interestDM: InterestDM) {
+        fun bindItems(interestDM: InterestDM,position: Int) {
             val icon = itemView.icon_iv as ImageView
             val interestName = itemView.interest_name as TextView
             icon.setImageResource(interestDM.image)
@@ -49,7 +49,7 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
                 adapter?.notifyDataSetChanged()
                 setSelected(it.icon_iv, it.interest_name, it)
                 if(it.interest_name.text.equals("Delivery Executive")){
-                    onDeliveryExecutiveClickListener.onclick()
+                    onDeliveryExecutiveClickListener.onclick(position)
                 }
             })
         }
@@ -70,6 +70,6 @@ class AllInterestAdapter(val context: Context, val allInterestList: ArrayList<In
     }
 
     interface OnDeliveryExecutiveClickListener {
-        fun onclick()
+        fun onclick(position: Int)
     }
 }
