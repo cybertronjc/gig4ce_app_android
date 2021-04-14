@@ -19,6 +19,7 @@ class OnboardingFragmentNewViewModel : ViewModel() {
         list.add(TimingDM(MultiviewsAdapter.TimingVT))
         list.add(InterestDM(MultiviewsAdapter.InterestVT))
 
+
         return list
     }
 }

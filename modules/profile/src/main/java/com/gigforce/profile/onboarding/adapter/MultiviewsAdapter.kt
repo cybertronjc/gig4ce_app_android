@@ -155,13 +155,13 @@ class MultiviewsAdapter(
             })
             itemView.imageTextCardMol3.setOnClickListener(View.OnClickListener {
                 resetAll()
-                setSelected(itemView.icon1,itemView.option2,itemView.imageTextCardMol3)
+                setSelected(itemView.icon2,itemView.option2,itemView.imageTextCardMol3)
             })
 
         }
         private fun resetAll() {
             resetSelected(itemView.icon, itemView.option, itemView.imageTextCardMol)
-            resetSelected(itemView.icon1,itemView.option2,itemView.imageTextCardMol3)
+            resetSelected(itemView.icon2,itemView.option2,itemView.imageTextCardMol3)
         }
     }
 
@@ -218,21 +218,21 @@ class MultiviewsAdapter(
         } else if (viewType == DeliveryExecutiveExperienceVT) {
             return DeliveryExecutiveExperienceVH(
                 LayoutInflater.from(context)
-                    .inflate(R.layout.delivery_executive_item, parent, false)
+                    .inflate(R.layout.experience_item, parent, false)
             )
         } else if (viewType == CurrentlyWorkingVT) {
             return CurrentlyWorkingVH(
                 LayoutInflater.from(context)
-                    .inflate(R.layout.onboarding_job_preference_item, parent, false)
+                    .inflate(R.layout.experience_item, parent, false)
             )
         } else if (viewType == WorkingDaysVT) {
             return WorkingDaysVH(
                 LayoutInflater.from(context)
-                    .inflate(R.layout.schedule_preference_item, parent, false)
+                    .inflate(R.layout.experience_item, parent, false)
             )
         } else if (viewType == TimingVT) {
             return TimingVH(
-                LayoutInflater.from(context).inflate(R.layout.time_preference_item, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.experience_item, parent, false)
             )
         } else { //(viewType == InterestVT)
             return InterestVH(
