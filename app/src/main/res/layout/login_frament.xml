@@ -104,6 +104,7 @@
                 android:dropDownHorizontalOffset="0dp"
                 android:dropDownVerticalOffset="0dp"
                 android:ems="10"
+                android:visibility="gone"
                 android:gravity="start"
                 android:inputType="phone"
                 android:letterSpacing="0.2"
@@ -121,6 +122,17 @@
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toEndOf="@+id/tv_prefix_number_login"
                 app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login" />
+
+            <include
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/some_id_if_needed"
+                layout="@layout/mobile_number_digit_layout"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toEndOf="@+id/tv_prefix_number_login"
+                app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"/>
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/br_1"
