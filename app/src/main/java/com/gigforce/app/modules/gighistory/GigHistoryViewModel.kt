@@ -1,8 +1,9 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
+import com.gigforce.app.modules.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage2.models.DocChange
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
@@ -171,6 +172,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         if (pastGigs) {
             repositoryCallbacks.getPastGigs(this, lastVisibleItem, limit)
         } else {
+            Log.d("GigHostoryFragment","Fetching upcoming data ...")
             repositoryCallbacks.getUpComingGigs(this, lastVisibleItem, limit)
         }
 

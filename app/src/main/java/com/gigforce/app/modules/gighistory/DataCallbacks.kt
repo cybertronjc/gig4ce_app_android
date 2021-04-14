@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot

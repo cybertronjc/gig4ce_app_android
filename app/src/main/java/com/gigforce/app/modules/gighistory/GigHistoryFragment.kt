@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
 import android.os.Bundle
 import android.view.LayoutInflater

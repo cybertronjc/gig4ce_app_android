@@ -1,7 +1,6 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.utils.getEndOfDay
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
