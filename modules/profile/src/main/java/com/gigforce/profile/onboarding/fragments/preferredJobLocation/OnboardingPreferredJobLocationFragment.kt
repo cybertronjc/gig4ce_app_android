@@ -1,4 +1,4 @@
-package com.gigforce.profile.fragment
+package com.gigforce.profile.onboarding.fragments.preferredJobLocation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +19,7 @@ import com.gigforce.profile.adapters.OnboardingCityAdapter
 import com.gigforce.profile.adapters.OnboardingMajorCityAdapter
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
+import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
@@ -27,10 +28,6 @@ import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
-
-    private val firebaseStorage: FirebaseStorage by lazy {
-        FirebaseStorage.getInstance()
-    }
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -144,6 +141,13 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
                     stateCode = city.stateCode
             )
             Toast.makeText(requireContext(), "Preferred Location Selected", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object{
+
+        fun newInstance() : OnboardingPreferredJobLocationFragment {
+            return OnboardingPreferredJobLocationFragment()
         }
     }
 }

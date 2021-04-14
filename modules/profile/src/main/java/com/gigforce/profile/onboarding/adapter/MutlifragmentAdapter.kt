@@ -1,12 +1,7 @@
 package com.gigforce.profile.onboarding.adapter
 
-import android.app.Activity
-import android.widget.Adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.profile.onboarding.fragments.agegroup.AgeGroupFragment
 import com.gigforce.profile.onboarding.fragments.assetsowned.AssetOwnedFragment
@@ -15,11 +10,13 @@ import com.gigforce.profile.onboarding.fragments.highestqulalification.HighestQu
 import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
 import com.gigforce.profile.onboarding.fragments.jobpreference.JobPreferenceFragment
 import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
+import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
+import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 
 class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int {
-        return 7
+        return 9
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -29,8 +26,13 @@ class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
             2 -> HighestQualificationFragment.newInstance()
             3 -> ExperienceFragment.newInstance()
             4 -> InterestFragment.newInstance()
-            5-> JobPreferenceFragment.newInstance()
-            else->AssetOwnedFragment.newInstance()
+            5 -> JobPreferenceFragment.newInstance()
+            6 -> AssetOwnedFragment.newInstance()
+            7 -> OnboardingAddProfilePictureFragment.newInstance()
+            8 -> OnboardingPreferredJobLocationFragment.newInstance()
+            else -> {
+                throw IllegalStateException("fragment not defined")
+            }
         }
     }
 

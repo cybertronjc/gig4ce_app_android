@@ -1,4 +1,4 @@
-package com.gigforce.profile.fragment
+package com.gigforce.profile.onboarding.fragments.profilePicture
 
 import android.Manifest
 import android.app.Activity
@@ -87,12 +87,13 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
         }
 
         editLayout.setOnClickListener {
-            checkForPermissionElseShowCameraGalleryBottomSheet()
-        }
 
-        submitBtn.setOnClickListener {
-            checkForPermissionElseShowCameraGalleryBottomSheet()
+            //Skip
         }
+//        editLayout.setOnClickListener {
+//            checkForPermissionElseShowCameraGalleryBottomSheet()
+//        }
+
     }
 
 
@@ -127,14 +128,12 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
                         shimmerFrameLayout.gone()
                         imageView13.visible()
 
-                        submitBtn.visible()
                         if (it.content.hasUserUploadedProfilePicture()) {
                             displayImage(it.content.profileAvatarName)
                             editLayout.visible()
                         } else {
                             //skipButton.gone()
                             editLayout.gone()
-                            submitBtn.text = "Upload Photo"
                         }
                     }
                     is Lce.Error -> {
@@ -164,7 +163,6 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
                         imageView13.visible()
 
                         viewModel.getProfileForUser()
-                        submitBtn.text = "Next"
 
                         Toast.makeText(
                             requireContext(),
@@ -181,8 +179,6 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
                     }
                 }
             })
-
-
     }
 
     private fun displayImage(profileImg: String) {
@@ -309,6 +305,10 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
         private const val EXTENSION: String = ".jpg"
 
         private const val REQUEST_STORAGE_PERMISSION = 102
+
+        fun newInstance() : OnboardingAddProfilePictureFragment {
+            return OnboardingAddProfilePictureFragment()
+        }
     }
 
 }

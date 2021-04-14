@@ -6,16 +6,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
- >
+    android:orientation="vertical">
 
 
-    <com.gigforce.common_ui.views.GigforceToolbar
-        android:id="@+id/toolbar_layout"
+    <LinearLayout
+        android:id="@+id/breifing_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/banner_users_grid" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:lineHeight="17sp"
+            android:lineSpacingExtra="3sp"
+            android:text="Click your profile picture"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/profile_picture_tv"
@@ -30,7 +49,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
+        app:layout_constraintTop_toBottomOf="@id/breifing_layout" />
 
     <FrameLayout
         android:id="@+id/image_container"
@@ -82,7 +101,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/image_container"
         app:layout_constraintEnd_toEndOf="@id/image_container">
 
@@ -96,32 +115,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="14dp"
             android:fontFamily="@font/lato"
-            android:text="Edit"
-            android:textColor="@color/colorPrimary" />
+            android:lineHeight="17sp"
+            android:text="@string/skip_underlined"
+            android:textColor="@color/black" />
 
 
     </LinearLayout>
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/submitBtn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:enabled="true"
-        android:fontFamily="@font/lato"
-        android:gravity="center"
-        android:text="Next"
-        android:textAllCaps="false"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:strokeColor="@color/lipstick"
-        app:strokeWidth="1dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

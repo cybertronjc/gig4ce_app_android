@@ -944,7 +944,7 @@
         android:label="GroupMediaListFragment2" />
     <fragment
         android:id="@+id/onboardingPreferredJobLocationFragment"
-        android:name="com.gigforce.profile.fragment.OnboardingPreferredJobLocationFragment"
+        android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
         android:label="OnboardingPreferredJobLocationFragment" />
 
 
