@@ -1,12 +1,11 @@
 package com.gigforce.profile.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.profile.R
@@ -14,6 +13,7 @@ import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 
 class OnboardingMajorCityAdapter(
+        private val context: Context,
         private val requestManager: RequestManager
 ) : RecyclerView.Adapter<OnboardingMajorCityAdapter.OnboardingMajorCityViewHolder>(),
         Filterable {
@@ -60,7 +60,7 @@ class OnboardingMajorCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingMajorCityViewHolder, position: Int) {
-        holder.bindValues(filteredCityList.get(position))
+        holder.bindValues(filteredCityList.get(position), position)
     }
 
     fun setData(contacts: List<CityWithImage>) {
@@ -112,19 +112,49 @@ class OnboardingMajorCityAdapter(
 
         private var cityNameTv: TextView = itemView.findViewById(R.id.city_name_tv)
         private var cityImageIV: ImageView = itemView.findViewById(R.id.city_image_iv)
+        private var cityRootLayout: LinearLayout = itemView.findViewById(R.id.city_root_layout)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(city: CityWithImage) {
+        fun bindValues(city: CityWithImage, position: Int) {
             requestManager.load(city.image).into(cityImageIV)
             cityNameTv.text = city.name
+
+            if (selectedItemIndex == position) {
+                cityImageIV.setColorFilter(
+                        ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
+                )
+                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
+
+            } else {
+                cityImageIV.setColorFilter(null)
+                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_blue)
+            }
         }
 
         override fun onClick(v: View?) {
 
-            val city = filteredCityList[adapterPosition]
+            val newPosition = adapterPosition
+
+            if (selectedItemIndex != -1) {
+                val tempIndex = selectedItemIndex
+                selectedItemIndex = newPosition
+                notifyItemChanged(tempIndex)
+                notifyItemChanged(selectedItemIndex)
+            } else {
+                selectedItemIndex = newPosition
+                notifyItemChanged(selectedItemIndex)
+            }
+//            if (selectedItemIndex != -1) {
+//                selectedItemIndex = -1
+//            } else {
+//                selectedItemIndex = adapterPosition
+//            }
+//            notifyDataSetChanged()
+
+            val city = filteredCityList[newPosition]
             onCitySelectedListener?.onCitySelected(
                     City(
                             id = city.id,
@@ -132,12 +162,6 @@ class OnboardingMajorCityAdapter(
                             stateCode = city.stateCode
                     )
             )
-//            if (selectedItemIndex != -1) {
-//                selectedItemIndex = -1
-//            } else {
-//                selectedItemIndex = adapterPosition
-//            }
-//            notifyDataSetChanged()
         }
 
     }

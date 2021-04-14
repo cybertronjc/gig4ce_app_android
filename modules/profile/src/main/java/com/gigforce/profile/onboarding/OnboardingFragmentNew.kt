@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MultiviewsAdapter
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
@@ -15,8 +15,10 @@ import com.gigforce.profile.onboarding.fragments.experience.ExperienceFragment
 import com.gigforce.profile.onboarding.fragments.highestqulalification.HighestQualificationFragment
 import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
 import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
+import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
+import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
+import com.gigforce.profile.viewmodel.OnboardingViewModel
 import kotlinx.android.synthetic.main.age_group_item.*
-import kotlinx.android.synthetic.main.age_group_item.view.*
 import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
@@ -29,32 +31,47 @@ class OnboardingFragmentNew : Fragment() {
     }
 
     private lateinit var viewModel: OnboardingFragmentNewViewModel
+    private val onboardingViewModel: OnboardingViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.onboarding_fragment_new_fragment, container, false)
     }
-    var adapter : MultiviewsAdapter? = null
+
+    var adapter: MultiviewsAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)
         disableViewPagerScroll()
-        onboarding_pager.offscreenPageLimit = 6
+        onboarding_pager.offscreenPageLimit = 3
         activity?.let {
             onboarding_pager.adapter = MutlifragmentAdapter(it,
-                object : FragmentInteractionListener {
-                    override fun onActionResult(result: Boolean) {
-                        enableNextButton(true)
-                    }
-                })
+                    object : FragmentInteractionListener {
+                        override fun onActionResult(result: Boolean) {
+                            enableNextButton(true)
+                        }
+                    })
 
         }
+
+        onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                if (position == 8) {
+                    val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                    val fragment = fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
+                    fragment.showCameraSheetIfNotShown()
+                }
+            }
+        })
         next.setOnClickListener(View.OnClickListener {
             saveDataToDB(onboarding_pager.currentItem)
-            onboarding_pager.setCurrentItem(onboarding_pager.currentItem+1)
-            steps.text = "Steps ${onboarding_pager.currentItem+1}/9"
+            onboarding_pager.setCurrentItem(onboarding_pager.currentItem + 1)
+            steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
 
         })
 
@@ -73,24 +90,37 @@ class OnboardingFragmentNew : Fragment() {
         } else {
             next.background = resources.getDrawable(R.drawable.app_gradient_button_disabled, null);
         }
-
-
     }
 
     private fun saveDataToDB(currentItem: Int) {
         when (currentItem) {
             0 -> {
                 var enteredName =
-                    onboarding_pager.getChildAt(0).username
-                        .text.toString()
+                        onboarding_pager.getChildAt(0).username
+                                .text.toString()
                 var formattedString = getFormattedString(enteredName)
                 viewModel.saveUserName(formattedString.trim())
                 saveGender()
             }
             1 -> viewModel.saveAgeGroup(getSelectedAgeGroup())
-            2->viewModel.saveHighestQualification(getSelectedHighestQualification())
-            4-> setWorkingStatus()
-            5->setInterest()
+            2 -> viewModel.saveHighestQualification(getSelectedHighestQualification())
+            3 -> {
+                val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                val fragment = fragmentAdapter.getFragment(currentItem) as OnboardingPreferredJobLocationFragment
+                val selectedCity = fragment.getSelectedCity()
+
+                if(selectedCity != null){
+
+                    onboardingViewModel.savePreferredJobLocation(
+                            cityId = selectedCity.id,
+                            cityName = selectedCity.name,
+                            stateCode = selectedCity.stateCode,
+                            subLocation = selectedCity.subLocation
+                    )
+                }
+            }
+            4 -> setWorkingStatus()
+            5 -> setInterest()
 //            2 -> viewModel.selectYourGender(getSelectedDataFromRecycler(2))
 //            3 -> viewModel.saveHighestQualification(getSelectedDataFromRecycler(3))
 //            4 -> viewModel.saveWorkStatus(getSelectedDataFromRecycler(4))
@@ -114,8 +144,8 @@ class OnboardingFragmentNew : Fragment() {
 
         var total_experience_rg = experienceFragment.total_experience_rg
         val selectedId = total_experience_rg.getCheckedRadioButtonId()
-        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
-        viewModel.saveTotalExperience(radioButton.text.toString())
+//        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+//        viewModel.saveTotalExperience(radioButton.text.toString())
     }
 
 
@@ -126,12 +156,13 @@ class OnboardingFragmentNew : Fragment() {
         // find the radiobutton by returned id
 
         // find the radiobutton by returned id
-        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+        // var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
 
-        return radioButton.text.toString()
+        // return radioButton.text.toString()
+        return ""
     }
 
-    private fun getSelectedHighestQualification():String{
+    private fun getSelectedHighestQualification(): String {
         return (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as HighestQualificationFragment).selectedHighestQualification
     }
 
@@ -141,8 +172,8 @@ class OnboardingFragmentNew : Fragment() {
         for (str in arr) {
             try {
                 formattedString += str.substring(
-                    0,
-                    1
+                        0,
+                        1
                 ).toUpperCase() + str.substring(1).toLowerCase()
             } catch (e: Exception) {
 
@@ -152,8 +183,8 @@ class OnboardingFragmentNew : Fragment() {
         return formattedString.trim()
     }
 
-    interface FragmentInteractionListener{
-        fun onActionResult(result : Boolean)
+    interface FragmentInteractionListener {
+        fun onActionResult(result: Boolean)
     }
 
     //--------------
