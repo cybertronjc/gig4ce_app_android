@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/city_name_tv"
+    android:fontFamily="@font/lato"
+    android:textStyle="normal"
+    android:textSize="16sp"
+    android:textColor="#333333"
+    android:lineSpacingExtra="3sp"
+    android:text="Ss"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:orientation="vertical"/>
