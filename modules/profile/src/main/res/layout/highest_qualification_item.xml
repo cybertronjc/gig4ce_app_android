@@ -47,7 +47,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_less_tenth"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +85,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_tenth"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -123,7 +123,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_12th"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -164,7 +164,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_diploma"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -203,7 +203,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_graduate"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -242,7 +242,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/ic_chat"
+                android:src="@drawable/ic_post_graduate"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
