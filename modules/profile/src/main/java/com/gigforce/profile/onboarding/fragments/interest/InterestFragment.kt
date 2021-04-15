@@ -18,7 +18,7 @@ import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
 
-class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
+class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = InterestFragment(formCompletionListener)
@@ -71,10 +71,8 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                                     setSelected(view.icon_iv, view.interest_name, view)
                                     allInterestList.get(position).selected = true
                                 }
-                                if (allInterestList.get(position).interestName.equals("Delivery Executive")) {
-                                    interest_cl.gone()
-                                    delivery_executive_detail_cl.visible()
-                                }
+                                formCompletionListener.formcompleted(true)
+
                             } else {
                                 Toast.makeText(context, "Maximum three interest can be selected!!", Toast.LENGTH_LONG).show()
                             }
@@ -94,7 +92,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         return count
     }
 
-    private fun isDeliveryExecutiveSelected():Boolean{
+    private fun isDeliveryExecutiveSelected(): Boolean {
         allInterestList.forEach { obj ->
             if (obj.interestName.equals("Delivery Executive")) {
                 return true
@@ -139,7 +137,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             validateForm()
         }
 
-        imageTextCardMolfirst.setOnClickListener{
+        imageTextCardMolfirst.setOnClickListener {
             if (ecomSelected) {
                 resetSelected(icon1f, ecom, imageTextCardMolfirst)
                 ecomSelected = false
@@ -148,7 +146,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 ecomSelected = true
             }
         }
-        imageTextCardMol3.setOnClickListener{
+        imageTextCardMol3.setOnClickListener {
             if (milkSelected) {
                 resetSelected(icon2, milk, imageTextCardMol3)
                 milkSelected = false
@@ -204,15 +202,26 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         return selectedInterests
     }
 
-    fun validateForm(){
-        if(getSelectedInterestCount()>0 ){
-            if(isDeliveryExecutiveSelected()){
-                if(!experiencedInDeliveryExecutive || (foodSelected || grocerySelected || ecomSelected || milkSelected)){
+    fun validateForm() {
+        if (getSelectedInterestCount() > 0) {
+            if (isDeliveryExecutiveSelected()) {
+                if (!experiencedInDeliveryExecutive || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
                     formCompletionListener.formcompleted(true)
-                }
-                else formCompletionListener.formcompleted(false)
-            }
-            else formCompletionListener.formcompleted(true)
+                } else formCompletionListener.formcompleted(false)
+            } else formCompletionListener.formcompleted(true)
         }
+    }
+
+    override fun actionFound(): Boolean {
+        getselectedInterest().forEach {
+            if (it.equals("Delivery Executive")) {
+                interest_cl.gone()
+                delivery_executive_detail_cl.visible()
+                return true
+            }
+        }
+
+        return false
+
     }
 }

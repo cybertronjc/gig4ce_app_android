@@ -15,10 +15,10 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.job_preference_fragment.*
 
-class JobPreferenceFragment : Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
+class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
-        fun newInstance() = JobPreferenceFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = JobPreferenceFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: JobPreferenceViewModel
@@ -39,16 +39,18 @@ class JobPreferenceFragment : Fragment(), OnboardingFragmentNew.FragmentInteract
     var fullTimeJob = false
     private fun listeners() {
         imageTextCardcl.setOnClickListener(View.OnClickListener {
-            job_preferences.gone()
-            work_days_cl.visible()
-            timing_cl.gone()
+//            job_preferences.gone()
+//            work_days_cl.visible()
+//            timing_cl.gone()
             fullTimeJob = true
+            validateForm()
         })
         imageTextCardcl_.setOnClickListener(View.OnClickListener {
             job_preferences.gone()
             work_days_cl.visible()
             timing_cl.gone()
             fullTimeJob = false
+            validateForm()
         })
 
 
@@ -92,7 +94,11 @@ class JobPreferenceFragment : Fragment(), OnboardingFragmentNew.FragmentInteract
     }
 
     fun validateForm(){
-        if(getWorkingDays().size>0 && getTimeSlots().size>0){
+        if(fullTimeJob || (getWorkingDays().size>0 && getTimeSlots().size>0)){
+            formCompletionListener.formcompleted(true)
+        }
+        else{
+            formCompletionListener.formcompleted(false)
 
         }
     }

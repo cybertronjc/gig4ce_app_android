@@ -48,7 +48,7 @@ class OnboardingFragmentNew : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewForOnboarding()
-
+        enableNextButton(false)
 
     }
 
@@ -73,6 +73,9 @@ class OnboardingFragmentNew : Fragment() {
                 saveDataToDB(onboarding_pager.currentItem)
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+                if(onboarding_pager.currentItem == 3)
+                    enableNextButton(true)
+                else
                 enableNextButton(false)
             }
 
