@@ -1,8 +1,9 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
+import com.gigforce.app.modules.gighistory.models.GigsResponse
 import com.gigforce.app.modules.gigPage2.models.DocChange
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
@@ -121,6 +122,9 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             if (querySnapshot.documents.isNotEmpty())
                 lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
             isLastPage = querySnapshot.documents.size < limit
+
+
+            Log.d("TAG","Filtering gig for upcoming")
             observableScheduledGigs.value = GigsResponse(
                     true,
                     "Upcoming Gigs Loaded Successfully",
@@ -171,6 +175,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
         if (pastGigs) {
             repositoryCallbacks.getPastGigs(this, lastVisibleItem, limit)
         } else {
+            Log.d("GigHostoryFragment","Fetching upcoming data ...")
             repositoryCallbacks.getUpComingGigs(this, lastVisibleItem, limit)
         }
 
@@ -210,6 +215,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             userGigs.retainAll { element ->
 
                 val gigStatus = GigStatus.fromGig(element)
+
+                Log.d("TAG","filtering element ${element.gigId}")
+                Log.d("TAG","filtering element result ${gigStatus == GigStatus.UPCOMING}")
+
                 gigStatus == GigStatus.UPCOMING
             }
         }

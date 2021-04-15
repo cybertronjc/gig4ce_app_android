@@ -570,7 +570,7 @@
 
     <fragment
         android:id="@+id/gig_history_fragment"
-        android:name="com.gigforce.app.modules.earn.gighistory.GigHistoryFragment"
+        android:name="com.gigforce.app.modules.gighistory.GigHistoryFragment"
         android:label="GigHistoryFragment" />
     <fragment
         android:id="@+id/giger_id_fragment"

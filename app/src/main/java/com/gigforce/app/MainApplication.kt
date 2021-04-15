@@ -5,6 +5,9 @@ import android.app.NotificationManager
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.clevertap.android.sdk.CleverTapAPI
+import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.HiltAndroidApp
 
@@ -14,8 +17,15 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setupCleverTap()
+        setUpCrashlyticsUser()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+    }
+
+    private fun setUpCrashlyticsUser() {
+        FirebaseAuth.getInstance().currentUser?.let {
+            FirebaseCrashlytics.getInstance().setUserId(it.uid)
+        }
     }
 
     private fun setupCleverTap() {

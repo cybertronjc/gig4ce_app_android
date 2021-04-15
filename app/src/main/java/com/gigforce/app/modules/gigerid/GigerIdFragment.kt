@@ -27,6 +27,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -55,6 +56,7 @@ class GigerIdFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()

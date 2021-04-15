@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -135,8 +136,10 @@ class GigViewModel constructor(
                     remarks = remarks
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
+            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
+            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -162,9 +165,11 @@ class GigViewModel constructor(
                     checkOutTimeAccToUser = checkOutTimeAccToUser,
                     remarks = remarks
             )
-            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_OUT))
+            _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
+            _markingAttendanceState.value = null
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
+            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -501,7 +506,8 @@ class GigViewModel constructor(
                     .updateOrThrow(mapOf(
                             "gigStatus" to GigStatus.DECLINED.getStatusString(),
                             "declinedBy" to gig.gigerId,
-                            "declineReason" to reason
+                            "declineReason" to reason,
+                            "declinedOn" to Timestamp.now()
                     ))
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
@@ -526,7 +532,8 @@ class GigViewModel constructor(
                         .updateOrThrow(mapOf(
                                 "gigStatus" to GigStatus.DECLINED.getStatusString(),
                                 "declinedBy" to gig.gigerId,
-                                "declineReason" to reason
+                                "declineReason" to reason,
+                                "declinedOn" to Timestamp.now()
                         ))
             }
 

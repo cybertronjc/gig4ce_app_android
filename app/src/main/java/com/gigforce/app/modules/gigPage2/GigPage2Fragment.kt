@@ -26,8 +26,6 @@ import com.gigforce.app.R
 import com.gigforce.app.core.*
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage.*
-import com.gigforce.app.modules.gigPage2.models.ContactPerson
-import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
@@ -36,9 +34,7 @@ import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSh
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.PermissionRequiredBottomSheet
 import com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment
-import com.gigforce.app.modules.gigPage2.models.AttendanceType
-import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.modules.gigPage2.models.OtherOption
+import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
@@ -49,7 +45,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
@@ -60,6 +55,7 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -202,7 +198,7 @@ class GigPage2Fragment : BaseFragment(),
             viewModel.currentGig?.let {
 
                 val status = GigStatus.fromGig(it)
-                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING)
+                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING || status == GigStatus.PENDING)
                 popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
             }
 
@@ -210,35 +206,28 @@ class GigPage2Fragment : BaseFragment(),
             popupMenu.show()
         }
 
-        checkInCheckOutSliderBtn?.onSlideCompleteListener =
-                object : SlideToActView.OnSlideCompleteListener {
+        checkInCheckOutSliderBtn?.setOnClickListener {
 
-                    override fun onSlideComplete(view: SlideToActView) {
-                        val gig = viewModel.currentGig ?: return
+            val gig = viewModel.currentGig ?: return@setOnClickListener
 
-                        if (isNecessaryPermissionGranted()) {
+            if (isNecessaryPermissionGranted()) {
 
-                            if (!gig.isCheckInAndCheckOutMarked()) {
-                                if (imageClickedPath != null) {
+                if (!gig.isCheckInAndCheckOutMarked()) {
+                    if (imageClickedPath != null) {
 
-                                    if (location == null) {
-                                        showAlertDialog("Please wait while your current location is captured")
-                                    } else {
-                                        checkForLateOrEarlyCheckIn()
-                                    }
-                                } else {
-                                    startCameraForCapturingSelfie()
-                                }
-                            } else {
-                                //Start regularisation
-                                startRegularisation()
-                            }
-                        } else {
-                            checkInCheckOutSliderBtn?.resetSlider()
-                            showPermissionRequiredAndTheirReasonsDialog()
-                        }
+                        checkForLateOrEarlyCheckIn()
+                    } else {
+                        startCameraForCapturingSelfie()
                     }
+                } else {
+                    //Start regularisation
+                    startRegularisation()
                 }
+            } else {
+                showPermissionRequiredAndTheirReasonsDialog()
+            }
+        }
+
     }
 
     override fun onResume() {
@@ -273,7 +262,7 @@ class GigPage2Fragment : BaseFragment(),
             return
         }
 
-        val locationPhysicalAddress = if(location != null) {
+        val locationPhysicalAddress = if (location != null) {
             LocationUtils.getPhysicalAddressFromLocation(
                     context = requireContext(),
                     latitude = location!!.latitude,
@@ -313,6 +302,7 @@ class GigPage2Fragment : BaseFragment(),
 
         viewModel.markingAttendanceState
                 .observe(viewLifecycleOwner, Observer {
+                    it ?: return@Observer
 
                     when (it) {
                         Lce.Loading -> {
@@ -370,8 +360,7 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         val status = GigStatus.fromGig(gig)
-        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED ||
-                status == GigStatus.UPCOMING
+        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED || status == GigStatus.UPCOMING || status == GigStatus.PENDING
     }
 
     private fun setAttendanceButtonVisibility(gig: Gig) = when (GigStatus.fromGig(gig)) {
@@ -389,13 +378,23 @@ class GigPage2Fragment : BaseFragment(),
             gig: Gig
     ) {
 
-        checkInCheckOutSliderBtn.visible()
-        checkInCheckOutSliderBtn.text = if (!gig.isCheckInMarked()) {
-            "Check-in"
-        } else if (gig.isCheckInMarked()) {
-            "Check-out"
-        } else {
-            "Regularise"
+        if (!gig.isCheckInMarked()) {
+
+            checkInCheckOutSliderBtn.visible()
+            checkInCheckOutSliderBtn.text = "Check-in"
+        } else if (!gig.isCheckOutMarked()) {
+
+            val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
+            val currentTime = LocalDateTime.now()
+
+            val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+
+            if (minutes > 15L) {
+                checkInCheckOutSliderBtn.visible()
+                checkInCheckOutSliderBtn.text = "Check-out"
+            } else {
+                checkInCheckOutSliderBtn.gone()
+            }
         }
     }
 
@@ -491,13 +490,15 @@ class GigPage2Fragment : BaseFragment(),
             divider_below_feedback.gone()
         }
 
+        userFeedbackTV.isVisible = !gig.gigUserFeedback.isNullOrBlank()
+        userFeedbackTV.text = "User feedback : ${gig.gigUserFeedback}"
         userFeedbackRatingBar.rating = gig.gigRating
     }
 
     private fun showOtherOptions(gig: Gig) {
         val status = GigStatus.fromGig(gig)
 
-        val optionList = if (status == GigStatus.UPCOMING) {
+        val optionList = if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
             listOf(
                     IDENTITY_CARD,
                     ATTENDANCE_HISTORY,
@@ -569,7 +570,7 @@ class GigPage2Fragment : BaseFragment(),
 
         return when (item.itemId) {
             R.id.action_help -> {
-               // navigate(R.id.contactScreenFragment)
+                // navigate(R.id.contactScreenFragment)
                 true
             }
             R.id.action_feedback -> {
@@ -658,7 +659,6 @@ class GigPage2Fragment : BaseFragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        checkInCheckOutSliderBtn?.resetSlider()
 
         when (requestCode) {
             REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {

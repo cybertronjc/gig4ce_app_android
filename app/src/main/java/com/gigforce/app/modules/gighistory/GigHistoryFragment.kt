@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -140,8 +140,8 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         viewModel.observableDocChange.observe(viewLifecycleOwner, Observer {
             adapter.handleDocChange(it)
         })
-        //TODO : Correct this afterwards
-        var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        var viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile?.profileAvatarName!!)
 
@@ -155,7 +155,13 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun showNoGigExists(int: Int) {
-        tv_no_gigs_gig_hist.visibility = int
+        no_gigs_layout.visibility = int
+
+        if(adapter.getOngoingGigsCount() != 0){
+
+        } else {
+
+        }
     }
 
     override fun getPastGigs() {

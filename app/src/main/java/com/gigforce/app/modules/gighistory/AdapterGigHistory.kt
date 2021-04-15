@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.earn.gighistory
+package com.gigforce.app.modules.gighistory
 
 import android.view.LayoutInflater
 import android.view.View
@@ -62,6 +62,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return if (scheduledGigs != null) scheduledGigs?.size!! + 2 else 2;
+    }
+
+    fun getOngoingGigsCount() : Int{
+        return onGoingGigs?.size ?: 0
     }
 
     fun addScheduledGigs(scheduledGigs: List<Gig>?) {
