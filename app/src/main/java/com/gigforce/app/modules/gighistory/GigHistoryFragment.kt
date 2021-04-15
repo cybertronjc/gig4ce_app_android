@@ -140,8 +140,8 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
         viewModel.observableDocChange.observe(viewLifecycleOwner, Observer {
             adapter.handleDocChange(it)
         })
-        //TODO : Correct this afterwards
-        var viewModelProfile = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        var viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile?.profileAvatarName!!)
 
@@ -156,6 +156,12 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
 
     override fun showNoGigExists(int: Int) {
         no_gigs_layout.visibility = int
+
+        if(adapter.getOngoingGigsCount() != 0){
+
+        } else {
+
+        }
     }
 
     override fun getPastGigs() {

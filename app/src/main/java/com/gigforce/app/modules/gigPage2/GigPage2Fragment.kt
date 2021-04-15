@@ -198,7 +198,7 @@ class GigPage2Fragment : BaseFragment(),
             viewModel.currentGig?.let {
 
                 val status = GigStatus.fromGig(it)
-                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING)
+                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING || status == GigStatus.PENDING)
                 popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
             }
 
@@ -360,8 +360,7 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         val status = GigStatus.fromGig(gig)
-        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED ||
-                status == GigStatus.UPCOMING
+        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED || status == GigStatus.UPCOMING || status == GigStatus.PENDING
     }
 
     private fun setAttendanceButtonVisibility(gig: Gig) = when (GigStatus.fromGig(gig)) {
@@ -491,13 +490,15 @@ class GigPage2Fragment : BaseFragment(),
             divider_below_feedback.gone()
         }
 
+        userFeedbackTV.isVisible = !gig.gigUserFeedback.isNullOrBlank()
+        userFeedbackTV.text = "User feedback : ${gig.gigUserFeedback}"
         userFeedbackRatingBar.rating = gig.gigRating
     }
 
     private fun showOtherOptions(gig: Gig) {
         val status = GigStatus.fromGig(gig)
 
-        val optionList = if (status == GigStatus.UPCOMING) {
+        val optionList = if (status == GigStatus.UPCOMING || status == GigStatus.PENDING) {
             listOf(
                     IDENTITY_CARD,
                     ATTENDANCE_HISTORY,

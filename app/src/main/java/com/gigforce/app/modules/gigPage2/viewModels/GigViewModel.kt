@@ -506,7 +506,8 @@ class GigViewModel constructor(
                     .updateOrThrow(mapOf(
                             "gigStatus" to GigStatus.DECLINED.getStatusString(),
                             "declinedBy" to gig.gigerId,
-                            "declineReason" to reason
+                            "declineReason" to reason,
+                            "declinedOn" to Timestamp.now()
                     ))
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
@@ -531,7 +532,8 @@ class GigViewModel constructor(
                         .updateOrThrow(mapOf(
                                 "gigStatus" to GigStatus.DECLINED.getStatusString(),
                                 "declinedBy" to gig.gigerId,
-                                "declineReason" to reason
+                                "declineReason" to reason,
+                                "declinedOn" to Timestamp.now()
                         ))
             }
 

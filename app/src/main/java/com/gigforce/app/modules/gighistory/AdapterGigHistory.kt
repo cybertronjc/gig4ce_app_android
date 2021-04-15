@@ -64,6 +64,10 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return if (scheduledGigs != null) scheduledGigs?.size!! + 2 else 2;
     }
 
+    fun getOngoingGigsCount() : Int{
+        return onGoingGigs?.size ?: 0
+    }
+
     fun addScheduledGigs(scheduledGigs: List<Gig>?) {
         val itemSizeBefore = this.scheduledGigs?.size;
         this.scheduledGigs?.addAll(scheduledGigs!!)

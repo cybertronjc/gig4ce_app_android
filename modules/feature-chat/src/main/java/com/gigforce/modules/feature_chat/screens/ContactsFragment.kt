@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
@@ -306,6 +307,7 @@ class ContactsFragment : DialogFragment(),
                 contactsToolbarLabel.gone()
                 contactsToolbarSubTitle.gone()
                 searchET.requestFocus()
+                openSoftKeyboard(searchET)
 
                 onBackPressCallback.isEnabled = true
             }
@@ -596,5 +598,14 @@ class ContactsFragment : DialogFragment(),
 
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+    }
+
+    private fun openSoftKeyboard(view: View) {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInputFromWindow(
+                view.applicationWindowToken,
+                InputMethod.SHOW_FORCED,
+                0
+        )
     }
 }

@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="340dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/rv_gigs_gig_history"
         app:layout_constraintEnd_toEndOf="parent"
