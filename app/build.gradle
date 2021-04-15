@@ -45,8 +45,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 92
-        versionName "1.28.3"
+        versionCode 93
+        versionName "1.28.4"
 
         vectorDrawables.useSupportLibrary = true
 
