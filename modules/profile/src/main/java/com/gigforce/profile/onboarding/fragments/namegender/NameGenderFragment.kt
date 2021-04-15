@@ -1,6 +1,7 @@
 package com.gigforce.profile.onboarding.fragments.namegender
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,9 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NameGenderFragment() : Fragment() {
+class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
     companion object {
-        fun newInstance() = NameGenderFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
     var gender = ""
     override fun onCreateView(
@@ -37,21 +38,34 @@ class NameGenderFragment() : Fragment() {
     }
 
     private fun listener() {
+
         imageTextCardMol.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon, option, imageTextCardMol)
             gender = "Male"
+            validateAllValues()
         })
         imageTextCardMol4.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon1, option1, imageTextCardMol4)
             gender = "Female"
+            validateAllValues()
         })
         imageTextCardMol3.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon2, option2, imageTextCardMol3)
             gender = "Other"
+            validateAllValues()
         })
+    }
+
+    private fun validateAllValues(){
+        if(!gender.equals("") && !username.text.toString().equals("")){
+            formCompletionListener.formcompleted(true)
+        }
+        else{
+            formCompletionListener.formcompleted(false)
+        }
     }
 
     private fun resetAll() {

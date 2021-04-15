@@ -10,12 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.highest_qualification_item.*
 
-class HighestQualificationFragment : Fragment() {
+class HighestQualificationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
 
     companion object {
-        fun newInstance() = HighestQualificationFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = HighestQualificationFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: HighestQualificationViewModel
@@ -34,37 +35,51 @@ class HighestQualificationFragment : Fragment() {
     }
 
     private fun listener() {
-        imageTextCardMol.setOnClickListener(View.OnClickListener {
+        imageTextCardMol.setOnClickListener {
             resetAll()
             setSelected(icon, option, imageTextCardMol)
             selectedHighestQualification = "<10th"
-        })
-        imageTextCardMol4.setOnClickListener(View.OnClickListener {
+            validateForm()
+        }
+        imageTextCardMol4.setOnClickListener{
             resetAll()
             setSelected(icon1, option1, imageTextCardMol4)
             selectedHighestQualification = "10th pass"
-        })
-        imageTextCardMol3.setOnClickListener(View.OnClickListener {
+            validateForm()
+        }
+        imageTextCardMol3.setOnClickListener {
             resetAll()
             setSelected(icon2, option2, imageTextCardMol3)
             selectedHighestQualification = "12th pass"
-        })
-        imageTextCardMol_.setOnClickListener(View.OnClickListener {
+            validateForm()
+        }
+        imageTextCardMol_.setOnClickListener{
             resetAll()
             setSelected(icon_, option_, imageTextCardMol_)
             selectedHighestQualification = "Diploma"
-        })
-        imageTextCardMol4_.setOnClickListener(View.OnClickListener {
+            validateForm()
+        }
+        imageTextCardMol4_.setOnClickListener{
             resetAll()
             setSelected(icon1_, option1_, imageTextCardMol4_)
             selectedHighestQualification = "Graduated"
-
-        })
-        imageTextCardMol3_.setOnClickListener(View.OnClickListener {
+            validateForm()
+        }
+        imageTextCardMol3_.setOnClickListener{
             resetAll()
             setSelected(icon2_, option2_, imageTextCardMol3_)
             selectedHighestQualification = "Post Graduated"
-        })
+            validateForm()
+        }
+    }
+
+    private fun validateForm() {
+        if(!selectedHighestQualification.equals("")){
+            formCompletionListener.formcompleted(true)
+        }
+        else{
+            formCompletionListener.formcompleted(false)
+        }
     }
 
     private fun resetAll() {

@@ -14,7 +14,7 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 
-class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class MutlifragmentAdapter(activity: FragmentActivity,formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int {
         return 9
@@ -22,12 +22,12 @@ class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(ac
 
     val fragmentArr = ArrayList<Fragment>()
     init {
-        fragmentArr.add(NameGenderFragment.newInstance())
-        fragmentArr.add(AgeGroupFragment.newInstance())
-        fragmentArr.add(HighestQualificationFragment.newInstance())
+        fragmentArr.add(NameGenderFragment.newInstance(formCompletionListener))
+        fragmentArr.add(AgeGroupFragment.newInstance(formCompletionListener))
+        fragmentArr.add(HighestQualificationFragment.newInstance(formCompletionListener))
         fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance())
-        fragmentArr.add(ExperienceFragment.newInstance())
-        fragmentArr.add(InterestFragment.newInstance())
+        fragmentArr.add(ExperienceFragment.newInstance(formCompletionListener))
+        fragmentArr.add(InterestFragment.newInstance(formCompletionListener))
         fragmentArr.add(JobPreferenceFragment.newInstance())
         fragmentArr.add(AssetOwnedFragment.newInstance())
         fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance())

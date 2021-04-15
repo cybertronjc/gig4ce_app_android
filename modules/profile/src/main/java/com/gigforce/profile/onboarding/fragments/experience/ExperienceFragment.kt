@@ -1,34 +1,29 @@
 package com.gigforce.profile.onboarding.fragments.experience
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.experience_item.*
-import kotlinx.android.synthetic.main.experience_item.icon
-import kotlinx.android.synthetic.main.experience_item.icon2
-import kotlinx.android.synthetic.main.experience_item.imageTextCardMol
-import kotlinx.android.synthetic.main.experience_item.imageTextCardMol3
-import kotlinx.android.synthetic.main.experience_item.option
-import kotlinx.android.synthetic.main.experience_item.option2
-import kotlinx.android.synthetic.main.highest_qualification_item.*
-import kotlinx.android.synthetic.main.name_gender_item.view.*
 
-class ExperienceFragment : Fragment() {
+class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
+    Fragment() {
 
     companion object {
-        fun newInstance() = ExperienceFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
+            ExperienceFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: ExperienceViewModel
     var workStatus = ""
-    var totalExperience = ""
+    var istotalExperienceSelected = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,14 +40,29 @@ class ExperienceFragment : Fragment() {
     private fun listener() {
         imageTextCardMol.setOnClickListener(View.OnClickListener {
             resetAll()
-            setSelected(icon, option,imageTextCardMol)
+            setSelected(icon, option, imageTextCardMol)
             workStatus = "Working"
+            validateForm()
         })
         imageTextCardMol3.setOnClickListener(View.OnClickListener {
             resetAll()
-            setSelected(icon2,option2,imageTextCardMol3)
+            setSelected(icon2, option2, imageTextCardMol3)
             workStatus = "Not Working"
+            validateForm()
         })
+
+        total_experience_rg.setOnCheckedChangeListener { group, checkedId ->
+            istotalExperienceSelected = true
+            validateForm()
+        }
+    }
+
+    private fun validateForm() {
+        if (!workStatus.equals("") && istotalExperienceSelected) {
+            formCompletionListener.formcompleted(true)
+        } else {
+            formCompletionListener.formcompleted(false)
+        }
     }
 
     private fun resetAll() {

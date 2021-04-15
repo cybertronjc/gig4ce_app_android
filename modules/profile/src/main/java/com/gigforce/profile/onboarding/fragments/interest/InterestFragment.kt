@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
 
-class InterestFragment : Fragment() {
+class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
 
     companion object {
-        fun newInstance() = InterestFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = InterestFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: InterestViewModel
@@ -93,16 +94,27 @@ class InterestFragment : Fragment() {
         return count
     }
 
+    private fun isDeliveryExecutiveSelected():Boolean{
+        allInterestList.forEach { obj ->
+            if (obj.interestName.equals("Delivery Executive")) {
+                return true
+            }
+        }
+        return false
+    }
+
     private fun listener() {
         imageTextCardcl.setOnClickListener {
             setSelected(icon_iv_1, yes_i_have, imageTextCardcl)
             resetSelected(icon_iv1, no_i_dont, imageTextCardcl_)
             experiencedInDeliveryExecutive = true
+            validateForm()
         }
         imageTextCardcl_.setOnClickListener {
             resetSelected(icon_iv_1, yes_i_have, imageTextCardcl)
             setSelected(icon_iv1, no_i_dont, imageTextCardcl_)
             experiencedInDeliveryExecutive = false
+            validateForm()
         }
 
         imageTextCardMol.setOnClickListener {
@@ -113,6 +125,7 @@ class InterestFragment : Fragment() {
                 setSelected(icon, food, imageTextCardMol)
                 foodSelected = true
             }
+            validateForm()
         }
 
         imageTextCardMol4.setOnClickListener {
@@ -123,6 +136,7 @@ class InterestFragment : Fragment() {
                 setSelected(icon1, grocery, imageTextCardMol4)
                 grocerySelected = true
             }
+            validateForm()
         }
 
         imageTextCardMolfirst.setOnClickListener{
@@ -142,6 +156,7 @@ class InterestFragment : Fragment() {
                 setSelected(icon2, milk, imageTextCardMol3)
                 milkSelected = true
             }
+            validateForm()
         }
 
     }
@@ -187,5 +202,17 @@ class InterestFragment : Fragment() {
             }
         }
         return selectedInterests
+    }
+
+    fun validateForm(){
+        if(getSelectedInterestCount()>0 ){
+            if(isDeliveryExecutiveSelected()){
+                if(!experiencedInDeliveryExecutive || (foodSelected || grocerySelected || ecomSelected || milkSelected)){
+                    formCompletionListener.formcompleted(true)
+                }
+                else formCompletionListener.formcompleted(false)
+            }
+            else formCompletionListener.formcompleted(true)
+        }
     }
 }

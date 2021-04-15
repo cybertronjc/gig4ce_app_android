@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import kotlinx.android.synthetic.main.age_group_item.*
 
-class AgeGroupFragment : Fragment() {
+class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
 
     companion object {
-        fun newInstance() = AgeGroupFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AgeGroupFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: AgeGroupViewModel
@@ -24,6 +26,9 @@ class AgeGroupFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AgeGroupViewModel::class.java)
+        age_group.setOnCheckedChangeListener{ group, checkedId ->
+            formCompletionListener.formcompleted(true)
+        }
     }
 
 }

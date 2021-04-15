@@ -90,4 +90,11 @@ class JobPreferenceFragment : Fragment(), OnboardingFragmentNew.FragmentInteract
         ids.forEach { slot-> if(slot.isChecked) workingTimeSlots.add(slot.tag.toString())}
         return workingTimeSlots
     }
+
+    fun validateForm(){
+        if(getWorkingDays().size>0 && getTimeSlots().size>0){
+
+        }
+    }
+
 }
