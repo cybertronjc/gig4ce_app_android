@@ -12,6 +12,7 @@
         android:minHeight="@dimen/size_72"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:background="@drawable/toolbar_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,6 +21,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/back_button_login"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_button"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/login_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/back_button_login"
+                android:textAlignment="center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:textSize="20sp"
+                android:text="@string/login" />
         </RelativeLayout>
 
 
@@ -79,7 +103,7 @@
                 android:id="@+id/tv_prefix_number_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_24"
+                android:layout_marginStart="@dimen/size_16"
                 android:layout_marginTop="@dimen/size_28"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="4sp"
@@ -123,13 +147,13 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login" />
 
             <include
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/some_id_if_needed"
                 layout="@layout/mobile_number_digit_layout"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
                 app:layout_constraintEnd_toEndOf="@+id/ll_note_login"
-
+                app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
                 app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"/>
 
             <androidx.constraintlayout.widget.Barrier
@@ -137,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="tv_prefix_number_login,otp_mobile_number" />
+                app:constraint_referenced_ids="tv_prefix_number_login, some_id_if_needed" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cvloginwrong"
@@ -186,7 +210,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_30"
                 android:layout_marginEnd="@dimen/size_16"
                 android:background="@drawable/bg_4fffe9ef_rad_4"
                 android:orientation="vertical"
@@ -203,7 +227,7 @@
                     android:lineSpacingExtra="3sp"
                     android:text="@string/note"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
 
@@ -228,7 +252,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/this_mobile_no_will_be_used_to_call_you_for_various_job_opportunities"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="17dp"
                         android:textStyle="normal" />
                 </TableRow>
 
@@ -254,7 +278,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/this_overrides_any_dnd_requests_with_your_operator"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="17sp"
                         android:textStyle="normal" />
                 </TableRow>
 
@@ -271,7 +295,7 @@
         android:id="@+id/login_button"
         style="@style/button_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_22"

@@ -9,12 +9,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
@@ -49,6 +49,7 @@ class Login : BaseFragment() {
     private var mobile_number: String = ""
     private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
+    private var win: Window? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,11 +82,18 @@ class Login : BaseFragment() {
             //otp_mobile_number.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)
             Log.d("mobile_number", mobile_number)
+            changeStatusBarColor()
             getAllEarlierMobileNumbers()
             prepareEditTextList()
             listeners()
             observer()
             setClickListnerOnEditTexts()
+
+            //back button
+            back_button_login.setOnClickListener {
+                onBackPressed()
+            }
+
             //registerTextWatcher()
 //            if (mobile_number.equals(""))
 //                showComfortDialog()
@@ -95,13 +103,26 @@ class Login : BaseFragment() {
 
     private fun populateMobileInEditTexts(mobile: String){
         if (mobile.length == 10){
-            Log.d("mobile sixe", "Here")
+            prepareEditTextList()
+            Log.d("mobile sixe", mobile)
             for (i in 0..mobile.length - 1){
-                //arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
+                arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
                 Log.d("array size", ""+arrayEditTexts1.size )
             }
         }
 
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
     }
 
 
@@ -221,7 +242,7 @@ class Login : BaseFragment() {
     }
 
     private fun listeners() {
-        cvloginwrong.visibility = INVISIBLE
+        cvloginwrong.visibility = GONE
         otp_mobile_number.doAfterTextChanged {
             showWrongMobileNoLayout(false)
             if (otp_mobile_number.text.toString().length == 10) {
@@ -263,7 +284,7 @@ class Login : BaseFragment() {
 
 
         otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
-            cvloginwrong.visibility = INVISIBLE
+            cvloginwrong.visibility = GONE
 //            textView23.visibility = VISIBLE
 
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -294,7 +315,7 @@ class Login : BaseFragment() {
             cvloginwrong.visibility = VISIBLE
 //            textView23.visibility = INVISIBLE
         } else {
-            cvloginwrong.visibility = INVISIBLE
+            cvloginwrong.visibility = GONE
 //            textView23.visibility = VISIBLE
 
         }
