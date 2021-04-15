@@ -86,6 +86,9 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
         resetSelected(icon, option, imageTextCardMol)
         resetSelected(icon1,option1, imageTextCardMol4)
         resetSelected(icon2, option2, imageTextCardMol3)
+        resetSelected(icon_, option_, imageTextCardMol_ )
+        resetSelected(icon1_, option1_, imageTextCardMol4_)
+        resetSelected(icon2_, option2_, imageTextCardMol3_)
 
     }
 

@@ -34,8 +34,9 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         return inflater.inflate(R.layout.interest_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
         allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
         allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, "Delivery Executive"))
@@ -66,15 +67,18 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                             }
 
                             if (getSelectedInterestCount() < 3) {
-
                                 if (!foundSelected) {
                                     setSelected(view.icon_iv, view.interest_name, view)
                                     allInterestList.get(position).selected = true
                                 }
-                                formCompletionListener.formcompleted(true)
-
                             } else {
                                 Toast.makeText(context, "Maximum three interest can be selected!!", Toast.LENGTH_LONG).show()
+                            }
+
+                            if (getSelectedInterestCount() > 0) {
+                                formCompletionListener.formcompleted(true)
+                            } else {
+                                formCompletionListener.formcompleted(false)
                             }
                         }
                     })
@@ -101,17 +105,25 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         return false
     }
 
+    var clickedOnExperiencedOptions = false
+
     private fun listener() {
         imageTextCardcl.setOnClickListener {
             setSelected(icon_iv_1, yes_i_have, imageTextCardcl)
             resetSelected(icon_iv1, no_i_dont, imageTextCardcl_)
             experiencedInDeliveryExecutive = true
+            clickedOnExperiencedOptions = true
+            experienced_in.visible()
+            formCompletionListener.formcompleted(false)
             validateForm()
         }
         imageTextCardcl_.setOnClickListener {
             resetSelected(icon_iv_1, yes_i_have, imageTextCardcl)
             setSelected(icon_iv1, no_i_dont, imageTextCardcl_)
             experiencedInDeliveryExecutive = false
+            clickedOnExperiencedOptions = true
+            experienced_in.gone()
+            formCompletionListener.formcompleted(true)
             validateForm()
         }
 
@@ -121,6 +133,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 foodSelected = false
             } else {
                 setSelected(icon, food, imageTextCardMol)
+                formCompletionListener.formcompleted(true)
                 foodSelected = true
             }
             validateForm()
@@ -132,6 +145,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 grocerySelected = false
             } else {
                 setSelected(icon1, grocery, imageTextCardMol4)
+                formCompletionListener.formcompleted(true)
                 grocerySelected = true
             }
             validateForm()
@@ -143,6 +157,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 ecomSelected = false
             } else {
                 setSelected(icon1f, ecom, imageTextCardMolfirst)
+                formCompletionListener.formcompleted(true)
                 ecomSelected = true
             }
         }
@@ -152,6 +167,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 milkSelected = false
             } else {
                 setSelected(icon2, milk, imageTextCardMol3)
+                formCompletionListener.formcompleted(true)
                 milkSelected = true
             }
             validateForm()
@@ -213,10 +229,12 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     }
 
     override fun actionFound(): Boolean {
+
         getselectedInterest().forEach {
             if (it.equals("Delivery Executive")) {
                 interest_cl.gone()
                 delivery_executive_detail_cl.visible()
+                formCompletionListener.formcompleted(false)
                 return true
             }
         }
