@@ -1,187 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_lang_opt"
+
+    <com.gigforce.common_ui.views.GigforceToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:background="@drawable/app_gradient_button_square"
-        >
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <TextView
-                android:id="@+id/text_view_lang"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_lang"
-                android:textAlignment="center"
-                android:letterSpacing="0"
-                android:fontFamily="@font/lato"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="wrap_content"/>
 
 
-    <RadioGroup
-        android:id="@+id/groupradio"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_below="@id/app_bar_lang_opt"
-        android:paddingStart="2dp">
-
-        <RadioButton
-            android:id="@+id/en"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="en"
-            android:text="English"
-            android:textSize="14sp"
-            android:letterSpacing="0"
-            android:enabled="false"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:paddingLeft="16dp"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/hi"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="hi"
-            android:text="हिंदी"
-            android:letterSpacing="0"
-            android:textSize="14sp"
-            android:paddingLeft="16dp"
-            android:enabled="false"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/kn"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="te"
-            android:text="@string/kannada"
-            android:enabled="false"
-            android:textSize="14sp"
-            android:paddingLeft="16dp"
-            android:letterSpacing="0"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/te"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="te"
-            android:text="తెలుగు"
-            android:enabled="false"
-            android:textSize="14sp"
-            android:paddingLeft="16dp"
-            android:letterSpacing="0"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/gu"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="gu"
-            android:text="ગુજરતી"
-            android:enabled="false"
-            android:textSize="14sp"
-            android:letterSpacing="0"
-            android:paddingLeft="16dp"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/pu"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="pa"
-            android:text="ਪੰਜਾਬੀ"
-            android:enabled="false"
-            android:letterSpacing="0"
-            android:textSize="14sp"
-            android:paddingLeft="16dp"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/fr"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="fr"
-            android:text="français"
-            android:letterSpacing="0"
-            android:textSize="14sp"
-            android:enabled="false"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:paddingLeft="16dp"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-        <RadioButton
-            android:id="@+id/mr"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height_select_lang_item"
-            android:hint="mr"
-            android:text="मराठी"
-            android:letterSpacing="0"
-            android:textSize="14sp"
-            style="@style/Theme.RadioButtonLipstickPink"
-            android:paddingLeft="16dp"
-            android:enabled="false"
-            android:layout_marginLeft="16dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_seprator_language"/>
-    </RadioGroup>
-
-    <ImageView
-        android:id="@+id/nextbuttonLang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+    <LinearLayout
+        android:id="@+id/breifing_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/ic_button_next1" />
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
 
-</RelativeLayout>
-    <!--
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/banner_users_grid" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:lineHeight="17sp"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/glad_to_know_about_your_interest_give_a_bit_more_details_to_show_best_gigs_to_you"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/language_recycler_view"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_gravity="center_horizontal"/>
+
+
+</LinearLayout><!--
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="200dp"

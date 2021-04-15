@@ -1,6 +1,7 @@
 package com.gigforce.profile.adapters
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,23 +121,28 @@ class OnboardingCityAdapter(
 
             if (selectedItemIndex == position) {
                 cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.lipstick, null))
+                cityNameTv.setTypeface(null,Typeface.BOLD)
             } else {
                 cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.black, null))
+                cityNameTv.setTypeface(null,Typeface.NORMAL)
             }
-
         }
 
         override fun onClick(v: View?) {
-            val city = filteredCityList[adapterPosition]
-            onCitySelectedListener?.onCitySelected(city)
+            val newPosition = adapterPosition
 
-//            if (selectedItemIndex != -1) {
-//                val tempIndex = selectedItemIndex
-//                selectedItemIndex = -1
-//            } else {
-//                selectedItemIndex = adapterPosition
-//            }
-//            notifyItemChanged(selectedItemIndex)
+            if (selectedItemIndex != -1) {
+                val tempIndex = selectedItemIndex
+                selectedItemIndex = newPosition
+                notifyItemChanged(tempIndex)
+                notifyItemChanged(selectedItemIndex)
+            } else {
+                selectedItemIndex = newPosition
+                notifyItemChanged(selectedItemIndex)
+            }
+
+//            val city = filteredCityList[newPosition]
+//            onCitySelectedListener?.onCitySelected(city)
         }
 
     }

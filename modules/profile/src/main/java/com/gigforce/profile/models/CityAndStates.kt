@@ -30,7 +30,11 @@ data class City(
 
     @get:PropertyName("state_code")
     @set:PropertyName("state_code")
-    var stateCode: String = ""
+    var stateCode: String = "",
+
+    @get:PropertyName("sub_location")
+    @set:PropertyName("sub_location")
+    var subLocation: String? = null,
 ){
 
     override fun toString(): String {

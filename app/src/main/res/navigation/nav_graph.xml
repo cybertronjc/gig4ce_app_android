@@ -54,12 +54,12 @@
         tools:layout="@layout/date_time_fragment" />
 
     <fragment
-        android:id="@+id/onboardingfragment"
+        android:id="@+id/onboardingfragmentold"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingMainFragment"
         tools:layout="@layout/onboarding_main_fragment" />
 
     <fragment
-        android:id="@+id/onboardingNew"
+        android:id="@+id/onboardingfragment"
         android:name="com.gigforce.profile.onboarding.OnboardingFragmentNew"
         tools:layout="@layout/onboarding_fragment_new_fragment" />
 
@@ -250,7 +250,7 @@
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.gigforce.app.utils.LanguageSelectFragment"
+        android:name="com.gigforce.app.modules.language.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"

@@ -33,8 +33,10 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
         Glide.with(requireContext())
     }
 
+    private var selectedCity : City? = null
+
     private val majorCitiesAdapter: OnboardingMajorCityAdapter by lazy {
-        OnboardingMajorCityAdapter(glide).apply {
+        OnboardingMajorCityAdapter(requireContext(),glide).apply {
             setOnCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
         }
     }
@@ -43,6 +45,10 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
         OnboardingCityAdapter(requireContext()).apply {
             setOnCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
         }
+    }
+
+    fun getSelectedCity() : City? {
+        return selectedCity
     }
 
     override fun onCreateView(
@@ -133,25 +139,14 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
                     .setItems(delhiSubLocations) { _, which ->
 
                         val selectedSubLocation = delhiSubLocations[which]
-                        viewModel.savePreferredJobLocation(
-                                cityId = city.id,
-                                cityName = city.name,
-                                subLocation = selectedSubLocation,
-                                stateCode = city.stateCode
-                        )
-                        Toast.makeText(requireContext(), "Preferred Location Selected", Toast.LENGTH_SHORT).show()
+                        city.subLocation = selectedSubLocation
+                        selectedCity = city
+
                     }.show()
 
 
         } else {
-
-            viewModel.savePreferredJobLocation(
-                    cityId = city.id,
-                    cityName = city.name,
-                    subLocation = null,
-                    stateCode = city.stateCode
-            )
-            Toast.makeText(requireContext(), "Preferred Location Selected", Toast.LENGTH_SHORT).show()
+            selectedCity = city
         }
     }
 

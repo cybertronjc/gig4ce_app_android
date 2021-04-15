@@ -63,6 +63,9 @@ class OnboardingFragmentNewViewModel : ViewModel() {
     fun saveAssets(assetsData: Map<String, Any>) {
         profileFirebaseRepository.setData(assetsData)
     }
+    fun onboardingCompleted(){
+        profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
+    }
     fun setOnboardingCompleted(
         invite: String?,
         inviteByAmbassador: String,

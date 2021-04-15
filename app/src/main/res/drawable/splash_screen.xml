@@ -4,14 +4,21 @@
     <item android:drawable="@color/cardview_light_background" />
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/logo_gig_force_v_2" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|fill_horizontal"
+            android:src="@drawable/button_active_48_h" />
     </item>
+
     <item>
         <bitmap
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom|fill_horizontal"
-            android:src="@drawable/splash_bottom" />
+            android:gravity="center"
+            android:src="@drawable/page_1" />
+    </item>
+
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/gigforce_logo_2" />
     </item>
 </layer-list>
