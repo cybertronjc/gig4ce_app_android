@@ -33,7 +33,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
-import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
 
 class LoginSuccessfulFragment : BaseFragment() {
 
@@ -66,8 +65,14 @@ class LoginSuccessfulFragment : BaseFragment() {
 //            popFragmentFromStack(R.id.homeScreenIcons)
 //            navigateWithAllPopupStack(R.id.homeScreenIcons1);
 //        }
-        Glide.with(requireContext()).load(com.gigforce.profile.R.drawable.gif_hello).into(hi_there_image)
-        onboarding_get_started_btn.setOnClickListener {
+
+
+        checkForGpsPermissionsAndGpsStatus()
+    }
+
+    private fun observer() {
+        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
+            profileData = profile
 
             profileData?.let {
                 if (it.status) {
@@ -83,17 +88,6 @@ class LoginSuccessfulFragment : BaseFragment() {
                 } else
                     showToast(it.errormsg)
             }
-
-
-        }
-
-
-        checkForGpsPermissionsAndGpsStatus()
-    }
-
-    private fun observer() {
-        viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
-            profileData = profile
 
         })
     }

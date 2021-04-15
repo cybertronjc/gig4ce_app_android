@@ -8,7 +8,7 @@
         android:id="@+id/successful_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/ivotpsuccess"
@@ -50,8 +50,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/onboarding_greeting_layout"
-        layout="@layout/onboarding_fragment_new_fragment_greeting_layout"
-        android:visibility="visible" />
+
 </RelativeLayout>
