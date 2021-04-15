@@ -45,7 +45,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
@@ -209,29 +208,25 @@ class GigPage2Fragment : BaseFragment(),
 
         checkInCheckOutSliderBtn?.setOnClickListener {
 
-                        val gig = viewModel.currentGig ?: return@setOnClickListener
+            val gig = viewModel.currentGig ?: return@setOnClickListener
 
-                        if (isNecessaryPermissionGranted()) {
+            if (isNecessaryPermissionGranted()) {
 
-                            if (!gig.isCheckInAndCheckOutMarked()) {
-                                if (imageClickedPath != null) {
+                if (!gig.isCheckInAndCheckOutMarked()) {
+                    if (imageClickedPath != null) {
 
-                                    if (location == null) {
-                                        showAlertDialog("Please wait while your current location is captured")
-                                    } else {
-                                        checkForLateOrEarlyCheckIn()
-                                    }
-                                } else {
-                                    startCameraForCapturingSelfie()
-                                }
-                            } else {
-                                //Start regularisation
-                                startRegularisation()
-                            }
-                        } else {
-                            showPermissionRequiredAndTheirReasonsDialog()
-                        }
+                        checkForLateOrEarlyCheckIn()
+                    } else {
+                        startCameraForCapturingSelfie()
                     }
+                } else {
+                    //Start regularisation
+                    startRegularisation()
+                }
+            } else {
+                showPermissionRequiredAndTheirReasonsDialog()
+            }
+        }
 
     }
 

@@ -344,7 +344,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
         firebaseDB
                 .collection(profileCollectionName)
                 .document(uid)
-                .update("isUserAmbassador", true) //TODO replace with updateOrThrow
+                .updateOrThrow("isUserAmbassador", true)
     }
 
     suspend fun updateUserDetails(

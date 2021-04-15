@@ -108,6 +108,10 @@ class VerifyUserMobileViewModel constructor(
                                 longitude = longitude,
                                 fullAddress = fullAddress
                         )
+
+                        if (!profile.isUserAmbassador)
+                            profileFirebaseRepository.setUserAsAmbassador()
+
                         _createProfile.value = Lce.content(response)
                     } else {
                         _createProfile.value = Lce.error("Otp does not match")

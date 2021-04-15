@@ -155,7 +155,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun showNoGigExists(int: Int) {
-        tv_no_gigs_gig_hist.visibility = int
+        no_gigs_layout.visibility = int
     }
 
     override fun getPastGigs() {

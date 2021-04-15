@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.gighistory
 
+import android.util.Log
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
@@ -60,17 +61,23 @@ class GigHistoryRepository : BaseFirestoreDBRepository(), DataCallbacks {
             limit: Long
     ) {
 
-        val gigQuery =
-                if (lastVisible != null) getCollectionReference().whereEqualTo("gigerId", getUID())
-                        .orderBy("startDateTime", Query.Direction.ASCENDING)
-                        .startAfter(lastVisible)
-                        .limit(limit)
-                else
-                    getCollectionReference().whereEqualTo("gigerId", getUID())
-                            .orderBy("startDateTime", Query.Direction.ASCENDING)
-                            .limit(limit)
+        val gigQuery = if (lastVisible != null) getCollectionReference()
+                .whereEqualTo("gigerId", getUID())
+                .whereGreaterThan("startDateTime",Date())
+                .orderBy("startDateTime", Query.Direction.ASCENDING)
+                .startAfter(lastVisible)
+                .limit(limit)
+        else
+            getCollectionReference()
+                    .whereEqualTo("gigerId", getUID())
+                    .whereGreaterThan("startDateTime",Date())
+                    .orderBy("startDateTime", Query.Direction.ASCENDING)
+                    .limit(limit)
 
+        Log.d("TAG", "Get Upcoming called , ${lastVisible != null}")
         listener = gigQuery.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            Log.d("TAG", "Get Upcoming called , ${querySnapshot?.size()}")
+            firebaseFirestoreException?.printStackTrace()
             responseCallbacks.upcomingGigsResponse(querySnapshot, firebaseFirestoreException);
         }
     }

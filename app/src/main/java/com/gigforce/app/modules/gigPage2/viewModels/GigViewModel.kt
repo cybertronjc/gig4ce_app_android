@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -164,8 +165,8 @@ class GigViewModel constructor(
                     checkOutTimeAccToUser = checkOutTimeAccToUser,
                     remarks = remarks
             )
-            _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_OUT))
-            _markingAttendanceState.postValue(null)
+            _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
+            _markingAttendanceState.value = null
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
             _markingAttendanceState.postValue(null)

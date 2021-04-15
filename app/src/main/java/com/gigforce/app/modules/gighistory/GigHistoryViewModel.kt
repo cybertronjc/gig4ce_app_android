@@ -122,6 +122,9 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             if (querySnapshot.documents.isNotEmpty())
                 lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
             isLastPage = querySnapshot.documents.size < limit
+
+
+            Log.d("TAG","Filtering gig for upcoming")
             observableScheduledGigs.value = GigsResponse(
                     true,
                     "Upcoming Gigs Loaded Successfully",
@@ -212,6 +215,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             userGigs.retainAll { element ->
 
                 val gigStatus = GigStatus.fromGig(element)
+
+                Log.d("TAG","filtering element ${element.gigId}")
+                Log.d("TAG","filtering element result ${gigStatus == GigStatus.UPCOMING}")
+
                 gigStatus == GigStatus.UPCOMING
             }
         }
