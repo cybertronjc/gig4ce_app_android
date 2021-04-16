@@ -199,6 +199,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Monday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
 
@@ -233,6 +234,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Tuesday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -264,6 +266,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Wednesday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -295,6 +298,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Thurday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -326,6 +330,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Friday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -357,6 +362,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Saturday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -388,6 +394,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="Sunday"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <TextView
@@ -469,6 +476,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="5 am - 8 am"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <LinearLayout
@@ -519,6 +527,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="8 am - 12 pm"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <LinearLayout
@@ -569,6 +578,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="12 pm - 4 pm"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <LinearLayout
@@ -619,6 +629,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="4 pm - 8 pm"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <LinearLayout
@@ -669,6 +680,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/size16"
                         android:tag="8 pm - 12 am"
+                        android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
                     <LinearLayout

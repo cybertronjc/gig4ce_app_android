@@ -10,12 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
 
-class AssetOwnedFragment : Fragment() {
+class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
 
     companion object {
-        fun newInstance() = AssetOwnedFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AssetOwnedFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: AssetOwnedViewModel
@@ -46,6 +47,7 @@ class AssetOwnedFragment : Fragment() {
     var owned_pc = false
     private fun listeners() {
         imageTextCardcl.setOnClickListener {
+
             if (owned_bicycle) {
                 resetSelected(icon_iv, bicycle, imageTextCardcl)
                 owned_bicycle = false
@@ -53,6 +55,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv, bicycle, imageTextCardcl)
                 owned_bicycle = true
             }
+            validateForm()
         }
         imageTextCardcl_.setOnClickListener {
             if (owned_electric_bike) {
@@ -62,6 +65,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv1, electric_bike, imageTextCardcl_)
                 owned_electric_bike = true
             }
+            validateForm()
         }
 
         imageTextCardcl_x.setOnClickListener {
@@ -72,6 +76,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_x, motor_bike, imageTextCardcl_x)
                 owned_motor_bike = true
             }
+            validateForm()
         }
 
         imageTextCardcl_1.setOnClickListener {
@@ -82,6 +87,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_1, e_rickshaw, imageTextCardcl_1)
                 owned_e_rickshaw = true
             }
+            validateForm()
         }
 
         imageTextCardcl_2.setOnClickListener {
@@ -92,6 +98,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_2, auto_rickshaw, imageTextCardcl_2)
                 owned_auto_rickshaw = true
             }
+            validateForm()
         }
 
         imageTextCardcl_3.setOnClickListener {
@@ -102,6 +109,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_3, car, imageTextCardcl_3)
                 owned_car = true
             }
+            validateForm()
         }
         imageTextCardcl_4.setOnClickListener {
             if (owned_commercial_vehicle) {
@@ -111,6 +119,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_4, commercial_vehicle, imageTextCardcl_4)
                 owned_commercial_vehicle = true
             }
+            validateForm()
         }
 
         imageTextCardcl5.setOnClickListener {
@@ -121,6 +130,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_5, laptop, imageTextCardcl5)
                 owned_laptop = true
             }
+            validateForm()
         }
 
         imageTextCardcl_6.setOnClickListener {
@@ -131,6 +141,7 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_6, smart_phone, imageTextCardcl_6)
                 owned_smart_phone = true
             }
+            validateForm()
         }
 
         imageTextCardcl_7.setOnClickListener {
@@ -141,8 +152,14 @@ class AssetOwnedFragment : Fragment() {
                 setSelected(icon_iv_7, pc, imageTextCardcl_7)
                 owned_pc = true
             }
+            validateForm()
         }
 
+    }
+
+    private fun validateForm() {
+        if(owned_smart_phone)
+        formCompletionListener.formcompleted(true)
     }
 
     private fun resetSelected(icon: ImageView, option: TextView, view: View) {

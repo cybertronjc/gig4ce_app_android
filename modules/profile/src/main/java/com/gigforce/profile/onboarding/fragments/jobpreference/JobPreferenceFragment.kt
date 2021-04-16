@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.extensions.gone
@@ -14,18 +13,20 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.job_preference_fragment.*
 
-class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
+class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
+    Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = JobPreferenceFragment(formCompletionListener)
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
+            JobPreferenceFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: JobPreferenceViewModel
     var timeSlotsIds = ArrayList<CheckBox>()
     var workingDaysIds = ArrayList<CheckBox>()
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.job_preference_fragment, container, false)
     }
@@ -74,47 +75,66 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
         workingDaysIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
-
-
+                if (isChecked)
+                    formCompletionListener.formcompleted(true)
+                else if (anyCheckboxChecked(workingDaysIds)) {
+                    formCompletionListener.formcompleted(true)
+                } else {
+                    formCompletionListener.formcompleted(false)
+                }
             }
+
         }
 
+        timeSlotsIds.forEach{ obj ->
+            obj.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked)
+                    formCompletionListener.formcompleted(true)
+                else if (anyCheckboxChecked(timeSlotsIds)) {
+                    formCompletionListener.formcompleted(true)
+                } else {
+                    formCompletionListener.formcompleted(false)
+                }
+            }
+        }
     }
 
+    fun anyCheckboxChecked(ids:ArrayList<CheckBox>): Boolean {
+        ids.forEach { checkbox -> if (checkbox.isChecked) return true }
+        return false
+    }
 //    class CheckedChangedListener : OnCheck
 
-    fun getWorkingDays():ArrayList<String>{
+    fun getWorkingDays(): ArrayList<String> {
         var workingdays = ArrayList<String>()
-        workingDaysIds.forEach { day-> if(day.isChecked) workingdays.add(day.tag.toString())}
+        workingDaysIds.forEach { day -> if (day.isChecked) workingdays.add(day.tag.toString()) }
         return workingdays
     }
 
-    fun getTimeSlots():ArrayList<String>{
+    fun getTimeSlots(): ArrayList<String> {
         var workingTimeSlots = ArrayList<String>()
-        timeSlotsIds.forEach { slot-> if(slot.isChecked) workingTimeSlots.add(slot.tag.toString())}
+        timeSlotsIds.forEach { slot -> if (slot.isChecked) workingTimeSlots.add(slot.tag.toString()) }
         return workingTimeSlots
     }
 
-    fun validateForm(){
-        if(fullTimeJob || (getWorkingDays().size>0 && getTimeSlots().size>0)){
-            formCompletionListener.formcompleted(true)
-        }
-        else{
-            formCompletionListener.formcompleted(false)
-
-        }
-    }
+    var currentStep = 0
     override fun actionFound(): Boolean {
-        if(!fullTimeJob && getWorkingDays().size == 0){
-            job_preferences.gone()
-            work_days_cl.visible()
-            timing_cl.gone()
-            return true
-        }else if(!fullTimeJob && getWorkingDays().size>0 && getTimeSlots().size == 0) {
-            job_preferences.gone()
-            work_days_cl.gone()
-            timing_cl.visible()
-            return true
+        when (currentStep) {
+            0 -> if (!fullTimeJob) {
+                job_preferences.gone()
+                work_days_cl.visible()
+                timing_cl.gone()
+                currentStep = 1
+                return true
+            }
+            1 -> if (getWorkingDays().size > 0) {
+                job_preferences.gone()
+                work_days_cl.gone()
+                timing_cl.visible()
+                currentStep = 2
+                return true
+            }
+            else -> return false
         }
         return false
 

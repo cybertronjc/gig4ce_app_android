@@ -18,18 +18,20 @@ import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
 
-class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
+class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
+    Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = InterestFragment(formCompletionListener)
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
+            InterestFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: InterestViewModel
     private var allInterestList = ArrayList<InterestDM>()
     var experiencedInDeliveryExecutive = false
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.interest_fragment, container, false)
     }
@@ -51,37 +53,41 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         listener()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
-                    activity, 3,
-                    GridLayoutManager.VERTICAL, false
+                activity, 3,
+                GridLayoutManager.VERTICAL, false
             )
             all_interests_rv.adapter = AllInterestAdapter(
-                    it,
-                    allInterestList,
-                    object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
-                        override fun onclick(view: View, position: Int) {
-                            var foundSelected = false
-                            if (allInterestList.get(position).selected) {
-                                resetSelected(view.icon_iv, view.interest_name, view)
-                                allInterestList.get(position).selected = false
-                                foundSelected = true
-                            }
-
-                            if (getSelectedInterestCount() < 3) {
-                                if (!foundSelected) {
-                                    setSelected(view.icon_iv, view.interest_name, view)
-                                    allInterestList.get(position).selected = true
-                                }
-                            } else {
-                                Toast.makeText(context, "Maximum three interest can be selected!!", Toast.LENGTH_LONG).show()
-                            }
-
-                            if (getSelectedInterestCount() > 0) {
-                                formCompletionListener.formcompleted(true)
-                            } else {
-                                formCompletionListener.formcompleted(false)
-                            }
+                it,
+                allInterestList,
+                object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
+                    override fun onclick(view: View, position: Int) {
+                        var foundSelected = false
+                        if (allInterestList.get(position).selected) {
+                            resetSelected(view.icon_iv, view.interest_name, view)
+                            allInterestList.get(position).selected = false
+                            foundSelected = true
                         }
-                    })
+
+                        if (getSelectedInterestCount() < 3) {
+                            if (!foundSelected) {
+                                setSelected(view.icon_iv, view.interest_name, view)
+                                allInterestList.get(position).selected = true
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Maximum three interest can be selected!!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        if (getSelectedInterestCount() > 0) {
+                            formCompletionListener.formcompleted(true)
+                        } else {
+                            formCompletionListener.formcompleted(false)
+                        }
+                    }
+                })
 
         }
     }
@@ -186,10 +192,10 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             icon.setColorFilter(ContextCompat.getColor(it, R.color.default_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.default_color))
             view.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            it,
-                            R.drawable.option_default_border
-                    )
+                ContextCompat.getDrawable(
+                    it,
+                    R.drawable.option_default_border
+                )
             )
         }
     }
@@ -199,10 +205,10 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             icon.setColorFilter(ContextCompat.getColor(it, R.color.selected_image_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.selected_text_color))
             view.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            it,
-                            R.drawable.option_selection_border
-                    )
+                ContextCompat.getDrawable(
+                    it,
+                    R.drawable.option_selection_border
+                )
             )
         }
 
@@ -228,18 +234,21 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         }
     }
 
+    var currentStep = 0
+
     override fun actionFound(): Boolean {
-
-        getselectedInterest().forEach {
-            if (it.equals("Delivery Executive")) {
-                interest_cl.gone()
-                delivery_executive_detail_cl.visible()
-                formCompletionListener.formcompleted(false)
-                return true
+        when (currentStep) {
+            0 -> getselectedInterest().forEach {
+                if (it.equals("Delivery Executive")) {
+                    interest_cl.gone()
+                    delivery_executive_detail_cl.visible()
+                    formCompletionListener.formcompleted(false)
+                    currentStep = 1
+                    return true
+                }
             }
+            else -> return false
         }
-
         return false
-
     }
 }

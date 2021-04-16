@@ -86,7 +86,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_bicycle"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -161,7 +161,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_motor_bike"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -226,7 +226,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_e_rickshaw"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -264,7 +264,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_auto_rickshaw"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -295,7 +295,7 @@
             android:layout_marginLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
             android:fontFamily="@font/lato"
-            android:text="3 Wheeler"
+            android:text="Other"
             android:textColor="#131415"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -329,7 +329,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_car"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -367,7 +367,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_truck_commercial"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -436,7 +436,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_laptop"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -474,7 +474,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_smartphone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

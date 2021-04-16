@@ -51,8 +51,6 @@ class OnboardingFragmentNew : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpViewForOnboarding()
-        enableNextButton(false)
 
        // setUpViewForOnboarding()
 
@@ -61,6 +59,7 @@ class OnboardingFragmentNew : Fragment() {
 
             onboarding_greeting_layout.gone()
             setUpViewForOnboarding()
+            enableNextButton(false)
         }
     }
 

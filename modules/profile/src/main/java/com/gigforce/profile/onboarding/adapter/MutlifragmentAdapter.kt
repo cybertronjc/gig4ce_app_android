@@ -29,7 +29,7 @@ class MutlifragmentAdapter(activity: FragmentActivity,formCompletionListener: On
         fragmentArr.add(ExperienceFragment.newInstance(formCompletionListener))
         fragmentArr.add(InterestFragment.newInstance(formCompletionListener))
         fragmentArr.add(JobPreferenceFragment.newInstance(formCompletionListener))
-        fragmentArr.add(AssetOwnedFragment.newInstance())
+        fragmentArr.add(AssetOwnedFragment.newInstance(formCompletionListener))
         fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance())
     }
 
