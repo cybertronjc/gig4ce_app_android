@@ -65,7 +65,8 @@ class AuthFlowFragment : BaseFragment() {
             navigate(
                 R.id.Login
             )
-        } else {
+        }
+        else {
             var fragments = getFragmentManager()?.getFragments()
             if (fragments != null && fragments?.size == 1) {
                 popAllBackStates()
