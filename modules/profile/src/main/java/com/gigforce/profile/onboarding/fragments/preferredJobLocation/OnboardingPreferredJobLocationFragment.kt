@@ -11,18 +11,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.profile.R
 import com.gigforce.profile.adapters.OnCitySelectedListener
 import com.gigforce.profile.adapters.OnboardingCityAdapter
 import com.gigforce.profile.adapters.OnboardingMajorCityAdapter
+import com.gigforce.profile.adapters.OnboardingSubCityAdapter
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.gigforce.profile.onboarding.SpaceItemDecoration
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.api.Distribution
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 
@@ -36,6 +40,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
     private var selectedCity : City? = null
+    private var spaceItemDecoration: SpaceItemDecoration? = null
 
     private val majorCitiesAdapter: OnboardingMajorCityAdapter by lazy {
         OnboardingMajorCityAdapter(requireContext(),glide).apply {
@@ -49,9 +54,14 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         }
     }
 
+    private val subCityAdapter: OnboardingSubCityAdapter by lazy {
+        OnboardingSubCityAdapter(requireContext())
+    }
+
     fun getSelectedCity() : City? {
         return selectedCity
     }
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -75,6 +85,10 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
         major_cities_recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
         major_cities_recyclerview.adapter = majorCitiesAdapter
+        major_cities_recyclerview.addItemDecoration(SpaceItemDecoration(0));
+
+        sub_cities_rv.layoutManager = LinearLayoutManager(requireContext())
+        sub_cities_rv.adapter = subCityAdapter
     }
 
     private fun getMajorCitiesAndOtherCities() {
@@ -122,9 +136,12 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     override fun onCitySelected(city: City) {
 
+        cities_layout.visibility = View.GONE
+        sub_cities_layout.visibility = View.VISIBLE
+
         val delhiId = "HCbEvKJd2aPZaYgenUV7"
         if (city.id == delhiId) {
-            val delhiSubLocations = arrayOf(
+            val delhiSubLocations = arrayListOf<String>(
                     "Faridabad",
                     "Ghaziabad",
                     "Gurugram",
@@ -136,15 +153,18 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
                     "South Delhi"
             )
 
-            MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Choose a sub location")
-                    .setItems(delhiSubLocations) { _, which ->
+            subCityAdapter.setData(delhiSubLocations)
 
-                        val selectedSubLocation = delhiSubLocations[which]
-                        city.subLocation = selectedSubLocation
-                        selectedCity = city
 
-                    }.show()
+//            MaterialAlertDialogBuilder(requireContext())
+//                    .setTitle("Choose a sub location")
+//                    .setItems(delhiSubLocations) { _, which ->
+//
+//                        val selectedSubLocation = delhiSubLocations[which]
+//                        city.subLocation = selectedSubLocation
+//                        selectedCity = city
+//
+//                    }.show()
 
 
         } else {

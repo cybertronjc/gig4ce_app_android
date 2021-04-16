@@ -77,18 +77,33 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/next"
         style="@style/button_style"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="@dimen/size16"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:text="Next"
-        android:visibility="gone" />
+        android:visibility="visible" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 
 </RelativeLayout>

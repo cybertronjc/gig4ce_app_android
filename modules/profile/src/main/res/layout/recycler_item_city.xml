@@ -10,6 +10,6 @@
     android:textColor="#333333"
     android:lineSpacingExtra="3sp"
     android:text="Ss"
-    android:paddingTop="16dp"
+    android:paddingTop="8dp"
     android:paddingBottom="16dp"
     android:orientation="vertical"/>
