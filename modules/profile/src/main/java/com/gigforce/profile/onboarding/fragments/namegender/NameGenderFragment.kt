@@ -2,9 +2,7 @@ package com.gigforce.profile.onboarding.fragments.namegender
 
 import android.os.Bundle
 import android.text.Editable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -24,6 +22,7 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
     var gender = ""
+    private var win: Window? = null
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -66,6 +65,18 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         else{
             formCompletionListener.formcompleted(false)
         }
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        //win?.setStatusBarColor(resources.getColor(R.color.colorStat))
     }
 
     private fun resetAll() {

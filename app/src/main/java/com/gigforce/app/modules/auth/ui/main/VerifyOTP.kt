@@ -5,7 +5,11 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
@@ -16,6 +20,11 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.otp_verification.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -38,7 +47,8 @@ class VerifyOTP : BaseFragment() {
             Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
-    private var win: Window? = null
+   // private  var client: SmsRetrieverClient? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -48,9 +58,9 @@ class VerifyOTP : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
@@ -68,6 +78,7 @@ class VerifyOTP : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
         initializeViews()
+       // setupSmsRetriver()
         listeners()
         observer()
         saveNewUsedMobileNumber()
@@ -78,17 +89,22 @@ class VerifyOTP : BaseFragment() {
 //        }
     }
 
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
-    }
+//    private fun setupSmsRetriver() {
+//        client = context?.let { SmsRetriever.getClient(it) }
+//        var task: Task<Void>? = client?.startSmsRetriever()
+//
+//        // Listen for success/failure of the start Task. If in a background thread, this
+//// can be made blocking using Tasks.await(task, [timeout]);
+//        // Listen for success/failure of the start Task. If in a background thread, this
+//// can be made blocking using Tasks.await(task, [timeout]);
+//       task?.addOnSuccessListener {
+//            Log.d("sms retrive", it.toString())
+//       }
+//
+//        task?.addOnFailureListener {
+//            Log.d("sms failure", it.toString())
+//        }
+//    }
 
 
     private fun saveNewUsedMobileNumber() {
@@ -176,7 +192,7 @@ class VerifyOTP : BaseFragment() {
     private fun navigateToLoginScreen() {
         countDownTimer?.cancel()
         val bundle = bundleOf(
-                "mobileno" to mobile_number
+            "mobileno" to mobile_number
 
         )
         popAllBackStates()

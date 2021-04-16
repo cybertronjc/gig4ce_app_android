@@ -248,6 +248,10 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
 
+    //sms retriver
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+
     implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
 
 
