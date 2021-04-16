@@ -55,6 +55,8 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             istotalExperienceSelected = true
             validateForm()
         }
+
+        
     }
 
     private fun validateForm() {

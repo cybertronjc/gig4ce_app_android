@@ -1,37 +1,29 @@
 package com.gigforce.profile.onboarding.fragments.preferredJobLocation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.profile.R
-import com.gigforce.profile.adapters.OnCitySelectedListener
-import com.gigforce.profile.adapters.OnboardingCityAdapter
-import com.gigforce.profile.adapters.OnboardingMajorCityAdapter
-import com.gigforce.profile.adapters.OnboardingSubCityAdapter
+import com.gigforce.profile.adapters.*
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.onboarding.SpaceItemDecoration
-import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.api.Distribution
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 
 class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnCitySelectedListener,
-    OnboardingFragmentNew.FragmentSetLastStateListener {
+    OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -55,8 +47,12 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
     private val subCityAdapter: OnboardingSubCityAdapter by lazy {
-        OnboardingSubCityAdapter(requireContext())
+        OnboardingSubCityAdapter(requireContext()).apply {
+            setOnSubCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
+        }
     }
+
+    private var confirmSubCityList: ArrayList<String>? = null
 
     fun getSelectedCity() : City? {
         return selectedCity
@@ -132,6 +128,20 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 //                glide
 //        )
 
+    }
+
+
+    override fun onSubCitySelected(add: Boolean, text: String){
+        if (add){
+            confirmSubCityList?.add(text)
+            Log.d("added", "text" + " list: " + confirmSubCityList.toString())
+        }
+        else{
+            if (confirmSubCityList?.contains(text)!!){
+                confirmSubCityList?.remove(text)
+                Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
+            }
+        }
     }
 
     override fun onCitySelected(city: City) {
