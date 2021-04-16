@@ -2,9 +2,7 @@ package com.gigforce.app.modules.language
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,6 +25,8 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         }
     }
 
+    private var win: Window? = null
+
     val SUPPORTED_LOCALES =
             Arrays.asList(
                     Locale("en", "US"),
@@ -41,7 +41,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             savedInstanceState: Bundle?
     ): View? {
 //        this.setDarkStatusBarTheme(true)
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
+        //StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
 
         try {
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
@@ -53,11 +53,18 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        dismissLanguageSelectionDialog()
+        changeStatusBarColor()
         storeDeviceLanguage()
         initializer()
         setDefaultLanguage()
         listener()
         initViewModel()
+
+
+        //back press
+        iv_back_language_fragment.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     private fun initViewModel() {
@@ -96,6 +103,18 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         saveDeviceLanguage(Resources.getSystem().getConfiguration().locale.getLanguage())
     }
 
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
+    }
+
     private fun initializer() {
         // groupradio.clearCheck()
 
@@ -124,13 +143,13 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 //            onNextButtonClicked()
 //        }
 
-        toolbar.apply {
-            showTitle("Language")
-            hideActionMenu()
-            setBackButtonListener{
-                activity?.onBackPressed()
-            }
-        }
+//        toolbar.apply {
+//            showTitle("Language")
+//            hideActionMenu()
+//            setBackButtonListener{
+//                activity?.onBackPressed()
+//            }
+//        }
 
     }
 

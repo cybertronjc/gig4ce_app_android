@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="calendar_disabled_bg">#efefef</color>
     <color name="colorAccent">#930077</color>
+    <color name="colorStatusBar">#e53369</color>
+    <color name="colorStatus">#e53369</color>
     <color name="colorLightAccent">#e42c64</color>
     <color name="topBarDark">#d72467</color>
     <color name="bg">#FFFFFF</color>
@@ -132,13 +134,6 @@
     <color name="gig_timer_completed_grey">#e8e8e8</color>
     <color name="gig_timer_no_show_red">#ff8b8b</color>
     <color name="gig_timer_upcoming_pink">#f7d16a</color>
-
-
-
-
-
-
-
 
 
 </resources>

@@ -1342,4 +1342,7 @@
     <string name="otp_reenter_mobile_underline"><u>Re-enter mobile number</u></string>
     <string name="bank_details_updated">Bank Details Updated</string>
     <string name="cancel_underlined"><u>Cancel</u></string>
+    <string name="password">Password</string>
+    <string name="select_language">Select Langugage</string>
+    <string name="step_language">Step 01/09</string>
 </resources>
