@@ -27,6 +27,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
@@ -35,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_onboarding_profile_picture.*
 import java.io.File
 import java.util.*
 
-class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
+class OnboardingAddProfilePictureFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), ImageCropCallback, OnboardingFragmentNew.FragmentSetLastStateListener {
 
     private var viewShownFirstTime = false
     private val viewModel: OnboardingViewModel by viewModels()
@@ -315,9 +316,14 @@ class OnboardingAddProfilePictureFragment : Fragment(), ImageCropCallback {
 
         private const val REQUEST_STORAGE_PERMISSION = 102
 
-        fun newInstance(): OnboardingAddProfilePictureFragment {
-            return OnboardingAddProfilePictureFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener): OnboardingAddProfilePictureFragment {
+            return OnboardingAddProfilePictureFragment(formCompletionListener)
         }
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 
 }

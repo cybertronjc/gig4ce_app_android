@@ -14,7 +14,7 @@ import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.experience_item.*
 
 class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
-    Fragment() {
+    Fragment() ,OnboardingFragmentNew.FragmentSetLastStateListener{
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
@@ -59,9 +59,9 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     private fun validateForm() {
         if (!workStatus.equals("") && istotalExperienceSelected) {
-            formCompletionListener.formcompleted(true)
+            formCompletionListener.enableDisableNextButton(true)
         } else {
-            formCompletionListener.formcompleted(false)
+            formCompletionListener.enableDisableNextButton(false)
         }
     }
 
@@ -96,6 +96,11 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             )
         }
 
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 
 }

@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
 
 class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
-    Fragment(), OnboardingFragmentNew.FragmentInteractionListener {
+    Fragment(), OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.FragmentSetLastStateListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
@@ -82,9 +82,9 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                         }
 
                         if (getSelectedInterestCount() > 0) {
-                            formCompletionListener.formcompleted(true)
+                            formCompletionListener.enableDisableNextButton(true)
                         } else {
-                            formCompletionListener.formcompleted(false)
+                            formCompletionListener.enableDisableNextButton(false)
                         }
                     }
                 })
@@ -120,7 +120,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             experiencedInDeliveryExecutive = true
             clickedOnExperiencedOptions = true
             experienced_in.visible()
-            formCompletionListener.formcompleted(false)
+            formCompletionListener.enableDisableNextButton(false)
             validateForm()
         }
         imageTextCardcl_.setOnClickListener {
@@ -129,7 +129,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             experiencedInDeliveryExecutive = false
             clickedOnExperiencedOptions = true
             experienced_in.gone()
-            formCompletionListener.formcompleted(true)
+            formCompletionListener.enableDisableNextButton(true)
             validateForm()
         }
 
@@ -139,7 +139,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 foodSelected = false
             } else {
                 setSelected(icon, food, imageTextCardMol)
-                formCompletionListener.formcompleted(true)
+                formCompletionListener.enableDisableNextButton(true)
                 foodSelected = true
             }
             validateForm()
@@ -151,7 +151,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 grocerySelected = false
             } else {
                 setSelected(icon1, grocery, imageTextCardMol4)
-                formCompletionListener.formcompleted(true)
+                formCompletionListener.enableDisableNextButton(true)
                 grocerySelected = true
             }
             validateForm()
@@ -163,7 +163,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 ecomSelected = false
             } else {
                 setSelected(icon1f, ecom, imageTextCardMolfirst)
-                formCompletionListener.formcompleted(true)
+                formCompletionListener.enableDisableNextButton(true)
                 ecomSelected = true
             }
         }
@@ -173,7 +173,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                 milkSelected = false
             } else {
                 setSelected(icon2, milk, imageTextCardMol3)
-                formCompletionListener.formcompleted(true)
+                formCompletionListener.enableDisableNextButton(true)
                 milkSelected = true
             }
             validateForm()
@@ -228,21 +228,21 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         if (getSelectedInterestCount() > 0) {
             if (isDeliveryExecutiveSelected()) {
                 if (!experiencedInDeliveryExecutive || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
-                    formCompletionListener.formcompleted(true)
-                } else formCompletionListener.formcompleted(false)
-            } else formCompletionListener.formcompleted(true)
+                    formCompletionListener.enableDisableNextButton(true)
+                } else formCompletionListener.enableDisableNextButton(false)
+            } else formCompletionListener.enableDisableNextButton(true)
         }
     }
 
     var currentStep = 0
 
-    override fun actionFound(): Boolean {
+    override fun nextButtonActionFound(): Boolean {
         when (currentStep) {
             0 -> getselectedInterest().forEach {
                 if (it.equals("Delivery Executive")) {
                     interest_cl.gone()
                     delivery_executive_detail_cl.visible()
-                    formCompletionListener.formcompleted(false)
+                    formCompletionListener.enableDisableNextButton(false)
                     currentStep = 1
                     return true
                 }
@@ -250,5 +250,16 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             else -> return false
         }
         return false
+    }
+
+    override fun lastStateFormFound() : Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        if(currentStep == 1){
+            interest_cl.visible()
+            delivery_executive_detail_cl.gone()
+            currentStep = 0
+            return true
+        }
+        else return false
     }
 }

@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
-import javax.inject.Inject
 
 //@AndroidEntryPoint
 class OnboardingFragmentNew : Fragment() {
@@ -52,7 +51,7 @@ class OnboardingFragmentNew : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       // setUpViewForOnboarding()
+        // setUpViewForOnboarding()
 
         Glide.with(requireContext()).load(R.drawable.gif_hello).into(hi_there_image)
         onboarding_get_started_btn.setOnClickListener {
@@ -73,7 +72,7 @@ class OnboardingFragmentNew : Fragment() {
         activity?.let {
             onboarding_pager.adapter =
                 MutlifragmentAdapter(it, object : OnFragmentFormCompletionListener {
-                    override fun formcompleted(validate: Boolean) {
+                    override fun enableDisableNextButton(validate: Boolean) {
                         enableNextButton(validate)
                     }
 
@@ -85,14 +84,18 @@ class OnboardingFragmentNew : Fragment() {
                 saveDataToDB(onboarding_pager.currentItem)
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                if(onboarding_pager.currentItem == 3)
+                if (onboarding_pager.currentItem == 3)
                     enableNextButton(true)
                 else
-                enableNextButton(false)
+                    enableNextButton(false)
             }
 
         }
 
+        backpressicon.setOnClickListener(View.OnClickListener {
+            if (!isFragmentLastStateFound())
+                onboarding_pager.currentItem = onboarding_pager.currentItem - 1
+        })
 
 
         onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -110,11 +113,20 @@ class OnboardingFragmentNew : Fragment() {
         })
     }
 
+    private fun isFragmentLastStateFound(): Boolean {
+        var currentFragment =
+            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+        if (currentFragment is FragmentSetLastStateListener) {
+            return currentFragment.lastStateFormFound()
+        }
+        return false
+    }
+
     private fun isFragmentActionNotExists(): Boolean {
         var currentFragment =
             ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
         if (currentFragment is FragmentInteractionListener) {
-            return !currentFragment.actionFound()
+            return !currentFragment.nextButtonActionFound()
         }
         return true
     }
@@ -254,12 +266,16 @@ class OnboardingFragmentNew : Fragment() {
         return formattedString.trim()
     }
 
+    interface FragmentSetLastStateListener {
+        fun lastStateFormFound(): Boolean
+    }
+
     interface FragmentInteractionListener {
-        fun actionFound(): Boolean
+        fun nextButtonActionFound(): Boolean
     }
 
     interface OnFragmentFormCompletionListener {
-        fun formcompleted(validate : Boolean)
+        fun enableDisableNextButton(validate: Boolean)
     }
 
     fun hideKeyboard() {
@@ -274,7 +290,6 @@ class OnboardingFragmentNew : Fragment() {
             }
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-
     }
     //--------------
 

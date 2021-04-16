@@ -10,7 +10,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.age_group_item.*
 
-class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
+class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AgeGroupFragment(formCompletionListener)
@@ -27,8 +27,13 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AgeGroupViewModel::class.java)
         age_group.setOnCheckedChangeListener{ group, checkedId ->
-            formCompletionListener.formcompleted(true)
+            formCompletionListener.enableDisableNextButton(true)
         }
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 
 }

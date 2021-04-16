@@ -13,7 +13,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
 
-class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
+class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AssetOwnedFragment(formCompletionListener)
@@ -159,7 +159,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     private fun validateForm() {
         if(owned_smart_phone)
-        formCompletionListener.formcompleted(true)
+        formCompletionListener.enableDisableNextButton(true)
     }
 
     private fun resetSelected(icon: ImageView, option: TextView, view: View) {
@@ -195,6 +195,11 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
                 "other" to mapOf("car" to owned_car,"commercialVehicle" to owned_commercial_vehicle),
                 "it" to mapOf("laptop" to owned_laptop,"smartPhone" to owned_smart_phone, "pc" to owned_pc))
         )
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 
 }

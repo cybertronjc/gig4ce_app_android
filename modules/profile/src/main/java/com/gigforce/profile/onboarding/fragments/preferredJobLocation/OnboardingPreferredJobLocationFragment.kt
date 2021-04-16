@@ -19,13 +19,15 @@ import com.gigforce.profile.adapters.OnboardingCityAdapter
 import com.gigforce.profile.adapters.OnboardingMajorCityAdapter
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
+import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 
-class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListener {
+class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnCitySelectedListener,
+    OnboardingFragmentNew.FragmentSetLastStateListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -152,8 +154,13 @@ class OnboardingPreferredJobLocationFragment : Fragment(), OnCitySelectedListene
 
     companion object{
 
-        fun newInstance() : OnboardingPreferredJobLocationFragment {
-            return OnboardingPreferredJobLocationFragment()
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : OnboardingPreferredJobLocationFragment {
+            return OnboardingPreferredJobLocationFragment(formCompletionListener)
         }
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 }

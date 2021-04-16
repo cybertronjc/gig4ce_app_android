@@ -25,12 +25,12 @@ class MutlifragmentAdapter(activity: FragmentActivity,formCompletionListener: On
         fragmentArr.add(NameGenderFragment.newInstance(formCompletionListener))
         fragmentArr.add(AgeGroupFragment.newInstance(formCompletionListener))
         fragmentArr.add(HighestQualificationFragment.newInstance(formCompletionListener))
-        fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance())
+        fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance(formCompletionListener))
         fragmentArr.add(ExperienceFragment.newInstance(formCompletionListener))
         fragmentArr.add(InterestFragment.newInstance(formCompletionListener))
         fragmentArr.add(JobPreferenceFragment.newInstance(formCompletionListener))
         fragmentArr.add(AssetOwnedFragment.newInstance(formCompletionListener))
-        fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance())
+        fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance(formCompletionListener))
     }
 
     override fun createFragment(position: Int): Fragment {

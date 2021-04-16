@@ -1,8 +1,9 @@
 package com.gigforce.profile.onboarding.fragments.namegender
 
+import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment() {
+class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
@@ -43,27 +44,30 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             setSelected(icon, option, imageTextCardMol)
             gender = "Male"
             validateAllValues()
+            hideKeyboard()
         })
         imageTextCardMol4.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon1, option1, imageTextCardMol4)
             gender = "Female"
             validateAllValues()
+            hideKeyboard()
         })
         imageTextCardMol3.setOnClickListener(View.OnClickListener {
             resetAll()
             setSelected(icon2, option2, imageTextCardMol3)
             gender = "Other"
             validateAllValues()
+            hideKeyboard()
         })
     }
 
     private fun validateAllValues(){
         if(!gender.equals("") && !username.text.toString().equals("")){
-            formCompletionListener.formcompleted(true)
+            formCompletionListener.enableDisableNextButton(true)
         }
         else{
-            formCompletionListener.formcompleted(false)
+            formCompletionListener.enableDisableNextButton(false)
         }
     }
 
@@ -111,5 +115,25 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             )
         }
 
+    }
+
+    fun hideKeyboard() {
+        activity?.let {
+            val imm: InputMethodManager =
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            //Find the currently focused view, so we can grab the correct window token from it.
+            var view: View? = it.currentFocus ?: null
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = View(activity)
+            }
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        return false
     }
 }
