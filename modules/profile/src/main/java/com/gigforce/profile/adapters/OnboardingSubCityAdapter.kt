@@ -94,23 +94,13 @@ class OnboardingSubCityAdapter(
             val subCity = originalSubCityList.get(adapterPosition)
 
             subCityCheckbox.performClick()
-            if (subCityCheckbox.isChecked) {
-                // add to list
-                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
-            } else {
-                //remove from list
-                onSubCitySelectedListener?.onSubCitySelected(false, subCity)
-            }
+            onSubCitySelectedListener?.onSubCitySelected(subCityCheckbox.isChecked, subCity)
         }
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
             val subCity = originalSubCityList.get(adapterPosition)
 
-            if(isChecked){
-                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
-            } else {
-                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
-            }
+            onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity)
         }
 
     }
