@@ -76,9 +76,9 @@ class Login : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
-            navigateWithAllPopupStack(R.id.authFlowFragment)
-        } else {
+//        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
+//            navigateWithAllPopupStack(R.id.authFlowFragment)
+//        } else {
             viewModel.activity = this.requireActivity()
             invisible_edit_mobile.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)
@@ -92,13 +92,13 @@ class Login : BaseFragment() {
 
             //back button
             back_button_login.setOnClickListener {
-                onBackPressed()
+                activity?.onBackPressed()
             }
 
             //registerTextWatcher()
 //            if (mobile_number.equals(""))
 //                showComfortDialog()
-        }
+//        }
     }
 
 

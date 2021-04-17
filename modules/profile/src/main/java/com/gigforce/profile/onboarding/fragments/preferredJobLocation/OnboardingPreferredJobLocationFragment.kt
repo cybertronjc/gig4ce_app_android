@@ -107,7 +107,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
                 })
 
         viewModel.allCities
-                .observe(viewLifecycleOwner, Observer {
+                .observe(viewLifecycleOwner,  {
                     showAllCities(it)
                 })
     }
@@ -146,11 +146,11 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     override fun onCitySelected(city: City) {
 
-        cities_layout.visibility = View.GONE
-        sub_cities_layout.visibility = View.VISIBLE
-
         val delhiId = "HCbEvKJd2aPZaYgenUV7"
         if (city.id == delhiId) {
+            cities_layout.visibility = View.GONE
+            sub_cities_layout.visibility = View.VISIBLE
+
             val delhiSubLocations = arrayListOf<String>(
                     "Faridabad",
                     "Ghaziabad",
@@ -164,19 +164,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             )
 
             subCityAdapter.setData(delhiSubLocations)
-
-
-//            MaterialAlertDialogBuilder(requireContext())
-//                    .setTitle("Choose a sub location")
-//                    .setItems(delhiSubLocations) { _, which ->
-//
-//                        val selectedSubLocation = delhiSubLocations[which]
-//                        city.subLocation = selectedSubLocation
-//                        selectedCity = city
-//
-//                    }.show()
-
-
         } else {
             selectedCity = city
         }
