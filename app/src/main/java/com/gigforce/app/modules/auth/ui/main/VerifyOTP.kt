@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.auth.ui.main
 
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -9,11 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -30,7 +33,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class VerifyOTP : BaseFragment() {
+class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListener {
 
     companion object {
         fun newInstance() = VerifyOTP()
@@ -47,7 +50,9 @@ class VerifyOTP : BaseFragment() {
             Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
-   // private  var client: SmsRetrieverClient? = null
+    private  var client: SmsRetrieverClient? = null
+    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
+    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +60,13 @@ class VerifyOTP : BaseFragment() {
             verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
+
+        smsBroadcast.initOTPListener(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+
+
+        context?.registerReceiver(smsBroadcast, intentFilter)
     }
 
     override fun onCreateView(
@@ -78,7 +90,7 @@ class VerifyOTP : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
         initializeViews()
-       // setupSmsRetriver()
+        startSmsRetriver()
         listeners()
         observer()
         saveNewUsedMobileNumber()
@@ -89,22 +101,27 @@ class VerifyOTP : BaseFragment() {
 //        }
     }
 
-//    private fun setupSmsRetriver() {
-//        client = context?.let { SmsRetriever.getClient(it) }
-//        var task: Task<Void>? = client?.startSmsRetriever()
-//
-//        // Listen for success/failure of the start Task. If in a background thread, this
-//// can be made blocking using Tasks.await(task, [timeout]);
-//        // Listen for success/failure of the start Task. If in a background thread, this
-//// can be made blocking using Tasks.await(task, [timeout]);
-//       task?.addOnSuccessListener {
-//            Log.d("sms retrive", it.toString())
-//       }
-//
-//        task?.addOnFailureListener {
-//            Log.d("sms failure", it.toString())
-//        }
-//    }
+    private fun startSmsRetriver() {
+        client = context?.let { SmsRetriever.getClient(it) }
+        val task = client?.startSmsRetriever()
+
+       task?.addOnSuccessListener { showToast("SMS Retriever Started") }
+
+        task?.addOnFailureListener { showToast("SMS Retriever Failed") }
+    }
+
+    override fun onOTPReceived(otp: String) {
+        if (smsBroadcast != null) {
+            context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(smsBroadcast) }
+        }
+        showToast(otp)
+        txt_otp.setText(otp)
+        Log.e("OTP Received", otp)
+    }
+
+    override fun onOTPTimeOut() {
+        // do nothing
+    }
 
 
     private fun saveNewUsedMobileNumber() {
