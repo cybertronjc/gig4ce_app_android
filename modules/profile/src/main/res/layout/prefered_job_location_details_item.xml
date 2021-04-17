@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="18dp"
         android:text="HSR"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="14dp"
         android:fontFamily="@font/lato"
         android:textSize="16sp"
         android:textColor="#333333"
@@ -31,6 +31,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Theme.checkbox"
-        android:layout_marginEnd="16dp"/>
+        style="@style/Theme.checkbox" />
 </androidx.constraintlayout.widget.ConstraintLayout>
