@@ -135,7 +135,7 @@ class OnboardingViewModel constructor(
                 ),
                 CityWithImage(
                         id = "HCbEvKJd2aPZaYgenUV7",
-                        name = "Delhi",
+                        name = "Delhi-Ncr",
                         image = R.drawable.ic_delhi,
                         stateCode = "in_delhi"
                 ),
@@ -224,7 +224,7 @@ class OnboardingViewModel constructor(
             cityId: String,
             cityName: String,
             stateCode : String,
-            subLocation: String?
+            subLocation: List<String>
     ) = viewModelScope.launch {
 
         try {

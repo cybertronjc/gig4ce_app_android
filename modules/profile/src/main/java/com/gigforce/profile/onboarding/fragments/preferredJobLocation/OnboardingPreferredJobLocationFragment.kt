@@ -52,9 +52,14 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         }
     }
 
-    private var confirmSubCityList: ArrayList<String>? = null
+    private var confirmSubCityList: ArrayList<String> = ArrayList()
 
     fun getSelectedCity() : City? {
+
+        if(selectedCity != null){
+            selectedCity?.subLocation = confirmSubCityList
+        }
+
         return selectedCity
     }
 
@@ -133,18 +138,19 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     override fun onSubCitySelected(add: Boolean, text: String){
         if (add){
-            confirmSubCityList?.add(text)
+            confirmSubCityList.add(text)
             Log.d("added", "text" + " list: " + confirmSubCityList.toString())
         }
         else{
-            if (confirmSubCityList?.contains(text)!!){
-                confirmSubCityList?.remove(text)
+            if (confirmSubCityList.contains(text)){
+                confirmSubCityList.remove(text)
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
     }
 
     override fun onCitySelected(city: City) {
+        selectedCity = city
 
         val delhiId = "HCbEvKJd2aPZaYgenUV7"
         if (city.id == delhiId) {
@@ -164,8 +170,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             )
 
             subCityAdapter.setData(delhiSubLocations)
-        } else {
-            selectedCity = city
         }
     }
 
