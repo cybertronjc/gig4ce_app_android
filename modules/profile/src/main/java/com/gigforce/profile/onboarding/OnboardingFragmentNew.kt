@@ -77,6 +77,10 @@ class OnboardingFragmentNew : Fragment() {
                         enableNextButton(validate)
                     }
 
+                    override fun profilePictureSkipPressed() {
+                      //completet this
+                    }
+
                     override fun checkForButtonText() {
                         super.checkForButtonText()
 
@@ -314,6 +318,8 @@ class OnboardingFragmentNew : Fragment() {
         fun enableDisableNextButton(validate: Boolean)
 
         fun checkForButtonText(){}
+
+        fun profilePictureSkipPressed()
     }
 
     fun hideKeyboard() {

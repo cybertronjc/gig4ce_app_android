@@ -104,10 +104,9 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
         editLayout.setOnClickListener {
 
             if(onboardingProfileData?.hasUserUploadedProfilePicture() == true){
-//                skip
-                //todo
-            } else {
                 showCameraSheetIfNotShown()
+            } else {
+                formCompletionListener.profilePictureSkipPressed()
             }
         }
 //        editLayout.setOnClickListener {

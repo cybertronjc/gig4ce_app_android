@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
@@ -67,13 +68,14 @@ class OnboardingSubCityAdapter(
     inner class OnboardingSubCityViewHolder(
             itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener {
+            View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
         private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
         private var subCityCheckbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
             itemView.setOnClickListener(this)
+            subCityCheckbox.setOnCheckedChangeListener(this@OnboardingSubCityViewHolder)
         }
 
         fun bindValues(subCity: String, position: Int) {
@@ -89,18 +91,30 @@ class OnboardingSubCityAdapter(
         }
 
         override fun onClick(v: View?) {
+            val subCity = originalSubCityList.get(adapterPosition)
 
             subCityCheckbox.performClick()
             if (subCityCheckbox.isChecked) {
                 // add to list
-                onSubCitySelectedListener?.onSubCitySelected(true, subCityName.text.toString())
+                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
             } else {
                 //remove from list
-                onSubCitySelectedListener?.onSubCitySelected(false, subCityName.text.toString())
+                onSubCitySelectedListener?.onSubCitySelected(false, subCity)
             }
+        }
 
+        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+            val subCity = originalSubCityList.get(adapterPosition)
+
+            if(isChecked){
+                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
+            } else {
+                onSubCitySelectedListener?.onSubCitySelected(true, subCity)
+            }
         }
 
     }
+
+
 
 }
