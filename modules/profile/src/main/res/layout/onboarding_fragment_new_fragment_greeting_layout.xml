@@ -57,7 +57,7 @@
         android:background="@drawable/gradient_button"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="Let's get Started"
+        android:text="Let's Get Started"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"

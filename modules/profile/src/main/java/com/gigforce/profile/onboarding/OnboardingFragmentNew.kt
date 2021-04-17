@@ -77,7 +77,7 @@ class OnboardingFragmentNew : Fragment() {
                     }
 
                 })
-
+            steps.text = "Step ${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size/9}"
         }
         next.setOnClickListener {
             if (isFragmentActionNotExists()) {

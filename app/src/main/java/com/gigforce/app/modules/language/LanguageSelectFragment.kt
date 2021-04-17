@@ -212,7 +212,6 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             viewHolder.languageNameTV.setTextColor(ResourcesCompat.getColor(it.resources,R.color.lipstick,null))
             viewHolder.languageNameBigTv.setTextColor(ResourcesCompat.getColor(it.resources,R.color.lipstick,null))
             viewHolder.languageRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
-
         }
     }
 }
