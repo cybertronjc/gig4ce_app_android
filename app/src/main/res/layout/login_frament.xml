@@ -165,6 +165,8 @@
                 android:textColor="@color/fui_transparent"
                 android:paddingTop="6dp"
                 android:inputType="phone"
+                android:longClickable="false"
+                android:textIsSelectable="false"
                 android:paddingBottom="6dp"
                 android:cursorVisible="false"
                 android:layout_marginStart="@dimen/size8"
