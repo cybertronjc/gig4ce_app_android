@@ -138,7 +138,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_icon_feather_thumbs_up"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -175,7 +175,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_icon_feather_thumbs_down"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -249,7 +249,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_chat"
+                        android:src="@drawable/ic_food"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -287,7 +287,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_chat"
+                        android:src="@drawable/ic_grocery"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -362,7 +362,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_chat"
+                        android:src="@drawable/ic_milk"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

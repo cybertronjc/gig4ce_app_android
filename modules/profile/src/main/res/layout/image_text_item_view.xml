@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
  <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/imageTextCardcl"
-        android:layout_width="match_parent"
+        android:layout_width="82dp"
         android:layout_height="82dp"
         android:layout_marginRight="1dp"
-        android:background="@drawable/rect_top_left_cornor_card"
+        android:background="@drawable/rect_left_cornor_card"
         app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
