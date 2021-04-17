@@ -13,7 +13,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.highest_qualification_item.*
 
-class HighestQualificationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
+class HighestQualificationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = HighestQualificationFragment(formCompletionListener)
@@ -122,5 +122,13 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+        return false
+    }
+
+    override fun activeNextButton() {
+        validateForm()
     }
 }

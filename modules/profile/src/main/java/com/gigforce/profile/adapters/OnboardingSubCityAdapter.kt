@@ -99,12 +99,9 @@ class OnboardingSubCityAdapter(
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
             val subCity = originalSubCityList.get(adapterPosition)
-
             onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity)
         }
 
     }
-
-
 
 }

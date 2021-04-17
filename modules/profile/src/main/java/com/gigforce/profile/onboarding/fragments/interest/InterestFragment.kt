@@ -52,7 +52,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         listener()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
-                activity, 3,
+                activity, 4,
                 GridLayoutManager.VERTICAL, false
             )
             all_interests_rv.adapter = AllInterestAdapter(
@@ -249,6 +249,15 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             else -> return false
         }
         return false
+    }
+
+    override fun activeNextButton() {
+        when (currentStep){
+            0-> if(getSelectedInterestCount()>0) formCompletionListener.enableDisableNextButton(true)
+            1-> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
+                formCompletionListener.enableDisableNextButton(true)
+            } else formCompletionListener.enableDisableNextButton(false)
+        }
     }
 
     override fun lastStateFormFound() : Boolean {

@@ -58,9 +58,11 @@ class OnboardingFragmentNew : Fragment() {
 
             onboarding_greeting_layout.gone()
             setUpViewForOnboarding()
-            enableNextButton(false)
+            next_fl.visible()
+            setNextButtonForCurrentFragment()
         }
     }
+
 
     private fun setUpViewForOnboarding() {
         next.visible()
@@ -70,7 +72,6 @@ class OnboardingFragmentNew : Fragment() {
         disableViewPagerScroll()
         onboarding_pager.offscreenPageLimit = 3
         activity?.let {
-
             onboarding_pager.adapter =
                 MutlifragmentAdapter(it, object : OnFragmentFormCompletionListener {
                     override fun enableDisableNextButton(validate: Boolean) {
@@ -78,18 +79,19 @@ class OnboardingFragmentNew : Fragment() {
                     }
 
                     override fun profilePictureSkipPressed() {
-                      //completet this
+                        //completet this
                     }
 
                     override fun checkForButtonText() {
                         super.checkForButtonText()
 
-                        if(onboarding_pager.currentItem == 8){
+                        if (onboarding_pager.currentItem == 8) {
 
                             val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                            val fragment = fragmentAdapter.getFragment(onboarding_pager.currentItem ) as OnboardingAddProfilePictureFragment
+                            val fragment =
+                                fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
 
-                            if(!fragment.hasUserUploadedPhoto()) {
+                            if (!fragment.hasUserUploadedPhoto()) {
                                 next.text = "Upload Photo"
                                 enableNextButton(true)
                                 fragment.showCameraSheetIfNotShown()
@@ -100,38 +102,36 @@ class OnboardingFragmentNew : Fragment() {
                         }
                     }
                 })
-            steps.text = "Step ${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size/9}"
+            steps.text =
+                "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
         }
         next.setOnClickListener {
+            saveDataToDB(onboarding_pager.currentItem)
             if (isFragmentActionNotExists()) {
+
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-
-                if(onboarding_pager.currentItem == 8){
-
+                if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                    val fragment = fragmentAdapter.getFragment(onboarding_pager.currentItem ) as OnboardingAddProfilePictureFragment
-                    if(!fragment.hasUserUploadedPhoto()) {
+                    val fragment =
+                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                    if (!fragment.hasUserUploadedPhoto()) {
                         fragment.showCameraSheetIfNotShown()
                     } else {
                     }
-                } else {
-
-                    if (onboarding_pager.currentItem == 3)
-                        enableNextButton(true)
-                    else
-                        enableNextButton(false)
-
-                    saveDataToDB(onboarding_pager.currentItem)
                 }
             }
-
+            setNextButtonForCurrentFragment()
         }
 
-        backpressicon.setOnClickListener(View.OnClickListener {
+
+
+        backpressicon.setOnClickListener {
             if (!isFragmentLastStateFound())
-                onboarding_pager.currentItem = onboarding_pager.currentItem - 1
-        })
+                if (onboarding_pager.currentItem != 0)
+                    onboarding_pager.currentItem = onboarding_pager.currentItem - 1
+                else activity?.onBackPressed()
+        }
 
 
         onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -151,6 +151,15 @@ class OnboardingFragmentNew : Fragment() {
                 }
             }
         })
+    }
+
+
+    fun setNextButtonForCurrentFragment(){
+        var currentFragment =
+            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+        if (currentFragment is FragmentInteractionListener) {
+            currentFragment.activeNextButton()
+        }
     }
 
     private fun isFragmentLastStateFound(): Boolean {
@@ -312,12 +321,13 @@ class OnboardingFragmentNew : Fragment() {
 
     interface FragmentInteractionListener {
         fun nextButtonActionFound(): Boolean
+        fun activeNextButton()
     }
 
     interface OnFragmentFormCompletionListener {
         fun enableDisableNextButton(validate: Boolean)
 
-        fun checkForButtonText(){}
+        fun checkForButtonText() {}
 
         fun profilePictureSkipPressed()
     }

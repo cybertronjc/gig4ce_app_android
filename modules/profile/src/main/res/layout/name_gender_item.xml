@@ -40,6 +40,8 @@
             android:fontFamily="@font/lato"
             android:gravity="center"
             android:hint="Name"
+            android:importantForAutofill="no"
+            android:inputType="text|textCapWords|textNoSuggestions|textPersonName|textVisiblePassword"
             android:letterSpacing="0"
             android:singleLine="true"
             android:textColorHint="#aeaeaf"

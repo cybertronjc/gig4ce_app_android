@@ -23,7 +23,7 @@ import com.gigforce.profile.viewmodel.OnboardingViewModel
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 
 class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnCitySelectedListener,
-    OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener {
+    OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -183,5 +183,13 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+        return false
+    }
+
+    override fun activeNextButton() {
+        formCompletionListener.enableDisableNextButton(true)
     }
 }

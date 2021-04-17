@@ -78,11 +78,12 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/next_fl"
         android:layout_width="match_parent"
         android:layout_height="108dp"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
-        >
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -99,7 +100,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:text="Next"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
         </RelativeLayout>
 
