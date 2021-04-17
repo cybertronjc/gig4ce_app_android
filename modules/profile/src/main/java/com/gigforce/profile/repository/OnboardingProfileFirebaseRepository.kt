@@ -120,7 +120,7 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
                         }
             }
 
-    suspend fun setPreferredJobLocation(cityId: String, cityName: String, stateCode: String, subLocation: String?) {
+    suspend fun setPreferredJobLocation(cityId: String, cityName: String, stateCode: String, subLocation: List<String>) {
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .updateOrThrow(mapOf(

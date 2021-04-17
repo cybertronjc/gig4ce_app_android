@@ -70,24 +70,56 @@ class OnboardingFragmentNew : Fragment() {
         disableViewPagerScroll()
         onboarding_pager.offscreenPageLimit = 3
         activity?.let {
+
             onboarding_pager.adapter =
                 MutlifragmentAdapter(it, object : OnFragmentFormCompletionListener {
                     override fun enableDisableNextButton(validate: Boolean) {
                         enableNextButton(validate)
                     }
 
+                    override fun checkForButtonText() {
+                        super.checkForButtonText()
+
+                        if(onboarding_pager.currentItem == 8){
+
+                            val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                            val fragment = fragmentAdapter.getFragment(onboarding_pager.currentItem ) as OnboardingAddProfilePictureFragment
+
+                            if(!fragment.hasUserUploadedPhoto()) {
+                                next.text = "Upload Photo"
+                                enableNextButton(true)
+                                fragment.showCameraSheetIfNotShown()
+                            } else {
+                                enableNextButton(true)
+                                next.text = "Next"
+                            }
+                        }
+                    }
                 })
 
         }
         next.setOnClickListener {
             if (isFragmentActionNotExists()) {
-                saveDataToDB(onboarding_pager.currentItem)
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                if (onboarding_pager.currentItem == 3)
-                    enableNextButton(true)
-                else
-                    enableNextButton(false)
+
+                if(onboarding_pager.currentItem == 8){
+
+                    val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                    val fragment = fragmentAdapter.getFragment(onboarding_pager.currentItem ) as OnboardingAddProfilePictureFragment
+                    if(!fragment.hasUserUploadedPhoto()) {
+                        fragment.showCameraSheetIfNotShown()
+                    } else {
+                    }
+                } else {
+
+                    if (onboarding_pager.currentItem == 3)
+                        enableNextButton(true)
+                    else
+                        enableNextButton(false)
+
+                    saveDataToDB(onboarding_pager.currentItem)
+                }
             }
 
         }
@@ -108,6 +140,10 @@ class OnboardingFragmentNew : Fragment() {
                     val fragment =
                         fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
                     fragment.showCameraSheetIfNotShown()
+
+                    enableNextButton(true)
+                } else {
+                    next.text = "Next"
                 }
             }
         })
@@ -276,6 +312,8 @@ class OnboardingFragmentNew : Fragment() {
 
     interface OnFragmentFormCompletionListener {
         fun enableDisableNextButton(validate: Boolean)
+
+        fun checkForButtonText(){}
     }
 
     fun hideKeyboard() {

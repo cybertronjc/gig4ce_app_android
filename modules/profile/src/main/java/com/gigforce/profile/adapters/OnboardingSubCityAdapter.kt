@@ -6,23 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
-import com.gigforce.profile.models.City
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 
 class OnboardingSubCityAdapter(
         private val context: Context
-) : RecyclerView.Adapter<OnboardingSubCityAdapter.OnboardingSubCityViewHolder>(){
+) : RecyclerView.Adapter<OnboardingSubCityAdapter.OnboardingSubCityViewHolder>() {
 
 
     private var originalSubCityList: List<String> = emptyList()
     private var selectedItemIndex: Int = -1
 
-    private var onSubCitySelectedListener : OnSubCitySelectedListener? = null
+    private var onSubCitySelectedListener: OnSubCitySelectedListener? = null
 
-    fun setOnSubCitySelectedListener(onSubCitySelectedListener: OnboardingPreferredJobLocationFragment){
+    fun setOnSubCitySelectedListener(onSubCitySelectedListener: OnboardingPreferredJobLocationFragment) {
         this.onSubCitySelectedListener = onSubCitySelectedListener
     }
 
@@ -93,14 +91,12 @@ class OnboardingSubCityAdapter(
         override fun onClick(v: View?) {
 
             subCityCheckbox.performClick()
-
-            if (subCityCheckbox.isChecked){
+            if (subCityCheckbox.isChecked) {
                 // add to list
-                
-            }
-            else{
+                onSubCitySelectedListener?.onSubCitySelected(true, subCityName.text.toString())
+            } else {
                 //remove from list
-
+                onSubCitySelectedListener?.onSubCitySelected(false, subCityName.text.toString())
             }
 
         }
