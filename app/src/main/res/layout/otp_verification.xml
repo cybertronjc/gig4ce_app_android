@@ -24,15 +24,13 @@
 
             <ImageView
                 android:id="@+id/iv_back_otp_fragment"
-                android:layout_width="47dp"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_button"
+                android:tint="@color/white"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="16dp"
-                app:tint="@color/white"
-                android:layout_marginStart="16dp"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -47,7 +45,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:textSize="20sp"
-                android:text="@string/password" />
+                android:text="@string/login" />
 
 
         </RelativeLayout>
@@ -202,30 +200,33 @@ Please enter it below.
                 app:layout_constraintTop_toBottomOf="@+id/txt_otp"
                 tools:text="00:00" />
 
-            <TextView
-                android:id="@+id/reenter_mobile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="@dimen/size_60"
-                android:layout_marginEnd="@dimen/size_16"
-                android:fontFamily="@font/lato"
-                android:gravity="center"
-                android:letterSpacing="0.09"
-                android:lineSpacingExtra="3sp"
-                android:text="@string/otp_reenter_mobile_underline"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvotpwrong"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/reenter_mobile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_33"
+        android:layout_marginEnd="@dimen/size_16"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+
+        android:letterSpacing="0.09"
+        android:lineSpacingExtra="3sp"
+        android:text="@string/otp_reenter_mobile_underline"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/verify_otp_button"
+       />
 
 
     <TextView
