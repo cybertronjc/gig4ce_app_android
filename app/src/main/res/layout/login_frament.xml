@@ -156,6 +156,24 @@
                 app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
                 app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"/>
 
+            <EditText
+                android:id="@+id/invisible_edit_mobile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/fui_transparent"
+                android:paddingTop="6dp"
+                android:inputType="phone"
+                android:paddingBottom="6dp"
+                android:cursorVisible="false"
+                android:layout_marginStart="@dimen/size8"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
+                app:layout_constraintEnd_toEndOf="@+id/ll_note_login"
+                app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
+                app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"></EditText>
+
+
+
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/br_1"
                 android:layout_width="wrap_content"
@@ -227,7 +245,7 @@
                     android:lineSpacingExtra="3sp"
                     android:text="@string/note"
                     android:textColor="@color/black"
-                    android:textSize="17sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
 
@@ -252,7 +270,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/this_mobile_no_will_be_used_to_call_you_for_various_job_opportunities"
                         android:textColor="@color/black"
-                        android:textSize="17dp"
+                        android:textSize="14dp"
                         android:textStyle="normal" />
                 </TableRow>
 
@@ -278,7 +296,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/this_overrides_any_dnd_requests_with_your_operator"
                         android:textColor="@color/black"
-                        android:textSize="17sp"
+                        android:textSize="14sp"
                         android:textStyle="normal" />
                 </TableRow>
 
@@ -293,15 +311,15 @@
 
     <TextView
         android:id="@+id/login_button"
-        style="@style/button_style"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@drawable/app_gradient_button_disabled"
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_22"
         android:gravity="center"
         android:minHeight="@dimen/size_36"
-        android:text="@string/next"
+        android:text="Next"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

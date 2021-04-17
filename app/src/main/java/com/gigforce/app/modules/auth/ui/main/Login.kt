@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -79,7 +80,7 @@ class Login : BaseFragment() {
             navigateWithAllPopupStack(R.id.authFlowFragment)
         } else {
             viewModel.activity = this.requireActivity()
-            //otp_mobile_number.setText(mobile_number)
+            invisible_edit_mobile.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)
             Log.d("mobile_number", mobile_number)
             changeStatusBarColor()
@@ -87,7 +88,7 @@ class Login : BaseFragment() {
             prepareEditTextList()
             listeners()
             observer()
-            setClickListnerOnEditTexts()
+            //setClickListnerOnEditTexts()
 
             //back button
             back_button_login.setOnClickListener {
@@ -109,6 +110,8 @@ class Login : BaseFragment() {
                 arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
                 Log.d("array size", ""+arrayEditTexts1.size )
             }
+//            login_button.isEnabled = true
+//            login_button.background = resources.getDrawable(R.drawable.gradient_button)
         }
 
     }
@@ -125,45 +128,6 @@ class Login : BaseFragment() {
         win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
     }
 
-
-    private fun setClickListnerOnEditTexts(){
-        for (i in 0..arrayEditTexts1.size - 1){
-            arrayEditTexts1.get(i).setOnClickListener {
-                val lastFilledBox = mobile_number_sb.toString().length
-                Log.d("lastFilledBox", "" + lastFilledBox)
-                arrayEditTexts1.get(lastFilledBox).requestFocus()
-            }
-
-//            arrayEditTexts1.get(i).setOnTouchListener(object : View.OnTouchListener {
-//                override fun onTouch(v: View?, event: MotionEvent): Boolean {
-//                    if (MotionEvent.ACTION_UP === event.action) {
-//                        if (mobile_number_sb.length == 0){
-//                            mobile_digit_1.requestFocus()
-//                        }
-////                        arrayEditTexts1.get(i).clearFocus()
-////                        val lastFilledBox = mobile_number_sb.toString().length
-////                        Log.d("lastFilledBox", "" + lastFilledBox)
-////                        arrayEditTexts1.get(lastFilledBox).requestFocus()
-//                    }
-//                    return false // return is important...
-//                }
-//            })
-
-//            arrayEditTexts1.get(i).setOnFocusChangeListener { view, b ->
-//                if (b){
-//                    if (mobile_number_sb.length == 0){
-//                        arrayEditTexts1.get(0).requestFocus()
-//                    }
-//                   // arrayEditTexts1.get(i).background = resources.getDrawable(R.drawable.mobile_number_digit_focus_bg)
-//                }
-//                else{
-//                   // arrayEditTexts1.get(i).background = resources.getDrawable(R.drawable.mobile_number_digit_background)
-//                }
-//            }
-
-
-        }
-    }
 
     private fun prepareEditTextList() {
         arrayEditTexts1 = arrayListOf(
@@ -243,52 +207,40 @@ class Login : BaseFragment() {
 
     private fun listeners() {
         cvloginwrong.visibility = GONE
-        otp_mobile_number.doAfterTextChanged {
+        invisible_edit_mobile.doAfterTextChanged {
             showWrongMobileNoLayout(false)
-            if (otp_mobile_number.text.toString().length == 10) {
+            if (invisible_edit_mobile.text.toString().length == 10) {
                 hideKeyboard()
+                login_button.isEnabled = true
+                login_button.background = resources.getDrawable(R.drawable.gradient_button)
             }
-        }
-
-        for (i in 0..arrayEditTexts1.size - 1){
-            arrayEditTexts1.get(i).setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-                if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL && i != 0 && arrayEditTexts1.get(
-                        i
-                    ).text.isEmpty()
-                ) {
-
-                    arrayEditTexts1.get(i - 1)!!.text = null
-                    arrayEditTexts1.get(i - 1).requestFocus()
-                    //arrayEditTexts1.get(i-1).background = resources.getDrawable(R.drawable.mobile_number_digit_focus_bg)
-                    if (mobile_number_sb.length > 0){
-                        mobile_number_sb.deleteAt(mobile_number_sb.length - 1)
-                    }
-
-                    Log.d("stringbuilder", mobile_number_sb.toString())
-                    Log.d("lastboxfilled", "" + (mobile_number_sb.length - 1))
-                    true
-                }
-                false
-            })
-        }
-
-        for (i in 0..arrayEditTexts1.size - 1){
-            arrayEditTexts1.get(i).doAfterTextChanged {
-                if (it.toString()?.length == 1 && i != 9){
-                    arrayEditTexts1.get(i + 1).requestFocus()
-                   // arrayEditTexts1.get(i+1).background = resources.getDrawable(R.drawable.mobile_number_digit_focus_bg)
-                    mobile_number_sb.append(it.toString())
-                }
+            else{
+                login_button.isEnabled = false
+                login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+            }
+            if (it.toString().length > 0){
+                //fill the boxes
+                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length-1].toString(), true)
+            }
+            if (it.toString().length < makeMobileNumberString().length) {
+                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
             }
         }
 
 
-        otp_mobile_number.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+        invisible_edit_mobile.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = GONE
 //            textView23.visibility = VISIBLE
 
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+//            if( keyCode == KeyEvent.KEYCODE_DEL ) {
+//                //this is for backspace
+//                    Log.d("backspace", "here")
+//                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
+//            }
+
+             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
+                 login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 doActionOnClick()
             }
             false
@@ -309,6 +261,21 @@ class Login : BaseFragment() {
 
     }
 
+    private fun fillMobileDigitBoxes(ind: Int, md: String, remove: Boolean) {
+
+        if (!remove) {
+            Log.d("fill", md + "ind " + ind + " remove")
+            arrayEditTexts1.get(ind).setText("")
+        }
+        else{
+            Log.d("fill", md + "ind " + ind + " add")
+            arrayEditTexts1.get(ind - 1).setText(md)
+        }
+
+    }
+
+
+
 
     private fun showWrongMobileNoLayout(show: Boolean) {
         if (show) {
@@ -322,12 +289,13 @@ class Login : BaseFragment() {
     }
 
     private fun doActionOnClick() {
-        var phoneNumber: String = "+91" + makeMobileNumberString();
+        var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString();
         if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
             cvloginwrong.visibility = VISIBLE
 //            textView23.visibility = INVISIBLE
             login_button.isEnabled = true;
+            login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else {
             viewModel.sendVerificationCode(phoneNumber)
         }
@@ -368,7 +336,7 @@ class Login : BaseFragment() {
                 deviceMobileNos
             )
 //            makeMobileNumberString().threshold = 1
-//            otp_mobile_number.setAdapter(
+//            invisible_edit_mobile.setAdapter(
 //                    adapter
 //            )
         }
@@ -416,93 +384,12 @@ class Login : BaseFragment() {
 //                deviceMobileNos.add(numbStr)
 //            }
 //        }
-//        otp_mobile_number.threshold = 0
-//        otp_mobile_number.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
+//        invisible_edit_mobile.threshold = 0
+//        invisible_edit_mobile.setAdapter(ArrayAdapter(activity!!, com.gigforce.app.R.layout.support_simple_spinner_dropdown_item, deviceMobileNos))
 //
 //    }
 //    else{
 //        checkForAllPermissions()
 //    }
 //}
-
-     class GenericTextWatcher(private val currentView: View, private val nextView: View?) : TextWatcher {
-        override fun afterTextChanged(editable: Editable) { // TODO Auto-generated method stub
-            val text = editable.toString()
-            when (currentView.id) {
-                R.id.mobile_digit_1 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-                    Log.d("here", "expending")
-
-                }
-                R.id.mobile_digit_2 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_3 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_4 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_5 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_6 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_7 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_8 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_9 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                R.id.mobile_digit_10 -> if (text.length == 1) {
-                    nextView!!.requestFocus()
-
-                }
-                //You can use EditText4 same as above to hide the keyboard
-            }
-        }
-
-        override fun beforeTextChanged(
-            arg0: CharSequence,
-            arg1: Int,
-            arg2: Int,
-            arg3: Int
-        ) { // TODO Auto-generated method stub
-        }
-
-        override fun onTextChanged(
-            arg0: CharSequence,
-            arg1: Int,
-            arg2: Int,
-            arg3: Int
-        ) { // TODO Auto-generated method stub
-        }
-
-    }
-
-    class GenericKeyEvent(private val currentView: EditText, private val previousView: EditText?) : View.OnKeyListener {
-        override fun onKey(p0: View?, keyCode: Int, event: KeyEvent?): Boolean {
-            if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL && currentView.id != R.id.mobile_digit_1 && currentView.text.isEmpty()) {
-                //If current is empty then previous EditText's number will also be deleted
-                previousView!!.text = null
-                previousView.requestFocus()
-                return true
-            }
-            return false
-        }
-
-
-    }
 }
