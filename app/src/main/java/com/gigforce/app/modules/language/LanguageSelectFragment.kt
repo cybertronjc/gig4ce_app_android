@@ -10,7 +10,6 @@ import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.configrepository.ConfigViewModel
-import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
 
@@ -35,6 +34,10 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
                     Locale("fr", "FR")
                     //Locale("ar", "JO")
             )
+
+    companion object{
+        var languageCode = ""
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -195,10 +198,21 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         super.onDestroyView()
     }
 
-    override fun onLanguageSelected(language: Language) {
+    override fun onLanguageSelected(language: Language,viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {
         updateResources(language.languageCode)
         saveAppLanuageCode(language.languageCode)
         saveAppLanguageName(language.languageCode)
+        setSelected(viewHolder)
+        languageCode = language.languageCode
         navNext()
+    }
+
+    private fun setSelected(viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {
+        context?.let {
+            viewHolder.languageNameTV.setTextColor(ResourcesCompat.getColor(it.resources,R.color.lipstick,null))
+            viewHolder.languageNameBigTv.setTextColor(ResourcesCompat.getColor(it.resources,R.color.lipstick,null))
+            viewHolder.languageRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
+
+        }
     }
 }

@@ -27,7 +27,7 @@ class LanguageAdapter(
     fun setOnCitySelectedListener(onCitySelectedListener: LanguageAdapterClickListener) {
         this.onLanguageSelectedListener = onCitySelectedListener
     }
-
+    var allViewHolder = ArrayList<OnboardingMajorCityViewHolder>()
     override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -35,7 +35,20 @@ class LanguageAdapter(
         val view = LayoutInflater.from(
                 parent.context
         ).inflate(R.layout.recycler_item_language, parent, false)
-        return OnboardingMajorCityViewHolder(view)
+        LanguageSelectFragment.languageCode?.let {
+            if(it.equals("en")){
+                selectedItemIndex = 0
+            }
+            else if(it.equals("hi")){
+                selectedItemIndex = 1
+            }
+            else{
+                selectedItemIndex = -1
+            }
+        }
+        var viewHolder = OnboardingMajorCityViewHolder(view)
+        allViewHolder.add(viewHolder)
+        return viewHolder
     }
 
     fun getSelectedItemIndex(): Int {
@@ -106,9 +119,9 @@ class LanguageAdapter(
     ) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
 
-        private var languageNameTV: TextView = itemView.findViewById(R.id.language_name_tv)
-        private var languageNameBigTv: TextView = itemView.findViewById(R.id.langugage_text_big)
-        private var languageRootLayout: LinearLayout = itemView.findViewById(R.id.language_root_layout)
+        var languageNameTV: TextView = itemView.findViewById(R.id.language_name_tv)
+        var languageNameBigTv: TextView = itemView.findViewById(R.id.langugage_text_big)
+        var languageRootLayout: LinearLayout = itemView.findViewById(R.id.language_root_layout)
 
         init {
             itemView.setOnClickListener(this)
@@ -137,11 +150,11 @@ class LanguageAdapter(
             if (selectedItemIndex != -1) {
                 val tempIndex = selectedItemIndex
                 selectedItemIndex = newPosition
-                notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
+//                notifyItemChanged(tempIndex)
+//                notifyItemChanged(selectedItemIndex)
             } else {
                 selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
+//                notifyItemChanged(selectedItemIndex)
             }
 //            if (selectedItemIndex != -1) {
 //                selectedItemIndex = -1
@@ -152,7 +165,7 @@ class LanguageAdapter(
 
             val language = filteredLanguageList[newPosition]
             onLanguageSelectedListener?.onLanguageSelected(
-                    language
+                    language,allViewHolder.get(newPosition)
             )
         }
 
@@ -161,6 +174,7 @@ class LanguageAdapter(
 
     interface LanguageAdapterClickListener{
 
-        fun onLanguageSelected(language : Language)
+        fun onLanguageSelected(language : Language,viewHolder:OnboardingMajorCityViewHolder)
     }
+
 }
