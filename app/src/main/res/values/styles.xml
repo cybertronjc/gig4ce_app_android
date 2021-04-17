@@ -46,6 +46,7 @@
 
     <style name="Theme.RadioButtonLipstickPink" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="buttonTint">@drawable/radio_button_drawable</item>
+
     </style>
 
     <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">

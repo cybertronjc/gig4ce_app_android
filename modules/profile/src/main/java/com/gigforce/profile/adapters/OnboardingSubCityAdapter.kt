@@ -1,17 +1,16 @@
 package com.gigforce.profile.adapters
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
 import com.gigforce.profile.models.City
+import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 
 class OnboardingSubCityAdapter(
         private val context: Context
@@ -20,11 +19,12 @@ class OnboardingSubCityAdapter(
 
     private var originalSubCityList: List<String> = emptyList()
     private var selectedItemIndex: Int = -1
-//    private var onCitySelectedListener : OnCitySelectedListener? = null
-//
-//    fun setOnCitySelectedListener(onCitySelectedListener: OnCitySelectedListener){
-//        this.onCitySelectedListener = onCitySelectedListener
-//    }
+
+    private var onSubCitySelectedListener : OnSubCitySelectedListener? = null
+
+    fun setOnSubCitySelectedListener(onSubCitySelectedListener: OnboardingPreferredJobLocationFragment){
+        this.onSubCitySelectedListener = onSubCitySelectedListener
+    }
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -72,6 +72,7 @@ class OnboardingSubCityAdapter(
             View.OnClickListener {
 
         private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
+        private var subCityCheckbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
             itemView.setOnClickListener(this)
@@ -90,20 +91,18 @@ class OnboardingSubCityAdapter(
         }
 
         override fun onClick(v: View?) {
-            val newPosition = adapterPosition
 
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
-                notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
-            } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
+            subCityCheckbox.performClick()
+
+            if (subCityCheckbox.isChecked){
+                // add to list
+                
+            }
+            else{
+                //remove from list
+
             }
 
-//            val city = filteredCityList[newPosition]
-//            onCitySelectedListener?.onCitySelected(city)
         }
 
     }
