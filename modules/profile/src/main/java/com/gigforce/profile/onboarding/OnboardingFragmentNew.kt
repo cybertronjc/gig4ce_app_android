@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
 import com.gigforce.profile.onboarding.fragments.assetsowned.AssetOwnedFragment
@@ -24,20 +25,23 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
+import javax.inject.Inject
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class OnboardingFragmentNew : Fragment() {
 
+    @Inject lateinit var navigation : INavigation
     companion object {
         fun newInstance() = OnboardingFragmentNew()
     }
 
-    //    @Inject lateinit var navigation : INavigation
+
     private lateinit var viewModel: OnboardingFragmentNewViewModel
     private val onboardingViewModel: OnboardingViewModel by viewModels()
 
@@ -237,8 +241,8 @@ class OnboardingFragmentNew : Fragment() {
     }
 
     private fun navigateToLoaderScreen() {
-//        navigation.popAllBackStates()
-//        navigation.navigateTo("loader_screen")
+        navigation.popAllBackStates()
+        navigation.navigateTo("loader_screen")
     }
 
     private fun setAssetsData() {
