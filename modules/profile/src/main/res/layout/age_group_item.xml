@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:buttonTint="#d5d5d5"
             android:layout_marginEnd="@dimen/size16"
@@ -45,7 +45,7 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
             android:layout_marginEnd="@dimen/size16"
@@ -61,7 +61,7 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/experience_options_background"
@@ -77,7 +77,7 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginEnd="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
@@ -93,7 +93,7 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:layout_marginTop="@dimen/size16"
             android:layout_marginEnd="@dimen/size16"
@@ -109,7 +109,7 @@
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size16"
+            android:layout_marginStart="@dimen/size16"
             android:paddingLeft="@dimen/size16"
             android:background="@drawable/experience_options_background"
             android:layout_marginTop="@dimen/size16"
