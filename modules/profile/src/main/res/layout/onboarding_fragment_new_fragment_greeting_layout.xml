@@ -37,7 +37,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="4sp"
-        android:text="Before you start , We just have a few questions"
+        android:text="Before we start, Let’s know you better"
         android:textColor="#999999"
         android:textSize="20sp"
         android:textStyle="normal"
