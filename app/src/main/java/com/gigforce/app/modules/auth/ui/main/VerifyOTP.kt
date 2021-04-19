@@ -7,9 +7,7 @@ import android.os.Handler
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
@@ -23,6 +21,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.gigforce.app.modules.auth.utils.AppSignatureHelper
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import com.google.android.gms.tasks.OnFailureListener
@@ -53,6 +52,9 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
     private  var client: SmsRetrieverClient? = null
     private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
     private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
+    //var appSignature = AppSignatureHelper(context)
+    private var win: Window? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,13 +62,9 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
             verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
-
-        smsBroadcast.initOTPListener(this)
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+        //Log.d("app signature", appSignature.appSignatures.get(0))
 
 
-        context?.registerReceiver(smsBroadcast, intentFilter)
     }
 
     override fun onCreateView(
@@ -78,6 +76,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
+        changeStatusBarColor()
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -101,11 +100,34 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
 //        }
     }
 
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.fui_transparent))
+    }
+
+
     private fun startSmsRetriver() {
-        client = context?.let { SmsRetriever.getClient(it) }
+        client = activity?.let { SmsRetriever.getClient(it) }
         val task = client?.startSmsRetriever()
 
-       task?.addOnSuccessListener { showToast("SMS Retriever Started") }
+       task?.addOnSuccessListener { showToast("SMS Retriever Started")
+           smsBroadcast.initOTPListener(this)
+           val intentFilter = IntentFilter()
+           intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+
+
+           context?.registerReceiver(smsBroadcast, intentFilter)
+
+           //context?.let { it1 -> LocalBroadcastManager.getInstance(it1).registerReceiver(smsBroadcast, intentFilter) }
+
+       }
 
         task?.addOnFailureListener { showToast("SMS Retriever Failed") }
     }
@@ -116,11 +138,12 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         }
         showToast(otp)
         txt_otp.setText(otp)
-        Log.e("OTP Received", otp)
+        Log.d("OTP Received", otp)
     }
 
     override fun onOTPTimeOut() {
         // do nothing
+        Log.d("Otp", "timeout")
     }
 
 

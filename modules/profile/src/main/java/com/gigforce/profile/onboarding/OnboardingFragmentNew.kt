@@ -2,9 +2,7 @@ package com.gigforce.profile.onboarding
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,6 +38,7 @@ class OnboardingFragmentNew : Fragment() {
     //    @Inject lateinit var navigation : INavigation
     private lateinit var viewModel: OnboardingFragmentNewViewModel
     private val onboardingViewModel: OnboardingViewModel by viewModels()
+    private var win: Window? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +51,7 @@ class OnboardingFragmentNew : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // setUpViewForOnboarding()
+        //changeStatusBarColor()
 
         Glide.with(requireContext()).load(R.drawable.gif_hello).into(hi_there_image)
         onboarding_get_started_btn.setOnClickListener {
@@ -111,6 +111,18 @@ class OnboardingFragmentNew : Fragment() {
                 }
             }
         })
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
     private fun isFragmentLastStateFound(): Boolean {

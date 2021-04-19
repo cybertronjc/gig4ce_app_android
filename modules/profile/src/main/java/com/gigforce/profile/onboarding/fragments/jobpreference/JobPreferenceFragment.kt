@@ -1,6 +1,7 @@
 package com.gigforce.profile.onboarding.fragments.jobpreference
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,8 +85,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
         workingDaysIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked)
+                if (isChecked){
                     formCompletionListener.enableDisableNextButton(true)
+                    }
                 else if (anyCheckboxChecked(workingDaysIds)) {
                     formCompletionListener.enableDisableNextButton(true)
                 } else {
@@ -96,8 +98,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
         timeSlotsIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked)
+                if (isChecked){
                     formCompletionListener.enableDisableNextButton(true)
+                    }
                 else if (anyCheckboxChecked(timeSlotsIds)) {
                     formCompletionListener.enableDisableNextButton(true)
                 } else {
@@ -113,7 +116,8 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     }
 
     fun anyCheckboxChecked(ids: ArrayList<CheckBox>): Boolean {
-        ids.forEach { checkbox -> if (checkbox.isChecked) return true }
+        ids.forEach { checkbox -> if (checkbox.isChecked) return true}
+
         return false
     }
 
@@ -121,13 +125,25 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
     fun getWorkingDays(): ArrayList<String> {
         var workingdays = ArrayList<String>()
-        workingDaysIds.forEach { day -> if (day.isChecked) workingdays.add(day.tag.toString()) }
+        workingDaysIds.forEach { day -> if (day.isChecked) {
+            workingdays.add(day.tag.toString())
+            day.background = resources.getDrawable(R.drawable.rect_gray_border)
+        }
+        else{
+            day.background = resources.getDrawable(R.drawable.option_selection_border)
+        }}
         return workingdays
     }
 
     fun getTimeSlots(): ArrayList<String> {
         var workingTimeSlots = ArrayList<String>()
-        timeSlotsIds.forEach { slot -> if (slot.isChecked) workingTimeSlots.add(slot.tag.toString()) }
+        timeSlotsIds.forEach { slot -> if (slot.isChecked){
+            workingTimeSlots.add(slot.tag.toString())
+            slot.background = resources.getDrawable(R.drawable.option_selection_border)
+        }
+        else {
+            slot.background = resources.getDrawable(R.drawable.rect_gray_border)
+        }}
         return workingTimeSlots
     }
 

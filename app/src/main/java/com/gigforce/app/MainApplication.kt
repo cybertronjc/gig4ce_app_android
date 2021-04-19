@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.clevertap.android.sdk.CleverTapAPI
+import com.gigforce.app.modules.auth.utils.AppSignatureHelper
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.HiltAndroidApp
 
@@ -16,6 +17,7 @@ class MainApplication : Application() {
         setupCleverTap()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+
     }
 
     private fun setupCleverTap() {

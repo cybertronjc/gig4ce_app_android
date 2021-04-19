@@ -42,7 +42,7 @@
                 android:background="#f4faff"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
-                android:paddingLeft="@dimen/size16"
+                android:paddingStart="@dimen/size16"
                 android:text="Job preference"
                 android:textColor="#333333"
                 android:textSize="16sp"
@@ -79,7 +79,7 @@
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_full_time"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +93,7 @@
                     android:text="Full Time"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
 
@@ -117,7 +117,7 @@
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_part_time"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,7 +131,7 @@
                     android:text="Part Time"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
 
@@ -169,7 +169,7 @@
             android:background="#f4faff"
             android:fontFamily="@font/lato"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/size16"
+            android:paddingStart="@dimen/size16"
             android:text="Work Days"
             android:textColor="#333333"
             android:textSize="16sp"
@@ -187,233 +187,116 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/monday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="Monday"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
+                        android:text="Monday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Monday"
-                        android:textColor="#333333"
-                        android:textSize="16sp"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/tuesday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:tag="Tuesday"
+                        android:layout_weight="1"
+                        android:text="Tuesday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Tuesday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/wednesday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="Wednesday"
+                        android:text="Wednesday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Wednesday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/thursday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
-                        android:tag="Thurday"
+                        android:layout_marginStart="@dimen/size16"
+                        android:tag="Thursday"
+                        android:text="Thursday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Thursday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/friday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="Friday"
+                        android:text="Friday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Friday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/saturday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="Saturday"
+                        android:text="Saturday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Saturday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/sunday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="Sunday"
+                        android:text="Sunday"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:layout_weight="1"
-                        android:background="@drawable/rect_gray_border"
-                        android:fontFamily="@font/lato"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/size8"
-                        android:text="Sunday"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
 
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -446,7 +329,7 @@
             android:background="#f4faff"
             android:fontFamily="@font/lato"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/size16"
+            android:paddingStart="@dimen/size16"
             android:text="Time Slots"
             android:textColor="#333333"
             android:textSize="16sp"
@@ -464,260 +347,79 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
                     <CheckBox
                         android:id="@+id/early_morning"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
+                        android:layout_marginBottom="@dimen/size16"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:text="5 am - 8 am"
                         android:tag="5 am - 8 am"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:background="@drawable/rect_gray_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_marginLeft="@dimen/size8"
-                            android:fontFamily="@font/lato"
-                            android:text="Early Morning"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="@dimen/size16"
-                            android:fontFamily="@font/lato"
-                            android:text="5 am - 8 am"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
                     <CheckBox
                         android:id="@+id/morning"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
+                        android:layout_marginBottom="@dimen/size16"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:text="8 am - 12 pm"
                         android:tag="8 am - 12 pm"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:background="@drawable/rect_gray_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_marginLeft="@dimen/size8"
-                            android:fontFamily="@font/lato"
-                            android:text="Morning"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="@dimen/size16"
-                            android:fontFamily="@font/lato"
-                            android:text="8 am - 12 pm"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/day_time"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:text="12 pm - 4 pm"
                         android:tag="12 pm - 4 pm"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:background="@drawable/rect_gray_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_marginLeft="@dimen/size8"
-                            android:fontFamily="@font/lato"
-                            android:text="Day Time"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="@dimen/size16"
-                            android:fontFamily="@font/lato"
-                            android:text="12 pm - 4 pm"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
                     <CheckBox
                         android:id="@+id/evening"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
+                        android:background="@drawable/experience_options_background"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:text="4 pm - 8 pm"
                         android:tag="4 pm - 8 pm"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:background="@drawable/rect_gray_border"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_marginLeft="@dimen/size8"
-                            android:fontFamily="@font/lato"
-                            android:text="Evening"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="@dimen/size16"
-                            android:fontFamily="@font/lato"
-                            android:text="4 pm - 8 pm"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/night"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/size16"
+                        android:layout_marginStart="@dimen/size16"
                         android:tag="8 pm - 12 am"
+                        android:background="@drawable/experience_options_background"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginEnd="@dimen/size16"
+                        android:text="8 pm - 12 am"
                         android:checked="true"
                         style="@style/Theme.CheckBoxLipstickPink"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="@dimen/size8"
-                        android:layout_marginRight="@dimen/size16"
-                        android:background="@drawable/rect_gray_border"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:layout_marginLeft="@dimen/size8"
-                            android:fontFamily="@font/lato"
-                            android:text="Night"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="@dimen/size16"
-                            android:fontFamily="@font/lato"
-                            android:text="8 pm - 12 am"
-                            android:textColor="#333333"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

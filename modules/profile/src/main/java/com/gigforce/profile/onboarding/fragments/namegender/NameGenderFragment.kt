@@ -71,18 +71,6 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         }
     }
 
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        //win?.setStatusBarColor(resources.getColor(R.color.colorStat))
-    }
-
     private fun resetAll() {
         resetSelected(icon, option, imageTextCardMol)
         resetSelected(icon1, option1, imageTextCardMol4)

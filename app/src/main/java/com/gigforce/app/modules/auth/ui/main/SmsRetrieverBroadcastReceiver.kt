@@ -26,6 +26,7 @@ class SmsRetrieverBroadcastReceiver : BroadcastReceiver() {
                 CommonStatusCodes.SUCCESS -> {
                     // Get SMS message contents
                     var otp: String = extras.get(SmsRetriever.EXTRA_SMS_MESSAGE) as String
+                    Log.d("otp", otp)
 
                     // Extract one-time code from the message and complete verification
                     // by sending the code back to your server for SMS authenticity.
@@ -34,12 +35,17 @@ class SmsRetrieverBroadcastReceiver : BroadcastReceiver() {
                         otp = otp.substring(0, 5)
                         otpReceiver!!.onOTPReceived(otp)
                     }
+
                 }
 
-                CommonStatusCodes.TIMEOUT ->
-                    // Waiting for SMS timed out (5 minutes)
-                    // Handle the error ...
-                    otpReceiver!!.onOTPTimeOut()
+                CommonStatusCodes.TIMEOUT -> {
+
+                // Waiting for SMS timed out (5 minutes)
+
+                // Handle the error ...
+                otpReceiver!!.onOTPTimeOut()
+                        Log . d ("otp", "timeout")
+            }
             }
         }
     }
