@@ -80,7 +80,7 @@
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_full_time"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -94,7 +94,7 @@
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
 
 
@@ -118,7 +118,7 @@
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_part_time"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -132,7 +132,7 @@
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -145,8 +145,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/work_days_cl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
         android:visibility="gone">
+
 
         <TextView
             android:id="@+id/textView4"
@@ -181,7 +182,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/size16"
-
             app:layout_constraintTop_toBottomOf="@+id/work_days">
 
             <LinearLayout
