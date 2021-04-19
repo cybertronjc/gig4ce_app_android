@@ -37,7 +37,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="4sp"
-        android:text="Before you start , We just have a few questions"
+        android:text="Before we start, Let’s know you better"
         android:textColor="#999999"
         android:textSize="20sp"
         android:textStyle="normal"
@@ -51,16 +51,18 @@
         android:id="@+id/onboarding_get_started_btn"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/gradient_button"
         android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="Let's get Started"
+        android:text="Let's Get Started"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

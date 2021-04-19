@@ -27,6 +27,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
+import com.gigforce.profile.models.OnboardingProfileData
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,6 +41,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
     private var viewShownFirstTime = false
     private val viewModel: OnboardingViewModel by viewModels()
+    private var onboardingProfileData : OnboardingProfileData? = null
 
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -62,6 +64,10 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
                     .setOutputFileUri(imageFile.toUri())
                     .build()
         }
+
+    fun hasUserUploadedPhoto() : Boolean {
+       return onboardingProfileData?.hasUserUploadedProfilePicture() ?: false
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -97,7 +103,11 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
         editLayout.setOnClickListener {
 
-            //Skip
+            if(onboardingProfileData?.hasUserUploadedProfilePicture() == true){
+                showCameraSheetIfNotShown()
+            } else {
+                formCompletionListener.profilePictureSkipPressed()
+            }
         }
 //        editLayout.setOnClickListener {
 //            checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -132,6 +142,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
                             shimmerFrameLayout.startShimmer()
                         }
                         is Lce.Content -> {
+                            onboardingProfileData = it.content
 
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.gone()
@@ -139,11 +150,13 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
                             if (it.content.hasUserUploadedProfilePicture()) {
                                 displayImage(it.content.profileAvatarName)
-                                editLayout.visible()
+                               // formCompletionListener.changeTextButton("Upload Photo")
+                                skip_edit_textview.text = "Change"
                             } else {
-                                //skipButton.gone()
-                                editLayout.gone()
+                                skip_edit_textview.text = "Skip"
                             }
+
+                            formCompletionListener.checkForButtonText()
                         }
                         is Lce.Error -> {
                             shimmerFrameLayout.stopShimmer()
@@ -171,7 +184,9 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
                             shimmerFrameLayout.gone()
                             imageView13.visible()
 
+
                             viewModel.getProfileForUser()
+
 
                             Toast.makeText(
                                     requireContext(),

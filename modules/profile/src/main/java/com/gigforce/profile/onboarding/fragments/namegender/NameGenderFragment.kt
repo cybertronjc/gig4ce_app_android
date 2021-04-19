@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
+class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,
+    OnboardingFragmentNew.FragmentInteractionListener {
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
@@ -35,8 +36,19 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener()
+        showKeyboard()
     }
 
+
+    fun showKeyboard(){
+        username.requestFocus()
+        val inputMethodManager =
+            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.toggleSoftInputFromWindow(
+            username.getApplicationWindowToken(),
+            InputMethodManager.SHOW_FORCED, 0
+        )
+    }
     private fun listener() {
 
         imageTextCardMol.setOnClickListener(View.OnClickListener {
@@ -123,5 +135,13 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+        return false
+    }
+
+    override fun activeNextButton() {
+        validateAllValues()
     }
 }

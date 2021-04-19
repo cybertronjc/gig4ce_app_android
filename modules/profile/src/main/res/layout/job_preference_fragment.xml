@@ -53,7 +53,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
 
-            android:layout_width="218dp"
+            android:layout_width="222dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
@@ -64,8 +64,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl"
-                android:layout_width="0dp"
-                android:layout_height="82dp"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
@@ -75,8 +75,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_full_time"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,8 +103,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_"
-                android:layout_width="0dp"
-                android:layout_height="82dp"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -113,8 +113,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_part_time"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,8 +145,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/work_days_cl"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textView4"
@@ -179,14 +179,17 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/size16"
+
             app:layout_constraintTop_toBottomOf="@+id/work_days">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="308dp"
+                >
 
 
                     <CheckBox
@@ -339,14 +342,15 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/size16"
             app:layout_constraintTop_toBottomOf="@+id/work_days_">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="108dp">
 
                     <CheckBox
                         android:id="@+id/early_morning"

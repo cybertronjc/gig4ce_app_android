@@ -61,18 +61,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/two_wheeler_cl"
-            android:layout_width="327dp"
+            android:layout_width="252dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
@@ -83,8 +83,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_bicycle"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -95,15 +95,15 @@
                     android:id="@+id/bicycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Bicycle"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -111,7 +111,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/imageTextCardcl_x"
@@ -121,8 +121,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_electric_bike"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -133,23 +133,25 @@
                     android:id="@+id/electric_bike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
-                    android:text="Electric Bike"
+                    android:text="E-Bike"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_x"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:layout_marginLeft="1dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -158,8 +160,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_x"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_motor_bike"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -170,15 +172,20 @@
                     android:id="@+id/motor_bike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
+                    android:singleLine="true"
                     android:text="Motor Bike"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_x" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,18 +208,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/three_wheeler_cl"
-            android:layout_width="218dp"
+            android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_1"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
@@ -223,8 +230,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_e_rickshaw"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -235,15 +242,21 @@
                     android:id="@+id/e_rickshaw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
-                    android:text="E- rickshaw"
+                    android:singleLine="true"
+                    android:text="E-rickshaw"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_1" />
+                    app:layout_constraintRight_toRightOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -251,7 +264,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_2"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -261,8 +274,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_2"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_auto_rickshaw"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -273,15 +286,20 @@
                     android:id="@+id/auto_rickshaw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
-                    android:text="Auto rickshaw"
+                    android:singleLine="true"
+                    android:text="Auto-rickshaw"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_2" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -304,18 +322,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/three_wheeler_cl1"
-            android:layout_width="218dp"
+            android:layout_width="168dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_3"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
@@ -326,8 +344,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_3"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_car"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -338,15 +356,16 @@
                     android:id="@+id/car"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Car"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_3" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -354,7 +373,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_4"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -364,8 +383,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_4"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_truck_commercial"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -376,15 +395,20 @@
                     android:id="@+id/commercial_vehicle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
+                    android:maxLength="20"
+                    android:singleLine="true"
                     android:text="Commercial"
                     android:textColor="#2e2f30"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_4" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -411,18 +435,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/it_assets"
-            android:layout_width="327dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size16"
+            android:layout_marginTop="@dimen/size32"
             android:background="@drawable/rect_gray_fill"
             android:padding="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl5"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_left_cornor_card"
@@ -433,8 +457,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_5"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_laptop"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -445,15 +469,15 @@
                     android:id="@+id/laptop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Laptop"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_5" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -461,7 +485,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_6"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_7"
@@ -471,8 +495,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_6"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_smartphone"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -483,22 +507,25 @@
                     android:id="@+id/smart_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Smartphone"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:layout_marginLeft="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_6" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_7"
-                android:layout_width="0dp"
+                android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginLeft="1dp"
                 android:background="@drawable/rect_right_cornor_card"
@@ -510,8 +537,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_7"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_computer"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -522,15 +549,15 @@
                     android:id="@+id/pc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="PC"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_7" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

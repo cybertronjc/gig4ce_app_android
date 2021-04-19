@@ -55,7 +55,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/currently_working_option"
-                    android:layout_width="218dp"
+                    android:layout_width="222dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
@@ -70,7 +70,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/imageTextCardMol"
-                        android:layout_width="0dp"
+                        android:layout_width="109dp"
                         android:layout_height="109dp"
                         android:layout_marginRight="1dp"
                         android:background="@drawable/rect_right_cornor_card"
@@ -82,8 +82,8 @@
 
                         <ImageView
                             android:id="@+id/icon"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
                             android:src="@drawable/ic_working"
                             app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/imageTextCardMol3"
-                        android:layout_width="0dp"
+                        android:layout_width="109dp"
                         android:layout_height="109dp"
                         android:layout_marginStart="1dp"
                         android:background="@drawable/rect_right_cornor_card"
@@ -122,8 +122,8 @@
 
                         <ImageView
                             android:id="@+id/icon2"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
                             android:src="@drawable/ic_not_working"
                             app:layout_constraintStart_toStartOf="parent"

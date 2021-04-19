@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
 import com.gigforce.profile.onboarding.fragments.assetsowned.AssetOwnedFragment
@@ -22,20 +23,23 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 import com.gigforce.profile.viewmodel.OnboardingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
+import javax.inject.Inject
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class OnboardingFragmentNew : Fragment() {
 
+    @Inject lateinit var navigation : INavigation
     companion object {
         fun newInstance() = OnboardingFragmentNew()
     }
 
-    //    @Inject lateinit var navigation : INavigation
+
     private lateinit var viewModel: OnboardingFragmentNewViewModel
     private val onboardingViewModel: OnboardingViewModel by viewModels()
     private var win: Window? = null
@@ -58,9 +62,11 @@ class OnboardingFragmentNew : Fragment() {
 
             onboarding_greeting_layout.gone()
             setUpViewForOnboarding()
-            enableNextButton(false)
+            next_fl.visible()
+            setNextButtonForCurrentFragment()
         }
     }
+
 
     private fun setUpViewForOnboarding() {
         next.visible()
@@ -76,26 +82,60 @@ class OnboardingFragmentNew : Fragment() {
                         enableNextButton(validate)
                     }
 
-                })
+                    override fun profilePictureSkipPressed() {
+                        //completet this
+                    }
 
+                    override fun checkForButtonText() {
+                        super.checkForButtonText()
+
+                        if (onboarding_pager.currentItem == 8) {
+
+                            val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                            val fragment =
+                                fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+
+                            if (!fragment.hasUserUploadedPhoto()) {
+                                next.text = "Upload Photo"
+                                enableNextButton(true)
+                                fragment.showCameraSheetIfNotShown()
+                            } else {
+                                enableNextButton(true)
+                                next.text = "Next"
+                            }
+                        }
+                    }
+                })
+            steps.text =
+                "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
         }
         next.setOnClickListener {
+            saveDataToDB(onboarding_pager.currentItem)
             if (isFragmentActionNotExists()) {
-                saveDataToDB(onboarding_pager.currentItem)
+
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                if (onboarding_pager.currentItem == 3)
-                    enableNextButton(true)
-                else
-                    enableNextButton(false)
+                if (onboarding_pager.currentItem == 8) {
+                    val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                    val fragment =
+                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                    if (!fragment.hasUserUploadedPhoto()) {
+                        fragment.showCameraSheetIfNotShown()
+                    } else {
+                    }
+                }
             }
-
+            setNextButtonForCurrentFragment()
         }
 
-        backpressicon.setOnClickListener(View.OnClickListener {
+
+
+        backpressicon.setOnClickListener {
             if (!isFragmentLastStateFound())
-                onboarding_pager.currentItem = onboarding_pager.currentItem - 1
-        })
+                if (onboarding_pager.currentItem != 0)
+                    onboarding_pager.currentItem = onboarding_pager.currentItem - 1
+                else activity?.onBackPressed()
+        }
 
 
         onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -108,9 +148,22 @@ class OnboardingFragmentNew : Fragment() {
                     val fragment =
                         fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
                     fragment.showCameraSheetIfNotShown()
+
+                    enableNextButton(true)
+                } else {
+                    next.text = "Next"
                 }
             }
         })
+    }
+
+
+    fun setNextButtonForCurrentFragment(){
+        var currentFragment =
+            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+        if (currentFragment is FragmentInteractionListener) {
+            currentFragment.activeNextButton()
+        }
     }
 
     private fun changeStatusBarColor(){
@@ -200,8 +253,8 @@ class OnboardingFragmentNew : Fragment() {
     }
 
     private fun navigateToLoaderScreen() {
-//        navigation.popAllBackStates()
-//        navigation.navigateTo("loader_screen")
+        navigation.popAllBackStates()
+        navigation.navigateTo("loader_screen")
     }
 
     private fun setAssetsData() {
@@ -284,10 +337,15 @@ class OnboardingFragmentNew : Fragment() {
 
     interface FragmentInteractionListener {
         fun nextButtonActionFound(): Boolean
+        fun activeNextButton()
     }
 
     interface OnFragmentFormCompletionListener {
         fun enableDisableNextButton(validate: Boolean)
+
+        fun checkForButtonText() {}
+
+        fun profilePictureSkipPressed()
     }
 
     fun hideKeyboard() {

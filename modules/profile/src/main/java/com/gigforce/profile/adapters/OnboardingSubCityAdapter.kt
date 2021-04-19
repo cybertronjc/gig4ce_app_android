@@ -5,24 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
-import com.gigforce.profile.models.City
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 
 class OnboardingSubCityAdapter(
         private val context: Context
-) : RecyclerView.Adapter<OnboardingSubCityAdapter.OnboardingSubCityViewHolder>(){
+) : RecyclerView.Adapter<OnboardingSubCityAdapter.OnboardingSubCityViewHolder>() {
 
 
     private var originalSubCityList: List<String> = emptyList()
     private var selectedItemIndex: Int = -1
 
-    private var onSubCitySelectedListener : OnSubCitySelectedListener? = null
+    private var onSubCitySelectedListener: OnSubCitySelectedListener? = null
 
-    fun setOnSubCitySelectedListener(onSubCitySelectedListener: OnboardingPreferredJobLocationFragment){
+    fun setOnSubCitySelectedListener(onSubCitySelectedListener: OnboardingPreferredJobLocationFragment) {
         this.onSubCitySelectedListener = onSubCitySelectedListener
     }
 
@@ -69,13 +68,14 @@ class OnboardingSubCityAdapter(
     inner class OnboardingSubCityViewHolder(
             itemView: View
     ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener {
+            View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
         private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
         private var subCityCheckbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
             itemView.setOnClickListener(this)
+            subCityCheckbox.setOnCheckedChangeListener(this@OnboardingSubCityViewHolder)
         }
 
         fun bindValues(subCity: String, position: Int) {
@@ -91,18 +91,15 @@ class OnboardingSubCityAdapter(
         }
 
         override fun onClick(v: View?) {
+            val subCity = originalSubCityList.get(adapterPosition)
 
             subCityCheckbox.performClick()
+            onSubCitySelectedListener?.onSubCitySelected(subCityCheckbox.isChecked, subCity)
+        }
 
-            if (subCityCheckbox.isChecked){
-                // add to list
-                
-            }
-            else{
-                //remove from list
-
-            }
-
+        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+            val subCity = originalSubCityList.get(adapterPosition)
+            onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity)
         }
 
     }

@@ -34,7 +34,7 @@ data class City(
 
     @get:PropertyName("sub_location")
     @set:PropertyName("sub_location")
-    var subLocation: String? = null,
+    var subLocation: List<String> = emptyList(),
 ){
 
     override fun toString(): String {

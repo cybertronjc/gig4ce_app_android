@@ -13,7 +13,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
 
-class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener {
+class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AssetOwnedFragment(formCompletionListener)
@@ -158,7 +158,6 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     private fun validateForm() {
-        if(owned_smart_phone)
         formCompletionListener.enableDisableNextButton(true)
     }
 
@@ -200,6 +199,14 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+        return false
+    }
+
+    override fun activeNextButton() {
+        formCompletionListener.enableDisableNextButton(true)
     }
 
 }

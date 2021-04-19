@@ -1,5 +1,6 @@
 package com.gigforce.profile.onboarding.fragments.interest
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
+import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
+
 
 class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
     Fragment(), OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.FragmentSetLastStateListener {
@@ -45,6 +48,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))
         allInterestList.add(InterestDM(R.drawable.ic_technician, "Technician"))
         allInterestList.add(InterestDM(R.drawable.ic_trolley, "Helper"))
+        allInterestList.add(InterestDM(R.drawable.ic_security, "Security"))
         allInterestList.add(InterestDM(R.drawable.ic_technician, "Tele Calling"))
         allInterestList.add(InterestDM(R.drawable.ic_supervisor, "Supervisor"))
         allInterestList.add(InterestDM(R.drawable.ic_cleaning, "Cleaner"))
@@ -52,7 +56,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         listener()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
-                activity, 3,
+                activity, 4,
                 GridLayoutManager.VERTICAL, false
             )
             all_interests_rv.adapter = AllInterestAdapter(
@@ -76,7 +80,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                             Toast.makeText(
                                 context,
                                 "Maximum three interest can be selected!!",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
 
@@ -87,6 +91,18 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                         }
                     }
                 })
+
+//            all_interests_rv.addItemDecoration(
+//                SpaceItemDecoration(
+//                    resources.getDimensionPixelSize(R.dimen.size1)
+//                )
+//            )
+            context?.let {
+                val itemDecoration = MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
+                all_interests_rv.addItemDecoration(itemDecoration)
+//                all_interests_rv.addItemDecoration(SeparatorDecoration(it, Color.GREEN,1f))
+            }
 
         }
     }
@@ -249,6 +265,15 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             else -> return false
         }
         return false
+    }
+
+    override fun activeNextButton() {
+        when (currentStep){
+            0-> if(getSelectedInterestCount()>0) formCompletionListener.enableDisableNextButton(true)
+            1-> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
+                formCompletionListener.enableDisableNextButton(true)
+            } else formCompletionListener.enableDisableNextButton(false)
+        }
     }
 
     override fun lastStateFormFound() : Boolean {

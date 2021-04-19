@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/interest_cl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/textView14"
@@ -42,14 +43,14 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/all_interests_rv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size16"
             android:layout_marginTop="36dp"
             android:layout_marginRight="@dimen/size16"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+            app:layout_constraintTop_toBottomOf="@+id/textView14"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,6 +82,7 @@
             android:layout_height="wrap_content"
             android:background="#f4faff"
             android:orientation="vertical"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
@@ -89,7 +91,7 @@
                 android:id="@+id/major_cities_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/size16"
@@ -113,7 +115,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/yes_no_cl"
-            android:layout_width="218dp"
+            android:layout_width="222dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
@@ -124,8 +126,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl"
-                android:layout_width="0dp"
-                android:layout_height="82dp"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
@@ -135,8 +137,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv_1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_icon_feather_thumbs_up"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -162,8 +164,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_"
-                android:layout_width="0dp"
-                android:layout_height="82dp"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -172,8 +174,8 @@
 
                 <ImageView
                     android:id="@+id/icon_iv1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_icon_feather_thumbs_down"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -222,7 +224,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="335dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="24dp"
@@ -230,12 +232,12 @@
                 android:background="@drawable/rect_light_blue_fill"
                 android:padding="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/which_delivery">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageTextCardMol"
-                    android:layout_width="0dp"
+                    android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:layout_marginRight="1dp"
                     android:background="@drawable/rect_left_cornor_card"
@@ -246,8 +248,8 @@
 
                     <ImageView
                         android:id="@+id/icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:src="@drawable/ic_food"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -274,9 +276,10 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageTextCardMol4"
-                    android:layout_width="0dp"
+                    android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:background="@color/white"
+                    android:layout_marginRight="1dp"
                     app:layout_constraintEnd_toStartOf="@+id/imageTextCardMolfirst"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imageTextCardMol"
@@ -284,8 +287,8 @@
 
                     <ImageView
                         android:id="@+id/icon1"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:src="@drawable/ic_grocery"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -311,7 +314,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageTextCardMolfirst"
-                    android:layout_width="0dp"
+                    android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:background="@color/white"
                     app:layout_constraintEnd_toStartOf="@+id/imageTextCardMol3"
@@ -321,10 +324,10 @@
 
                     <ImageView
                         android:id="@+id/icon1f"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_chat"
+                        android:src="@drawable/ic_food"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -348,7 +351,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageTextCardMol3"
-                    android:layout_width="0dp"
+                    android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:layout_marginLeft="1dp"
                     android:background="@drawable/rect_right_cornor_card"
@@ -359,8 +362,8 @@
 
                     <ImageView
                         android:id="@+id/icon2"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:src="@drawable/ic_milk"
                         app:layout_constraintLeft_toLeftOf="parent"

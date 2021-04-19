@@ -22,6 +22,10 @@
         android:textColor="#333333"
         android:textSize="14sp"
         android:textStyle="normal"
-        tools:text="Bangalore" />
+        tools:text="Bangalore"
+        android:gravity="center"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:layout_marginLeft="2dp"/>
 
 </LinearLayout>
