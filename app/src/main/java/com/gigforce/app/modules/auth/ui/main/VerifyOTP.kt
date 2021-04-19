@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.app.Activity
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -11,24 +12,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.NonNull
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class VerifyOTP : BaseFragment() {
+class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListener {
 
     companion object {
         fun newInstance() = VerifyOTP()
@@ -45,7 +49,12 @@ class VerifyOTP : BaseFragment() {
             Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
-   // private  var client: SmsRetrieverClient? = null
+    private  var client: SmsRetrieverClient? = null
+    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
+    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
+    //var appSignature = AppSignatureHelper(context)
+    private var win: Window? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,9 @@ class VerifyOTP : BaseFragment() {
             verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
+        //Log.d("app signature", appSignature.appSignatures.get(0))
+
+
     }
 
     override fun onCreateView(
@@ -64,6 +76,7 @@ class VerifyOTP : BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
+        changeStatusBarColor()
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -76,7 +89,7 @@ class VerifyOTP : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
         initializeViews()
-       // setupSmsRetriver()
+        startSmsRetriver()
         listeners()
         observer()
         saveNewUsedMobileNumber()
@@ -112,6 +125,51 @@ class VerifyOTP : BaseFragment() {
 //            Log.d("sms failure", it.toString())
 //        }
 //    }
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.fui_transparent))
+    }
+
+
+    private fun startSmsRetriver() {
+        client = activity?.let { SmsRetriever.getClient(it) }
+        val task = client?.startSmsRetriever()
+
+       task?.addOnSuccessListener { showToast("SMS Retriever Started")
+           smsBroadcast.initOTPListener(this)
+           val intentFilter = IntentFilter()
+           intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+
+
+           context?.registerReceiver(smsBroadcast, intentFilter)
+
+           //context?.let { it1 -> LocalBroadcastManager.getInstance(it1).registerReceiver(smsBroadcast, intentFilter) }
+
+       }
+
+        task?.addOnFailureListener { showToast("SMS Retriever Failed") }
+    }
+
+    override fun onOTPReceived(otp: String) {
+        if (smsBroadcast != null) {
+            context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(smsBroadcast) }
+        }
+        showToast(otp)
+        txt_otp.setText(otp)
+        Log.d("OTP Received", otp)
+    }
+
+    override fun onOTPTimeOut() {
+        // do nothing
+        Log.d("Otp", "timeout")
+    }
 
 
     private fun saveNewUsedMobileNumber() {

@@ -53,6 +53,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
         total_experience_rg.setOnCheckedChangeListener { group, checkedId ->
             istotalExperienceSelected = true
+            //view?.findViewById<View>(group.checkedRadioButtonId)?.background = resources.getDrawable(R.drawable.option_selection_border)
             validateForm()
         }
 

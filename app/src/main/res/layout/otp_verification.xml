@@ -207,7 +207,7 @@ Please enter it below.
                 android:layout_marginStart="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_33"
                 android:layout_marginEnd="@dimen/size_16"
-                android:layout_marginTop="330dp"
+                android:layout_marginTop="230dp"
                 android:fontFamily="@font/lato"
                 android:gravity="center"
                 android:letterSpacing="0.09"
