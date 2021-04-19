@@ -21,7 +21,7 @@ class LanguageAdapter(
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = -1
+    private var selectedItemIndex: Int = 1
     private var onLanguageSelectedListener: LanguageAdapterClickListener? = null
 
     fun setOnCitySelectedListener(onCitySelectedListener: LanguageAdapterClickListener) {

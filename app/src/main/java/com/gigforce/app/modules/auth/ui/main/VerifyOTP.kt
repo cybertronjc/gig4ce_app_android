@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.auth.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
@@ -20,12 +22,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
-import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.gms.auth.api.phone.SmsRetrieverClient
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.otp_verification.*
+import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -82,13 +80,22 @@ class VerifyOTP : BaseFragment() {
         listeners()
         observer()
         saveNewUsedMobileNumber()
-
+        showKeyboard()
 //        if(otpresentcounter>=2){
 //            layout.otptimertv.text = "try later!"
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
+    fun showKeyboard(){
+        txt_otp.requestFocus()
+        val inputMethodManager =
+            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.toggleSoftInputFromWindow(
+            txt_otp.getApplicationWindowToken(),
+            InputMethodManager.SHOW_FORCED, 0
+        )
 
+    }
 //    private fun setupSmsRetriver() {
 //        client = context?.let { SmsRetriever.getClient(it) }
 //        var task: Task<Void>? = client?.startSmsRetriever()
@@ -252,9 +259,9 @@ class VerifyOTP : BaseFragment() {
 
     override fun onBackPressed(): Boolean {
 
-        if (!timerStarted) {
-            navigateToLoginScreen()
-        }
+//        if (!timerStarted) {
+//        }
+        navigateToLoginScreen()
         return true
     }
 

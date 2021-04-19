@@ -80,7 +80,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                             Toast.makeText(
                                 context,
                                 "Maximum three interest can be selected!!",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
 

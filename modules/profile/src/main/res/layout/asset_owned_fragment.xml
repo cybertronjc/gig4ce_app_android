@@ -66,7 +66,7 @@
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10">
 
@@ -95,15 +95,15 @@
                     android:id="@+id/bicycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Bicycle"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -133,15 +133,16 @@
                     android:id="@+id/electric_bike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="E-Bike"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -171,15 +172,20 @@
                     android:id="@+id/motor_bike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
+                    android:singleLine="true"
                     android:text="Motor Bike"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_x" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -207,7 +213,7 @@
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11">
 
@@ -236,15 +242,21 @@
                     android:id="@+id/e_rickshaw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
+                    android:singleLine="true"
                     android:text="E-rickshaw"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_1" />
+                    app:layout_constraintRight_toRightOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -274,16 +286,20 @@
                     android:id="@+id/auto_rickshaw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
+                    android:gravity="center"
                     android:letterSpacing="0"
-                    android:text="Auto"
+                    android:singleLine="true"
+                    android:text="Auto-rickshaw"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
-                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_2" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -311,7 +327,7 @@
             android:layout_marginTop="@dimen/size16"
             android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12">
 
@@ -340,15 +356,16 @@
                     android:id="@+id/car"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Car"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_3" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -378,18 +395,19 @@
                     android:id="@+id/commercial_vehicle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
+                    android:maxLength="20"
+                    android:singleLine="true"
                     android:text="Commercial"
                     android:textColor="#2e2f30"
                     android:textSize="12sp"
-                    android:singleLine="true"
-                    android:maxLength="20"
-                    android:ellipsize="marquee"
+                    android:layout_marginBottom="@dimen/size8"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/icon_iv_4" />
+                    app:layout_constraintRight_toRightOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -416,19 +434,19 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/it_assets"
-            android:layout_width="333dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size16"
+            android:layout_marginTop="@dimen/size32"
             android:background="@drawable/rect_gray_fill"
             android:padding="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl5"
-                android:layout_width="109dp"
-                android:layout_height="109dp"
+                android:layout_width="82dp"
+                android:layout_height="82dp"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_6"
@@ -450,12 +468,12 @@
                     android:id="@+id/laptop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Laptop"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    android:layout_marginBottom="29dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
@@ -466,8 +484,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_6"
-                android:layout_width="109dp"
-                android:layout_height="109dp"
+                android:layout_width="82dp"
+                android:layout_height="82dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_7"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -488,12 +506,15 @@
                     android:id="@+id/smart_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="Smartphone"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    android:layout_marginBottom="29dp"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:layout_marginLeft="2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
@@ -503,8 +524,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_7"
-                android:layout_width="109dp"
-                android:layout_height="109dp"
+                android:layout_width="82dp"
+                android:layout_height="82dp"
                 android:layout_marginLeft="1dp"
                 android:background="@drawable/rect_right_cornor_card"
 
@@ -527,12 +548,12 @@
                     android:id="@+id/pc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/size8"
                     android:fontFamily="@font/lato"
                     android:letterSpacing="0"
                     android:text="PC"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    android:layout_marginBottom="29dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />

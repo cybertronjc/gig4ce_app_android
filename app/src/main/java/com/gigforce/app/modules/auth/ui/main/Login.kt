@@ -5,19 +5,16 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -94,7 +91,7 @@ class Login : BaseFragment() {
             back_button_login.setOnClickListener {
                 activity?.onBackPressed()
             }
-
+            showKeyboard()
             //registerTextWatcher()
 //            if (mobile_number.equals(""))
 //                showComfortDialog()
@@ -155,6 +152,16 @@ class Login : BaseFragment() {
         view?.let {
             imm?.hideSoftInputFromWindow(it.getWindowToken(), 0)
         }
+    }
+
+    fun showKeyboard(){
+        invisible_edit_mobile.requestFocus()
+        val inputMethodManager =
+            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.toggleSoftInputFromWindow(
+            invisible_edit_mobile.getApplicationWindowToken(),
+            InputMethodManager.SHOW_FORCED, 0
+        )
     }
 
     private fun showComfortDialog() {

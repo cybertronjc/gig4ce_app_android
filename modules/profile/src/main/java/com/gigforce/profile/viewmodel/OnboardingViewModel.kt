@@ -135,7 +135,7 @@ class OnboardingViewModel constructor(
                 ),
                 CityWithImage(
                         id = "HCbEvKJd2aPZaYgenUV7",
-                        name = "Delhi-Ncr",
+                        name = "Delhi-NCR",
                         image = R.drawable.ic_delhi,
                         stateCode = "in_delhi"
                 ),

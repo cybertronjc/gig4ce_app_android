@@ -36,8 +36,18 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listener()
+        showKeyboard()
     }
 
+
+    fun showKeyboard(){
+        val inputMethodManager =
+            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager!!.toggleSoftInputFromWindow(
+            username.getApplicationWindowToken(),
+            InputMethodManager.SHOW_FORCED, 0
+        )
+    }
     private fun listener() {
 
         imageTextCardMol.setOnClickListener(View.OnClickListener {
