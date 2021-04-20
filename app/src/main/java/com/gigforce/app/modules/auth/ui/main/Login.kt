@@ -282,8 +282,6 @@ class Login : BaseFragment() {
     }
 
 
-
-
     private fun showWrongMobileNoLayout(show: Boolean) {
         if (show) {
             cvloginwrong.visibility = VISIBLE

@@ -2,10 +2,8 @@ package com.gigforce.profile.onboarding.fragments.agegroup
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.age_group_item.*
@@ -16,6 +14,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AgeGroupFragment(formCompletionListener)
     }
 
+    private var win: Window? = null
     private lateinit var viewModel: AgeGroupViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,5 +44,6 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             formCompletionListener.enableDisableNextButton(true)
         else formCompletionListener.enableDisableNextButton(false)
     }
+
 
 }

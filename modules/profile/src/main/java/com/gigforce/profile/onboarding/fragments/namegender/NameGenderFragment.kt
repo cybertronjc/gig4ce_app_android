@@ -30,13 +30,16 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        changeStatusBarColor()
         return inflater.inflate(R.layout.name_gender_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         listener()
         showKeyboard()
+
     }
 
 
@@ -143,5 +146,17 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun activeNextButton() {
         validateAllValues()
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 }
