@@ -36,7 +36,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             )
 
     companion object{
-        var languageCode = ""
+        var languageCode = "en"
     }
 
     override fun onCreateView(
@@ -153,7 +153,15 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 //                activity?.onBackPressed()
 //            }
 //        }
+        next.setOnClickListener{
+            var language = languageAdapter.getSelectedLanguage()
+            updateResources(language.languageCode)
+            saveAppLanuageCode(language.languageCode)
+            saveAppLanguageName(language.languageCode)
 
+            languageCode = language.languageCode
+            navNext()
+        }
     }
 
     private fun setDefaultLanguage() {
@@ -199,12 +207,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
     }
 
     override fun onLanguageSelected(language: Language,viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {
-        updateResources(language.languageCode)
-        saveAppLanuageCode(language.languageCode)
-        saveAppLanguageName(language.languageCode)
         setSelected(viewHolder)
-        languageCode = language.languageCode
-        navNext()
     }
 
     private fun setSelected(viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {

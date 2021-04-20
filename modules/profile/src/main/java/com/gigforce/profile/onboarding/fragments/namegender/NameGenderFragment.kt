@@ -41,13 +41,16 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
 
     fun showKeyboard(){
-        username.requestFocus()
-        val inputMethodManager =
-            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputMethodManager!!.toggleSoftInputFromWindow(
-            username.getApplicationWindowToken(),
-            InputMethodManager.SHOW_FORCED, 0
-        )
+        username?.let {
+            it.requestFocus()
+            val inputMethodManager =
+                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                    it.getApplicationWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0
+            )
+        }
+
     }
     private fun listener() {
 

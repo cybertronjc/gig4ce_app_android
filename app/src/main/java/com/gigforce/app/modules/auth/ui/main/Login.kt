@@ -55,6 +55,7 @@ class Login : BaseFragment() {
         arguments?.let {
             mobile_number = it.getString("mobileno") ?: ""
         }
+        showKeyboard()
     }
 
     override fun isDeviceLanguageChangedDialogRequired(): Boolean {
@@ -89,6 +90,7 @@ class Login : BaseFragment() {
 
             //back button
             back_button_login.setOnClickListener {
+                hideKeyboard()
                 activity?.onBackPressed()
             }
             showKeyboard()
@@ -155,13 +157,16 @@ class Login : BaseFragment() {
     }
 
     fun showKeyboard(){
-        invisible_edit_mobile.requestFocus()
-        val inputMethodManager =
-            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputMethodManager!!.toggleSoftInputFromWindow(
-            invisible_edit_mobile.getApplicationWindowToken(),
-            InputMethodManager.SHOW_FORCED, 0
-        )
+        invisible_edit_mobile?.let {
+            it.requestFocus()
+            val inputMethodManager =
+                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                    it.getApplicationWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0
+            )
+        }
+
     }
 
     private fun showComfortDialog() {

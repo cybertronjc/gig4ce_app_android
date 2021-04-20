@@ -231,6 +231,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
             } else {
                 showWrongOTPLayout(true)
             }
+            hideSoftKeyboard()
         }
         resend_otp?.setOnClickListener {
 

@@ -16,12 +16,12 @@ class LanguageAdapter(
 ) : RecyclerView.Adapter<LanguageAdapter.OnboardingMajorCityViewHolder>(),
         Filterable {
 
-    private var originalLanguageList: List<Language> = emptyList()
+    var originalLanguageList: List<Language> = emptyList()
     private var filteredLanguageList: List<Language> = emptyList()
 
     private val contactsFilter = CityFilter()
 
-    private var selectedItemIndex: Int = 1
+    private var selectedItemIndex: Int = 0
     private var onLanguageSelectedListener: LanguageAdapterClickListener? = null
 
     fun setOnCitySelectedListener(onCitySelectedListener: LanguageAdapterClickListener) {
@@ -74,12 +74,14 @@ class LanguageAdapter(
 
     fun setData(contacts: List<Language>) {
 
-        this.selectedItemIndex = -1
+//        this.selectedItemIndex = -1
         this.originalLanguageList = contacts
         this.filteredLanguageList = contacts
         notifyDataSetChanged()
     }
-
+    fun getSelectedLanguage():Language{
+        return originalLanguageList.get(selectedItemIndex)
+    }
     override fun getFilter(): Filter = contactsFilter
 
     private inner class CityFilter : Filter() {
@@ -162,7 +164,7 @@ class LanguageAdapter(
 //                selectedItemIndex = adapterPosition
 //            }
 //            notifyDataSetChanged()
-
+            notifyDataSetChanged()
             val language = filteredLanguageList[newPosition]
             onLanguageSelectedListener?.onLanguageSelected(
                     language,allViewHolder.get(newPosition)
