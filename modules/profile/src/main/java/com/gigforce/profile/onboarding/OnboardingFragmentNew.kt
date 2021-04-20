@@ -115,6 +115,7 @@ class OnboardingFragmentNew : Fragment() {
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+                changeStatusBarColor()
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                     val fragment =

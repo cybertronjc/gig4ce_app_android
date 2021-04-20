@@ -2,10 +2,8 @@ package com.gigforce.profile.onboarding.fragments.agegroup
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import kotlinx.android.synthetic.main.age_group_item.*
@@ -16,6 +14,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AgeGroupFragment(formCompletionListener)
     }
 
+    private var win: Window? = null
     private lateinit var viewModel: AgeGroupViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +25,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AgeGroupViewModel::class.java)
+        //changeStatusBarColor()
         age_group.setOnCheckedChangeListener{ group, checkedId ->
             formCompletionListener.enableDisableNextButton(true)
         }
@@ -44,6 +44,18 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         if(age_group.checkedRadioButtonId!=-1)
             formCompletionListener.enableDisableNextButton(true)
         else formCompletionListener.enableDisableNextButton(false)
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
 }

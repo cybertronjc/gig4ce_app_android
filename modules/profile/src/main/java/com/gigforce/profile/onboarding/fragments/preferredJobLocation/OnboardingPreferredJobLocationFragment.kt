@@ -2,9 +2,7 @@ package com.gigforce.profile.onboarding.fragments.preferredJobLocation
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -29,6 +27,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
+
+    private var win : Window? = null
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -80,6 +80,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         initListeners()
         initViewModel()
         getMajorCitiesAndOtherCities()
+        //changeStatusBarColor()
     }
 
     private fun initViews() {
@@ -107,6 +108,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             majorCitiesAdapter.filter.filter(text)
         }
     }
+
+
 
     private fun initViewModel() {
         viewModel.majorCities
@@ -202,5 +205,17 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     override fun activeNextButton() {
         formCompletionListener.enableDisableNextButton(true)
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 }

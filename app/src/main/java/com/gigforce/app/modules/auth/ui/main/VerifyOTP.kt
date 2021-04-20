@@ -62,6 +62,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
             verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
+
         //Log.d("app signature", appSignature.appSignatures.get(0))
 
 
@@ -72,11 +73,12 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        changeStatusBarColor()
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-        changeStatusBarColor()
+
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -134,7 +136,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.fui_transparent))
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
 

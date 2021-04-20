@@ -1,9 +1,7 @@
 package com.gigforce.profile.onboarding.fragments.assetsowned
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -20,6 +18,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     private lateinit var viewModel: AssetOwnedViewModel
+    private var win: Window? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -28,6 +27,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //changeStatusBarColor()
         viewModel = ViewModelProvider(this).get(AssetOwnedViewModel::class.java)
         listeners()
     }
@@ -207,6 +207,18 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun activeNextButton() {
         formCompletionListener.enableDisableNextButton(true)
+    }
+
+    private fun changeStatusBarColor(){
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
 }
