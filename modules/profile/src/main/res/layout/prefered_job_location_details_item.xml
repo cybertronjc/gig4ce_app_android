@@ -9,7 +9,6 @@
     android:layout_marginBottom="4dp"
     android:background="@color/white">
 
-
     <CheckBox
         android:id="@+id/checkbox"
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textColor="#333333"
-        android:checked="true"
+        android:checked="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
