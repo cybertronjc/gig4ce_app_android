@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.adapters.*
 import com.gigforce.profile.models.City
@@ -152,8 +155,29 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     override fun onCitySelected(city: City) {
         selectedCity = city
 
+    }
+
+    companion object{
+
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : OnboardingPreferredJobLocationFragment {
+            return OnboardingPreferredJobLocationFragment(formCompletionListener)
+        }
+    }
+
+    override fun lastStateFormFound(): Boolean {
+        formCompletionListener.enableDisableNextButton(true)
+        if(sub_cities_layout.isVisible){
+            cities_layout.visible()
+            sub_cities_layout.gone()
+            return true
+        }
+        return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+
         val delhiId = "HCbEvKJd2aPZaYgenUV7"
-        if (city.id == delhiId) {
+        if (selectedCity?.id == delhiId) {
             cities_layout.visibility = View.GONE
             sub_cities_layout.visibility = View.VISIBLE
 
@@ -170,22 +194,9 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             )
 
             subCityAdapter.setData(delhiSubLocations)
+            return true
         }
-    }
 
-    companion object{
-
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : OnboardingPreferredJobLocationFragment {
-            return OnboardingPreferredJobLocationFragment(formCompletionListener)
-        }
-    }
-
-    override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
-        return false
-    }
-
-    override fun nextButtonActionFound(): Boolean {
         return false
     }
 
