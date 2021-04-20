@@ -48,7 +48,9 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
     }
 
     private val cameraAndGalleryIntegrator: CameraAndGalleryIntegrator by lazy {
-        CameraAndGalleryIntegrator(this)
+        CameraAndGalleryIntegrator(this).apply {
+            openFrontCamera()
+        }
     }
 
     private val imageCropOptions: ImageCropOptions
@@ -89,10 +91,10 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
     fun showCameraSheetIfNotShown(){
 
-        if (!viewShownFirstTime) {
+//        if (!viewShownFirstTime) {
             checkForPermissionElseShowCameraGalleryBottomSheet()
-            viewShownFirstTime = true
-        }
+//            viewShownFirstTime = true
+//        }
     }
 
     private fun initListeners() {

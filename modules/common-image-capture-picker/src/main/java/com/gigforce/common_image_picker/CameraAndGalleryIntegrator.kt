@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.camera2.CameraCharacteristics
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.util.Size
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +29,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
     private var activity: FragmentActivity
     private var context: Context
     private var fragment: Fragment? = null
+    private var openFrontCamera: Boolean = false
 
     constructor(activity: FragmentActivity) {
         this.activity = activity
@@ -50,6 +53,10 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
     private val detector = FirebaseVision.getInstance().getVisionFaceDetector(options)
 
+    fun openFrontCamera() {
+        this.openFrontCamera = true
+    }
+
     fun showCameraAndGalleryBottomSheet(
     ) {
 
@@ -71,6 +78,19 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         }
 
         val intents = ImagePicker.getCaptureImageIntentsOnly(context)
+        if(openFrontCamera){
+            when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {
+                    intents.putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT)  // Tested on API 24 Android version 7.0(Samsung S6)
+                }
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+                    intents.putExtra("android.intent.extras.CAMERA_FACING", CameraCharacteristics.LENS_FACING_FRONT) // Tested on API 27 Android version 8.0(Nexus 6P)
+                    intents.putExtra("android.intent.extra.USE_FRONT_CAMERA", true)
+                }
+                else -> intents.putExtra("android.intent.extras.CAMERA_FACING", 1)  // Tested API 21 Android version 5.0.1(Samsung S4)
+            }
+        }
+
         if (fragment != null) {
             fragment!!.startActivityForResult(intents, REQUEST_CAPTURE_IMAGE)
         } else {
@@ -95,11 +115,11 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
     }
 
     fun parseResults(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        imageCropOptions: ImageCropOptions,
-        callback: ImageCropCallback
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?,
+            imageCropOptions: ImageCropOptions,
+            callback: ImageCropCallback
     ) {
 
         val context: Context = if (fragment != null) {
@@ -114,7 +134,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             if (outputFileUri == null) {
 
                 callback.errorWhileCapturingOrPickingImage(
-                    Exception("Unable to capture results")
+                        Exception("Unable to capture results")
                 )
             } else {
 
@@ -133,9 +153,9 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
             if (imageUriResultCrop == null) {
                 callback.errorWhileCapturingOrPickingImage(
-                    Exception(
-                        "Unable to capture or pick Image"
-                    )
+                        Exception(
+                                "Unable to capture or pick Image"
+                        )
                 )
 
                 FirebaseCrashlytics.getInstance().apply {
@@ -162,20 +182,20 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         //can use this for a new name every time
 
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
 
         val imageFileName = "IMG_${timeStamp}_"
         val uCrop: UCrop = if (imageCropOptions.outputFileUri == null) {
             UCrop.of(
-                uri,
-                Uri.fromFile(File(context.cacheDir, imageFileName + EXTENSION))
+                    uri,
+                    Uri.fromFile(File(context.cacheDir, imageFileName + EXTENSION))
             )
         } else {
             UCrop.of(
-                uri,
-                imageCropOptions.outputFileUri!!
+                    uri,
+                    imageCropOptions.outputFileUri!!
             )
         }
 
@@ -201,7 +221,6 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
     }
 
 
-
     private fun getCropOptions(): UCrop.Options {
         val options: UCrop.Options = UCrop.Options()
         options.setCompressionQuality(70)
@@ -210,27 +229,27 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         options.setHideBottomControls((false))
         options.setFreeStyleCropEnabled(false)
         options.setStatusBarColor(
-            ResourcesCompat.getColor(
-                context.resources,
-                R.color.topBarDark,
-                null
-            )
+                ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.topBarDark,
+                        null
+                )
         )
         options.setToolbarColor(
-            ResourcesCompat.getColor(
-                context.resources,
-                R.color.topBarDark,
-                null
-            )
+                ResourcesCompat.getColor(
+                        context.resources,
+                        R.color.topBarDark,
+                        null
+                )
         )
         options.setToolbarTitle(context.getString(R.string.crop_and_rotate))
         return options
     }
 
     private fun detectFacesAndReturnResult(
-        callback: ImageCropCallback,
-        outputFileUri: Uri,
-        firebaseVisionImage: FirebaseVisionImage
+            callback: ImageCropCallback,
+            outputFileUri: Uri,
+            firebaseVisionImage: FirebaseVisionImage
     ) = detector.detectInImage(firebaseVisionImage).addOnSuccessListener { faces ->
         // Task completed successfully
 
@@ -238,9 +257,9 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             returnFileImage(callback, outputFileUri)
         } else {
             callback.errorWhileCapturingOrPickingImage(
-                Exception(
-                    "No Face Detected"
-                )
+                    Exception(
+                            "No Face Detected"
+                    )
             )
         }
     }.addOnFailureListener { e ->
