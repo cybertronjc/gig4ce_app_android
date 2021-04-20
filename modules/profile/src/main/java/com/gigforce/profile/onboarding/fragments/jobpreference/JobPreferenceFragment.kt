@@ -131,10 +131,6 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         var workingdays = ArrayList<String>()
         workingDaysIds.forEach { day -> if (day.isChecked) {
             workingdays.add(day.tag.toString())
-            day.background = resources.getDrawable(R.drawable.rect_gray_border)
-        }
-        else{
-            day.background = resources.getDrawable(R.drawable.option_selection_border)
         }}
         return workingdays
     }
@@ -143,11 +139,8 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         var workingTimeSlots = ArrayList<String>()
         timeSlotsIds.forEach { slot -> if (slot.isChecked){
             workingTimeSlots.add(slot.tag.toString())
-            slot.background = resources.getDrawable(R.drawable.option_selection_border)
-        }
-        else {
-            slot.background = resources.getDrawable(R.drawable.rect_gray_border)
         }}
+
         return workingTimeSlots
     }
 

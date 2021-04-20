@@ -79,8 +79,8 @@
                     android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_full_time"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -93,8 +93,8 @@
                     android:text="Full Time"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
 
 
@@ -117,8 +117,8 @@
                     android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_part_time"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -131,8 +131,8 @@
                     android:text="Part Time"
                     android:textColor="#2e2f30"
                     android:textSize="14sp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -179,14 +179,16 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/size16"
             app:layout_constraintTop_toBottomOf="@+id/work_days">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="308dp"
+                >
 
 
                 <CheckBox
@@ -339,14 +341,15 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/size16"
             app:layout_constraintTop_toBottomOf="@+id/work_days_">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="108dp">
 
                 <CheckBox
                     android:id="@+id/early_morning"
