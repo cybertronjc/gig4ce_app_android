@@ -70,7 +70,7 @@ class OnboardingSubCityAdapter(
     ) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-        private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
+        //private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
         private var subCityCheckbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
@@ -79,7 +79,7 @@ class OnboardingSubCityAdapter(
         }
 
         fun bindValues(subCity: String, position: Int) {
-            subCityName.text = subCity
+            subCityCheckbox.text = subCity
 
 //            if (selectedItemIndex == position) {
 //                cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.lipstick, null))

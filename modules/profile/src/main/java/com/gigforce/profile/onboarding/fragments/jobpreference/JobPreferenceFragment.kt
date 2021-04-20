@@ -2,9 +2,7 @@ package com.gigforce.profile.onboarding.fragments.jobpreference
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -218,4 +216,5 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         }
 
     }
+
 }
