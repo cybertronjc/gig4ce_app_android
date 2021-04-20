@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -126,11 +127,20 @@ class OnboardingMajorCityAdapter(
                 cityImageIV.setColorFilter(
                         ResourcesCompat.getColor(context.resources, R.color.lipstick, null)
                 )
-                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
+                cityRootLayout.setBackgroundDrawable(
+                                ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.option_selection_border
+                                )
+                        )
+                cityNameTv.setTextColor(ContextCompat.getColor(context, R.color.selected_text_color))
+//                cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_pink)
 
             } else {
                 cityImageIV.setColorFilter(null)
                 cityRootLayout.setBackgroundResource(R.drawable.rectangle_round_light_blue)
+                cityNameTv.setTextColor(ContextCompat.getColor(context, R.color.default_color))
+
             }
         }
 

@@ -88,7 +88,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
         major_cities_recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
         major_cities_recyclerview.adapter = majorCitiesAdapter
-        major_cities_recyclerview.addItemDecoration(SpaceItemDecoration(0));
+//        major_cities_recyclerview.addItemDecoration(SpaceItemDecoration(0));
 
         sub_cities_rv.layoutManager = LinearLayoutManager(requireContext())
         sub_cities_rv.adapter = subCityAdapter
@@ -174,28 +174,33 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         }
         return false
     }
-
+    var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
+        if(currentStep == 0) {
+                val delhiId = "HCbEvKJd2aPZaYgenUV7"
+            if (selectedCity?.id == delhiId) {
+                cities_layout.visibility = View.GONE
+                sub_cities_layout.visibility = View.VISIBLE
 
-        val delhiId = "HCbEvKJd2aPZaYgenUV7"
-        if (selectedCity?.id == delhiId) {
-            cities_layout.visibility = View.GONE
-            sub_cities_layout.visibility = View.VISIBLE
+                val delhiSubLocations = arrayListOf<String>(
+                        "Faridabad",
+                        "Ghaziabad",
+                        "Gurugram",
+                        "Gautam Buddh Nagar",
+                        "New Delhi",
+                        "North Delhi",
+                        "West Delhi",
+                        "East Delhi",
+                        "South Delhi"
+                )
 
-            val delhiSubLocations = arrayListOf<String>(
-                    "Faridabad",
-                    "Ghaziabad",
-                    "Gurugram",
-                    "Gautam Buddh Nagar",
-                    "New Delhi",
-                    "North Delhi",
-                    "West Delhi",
-                    "East Delhi",
-                    "South Delhi"
-            )
-
-            subCityAdapter.setData(delhiSubLocations)
-            return true
+                subCityAdapter.setData(delhiSubLocations)
+                currentStep = 1
+                return true
+            }
+            else{
+                return false
+            }
         }
 
         return false
