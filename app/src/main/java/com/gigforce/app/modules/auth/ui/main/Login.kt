@@ -91,7 +91,7 @@ class Login : BaseFragment() {
             back_button_login.setOnClickListener {
                 activity?.onBackPressed()
             }
-            showKeyboard()
+           // showKeyboard()
             //registerTextWatcher()
 //            if (mobile_number.equals(""))
 //                showComfortDialog()
@@ -160,7 +160,7 @@ class Login : BaseFragment() {
             activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         inputMethodManager!!.toggleSoftInputFromWindow(
             invisible_edit_mobile.getApplicationWindowToken(),
-            InputMethodManager.SHOW_FORCED, 0
+            InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
         )
     }
 
@@ -347,8 +347,12 @@ class Login : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
+    }
 
-//private fun checkForAllPermissions() {
+    //private fun checkForAllPermissions() {
 //    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)
 //}
 //override fun onRequestPermissionsResult(
