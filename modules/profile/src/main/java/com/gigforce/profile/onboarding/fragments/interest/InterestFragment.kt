@@ -30,7 +30,6 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     private lateinit var viewModel: InterestViewModel
     private var allInterestList = ArrayList<InterestDM>()
     var experiencedInDeliveryExecutive = false
-    private var win: Window? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +52,6 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         allInterestList.add(InterestDM(R.drawable.ic_cleaning, "Cleaner"))
         allInterestList.add(InterestDM(R.drawable.ic_plant_in_hand, "Farmers"))
         listener()
-        //changeStatusBarColor()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
                 activity, 4,
@@ -287,15 +285,4 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         else return false
     }
 
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
-    }
 }

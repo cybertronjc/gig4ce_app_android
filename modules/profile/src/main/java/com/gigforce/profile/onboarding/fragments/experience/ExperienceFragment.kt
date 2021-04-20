@@ -21,7 +21,6 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     private lateinit var viewModel: ExperienceViewModel
     var workStatus = ""
-    private var win: Window? = null
     var istotalExperienceSelected = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +33,6 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ExperienceViewModel::class.java)
         listener()
-        //changeStatusBarColor()
     }
 
     private fun listener() {
@@ -112,18 +110,6 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun activeNextButton() {
         validateForm()
-    }
-
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
 }

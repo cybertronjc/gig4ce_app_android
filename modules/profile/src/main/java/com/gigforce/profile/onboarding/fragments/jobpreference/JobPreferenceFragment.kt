@@ -23,7 +23,6 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
             JobPreferenceFragment(formCompletionListener)
     }
-    private var win: Window? = null
 
     private lateinit var viewModel: JobPreferenceViewModel
     var timeSlotsIds = ArrayList<CheckBox>()
@@ -38,7 +37,6 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(JobPreferenceViewModel::class.java)
-        //changeStatusBarColor()
         initVar()
         listeners()
     }
@@ -219,15 +217,4 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
     }
 
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
-    }
 }

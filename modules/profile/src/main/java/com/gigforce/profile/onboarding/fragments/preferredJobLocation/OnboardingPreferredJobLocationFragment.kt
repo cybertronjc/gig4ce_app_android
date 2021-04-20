@@ -28,7 +28,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     private val viewModel: OnboardingViewModel by viewModels()
 
-    private var win : Window? = null
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -80,7 +79,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         initListeners()
         initViewModel()
         getMajorCitiesAndOtherCities()
-        //changeStatusBarColor()
     }
 
     private fun initViews() {
@@ -205,17 +203,5 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     override fun activeNextButton() {
         formCompletionListener.enableDisableNextButton(true)
-    }
-
-    private fun changeStatusBarColor(){
-        win = activity?.window
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 }
