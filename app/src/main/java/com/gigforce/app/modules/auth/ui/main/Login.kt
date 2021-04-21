@@ -20,17 +20,21 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class Login : BaseFragment() {
     companion object {
         fun newInstance() = Login()
@@ -42,7 +46,7 @@ class Login : BaseFragment() {
         var MOBILENO_INPUT_CHANGED = false
 
     }
-
+    @Inject lateinit var eventTracker : IEventTracker
     lateinit var viewModel: LoginViewModel
     private val INDIAN_MOBILE_NUMBER =
             Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
@@ -54,7 +58,7 @@ class Login : BaseFragment() {
     private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
     private var win: Window? = null
-    private var mixpanel: MixpanelAPI? = null
+//    private var mixpanel: MixpanelAPI? = null
     private val CREDENTIAL_PICKER_REQUEST = 9
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +91,9 @@ class Login : BaseFragment() {
 //            navigateWithAllPopupStack(R.id.authFlowFragment)
 //        } else {
 
-            mixpanel = (activity?.application as MainApplication).mixpanel
-            mixpanel?.track("Login Screen")
+//            mixpanel = (activity?.application as MainApplication).mixpanel
+            eventTracker.pushEvent(TrackingEventArgs("User Register",null))
+//            mixpanel?.track("Login Screen")
             viewModel.activity = this.requireActivity()
             invisible_edit_mobile.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)

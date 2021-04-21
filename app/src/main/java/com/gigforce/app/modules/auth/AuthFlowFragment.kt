@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
+import com.gigforce.core.IEventTracker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AuthFlowFragment : BaseFragment() {
-
+    @Inject
+    lateinit var eventTracker : IEventTracker
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +74,8 @@ class AuthFlowFragment : BaseFragment() {
 //            if (fragments != null && fragments?.size == 1) {
             popAllBackStates()
             saveData(AppConstants.LANGUAGE_SELECTED, "true")
+            eventTracker.setUserId(currentUser?.phoneNumber);
+
             navigateWithAllPopupStack(
                 R.id.onboardingLoaderfragment
             )

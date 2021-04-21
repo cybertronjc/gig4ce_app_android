@@ -44,7 +44,12 @@ class VerifyOTP : BaseFragment() {
         fun newInstance() = VerifyOTP()
     }
 
+
+
     @Inject lateinit var eventTracker : IEventTracker
+
+
+
     private var countDownTimer: CountDownTimer? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
@@ -209,7 +214,8 @@ class VerifyOTP : BaseFragment() {
         viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
-                mixpanel?.track("Entered wrong OTP")
+                eventTracker.pushEvent(TrackingEventArgs("Entered wrong OTP",null))
+//                mixpanel?.track("Entered wrong OTP")
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()

@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
     val MIXPANEL_TOKEN = "536f16151a9da631a385119be6510d56"
-    var mixpanel : MixpanelAPI? = null
+//    var mixpanel : MixpanelAPI? = null
     private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
@@ -158,12 +158,12 @@ class MainActivity : AppCompatActivity(),
             lookForNewChatMessages()
         }
 
-        mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
-        if (firebaseAuth?.currentUser?.phoneNumber != null){
-            mixpanel?.identify(firebaseAuth?.currentUser?.phoneNumber);
-            mixpanel?.getPeople()?.identify(firebaseAuth?.currentUser?.phoneNumber)
-            mixpanel?.track("User identified")
-        }
+//        mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
+//        if (firebaseAuth?.currentUser?.phoneNumber != null){
+//            mixpanel?.identify(firebaseAuth?.currentUser?.phoneNumber);
+//            mixpanel?.getPeople()?.identify(firebaseAuth?.currentUser?.phoneNumber)
+//            mixpanel?.track("User identified")
+//        }
         val props = JSONObject()
 
 //        props.put("genre", "hip-hop")
@@ -285,7 +285,7 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
-        mixpanel?.flush();
+//        mixpanel?.flush();
 
     }
 

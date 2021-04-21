@@ -42,6 +42,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
+        allInterestList.clear()
         allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
         allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, "Delivery Executive"))
         allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))

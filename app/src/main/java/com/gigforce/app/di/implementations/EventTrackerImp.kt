@@ -18,11 +18,13 @@ class EventTrackerImp @Inject constructor(
 
 
     override fun setUserId(userId: String) {
-
+        mixpanel?.identify(userId);
+        mixpanel?.getPeople()?.identify(userId)
+        mixpanel?.track("User identified")
     }
 
-    override fun setUserProperty(propName: String, args: UserPropArgs) {
-
+    override fun setUserProperty(props: Map<String, Any>) {
+        mixpanel?.registerSuperPropertiesMap(props)
     }
 
     override fun pushEvent(args: TrackingEventArgs) {

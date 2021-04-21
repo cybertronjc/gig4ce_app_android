@@ -38,13 +38,18 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         super.onViewCreated(view, savedInstanceState)
 
         listener()
-        showKeyboard()
+//        showKeyboard()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
+    }
 
     fun showKeyboard(){
         username?.let {
+            it.setFocusableInTouchMode(true)
             it.requestFocus()
             val inputMethodManager =
                     activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?

@@ -6,7 +6,7 @@ interface IEventTracker {
     fun setUserId(userId: String)
 
     // set user properties
-    fun setUserProperty(propName: String, args:UserPropArgs)
+    fun setUserProperty(props: Map<String, Any>)
 
     // push events
     fun pushEvent(args:TrackingEventArgs)
