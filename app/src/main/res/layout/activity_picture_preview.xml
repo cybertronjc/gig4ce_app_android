@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:keepScreenOn="true"
         android:orientation="vertical"
-        app:cameraAudio="off"
+        app:cameraAudio="on"
         app:cameraAutoFocusMarker="@string/cameraview_default_autofocus_marker"
         app:cameraEngine="camera2"
         app:cameraExperimental="true"

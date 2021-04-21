@@ -140,6 +140,7 @@ class ImageCaptureActivity : AppCompatActivity() {
 //        )
 //        cameraView.setPictureSize(result)
 //        cameraView.setVideoSize(result)
+        cameraView.setPreviewStreamSize(SizeSelectors.and(SizeSelectors.maxWidth(1000), SizeSelectors.biggest()))
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
     }
