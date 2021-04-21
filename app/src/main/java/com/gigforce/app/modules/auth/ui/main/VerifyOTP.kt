@@ -32,7 +32,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListener {
+class VerifyOTP : BaseFragment() {
 
     companion object {
         fun newInstance() = VerifyOTP()
@@ -50,8 +50,8 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
     lateinit var match: Matcher;
     var timerStarted = false
     private  var client: SmsRetrieverClient? = null
-    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
-    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
+//    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
+//    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
     //var appSignature = AppSignatureHelper(context)
     private var win: Window? = null
 
@@ -91,7 +91,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
         initializeViews()
-        startSmsRetriver()
+//        startSmsRetriver()
         listeners()
         observer()
         saveNewUsedMobileNumber()
@@ -140,38 +140,38 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
     }
 
 
-    private fun startSmsRetriver() {
-        client = activity?.let { SmsRetriever.getClient(it) }
-        val task = client?.startSmsRetriever()
+//    private fun startSmsRetriver() {
+//        client = activity?.let { SmsRetriever.getClient(it) }
+//        val task = client?.startSmsRetriever()
+//
+//       task?.addOnSuccessListener { //showToast("SMS Retriever Started")
+////           smsBroadcast.initOTPListener(this)
+//           val intentFilter = IntentFilter()
+//           intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+//
+//
+////           context?.registerReceiver(smsBroadcast, intentFilter)
+//
+//           //context?.let { it1 -> LocalBroadcastManager.getInstance(it1).registerReceiver(smsBroadcast, intentFilter) }
+//
+//       }
+//
+//        task?.addOnFailureListener { showToast("SMS Retriever Failed") }
+//    }
 
-       task?.addOnSuccessListener { //showToast("SMS Retriever Started")
-           smsBroadcast.initOTPListener(this)
-           val intentFilter = IntentFilter()
-           intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
-
-
-           context?.registerReceiver(smsBroadcast, intentFilter)
-
-           //context?.let { it1 -> LocalBroadcastManager.getInstance(it1).registerReceiver(smsBroadcast, intentFilter) }
-
-       }
-
-        task?.addOnFailureListener { showToast("SMS Retriever Failed") }
-    }
-
-    override fun onOTPReceived(otp: String) {
-        if (smsBroadcast != null) {
-            context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(smsBroadcast) }
-        }
-        showToast(otp)
-        txt_otp.setText(otp)
-        Log.d("OTP Received", otp)
-    }
-
-    override fun onOTPTimeOut() {
-        // do nothing
-        Log.d("Otp", "timeout")
-    }
+//    override fun onOTPReceived(otp: String) {
+//        if (smsBroadcast != null) {
+//            context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(smsBroadcast) }
+//        }
+//        showToast(otp)
+//        txt_otp.setText(otp)
+//        Log.d("OTP Received", otp)
+//    }
+//
+//    override fun onOTPTimeOut() {
+//        // do nothing
+//        Log.d("Otp", "timeout")
+//    }
 
 
     private fun saveNewUsedMobileNumber() {
