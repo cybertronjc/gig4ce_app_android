@@ -27,6 +27,10 @@ class EventTrackerImp @Inject constructor(
         mixpanel?.registerSuperPropertiesMap(props)
     }
 
+    override fun removeUserProperty(prop: String) {
+        mixpanel?.unregisterSuperProperty(prop)
+    }
+
     override fun pushEvent(args: TrackingEventArgs) {
         mixpanel?.trackMap(args.eventName,args.props)
     }

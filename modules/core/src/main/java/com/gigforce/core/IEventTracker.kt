@@ -8,6 +8,8 @@ interface IEventTracker {
     // set user properties
     fun setUserProperty(props: Map<String, Any>)
 
+    fun removeUserProperty(prop:String)
+
     // push events
     fun pushEvent(args:TrackingEventArgs)
 }

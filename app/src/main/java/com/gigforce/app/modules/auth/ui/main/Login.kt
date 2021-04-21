@@ -175,6 +175,7 @@ class Login : BaseFragment() {
 
     fun showKeyboard(){
         invisible_edit_mobile?.let {
+            it.setFocusableInTouchMode(true)
             it.requestFocus()
             val inputMethodManager =
                     activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
@@ -382,6 +383,10 @@ class Login : BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideSoftKeyboard()
+    }
 
 //private fun checkForAllPermissions() {
 //    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)

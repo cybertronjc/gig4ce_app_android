@@ -1,8 +1,9 @@
 package com.gigforce.profile.onboarding.fragments.interest
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -10,30 +11,38 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
-    Fragment(), OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.FragmentSetLastStateListener {
+        Fragment(), OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.FragmentSetLastStateListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
-            InterestFragment(formCompletionListener)
+                InterestFragment(formCompletionListener)
+
         private var allInterestList = ArrayList<InterestDM>()
 
     }
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private lateinit var viewModel: InterestViewModel
     var experiencedInDeliveryExecutive = false
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.interest_fragment, container, false)
     }
@@ -56,41 +65,41 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         listener()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
-                activity, 4,
-                GridLayoutManager.VERTICAL, false
+                    activity, 4,
+                    GridLayoutManager.VERTICAL, false
             )
             all_interests_rv.adapter = AllInterestAdapter(
-                it,
-                allInterestList,
-                object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
-                    override fun onclick(view: View, position: Int) {
-                        var foundSelected = false
-                        if (allInterestList.get(position).selected) {
-                            resetSelected(view.icon_iv, view.interest_name, view)
-                            allInterestList.get(position).selected = false
-                            foundSelected = true
-                        }
-
-                        if (getSelectedInterestCount() < 3) {
-                            if (!foundSelected) {
-                                setSelected(view.icon_iv, view.interest_name, view)
-                                allInterestList.get(position).selected = true
+                    it,
+                    allInterestList,
+                    object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
+                        override fun onclick(view: View, position: Int) {
+                            var foundSelected = false
+                            if (allInterestList.get(position).selected) {
+                                resetSelected(view.icon_iv, view.interest_name, view)
+                                allInterestList.get(position).selected = false
+                                foundSelected = true
                             }
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Maximum three interest can be selected!!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
 
-                        if (getSelectedInterestCount() > 0) {
-                            formCompletionListener.enableDisableNextButton(true)
-                        } else {
-                            formCompletionListener.enableDisableNextButton(false)
+                            if (getSelectedInterestCount() < 3) {
+                                if (!foundSelected) {
+                                    setSelected(view.icon_iv, view.interest_name, view)
+                                    allInterestList.get(position).selected = true
+                                }
+                            } else {
+                                Toast.makeText(
+                                        context,
+                                        "Maximum three interest can be selected!!",
+                                        Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            if (getSelectedInterestCount() > 0) {
+                                formCompletionListener.enableDisableNextButton(true)
+                            } else {
+                                formCompletionListener.enableDisableNextButton(false)
+                            }
                         }
-                    }
-                })
+                    })
 
 //            all_interests_rv.addItemDecoration(
 //                SpaceItemDecoration(
@@ -201,12 +210,12 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     var ecomSelected = false
     var milkSelected = false
 
-    fun getDeliveryExecutiveExperiences():ArrayList<String>{
+    fun getDeliveryExecutiveExperiences(): ArrayList<String> {
         var experiences = ArrayList<String>()
-        if(foodSelected)experiences.add("Food")
-        if(grocerySelected)experiences.add("Grocery")
-        if(ecomSelected)experiences.add("Ecom")
-        if(milkSelected)experiences.add("Milk")
+        if (foodSelected) experiences.add("Food")
+        if (grocerySelected) experiences.add("Grocery")
+        if (ecomSelected) experiences.add("Ecom")
+        if (milkSelected) experiences.add("Milk")
         return experiences
     }
 
@@ -215,10 +224,10 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             icon.setColorFilter(ContextCompat.getColor(it, R.color.default_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.default_color))
             view.setBackgroundDrawable(
-                ContextCompat.getDrawable(
-                    it,
-                    R.drawable.option_default_border
-                )
+                    ContextCompat.getDrawable(
+                            it,
+                            R.drawable.option_default_border
+                    )
             )
         }
     }
@@ -228,10 +237,10 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             icon.setColorFilter(ContextCompat.getColor(it, R.color.selected_image_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.selected_text_color))
             view.setBackgroundDrawable(
-                ContextCompat.getDrawable(
-                    it,
-                    R.drawable.option_selection_border
-                )
+                    ContextCompat.getDrawable(
+                            it,
+                            R.drawable.option_selection_border
+                    )
             )
         }
 
@@ -270,29 +279,46 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
                     return true
                 }
             }
-            else -> return false
+            else -> {
+                setDeliveryExecutiveInterestTracker()
+                return false
+            }
         }
+        setMainInterestTracker()
         return false
     }
 
+    private fun setMainInterestTracker() {
+        var map = mapOf("Interests" to getselectedInterest())
+        eventTracker.pushEvent(TrackingEventArgs("UserInterests", map))
+        eventTracker.removeUserProperty("DeliveryExperience")
+        eventTracker.removeUserProperty("ExperienceIn")
+        eventTracker.setUserProperty(map)
+    }
+
+    fun setDeliveryExecutiveInterestTracker() {
+        var map = mapOf("interests" to getselectedInterest(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
+        eventTracker.pushEvent(TrackingEventArgs("UserInterests", map))
+        eventTracker.setUserProperty(map)
+    }
+
     override fun activeNextButton() {
-        when (currentStep){
-            0-> if(getSelectedInterestCount()>0) formCompletionListener.enableDisableNextButton(true)
-            1-> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
+        when (currentStep) {
+            0 -> if (getSelectedInterestCount() > 0) formCompletionListener.enableDisableNextButton(true)
+            1 -> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
                 formCompletionListener.enableDisableNextButton(true)
             } else formCompletionListener.enableDisableNextButton(false)
         }
     }
 
-    override fun lastStateFormFound() : Boolean {
+    override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
-        if(currentStep == 1){
+        if (currentStep == 1) {
             interest_cl.visible()
             delivery_executive_detail_cl.gone()
             currentStep = 0
             return true
-        }
-        else return false
+        } else return false
     }
 
 }

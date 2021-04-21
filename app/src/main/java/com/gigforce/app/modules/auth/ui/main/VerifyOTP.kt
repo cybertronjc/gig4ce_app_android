@@ -116,13 +116,17 @@ class VerifyOTP : BaseFragment() {
 //        }
     }
     fun showKeyboard(){
-        txt_otp.requestFocus()
-        val inputMethodManager =
-            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputMethodManager!!.toggleSoftInputFromWindow(
-            txt_otp.getApplicationWindowToken(),
-            InputMethodManager.SHOW_FORCED, 0
-        )
+        txt_otp?.let {
+            it.setFocusableInTouchMode(true)
+            it.requestFocus()
+            val inputMethodManager =
+                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                    it.getApplicationWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0
+            )
+        }
+
 
     }
 //    private fun setupSmsRetriver() {
@@ -348,5 +352,10 @@ class VerifyOTP : BaseFragment() {
         if (countDownTimer != null) {
             countDownTimer?.cancel()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideSoftKeyboard()
     }
 }
