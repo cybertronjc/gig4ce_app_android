@@ -2,8 +2,10 @@ package com.gigforce.profile.onboarding
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +36,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class OnboardingFragmentNew : Fragment() {
 
-    @Inject lateinit var navigation : INavigation
+    @Inject
+    lateinit var navigation: INavigation
+
     companion object {
         fun newInstance() = OnboardingFragmentNew()
     }
@@ -45,8 +49,8 @@ class OnboardingFragmentNew : Fragment() {
     private var win: Window? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.onboarding_fragment_new_fragment, container, false)
     }
@@ -77,41 +81,41 @@ class OnboardingFragmentNew : Fragment() {
         onboarding_pager.offscreenPageLimit = 3
         activity?.let {
             onboarding_pager.adapter =
-                MutlifragmentAdapter(it, object : OnFragmentFormCompletionListener {
-                    override fun enableDisableNextButton(validate: Boolean) {
-                        enableNextButton(validate)
-                    }
+                    MutlifragmentAdapter(it, object : OnFragmentFormCompletionListener {
+                        override fun enableDisableNextButton(validate: Boolean) {
+                            enableNextButton(validate)
+                        }
 
-                    override fun profilePictureSkipPressed() {
-                        //completet this
-                    }
+                        override fun profilePictureSkipPressed() {
+                            //completet this
+                        }
 
-                    override fun checkForButtonText() {
-                        super.checkForButtonText()
+                        override fun checkForButtonText() {
+                            super.checkForButtonText()
 
-                        if (onboarding_pager.currentItem == 8) {
+                            if (onboarding_pager.currentItem == 8) {
 
-                            val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
-                            val fragment =
-                                fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                                val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
+                                val fragment =
+                                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
 
-                            if (!fragment.hasUserUploadedPhoto()) {
-                                next.text = "Upload Photo"
-                                enableNextButton(true)
-                                fragment.showCameraSheetIfNotShown()
-                            } else {
-                                enableNextButton(true)
-                                next.text = "Next"
+                                if (!fragment.hasUserUploadedPhoto()) {
+                                    next.text = "Upload Photo"
+                                    enableNextButton(true)
+                                    fragment.showCameraSheetIfNotShown()
+                                } else {
+                                    enableNextButton(true)
+                                    next.text = "Next"
+                                }
                             }
                         }
-                    }
-                })
+                    })
             steps.text =
-                "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
+                    "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
         }
         next.setOnClickListener {
-            saveDataToDB(onboarding_pager.currentItem)
             if (isFragmentActionNotExists()) {
+                saveDataToDB(onboarding_pager.currentItem)
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
@@ -119,7 +123,7 @@ class OnboardingFragmentNew : Fragment() {
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                     val fragment =
-                        fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
+                            fragmentAdapter.getFragment(onboarding_pager.currentItem) as OnboardingAddProfilePictureFragment
                     if (!fragment.hasUserUploadedPhoto()) {
                         fragment.showCameraSheetIfNotShown()
                     } else {
@@ -147,7 +151,7 @@ class OnboardingFragmentNew : Fragment() {
                 if (position == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                     val fragment =
-                        fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
+                            fragmentAdapter.getFragment(position) as OnboardingAddProfilePictureFragment
                     fragment.showCameraSheetIfNotShown()
 
                     enableNextButton(true)
@@ -159,29 +163,29 @@ class OnboardingFragmentNew : Fragment() {
     }
 
 
-    fun setNextButtonForCurrentFragment(){
+    fun setNextButtonForCurrentFragment() {
         var currentFragment =
-            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+                ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
         if (currentFragment is FragmentInteractionListener) {
             currentFragment.activeNextButton()
         }
     }
 
-    private fun changeStatusBarColor(){
+    private fun changeStatusBarColor() {
         win = activity?.window
         // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
 // finally change the color
-        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
+        win?.statusBarColor = resources.getColor(R.color.status_bar_gray)
     }
 
     private fun isFragmentLastStateFound(): Boolean {
         var currentFragment =
-            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+                ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
         if (currentFragment is FragmentSetLastStateListener) {
             return currentFragment.lastStateFormFound()
         }
@@ -190,7 +194,7 @@ class OnboardingFragmentNew : Fragment() {
 
     private fun isFragmentActionNotExists(): Boolean {
         var currentFragment =
-            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
+                ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem))
         if (currentFragment is FragmentInteractionListener) {
             return !currentFragment.nextButtonActionFound()
         }
@@ -212,11 +216,12 @@ class OnboardingFragmentNew : Fragment() {
     }
 
     private fun saveDataToDB(currentItem: Int) {
+        Log.e("working", "working save data")
         when (currentItem) {
             0 -> {
                 var enteredName =
-                    onboarding_pager.getChildAt(0).username
-                        .text.toString()
+                        onboarding_pager.getChildAt(0).username
+                                .text.toString()
                 var formattedString = getFormattedString(enteredName)
                 viewModel.saveUserName(formattedString.trim())
                 saveGender()
@@ -227,16 +232,16 @@ class OnboardingFragmentNew : Fragment() {
             3 -> {
                 val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                 val fragment =
-                    fragmentAdapter.getFragment(currentItem) as OnboardingPreferredJobLocationFragment
+                        fragmentAdapter.getFragment(currentItem) as OnboardingPreferredJobLocationFragment
                 val selectedCity = fragment.getSelectedCity()
 
                 if (selectedCity != null) {
 
                     onboardingViewModel.savePreferredJobLocation(
-                        cityId = selectedCity.id,
-                        cityName = selectedCity.name,
-                        stateCode = selectedCity.stateCode,
-                        subLocation = selectedCity.subLocation
+                            cityId = selectedCity.id,
+                            cityName = selectedCity.name,
+                            stateCode = selectedCity.stateCode,
+                            subLocation = selectedCity.subLocation
                     )
                 }
             }
@@ -260,55 +265,61 @@ class OnboardingFragmentNew : Fragment() {
 
     private fun setAssetsData() {
         var assetsowned =
-            (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as AssetOwnedFragment)
+                (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as AssetOwnedFragment)
         viewModel.saveAssets(assetsowned.getAssetsData())
     }
 
     private fun setJobPreference() {
         var jobPreferenceFragment =
-            (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
-        viewModel.saveJobPreference(jobPreferenceFragment.fullTimeJob)
-        viewModel.saveDaysPreference(jobPreferenceFragment.getWorkingDays())
-        viewModel.saveTimeSlots(jobPreferenceFragment.getTimeSlots())
+                (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as JobPreferenceFragment)
+        var fullTimeJob = jobPreferenceFragment.fullTimeJob
+        var fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
+        if (!fullTimeJob) {
+            viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getWorkingDays(), jobPreferenceFragment.getTimeSlots())
+        } else {
+            viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getAllWorkingDays(), jobPreferenceFragment.getAllTimeSlots())
+        }
     }
 
     private fun saveGender() {
         var nameGenderFragment =
-            (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as NameGenderFragment)
+                (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as NameGenderFragment)
         viewModel.selectYourGender(nameGenderFragment.gender)
     }
 
     private fun setInterest() {
         var interestFragment =
-            (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as InterestFragment)
-        viewModel.saveInterest(interestFragment.getselectedInterest())
+                (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as InterestFragment)
+        viewModel.saveInterest(interestFragment.getselectedInterest(), interestFragment.experiencedInDeliveryExecutive, interestFragment.getDeliveryExecutiveExperiences())
+        Log.e("working", "working save data 1")
+
     }
 
     private fun setWorkingStatus() {
         var experienceFragment =
-            (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as ExperienceFragment)
+                (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as ExperienceFragment)
         var workStatus = experienceFragment.workStatus
         viewModel.saveWorkStatus(workStatus)
 
         var total_experience_rg = experienceFragment.total_experience_rg
         val selectedId = total_experience_rg.checkedRadioButtonId
-//        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
-//        viewModel.saveTotalExperience(radioButton.text.toString())
+        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+        viewModel.saveTotalExperience(radioButton.text.toString())
     }
 
 
     private fun getSelectedAgeGroup(): String {
         var radioGroup =
-            ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)).age_group
+                ((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)).age_group
         val selectedId: Int = radioGroup.checkedRadioButtonId
 
         // find the radiobutton by returned id
 
         // find the radiobutton by returned id
-        // var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
+        var radioButton = onboarding_pager.findViewById(selectedId) as RadioButton
 
-        // return radioButton.text.toString()
-        return ""
+        return radioButton.text.toString()
+//        return ""
     }
 
     private fun getSelectedHighestQualification(): String {
@@ -321,8 +332,8 @@ class OnboardingFragmentNew : Fragment() {
         for (str in arr) {
             try {
                 formattedString += str.substring(
-                    0,
-                    1
+                        0,
+                        1
                 ).toUpperCase() + str.substring(1).toLowerCase()
             } catch (e: Exception) {
 
@@ -352,7 +363,7 @@ class OnboardingFragmentNew : Fragment() {
     fun hideKeyboard() {
         activity?.let {
             val imm: InputMethodManager =
-                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             //Find the currently focused view, so we can grab the correct window token from it.
             var view: View? = it.currentFocus ?: null
             //If no view currently has focus, create a new one, just so we can grab a window token from it

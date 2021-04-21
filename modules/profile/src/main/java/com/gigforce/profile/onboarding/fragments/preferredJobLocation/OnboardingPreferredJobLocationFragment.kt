@@ -2,12 +2,13 @@ package com.gigforce.profile.onboarding.fragments.preferredJobLocation
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -24,7 +25,7 @@ import com.gigforce.profile.viewmodel.OnboardingViewModel
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 
 class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnCitySelectedListener,
-    OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener,OnboardingFragmentNew.FragmentInteractionListener {
+        OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener, OnboardingFragmentNew.FragmentInteractionListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -33,11 +34,11 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         Glide.with(requireContext())
     }
 
-    private var selectedCity : City? = null
+    private var selectedCity: City? = null
     private var spaceItemDecoration: SpaceItemDecoration? = null
 
     private val majorCitiesAdapter: OnboardingMajorCityAdapter by lazy {
-        OnboardingMajorCityAdapter(requireContext(),glide).apply {
+        OnboardingMajorCityAdapter(requireContext(), glide).apply {
             setOnCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
         }
     }
@@ -56,12 +57,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     private var confirmSubCityList: ArrayList<String> = ArrayList()
 
-    fun getSelectedCity() : City? {
-
-        if(selectedCity != null){
-            selectedCity?.subLocation = confirmSubCityList
-        }
-
+    fun getSelectedCity(): City? {
+        selectedCity?.subLocation = confirmSubCityList.toSet().toList()
         return selectedCity
     }
 
@@ -108,7 +105,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
 
-
     private fun initViewModel() {
         viewModel.majorCities
                 .observe(viewLifecycleOwner, {
@@ -116,7 +112,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
                 })
 
         viewModel.allCities
-                .observe(viewLifecycleOwner,  {
+                .observe(viewLifecycleOwner, {
                     showAllCities(it)
                 })
     }
@@ -129,7 +125,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         majorCitiesAdapter.setData(it)
 
 
-
 //        major_cities_recyclerview.adapter = PreferredLocationMajorCitiesAdapter(
 //                requireContext(),
 //                R.layout.recycler_item_major_city,
@@ -140,13 +135,15 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
 
-    override fun onSubCitySelected(add: Boolean, text: String){
-        if (add){
+    override fun onSubCitySelected(add: Boolean, text: String) {
+        val uniqueList = confirmSubCityList.toSet().toList()
+        confirmSubCityList.clear()
+        uniqueList.forEach { obj -> confirmSubCityList.add(obj) }
+        if (add) {
             confirmSubCityList.add(text)
             Log.d("added", "text" + " list: " + confirmSubCityList.toString())
-        }
-        else{
-            if (confirmSubCityList.contains(text)){
+        } else {
+            if (confirmSubCityList.contains(text)) {
                 confirmSubCityList.remove(text)
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
@@ -158,26 +155,28 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     }
 
-    companion object{
+    companion object {
 
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : OnboardingPreferredJobLocationFragment {
+        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener): OnboardingPreferredJobLocationFragment {
             return OnboardingPreferredJobLocationFragment(formCompletionListener)
         }
     }
 
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
-        if(sub_cities_layout.isVisible){
+        if (sub_cities_layout.isVisible) {
             cities_layout.visible()
             sub_cities_layout.gone()
+            currentStep = 0
             return true
         }
         return false
     }
+
     var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
-        if(currentStep == 0) {
-                val delhiId = "HCbEvKJd2aPZaYgenUV7"
+        if (currentStep == 0) {
+            val delhiId = "HCbEvKJd2aPZaYgenUV7"
             if (selectedCity?.id == delhiId) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
@@ -194,11 +193,12 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
                         "South Delhi"
                 )
 
-                subCityAdapter.setData(delhiSubLocations)
+                subCityAdapter.setData(delhiSubLocations, confirmSubCityList)
                 currentStep = 1
                 return true
-            }
-            else{
+            } else {
+                confirmSubCityList.clear()
+                selectedCity?.subLocation = confirmSubCityList
                 return false
             }
         }

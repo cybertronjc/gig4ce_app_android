@@ -25,10 +25,11 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
             InterestFragment(formCompletionListener)
+        private var allInterestList = ArrayList<InterestDM>()
+
     }
 
     private lateinit var viewModel: InterestViewModel
-    private var allInterestList = ArrayList<InterestDM>()
     var experiencedInDeliveryExecutive = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -199,6 +200,14 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     var ecomSelected = false
     var milkSelected = false
 
+    fun getDeliveryExecutiveExperiences():ArrayList<String>{
+        var experiences = ArrayList<String>()
+        if(foodSelected)experiences.add("Food")
+        if(grocerySelected)experiences.add("Grocery")
+        if(ecomSelected)experiences.add("Ecom")
+        if(milkSelected)experiences.add("Milk")
+        return experiences
+    }
 
     private fun resetSelected(icon: ImageView, option: TextView, view: View) {
         context?.let {

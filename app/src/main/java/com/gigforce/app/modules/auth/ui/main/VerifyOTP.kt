@@ -144,7 +144,7 @@ class VerifyOTP : BaseFragment(), SmsRetrieverBroadcastReceiver.OTPReceiveListen
         client = activity?.let { SmsRetriever.getClient(it) }
         val task = client?.startSmsRetriever()
 
-       task?.addOnSuccessListener { showToast("SMS Retriever Started")
+       task?.addOnSuccessListener { //showToast("SMS Retriever Started")
            smsBroadcast.initOTPListener(this)
            val intentFilter = IntentFilter()
            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)

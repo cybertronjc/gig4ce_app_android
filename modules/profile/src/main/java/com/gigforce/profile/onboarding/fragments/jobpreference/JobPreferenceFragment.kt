@@ -41,6 +41,28 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         listeners()
     }
 
+    fun getAllWorkingDays():ArrayList<String>{
+        var workingDaysList = ArrayList<String>()
+        workingDaysList.add(("Monday"))
+        workingDaysList.add(("Tuesday"))
+        workingDaysList.add(("Wednesday"))
+        workingDaysList.add(("Thursday"))
+        workingDaysList.add(("Friday"))
+        workingDaysList.add(("Saturday"))
+        workingDaysList.add(("Sunday"))
+        return workingDaysList
+    }
+
+    fun getAllTimeSlots():ArrayList<String>{
+        var timeSlots = ArrayList<String>()
+        timeSlots.add("5 am - 8 am")
+        timeSlots.add("8 am - 12 pm")
+        timeSlots.add("12 pm - 4 pm")
+        timeSlots.add("4 pm - 8 pm")
+        timeSlots.add("8 pm - 12 am")
+        return timeSlots
+    }
+
     private fun initVar() {
         workingDaysArr()
         timeSlotsArr()

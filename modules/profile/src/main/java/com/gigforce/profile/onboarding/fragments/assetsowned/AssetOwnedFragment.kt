@@ -28,6 +28,8 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AssetOwnedViewModel::class.java)
         listeners()
+        setSelected(icon_iv_6, smart_phone, imageTextCardcl_6)
+        owned_smart_phone = true
     }
 
     var owned_bicycle = false

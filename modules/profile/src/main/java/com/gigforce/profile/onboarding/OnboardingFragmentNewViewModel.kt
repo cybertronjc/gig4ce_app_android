@@ -1,16 +1,16 @@
 package com.gigforce.profile.onboarding
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.profile.datamodel.EnrollmentInfo
 import com.gigforce.profile.datamodel.Invites
 import com.gigforce.profile.datamodel.ProfileData
-import com.gigforce.profile.onboarding.adapter.MultiviewsAdapter
-import com.gigforce.profile.onboarding.models.*
 import com.gigforce.profile.repo.ProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.launch
 import java.util.*
 
 class OnboardingFragmentNewViewModel : ViewModel() {
@@ -44,112 +44,123 @@ class OnboardingFragmentNewViewModel : ViewModel() {
 
     }
 
-    fun saveInterest(selectedInterest: ArrayList<String>) {
-        profileFirebaseRepository.setData("interests", selectedInterest)
+    fun saveInterest(selectedInterest: ArrayList<String>, deliveryExecutiveExperience: Boolean, experiences: ArrayList<String>) = viewModelScope.launch {
+        try {
+            profileFirebaseRepository.setInterestData(selectedInterest, deliveryExecutiveExperience, experiences)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
-    fun saveJobPreference(fullTimeJob: Boolean) {
-        profileFirebaseRepository.setDataAsKeyValue("jobType", fullTimeJob)
 
+    fun saveJobPreference(jobType: String,workingDays: ArrayList<String>,timeSlots: ArrayList<String>) = viewModelScope.launch {
+        try {
+            profileFirebaseRepository.setJobPreferenceData(jobType, workingDays,timeSlots)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun saveDaysPreference(workingDays: ArrayList<String>) {
-        profileFirebaseRepository.setData("workingDays",workingDays)
+        profileFirebaseRepository.setData("workingDays", workingDays)
     }
 
     fun saveTimeSlots(timeSlots: ArrayList<String>) {
-        profileFirebaseRepository.setData("timeSlots",timeSlots)
+        profileFirebaseRepository.setData("timeSlots", timeSlots)
     }
+
     fun saveAssets(assetsData: Map<String, Any>) {
         profileFirebaseRepository.setData(assetsData)
     }
-    fun onboardingCompleted(){
+
+    fun onboardingCompleted() {
         profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
     }
+
     fun setOnboardingCompleted(
-        invite: String?,
-        inviteByAmbassador: String,
-        ambassadorLatitude:Double,
-        ambassadorLongitude:Double,
-        roleID: String,
-        jobProfileId: String,username:String
+            invite: String?,
+            inviteByAmbassador: String,
+            ambassadorLatitude: Double,
+            ambassadorLongitude: Double,
+            roleID: String,
+            jobProfileId: String, username: String
     ) {
         if (!invite.isNullOrEmpty()) {
             var listener: ListenerRegistration? = null
             listener = profileFirebaseRepository.getCollectionReference()
-                .document(invite).addSnapshotListener { snapshot, err ->
-                    listener?.remove()
-                    run {
-                        val obj = snapshot?.toObject(ProfileData::class.java) ?: return@run
-                        if (obj?.invited == null) {
-                            profileFirebaseRepository.getCollectionReference()
-                                .document(invite)
-                                .update(
-                                    "invited",
-                                    arrayListOf(
-                                        Invites(
-                                            profileFirebaseRepository.getUID(),
-                                            Date(),
-                                            roleID,
-                                            jobProfileId
+                    .document(invite).addSnapshotListener { snapshot, err ->
+                        listener?.remove()
+                        run {
+                            val obj = snapshot?.toObject(ProfileData::class.java) ?: return@run
+                            if (obj.invited == null) {
+                                profileFirebaseRepository.getCollectionReference()
+                                        .document(invite)
+                                        .update(
+                                                "invited",
+                                                arrayListOf(
+                                                        Invites(
+                                                                profileFirebaseRepository.getUID(),
+                                                                Date(),
+                                                                roleID,
+                                                                jobProfileId
+                                                        )
+                                                )
                                         )
-                                    )
-                                )
 
 //                                    EnrolledUser(uid = profileFirebaseRepository.uid,enrolledBy = invite, enrolledByLink = true )
-                        } else {
-                            profileFirebaseRepository.getCollectionReference()
-                                .document(invite)
-                                .update(
-                                    "invited",
-                                    FieldValue.arrayUnion(
-                                        Invites(
-                                            profileFirebaseRepository.getUID(),
-                                            Date(), roleID, jobProfileId
+                            } else {
+                                profileFirebaseRepository.getCollectionReference()
+                                        .document(invite)
+                                        .update(
+                                                "invited",
+                                                FieldValue.arrayUnion(
+                                                        Invites(
+                                                                profileFirebaseRepository.getUID(),
+                                                                Date(), roleID, jobProfileId
+                                                        )
+                                                )
                                         )
-                                    )
-                                )
+
+                            }
+                            if (inviteByAmbassador.isNotBlank()) {
+
+                                profileFirebaseRepository.getDBCollection()
+                                        .update(
+                                                "enrolledBy",
+                                                EnrollmentInfo(id = invite, enrolledOn = Timestamp.now())
+
+                                        )
+                                profileFirebaseRepository.getDBCollection()
+                                        .update(
+                                                "enrolledByLink",
+                                                true
+
+                                        )
+                                profileFirebaseRepository.db.collection("Ambassador_Enrolled_User")
+                                        .document(invite).collection("Enrolled_Users")
+                                        .document(profileFirebaseRepository.uid).set(
+                                                mapOf(
+                                                        "uid" to profileFirebaseRepository.uid,
+                                                        "enrolledBy" to invite,
+                                                        "enrolledOn" to Timestamp.now(),
+                                                        "enrolledByLink" to true,
+                                                        "name" to username,
+                                                        "mobileNumber" to getNumberWithoutNineone(FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()),
+                                                        "locationLogs" to FieldValue.arrayUnion(
+                                                                mapOf(
+                                                                        "userDetailsUploaded" to true,
+                                                                        "latitude" to ambassadorLatitude,
+                                                                        "longitude" to ambassadorLongitude,
+                                                                        "entryType" to "create_by_user",
+                                                                        "addedOn" to Timestamp.now()
+                                                                )
+                                                        )
+                                                )
+                                        )
+                            }
 
                         }
-                        if (inviteByAmbassador.isNotBlank()) {
-
-                            profileFirebaseRepository.getDBCollection()
-                                .update(
-                                    "enrolledBy",
-                                    EnrollmentInfo(id = invite, enrolledOn = Timestamp.now())
-
-                                )
-                            profileFirebaseRepository.getDBCollection()
-                                .update(
-                                    "enrolledByLink",
-                                    true
-
-                                )
-                            profileFirebaseRepository.db.collection("Ambassador_Enrolled_User")
-                                .document(invite).collection("Enrolled_Users")
-                                .document(profileFirebaseRepository.uid).set(
-                                    mapOf(
-                                        "uid" to profileFirebaseRepository.uid,
-                                        "enrolledBy" to invite,
-                                        "enrolledOn" to Timestamp.now(),
-                                        "enrolledByLink" to true,
-                                        "name" to username,
-                                        "mobileNumber" to getNumberWithoutNineone(FirebaseAuth.getInstance().currentUser?.phoneNumber.toString()),
-                                        "locationLogs" to FieldValue.arrayUnion(
-                                            mapOf(
-                                                "userDetailsUploaded" to true,
-                                                "latitude" to ambassadorLatitude,
-                                                "longitude" to ambassadorLongitude,
-                                                "entryType" to "create_by_user",
-                                                "addedOn" to Timestamp.now()
-                                            )
-                                        )
-                                    )
-                                )
-                        }
-
                     }
-                }
 
 
         }
@@ -157,14 +168,12 @@ class OnboardingFragmentNewViewModel : ViewModel() {
         profileFirebaseRepository.setDataAsKeyValue("isonboardingdone", true)
     }
 
-    fun getNumberWithoutNineone(mobileNumber:String):String{
-        if(mobileNumber.contains("+91")){
+    fun getNumberWithoutNineone(mobileNumber: String): String {
+        if (mobileNumber.contains("+91")) {
             return mobileNumber.takeLast(10)
         }
         return mobileNumber
     }
-
-
 
 
 }

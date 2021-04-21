@@ -86,11 +86,13 @@
                 android:id="@+id/major_cities_recyclerview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:adjustViewBounds="true"
                 android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
                 android:nestedScrollingEnabled="true"
-                android:layout_marginEnd="16dp" />
+                />
 
 
             <TextView

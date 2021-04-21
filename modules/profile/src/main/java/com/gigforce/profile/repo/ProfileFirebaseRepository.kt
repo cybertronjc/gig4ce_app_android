@@ -1,5 +1,6 @@
 package com.gigforce.profile.repo
 
+import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -494,5 +495,26 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 //                    cont.resumeWithException(it)
 //                }
 //        }
+
+    suspend fun setInterestData(interests:ArrayList<String>,deliveryExecutiveExperience:Boolean,DEList : ArrayList<String>){
+        firebaseDB.collection(profileCollectionName)
+                .document(uid)
+                .updateOrThrow(mapOf(
+                        "interests" to interests,
+                        "interest.interests" to interests,
+                        "interest.deliveryExecutiveExperience" to deliveryExecutiveExperience,
+                        "interest.experiences" to DEList
+                ))
+    }
+
+    suspend fun setJobPreferenceData(jobType:String,workingDays:ArrayList<String>,timeSlots : ArrayList<String>){
+        firebaseDB.collection(profileCollectionName)
+                .document(uid)
+                .updateOrThrow(mapOf(
+                        "jobType" to jobType,
+                        "workingDays" to workingDays,
+                        "timeSlots" to timeSlots
+                ))
+    }
 
 }

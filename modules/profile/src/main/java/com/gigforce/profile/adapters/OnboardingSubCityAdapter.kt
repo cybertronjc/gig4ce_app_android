@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
@@ -16,8 +15,8 @@ class OnboardingSubCityAdapter(
 ) : RecyclerView.Adapter<OnboardingSubCityAdapter.OnboardingSubCityViewHolder>() {
 
 
+    private var selectedSubCityList: List<String> = emptyList()
     private var originalSubCityList: List<String> = emptyList()
-    private var selectedItemIndex: Int = -1
 
     private var onSubCitySelectedListener: OnSubCitySelectedListener? = null
 
@@ -35,18 +34,6 @@ class OnboardingSubCityAdapter(
         return OnboardingSubCityViewHolder(view)
     }
 
-    fun getSelectedItemIndex(): Int {
-        return selectedItemIndex
-    }
-
-    fun resetSelectedItem() {
-        if (selectedItemIndex == -1)
-            return
-
-        val tempIndex = selectedItemIndex
-        selectedItemIndex = -1
-        notifyItemChanged(tempIndex)
-    }
 
     override fun getItemCount(): Int {
         return originalSubCityList.size
@@ -56,46 +43,41 @@ class OnboardingSubCityAdapter(
         holder.bindValues(originalSubCityList.get(position), position)
     }
 
-    fun setData(contacts: List<String>) {
+    fun setData(contacts: List<String>, selectedCityList: List<String>) {
 
-        this.selectedItemIndex = -1
         this.originalSubCityList = contacts
-        //this.filteredCityList = contacts
+        this.selectedSubCityList = selectedCityList
         notifyDataSetChanged()
     }
 
 
     inner class OnboardingSubCityViewHolder(
             itemView: View
-    ) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    ) : RecyclerView.ViewHolder(itemView), CompoundButton.OnCheckedChangeListener {
 
         //private var subCityName: TextView = itemView.findViewById(R.id.sub_city_title)
         private var subCityCheckbox: CheckBox = itemView.findViewById(R.id.checkbox)
 
         init {
-            itemView.setOnClickListener(this)
+//            itemView.setOnClickListener(this)
             subCityCheckbox.setOnCheckedChangeListener(this@OnboardingSubCityViewHolder)
         }
 
         fun bindValues(subCity: String, position: Int) {
             subCityCheckbox.text = subCity
-
-//            if (selectedItemIndex == position) {
-//                cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.lipstick, null))
-//                cityNameTv.setTypeface(null, Typeface.BOLD)
-//            } else {
-//                cityNameTv.setTextColor(ResourcesCompat.getColor(context.resources, R.color.black, null))
-//                cityNameTv.setTypeface(null, Typeface.NORMAL)
-//            }
+            var found = false
+            if (selectedSubCityList.size > 0) {
+                found = selectedSubCityList.contains(subCity)
+            }
+            subCityCheckbox.isChecked = found
         }
 
-        override fun onClick(v: View?) {
-            val subCity = originalSubCityList.get(adapterPosition)
-
-            subCityCheckbox.performClick()
-            onSubCitySelectedListener?.onSubCitySelected(subCityCheckbox.isChecked, subCity)
-        }
+//        override fun onClick(v: View?) {
+//            val subCity = originalSubCityList.get(adapterPosition)
+//
+//            subCityCheckbox.performClick()
+//            onSubCitySelectedListener?.onSubCitySelected(subCityCheckbox.isChecked, subCity)
+//        }
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
             val subCity = originalSubCityList.get(adapterPosition)

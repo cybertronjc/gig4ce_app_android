@@ -169,6 +169,7 @@
                 android:textSize="1sp"
                 android:cursorVisible="false"
                 android:layout_marginStart="@dimen/size8"
+                android:digits="0123456789"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
                 app:layout_constraintEnd_toEndOf="@+id/ll_note_login"
                 app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
