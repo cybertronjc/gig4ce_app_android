@@ -3,6 +3,9 @@ package com.gigforce.app.modules.auth.ui.main
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,12 +16,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.Credentials
+import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.common.api.GoogleApiClient
 import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
 import java.util.regex.Matcher
@@ -30,8 +37,8 @@ class Login : BaseFragment() {
         fun newInstance() = Login()
         val PERMISSION_REQ_CODE = 100
         val permissionsRequired = arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_PHONE_NUMBERS
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
         )
         var MOBILENO_INPUT_CHANGED = false
 
@@ -48,6 +55,8 @@ class Login : BaseFragment() {
     private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
     private var win: Window? = null
+    private val RC_HINT = 9
+    var mCredentialsApiClient: GoogleApiClient? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,9 +72,9 @@ class Login : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
@@ -87,8 +96,10 @@ class Login : BaseFragment() {
             listeners()
             observer()
             //setClickListnerOnEditTexts()
+            requestHint()
 
-            //back button
+
+        //back button
             back_button_login.setOnClickListener {
                 hideKeyboard()
                 activity?.onBackPressed()
@@ -107,7 +118,7 @@ class Login : BaseFragment() {
             Log.d("mobile sixe", mobile)
             for (i in 0..mobile.length - 1){
                 arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
-                Log.d("array size", ""+arrayEditTexts1.size )
+                Log.d("array size", "" + arrayEditTexts1.size)
             }
 //            login_button.isEnabled = true
 //            login_button.background = resources.getDrawable(R.drawable.gradient_button)
@@ -127,19 +138,28 @@ class Login : BaseFragment() {
         win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
     }
 
+    @Throws(IntentSender.SendIntentException::class)
+    private fun requestHint() {
+        val hintRequest = HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build()
+        val intent: PendingIntent? = context?.let { Credentials.getClient(it).getHintPickerIntent(hintRequest) }
+        startIntentSenderForResult(intent?.getIntentSender(), RC_HINT, null, 0, 0, 0, null)
+    }
+
 
     private fun prepareEditTextList() {
         arrayEditTexts1 = arrayListOf(
-            mobile_digit_1,
-            mobile_digit_2,
-            mobile_digit_3,
-            mobile_digit_4,
-            mobile_digit_5,
-            mobile_digit_6,
-            mobile_digit_7,
-            mobile_digit_8,
-            mobile_digit_9,
-            mobile_digit_10
+                mobile_digit_1,
+                mobile_digit_2,
+                mobile_digit_3,
+                mobile_digit_4,
+                mobile_digit_5,
+                mobile_digit_6,
+                mobile_digit_7,
+                mobile_digit_8,
+                mobile_digit_9,
+                mobile_digit_10
         )
     }
 
@@ -183,7 +203,7 @@ class Login : BaseFragment() {
             removeIntroComplete()
             popFragmentFromStack(R.id.Login)
             navigate(
-                R.id.authFlowFragment
+                    R.id.authFlowFragment
             )
             dialog?.dismiss()
         }
@@ -207,10 +227,10 @@ class Login : BaseFragment() {
         if (getNavigationController().currentDestination?.id == R.id.Login) {
             try {
                 findNavController().navigate(
-                    LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
-                        makeMobileNumberString()
-                    )
+                        LoginDirections.actionLogin2ToVerifyOTP(
+                                viewModel.verificationId!!,
+                                makeMobileNumberString()
+                        )
                 )
             } catch (e: Exception) {
             }
@@ -232,7 +252,7 @@ class Login : BaseFragment() {
             }
             if (it.toString().length > 0){
                 //fill the boxes
-                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length-1].toString(), true)
+                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length - 1].toString(), true)
             }
             if (it.toString().length < makeMobileNumberString().length) {
                 fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
@@ -250,9 +270,9 @@ class Login : BaseFragment() {
 //                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
 //            }
 
-             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
-                 login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 doActionOnClick()
             }
             false
@@ -341,14 +361,33 @@ class Login : BaseFragment() {
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                requireActivity(),
-                android.R.layout.select_dialog_item,
-                deviceMobileNos
+                    requireActivity(),
+                    android.R.layout.select_dialog_item,
+                    deviceMobileNos
             )
 //            makeMobileNumberString().threshold = 1
 //            invisible_edit_mobile.setAdapter(
 //                    adapter
 //            )
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
+
+            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+            if (credential.id != null){
+                invisible_edit_mobile.setText(credential.id.substring(3))
+                populateMobileInEditTexts(credential.id.substring(3))
+                Log.d("phone detected", credential.id.substring(3))
+            }
+            else {
+                Log.d("phone detected", "Couldn't detect Phone number")
+            }
+
+
         }
     }
 
