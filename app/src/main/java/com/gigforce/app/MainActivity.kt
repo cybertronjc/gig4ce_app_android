@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -35,12 +36,13 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
-
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -53,7 +55,8 @@ class MainActivity : AppCompatActivity(),
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
-
+    val MIXPANEL_TOKEN = "536f16151a9da631a385119be6510d56"
+    var mixpanel : MixpanelAPI? = null
     private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
@@ -154,6 +157,23 @@ class MainActivity : AppCompatActivity(),
         if (firebaseAuth.currentUser != null) {
             lookForNewChatMessages()
         }
+
+        mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
+        val props = JSONObject()
+
+        props.put("genre", "hip-hop")
+        props.put("duration in seconds", 42)
+
+        mixpanel?.track("Video play", props)
+
+        // Ensure all future events sent from
+// the device will have the distinct_id 13793
+        mixpanel?.identify("100001");
+
+
+// Ensure all future user profile properties sent from
+// the device will have the distinct_id 13793
+        mixpanel?.getPeople()?.identify("100001");
     }
 
     private fun lookForNewChatMessages() {
@@ -260,6 +280,8 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
+        mixpanel?.flush();
+
     }
 
     override fun onBackPressed() {
