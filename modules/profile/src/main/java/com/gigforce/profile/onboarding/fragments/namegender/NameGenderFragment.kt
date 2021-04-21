@@ -8,9 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.google.gson.JsonObject
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.name_gender_item.*
+import javax.inject.Inject
 
 
 /**
@@ -18,11 +23,14 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,
     OnboardingFragmentNew.FragmentInteractionListener {
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
+
+    @Inject lateinit var eventTracker: IEventTracker
     var gender = ""
     private var win: Window? = null
     override fun onCreateView(
@@ -149,6 +157,12 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun nextButtonActionFound(): Boolean {
+        var props = HashMap<String, Any>()
+        props.put("Name", username.text.toString())
+        props.put("Gender", gender)
+        eventTracker.pushEvent(TrackingEventArgs("Name and Gender",props))
+        eventTracker.setUserProperty(props)
+
         return false
     }
 

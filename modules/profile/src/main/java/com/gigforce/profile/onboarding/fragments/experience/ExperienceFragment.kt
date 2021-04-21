@@ -5,12 +5,20 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.google.android.material.radiobutton.MaterialRadioButton
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.age_group_item.*
 import kotlinx.android.synthetic.main.experience_item.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
     Fragment() ,OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener{
 
@@ -19,6 +27,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
             ExperienceFragment(formCompletionListener)
     }
 
+    @Inject lateinit var eventTracker: IEventTracker
     private lateinit var viewModel: ExperienceViewModel
     var workStatus = ""
     var istotalExperienceSelected = false
@@ -105,6 +114,13 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun nextButtonActionFound(): Boolean {
+       // var radioButton: MaterialRadioButton? = view?.findViewById<View>(age_group.checkedRadioButtonId) as MaterialRadioButton?
+        var props = HashMap<String, Any>()
+        props.put("Working Status", workStatus)
+        //props.put("Total Experience", radioButton?.text.toString())
+
+        eventTracker.pushEvent(TrackingEventArgs("Experience",props))
+        eventTracker.setUserProperty(props)
         return false
     }
 
