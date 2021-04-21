@@ -10,14 +10,19 @@ import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MainApplication : Application() {
 
+    val MIXPANEL_TOKEN = "536f16151a9da631a385119be6510d56"
+    var mixpanel : MixpanelAPI? = null
+
     override fun onCreate() {
         super.onCreate()
         setupCleverTap()
+        setupMixpanel()
         setUpCrashlyticsUser()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
@@ -27,6 +32,10 @@ class MainApplication : Application() {
         FirebaseAuth.getInstance().currentUser?.let {
             FirebaseCrashlytics.getInstance().setUserId(it.uid)
         }
+    }
+
+    private fun setupMixpanel(){
+        mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
     }
 
     private fun setupCleverTap() {

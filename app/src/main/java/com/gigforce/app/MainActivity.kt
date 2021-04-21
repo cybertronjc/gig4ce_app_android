@@ -159,21 +159,26 @@ class MainActivity : AppCompatActivity(),
         }
 
         mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
+        if (firebaseAuth?.currentUser?.phoneNumber != null){
+            mixpanel?.identify(firebaseAuth?.currentUser?.phoneNumber);
+            mixpanel?.getPeople()?.identify(firebaseAuth?.currentUser?.phoneNumber)
+            mixpanel?.track("User identified")
+        }
         val props = JSONObject()
 
-        props.put("genre", "hip-hop")
-        props.put("duration in seconds", 42)
-
-        mixpanel?.track("Video play", props)
+//        props.put("genre", "hip-hop")
+//        props.put("duration in seconds", 42)
+//
+//        mixpanel?.track("Video play", props)
 
         // Ensure all future events sent from
 // the device will have the distinct_id 13793
-        mixpanel?.identify("100001");
+       // mixpanel?.identify(firebaseAuth.currentUser.phoneNumber);
 
 
 // Ensure all future user profile properties sent from
 // the device will have the distinct_id 13793
-        mixpanel?.getPeople()?.identify("100001");
+        //mixpanel?.getPeople()?.identify(firebaseAuth.currentUser.phoneNumber);
     }
 
     private fun lookForNewChatMessages() {

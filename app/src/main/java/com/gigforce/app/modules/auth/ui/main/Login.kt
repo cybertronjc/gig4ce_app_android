@@ -3,6 +3,7 @@ package com.gigforce.app.modules.auth.ui.main
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,12 +14,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.Credentials
+import com.google.android.gms.auth.api.credentials.HintRequest
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
 import java.util.regex.Matcher
@@ -30,8 +36,8 @@ class Login : BaseFragment() {
         fun newInstance() = Login()
         val PERMISSION_REQ_CODE = 100
         val permissionsRequired = arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_PHONE_NUMBERS
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
         )
         var MOBILENO_INPUT_CHANGED = false
 
@@ -48,7 +54,8 @@ class Login : BaseFragment() {
     private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
     private var win: Window? = null
-
+    private var mixpanel: MixpanelAPI? = null
+    private val CREDENTIAL_PICKER_REQUEST = 9
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,12 +70,14 @@ class Login : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
+
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+
         return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
     }
 
@@ -77,6 +86,9 @@ class Login : BaseFragment() {
 //        if (getIntroCompleted() == null || getIntroCompleted().equals("")) {
 //            navigateWithAllPopupStack(R.id.authFlowFragment)
 //        } else {
+
+            mixpanel = (activity?.application as MainApplication).mixpanel
+            mixpanel?.track("Login Screen")
             viewModel.activity = this.requireActivity()
             invisible_edit_mobile.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)
@@ -86,6 +98,7 @@ class Login : BaseFragment() {
             prepareEditTextList()
             listeners()
             observer()
+
             //setClickListnerOnEditTexts()
 
             //back button
@@ -107,7 +120,7 @@ class Login : BaseFragment() {
             Log.d("mobile sixe", mobile)
             for (i in 0..mobile.length - 1){
                 arrayEditTexts1.get(i).setText(mobile.toCharArray().get(i).toString())
-                Log.d("array size", ""+arrayEditTexts1.size )
+                Log.d("array size", "" + arrayEditTexts1.size)
             }
 //            login_button.isEnabled = true
 //            login_button.background = resources.getDrawable(R.drawable.gradient_button)
@@ -127,19 +140,18 @@ class Login : BaseFragment() {
         win?.setStatusBarColor(resources.getColor(R.color.colorStatusBar))
     }
 
-
     private fun prepareEditTextList() {
         arrayEditTexts1 = arrayListOf(
-            mobile_digit_1,
-            mobile_digit_2,
-            mobile_digit_3,
-            mobile_digit_4,
-            mobile_digit_5,
-            mobile_digit_6,
-            mobile_digit_7,
-            mobile_digit_8,
-            mobile_digit_9,
-            mobile_digit_10
+                mobile_digit_1,
+                mobile_digit_2,
+                mobile_digit_3,
+                mobile_digit_4,
+                mobile_digit_5,
+                mobile_digit_6,
+                mobile_digit_7,
+                mobile_digit_8,
+                mobile_digit_9,
+                mobile_digit_10
         )
     }
 
@@ -183,7 +195,7 @@ class Login : BaseFragment() {
             removeIntroComplete()
             popFragmentFromStack(R.id.Login)
             navigate(
-                R.id.authFlowFragment
+                    R.id.authFlowFragment
             )
             dialog?.dismiss()
         }
@@ -207,10 +219,10 @@ class Login : BaseFragment() {
         if (getNavigationController().currentDestination?.id == R.id.Login) {
             try {
                 findNavController().navigate(
-                    LoginDirections.actionLogin2ToVerifyOTP(
-                        viewModel.verificationId!!,
-                        makeMobileNumberString()
-                    )
+                        LoginDirections.actionLogin2ToVerifyOTP(
+                                viewModel.verificationId!!,
+                                makeMobileNumberString()
+                        )
                 )
             } catch (e: Exception) {
             }
@@ -232,7 +244,7 @@ class Login : BaseFragment() {
             }
             if (it.toString().length > 0){
                 //fill the boxes
-                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length-1].toString(), true)
+                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length - 1].toString(), true)
             }
             if (it.toString().length < makeMobileNumberString().length) {
                 fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
@@ -250,9 +262,9 @@ class Login : BaseFragment() {
 //                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
 //            }
 
-             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false;
-                 login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
                 doActionOnClick()
             }
             false
@@ -341,14 +353,27 @@ class Login : BaseFragment() {
                 deviceMobileNos.add(oldDeviceMobileNosList.get(i))
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-                requireActivity(),
-                android.R.layout.select_dialog_item,
-                deviceMobileNos
+                    requireActivity(),
+                    android.R.layout.select_dialog_item,
+                    deviceMobileNos
             )
 //            makeMobileNumberString().threshold = 1
 //            invisible_edit_mobile.setAdapter(
 //                    adapter
 //            )
+        }
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            CREDENTIAL_PICKER_REQUEST ->
+                // Obtain the phone number from the result
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val credential = data.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
+                    // credential.getId();  <-- will need to process phone number string
+                }
+            // ...
         }
     }
 

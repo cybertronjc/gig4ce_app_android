@@ -18,6 +18,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
@@ -26,6 +27,7 @@ import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGN
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
@@ -54,6 +56,7 @@ class VerifyOTP : BaseFragment() {
 //    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
     //var appSignature = AppSignatureHelper(context)
     private var win: Window? = null
+    private var mixpanel: MixpanelAPI? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +81,8 @@ class VerifyOTP : BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-
+        mixpanel = (activity?.application as MainApplication).mixpanel
+        mixpanel?.track("OTP verification screen")
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -200,6 +204,7 @@ class VerifyOTP : BaseFragment() {
         viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
+                mixpanel?.track("Entered wrong OTP")
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
@@ -317,6 +322,7 @@ class VerifyOTP : BaseFragment() {
 
         }
     }
+
 
     override fun onBackPressed(): Boolean {
 

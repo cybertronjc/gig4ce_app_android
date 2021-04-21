@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.app.MainApplication
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -11,6 +12,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -33,6 +35,7 @@ class LoginViewModel() : ViewModel() {
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
+    val mixpanelAPI: MixpanelAPI? = MainApplication().mixpanel
 
     init {
         FirebaseAuth.getInstance().currentUser.let {
@@ -105,6 +108,7 @@ class LoginViewModel() : ViewModel() {
                 .addOnSuccessListener {
                     registerFirebaseToken()
                     Log.d(TAG, "Signed in successfully")
+
                 }
                 .addOnFailureListener {
                     Log.d(TAG, "Signed in failed")
