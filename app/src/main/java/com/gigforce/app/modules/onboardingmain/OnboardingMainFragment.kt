@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -312,9 +313,9 @@ class OnboardingMainFragment : BaseFragment() {
         next.isEnabled = enable
 
         if (enable) {
-            next.background = resources.getDrawable(R.drawable.app_gradient_button, null);
+            next.background = ResourcesCompat.getDrawable(resources,R.drawable.app_gradient_button,null)
         } else {
-            next.background = resources.getDrawable(R.drawable.app_gradient_button_disabled, null);
+            next.background =  ResourcesCompat.getDrawable(resources,R.drawable.app_gradient_button_disabled,null)
         }
 
 

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="3dp"
-    tools:context=".modules.gigPage.RateGigDialogFragment">
+    tools:context=".modules.gigPage2.dialogFragments.RateGigDialogFragment">
 
 
     <LinearLayout

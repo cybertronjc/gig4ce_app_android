@@ -100,9 +100,9 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
             return
         }
 
-        if (location == null) {
-            showAlertDialog("", getString(R.string.location_error))
-        }
+//        if (location == null) {
+//            showAlertDialog("", getString(R.string.location_error))
+//        }
 
         viewModel.checkOtpAndCreateProfile(
                 userId = userId,
@@ -110,16 +110,19 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
                 token = verificationToken,
                 otp = txt_otp.text.toString(),
                 mobile = mobileNo,
-                latitude = location!!.latitude,
-                longitude = location!!.longitude,
-                fullAddress = processLocationAndUpdateUserDetails(location!!)
+                latitude = location?.latitude ?: 0.0,
+                longitude = location?.longitude ?: 0.0,
+                fullAddress = processLocationAndUpdateUserDetails(location)
         )
     }
 
-    fun processLocationAndUpdateUserDetails(location: Location) : String {
+    fun processLocationAndUpdateUserDetails(location: Location?) : String {
 
-        val latitude: Double = location.latitude ?: 0.0
-        val longitude: Double = location.longitude ?: 0.0
+        if(location == null)
+            return ""
+
+        val latitude: Double = location?.latitude ?: 0.0
+        val longitude: Double = location?.longitude ?: 0.0
 
         var locationAddress = ""
         try {

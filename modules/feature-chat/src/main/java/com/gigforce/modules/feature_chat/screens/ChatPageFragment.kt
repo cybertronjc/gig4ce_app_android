@@ -152,12 +152,19 @@ class ChatPageFragment : Fragment(),
         validateIfRequiredDataIsAvailable()
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources,R.color.lipstick_2,null))
 
+        checkForPermissionElseRequest()
         cancelAnyNotificationIfShown()
         findViews(view)
         init()
         manageNewMessageToContact()
         checkForChatTypeAndSubscribeToRespectiveViewModel()
         hideSoftKeyboard()
+    }
+
+    private fun checkForPermissionElseRequest() {
+        if(!isStoragePermissionGranted()){
+            askForStoragePermission()
+        }
     }
 
     private fun cancelAnyNotificationIfShown() {
@@ -728,7 +735,7 @@ class ChatPageFragment : Fragment(),
             } else
                 Toast.makeText(
                         requireContext(),
-                        "Please grant storage permission, to pick files",
+                        "Please grant storage permission",
                         Toast.LENGTH_SHORT
                 ).show()
         }

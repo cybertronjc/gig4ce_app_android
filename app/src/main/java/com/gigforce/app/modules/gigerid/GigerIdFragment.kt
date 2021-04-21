@@ -16,9 +16,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.app.modules.gigPage.models.Gig
-import com.gigforce.app.modules.gigPage.models.GigOrder
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigOrder
 import com.gigforce.app.utils.*
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
@@ -27,6 +27,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -55,6 +56,7 @@ class GigerIdFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
@@ -91,7 +93,7 @@ class GigerIdFragment : BaseFragment() {
             showToast(it!!)
         })
         viewModelGigerID.observableUserProfileDataSuccess.observe(viewLifecycleOwner, Observer {
-            viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
+            viewModelGigerID.getGigDetails(arguments?.getString(GigPage2Fragment.INTENT_EXTRA_GIG_ID))
 
             viewModelGigerID.getProfilePicture(it?.profileAvatarName ?: "--")
             tv_giger_name_giger_id.text = it?.name ?: "--"

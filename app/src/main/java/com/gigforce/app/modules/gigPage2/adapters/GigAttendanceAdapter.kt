@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import kotlinx.android.synthetic.main.recycler_item_gig_attendance.view.*
 import java.text.SimpleDateFormat
@@ -25,13 +25,14 @@ class GigAttendanceAdapter(
 
     private var originalGigs: List<Gig> = emptyList()
     private var gigs: List<Gig> = emptyList()
+
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigAttendanceAdapterClickListener? = null
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     fun setListener(otherOptionClickListener: GigAttendanceAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener
-    }
+    }//9983088869
 
     fun updateAttendanceList(gigs: List<Gig>) {
         this.originalGigs = gigs
@@ -47,7 +48,7 @@ class GigAttendanceAdapter(
     fun showPresentAttendances() {
         gigs = originalGigs.filter {
             val gigStats = GigStatus.fromGig(it)
-            gigStats == GigStatus.COMPLETED && gigStats == GigStatus.ONGOING
+            gigStats == GigStatus.COMPLETED || gigStats == GigStatus.ONGOING
         }
         notifyDataSetChanged()
     }
@@ -55,7 +56,7 @@ class GigAttendanceAdapter(
     fun showAbsentAttendances() {
         gigs = originalGigs.filter {
             val gigStats = GigStatus.fromGig(it)
-            gigStats == GigStatus.DECLINED && gigStats == GigStatus.MISSED && gigStats == GigStatus.NO_SHOW
+            gigStats == GigStatus.DECLINED || gigStats == GigStatus.MISSED || gigStats == GigStatus.NO_SHOW
         }
         notifyDataSetChanged()
     }

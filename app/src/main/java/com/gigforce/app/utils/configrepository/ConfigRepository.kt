@@ -2,12 +2,9 @@ package com.gigforce.app.utils.configrepository
 
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.gigPage.models.Gig
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class ConfigRepository : BaseFirestoreDBRepository {
     var COLLECTION_NAME = "Configuration";

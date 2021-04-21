@@ -33,5 +33,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/whatsYourRateTv" />
 
+    <TextView
+        android:id="@+id/userFeedbackTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:text="User Feedback : "
+        android:textColor="@color/black"
+        android:visibility="gone"
+ />
+
 
 </LinearLayout>

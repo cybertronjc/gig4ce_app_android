@@ -65,7 +65,7 @@ abstract class TextMessageView(
         containerView.setOnLongClickListener(this)
 
         val screenWidth = DisplayUtil.getScreenWidthInPx(context)
-        val maxWidth = (screenWidth * 0.80).toInt()
+        val maxWidth = (screenWidth * 0.70).toInt()
         msgView.maxWidth = maxWidth
     }
 

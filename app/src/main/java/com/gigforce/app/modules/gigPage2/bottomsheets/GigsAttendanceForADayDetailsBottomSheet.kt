@@ -13,8 +13,8 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.utils.Lce

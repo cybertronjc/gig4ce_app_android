@@ -13,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,8 +64,6 @@ class LoginSuccessfulFragment : BaseFragment() {
 //            popFragmentFromStack(R.id.homeScreenIcons)
 //            navigateWithAllPopupStack(R.id.homeScreenIcons1);
 //        }
-
-
         checkForGpsPermissionsAndGpsStatus()
     }
 
@@ -88,7 +85,6 @@ class LoginSuccessfulFragment : BaseFragment() {
                 } else
                     showToast(it.errormsg)
             }
-
         })
     }
 
@@ -119,10 +115,10 @@ class LoginSuccessfulFragment : BaseFragment() {
     fun requestPermissionForGPS() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(
-                    arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    ), GigPageFragment.PERMISSION_FINE_LOCATION
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), PERMISSION_FINE_LOCATION
             )
         }
     }
@@ -181,8 +177,9 @@ class LoginSuccessfulFragment : BaseFragment() {
     }
 
 
+
     private fun canToggleGPS(): Boolean {
-        val pacman = context?.packageManager
+        val pacman = context?.getPackageManager()
         var pacInfo: PackageInfo? = null
         try {
             pacInfo = pacman?.getPackageInfo("com.android.settings", PackageManager.GET_RECEIVERS)
@@ -266,7 +263,7 @@ class LoginSuccessfulFragment : BaseFragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            GigPageFragment.PERMISSION_FINE_LOCATION -> {
+            PERMISSION_FINE_LOCATION -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
@@ -280,5 +277,6 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     companion object {
         const val REQUEST_CODE_TOGGLE_GPS_MANUAL = 121
+        const val PERMISSION_FINE_LOCATION = 233
     }
 }

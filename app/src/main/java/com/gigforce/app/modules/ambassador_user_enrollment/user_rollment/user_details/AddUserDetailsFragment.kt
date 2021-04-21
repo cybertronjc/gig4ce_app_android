@@ -80,6 +80,7 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
             this.setInitialDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1 , 1995)
             this.setCustomYearRange(1950, cal.get(Calendar.YEAR))
             this.setOnDatePickedListener(this@AddUserDetailsFragment)
+            this.setCustomSeparator("/")
         }
     }
 

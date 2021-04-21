@@ -19,9 +19,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.gigPage.GigAttendancePageFragment
-import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.models.Gig
+import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import java.time.LocalDateTime
@@ -202,11 +202,16 @@ class HourViewFragment : RosterBaseFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun scheduleCurrentTimerUpdate() {
         val handler = Handler() { msg ->
-            val datetime = LocalDateTime.now()
-            val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
-            val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
-            current_time_divider.requestLayout()
+            try {
+                val datetime = LocalDateTime.now()
+                val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+                val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
+                current_time_divider.requestLayout()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             true
         }
         timer.scheduleAtFixedRate(object : TimerTask() {
@@ -301,7 +306,7 @@ class HourViewFragment : RosterBaseFragment() {
 
                     currentCard.setOnClickListener {
                         GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
-                            this.putString(GigAttendancePageFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }
 
