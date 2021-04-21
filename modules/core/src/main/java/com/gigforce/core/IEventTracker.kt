@@ -14,7 +14,7 @@ interface IEventTracker {
 
 data class TrackingEventArgs(
     val eventName:String,
-    val props: Map<String, Any>
+    val props: Map<String, Any>?
 ){}
 
 data class UserPropArgs(

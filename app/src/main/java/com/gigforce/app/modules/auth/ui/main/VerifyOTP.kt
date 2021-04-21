@@ -25,22 +25,26 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class VerifyOTP : BaseFragment() {
 
     companion object {
         fun newInstance() = VerifyOTP()
     }
 
-
+    @Inject lateinit var eventTracker : IEventTracker
     private var countDownTimer: CountDownTimer? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
@@ -56,7 +60,7 @@ class VerifyOTP : BaseFragment() {
 //    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
     //var appSignature = AppSignatureHelper(context)
     private var win: Window? = null
-    private var mixpanel: MixpanelAPI? = null
+//    private var mixpanel: MixpanelAPI? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +85,9 @@ class VerifyOTP : BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-        mixpanel = (activity?.application as MainApplication).mixpanel
-        mixpanel?.track("OTP verification screen")
+//        mixpanel = (activity?.application as MainApplication).mixpanel
+        eventTracker.pushEvent(TrackingEventArgs("OTP verification screen",null))
+//        mixpanel?.track("OTP verification screen")
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
