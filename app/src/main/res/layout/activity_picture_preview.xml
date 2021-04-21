@@ -21,11 +21,8 @@
         app:cameraFlash="auto"
         app:cameraGestureTap="autoFocus"
         app:cameraMode="picture"
-        app:cameraPictureSizeAspectRatio="9:16"
-        app:cameraPictureSizeMaxHeight="1280"
         app:cameraPlaySounds="true"
-        app:cameraPreview="glSurface"
-        app:cameraSnapshotMaxWidth="720" />
+        app:cameraPreview="glSurface" />
 
     <ImageView
         android:id="@+id/capture_icon"
