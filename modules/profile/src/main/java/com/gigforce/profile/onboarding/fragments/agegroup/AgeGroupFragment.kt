@@ -4,16 +4,13 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import android.widget.RadioButton
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
-import com.google.android.material.radiobutton.MaterialRadioButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
-import kotlinx.android.synthetic.main.name_gender_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,12 +43,12 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     }
 
     override fun nextButtonActionFound(): Boolean {
-        //var radioButton: MaterialRadioButton = age_group.get(age_group.checkedRadioButtonId) as MaterialRadioButton
-        //var props = HashMap<String, Any>()
-        //props.put("Age", radioButton.text.toString())
+        val radioButton = age_group.checkedRadioButtonId as RadioButton
+        var age = radioButton.text.toString()
+        var map = mapOf("Age" to age)
+        eventTracker.pushEvent(TrackingEventArgs("Age Group",map))
+        eventTracker.setUserProperty(map)
 
-        eventTracker.pushEvent(TrackingEventArgs("Age Group",null))
-        //eventTracker.setUserProperty(props)
         return false
     }
 

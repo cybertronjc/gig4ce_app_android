@@ -129,11 +129,9 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     }
 
     override fun nextButtonActionFound(): Boolean {
-        var props = HashMap<String, Any>()
-        props.put("Highest Qualification", selectedHighestQualification)
-
-        eventTracker.pushEvent(TrackingEventArgs("Highest Qualification",props))
-        eventTracker.setUserProperty(props)
+        var map = mapOf("Qualification" to selectedHighestQualification)
+        eventTracker.pushEvent(TrackingEventArgs("Highest Qualification",map))
+        eventTracker.setUserProperty(map)
         return false
     }
 

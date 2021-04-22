@@ -19,6 +19,8 @@ import com.gigforce.common_image_picker.ImageCropCallback
 import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.FragmentHelper
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.gone
@@ -33,16 +35,21 @@ import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_onboarding_profile_picture.*
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
-class OnboardingAddProfilePictureFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), ImageCropCallback, OnboardingFragmentNew.FragmentSetLastStateListener {
+@AndroidEntryPoint
+class OnboardingAddProfilePictureFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), ImageCropCallback, OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     private var viewShownFirstTime = false
     private val viewModel: OnboardingViewModel by viewModels()
     private var onboardingProfileData : OnboardingProfileData? = null
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
     private val firebaseStorage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
     }
@@ -341,6 +348,17 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
+    }
+
+    override fun nextButtonActionFound(): Boolean {
+        var map = mapOf("OnboardingDone" to true)
+        eventTracker.pushEvent(TrackingEventArgs("OnboardingDone",map))
+        eventTracker.setUserProperty(map)
+        return false
+    }
+
+    override fun activeNextButton() {
+        formCompletionListener.enableDisableNextButton(true)
     }
 
 }
