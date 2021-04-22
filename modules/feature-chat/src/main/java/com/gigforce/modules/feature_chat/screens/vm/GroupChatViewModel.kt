@@ -273,15 +273,8 @@ class GroupChatViewModel constructor(
                 groupMember.name = matchInContact.name
             } else if (currentUser.phoneNumber!!.contains(groupMember.mobile)) {
                 groupMember.name = "You"
-            } else {
-                //get from Profile name
-
-                try {
-                    val profile = chatProfileFirebaseRepository.getProfileDataIfExist(groupMember.uid)
-                    groupMember.name = profile?.name ?: ""
-                } catch (e: Exception) {
-                    groupMember.name = ""
-                }
+            } else if(groupMember.name == null){
+                groupMember.name = ""
             }
         }
         _groupInfo.value = groupDetails!!
