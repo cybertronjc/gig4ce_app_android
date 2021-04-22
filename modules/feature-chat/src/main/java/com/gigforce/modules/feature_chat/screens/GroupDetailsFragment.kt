@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,6 +38,7 @@ import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat_group_details_main_2.*
 import java.io.File
@@ -282,6 +284,15 @@ class GroupDetailsFragment : Fragment(),
         } else {
             group_deactivated_container.gone()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        ))
     }
 
     private fun showDownloadingDialog() {

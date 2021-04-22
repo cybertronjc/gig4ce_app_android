@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.gigPage2.models.Gig
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.day_view_top_bar.*
 import kotlinx.android.synthetic.main.day_view_top_bar.view.*
 import kotlinx.android.synthetic.main.roster_day_fragment.*
@@ -83,6 +85,15 @@ class RosterDayFragment : RosterBaseFragment() {
 //        rosterViewModel.currentDateTime.value = rosterViewModel.currentDateTime.value
 
         return inflateView(R.layout.roster_day_fragment, inflater, container)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                R.color.white,
+                null
+        ))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

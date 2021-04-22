@@ -24,6 +24,7 @@ import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*
 import java.time.*
@@ -61,6 +62,15 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         initUi()
         initViewModel()
         showMonthYearValueOnViewAndStartFetchingData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                R.color.lipstick_two,
+                null
+        ))
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {

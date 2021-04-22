@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_help_video.*
 
 
@@ -32,6 +34,15 @@ class HelpVideosFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                R.color.lipstick_two,
+                null
+        ))
     }
 
     private fun initView() {
