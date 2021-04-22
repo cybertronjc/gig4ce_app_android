@@ -91,9 +91,7 @@ class Login : BaseFragment() {
 //            navigateWithAllPopupStack(R.id.authFlowFragment)
 //        } else {
 
-//            mixpanel = (activity?.application as MainApplication).mixpanel
-            eventTracker.pushEvent(TrackingEventArgs("User Register",null))
-//            mixpanel?.track("Login Screen")
+            eventTracker.pushEvent(TrackingEventArgs("Login Screen",null))
             viewModel.activity = this.requireActivity()
             invisible_edit_mobile.setText(mobile_number)
             populateMobileInEditTexts(mobile_number)
@@ -211,11 +209,17 @@ class Login : BaseFragment() {
     private fun observer() {
         viewModel.liveState.observeForever {
             when (it.stateResponse) {
-                LoginViewModel.STATE_CODE_SENT -> navigateToOTPVarificationScreen()
-                LoginViewModel.STATE_VERIFY_FAILED -> showToast(it.msg)
-                LoginViewModel.STATE_VERIFY_SUCCESS ->
-
+                LoginViewModel.STATE_CODE_SENT -> {
                     navigateToOTPVarificationScreen()
+                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen",null))
+                }
+                LoginViewModel.STATE_VERIFY_FAILED -> {
+                    showToast(it.msg)
+                    eventTracker.pushEvent(TrackingEventArgs("Login Failed",null))
+                }
+                LoginViewModel.STATE_VERIFY_SUCCESS ->{
+                    navigateToOTPVarificationScreen()
+                    eventTracker.pushEvent(TrackingEventArgs("Login Successful",null))}
             }
         }
     }

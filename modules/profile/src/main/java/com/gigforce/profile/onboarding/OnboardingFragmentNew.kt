@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -38,6 +40,7 @@ class OnboardingFragmentNew : Fragment() {
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject lateinit var eventTracker: IEventTracker
 
     companion object {
         fun newInstance() = OnboardingFragmentNew()
@@ -69,6 +72,8 @@ class OnboardingFragmentNew : Fragment() {
             next_fl.visible()
             setNextButtonForCurrentFragment()
         }
+
+        eventTracker.pushEvent(TrackingEventArgs("Onboarding started", null))
     }
 
 
