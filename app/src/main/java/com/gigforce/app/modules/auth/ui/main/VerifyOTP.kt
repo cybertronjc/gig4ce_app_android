@@ -99,7 +99,7 @@ class VerifyOTP : BaseFragment() {
         listeners()
         observer()
         saveNewUsedMobileNumber()
-        showKeyboard()
+//        showKeyboard()
 //        if(otpresentcounter>=2){
 //            layout.otptimertv.text = "try later!"
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
@@ -118,6 +118,10 @@ class VerifyOTP : BaseFragment() {
         }
 
 
+    }
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
     }
 //    private fun setupSmsRetriver() {
 //        client = context?.let { SmsRetriever.getClient(it) }
@@ -346,8 +350,8 @@ class VerifyOTP : BaseFragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        hideSoftKeyboard()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        hideSoftKeyboard()
+//    }
 }
