@@ -43,7 +43,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     }
 
     override fun nextButtonActionFound(): Boolean {
-        val radioButton = age_group.checkedRadioButtonId as RadioButton
+        val radioButton = age_group.findViewById(age_group.checkedRadioButtonId) as RadioButton
         var age = radioButton.text.toString()
         var map = mapOf("Age" to age)
         eventTracker.pushEvent(TrackingEventArgs("Age Group",map))

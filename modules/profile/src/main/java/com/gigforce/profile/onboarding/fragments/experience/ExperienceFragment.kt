@@ -112,7 +112,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun nextButtonActionFound(): Boolean {
-        val radioButton = total_experience_rg.checkedRadioButtonId as RadioButton
+        val radioButton = total_experience_rg.findViewById( total_experience_rg.checkedRadioButtonId) as RadioButton
         var totalExperience = radioButton.text.toString()
         var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
         eventTracker.pushEvent(TrackingEventArgs("Experience",map))
