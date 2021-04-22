@@ -1,7 +1,6 @@
 package com.gigforce.profile.onboarding.fragments.namegender
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -9,9 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.google.gson.JsonObject
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.name_gender_item.*
+import javax.inject.Inject
 
 
 /**
@@ -19,12 +23,14 @@ import kotlinx.android.synthetic.main.name_gender_item.*
  * Use the [NameGenderFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentSetLastStateListener,
-        OnboardingFragmentNew.FragmentInteractionListener {
+@AndroidEntryPoint
+class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,
+    OnboardingFragmentNew.FragmentInteractionListener {
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
     }
 
+    @Inject lateinit var eventTracker: IEventTracker
     var gender = ""
     private var win: Window? = null
     override fun onCreateView(
@@ -40,33 +46,28 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         super.onViewCreated(view, savedInstanceState)
 
         listener()
-        showKeyboard()
+//        showKeyboard()
 
     }
 
-    fun showKeyboard() {
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
+    }
+
+    fun showKeyboard(){
         username?.let {
-            it.isFocusableInTouchMode = true
+            it.setFocusableInTouchMode(true)
             it.requestFocus()
             val inputMethodManager =
                     activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
             inputMethodManager!!.toggleSoftInputFromWindow(
-                    it.applicationWindowToken,
+                    it.getApplicationWindowToken(),
                     InputMethodManager.SHOW_FORCED, 0
             )
         }
 
     }
-
-    fun hideSoftKeyboard() {
-
-        val activity = activity ?: return
-
-        val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
-    }
-
     private fun listener() {
 
         imageTextCardMol.setOnClickListener(View.OnClickListener {
@@ -92,10 +93,11 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         })
     }
 
-    private fun validateAllValues() {
-        if (!gender.equals("") && !username.text.toString().equals("")) {
+    private fun validateAllValues(){
+        if(!gender.equals("") && !username.text.toString().equals("")){
             formCompletionListener.enableDisableNextButton(true)
-        } else {
+        }
+        else{
             formCompletionListener.enableDisableNextButton(false)
         }
     }
@@ -137,7 +139,7 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     fun hideKeyboard() {
         activity?.let {
             val imm: InputMethodManager =
-                    it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             //Find the currently focused view, so we can grab the correct window token from it.
             var view: View? = it.currentFocus ?: null
             //If no view currently has focus, create a new one, just so we can grab a window token from it
@@ -155,6 +157,12 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun nextButtonActionFound(): Boolean {
+        var props = HashMap<String, Any>()
+        props.put("Name", username.text.toString())
+        props.put("Gender", gender)
+        eventTracker.pushEvent(TrackingEventArgs("Name and Gender",props))
+        eventTracker.setUserProperty(props)
+
         return false
     }
 
@@ -162,20 +170,15 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         validateAllValues()
     }
 
-    private fun changeStatusBarColor() {
+    private fun changeStatusBarColor(){
         win = activity?.window
         // clear FLAG_TRANSLUCENT_STATUS flag:
-        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
 // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 // finally change the color
-        win?.statusBarColor = resources.getColor(R.color.status_bar_gray)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        hideSoftKeyboard()
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 }
