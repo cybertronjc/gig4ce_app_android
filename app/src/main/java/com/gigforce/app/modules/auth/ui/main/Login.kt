@@ -215,11 +215,12 @@ class Login : BaseFragment() {
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
                     showToast(it.msg)
-                    eventTracker.pushEvent(TrackingEventArgs("Login Failed",null))
+                    var map = mapOf("Error" to it.msg)
+                    eventTracker.pushEvent(TrackingEventArgs("Login Error",map))
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS ->{
                     navigateToOTPVarificationScreen()
-                    eventTracker.pushEvent(TrackingEventArgs("Login Successful",null))}
+                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen",null))}
             }
         }
     }
