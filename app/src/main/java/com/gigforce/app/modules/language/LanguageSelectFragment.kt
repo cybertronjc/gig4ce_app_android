@@ -10,10 +10,15 @@ import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.configrepository.ConfigViewModel
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
+import javax.inject.Inject
+import kotlin.collections.HashMap
 
-
+@AndroidEntryPoint
 class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterClickListener {
 
     private val viewModel: ConfigViewModel by viewModels()
@@ -24,6 +29,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         }
     }
 
+    @Inject lateinit var eventTracker: IEventTracker
     private var win: Window? = null
 
     val SUPPORTED_LOCALES =
@@ -63,7 +69,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         listener()
         initViewModel()
 
-
+        eventTracker.pushEvent(TrackingEventArgs("Language selection screen", null))
         //back press
         iv_back_language_fragment.setOnClickListener {
             activity?.onBackPressed()
@@ -160,6 +166,10 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             saveAppLanguageName(language.languageCode)
 
             languageCode = language.languageCode
+            var map = HashMap<String, Any>()
+            map.put("Language", language.languageName)
+            eventTracker.pushEvent(TrackingEventArgs("Language selected", map))
+            eventTracker.setUserProperty(map)
             navNext()
         }
     }
@@ -198,6 +208,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         navigate(
                 R.id.authFlowFragment
         )
+
     }
 
 

@@ -29,7 +29,6 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
-import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.otp_verification.*
 import kotlinx.android.synthetic.main.otp_verification.progressBar
@@ -44,12 +43,7 @@ class VerifyOTP : BaseFragment() {
         fun newInstance() = VerifyOTP()
     }
 
-
-
     @Inject lateinit var eventTracker : IEventTracker
-
-
-
     private var countDownTimer: CountDownTimer? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
@@ -65,8 +59,6 @@ class VerifyOTP : BaseFragment() {
 //    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
     //var appSignature = AppSignatureHelper(context)
     private var win: Window? = null
-//    private var mixpanel: MixpanelAPI? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +82,7 @@ class VerifyOTP : BaseFragment() {
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-//        mixpanel = (activity?.application as MainApplication).mixpanel
         eventTracker.pushEvent(TrackingEventArgs("OTP verification screen",null))
-//        mixpanel?.track("OTP verification screen")
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -223,6 +213,7 @@ class VerifyOTP : BaseFragment() {
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
+                eventTracker.pushEvent(TrackingEventArgs("Signed in successfully",null))
 
 //                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }
@@ -285,6 +276,7 @@ class VerifyOTP : BaseFragment() {
         )
         popAllBackStates()
         navigate(R.id.Login, bundle)
+        eventTracker.pushEvent(TrackingEventArgs("Navigate back to Login screen",null))
 //        navigateWithAllPopupStack(R.id.Login)
     }
 
