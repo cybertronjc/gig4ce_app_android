@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
+import com.gigforce.app.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
@@ -22,15 +23,22 @@ import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.app.modules.profile.ProfileFragment
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_application_client_activation_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ApplicationClientActivationFragment : BaseFragment(),
         AdapterApplicationClientActivation.AdapterApplicationClientActivationCallbacks,
         ReviewApplicationDialogClientActivation.ReviewApplicationDialogCallbacks {
     private var dialog: ReviewApplicationDialogClientActivation? = null
     private lateinit var viewModel: ApplicationClientActivationViewModel
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val adapter: AdapterApplicationClientActivation by lazy {
         AdapterApplicationClientActivation()
@@ -85,6 +93,15 @@ class ApplicationClientActivationFragment : BaseFragment(),
         }
 
         tv_action_application_client_activation.setOnClickListener {
+
+            val bussinessTitle = jpSettings?.businessTitle ?: ""
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
+                    props = mapOf(
+                            "id" to mJobProfileId,
+                            "title" to bussinessTitle
+                    )
+            ))
 
             onClickSubmit()
 
