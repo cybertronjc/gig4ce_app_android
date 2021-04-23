@@ -88,7 +88,8 @@ android {
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
             buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
-
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
         }
 
         /**
@@ -107,6 +108,8 @@ android {
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
             buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
 
         }
 
@@ -123,6 +126,8 @@ android {
             buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
             buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
 
         }
     }
@@ -376,4 +381,6 @@ dependencies {
 
 
     implementation 'com.mixpanel.android:mixpanel-android:5.8.8'
+    implementation 'com.appsflyer:af-android-sdk:5.4.0'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 }

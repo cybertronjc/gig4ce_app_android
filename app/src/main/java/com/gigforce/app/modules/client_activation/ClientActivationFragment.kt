@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
+import com.gigforce.app.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
@@ -35,6 +36,8 @@ import com.gigforce.app.modules.learning.LearningConstants
 import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.learning.models.LessonModel
 import com.gigforce.app.utils.*
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -50,13 +53,20 @@ import com.google.firebase.storage.FirebaseStorage
 import com.skydoves.powermenu.CustomPowerMenu
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 import kotlinx.android.synthetic.main.layout_role_description.view.*
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ClientActivationFragment : BaseFragment(),
         LocationUpdates.LocationUpdateCallbacks {
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
@@ -102,7 +112,7 @@ class ClientActivationFragment : BaseFragment(),
 
 
     private fun setupBulletPontsRv() {
-        adapterBulletPoints = AdapterBulletPoints();
+        adapterBulletPoints = AdapterBulletPoints(requireActivity());
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =
@@ -204,6 +214,17 @@ class ClientActivationFragment : BaseFragment(),
             if (it == null) return@Observer
             if (it.info == null) return@Observer
 
+            val id = it.id ?: ""
+            val eventName = it.title ?: ""
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
+                    props = mapOf(
+                            "id" to id,
+                            "title" to eventName
+                    )
+            ))
+
             Glide.with(this).load(it.coverImg).placeholder(
                     getCircularProgressDrawable(requireContext())
             ).into(iv_main_client_activation)
@@ -264,6 +285,9 @@ class ClientActivationFragment : BaseFragment(),
         })
 
         viewModel.observableJpApplication.observe(viewLifecycleOwner, Observer { jpApplication ->
+
+
+
             pb_client_activation.gone()
             tv_mark_as_interest_role_details.text = getString(R.string.apply_now)
             run {
@@ -397,6 +421,7 @@ class ClientActivationFragment : BaseFragment(),
                     RecyclerGenericAdapter<LessonModel>(
                             activity?.applicationContext,
                             PFRecyclerViewAdapter.OnViewHolderClick<LessonModel> { view, position, item ->
+
                                 if (item.type == "document") {
                                     val docIntent = Intent(
                                             requireContext(),
@@ -408,6 +433,20 @@ class ClientActivationFragment : BaseFragment(),
                                     )
                                     startActivity(docIntent)
                                 } else {
+
+                                    val lessonId = item.lesson_id
+                                    val lessonName = item.name
+
+                                    eventTracker.pushEvent(
+                                            TrackingEventArgs(
+                                                    eventName = ClientActivationEvents.USER_TAPPED_REQUIREMENT_VIDEO,
+                                                    props = mapOf(
+                                                            "lesson_id" to lessonId,
+                                                            "lesson_name" to lessonName
+                                                    )
+                                            )
+                                    )
+
                                     if (FirebaseAuth.getInstance().currentUser?.uid == null) {
                                         PlayVideoDialogWithUrl.launch(
                                                 childFragmentManager = childFragmentManager,
@@ -531,6 +570,12 @@ class ClientActivationFragment : BaseFragment(),
     }
 
     fun shareToAnyApp(url: String) {
+
+        eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.USER_TAPPED_ON_SHARE,
+                props = null
+        ))
+
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
@@ -607,6 +652,12 @@ class ClientActivationFragment : BaseFragment(),
 
     fun markAsInterestClick(jpApplication: JpApplication?) {
         if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                    props = null
+            ))
+
             if (mClientViaDeeplink == true) {
                 if (location == null) {
                     showToast(getString(R.string.set_location_to_high_accuracy))

@@ -21,7 +21,9 @@ import com.gigforce.app.utils.getCircularProgressDrawable
 import com.gigforce.app.utils.getScreenWidth
 import kotlinx.android.synthetic.main.layout_rv_bullet_points.view.*
 
-class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>() {
+class AdapterBulletPoints constructor(
+    private val fragmentContext: Context
+): RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>() {
     var items: List<BulletPoints> = arrayListOf()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -49,7 +51,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
                 holder.itemView.tl_bullets,
                 bulletPoint.requiredShowPoints,
                 bulletPoint.showPoints,
-                holder.itemView.context
+                fragmentContext
             )
         } else if (bulletPoint.type == "collapsed") {
             holder.itemView.setOnClickListener {
@@ -61,7 +63,7 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
                     holder.itemView.tl_bullets,
                     bulletPoint.requiredShowPoints,
                     bulletPoint.showPoints,
-                    holder.itemView.context
+                    fragmentContext
                 )
             }
         }
@@ -85,7 +87,8 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
         role: List<String>?,
         layout: TableLayout,
         moreText: Boolean,
-        maxPoints: Int, context: Context
+        maxPoints: Int,
+        context: Context
     ) {
         if (layout.childCount > 0) {
             layout.removeAllViews()
@@ -134,7 +137,8 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
                     role?.size!! - 1,
                     layout,
                     role,
-                    true, context
+                    true,
+                    context
                 )
 
             }
@@ -148,7 +152,8 @@ class AdapterBulletPoints : RecyclerView.Adapter<AdapterBulletPoints.ViewHolder>
         to: Int,
         layout: TableLayout,
         arr: List<String>?,
-        removeAllViews: Boolean, context: Context
+        removeAllViews: Boolean,
+        context: Context
     ) {
         if (removeAllViews)
             layout.removeAllViews()

@@ -1,5 +1,7 @@
 package com.gigforce.app.modules.landingscreen
 
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.app.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
@@ -52,34 +55,21 @@ import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
-import com.gigforce.app.utils.widgets.GigforceDatePickerDialog
-import com.gigforce.app.views.MonthYearPickerDialog
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
-import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
-import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
-import kotlin.collections.ArrayList
-import com.gigforce.app.modules.landingscreen.LandingScreenFragmentDirections
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.jaeger.library.StatusBarUtil
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
-
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
 
+@AndroidEntryPoint
 class LandingScreenFragment : BaseFragment() {
 
     companion object {
@@ -90,6 +80,10 @@ class LandingScreenFragment : BaseFragment() {
         private const val SCREEN_GIG = 11
 
     }
+
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
@@ -612,7 +606,7 @@ class LandingScreenFragment : BaseFragment() {
                     false
             )
             gigforce_tip.adapter = recyclerGenericAdapter
-            if(gigforce_tip.onFlingListener==null){
+            if (gigforce_tip.onFlingListener == null) {
                 var pagerHelper = PagerSnapHelper()
                 pagerHelper.attachToRecyclerView(gigforce_tip)
             }
@@ -758,7 +752,7 @@ class LandingScreenFragment : BaseFragment() {
         }
 
         contact_us.setOnClickListener {
-          //  navigate(R.id.fakeGigContactScreenFragment)
+            //  navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {
@@ -792,7 +786,7 @@ class LandingScreenFragment : BaseFragment() {
 //                return@setOnClickListener
 //
 //            if (profile!!.isUserAmbassador) {
-                navigate(R.id.ambassadorEnrolledUsersListFragment)
+            navigate(R.id.ambassadorEnrolledUsersListFragment)
 //            } else {
 //                navigate(R.id.ambassadorProgramDetailsFragment)
 //            }
@@ -818,7 +812,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
                 resources,
                 android.R.color.white,
                 null
@@ -889,7 +883,7 @@ class LandingScreenFragment : BaseFragment() {
                                                 .error(R.drawable.ic_learning_default_back)
                                                 .into(img)
                                     } else {
-                                      val imageRef =   FirebaseStorage.getInstance()
+                                        val imageRef = FirebaseStorage.getInstance()
                                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                                                 .child(obj!!.coverPicture!!)
 
@@ -1058,6 +1052,17 @@ class LandingScreenFragment : BaseFragment() {
                     RecyclerGenericAdapter<JobProfile>(
                             activity?.applicationContext,
                             PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
+
+                                val id = item?.id ?: ""
+                                val title = item?.cardTitle ?: ""
+
+                                eventTracker.pushEvent(TrackingEventArgs(
+                                        eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                                        props = mapOf(
+                                                "id" to id,
+                                                "title" to title
+                                        )
+                                ))
                                 navigate(
                                         R.id.fragment_client_activation,
                                         bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
