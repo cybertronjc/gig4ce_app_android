@@ -16,7 +16,6 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.getFileOrThrow
 import com.gigforce.core.fb.FirebaseUtils
-import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
@@ -134,8 +133,8 @@ class GroupChatViewModel constructor(
 
     fun startWatchingGroupDetails() {
 
-        if(groupDetailsListener != null){
-            Log.d(TAG,"already a listener attached,no-op")
+        if (groupDetailsListener != null) {
+            Log.d(TAG, "already a listener attached,no-op")
             return
         }
 
@@ -211,8 +210,8 @@ class GroupChatViewModel constructor(
     }
 
     private fun startWatchingUserGroupHeader() {
-        if(userGroupHeaderChangeListener != null){
-            Log.d(TAG,"already a listener attached,no-op")
+        if (userGroupHeaderChangeListener != null) {
+            Log.d(TAG, "already a listener attached,no-op")
             return
         }
 
@@ -234,12 +233,12 @@ class GroupChatViewModel constructor(
 
                 }
 
-        Log.d(TAG,"userGroupHeaderChangeListener attached")
+        Log.d(TAG, "userGroupHeaderChangeListener attached")
     }
 
     private fun startWatchingGroupMessages() {
-        if(groupMessagesListener != null){
-            Log.d(TAG,"already a listener attached,no-op")
+        if (groupMessagesListener != null) {
+            Log.d(TAG, "already a listener attached,no-op")
             return
         }
 
@@ -265,7 +264,7 @@ class GroupChatViewModel constructor(
     }
 
 
-    private fun compareGroupMembersWithContactsAndEmit() {
+    private  fun compareGroupMembersWithContactsAndEmit()  = viewModelScope.launch{
         groupDetails!!.groupMembers.forEach { groupMember ->
 
             val matchInContact = userContacts!!.find { groupMember.uid == it.uid }
@@ -274,7 +273,7 @@ class GroupChatViewModel constructor(
                 groupMember.name = matchInContact.name
             } else if (currentUser.phoneNumber!!.contains(groupMember.mobile)) {
                 groupMember.name = "You"
-            } else {
+            } else if(groupMember.name == null){
                 groupMember.name = ""
             }
         }
@@ -305,14 +304,14 @@ class GroupChatViewModel constructor(
             return currentUserSenderInfo!!
 
 
-       val profile =  chatProfileFirebaseRepository.getProfileDataIfExist()!!
+        val profile = chatProfileFirebaseRepository.getProfileDataIfExist()!!
         val profilePic =
-            if (profile.profileAvatarName.isBlank() || profile.profileAvatarName == "avatar.jpg")
-                ""
-            else {
-                "profile_pics/${profile.profileAvatarName}"
-            }
-        return  UserInfo(id = currentUser.uid, name = profile.name, profilePic = profilePic)
+                if (profile.profileAvatarName.isBlank() || profile.profileAvatarName == "avatar.jpg")
+                    ""
+                else {
+                    "profile_pics/${profile.profileAvatarName}"
+                }
+        return UserInfo(id = currentUser.uid, name = profile.name, profilePic = profilePic)
     }
 
     //---------------------------
@@ -338,8 +337,6 @@ class GroupChatViewModel constructor(
                     timestamp = Timestamp.now()
             )
 
-            val groupMembers = groupDetails?.groupMembers
-                    ?: chatGroupRepository.getGroupDetails(groupId).groupMembers
             chatGroupRepository.sendTextMessage(groupId, message)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -660,9 +657,9 @@ class GroupChatViewModel constructor(
                         throw IllegalArgumentException("other types not supported yet")
                     }
 
-                    if(Patterns.WEB_URL.matcher(downloadLink).matches()){
+                    if (Patterns.WEB_URL.matcher(downloadLink).matches()) {
                         firebaseStorage.getReferenceFromUrl(downloadLink).getFileOrThrow(fileRef)
-                    } else{
+                    } else {
                         firebaseStorage.getReference(downloadLink).getFileOrThrow(fileRef)
                     }
 
@@ -693,7 +690,7 @@ class GroupChatViewModel constructor(
         userGroupHeaderChangeListener?.remove()
         userGroupHeaderChangeListener = null
 
-        Log.d(TAG,"userGroupHeaderChangeListener detached")
+        Log.d(TAG, "userGroupHeaderChangeListener detached")
     }
 
     companion object {

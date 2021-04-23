@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,10 +22,13 @@ import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.AspectRatio
 import com.otaliastudios.cameraview.size.Size
 import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_picture_preview.*
+import kotlinx.android.synthetic.main.activity_picture_preview.cameraView
+import kotlinx.android.synthetic.main.fragment_add_selfie_capture_video.*
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,8 +48,16 @@ class ImageCaptureActivity : AppCompatActivity() {
         capture_icon.setOnClickListener {
 
             if (!show_img_cl.isVisible) {
-                cameraView.takePicture()
 
+                if (cameraView.mode == Mode.VIDEO) {
+                    Log.e("ImageCaptureActivity", "Camera Is In Video Mode, Skipping Click Picture")
+                    return@setOnClickListener
+                }
+
+                if (cameraView.isTakingPicture || cameraView.isTakingVideo)
+                    return@setOnClickListener
+
+                cameraView.takePicture()
             }
         }
 
@@ -116,18 +128,19 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun initCamera() {
 
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
-        val size = getScreenWidth(this)
-        val width = SizeSelectors.minWidth(size.width)
-        val height = SizeSelectors.minHeight(size.height)
-        val dimensions = SizeSelectors.and(width, height) // Matches sizes bigger than 1000x2000.
-        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(Size(size.width, size.height)), 0f) // Matches 1:1 sizes.
-        val result = SizeSelectors.or(
-                SizeSelectors.and(ratio, dimensions),  // Try to match both constraints
-                ratio,  // If none is found, at least try to match the aspect ratio
-                SizeSelectors.biggest() // If none is found, take the biggest
-        )
-        cameraView.setPictureSize(result)
-        cameraView.setVideoSize(result)
+//        val size = getScreenWidth(this)
+//        val width = SizeSelectors.minWidth(size.width)
+//        val height = SizeSelectors.minHeight(size.height)
+//        val dimensions = SizeSelectors.and(width, height) // Matches sizes bigger than 1000x2000.
+//        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(Size(size.width, size.height)), 0f) // Matches 1:1 sizes.
+//        val result = SizeSelectors.or(
+//                SizeSelectors.and(ratio, dimensions),  // Try to match both constraints
+//                ratio,  // If none is found, at least try to match the aspect ratio
+//                SizeSelectors.biggest() // If none is found, take the biggest
+//        )
+//        cameraView.setPictureSize(result)
+//        cameraView.setVideoSize(result)
+        cameraView.setPreviewStreamSize(SizeSelectors.and(SizeSelectors.maxWidth(1000), SizeSelectors.biggest()))
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ import com.gigforce.app.utils.PaginationScrollListener
 import com.gigforce.app.utils.ViewModelProviderFactory
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.StorageReference
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_history.*
 
 
@@ -48,6 +50,15 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     ): View? {
         // Inflate the layout for this fragment
         return inflateView(R.layout.fragment_gig_history, inflater, container)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                R.color.lipstick_two,
+                null
+        ))
     }
 
 

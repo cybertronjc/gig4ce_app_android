@@ -565,10 +565,15 @@ class GigViewModel constructor(
                     val tomorrow = date.plusDays(1)
 
                     if (querySnapshot != null) {
-                        val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                            it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
+                        val todaysGigs = extractGigs(querySnapshot).filter {
+                            it.endDateTime.toLocalDate().isBefore(tomorrow)
                         }
-                        _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+                        val upcomingAndPendingGigs = todaysGigs.filter {
+                            val gigStatus = GigStatus.fromGig(it)
+                            gigStatus == GigStatus.PENDING || gigStatus == GigStatus.UPCOMING
+                        }
+
+                        _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
                     } else {
                         _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                     }
@@ -588,10 +593,15 @@ class GigViewModel constructor(
                     .getOrThrow()
 
             val tomorrow = date.plusDays(1)
-            val todaysUpcomingGigs = extractGigs(querySnapshot).filter {
-                it.startDateTime > Timestamp.now() && it.endDateTime.toLocalDate().isBefore(tomorrow)
+            val todaysGigs = extractGigs(querySnapshot).filter {
+                 it.endDateTime.toLocalDate().isBefore(tomorrow)
             }
-            _todaysGigs.value = Lce.content(todaysUpcomingGigs)
+            val upcomingAndPendingGigs = todaysGigs.filter {
+                val gigStatus = GigStatus.fromGig(it)
+                gigStatus == GigStatus.PENDING || gigStatus == GigStatus.UPCOMING
+            }
+
+            _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
             _todaysGigs.value = null
         } catch (e: Exception) {
             _todaysGigs.value = Lce.error(e.message!!)
