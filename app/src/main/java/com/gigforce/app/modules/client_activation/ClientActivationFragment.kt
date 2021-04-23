@@ -652,6 +652,12 @@ class ClientActivationFragment : BaseFragment(),
 
     fun markAsInterestClick(jpApplication: JpApplication?) {
         if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                    props = null
+            ))
+
             if (mClientViaDeeplink == true) {
                 if (location == null) {
                     showToast(getString(R.string.set_location_to_high_accuracy))
