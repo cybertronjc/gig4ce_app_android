@@ -112,7 +112,7 @@ class ClientActivationFragment : BaseFragment(),
 
 
     private fun setupBulletPontsRv() {
-        adapterBulletPoints = AdapterBulletPoints();
+        adapterBulletPoints = AdapterBulletPoints(requireActivity());
 
         rv_bullet_points.adapter = adapterBulletPoints
         rv_bullet_points.layoutManager =

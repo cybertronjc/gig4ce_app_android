@@ -64,6 +64,7 @@ class EventTrackerImp @Inject constructor(
                     args.props
             )
         } catch (e: Exception) {
+            e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging event on AppsFlyer", e)
         }
     }
@@ -72,6 +73,7 @@ class EventTrackerImp @Inject constructor(
         try {
             cleverTapApi?.pushEvent(args.eventName, args.props)
         } catch (e: Exception) {
+            e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging event on CleverTap", e)
         }
     }
@@ -80,6 +82,7 @@ class EventTrackerImp @Inject constructor(
         try {
             firebaseAnalytics.logEvent(args.eventName, args.props?.toBundle())
         } catch (e: Exception) {
+            e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging event on Firebase Analytics", e)
         }
     }
@@ -88,6 +91,7 @@ class EventTrackerImp @Inject constructor(
         try {
             mixpanel?.trackMap(args.eventName, args.props)
         } catch (e: Exception) {
+            e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging event on MixPanel", e)
         }
     }
