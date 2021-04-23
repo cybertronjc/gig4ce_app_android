@@ -7,16 +7,22 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AssetOwnedFragment(formCompletionListener)
     }
 
+    @Inject lateinit var eventTracker: IEventTracker
     private lateinit var viewModel: AssetOwnedViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -202,6 +208,9 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun nextButtonActionFound(): Boolean {
+        var assetsData = getAssetsData()
+        eventTracker.pushEvent(TrackingEventArgs("Assets Owned",assetsData))
+        eventTracker.setUserProperty(assetsData)
         return false
     }
 

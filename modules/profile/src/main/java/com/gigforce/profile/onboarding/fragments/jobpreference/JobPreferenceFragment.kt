@@ -9,15 +9,23 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.job_preference_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
     Fragment(), OnboardingFragmentNew.FragmentInteractionListener,
     OnboardingFragmentNew.FragmentSetLastStateListener {
+
+    @Inject
+    lateinit var eventTracker : IEventTracker
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
@@ -181,11 +189,31 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
                 currentStep = 2
                 return true
             }
-            else -> return false
+            else -> {
+                partTimeJobTracker()
+                return false
+            }
         }
+
+        fullTimeJobTracker()
         return false
 
     }
+
+    private fun partTimeJobTracker() {
+        var map = mapOf("FullTimeJob" to false,"Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
+        eventTracker.pushEvent(TrackingEventArgs("JobPreferred",map))
+        eventTracker.setUserProperty(map)
+    }
+
+    private fun fullTimeJobTracker() {
+        var map = mapOf("FullTimeJob" to true)
+        eventTracker.pushEvent(TrackingEventArgs("JobPreferred",map))
+        eventTracker.removeUserProperty("Days")
+        eventTracker.removeUserProperty("TimeSlots")
+        eventTracker.setUserProperty(map)
+    }
+
 
     override fun activeNextButton() {
         when (currentStep) {

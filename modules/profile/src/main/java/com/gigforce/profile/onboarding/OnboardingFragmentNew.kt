@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -38,6 +40,8 @@ class OnboardingFragmentNew : Fragment() {
 
     @Inject
     lateinit var navigation: INavigation
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     companion object {
         fun newInstance() = OnboardingFragmentNew()
@@ -59,7 +63,7 @@ class OnboardingFragmentNew : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // setUpViewForOnboarding()
-        //changeStatusBarColor()
+        changeStatusBarColor(R.color.fui_transparent)
 
         Glide.with(requireContext()).load(R.drawable.gif_hello).into(hi_there_image)
         onboarding_get_started_btn.setOnClickListener {
@@ -68,7 +72,10 @@ class OnboardingFragmentNew : Fragment() {
             setUpViewForOnboarding()
             next_fl.visible()
             setNextButtonForCurrentFragment()
+            changeStatusBarColor(R.color.status_bar_gray)
         }
+
+        eventTracker.pushEvent(TrackingEventArgs("Onboarding started", null))
     }
 
 
@@ -119,7 +126,7 @@ class OnboardingFragmentNew : Fragment() {
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
                 steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
-                changeStatusBarColor()
+
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
                     val fragment =
@@ -139,7 +146,10 @@ class OnboardingFragmentNew : Fragment() {
             if (!isFragmentLastStateFound())
                 if (onboarding_pager.currentItem != 0)
                     onboarding_pager.currentItem = onboarding_pager.currentItem - 1
-                else activity?.onBackPressed()
+                else {
+                    hideKeyboard()
+                    activity?.onBackPressed()
+                }
         }
 
 
@@ -171,7 +181,7 @@ class OnboardingFragmentNew : Fragment() {
         }
     }
 
-    private fun changeStatusBarColor() {
+    private fun changeStatusBarColor(colorId: Int) {
         win = activity?.window
         // clear FLAG_TRANSLUCENT_STATUS flag:
         win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -180,7 +190,7 @@ class OnboardingFragmentNew : Fragment() {
         win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
 // finally change the color
-        win?.statusBarColor = resources.getColor(R.color.status_bar_gray)
+        win?.statusBarColor = resources.getColor(colorId)
     }
 
     private fun isFragmentLastStateFound(): Boolean {

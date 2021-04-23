@@ -6,7 +6,9 @@ interface IEventTracker {
     fun setUserId(userId: String)
 
     // set user properties
-    fun setUserProperty(propName: String, args:UserPropArgs)
+    fun setUserProperty(props: Map<String, Any>)
+
+    fun removeUserProperty(prop:String)
 
     // push events
     fun pushEvent(args:TrackingEventArgs)
@@ -14,7 +16,7 @@ interface IEventTracker {
 
 data class TrackingEventArgs(
     val eventName:String,
-    val props: Map<String, Any>
+    val props: Map<String, Any>?
 ){}
 
 data class UserPropArgs(

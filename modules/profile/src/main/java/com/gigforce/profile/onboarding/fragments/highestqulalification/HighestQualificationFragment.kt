@@ -7,16 +7,22 @@ import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.highest_qualification_item.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HighestQualificationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = HighestQualificationFragment(formCompletionListener)
     }
 
+    @Inject lateinit var eventTracker: IEventTracker
     private lateinit var viewModel: HighestQualificationViewModel
     var selectedHighestQualification = ""
     override fun onCreateView(
@@ -123,6 +129,9 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     }
 
     override fun nextButtonActionFound(): Boolean {
+        var map = mapOf("Qualification" to selectedHighestQualification)
+        eventTracker.pushEvent(TrackingEventArgs("Highest Qualification",map))
+        eventTracker.setUserProperty(map)
         return false
     }
 
