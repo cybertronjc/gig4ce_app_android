@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.experience_item.*
@@ -115,7 +116,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         val radioButton = total_experience_rg.findViewById( total_experience_rg.checkedRadioButtonId) as RadioButton
         var totalExperience = radioButton.text.toString()
         var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
-        eventTracker.pushEvent(TrackingEventArgs("Experience",map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
         eventTracker.setUserProperty(map)
         return false
     }

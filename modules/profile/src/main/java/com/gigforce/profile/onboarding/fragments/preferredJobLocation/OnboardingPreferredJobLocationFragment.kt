@@ -29,8 +29,11 @@ import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnCitySelectedListener,
-        OnboardingFragmentNew.FragmentSetLastStateListener, OnSubCitySelectedListener, OnboardingFragmentNew.FragmentInteractionListener {
+class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),
+        OnCitySelectedListener,
+        OnboardingFragmentNew.FragmentSetLastStateListener,
+        OnSubCitySelectedListener,
+        OnboardingFragmentNew.FragmentInteractionListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -143,6 +146,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
 
     override fun onSubCitySelected(add: Boolean, text: String) {
+        formCompletionListener.enableDisableNextButton(true)
+
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
         uniqueList.forEach { obj -> confirmSubCityList.add(obj) }
@@ -158,8 +163,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
     override fun onCitySelected(city: City) {
+        formCompletionListener.enableDisableNextButton(true)
         selectedCity = city
-
     }
 
     companion object {

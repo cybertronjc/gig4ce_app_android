@@ -16,6 +16,7 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
@@ -290,7 +291,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     private fun setMainInterestTracker() {
         var map = mapOf("Interests" to getselectedInterest())
-        eventTracker.pushEvent(TrackingEventArgs("UserInterests", map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.removeUserProperty("DeliveryExperience")
         eventTracker.removeUserProperty("ExperienceIn")
         eventTracker.setUserProperty(map)
@@ -298,7 +299,6 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     fun setDeliveryExecutiveInterestTracker() {
         var map = mapOf("interests" to getselectedInterest(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
-        eventTracker.pushEvent(TrackingEventArgs("UserInterests", map))
         eventTracker.setUserProperty(map)
     }
 

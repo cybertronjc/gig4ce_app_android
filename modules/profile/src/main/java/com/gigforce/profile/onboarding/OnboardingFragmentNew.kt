@@ -17,6 +17,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.adapter.MutlifragmentAdapter
 import com.gigforce.profile.onboarding.fragments.assetsowned.AssetOwnedFragment
 import com.gigforce.profile.onboarding.fragments.experience.ExperienceFragment
@@ -75,7 +76,7 @@ class OnboardingFragmentNew : Fragment() {
             changeStatusBarColor(R.color.status_bar_gray)
         }
 
-        eventTracker.pushEvent(TrackingEventArgs("Onboarding started", null))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_STARTED, null))
     }
 
 
@@ -286,9 +287,27 @@ class OnboardingFragmentNew : Fragment() {
         var fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
         if (!fullTimeJob) {
             viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getWorkingDays(), jobPreferenceFragment.getTimeSlots())
+
+            eventTracker.pushEvent(args = TrackingEventArgs(
+                    OnboardingEvents.EVENT_USER_TIME_PREFERENCE_SELECTED,
+                    props = mapOf(
+                            "time_slots" to jobPreferenceFragment.getTimeSlots()
+                    )
+            )
+            )
         } else {
             viewModel.saveJobPreference(fullTimePartime, jobPreferenceFragment.getAllWorkingDays(), jobPreferenceFragment.getAllTimeSlots())
+
+            eventTracker.pushEvent(args = TrackingEventArgs(
+                    OnboardingEvents.EVENT_USER_TIME_PREFERENCE_SELECTED,
+                    props = mapOf(
+                            "time_slots" to jobPreferenceFragment.getAllTimeSlots()
+                    )
+            )
+            )
         }
+
+
     }
 
     private fun saveGender() {

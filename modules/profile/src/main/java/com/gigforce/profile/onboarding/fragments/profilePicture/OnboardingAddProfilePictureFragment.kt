@@ -29,6 +29,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.OnboardingProfileData
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.viewmodel.OnboardingViewModel
@@ -196,7 +197,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
                             viewModel.getProfileForUser()
 
-
+                            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPLOADED_PROFILE_PHOTO,null))
                             Toast.makeText(
                                     requireContext(),
                                     "Profile Pic uploaded",
@@ -352,7 +353,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
     override fun nextButtonActionFound(): Boolean {
         var map = mapOf("OnboardingDone" to true)
-        eventTracker.pushEvent(TrackingEventArgs("OnboardingDone",map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_COMPLETED_ONBOARDING,map))
         eventTracker.setUserProperty(map)
         return false
     }

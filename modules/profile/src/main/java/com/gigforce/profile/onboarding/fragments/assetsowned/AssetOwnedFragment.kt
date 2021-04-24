@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
@@ -209,7 +210,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun nextButtonActionFound(): Boolean {
         var assetsData = getAssetsData()
-        eventTracker.pushEvent(TrackingEventArgs("Assets Owned",assetsData))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_ASSETS_SELECTED,assetsData))
         eventTracker.setUserProperty(assetsData)
         return false
     }

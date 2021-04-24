@@ -1,25 +1,23 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.app.Activity
-import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.gigforce.app.MainApplication
 import com.gigforce.app.R
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
@@ -27,11 +25,9 @@ import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGN
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
-import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.otp_verification.*
-import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -43,7 +39,8 @@ class VerifyOTP : BaseFragment() {
         fun newInstance() = VerifyOTP()
     }
 
-    @Inject lateinit var eventTracker : IEventTracker
+    @Inject
+    lateinit var eventTracker: IEventTracker
     private var countDownTimer: CountDownTimer? = null
     private var verificationId: String = ""
     private var mobile_number: String = ""
@@ -54,8 +51,9 @@ class VerifyOTP : BaseFragment() {
             Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
-    private  var client: SmsRetrieverClient? = null
-//    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
+    private var client: SmsRetrieverClient? = null
+
+    //    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
 //    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
     //var appSignature = AppSignatureHelper(context)
     private var win: Window? = null
@@ -73,16 +71,16 @@ class VerifyOTP : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         changeStatusBarColor()
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-        eventTracker.pushEvent(TrackingEventArgs("OTP verification screen",null))
+        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_OTP_SCREEN_LOADED, null))
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -105,7 +103,8 @@ class VerifyOTP : BaseFragment() {
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
-    fun showKeyboard(){
+
+    fun showKeyboard() {
         txt_otp?.let {
             it.setFocusableInTouchMode(true)
             it.requestFocus()
@@ -119,11 +118,13 @@ class VerifyOTP : BaseFragment() {
 
 
     }
+
     override fun onResume() {
         super.onResume()
         showKeyboard()
     }
-//    private fun setupSmsRetriver() {
+
+    //    private fun setupSmsRetriver() {
 //        client = context?.let { SmsRetriever.getClient(it) }
 //        var task: Task<Void>? = client?.startSmsRetriever()
 //
@@ -139,7 +140,7 @@ class VerifyOTP : BaseFragment() {
 //            Log.d("sms failure", it.toString())
 //        }
 //    }
-    private fun changeStatusBarColor(){
+    private fun changeStatusBarColor() {
         win = activity?.window
         // clear FLAG_TRANSLUCENT_STATUS flag:
         win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -212,12 +213,14 @@ class VerifyOTP : BaseFragment() {
         viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
-                eventTracker.pushEvent(TrackingEventArgs("Entered wrong OTP",null))
+
+                var map = mapOf("Error" to it.msg)
+                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
 //                mixpanel?.track("Entered wrong OTP")
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
-                eventTracker.pushEvent(TrackingEventArgs("Signed in successfully",null))
+                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_SUCCESS, null))
 
 //                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }
@@ -263,7 +266,7 @@ class VerifyOTP : BaseFragment() {
         }
         reenter_mobile.setOnClickListener {
 //            if (!timerStarted) {
-                navigateToLoginScreen()
+            navigateToLoginScreen()
 //            }
         }
         txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
@@ -275,12 +278,12 @@ class VerifyOTP : BaseFragment() {
     private fun navigateToLoginScreen() {
         countDownTimer?.cancel()
         val bundle = bundleOf(
-            "mobileno" to mobile_number
+                "mobileno" to mobile_number
 
         )
         popAllBackStates()
         navigate(R.id.Login, bundle)
-        eventTracker.pushEvent(TrackingEventArgs("Navigate back to Login screen",null))
+//        eventTracker.pushEvent(TrackingEventArgs("Navigate back to Login screen", null))
 //        navigateWithAllPopupStack(R.id.Login)
     }
 
