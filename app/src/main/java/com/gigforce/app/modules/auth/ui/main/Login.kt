@@ -241,6 +241,11 @@ class Login : BaseFragment() {
 
     private fun listeners() {
         cvloginwrong.visibility = GONE
+
+        some_id_if_needed.setOnClickListener {
+            invisible_edit_mobile.requestFocus()
+        }
+
         invisible_edit_mobile.doAfterTextChanged {
             showWrongMobileNoLayout(false)
             if (invisible_edit_mobile.text.toString().length == 10) {
@@ -391,7 +396,7 @@ class Login : BaseFragment() {
 //    }
     override fun onResume() {
         super.onResume()
-        showKeyboard()
+//        showKeyboard()
     }
 //private fun checkForAllPermissions() {
 //    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)

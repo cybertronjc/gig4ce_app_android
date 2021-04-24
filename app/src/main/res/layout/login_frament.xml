@@ -158,7 +158,7 @@
             <EditText
                 android:id="@+id/invisible_edit_mobile"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:background="@null"
                 android:textColor="@color/fui_transparent"
                 android:paddingTop="12dp"
