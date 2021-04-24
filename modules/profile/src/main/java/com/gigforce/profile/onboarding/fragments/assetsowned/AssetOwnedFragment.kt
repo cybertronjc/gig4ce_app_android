@@ -203,13 +203,44 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         )
     }
 
+    fun getAssetsDataForAnalytics(): Map<String,Any> {
+
+        val twoWheelersOwned = mutableListOf<String>()
+        if(owned_bicycle) twoWheelersOwned.add("Bicycle")
+        if(owned_electric_bike) twoWheelersOwned.add("ElectricBike")
+        if(owned_motor_bike) twoWheelersOwned.add("MotorBike")
+
+
+        val threeWheelersOwned = mutableListOf<String>()
+        if(owned_e_rickshaw) threeWheelersOwned.add("eRickshaw")
+        if(owned_auto_rickshaw) threeWheelersOwned.add("autoRickshaw")
+
+
+        val otherVehicleOwned = mutableListOf<String>()
+        if(owned_car) otherVehicleOwned.add("car")
+        if(owned_commercial_vehicle) otherVehicleOwned.add("commercialVehicle")
+
+        val itAssetsOwned = mutableListOf<String>()
+        if(owned_laptop) itAssetsOwned.add("laptop")
+        if(owned_smart_phone) itAssetsOwned.add("smartPhone")
+        if(owned_pc) itAssetsOwned.add("pc")
+
+        return mapOf(
+                "two_wheelers_owned" to twoWheelersOwned,
+                "three_wheelers_owned" to threeWheelersOwned,
+                "other_vehicles_owned" to otherVehicleOwned,
+                "it_assets_owned" to itAssetsOwned,
+        )
+    }
+
+
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         return false
     }
 
     override fun nextButtonActionFound(): Boolean {
-        var assetsData = getAssetsData()
+        var assetsData = getAssetsDataForAnalytics()
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_ASSETS_SELECTED,assetsData))
         eventTracker.setUserProperty(assetsData)
         return false
