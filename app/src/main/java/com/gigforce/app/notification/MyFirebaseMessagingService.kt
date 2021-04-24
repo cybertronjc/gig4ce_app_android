@@ -1,11 +1,13 @@
 package com.gigforce.app.notification
 
+import android.R.id.message
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
-import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
 import com.gigforce.app.core.toBundle
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.*
 import kotlin.random.Random
+
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -37,8 +40,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         registerFirebaseTokenIfLoggedIn()
         FirebaseAuth.getInstance().currentUser ?: let {
             Log.v(
-                TAG,
-                "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                    TAG,
+                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
             )
             FirebaseAuth.getInstance().addAuthStateListener {
                 Log.v(TAG, "Firebase Auth State Changed")
@@ -52,11 +55,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val uid = it.uid
             FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
                 .set(
-                    hashMapOf(
-                        "uid" to uid,
-                        "type" to "fcm",
-                        "timestamp" to Date().time
-                    )
+                        hashMapOf(
+                                "uid" to uid,
+                                "type" to "fcm",
+                                "timestamp" to Date().time
+                        )
                 ).addOnSuccessListener {
                     Log.v(TAG, "Token Updated on Firestore Successfully")
                 }.addOnFailureListener {
@@ -68,8 +71,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        Log.d(TAG, "From: ${remoteMessage.from}")
+        try {
+            if (remoteMessage.data.isNotEmpty()) {
+                val extras = Bundle()
+                for ((key, value) in remoteMessage.data.entries) {
+                    extras.putString(key, value)
+                }
+                val info = CleverTapAPI.getNotificationInfo(extras)
+                if (info.fromCleverTap) {
+                    CleverTapAPI.createNotification(applicationContext, extras)
+                } else {
+                    // not from CleverTap handle yourself or pass to another provider
+                    handleNotificationMessageNotFromCleverTap(remoteMessage)
+                }
+            }
+        } catch (t: Throwable) {
+            Log.d("MYFCMLIST", "Error parsing FCM message", t)
+        }
 
+
+
+        // Also if you intend on generating your own notifications as a result of a received FCM
+        // message, here is where that should be initiated. See sendNotification method below.
+    }
+
+    private fun handleNotificationMessageNotFromCleverTap(remoteMessage: RemoteMessage) {
+        Log.d(TAG, "From: ${remoteMessage.from}")
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
@@ -77,8 +104,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val isChatMessage = remoteMessage.data.getOrDefault(IS_CHAT_MESSAGE, "false") == "true"
             if (isChatMessage) {
 
-               val intent  =  Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
-                    putExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE , remoteMessage)
+                val intent = Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
+                    putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
                 }
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 //handleChatNotifications(remoteMessage)
@@ -93,47 +120,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     null
 
                 NotificationHelper(applicationContext)
-                    .createUrgentPriorityNotification(
-                        title = it.title ?: "Gigforce",
-                        message = it.body ?: "message",
-                        pendingIntent = pendingIntent
-                    )
+                        .createUrgentPriorityNotification(
+                                title = it.title ?: "Gigforce",
+                                message = it.body ?: "message",
+                                pendingIntent = pendingIntent
+                        )
 
             }
         }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun handleChatNotifications(remoteMessage: RemoteMessage) {
-
-//        NotificationHelper(applicationContext).createUrgentPriorityNotification("s","S")
-    }
 
     private fun createPendingIntentFromData(
-        clickAction: String,
-        data: Map<String, String>
+            clickAction: String,
+            data: Map<String, String>
     ): PendingIntent? {
 
         val dataBundle = data.toBundle()
         dataBundle.putString(NotificationConstants.INTENT_EXTRA_CLICK_ACTION, clickAction)
 
-//        return NavDeepLinkBuilder(applicationContext)
-//                .setGraph(R.navigation.nav_graph)
-//                .setDestination(R.id.gigAttendancePageFragment)
-//                .setGraph(R.navigation.nav_graph)
-//                .setArguments(dataBundle)
-//                .createPendingIntent()
-
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
-                Intent(
-                    applicationContext,
-                    MainActivity::class.java
-                ).apply {
-                    putExtras(data.toBundle())
-                })
+                    Intent(
+                            applicationContext,
+                            MainActivity::class.java
+                    ).apply {
+                        putExtras(data.toBundle())
+                    })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }
