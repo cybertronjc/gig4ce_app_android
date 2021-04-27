@@ -17,17 +17,18 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@color/white"
-                app:navigationIcon="@drawable/ic_arrow_back_black"
+                android:background="@color/lipstick_2"
+                app:navigationIcon="@drawable/ct_ic_arrow_back_white_24dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="Help Videos"
-                app:titleTextColor="@color/black" />
+                app:titleTextColor="@color/white" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
