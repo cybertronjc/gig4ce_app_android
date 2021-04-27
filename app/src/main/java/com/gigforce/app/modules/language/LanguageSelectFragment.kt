@@ -2,20 +2,26 @@ package com.gigforce.app.modules.language
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.os.RemoteException
+import android.util.Log
 import android.view.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
-import com.gigforce.app.analytics.LanguageEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.configrepository.ConfigViewModel
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.TrackingEventArgs
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
+import com.android.installreferrer.api.ReferrerDetails
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.google.gson.JsonObject
+import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
@@ -30,8 +36,9 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         }
     }
 
-    @Inject lateinit var eventTracker: IEventTracker
     private var win: Window? = null
+    private lateinit var referrerClient: InstallReferrerClient
+    @Inject lateinit var eventTracker: IEventTracker
 
     val SUPPORTED_LOCALES =
             Arrays.asList(
@@ -69,12 +76,72 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         setDefaultLanguage()
         listener()
         initViewModel()
+        setUpReferrer()
 
-        eventTracker.pushEvent(TrackingEventArgs("Language selection screen", null))
         //back press
         iv_back_language_fragment.setOnClickListener {
             activity?.onBackPressed()
         }
+    }
+
+    private fun setUpReferrer() {
+        referrerClient = InstallReferrerClient.newBuilder(context).build()
+        referrerClient.startConnection(object : InstallReferrerStateListener {
+
+            override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                when (responseCode) {
+                    InstallReferrerClient.InstallReferrerResponse.OK -> {
+                        // Connection established.
+                        getReferrerDetails()
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
+                        // API not available on the current Play Store app.
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> {
+                        // Connection couldn't be established.
+                    }
+                }
+            }
+
+            override fun onInstallReferrerServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        })
+    }
+
+    private fun getReferrerDetails(){
+        var response: ReferrerDetails? = null
+        try {
+            response = referrerClient.installReferrer
+            Log.d("response", response.toString())
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+        val referrerUrl = response!!.installReferrer
+        Log.d("referrer link", referrerUrl)
+        try {
+            eventTracker.pushEvent(TrackingEventArgs("lead_source", getTagsMap(referrerUrl)))
+            eventTracker.setUserProperty(getTagsMap(referrerUrl))
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        referrerClient.endConnection()
+    }
+
+    private fun getTagsMap(url: String): HashMap<String, String>{
+
+        var map= HashMap<String, String>()
+        val strArray = url.split("&").toTypedArray()
+        for (i in 0 until strArray.size - 1){
+
+            var tagArray = strArray.get(i).split("=")
+            map.put(tagArray.get(0), tagArray.get(1))
+            Log.d("tagArray", tagArray.toString())
+        }
+
+        return map
     }
 
     private fun initViewModel() {
@@ -167,10 +234,6 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             saveAppLanguageName(language.languageCode)
 
             languageCode = language.languageCode
-            var map = HashMap<String, Any>()
-            map.put("Language", language.languageName)
-            eventTracker.pushEvent(TrackingEventArgs(LanguageEvents.LANGUAGE_SELECTED, map))
-            eventTracker.setUserProperty(map)
             navNext()
         }
     }
@@ -209,7 +272,6 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         navigate(
                 R.id.authFlowFragment
         )
-
     }
 
 
