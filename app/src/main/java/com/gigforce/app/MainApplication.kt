@@ -17,7 +17,6 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class MainApplication : Application() {
 
-    val MIXPANEL_TOKEN = "536f16151a9da631a385119be6510d56"
     var mixpanel: MixpanelAPI? = null
     private var cleverTapAPI: CleverTapAPI? = null
 
@@ -70,7 +69,7 @@ class MainApplication : Application() {
     }
 
     private fun setupMixpanel() {
-        mixpanel = MixpanelAPI.getInstance(applicationContext, MIXPANEL_TOKEN);
+        mixpanel = MixpanelAPI.getInstance(applicationContext, BuildConfig.MIX_PANEL_KEY);
     }
 
     private fun setupCleverTap() {

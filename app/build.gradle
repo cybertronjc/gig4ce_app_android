@@ -109,7 +109,7 @@ android {
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
             buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
             buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
-            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
 
         }
 
@@ -127,7 +127,7 @@ android {
             buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
             buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
             buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
-            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
 
         }
     }
