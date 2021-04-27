@@ -18,6 +18,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
@@ -89,7 +90,7 @@ class Login : BaseFragment() {
 //            navigateWithAllPopupStack(R.id.authFlowFragment)
 //        } else {
 
-        eventTracker.pushEvent(TrackingEventArgs("Login Screen", null))
+        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_LOADED, null))
         viewModel.activity = this.requireActivity()
         invisible_edit_mobile.setText(mobile_number)
         populateMobileInEditTexts(mobile_number)
@@ -209,16 +210,16 @@ class Login : BaseFragment() {
             when (it.stateResponse) {
                 LoginViewModel.STATE_CODE_SENT -> {
                     navigateToOTPVarificationScreen()
-                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
+//                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
                     showToast(it.msg)
                     var map = mapOf("Error" to it.msg)
-                    eventTracker.pushEvent(TrackingEventArgs("Login Error", map))
+                    eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
                     navigateToOTPVarificationScreen()
-                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
+//                    eventTracker.pushEvent(TrackingEventArgs("Navigate to OTP verification screen", null))
                 }
             }
         }
@@ -241,6 +242,11 @@ class Login : BaseFragment() {
 
     private fun listeners() {
         cvloginwrong.visibility = GONE
+
+        some_id_if_needed.setOnClickListener {
+            invisible_edit_mobile.requestFocus()
+        }
+
         invisible_edit_mobile.doAfterTextChanged {
             showWrongMobileNoLayout(false)
             if (invisible_edit_mobile.text.toString().length == 10) {
@@ -319,6 +325,8 @@ class Login : BaseFragment() {
     }
 
     private fun doActionOnClick() {
+
+
         var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString()
         if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
@@ -327,6 +335,14 @@ class Login : BaseFragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else {
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = AuthEvents.SIGN_UP_STARTED,
+                    props = mapOf(
+                            "phone_no" to phoneNumber
+                    )
+            ))
+
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
@@ -391,7 +407,7 @@ class Login : BaseFragment() {
 //    }
     override fun onResume() {
         super.onResume()
-        showKeyboard()
+//        showKeyboard()
     }
 //private fun checkForAllPermissions() {
 //    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)

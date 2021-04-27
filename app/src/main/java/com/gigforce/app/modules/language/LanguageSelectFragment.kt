@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
+import com.gigforce.app.analytics.LanguageEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.configrepository.ConfigViewModel
 import com.gigforce.core.IEventTracker
@@ -168,7 +169,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             languageCode = language.languageCode
             var map = HashMap<String, Any>()
             map.put("Language", language.languageName)
-            eventTracker.pushEvent(TrackingEventArgs("Language selected", map))
+            eventTracker.pushEvent(TrackingEventArgs(LanguageEvents.LANGUAGE_SELECTED, map))
             eventTracker.setUserProperty(map)
             navNext()
         }

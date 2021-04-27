@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.highest_qualification_item.*
@@ -129,8 +130,8 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     }
 
     override fun nextButtonActionFound(): Boolean {
-        var map = mapOf("Qualification" to selectedHighestQualification)
-        eventTracker.pushEvent(TrackingEventArgs("Highest Qualification",map))
+        var map = mapOf("qualification" to selectedHighestQualification)
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_HIGHEST_QUALIFICATION,map))
         eventTracker.setUserProperty(map)
         return false
     }

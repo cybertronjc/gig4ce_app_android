@@ -1,8 +1,9 @@
 package com.gigforce.profile.onboarding.fragments.jobpreference
 
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +15,7 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.job_preference_fragment.*
@@ -21,23 +23,23 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
-    Fragment(), OnboardingFragmentNew.FragmentInteractionListener,
-    OnboardingFragmentNew.FragmentSetLastStateListener {
+        Fragment(), OnboardingFragmentNew.FragmentInteractionListener,
+        OnboardingFragmentNew.FragmentSetLastStateListener {
 
     @Inject
-    lateinit var eventTracker : IEventTracker
+    lateinit var eventTracker: IEventTracker
 
     companion object {
         fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
-            JobPreferenceFragment(formCompletionListener)
+                JobPreferenceFragment(formCompletionListener)
     }
 
     private lateinit var viewModel: JobPreferenceViewModel
     var timeSlotsIds = ArrayList<CheckBox>()
     var workingDaysIds = ArrayList<CheckBox>()
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.job_preference_fragment, container, false)
     }
@@ -49,7 +51,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         listeners()
     }
 
-    fun getAllWorkingDays():ArrayList<String>{
+    fun getAllWorkingDays(): ArrayList<String> {
         var workingDaysList = ArrayList<String>()
         workingDaysList.add(("Monday"))
         workingDaysList.add(("Tuesday"))
@@ -61,7 +63,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         return workingDaysList
     }
 
-    fun getAllTimeSlots():ArrayList<String>{
+    fun getAllTimeSlots(): ArrayList<String> {
         var timeSlots = ArrayList<String>()
         timeSlots.add("5 am - 8 am")
         timeSlots.add("8 am - 12 pm")
@@ -117,10 +119,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
         workingDaysIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+                if (isChecked) {
                     formCompletionListener.enableDisableNextButton(true)
-                    }
-                else if (anyCheckboxChecked(workingDaysIds)) {
+                } else if (anyCheckboxChecked(workingDaysIds)) {
                     formCompletionListener.enableDisableNextButton(true)
                 } else {
                     formCompletionListener.enableDisableNextButton(false)
@@ -130,10 +131,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
         timeSlotsIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked){
+                if (isChecked) {
                     formCompletionListener.enableDisableNextButton(true)
-                    }
-                else if (anyCheckboxChecked(timeSlotsIds)) {
+                } else if (anyCheckboxChecked(timeSlotsIds)) {
                     formCompletionListener.enableDisableNextButton(true)
                 } else {
                     formCompletionListener.enableDisableNextButton(false)
@@ -148,7 +148,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     }
 
     fun anyCheckboxChecked(ids: ArrayList<CheckBox>): Boolean {
-        ids.forEach { checkbox -> if (checkbox.isChecked) return true}
+        ids.forEach { checkbox -> if (checkbox.isChecked) return true }
 
         return false
     }
@@ -157,17 +157,21 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
     fun getWorkingDays(): ArrayList<String> {
         var workingdays = ArrayList<String>()
-        workingDaysIds.forEach { day -> if (day.isChecked) {
-            workingdays.add(day.tag.toString())
-        }}
+        workingDaysIds.forEach { day ->
+            if (day.isChecked) {
+                workingdays.add(day.tag.toString())
+            }
+        }
         return workingdays
     }
 
     fun getTimeSlots(): ArrayList<String> {
         var workingTimeSlots = ArrayList<String>()
-        timeSlotsIds.forEach { slot -> if (slot.isChecked){
-            workingTimeSlots.add(slot.tag.toString())
-        }}
+        timeSlotsIds.forEach { slot ->
+            if (slot.isChecked) {
+                workingTimeSlots.add(slot.tag.toString())
+            }
+        }
 
         return workingTimeSlots
     }
@@ -180,12 +184,31 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
                 work_days_cl.visible()
                 timing_cl.gone()
                 currentStep = 1
+
+                val fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
+                eventTracker.pushEvent(args = TrackingEventArgs(
+                        OnboardingEvents.EVENT_USER_TIME_JOB_PREFERENCE_SELECTED,
+                        props = mapOf(
+                                "preference_selected" to fullTimePartime
+                        )
+                )
+                )
+
                 return true
             }
             1 -> if (getWorkingDays().size > 0) {
                 job_preferences.gone()
                 work_days_cl.gone()
                 timing_cl.visible()
+
+                eventTracker.pushEvent(args = TrackingEventArgs(
+                        OnboardingEvents.EVENT_USER_WORK_DAYS_PREFERRED_SELECTED,
+                        props = mapOf(
+                                "time_slots" to getTimeSlots()
+                        )
+                )
+                )
+
                 currentStep = 2
                 return true
             }
@@ -201,14 +224,14 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     }
 
     private fun partTimeJobTracker() {
-        var map = mapOf("FullTimeJob" to false,"Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
-        eventTracker.pushEvent(TrackingEventArgs("JobPreferred",map))
+        var map = mapOf("FullTimeJob" to false, "Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
         eventTracker.setUserProperty(map)
     }
 
     private fun fullTimeJobTracker() {
         var map = mapOf("FullTimeJob" to true)
-        eventTracker.pushEvent(TrackingEventArgs("JobPreferred",map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
         eventTracker.removeUserProperty("Days")
         eventTracker.removeUserProperty("TimeSlots")
         eventTracker.setUserProperty(map)
@@ -217,11 +240,12 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
     override fun activeNextButton() {
         when (currentStep) {
-            0 -> if(clickedOnPreferenceOptions ) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
+            0 -> if (clickedOnPreferenceOptions) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
             1 -> if (getWorkingDays().size > 0) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
-            else -> if(getTimeSlots().size>0) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
+            else -> if (getTimeSlots().size > 0) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
         }
     }
+
     override fun lastStateFormFound(): Boolean {
         formCompletionListener.enableDisableNextButton(true)
         if (currentStep == 2) {
@@ -229,6 +253,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
             work_days_cl.visible()
             timing_cl.gone()
             currentStep = 1
+
             return true
         } else if (currentStep == 1) {
             job_preferences.visible()
@@ -245,10 +270,10 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
             icon.setColorFilter(ContextCompat.getColor(it, R.color.default_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.default_color))
             view.setBackgroundDrawable(
-                ContextCompat.getDrawable(
-                    it,
-                    R.drawable.option_default_border
-                )
+                    ContextCompat.getDrawable(
+                            it,
+                            R.drawable.option_default_border
+                    )
             )
         }
     }
@@ -258,13 +283,12 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
             icon.setColorFilter(ContextCompat.getColor(it, R.color.selected_image_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.selected_text_color))
             view.setBackgroundDrawable(
-                ContextCompat.getDrawable(
-                    it,
-                    R.drawable.option_selection_border
-                )
+                    ContextCompat.getDrawable(
+                            it,
+                            R.drawable.option_selection_border
+                    )
             )
         }
-
     }
 
 }

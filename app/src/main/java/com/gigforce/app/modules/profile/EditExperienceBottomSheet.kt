@@ -39,6 +39,15 @@ class EditExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
         arguments?.let {
             arrayLocation = it.getString("array_location")!!
         }
+
+        savedInstanceState?.let {
+            arrayLocation = it.getString("array_location")!!
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("array_location", arrayLocation)
     }
 
     override fun onCreateView(
@@ -68,19 +77,24 @@ class EditExperienceBottomSheet : ProfileBaseBottomSheetFragment() {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         profileViewModel!!.userProfileData.observe(this, Observer { profile ->
             profile.experiences?.let {
-                val experiences = it.sortedByDescending { experience -> experience.startDate  }
+                val experiences = it
                 experience = experiences[arrayLocation.toInt()]
                 title.setText(experience.title)
                 company.setText(experience.company)
                 employment_type.setText(experience.employmentType, false)
                 location.setText(experience.location)
-                selectedStartDate = format.format(experience.startDate!!)
+
+                if(experience.startDate != null) {
+                    selectedStartDate = format.format(experience.startDate!!)
+                    start_date.setText(format.format(experience.startDate!!))
+                }
+
                 experience.endDate?.let {
                     selectedEndDate = format.format(experience.endDate!!)
                     end_date.setText(format.format(experience.endDate!!))
                 }
                 selectedEmployment = experience.employmentType
-                start_date.setText(format.format(experience.startDate!!))
+
                 if (experience.currentExperience) {
                     currently_work_here.isChecked = true
                     currentlyWorkHere = true

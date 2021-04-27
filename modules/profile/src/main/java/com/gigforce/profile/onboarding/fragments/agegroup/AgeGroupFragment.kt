@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
@@ -45,8 +46,8 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     override fun nextButtonActionFound(): Boolean {
         val radioButton = age_group.findViewById(age_group.checkedRadioButtonId) as RadioButton
         var age = radioButton.text.toString()
-        var map = mapOf("Age" to age)
-        eventTracker.pushEvent(TrackingEventArgs("Age Group",map))
+        var map = mapOf("age_group" to age)
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_AGE_GROUP,map))
         eventTracker.setUserProperty(map)
 
         return false

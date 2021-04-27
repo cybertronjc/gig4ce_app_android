@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.name_gender_item.*
@@ -158,9 +159,9 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     override fun nextButtonActionFound(): Boolean {
         var props = HashMap<String, Any>()
-        props.put("Name", username.text.toString())
-        props.put("Gender", gender)
-        eventTracker.pushEvent(TrackingEventArgs("Name and Gender", props))
+        props.put("name", username.text.toString())
+        props.put("gender", gender)
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER, props))
         eventTracker.setUserProperty(props)
 
         return false

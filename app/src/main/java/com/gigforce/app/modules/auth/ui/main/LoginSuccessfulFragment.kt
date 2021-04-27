@@ -24,15 +24,23 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginSuccessfulFragment : BaseFragment() {
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
     var layout: View? = null
@@ -77,6 +85,11 @@ class LoginSuccessfulFragment : BaseFragment() {
 //                        navigateWithAllPopupStack(R.id.landinghomefragment)
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
+
+                        eventTracker.pushEvent(TrackingEventArgs(
+                                eventName = AuthEvents.SIGN_SUCCESS,
+                                props = null
+                        ))
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }

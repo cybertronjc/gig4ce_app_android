@@ -10,3 +10,18 @@ object ClientActivationEvents{
     const val USER_TAPPED_ON_SHARE = "Gig_application_share"
     const val USER_SUBMITTED_APPLICATION = "Gig_application_submit"
 }
+
+object LanguageEvents{
+    const val LANGUAGE_SELECTED = "app_lang_selected"
+}
+
+
+object AuthEvents{
+    const val SIGN_UP_LOADED = "signup_loaded"
+    const val SIGN_UP_STARTED = "signup_started"
+    const val SIGN_UP_ERROR = "signup_error"
+    const val SIGN_RESEND_OTP = "signup_resend_otp"
+    const val SIGN_SUCCESS = "signup_success"
+
+    const val SIGN_UP_OTP_SCREEN_LOADED = "verify_otp_loaded"
+}
