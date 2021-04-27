@@ -132,6 +132,7 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     override fun nextButtonActionFound(): Boolean {
         var map = mapOf("qualification" to selectedHighestQualification)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_HIGHEST_QUALIFICATION,map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.setUserProperty(map)
         return false
     }

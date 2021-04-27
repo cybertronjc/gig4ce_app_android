@@ -48,6 +48,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         var age = radioButton.text.toString()
         var map = mapOf("age_group" to age)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_AGE_GROUP,map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.setUserProperty(map)
 
         return false

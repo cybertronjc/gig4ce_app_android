@@ -117,6 +117,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         var totalExperience = radioButton.text.toString()
         var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.setUserProperty(map)
         return false
     }

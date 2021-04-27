@@ -187,12 +187,15 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
                 val fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
                 eventTracker.pushEvent(args = TrackingEventArgs(
-                        OnboardingEvents.EVENT_USER_TIME_JOB_PREFERENCE_SELECTED,
+                        OnboardingEvents.EVENT_USER_EXPLOYMENT_PREFERENCE_SELECTED,
                         props = mapOf(
                                 "preference_selected" to fullTimePartime
                         )
                 )
                 )
+                eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, mapOf(
+                    "preference_selected" to fullTimePartime
+                )))
 
                 return true
             }
@@ -226,12 +229,14 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     private fun partTimeJobTracker() {
         var map = mapOf("FullTimeJob" to false, "Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.setUserProperty(map)
     }
 
     private fun fullTimeJobTracker() {
         var map = mapOf("FullTimeJob" to true)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.removeUserProperty("Days")
         eventTracker.removeUserProperty("TimeSlots")
         eventTracker.setUserProperty(map)

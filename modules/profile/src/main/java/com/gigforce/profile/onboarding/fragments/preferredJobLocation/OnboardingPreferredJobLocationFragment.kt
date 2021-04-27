@@ -19,6 +19,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.adapters.*
+import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
@@ -227,8 +228,9 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     private fun setSelectedCitySubCityTracker() {
         if (confirmSubCityList.size > 0) {
             selectedCity?.name?.let {
-                var map = mapOf("Name" to it, "SubLocation" to confirmSubCityList)
-                eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation", map))
+                var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
+                eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
+                eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
                 eventTracker.setUserProperty(map)
             }
         }
@@ -236,8 +238,9 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
     fun setSelectedCityTracker() {
         selectedCity?.name?.let {
-            var map = mapOf<String, String>("Name" to it)
-            eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation", map))
+            var map = mapOf<String, String>("Location" to it)
+            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
+            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
             eventTracker.setUserProperty(map)
             eventTracker.removeUserProperty("SubLocation")
         }

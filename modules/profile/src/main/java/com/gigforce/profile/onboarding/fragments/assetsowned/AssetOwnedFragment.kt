@@ -242,6 +242,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     override fun nextButtonActionFound(): Boolean {
         var assetsData = getAssetsDataForAnalytics()
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_ASSETS_SELECTED,assetsData))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, assetsData))
         eventTracker.setUserProperty(assetsData)
         return false
     }
