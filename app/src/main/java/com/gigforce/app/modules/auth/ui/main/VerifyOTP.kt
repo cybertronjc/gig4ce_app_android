@@ -220,7 +220,6 @@ class VerifyOTP : BaseFragment() {
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
-                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_SUCCESS, null))
 
 //                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }

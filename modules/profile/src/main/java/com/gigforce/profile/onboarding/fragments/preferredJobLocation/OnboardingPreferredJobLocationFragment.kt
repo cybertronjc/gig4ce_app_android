@@ -38,7 +38,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     private val viewModel: OnboardingViewModel by viewModels()
 
     @Inject
-    lateinit var eventTracker : IEventTracker
+    lateinit var eventTracker: IEventTracker
 
     private val glide: RequestManager by lazy {
         Glide.with(requireContext())
@@ -92,6 +92,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
         other_cities_recyclerview.layoutManager = LinearLayoutManager(requireContext())
         other_cities_recyclerview.adapter = cityAdapter
+        other_cities_recyclerview.itemAnimator = null
+        cityAdapter.setData(emptyList())
 
         major_cities_recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
         major_cities_recyclerview.adapter = majorCitiesAdapter
@@ -109,7 +111,9 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     private fun initListeners() {
         search_cities_et.doOnTextChanged { text, start, before, count ->
 
-            cityAdapter.filter.filter(text)
+            if (cityAdapter.itemCount != 0)
+                cityAdapter.filter.filter(text)
+
             majorCitiesAdapter.filter.filter(text)
         }
     }
@@ -221,19 +225,19 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
     private fun setSelectedCitySubCityTracker() {
-        if(confirmSubCityList.size>0){
+        if (confirmSubCityList.size > 0) {
             selectedCity?.name?.let {
                 var map = mapOf("Name" to it, "SubLocation" to confirmSubCityList)
-                eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation",map))
+                eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation", map))
                 eventTracker.setUserProperty(map)
             }
         }
     }
 
-    fun setSelectedCityTracker(){
+    fun setSelectedCityTracker() {
         selectedCity?.name?.let {
-            var map = mapOf<String,String>("Name" to it)
-            eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation",map))
+            var map = mapOf<String, String>("Name" to it)
+            eventTracker.pushEvent(TrackingEventArgs("PreferredJobLocation", map))
             eventTracker.setUserProperty(map)
             eventTracker.removeUserProperty("SubLocation")
         }
@@ -247,12 +251,10 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             } else {
                 formCompletionListener.enableDisableNextButton(false)
             }
-        }
-        else{
-            if(confirmSubCityList.size>0){
+        } else {
+            if (confirmSubCityList.size > 0) {
                 formCompletionListener.enableDisableNextButton(true)
-            }
-            else{
+            } else {
                 formCompletionListener.enableDisableNextButton(false)
             }
         }
