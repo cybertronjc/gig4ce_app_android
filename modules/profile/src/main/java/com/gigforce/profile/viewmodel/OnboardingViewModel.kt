@@ -128,67 +128,67 @@ class OnboardingViewModel constructor(
 
         val majorCities = listOf(
                 CityWithImage(
-                        id = "QzBMWPULA1ucG0AJyiQO",
+                        id = "YC5BxjzW7U6VA856n9cz",
                         name = "Chandigarh",
                         image = R.drawable.ic_chandigarh,
                         stateCode = "in_chandigarh"
                 ),
                 CityWithImage(
-                        id = "HCbEvKJd2aPZaYgenUV7",
+                        id = "oGpypK2Tolf2YTDLvsMq",
                         name = "Delhi-NCR",
                         image = R.drawable.ic_delhi,
                         stateCode = "in_delhi"
                 ),
                 CityWithImage(
-                        id = "hs1qTRWpJMbZXLD0wGVt",
+                        id = "hkz04AWh6foLbYgnc6Gy",
                         name = "Hyderabad",
                         image = R.drawable.ic_hyderabad,
                         stateCode = "in_telangana"
                 ),
                 CityWithImage(
-                        id = "77saiy6h46gisSOejIZV",
+                        id = "yF7PESNLX0NAtQ5xZmPT",
                         name = "Mumbai",
                         image = R.drawable.ic_mumbai,
                         stateCode = "in_maharashtra"
                 ),
                 CityWithImage(
-                        id = "eoWQ1EOLP4phzZjuGffz",
+                        id = "KZYBKIV826r3Vuw4aqku",
                         name = "Jaipur",
                         image = R.drawable.ic_jaipur,
                         stateCode = "in_rajasthan"
                 ),
                 CityWithImage(
-                        id = "edjFfvRTHwZOfKzKQ73E",
+                        id = "gyDk0qQS1iRHzBl2Bo3C",
                         name = "Chennai",
                         image = R.drawable.ic_chennai,
                         stateCode = "in_tamil_nadu"
                 ),
                 CityWithImage(
-                        id = "gIRzevfWSVwpcASTphdo",
+                        id = "53LnescEeZEd9kLlX4Lo",
                         name = "Bangalore",
                         image = R.drawable.ic_banglore,
                         stateCode = "in_karnataka"
                 ),
                 CityWithImage(
-                        id = "HXvsMILyHN1X3V1Xq1gM",
+                        id = "XWLZ6JRy6QGrE5p3e19a",
                         name = "Kolkata",
                         image = R.drawable.ic_kolkata,
                         stateCode = "in_west_bengal"
                 ),
                 CityWithImage(
-                        id = "Z4s7CqA6IgCBTJp74dAv",
+                        id = "CpBqv35f9ejJEcTvisu1",
                         name = "Guwahati",
                         image = R.drawable.ic_guwahati,
                         stateCode = "in_assam"
                 ),
                 CityWithImage(
-                        id = "wEFMHm7vBmXx1Kd7kEqE",
+                        id = "UIooNfjngZRTBMYW2tel",
                         name = "Lucknow",
                         image = R.drawable.ic_lucknow,
                         stateCode = "in_uttar_pradesh"
                 ),
                 CityWithImage(
-                        id = "CtSrJSbu5AP6CfdMu2kI",
+                        id = "cmE2a6bHNMyLt2oF5AjR",
                         name = "Pune",
                         image = R.drawable.ic_pune,
                         stateCode = "in_maharashtra"
