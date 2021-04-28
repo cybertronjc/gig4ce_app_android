@@ -193,9 +193,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
                         )
                 )
                 )
-                eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, mapOf(
-                    "preference_selected" to fullTimePartime
-                )))
+
 
                 return true
             }

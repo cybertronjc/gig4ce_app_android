@@ -162,7 +162,6 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         props.put("name", username.text.toString())
         props.put("gender", gender)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER, props))
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, props))
         eventTracker.setUserProperty(props)
 
         return false

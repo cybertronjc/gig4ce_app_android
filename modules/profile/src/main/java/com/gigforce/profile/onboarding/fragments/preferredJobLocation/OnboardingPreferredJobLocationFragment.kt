@@ -230,7 +230,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             selectedCity?.name?.let {
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
-                eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
                 eventTracker.setUserProperty(map)
             }
         }
@@ -240,7 +239,6 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
         selectedCity?.name?.let {
             var map = mapOf<String, String>("Location" to it)
             eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
-            eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
             eventTracker.setUserProperty(map)
             eventTracker.removeUserProperty("SubLocation")
         }
