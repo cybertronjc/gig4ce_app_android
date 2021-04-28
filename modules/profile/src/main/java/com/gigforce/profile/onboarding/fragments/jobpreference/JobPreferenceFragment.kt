@@ -227,14 +227,12 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
     private fun partTimeJobTracker() {
         var map = mapOf("FullTimeJob" to false, "Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.setUserProperty(map)
     }
 
     private fun fullTimeJobTracker() {
         var map = mapOf("FullTimeJob" to true)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_PROGRESS, map))
         eventTracker.removeUserProperty("Days")
         eventTracker.removeUserProperty("TimeSlots")
         eventTracker.setUserProperty(map)
