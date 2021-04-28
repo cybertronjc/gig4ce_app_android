@@ -187,12 +187,13 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
 
                 val fullTimePartime = if (fullTimeJob) "Full Time" else "Part Time"
                 eventTracker.pushEvent(args = TrackingEventArgs(
-                        OnboardingEvents.EVENT_USER_TIME_JOB_PREFERENCE_SELECTED,
+                        OnboardingEvents.EVENT_USER_EXPLOYMENT_PREFERENCE_SELECTED,
                         props = mapOf(
                                 "preference_selected" to fullTimePartime
                         )
                 )
                 )
+
 
                 return true
             }

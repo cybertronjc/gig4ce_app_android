@@ -290,7 +290,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     }
 
     private fun setMainInterestTracker() {
-        var map = mapOf("Interests" to getselectedInterest())
+        var map = mapOf("interests" to getselectedInterest())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.removeUserProperty("DeliveryExperience")
         eventTracker.removeUserProperty("ExperienceIn")
