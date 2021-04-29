@@ -2,6 +2,7 @@ package com.gigforce.app.di.implementations
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainApplication
@@ -12,13 +13,14 @@ import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class EventTrackerImp @Inject constructor(
-        @ActivityContext val context: Context
+        @ApplicationContext val context: Context
 ) : IEventTracker {
 
-    var mixpanel: MixpanelAPI? = ((context as Activity)?.application as MainApplication).mixpanel
+    var mixpanel: MixpanelAPI? = (context as MainApplication).mixpanel
 
     private var cleverTapApi: CleverTapAPI? = CleverTapAPI.getDefaultInstance(context)
 
@@ -51,6 +53,10 @@ class EventTrackerImp @Inject constructor(
     }
 
     override fun pushEvent(args: TrackingEventArgs) {
+        Log.d("EventTrackerImp", "---Event Pushed-------")
+        Log.d("EventTrackerImp", "Event Name : ${args.eventName}")
+        Log.d("EventTrackerImp", "Event Properties : ${args.props}")
+
         logEventOnMixPanel(args)
         logEventOnFirebaseAnalytics(args)
         logEventOnCleverTap(args)

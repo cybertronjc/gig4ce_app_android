@@ -84,17 +84,9 @@ class LoginSuccessfulFragment : BaseFragment() {
                         saveOnBoardingCompleted()
 //                        navigateWithAllPopupStack(R.id.landinghomefragment)
 
-                        eventTracker.pushEvent(TrackingEventArgs(
-                                eventName = AuthEvents.LOGIN_SUCCESS,
-                                props = null
-                        ))
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
 
-                        eventTracker.pushEvent(TrackingEventArgs(
-                                eventName = AuthEvents.SIGN_SUCCESS,
-                                props = null
-                        ))
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }
