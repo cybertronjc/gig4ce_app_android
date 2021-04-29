@@ -259,6 +259,11 @@ class VerifyOTP : BaseFragment() {
                 otpresentcounter++;
                 counterStart();
                 viewModel.sendVerificationCode("+91" + mobile_number)
+
+                eventTracker.pushEvent(TrackingEventArgs(
+                        eventName = AuthEvents.SIGN_RESEND_OTP,
+                        props = null
+                ))
             } else {
                 navigateToLoginScreen()
             }

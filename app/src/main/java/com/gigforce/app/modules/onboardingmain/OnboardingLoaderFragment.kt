@@ -10,18 +10,28 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.MainApplication
 import com.gigforce.app.R
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.app.utils.StringConstants
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OnboardingLoaderFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingLoaderFragment()
     }
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private lateinit var viewModel: LoginSuccessfulViewModel
     private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(
@@ -53,6 +63,12 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     private fun navigateToMainOnboarding() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
+
+        eventTracker.pushEvent(TrackingEventArgs(
+                eventName = AuthEvents.SIGN_SUCCESS,
+                props = null
+        ))
+
         navigate(R.id.onboardingfragment)
     }
 
