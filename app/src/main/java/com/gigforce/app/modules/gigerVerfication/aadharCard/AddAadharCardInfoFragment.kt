@@ -418,9 +418,9 @@ class AddAadharCardInfoFragment : BaseFragment() {
                 navigate(R.id.addDrivingLicenseInfoFragment)
             } else if (!it.bankDetailsUploaded) {
                 navigate(R.id.addBankDetailsInfoFragment)
-            } else if (!it.selfieVideoUploaded) {
+            } else /*if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
-            } else if (!it.panCardDetailsUploaded) {
+            } else*/ if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else {
                 showDetailsUploaded()
