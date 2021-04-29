@@ -184,16 +184,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
                 val dlNo =
                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
-
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(getString(R.string.alert))
-                        .setMessage(getString(R.string.enter_valid_dl))
-                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                        .show()
-
-                    return@setOnClickListener
-                }
+//                if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle(getString(R.string.alert))
+//                        .setMessage(getString(R.string.enter_valid_dl))
+//                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                        .show()
+//
+//                    return@setOnClickListener
+//                }
 
                 if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 

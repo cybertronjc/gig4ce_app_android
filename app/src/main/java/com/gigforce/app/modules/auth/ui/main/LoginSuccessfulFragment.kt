@@ -83,13 +83,10 @@ class LoginSuccessfulFragment : BaseFragment() {
                     if (it.isonboardingdone != null && it.isonboardingdone) {
                         saveOnBoardingCompleted()
 //                        navigateWithAllPopupStack(R.id.landinghomefragment)
+
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
 
-                        eventTracker.pushEvent(TrackingEventArgs(
-                                eventName = AuthEvents.SIGN_SUCCESS,
-                                props = null
-                        ))
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }

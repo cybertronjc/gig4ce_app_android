@@ -59,4 +59,7 @@ interface ViewModelBindings {
 
     @Binds
     fun provideBSDataRepo(imp: BSDataRepository): IBSDataRepository
+
+    @Binds
+    fun provideViewModelEventTracker(imp:EventTrackerImp) : IEventTracker
 }

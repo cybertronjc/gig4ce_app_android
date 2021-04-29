@@ -4,24 +4,24 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.MainApplication
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
-class LoginViewModel() : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+        private val eventTracker: IEventTracker
+) : ViewModel() {
 
     companion object {
         private const val TAG = "login/viewmodel"
@@ -100,24 +100,25 @@ class LoginViewModel() : ViewModel() {
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
                 .signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d(TAG, "signInWithCredential:success")
-
-
-                    } else {
-                        Log.w(TAG, "signInWithCredential:failure", it.exception)
-                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
-                    }
-                }
                 .addOnSuccessListener {
+                    Log.d(TAG, "signInWithCredential:success")
+
+                    if (it.additionalUserInfo.isNewUser) {
+                        eventTracker.pushEvent(TrackingEventArgs(
+                                eventName = AuthEvents.SIGN_SUCCESS,
+                                props = null)
+                        )
+                    } else {
+                        eventTracker.pushEvent(TrackingEventArgs(
+                                eventName = AuthEvents.LOGIN_SUCCESS,
+                                props = null)
+                        )
+                    }
+
                     registerFirebaseToken()
-                    Log.d(TAG, "Signed in successfully")
-
-
                 }
                 .addOnFailureListener {
-                    Log.d(TAG, "Signed in failed")
+                    Log.w(TAG, "signInWithCredential:failure", it)
                     liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
                 }
     }

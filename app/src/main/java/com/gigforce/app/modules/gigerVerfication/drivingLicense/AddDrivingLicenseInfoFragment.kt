@@ -182,17 +182,17 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
-
-                                MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle(getString(R.string.alert))
-                                        .setMessage(getString(R.string.enter_valid_dl))
-                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                        .show()
-
-                                dlSubmitSliderBtn.resetSlider()
-                                return
-                            }
+//                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.enter_valid_dl))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//
+//                                dlSubmitSliderBtn.resetSlider()
+//                                return
+//                            }
 
                             if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
@@ -480,9 +480,9 @@ class AddDrivingLicenseInfoFragment : BaseFragment() {
 
             if (!it.bankDetailsUploaded) {
                 navigate(R.id.addBankDetailsInfoFragment)
-            } else if (!it.selfieVideoUploaded) {
+            } else /*if (!it.selfieVideoUploaded) {
                 navigate(R.id.addSelfieVideoFragment)
-            } else if (!it.panCardDetailsUploaded) {
+            } else */if (!it.panCardDetailsUploaded) {
                 navigate(R.id.addPanCardInfoFragment)
             } else if (!it.aadharCardDetailsUploaded) {
                 navigate(R.id.addAadharCardInfoFragment)

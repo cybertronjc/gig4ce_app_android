@@ -14,8 +14,8 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
@@ -45,7 +45,9 @@ class VerifyOTP : BaseFragment() {
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
-    lateinit var viewModel: LoginViewModel
+
+    private val viewModel: LoginViewModel by viewModels()
+
     var otpresentcounter = 0;
     private val OTP_NUMBER =
             Pattern.compile("[0-9]{6}\$")
@@ -76,7 +78,6 @@ class VerifyOTP : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         changeStatusBarColor()
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO

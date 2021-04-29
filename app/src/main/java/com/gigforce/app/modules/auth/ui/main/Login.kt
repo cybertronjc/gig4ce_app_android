@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -45,7 +46,7 @@ class Login : BaseFragment() {
 
     @Inject
     lateinit var eventTracker: IEventTracker
-    lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
     private val INDIAN_MOBILE_NUMBER =
             Pattern.compile("^[+][9][1][6-9][0-9]{9}\$")
 
@@ -78,8 +79,6 @@ class Login : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
-
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
     }
