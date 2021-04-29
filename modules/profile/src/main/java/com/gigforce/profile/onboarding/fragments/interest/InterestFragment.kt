@@ -315,6 +315,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     fun setDeliveryExecutiveInterestTracker() {
         var map = mapOf("interests" to getselectedInterest(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
+        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.setUserProperty(map)
     }
 

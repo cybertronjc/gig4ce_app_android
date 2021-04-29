@@ -120,10 +120,10 @@ class VerifyOTP : BaseFragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        showKeyboard()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        showKeyboard()
+//    }
 
     //    private fun setupSmsRetriver() {
 //        client = context?.let { SmsRetriever.getClient(it) }
