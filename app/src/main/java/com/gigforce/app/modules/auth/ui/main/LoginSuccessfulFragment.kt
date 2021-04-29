@@ -86,10 +86,7 @@ class LoginSuccessfulFragment : BaseFragment() {
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
 
-                        eventTracker.pushEvent(TrackingEventArgs(
-                                eventName = AuthEvents.SIGN_SUCCESS,
-                                props = null
-                        ))
+
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }
