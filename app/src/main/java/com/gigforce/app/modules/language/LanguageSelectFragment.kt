@@ -23,7 +23,7 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.google.gson.JsonObject
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.name_gender_item.*
+//import kotlinx.android.synthetic.main.name_gender_item.*
 import org.json.JSONException
 import javax.inject.Inject
 import kotlin.collections.HashMap

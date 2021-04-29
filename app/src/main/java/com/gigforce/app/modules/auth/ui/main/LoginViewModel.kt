@@ -93,6 +93,7 @@ class LoginViewModel() : ViewModel() {
 
     fun verifyPhoneNumberWithCode(code: String) {
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+        Log.d(TAG, "code: " + code)
         signInWithPhoneAuthCredential(credential)
     }
 

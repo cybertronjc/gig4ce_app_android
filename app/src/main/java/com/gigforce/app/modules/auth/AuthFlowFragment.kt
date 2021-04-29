@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class AuthFlowFragment : BaseFragment() {
 //                )//, null, navOptionsPopToHome)
 //            }
             else -> {
-                popFragmentFromStack(R.id.authFlowFragment)
+//                popFragmentFromStack(R.id.authFlowFragment)
                 FirebaseAuth.getInstance().addAuthStateListener {
                     onAuthStateChanged(it.currentUser)
                 }
@@ -74,10 +75,12 @@ class AuthFlowFragment : BaseFragment() {
 //            if (fragments != null && fragments?.size == 1) {
             popAllBackStates()
             saveData(AppConstants.LANGUAGE_SELECTED, "true")
-            eventTracker.setUserId(currentUser?.phoneNumber);
+            eventTracker.setUserId(currentUser?.phoneNumber.toString());
+            Log.d("navigate", "navigate to onboarding loader")
 
             navigateWithAllPopupStack(
                 R.id.onboardingLoaderfragment
+
             )
 //                val onboardingCompleted = isOnBoardingCompleted()
 //                if (!onboardingCompleted!!) {
