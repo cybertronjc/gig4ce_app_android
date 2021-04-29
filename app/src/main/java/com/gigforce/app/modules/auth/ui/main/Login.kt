@@ -343,6 +343,7 @@ class Login : BaseFragment() {
                     )
             ))
 
+
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
