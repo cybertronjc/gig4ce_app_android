@@ -3,7 +3,9 @@ package com.gigforce.app.modules.auth.ui.main
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -20,9 +22,13 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.credentials.Credentials
+import com.google.android.gms.auth.api.credentials.HintRequest
+import com.google.android.gms.common.api.GoogleApiClient
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
-import com.google.android.gms.auth.api.credentials.Credential
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_frament.*
 import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
@@ -56,9 +62,9 @@ class Login : BaseFragment() {
     private var mobile_number_sb = StringBuilder()
     private var arrayEditTexts1 = ArrayList<EditText>()
     private var win: Window? = null
+    private val RC_HINT = 9
+    var mCredentialsApiClient: GoogleApiClient? = null
 
-    //    private var mixpanel: MixpanelAPI? = null
-    private val CREDENTIAL_PICKER_REQUEST = 9
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,9 +84,7 @@ class Login : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         //this.setDarkStatusBarTheme(false);
-
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-
         return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
     }
 
@@ -100,16 +104,16 @@ class Login : BaseFragment() {
         prepareEditTextList()
         listeners()
         observer()
-
+        requestHint()
         //setClickListnerOnEditTexts()
 
         //back button
-        back_button_login.setOnClickListener {
-            hideKeyboard()
-            activity?.onBackPressed()
-        }
+            back_button_login.setOnClickListener {
+                hideKeyboard()
+                activity?.onBackPressed()
+            }
 //            showKeyboard()
-        //registerTextWatcher()
+            //registerTextWatcher()
 //            if (mobile_number.equals(""))
 //                showComfortDialog()
 //        }
@@ -141,6 +145,16 @@ class Login : BaseFragment() {
 // finally change the color
         win?.statusBarColor = resources.getColor(R.color.colorStatusBar)
     }
+
+    @Throws(IntentSender.SendIntentException::class)
+    private fun requestHint() {
+        val hintRequest = HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build()
+        val intent: PendingIntent? = context?.let { Credentials.getClient(it).getHintPickerIntent(hintRequest) }
+        startIntentSenderForResult(intent?.getIntentSender(), RC_HINT, null, 0, 0, 0, null)
+    }
+
 
     private fun prepareEditTextList() {
         arrayEditTexts1 = arrayListOf(
@@ -325,9 +339,7 @@ class Login : BaseFragment() {
     }
 
     private fun doActionOnClick() {
-
-
-        var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString()
+        var phoneNumber: String = "+91" + invisible_edit_mobile.text.toString();
         if (!validatePhoneNumber(phoneNumber)) {
             // TODO make the error bar visible
             cvloginwrong.visibility = VISIBLE
@@ -391,25 +403,24 @@ class Login : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            CREDENTIAL_PICKER_REQUEST ->
-                // Obtain the phone number from the result
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    val credential = data.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
-                    // credential.getId();  <-- will need to process phone number string
-                }
-            // ...
+        if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
+
+            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+            if (credential.id != null){
+                invisible_edit_mobile.setText(credential.id.substring(3))
+                populateMobileInEditTexts(credential.id.substring(3))
+                Log.d("phone detected", credential.id.substring(3))
+            }
+            else {
+                Log.d("phone detected", "Couldn't detect Phone number")
+            }
+
+
         }
     }
 
-    //    override fun onPause() {
-//        super.onPause()
-//        hideSoftKeyboard()
-//    }
-    override fun onResume() {
-        super.onResume()
-//        showKeyboard()
-    }
+
 //private fun checkForAllPermissions() {
 //    requestPermissions(Login.permissionsRequired, Login.PERMISSION_REQ_CODE)
 //}
