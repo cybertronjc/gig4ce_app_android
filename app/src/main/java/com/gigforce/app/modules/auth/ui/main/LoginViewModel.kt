@@ -100,34 +100,25 @@ class LoginViewModel @Inject constructor(
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
                 .signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d(TAG, "signInWithCredential:success")
-
-                        if (it.result.additionalUserInfo.isNewUser) {
-                            eventTracker.pushEvent(TrackingEventArgs(
-                                    eventName = AuthEvents.SIGN_SUCCESS,
-                                    props = null)
-                            )
-                        } else {
-                            eventTracker.pushEvent(TrackingEventArgs(
-                                    eventName = AuthEvents.LOGIN_SUCCESS,
-                                    props = null)
-                            )
-                        }
-
-                    } else {
-                        Log.w(TAG, "signInWithCredential:failure", it.exception)
-                        liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, ""))
-                    }
-                }
                 .addOnSuccessListener {
-                    registerFirebaseToken()
-                    Log.d(TAG, "Signed in successfully")
+                    Log.d(TAG, "signInWithCredential:success")
 
+                    if (it.additionalUserInfo.isNewUser) {
+                        eventTracker.pushEvent(TrackingEventArgs(
+                                eventName = AuthEvents.SIGN_SUCCESS,
+                                props = null)
+                        )
+                    } else {
+                        eventTracker.pushEvent(TrackingEventArgs(
+                                eventName = AuthEvents.LOGIN_SUCCESS,
+                                props = null)
+                        )
+                    }
+
+                    registerFirebaseToken()
                 }
                 .addOnFailureListener {
-                    Log.d(TAG, "Signed in failed")
+                    Log.w(TAG, "signInWithCredential:failure", it)
                     liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
                 }
     }
