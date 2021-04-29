@@ -1,6 +1,7 @@
 package com.gigforce.profile.onboarding.fragments.interest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.gigforce.profile.onboarding.models.SkillDetailModel
+import com.gigforce.profile.onboarding.models.SkillModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 import kotlinx.android.synthetic.main.interest_fragment.*
@@ -54,7 +57,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
         allInterestList.clear()
         allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
-        allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, "Delivery Executive"))
+        allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, DELIVERY_EXECUTIVE))
         allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))
         allInterestList.add(InterestDM(R.drawable.ic_technician, "Technician"))
         allInterestList.add(InterestDM(R.drawable.ic_trolley, "Helper"))
@@ -129,7 +132,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     private fun isDeliveryExecutiveSelected(): Boolean {
         allInterestList.forEach { obj ->
-            if (obj.interestName.equals("Delivery Executive")) {
+            if (obj.interestName.equals(DELIVERY_EXECUTIVE)) {
                 return true
             }
         }
@@ -247,14 +250,23 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     }
 
-    fun getselectedInterest(): ArrayList<String> {
-        var selectedInterests = ArrayList<String>()
+    fun getselectedInterest(): ArrayList<SkillModel> {
+        var skills = ArrayList<SkillModel>()
+//        var selectedInterests = ArrayList<String>()
         allInterestList.forEach { interest ->
             if (interest.selected) {
-                selectedInterests.add(interest.interestName)
+                var skillModelData = SkillModel(id = interest.interestName,skillDetail = getSkillDetailData(interest.interestName))
+                skills.add(skillModelData)
             }
         }
-        return selectedInterests
+        return skills
+    }
+
+    private fun getSkillDetailData(interestName: String): SkillDetailModel? {
+        if(interestName.equals(DELIVERY_EXECUTIVE)){
+            return SkillDetailModel(hasExperience = experiencedInDeliveryExecutive,experiencedIn = getDeliveryExecutiveExperiences())
+        }
+        return null
     }
 
     fun validateForm() {
@@ -268,11 +280,14 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
     }
 
     var currentStep = 0
-
+    var DELIVERY_EXECUTIVE = "Delivery Executive"
     override fun nextButtonActionFound(): Boolean {
         when (currentStep) {
             0 -> getselectedInterest().forEach {
-                if (it.equals("Delivery Executive")) {
+                Log.d("test flow","first")
+                if (it.id.equals(DELIVERY_EXECUTIVE)) {
+                    Log.d("test flow","second")
+
                     interest_cl.gone()
                     delivery_executive_detail_cl.visible()
                     formCompletionListener.enableDisableNextButton(false)
@@ -282,6 +297,7 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
             }
             else -> {
                 setDeliveryExecutiveInterestTracker()
+                Log.d("test flow","third")
                 return false
             }
         }
