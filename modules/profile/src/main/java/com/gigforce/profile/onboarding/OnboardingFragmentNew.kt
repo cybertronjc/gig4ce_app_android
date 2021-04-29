@@ -319,7 +319,7 @@ class OnboardingFragmentNew : Fragment() {
     private fun setInterest() {
         var interestFragment =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as InterestFragment)
-        viewModel.saveInterest(interestFragment.getselectedInterest(), interestFragment.experiencedInDeliveryExecutive, interestFragment.getDeliveryExecutiveExperiences())
+        viewModel.saveInterest(interestFragment.getselectedInterest())
         Log.e("working", "working save data 1")
 
     }

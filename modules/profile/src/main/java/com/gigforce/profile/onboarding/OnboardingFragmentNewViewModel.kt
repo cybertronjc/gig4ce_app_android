@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.profile.datamodel.EnrollmentInfo
 import com.gigforce.profile.datamodel.Invites
 import com.gigforce.profile.datamodel.ProfileData
+import com.gigforce.profile.onboarding.models.SkillModel
 import com.gigforce.profile.repo.ProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -44,9 +45,9 @@ class OnboardingFragmentNewViewModel : ViewModel() {
 
     }
 
-    fun saveInterest(selectedInterest: ArrayList<String>, deliveryExecutiveExperience: Boolean, experiences: ArrayList<String>) = viewModelScope.launch {
+    fun saveInterest(selectedInterest: ArrayList<SkillModel>) = viewModelScope.launch {
         try {
-            profileFirebaseRepository.setInterestData(selectedInterest, deliveryExecutiveExperience, experiences)
+            profileFirebaseRepository.setInterestData(selectedInterest)
         } catch (e: Exception) {
             e.printStackTrace()
         }

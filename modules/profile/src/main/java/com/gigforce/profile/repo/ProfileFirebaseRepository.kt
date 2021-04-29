@@ -2,6 +2,7 @@ package com.gigforce.profile.repo
 
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.profile.onboarding.models.SkillModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -496,14 +497,11 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
 //                }
 //        }
 
-    suspend fun setInterestData(interests:ArrayList<String>,deliveryExecutiveExperience:Boolean,DEList : ArrayList<String>){
+    suspend fun setInterestData(interests: ArrayList<SkillModel>){
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .updateOrThrow(mapOf(
-                        "interests" to interests,
-                        "interest.interests" to interests,
-                        "interest.deliveryExecutiveExperience" to deliveryExecutiveExperience,
-                        "interest.experiences" to DEList
+                        "skills" to interests
                 ))
     }
 
