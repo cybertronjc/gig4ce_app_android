@@ -1,24 +1,23 @@
 package com.gigforce.app.modules.auth.ui.main
 
 import android.app.Activity
-import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
+import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
@@ -26,9 +25,9 @@ import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGN
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.otp_verification.*
-import kotlinx.android.synthetic.main.otp_verification.progressBar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -46,14 +45,20 @@ class VerifyOTP : BaseFragment() {
     private var verificationId: String = ""
     private var mobile_number: String = ""
     var layout: View? = null;
-    lateinit var viewModel: LoginViewModel
+
+    private val viewModel: LoginViewModel by viewModels()
+
     var otpresentcounter = 0;
     private val OTP_NUMBER =
             Pattern.compile("[0-9]{6}\$")
     lateinit var match: Matcher;
     var timerStarted = false
-    private var win: Window? = null
+    private var client: SmsRetrieverClient? = null
 
+    //    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
+//    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
+    //var appSignature = AppSignatureHelper(context)
+    private var win: Window? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,19 +66,22 @@ class VerifyOTP : BaseFragment() {
             verificationId = it.getString("verificationId")!!
             mobile_number = it.getString("mobile_number")!!
         }
+
+        //Log.d("app signature", appSignature.appSignatures.get(0))
+
+
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         changeStatusBarColor()
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.verificationId = verificationId.toString()
         layout = inflateView(R.layout.otp_verification, inflater, container)
         //TODO
-
+        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_OTP_SCREEN_LOADED, null))
 //        layout?.textView29?.text = "We have sent the OTP to your " +". Please enter the OTP";
         return layout
     }
@@ -86,51 +94,98 @@ class VerifyOTP : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.activity = this.requireActivity()
         initializeViews()
+//        startSmsRetriver()
         listeners()
         observer()
         saveNewUsedMobileNumber()
 //        showKeyboard()
-
-
 //        if(otpresentcounter>=2){
 //            layout.otptimertv.text = "try later!"
 //            Toast.makeText(layout.context, "Too many invalid attempts, Try again later!", Toast.LENGTH_SHORT).show()
 //        }
     }
 
+    fun showKeyboard() {
+        txt_otp?.let {
+            it.setFocusableInTouchMode(true)
+            it.requestFocus()
+            val inputMethodManager =
+                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                    it.getApplicationWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0
+            )
+        }
 
-    fun showKeyboard(){
-        txt_otp.requestFocus()
-        val inputMethodManager =
-            activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputMethodManager!!.toggleSoftInputFromWindow(
-            txt_otp.getApplicationWindowToken(),
-            InputMethodManager.SHOW_FORCED, 0
-        )
 
     }
 
     override fun onResume() {
-
         super.onResume()
-
         showKeyboard()
+    }
 
+    //    private fun setupSmsRetriver() {
+//        client = context?.let { SmsRetriever.getClient(it) }
+//        var task: Task<Void>? = client?.startSmsRetriever()
+//
+//        // Listen for success/failure of the start Task. If in a background thread, this
+//// can be made blocking using Tasks.await(task, [timeout]);
+//        // Listen for success/failure of the start Task. If in a background thread, this
+//// can be made blocking using Tasks.await(task, [timeout]);
+//       task?.addOnSuccessListener {
+//            Log.d("sms retrive", it.toString())
+//       }
+//
+//        task?.addOnFailureListener {
+//            Log.d("sms failure", it.toString())
+//        }
+//    }
+    private fun changeStatusBarColor() {
+        win = activity?.window
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
     }
 
 
+//    private fun startSmsRetriver() {
+//        client = activity?.let { SmsRetriever.getClient(it) }
+//        val task = client?.startSmsRetriever()
+//
+//       task?.addOnSuccessListener { //showToast("SMS Retriever Started")
+////           smsBroadcast.initOTPListener(this)
+//           val intentFilter = IntentFilter()
+//           intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+//
+//
+////           context?.registerReceiver(smsBroadcast, intentFilter)
+//
+//           //context?.let { it1 -> LocalBroadcastManager.getInstance(it1).registerReceiver(smsBroadcast, intentFilter) }
+//
+//       }
+//
+//        task?.addOnFailureListener { showToast("SMS Retriever Failed") }
+//    }
 
-    private fun changeStatusBarColor() {
-    win = activity?.window
-    // clear FLAG_TRANSLUCENT_STATUS flag:
-    win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-    win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-    win?.setStatusBarColor(resources.getColor(R.color.status_bar_gray))
-}
+//    override fun onOTPReceived(otp: String) {
+//        if (smsBroadcast != null) {
+//            context?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(smsBroadcast) }
+//        }
+//        showToast(otp)
+//        txt_otp.setText(otp)
+//        Log.d("OTP Received", otp)
+//    }
+//
+//    override fun onOTPTimeOut() {
+//        // do nothing
+//        Log.d("Otp", "timeout")
+//    }
 
 
     private fun saveNewUsedMobileNumber() {
@@ -159,6 +214,10 @@ class VerifyOTP : BaseFragment() {
         viewModel.liveState.observe(viewLifecycleOwner, Observer { it ->
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
+
+                var map = mapOf("Error" to it.msg)
+                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
+//                mixpanel?.track("Entered wrong OTP")
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
@@ -201,13 +260,14 @@ class VerifyOTP : BaseFragment() {
                 otpresentcounter++;
                 counterStart();
                 viewModel.sendVerificationCode("+91" + mobile_number)
+                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_RESEND_OTP, null))
             } else {
                 navigateToLoginScreen()
             }
         }
         reenter_mobile.setOnClickListener {
 //            if (!timerStarted) {
-                navigateToLoginScreen()
+            navigateToLoginScreen()
 //            }
         }
         txt_otp.doAfterTextChanged { showWrongOTPLayout(false) }
@@ -219,11 +279,12 @@ class VerifyOTP : BaseFragment() {
     private fun navigateToLoginScreen() {
         countDownTimer?.cancel()
         val bundle = bundleOf(
-            "mobileno" to mobile_number
+                "mobileno" to mobile_number
 
         )
         popAllBackStates()
         navigate(R.id.Login, bundle)
+//        eventTracker.pushEvent(TrackingEventArgs("Navigate back to Login screen", null))
 //        navigateWithAllPopupStack(R.id.Login)
     }
 
@@ -277,6 +338,7 @@ class VerifyOTP : BaseFragment() {
         }
     }
 
+
     override fun onBackPressed(): Boolean {
 
 //        if (!timerStarted) {
@@ -291,4 +353,9 @@ class VerifyOTP : BaseFragment() {
             countDownTimer?.cancel()
         }
     }
+
+//    override fun onPause() {
+//        super.onPause()
+//        hideSoftKeyboard()
+//    }
 }

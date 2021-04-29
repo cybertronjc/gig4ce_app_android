@@ -234,17 +234,17 @@ class UploadDrivingLicense : BaseFragment(), RejectionDialog.RejectionDialogCall
 
                             val dlNo =
                                     drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
-
-                                MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle(getString(R.string.alert))
-                                        .setMessage(getString(R.string.enter_valid_dl))
-                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                        .show()
-
-                                dlSubmitSliderBtn_client_act.resetSlider()
-                                return
-                            }
+//                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.enter_valid_dl))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//
+//                                dlSubmitSliderBtn_client_act.resetSlider()
+//                                return
+//                            }
 
                             if (dlSubmitSliderBtn_client_act.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 

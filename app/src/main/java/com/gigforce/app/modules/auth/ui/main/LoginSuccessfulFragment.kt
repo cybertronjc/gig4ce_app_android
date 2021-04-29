@@ -86,7 +86,6 @@ class LoginSuccessfulFragment : BaseFragment() {
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
 
-
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }
