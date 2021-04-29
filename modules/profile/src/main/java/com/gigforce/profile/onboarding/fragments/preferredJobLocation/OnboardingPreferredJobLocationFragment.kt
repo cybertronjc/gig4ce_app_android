@@ -193,7 +193,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
         if (currentStep == 0) {
-            val delhiId = "HCbEvKJd2aPZaYgenUV7"
+            val delhiId = "oGpypK2Tolf2YTDLvsMq"
             if (selectedCity?.id == delhiId) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
