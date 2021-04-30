@@ -239,6 +239,17 @@ class OnboardingViewModel constructor(
         }
     }
 
+    fun saveLeadSource(
+        leadSource: HashMap<String, String>
+    ) = viewModelScope.launch {
+        try {
+            profileFirebaseRepository.setLeadSource(leadSource)
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
     }

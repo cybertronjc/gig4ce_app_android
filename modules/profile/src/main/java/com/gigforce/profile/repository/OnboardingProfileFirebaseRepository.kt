@@ -131,5 +131,11 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 ))
     }
 
+    suspend fun setLeadSource(sourceMap: HashMap<String, String>){
+        firebaseDB.collection(profileCollectionName)
+            .document(uid)
+            .updateOrThrow("leadSource", sourceMap)
+    }
+
 
 }

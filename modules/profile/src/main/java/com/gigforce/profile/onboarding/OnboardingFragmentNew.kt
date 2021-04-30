@@ -2,6 +2,7 @@ package com.gigforce.profile.onboarding
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.RemoteException
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -34,7 +35,11 @@ import kotlinx.android.synthetic.main.experience_item.*
 import kotlinx.android.synthetic.main.name_gender_item.view.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment.*
 import kotlinx.android.synthetic.main.onboarding_fragment_new_fragment_greeting_layout.*
+import org.json.JSONException
 import javax.inject.Inject
+import com.android.installreferrer.api.ReferrerDetails
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 
 @AndroidEntryPoint
 class OnboardingFragmentNew : Fragment() {
@@ -52,6 +57,7 @@ class OnboardingFragmentNew : Fragment() {
     private lateinit var viewModel: OnboardingFragmentNewViewModel
     private val onboardingViewModel: OnboardingViewModel by viewModels()
     private var win: Window? = null
+    private lateinit var referrerClient: InstallReferrerClient
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +81,7 @@ class OnboardingFragmentNew : Fragment() {
             setNextButtonForCurrentFragment()
             changeStatusBarColor(R.color.status_bar_gray)
         }
-
+        setUpReferrer()
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_STARTED, null))
     }
 
@@ -370,6 +376,76 @@ class OnboardingFragmentNew : Fragment() {
             formattedString += " "
         }
         return formattedString.trim()
+    }
+
+    private fun setUpReferrer() {
+        referrerClient = InstallReferrerClient.newBuilder(context).build()
+        referrerClient.startConnection(object : InstallReferrerStateListener {
+
+            override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                when (responseCode) {
+                    InstallReferrerClient.InstallReferrerResponse.OK -> {
+                        // Connection established.
+                        getReferrerDetails()
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
+                        // API not available on the current Play Store app.
+                    }
+                    InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> {
+                        // Connection couldn't be established.
+                    }
+                }
+            }
+
+            override fun onInstallReferrerServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        })
+    }
+
+    private fun getReferrerDetails(){
+        var response: ReferrerDetails? = null
+        try {
+            response = referrerClient.installReferrer
+            Log.d("response", response.toString())
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+        val referrerUrl = response!!.installReferrer
+        Log.d("referrer link", referrerUrl)
+
+        //send source event to mixpanel
+        try {
+            eventTracker.pushEvent(TrackingEventArgs("lead_source", getTagsMap(referrerUrl)))
+            eventTracker.setUserProperty(getTagsMap(referrerUrl))
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        //send source data to firebase
+        try {
+            onboardingViewModel.saveLeadSource(getTagsMap(referrerUrl))
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+        }
+
+        referrerClient.endConnection()
+    }
+
+    private fun getTagsMap(url: String): HashMap<String, String>{
+
+        var map= HashMap<String, String>()
+        val strArray = url.split("&").toTypedArray()
+        for (i in 0 until strArray.size - 1){
+
+            var tagArray = strArray.get(i).split("=")
+            map.put(tagArray.get(0), tagArray.get(1))
+            Log.d("tagArray", tagArray.toString())
+        }
+
+        return map
     }
 
     interface FragmentSetLastStateListener {
