@@ -6,12 +6,14 @@ import android.view.*
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
+import kotlinx.android.synthetic.main.name_gender_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,6 +51,7 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         var map = mapOf("age_group" to age)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_AGE_GROUP,map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Age Group", age))
 
         return false
     }

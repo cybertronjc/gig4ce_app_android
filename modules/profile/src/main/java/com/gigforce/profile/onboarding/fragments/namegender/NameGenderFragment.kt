@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
@@ -163,6 +164,8 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         props.put("gender", gender)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER, props))
         eventTracker.setUserProperty(props)
+        eventTracker.setProfileProperty(ProfilePropArgs("\$name", username.text.toString()))
+        eventTracker.setProfileProperty(ProfilePropArgs("Gender", gender))
 
         return false
     }

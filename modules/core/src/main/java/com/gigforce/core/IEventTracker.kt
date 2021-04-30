@@ -12,6 +12,9 @@ interface IEventTracker {
 
     // push events
     fun pushEvent(args:TrackingEventArgs)
+
+    //set user profile properties
+    fun setProfileProperty(args: ProfilePropArgs)
 }
 
 data class TrackingEventArgs(
@@ -22,3 +25,8 @@ data class TrackingEventArgs(
 data class UserPropArgs(
    val userId:String
 ){}
+
+data class ProfilePropArgs(
+    val propertyName: String,
+    val propertyValue: Any?
+)

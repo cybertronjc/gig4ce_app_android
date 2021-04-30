@@ -8,6 +8,7 @@ import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainApplication
 import com.gigforce.app.core.toBundle
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -63,6 +64,10 @@ class EventTrackerImp @Inject constructor(
         logEventOnAppsFlyer(args)
     }
 
+    override fun setProfileProperty(args: ProfilePropArgs) {
+        logProfilePropertiesOnMixpanel(args)
+    }
+
     private fun logEventOnAppsFlyer(args: TrackingEventArgs) {
         try {
             appsFlyerLib.trackEvent(context,
@@ -99,6 +104,16 @@ class EventTrackerImp @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging event on MixPanel", e)
+        }
+    }
+
+    private fun logProfilePropertiesOnMixpanel(args: ProfilePropArgs){
+        try {
+            mixpanel?.people?.set(args.propertyName, args.propertyValue)
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            CrashlyticsLogger.e("EventTrackerImp", "While logging profile property on MixPanel", e)
         }
     }
 }
