@@ -53,6 +53,7 @@ class EventTrackerImp @Inject constructor(
         mixpanel?.unregisterSuperProperty(prop)
     }
 
+
     override fun pushEvent(args: TrackingEventArgs) {
         Log.d("EventTrackerImp", "---Event Pushed-------")
         Log.d("EventTrackerImp", "Event Name : ${args.eventName}")

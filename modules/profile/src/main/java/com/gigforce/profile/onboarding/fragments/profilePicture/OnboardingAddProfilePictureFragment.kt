@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.gigforce.common_image_picker.ImageCropOptions
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.FragmentHelper
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.date.DateHelper
@@ -183,13 +185,13 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
                     it ?: return@Observer
 
                     when (it) {
-                        Lse.Loading -> {
+                        Lce.Loading -> {
 
                             imageView13.gone()
                             shimmerFrameLayout.visible()
                             shimmerFrameLayout.startShimmer()
                         }
-                        Lse.Success -> {
+                        is Lce.Content -> {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.gone()
                             imageView13.visible()
@@ -197,14 +199,17 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
                             viewModel.getProfileForUser()
 
+                            Log.d("profile_picture", it.content)
+
                             eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPLOADED_PROFILE_PHOTO,null))
+                            eventTracker.setProfileProperty(ProfilePropArgs("\$avatar",it.content))
                             Toast.makeText(
                                     requireContext(),
                                     "Profile Pic uploaded",
                                     Toast.LENGTH_SHORT
                             ).show()
                         }
-                        is Lse.Error -> {
+                        is Lce.Error -> {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.gone()
                             imageView13.visible()

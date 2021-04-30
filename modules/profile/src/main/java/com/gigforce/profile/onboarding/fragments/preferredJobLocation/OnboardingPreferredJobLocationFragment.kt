@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -231,6 +232,8 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
                 eventTracker.setUserProperty(map)
+                eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
+                eventTracker.setProfileProperty(ProfilePropArgs("SubLocation", confirmSubCityList))
             }
         }
     }
@@ -240,6 +243,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
             var map = mapOf<String, String>("Location" to it)
             eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
             eventTracker.setUserProperty(map)
+            eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
             eventTracker.removeUserProperty("SubLocation")
         }
 

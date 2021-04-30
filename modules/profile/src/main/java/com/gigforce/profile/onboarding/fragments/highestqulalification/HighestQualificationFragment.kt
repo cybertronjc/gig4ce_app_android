@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
@@ -133,6 +134,7 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
         var map = mapOf("qualification" to selectedHighestQualification)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_HIGHEST_QUALIFICATION,map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Highest Qualification", selectedHighestQualification))
         return false
     }
 

@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
@@ -118,6 +119,8 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Working Status", workStatus))
+        eventTracker.setProfileProperty(ProfilePropArgs("Total Experience", totalExperience))
         return false
     }
 

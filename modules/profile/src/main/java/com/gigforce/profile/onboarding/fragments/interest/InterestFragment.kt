@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -305,18 +306,33 @@ class InterestFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         return false
     }
 
+    fun getSelectedInterestsForAnalytics(): ArrayList<String> {
+        var skills = ArrayList<String>()
+        allInterestList.forEach { interest ->
+            if (interest.selected) {
+                skills.add(interest.interestName)
+            }
+        }
+        return skills
+    }
+
+
     private fun setMainInterestTracker() {
-        var map = mapOf("interests" to getselectedInterest())
+        var map = mapOf("interests" to getSelectedInterestsForAnalytics())
+        Log.d("interestMap", map.toString())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.removeUserProperty("DeliveryExperience")
         eventTracker.removeUserProperty("ExperienceIn")
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Interests", getSelectedInterestsForAnalytics()))
     }
 
     fun setDeliveryExecutiveInterestTracker() {
-        var map = mapOf("interests" to getselectedInterest(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
+        var map = mapOf("interests" to getSelectedInterestsForAnalytics(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
+        Log.d("interestDel", map.toString())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Interests", map))
     }
 
     override fun activeNextButton() {

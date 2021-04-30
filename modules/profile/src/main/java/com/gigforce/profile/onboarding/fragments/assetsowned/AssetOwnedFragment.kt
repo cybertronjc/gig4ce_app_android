@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
@@ -243,6 +244,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         var assetsData = getAssetsDataForAnalytics()
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_ASSETS_SELECTED,assetsData))
         eventTracker.setUserProperty(assetsData)
+        eventTracker.setProfileProperty(ProfilePropArgs("Assets Owned", assetsData))
         return false
     }
 

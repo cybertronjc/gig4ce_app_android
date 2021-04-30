@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -228,6 +229,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         var map = mapOf("FullTimeJob" to false, "Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("FullTimeJob", false))
+        eventTracker.setProfileProperty(ProfilePropArgs("Days", getWorkingDays()))
+        eventTracker.setProfileProperty(ProfilePropArgs("TimeSlots", getTimeSlots()))
     }
 
     private fun fullTimeJobTracker() {
@@ -236,6 +240,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         eventTracker.removeUserProperty("Days")
         eventTracker.removeUserProperty("TimeSlots")
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("FullTimeJob", true))
     }
 
 
