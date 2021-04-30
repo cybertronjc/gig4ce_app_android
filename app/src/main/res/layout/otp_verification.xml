@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_otp_fragment"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_56"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/iv_back_otp_fragment"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_button"
+                android:tint="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/login_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/iv_back_otp_fragment"
+                android:textAlignment="center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:textSize="20sp"
+                android:text="@string/login" />
+
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_33"
+        app:layout_constraintBottom_toTopOf="@+id/verify_otp_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_otp_fragment"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cvotpwrong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_121"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_4de02020_rad_4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/resend_otp">
+
+                <ImageView
+                    android:id="@+id/ivwronglogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_20"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_icon_metro_warning" />
+
+                <TextView
+                    android:id="@+id/tvwronglogin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_16"
+                    android:letterSpacing="0"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/you_have_entered_invalid_otp_n_please_re_enter_otp"
+                    android:textColor="#E02020"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivwronglogin"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_header_otp_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_24"
+                android:layout_marginTop="@dimen/size_89"
+                android:layout_marginEnd="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="7sp"
+                android:minHeight="@dimen/size_42"
+                android:text="@string/verify_account"
+                android:textColor="#333333"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/otp_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_100"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:minHeight="@dimen/size_51"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_header_otp_fragment"
+                app:layout_constraintTop_toBottomOf="@+id/tv_header_otp_fragment"
+                tools:text="We have sent an OTP on 7898971681.
+Please enter it below.
+" />
+
+            <com.gigforce.app.modules.auth.ui.main.OtpEditText
+                android:id="@+id/txt_otp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_53"
+                android:layout_marginEnd="@dimen/size_32"
+                android:cursorVisible="false"
+                android:digits="0123456789"
+                android:inputType="number"
+                android:maxLength="6"
+                android:minHeight="@dimen/size_32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_header_otp_fragment"
+                app:layout_constraintTop_toBottomOf="@+id/otp_label" />
+
+            <TextView
+                android:id="@+id/resend_otp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:gravity="end"
+                android:letterSpacing="0.09"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/resend_otp"
+                android:textColor="#e82e66"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_otp" />
+
+            <TextView
+                android:id="@+id/timer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginStart="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:gravity="end"
+                android:layout_marginTop="@dimen/size_10"
+                android:letterSpacing="0.09"
+                android:lineSpacingExtra="3sp"
+                android:textColor="#e82e66"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_otp"
+                tools:text="00:00" />
+
+            <TextView
+                android:id="@+id/reenter_mobile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_33"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginTop="230dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center"
+                android:letterSpacing="0.09"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/otp_reenter_mobile_underline"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintTop_toBottomOf="@id/txt_otp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+
+
+    <TextView
+        android:id="@+id/verify_otp_button"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_24"
+        android:minHeight="@dimen/size_36"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/verify_otp_button"
+        app:layout_constraintEnd_toEndOf="@+id/verify_otp_button"
+        app:layout_constraintStart_toStartOf="@+id/verify_otp_button"
+        app:layout_constraintTop_toTopOf="@+id/verify_otp_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

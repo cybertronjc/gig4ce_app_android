@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    tools:context=".modules.preferences.location.AroundCurrentAddressFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/textView100"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_arrow_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+              app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="@id/textView100"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView100" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/preferred_distance_"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:letterSpacing="0"
+            app:layout_constraintBottom_toBottomOf="@id/textView100"
+            app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
+            app:layout_constraintTop_toTopOf="@id/textView100" />
+
+        <Switch
+            android:id="@+id/workFromHomeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:theme="@style/Theme.switchButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/current_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:paddingLeft="60dp"
+        android:paddingBottom="21dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView100">
+
+        <TextView
+            android:id="@+id/textView91"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/current_address"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/line1view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="54dp"
+            android:layout_marginTop="5dp"
+            android:letterSpacing="-0.01"
+            android:text="@string/first_line_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/textView91" />
+
+        <TextView
+            android:id="@+id/line2view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.01"
+            android:text="@string/second_line_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/line1view"
+            app:layout_constraintTop_toBottomOf="@+id/line1view" />
+
+        <TextView
+            android:id="@+id/areaview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/setting_bg"
+            android:letterSpacing="-0.01"
+            android:text="@string/area_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line2view" />
+
+        <TextView
+            android:id="@+id/cityview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/setting_bg"
+            android:letterSpacing="-0.01"
+            android:text="@string/city_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/areaview" />
+
+        <TextView
+            android:id="@+id/stateview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/setting_bg"
+            android:letterSpacing="-0.01"
+            android:text="@string/state_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cityview" />
+
+        <TextView
+            android:id="@+id/pincodeview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/setting_bg"
+            android:letterSpacing="-0.01"
+            android:text="@string/pincode_"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stateview" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/around_current_add_cl"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginTop="7dp"
+        android:background="@color/white"
+        android:paddingBottom="21dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_address">
+
+        <RadioButton
+            android:id="@+id/en"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="25dp"
+            android:buttonTint="@color/colorPrimary"
+            android:checked="true"
+            android:fontFamily="@font/lato"
+            android:paddingLeft="6dp"
+            android:text="@string/around_current_address_"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
+            android:id="@+id/arround_current_add_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="31dp"
+            android:max="20"
+            android:min="0"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/en" />
+
+        <TextView
+            android:id="@+id/textView93"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.05"
+            android:text="0 KM"
+            android:textColor="#787993"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
+
+        <TextView
+            android:id="@+id/textView94"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.05"
+            android:text="20 KM"
+            android:textColor="#787993"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
+
+        <TextView
+            android:id="@+id/seekbardependent"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="0dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintStart_toStartOf="@+id/arround_current_add_seekbar"
+            app:layout_constraintTop_toBottomOf="@+id/arround_current_add_seekbar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

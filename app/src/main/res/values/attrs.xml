@@ -3,5 +3,107 @@
     <declare-styleable name="TopProfileBar">
         <attr name="title" format="string" />
         <attr name="subtitle" format="string" />
+        <attr name="user_name" format="string" />
+        <attr name="image_name" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ProfileCardBackground">
+        <attr name="card_title" format="string" />
+        <attr name="card_content" format="string" />
+        <attr name="card_bottom" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="HelpRow">
+        <attr name="icon_help" format="integer" />
+        <attr name="content_help" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CardRow">
+        <attr name="row_content" format="string" />
+        <attr name="location" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="OBToggleButtonItem">
+        <attr name="text" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="OBTextViewItem">
+        <attr name="textview" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="ExtendedBottomSheetBehavior">
+        <attr name="hideable" format="boolean" />
+        <attr name="peekHeight" format="dimension" />
+        <attr name="skipCollapsed" format="boolean" />
+        <attr name="halfOffset" format="dimension" />
+        <attr name="allowDragging" format="boolean" />
+    </declare-styleable>
+    // The amount of DIM that will be applied to the background from 0 to 1.
+    <attr name="superBottomSheet_dim" format="float" />
+
+    // Sheet background color
+    <attr name="superBottomSheet_backgroundColor" format="color" />
+
+    // To corner radius to be applied. 0 if you want none.
+    <attr name="superBottomSheet_cornerRadius" format="dimension" />
+
+    // Enable or disable the status bar animation. Default is true.
+    <attr name="superBottomSheet_animateStatusBar" format="boolean" />
+
+    // Enable or disable the radius animation. Default is true.
+    <attr name="superBottomSheet_animateCornerRadius" format="boolean" />
+
+    // Default if false. Enalbe it if you want to skip collapse state
+    <attr name="superBottomSheet_alwaysExpanded" format="boolean" />
+
+    // Default if true
+    <attr name="superBottomSheet_cancelableOnTouchOutside" format="boolean" />
+
+    // Default if true
+    <attr name="superBottomSheet_cancelable" format="boolean" />
+
+    // Status bar color. The default uses the colorDark attribute value.
+    <attr name="superBottomSheet_statusBarColor" format="color" />
+
+    // The height of the bottom sheet when it is collapsed
+    <attr name="superBottomSheet_peekHeight" format="dimension" />
+
+    <declare-styleable name="SeekBarWithHint">
+        <attr name="hint_text_size" format="dimension"></attr>
+        <attr name="hint_text_color" format="color">#000000</attr>
+    </declare-styleable>
+
+    <declare-styleable name="ImageViewRounded">
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_circle_background_color" format="color" />
+        <attr name="civ_dashed_border" format="boolean" />
+        <attr name="civ_is_qr" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="ReadMoreTextView">
+        <attr name="trimExpandedText" format="string" />
+        <attr name="trimCollapsedText" format="string" />
+        <attr name="trimLength" format="integer" />
+        <attr name="showTrimExpandedText" format="boolean" />
+        <attr name="colorClickableText" format="color" />
+        <attr name="trimLines" format="integer" />
+        <attr name="trimMode">
+            <enum name="trimModeLine" value="0"/>
+            <enum name="trimModeLength" value="1"/>
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="RoundCornerImageView">
+        <attr name="sriv_left_top_corner_radius" format="dimension" />
+        <attr name="sriv_right_top_corner_radius" format="dimension" />
+        <attr name="sriv_left_bottom_corner_radius" format="dimension" />
+        <attr name="sriv_right_bottom_corner_radius" format="dimension" />
+        <attr name="sriv_border_width" format="dimension" />
+        <attr name="sriv_border_color" format="color" />
+        <attr name="sriv_oval" format="boolean" />
+        <attr name="android:scaleType" />
     </declare-styleable>
 </resources>

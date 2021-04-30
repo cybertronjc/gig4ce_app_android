@@ -8,7 +8,7 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/stateview"
         style="@style/text_pagetitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,5 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:minHeight="@dimen/size_36"
         android:text="Add New" />
 </LinearLayout>

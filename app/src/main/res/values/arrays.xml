@@ -9,4 +9,92 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="gender_values">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="indian_states">
+        <item>Select State</item>
+        <item>Andaman and Nicobar Islands</item>
+        <item>Andhra Pradesh</item>
+        <item>Arunachal Pradesh</item>
+        <item>Assam</item>
+        <item>Bihar</item>
+        <item>Chandigarh</item>
+        <item>Chhattisgarh</item>
+        <item>Dadra and Nagar Haveli</item>
+        <item>Daman and Diu</item>
+        <item>Delhi</item>
+        <item>Goa</item>
+        <item>Gujarat</item>
+        <item>Haryana</item>
+        <item>Himachal Pradesh</item>
+        <item>Jammu and Kashmir</item>
+        <item>Jharkhand</item>
+        <item>Karnataka</item>
+        <item>Kerala</item>
+        <item>Lakshadweep</item>
+        <item>Madhya Pradesh</item>
+        <item>Maharashtra</item>
+        <item>Manipur</item>
+        <item>Meghalaya</item>
+        <item>Mizoram</item>
+        <item>Nagaland</item>
+        <item>Orissa</item>
+        <item>Pondicherry</item>
+        <item>Punjab</item>
+        <item>Rajasthan</item>
+        <item>Sikkim</item>
+        <item>Tamil Nadu</item>
+        <item>Telangana</item>
+        <item>Tripura</item>
+        <item>Uttarakhand</item>
+        <item>Uttar Pradesh</item>
+        <item>West Bengal</item>
+    </string-array>
+
+    <string-array name="years_values">
+        <item>Select Years</item>
+        <item>0 Year</item>
+        <item>1 Year</item>
+        <item>2 Years</item>
+        <item>3 Years</item>
+        <item>4 Years</item>
+        <item>5 Years</item>
+        <item>6 Years</item>
+        <item>7 Years</item>
+        <item>8 Years</item>
+        <item>9 Years</item>
+        <item>10 Years</item>
+        <item>11 Years</item>
+        <item>12 Years</item>
+        <item>13 Years</item>
+        <item>14 Years</item>
+        <item>15 Years</item>
+        <item>16 Years</item>
+        <item>17 Years</item>
+        <item>18 Years</item>
+        <item>19 Years</item>
+        <item>20 Years</item>
+    </string-array>
+
+    <string-array name="months_values">
+        <item>Select Months</item>
+        <item>0 Month</item>
+        <item>1 Month</item>
+        <item>2 Months</item>
+        <item>3 Months</item>
+        <item>4 Months</item>
+        <item>5 Months</item>
+        <item>6 Months</item>
+        <item>7 Months</item>
+        <item>8 Months</item>
+        <item>9 Months</item>
+        <item>10 Months</item>
+        <item>11 Months</item>
+    </string-array>
+
 </resources>

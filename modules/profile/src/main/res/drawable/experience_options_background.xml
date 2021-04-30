@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="false">
+        <shape
+            android:shape="rectangle"
+            android:useLevel="false">
+            <corners
+                android:radius="4dp"
+                />
+
+            <stroke
+                android:color="#f4faff"
+                android:width="1dp"/>
+
+        </shape>
+    </item>
+
+    <item android:state_checked="true">
+        <shape
+            android:shape="rectangle"
+            android:useLevel="false">
+            <stroke
+                android:width="1dp"
+                android:color="@color/selected_option_border_color"></stroke>
+            <solid
+                android:color="@color/selected_option_bg"
+                />
+            <!-- The radius makes the corners rounded -->
+            <corners android:radius="4dp"></corners>
+
+        </shape>
+    </item>
+
+</selector>

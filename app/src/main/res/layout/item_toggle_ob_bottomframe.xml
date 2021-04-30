@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/inputContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="60dp"
+        android:padding="16dp"
+        cardElevation="1dp"
+        cardBackgroundColor="@color/colorAccent"
+        cardCornerRadius="10dp"
+        tools:ignore="MissingConstraints">
+                <com.gigforce.app.modules.onboarding.controls.OBToggleButton
+                    android:id="@+id/OBToggleButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </com.gigforce.app.modules.onboarding.controls.OBToggleButton>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

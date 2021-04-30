@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_up_sheet">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp">
+        <TextView
+            android:id="@+id/form_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/bs_top_margin"
+            android:paddingTop="8dp"
+            android:textColor="#d4e02020"
+            android:letterSpacing="0.05"
+            android:visibility="gone"
+            android:text="@string/error_empty_mandatory_fields" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bs_top_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="@string/edit_language"
+                style="@style/BsHeadingBold12" />
+
+            <ImageButton
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                  app:srcCompat="@drawable/ic_delete"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_language_name"
+            style="@style/LatoRegularCardText12" />
+
+        <EditText
+            android:id="@+id/language_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/add_language_name"
+            android:inputType="textPersonName" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/mother_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_mother_tongue_text"
+            style="@style/LatoRegularCardText12" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            style="@style/LatoRegularCardText12"
+            android:text="@string/add_language_speaking_level" />
+
+        <SeekBar
+            android:id="@+id/language_speaking_level"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            style="@style/LatoRegularCardText12"
+            android:text="@string/add_language_writing_level" />
+
+        <SeekBar
+            android:id="@+id/language_writing_level"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_text"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:minHeight="@dimen/size_36"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/gray_color"
+                app:strokeColor="@color/gray_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_text"
+                android:minHeight="@dimen/size_36"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimary"
+                app:strokeColor="@color/colorPrimary"
+                style="?attr/materialButtonOutlinedStyle"  />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

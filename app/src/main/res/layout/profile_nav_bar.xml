@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f2f2f2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/about_me"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:elevation="1dp"
+        android:textAlignment="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:chipBackgroundColor="@color/white"
+        android:text="@string/about_me" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/education"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:elevation="1dp"
+        android:textAlignment="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:chipBackgroundColor="@color/white"
+        android:text="@string/education" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/experience"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:elevation="1dp"
+        android:textAlignment="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:chipBackgroundColor="@color/white"
+        android:text="@string/experience" />
+
+</LinearLayout>

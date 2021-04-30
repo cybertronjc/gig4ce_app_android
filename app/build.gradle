@@ -4,69 +4,383 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+
+    signingConfigs {
+        debug {
+            storeFile file('../keystore/gigforceapp.jks')
+            storePassword 'gigforce'
+            keyAlias 'key0'
+            keyPassword 'gigforce'
+        }
+
+        production {
+            storeFile file('/Users/apple/Documents/gigforce-upload.jks')
+            storePassword 'gig4ce'
+            keyAlias 'PlayStoreUploadKey'
+            keyPassword 'gig4ce'
+        }
+
+        staging {
+            storeFile file('../keystore/gigforcestaging.jks')
+            storePassword 'gigforce'
+            keyAlias 'gigforce'
+            keyPassword 'gigforce'
+        }
+
+        //        production {
+//            storeFile file('/Users/apple/Downloads/gigforceprodapp.jks')
+//            storePassword 'gigforce'
+//            keyAlias 'gigforce'
+//            keyPassword 'gigforce'
+//        }
+    }
+
     compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 97
+        versionName "1.28.8"
+
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            crunchPngs false
+            splits.abi.enable = false
+            splits.density.enable = false
+
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+
+        /**
+         * Google Play Store Build
+         */
+        production {
+            dimension "default"
+            signingConfig signingConfigs.production
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Prod"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://qslv7bpakk.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_force_users_prod"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
+        }
+
+        /**
+         * development Build
+         */
+        development {
+            dimension "default"
+            versionNameSuffix '-Dev'
+            signingConfig signingConfigs.debug
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
+
+        }
+
+        staging {
+            dimension "default"
+            versionNameSuffix '-staging'
+            signingConfig signingConfigs.staging
+            buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
+            buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
+            buildConfigField "String", 'DRIVING_CERTIFICATE_METHOD', '"DrivingCertificate-Dev"'
+            buildConfigField "String", 'SYNC_CHAT_CONTACTS_URL', '"https://7jdkaxt35e.execute-api.ap-south-1.amazonaws.com/default/sync-user-uploaded-contacts_with_gig_gorce_users"'
+            buildConfigField "String", 'CREATE_USER_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/create"'
+            buildConfigField "String", 'CHECK_USER_OR_SEND_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/sendotp"'
+            buildConfigField "String", 'VERIFY_OTP_URL', '"https://v6ha2ldpw9.execute-api.ap-south-1.amazonaws.com/dev/verifyotp"'
+            buildConfigField "String", 'SEND_SMS_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/message/send"'
+            buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
+            buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
+
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
 }
 
 dependencies {
 
+    implementation project(path: ':modules:core')
+    implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:feature-chat')
+    implementation project(path: ':modules:app-giger')
+    implementation project(path: ':modules:learning')
+    implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:profile')
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    //implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
+    def moshiVersion = "1.8.0"
+    def retrofit2_version = "2.5.0"
+    def okhttp3_version = "3.12.0"
+    def kotlinCoroutineVersion = "1.0.1"
+
+    //Volley
+//    implementation 'com.android.volley:volley:1.1.1'
+
+    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
+
+    //Moshi
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    //Retrofit2
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+
+    //Okhttp3
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    //Kotlin Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
     implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    //implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha02"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.concurrent:concurrent-listenablefuture-callback:1.0.0-beta01'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
     // implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
-
-    implementation 'com.jaeger.statusbarutil:library:1.4.0'
-
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
+    implementation 'com.android.support:appcompat-v7:'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.appcompat:appcompat:1.2.0' // changed from 1.1.0
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
     // Navigation library
-    def nav_version = "2.1.0"
+    def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+
+    //implementation 'com.google.firebase:firebase-messaging:20.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     // implementation "androidx.fragment:fragment-testing:1.2.0-rc05"
+
 
     // glide
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
 
     // firebase SDKs
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.3.1'
-    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-core:18.0.2'
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    // implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.google.firebase:firebase-firestore:21.5.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
-}
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-functions:19.1.0'
 
-apply plugin: 'com.google.gms.google-services'
+
+    implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
+
+    //sms retriver
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+//    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
+
+    implementation "com.github.StephenVinouze:MaterialNumberPicker:1.0.0"
+
+
+//    implementation 'com.github.yalantis:ucrop:2.2.4'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+//    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-core:17.4.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    //ID fy
+    //implementation 'com.idfy:rft:1.0.3'
+
+    // LocaleChanger - language
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.github.franmontiel:LocaleChanger:0.9.2'
+//    implementation 'com.jakewharton:butterknife:8.8.1'
+    //annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //noinspection GradleCompatible
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //for paralax
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:26.1.0'
+    //vision api for face detect
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+
+    //vision api for face detect
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
+    implementation 'com.github.yalantis:ucrop:2.2.4'
+    // verification
+    // https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    // https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    // Drag bottomsheet
+    implementation 'com.github.andrefrsousa:SuperBottomSheet:1.5.0'
+
+    implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
+
+    implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
+    // material dialogs
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+
+    // swipe button
+    implementation "com.ncorti:slidetoact:0.8.0"
+
+    // round seekbar
+    implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
+
+    // semi circle progressbar
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
+    // timeline view
+    implementation 'com.github.vipulasri:timelineview:1.1.5'
+
+    //Camera View
+    implementation 'com.otaliastudios:cameraview:2.6.2'
+
+    // Sticky header
+    implementation 'com.github.qiujayen:sticky-layoutmanager:1.0.1'
+
+    //Exo Player
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    implementation 'com.jsibbold:zoomage:1.3.1'
+
+    //Transcoder for compressing video files
+    implementation 'com.otaliastudios:transcoder:0.9.1'
+    //Qr Code Library
+    implementation 'com.google.zxing:core:3.4.0'
+
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
+
+    implementation 'com.clevertap.android:clevertap-android-sdk:3.8.1'
+    implementation 'com.google.android.gms:play-services-base:17.3.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //Mandatory for CleverTap Android SDK v3.6.4 and above add the following -
+    implementation 'com.android.installreferrer:installreferrer:2.1'
+
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
+
+    //implementation 'com.google.dagger:dagger:2.31'
+    //kapt 'com.google.dagger:dagger-compiler:2.31'
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // Rx
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-rc01'
+
+    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
+    implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
+    implementation "com.github.skydoves:powermenu:2.1.9"
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Facebook Integration
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+    implementation 'com.google.firebase:firebase-config-ktx:20.0.3'
+    implementation 'com.github.michaldrabik:classicmaterialtimepicker:1.1.3'
+
+
+    implementation 'com.mixpanel.android:mixpanel-android:5.8.8'
+    implementation 'com.appsflyer:af-android-sdk:5.4.0'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
+}

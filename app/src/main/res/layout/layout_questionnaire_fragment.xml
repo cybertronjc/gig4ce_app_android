@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_questionnaire"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_72"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_back_application_client_activation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/size_16"
+                android:paddingEnd="@dimen/size_19"
+                app:srcCompat="@drawable/ic_arrow_back_24"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_tile_questionnaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_back_application_client_activation"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tb_layout_questionnaire"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_23"
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_questionnaire"
+        app:tabBackground="@drawable/tab_selector_questionnaire"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabPaddingEnd="@dimen/size_10"
+        app:tabPaddingStart="@dimen/size_10" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_questionnaire"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_action_questionnaire"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_layout_questionnaire" />
+
+
+    <TextView
+        android:id="@+id/tv_action_questionnaire"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_28"
+        android:layout_marginEnd="@dimen/size_28"
+        android:layout_marginBottom="@dimen/size_36"
+        android:background="@drawable/border_lipstick_rad_4"
+        android:gravity="center"
+        android:letterSpacing="0"
+        android:minHeight="@dimen/size_36"
+        android:paddingTop="@dimen/size_10"
+        android:paddingBottom="@dimen/size_9"
+        android:text="@string/next_camel_case"
+        android:textColor="@color/lipstick"
+        android:textSize="@dimen/font_14"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_questionnaire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

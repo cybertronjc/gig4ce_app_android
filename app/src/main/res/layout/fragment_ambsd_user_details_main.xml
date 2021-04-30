@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/skip_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:enabled="true"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:text="@string/skip_underline"
+        android:textColor="@color/warm_grey"
+        android:textAllCaps="false"
+        android:minHeight="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:enabled="true"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="@string/next_camel_case"
+        app:strokeWidth="1dp"
+        android:textAllCaps="false"
+        app:strokeColor="@color/lipstick"
+        app:layout_constraintBottom_toTopOf="@id/skip_btn" />
+
+    <ProgressBar
+        android:id="@+id/submit_progress_bar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/submitBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/submitBtn" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/submitBtn"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <com.gigforce.common_ui.views.GigforceToolbar
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/breifing_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="16dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                      app:srcCompat="@drawable/banner_users_grid" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato"
+                    android:lineHeight="17sp"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Tell us the basic information about the User"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/user_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:lineHeight="17sp"
+                android:text="Full Name *"
+                android:textColor="@color/black_three"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/breifing_layout" />
+
+            <EditText
+                android:id="@+id/user_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rectangle_round_grey"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:minHeight="36dp"
+                android:minLines="1"
+                android:paddingStart="10dp"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintTop_toBottomOf="@id/user_name_label" />
+
+            <ImageView
+                android:id="@+id/user_name_okay_iv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="14dp"
+                  app:srcCompat="@drawable/ic_done"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/user_name_et"
+                app:layout_constraintEnd_toEndOf="@id/user_name_et"
+                app:layout_constraintTop_toTopOf="@id/user_name_et" />
+
+            <TextView
+                android:id="@+id/full_name_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_name_et"
+                tools:text="Some Error" />
+
+
+            <TextView
+                android:id="@+id/date_of_birth_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Date Of Birth"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/full_name_error_tv" />
+
+
+            <TextView
+                android:id="@+id/date_of_birth_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rectangle_round_grey"
+                android:fontFamily="@font/lato"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="3sp"
+                android:minHeight="36dp"
+                android:paddingStart="8dp"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintTop_toBottomOf="@id/date_of_birth_label" />
+
+            <ImageView
+                android:id="@+id/dob_okay_iv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="14dp"
+                  app:srcCompat="@drawable/ic_done"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/date_of_birth_et"
+                app:layout_constraintEnd_toEndOf="@id/date_of_birth_et"
+                app:layout_constraintTop_toTopOf="@id/date_of_birth_et" />
+
+            <TextView
+                android:id="@+id/dob_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_of_birth_et"
+                tools:text="Some Error" />
+
+            <TextView
+                android:id="@+id/gender_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Gender *"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dob_error_tv" />
+
+            <TextView
+                android:id="@+id/gender_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gender_label"
+                tools:text="Some Error" />
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/gender_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="16dp"
+                app:chipSpacingHorizontal="14dp"
+                app:layout_constraintTop_toBottomOf="@id/gender_error_tv"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_male"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:checked="true"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_female"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_other"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+
+
+
+
+            <TextView
+                android:id="@+id/highest_qual_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Highest Qualification *"
+                android:textColor="@color/black_three"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gender_chip_group" />
+
+
+            <TextView
+                android:id="@+id/highest_qual_error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/highest_qual_label"
+                tools:text="Some Error" />
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/highest_qual_chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="16dp"
+                app:chipSpacingHorizontal="14dp"
+                app:layout_constraintTop_toBottomOf="@id/highest_qual_error_tv"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_less_than_10th"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upto 10th"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_10th_pass"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10th Pass"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_12th_pass"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12th Pass"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_diploma"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Diploma"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_graduation"
+                    style="@style/AppSingleChoiceChip2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Graduation"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

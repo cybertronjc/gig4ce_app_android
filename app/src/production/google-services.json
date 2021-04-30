@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1008010793707",
+    "firebase_url": "https://gig4ce-app.firebaseio.com",
+    "project_id": "gig4ce-app",
+    "storage_bucket": "gig4ce-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008010793707:android:ecdb556b5c3f41c7d0a4ae",
+        "android_client_info": {
+          "package_name": "com.gigforce.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008010793707-0rqdmqim302c3amj262gn111rqkkojgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "c9cd043805e7dc6273eec3d69f0c325a52b72659"
+          }
+        },
+        {
+          "client_id": "1008010793707-187sa4fklp3f1i0hodefq8a71ghh313b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "edcb19b44d6f9acba080aab4d1b5abe7ffc784c4"
+          }
+        },
+        {
+          "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD17twavcwPw1Au5eZ4CqELR9w91qTy4oE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008010793707-k9kg5ni1tjmv788v8uce247b3nvr5a97.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

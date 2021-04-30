@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="90dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/learningToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/learningBackButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="14dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleX="0.75"
+                android:scaleY="0.75"
+                  app:srcCompat="@drawable/ic_arrow_back_black"
+                app:tint="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv1HS1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0.01"
+                tools:text="Retail Sales Executive"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/learningBackButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ImageView
+            android:id="@+id/videoThumnailIV"
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/learningToolbarLayout" />
+
+
+
+        <TextView
+            android:id="@+id/videoTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            tools:text="Demonstrate products to customers"
+            android:textColor="#d9000000"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoThumnailIV" />
+
+
+        <TextView
+            android:id="@+id/videoDescTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="15dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="#d9000000"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoTitleTV"
+            tools:text="Every customer is unique, so every demo should be uniquely matched to that customer. Before you demonstrate a product, do your research. Learn how to become a master of the art of demonstrating a product to  a customer." />
+
+
+        <ImageView
+            android:id="@+id/imageView38"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+              app:srcCompat="@drawable/ic_wifi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoDescTV" />
+
+
+        <TextView
+            android:id="@+id/levelTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            tools:text="Module 1 of 3"
+            app:layout_constraintStart_toEndOf="@+id/imageView38"
+            app:layout_constraintTop_toBottomOf="@+id/videoDescTV" />
+
+
+
+        <ImageView
+            android:id="@+id/compStatusIV"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+              app:srcCompat="@drawable/ic_play"
+            app:tint="@color/black"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
+
+
+        <TextView
+            android:id="@+id/complitionStatusTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            tools:text="0/0 Lessons completed"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView38"
+            app:layout_constraintTop_toBottomOf="@+id/levelTV" />
+
+
+        <ImageView
+            android:id="@+id/assessmentCountIV"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+              app:srcCompat="@drawable/ic_receipt_outlined"
+            app:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/complitionStatusTv" />
+
+
+        <TextView
+            android:id="@+id/assessmentCountTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="0"
+            android:text="0/0 Assessments completed"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView38"
+            app:layout_constraintTop_toBottomOf="@+id/complitionStatusTv" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enrollBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="ENROLL"
+            app:strokeColor="@color/colorPrimary"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/assessmentCountTv" />
+
+
+        <View
+            android:id="@+id/dividerView"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/enrollBtn" />
+
+
+        <TextView
+            android:id="@+id/modulesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="Modules "
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerView" />
+
+
+
+        <FrameLayout
+            android:id="@+id/modules_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="170dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/modulesLabel">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_modules_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/learning_modules_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/learning_modules_learning_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/lessonsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="21dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/lessons"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modules_container" />
+
+
+
+        <FrameLayout
+            android:id="@+id/lessons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="170dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/lessonsLabel">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_lessons_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/learning_details_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/learning_details_learning_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/lessonsSeeMoreButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:minHeight="@dimen/size_36"
+            android:text="@string/see_more"
+            app:strokeColor="@color/colorPrimary"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintTop_toBottomOf="@id/lessons_container" />
+
+        <View
+            android:id="@+id/dividerView2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="24dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/lessonsSeeMoreButton" />
+
+
+        <TextView
+            android:id="@+id/assessmentsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/assessment_"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerView2" />
+
+
+        <FrameLayout
+            android:id="@+id/assessments_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/assessmentsLabel">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/learning_details_assessments_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/learning_details_assessments_progress_bar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/learning_details_assessments_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                tools:text="Unable to load your stuff" />
+
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/assessmentSeeMoreButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:minHeight="@dimen/size_36"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/see_more"
+            app:strokeColor="@color/colorPrimary"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            app:layout_constraintTop_toBottomOf="@id/assessments_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

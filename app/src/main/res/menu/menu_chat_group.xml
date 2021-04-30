@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_message_user"
+        android:title="Message User"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_remove_user"
+        android:title="Remove from group"
+        app:showAsAction="collapseActionView" />
+
+</menu>

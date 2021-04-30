@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_main_art_video"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="90dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_main_art_video"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/black"
+        android:letterSpacing="0"
+        android:fontFamily="@font/lato"
+        android:textSize="24sp"
+        android:text="Welcome to Gigforce" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:fontFamily="@font/lato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@id/tv_title"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="16dp"
+        android:textColor="#80000000"
+        android:letterSpacing="0"
+        android:textSize="18sp"
+        android:text="The Future of Work" />
+
+    <ImageView
+        android:id="@+id/iv_bottom_art"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_combined_shape_copy_2" />
+
+    <TextView
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="54dp"
+        android:layout_marginBottom="25dp"
+        android:text="Get Started"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"
+        android:letterSpacing="0"
+        android:textColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="15dp"
+          app:srcCompat="@drawable/ic_baseline_arrow_forward_24_white" />
+</RelativeLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_up_sheet"
+    android:clipToPadding="false">
+
+    <RelativeLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="26dp"
+        android:orientation="horizontal"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/delete"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/form_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bs_top_margin"
+                android:letterSpacing="0.05"
+                android:text="@string/error_empty_mandatory_fields"
+                android:textColor="#d4e02020"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_heading_add_contact_bts"
+                style="@style/BsHeadingBold12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/add_contact_new_contact" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/delete"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+              app:srcCompat="@drawable/ic_delete" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/add_contact_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/size_16"
+        android:ems="10"
+        android:hint="@string/phone_mandatory"
+        android:importantForAutofill="no"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ll_top"
+        app:layout_constraintTop_toBottomOf="@+id/ll_top" />
+
+    <EditText
+        android:id="@+id/add_contact_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/add_contact_email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_contact_add_more"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_more_text"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorPrimary"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/add_contact_phone"
+        app:layout_constraintTop_toBottomOf="@+id/cb_is_whatsapp_number_add_contact" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cb_is_whatsapp_number_add_contact"
+        style="@style/check_box_style_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/is_whats_app_number"
+        android:textSize="@dimen/font_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/ll_top"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_phone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_contact_cancel"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/cancel_text"
+        android:minHeight="@dimen/size_36"
+        android:textColor="@color/gray_color"
+        app:layout_constraintEnd_toStartOf="@+id/add_contact_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_contact_save"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_36"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/save_text"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_contact_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_add_more"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:strokeColor="@color/colorPrimary" />
+</androidx.constraintlayout.widget.ConstraintLayout>

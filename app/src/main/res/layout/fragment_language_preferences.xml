@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    tools:context=".modules.preferences.language.LanguagePreferencesFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_arrow_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+              app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="19dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/language"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RadioGroup
+        android:id="@+id/groupradio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="2dp"
+        android:background="@color/white"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <RadioButton
+            android:id="@+id/en"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="en"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:text="English"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/hi"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="hi"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:text="हिंदी"
+            android:textSize="14sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/kn"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="kn"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:text="@string/kannada"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/te"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="te"
+            android:text="తెలుగు"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/gu"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="gu"
+            android:paddingLeft="11dp"
+            android:text="ગુજરતી"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/pu"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="pa"
+            android:text="ਪੰਜਾਬੀ"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/fr"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="fr"
+            android:text="français"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/setting_bg" />
+
+        <RadioButton
+            android:id="@+id/mr"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:paddingLeft="11dp"
+            android:hint="mr"
+            android:text="मराठी"
+            android:enabled="false"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

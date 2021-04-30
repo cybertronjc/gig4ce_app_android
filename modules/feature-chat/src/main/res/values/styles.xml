@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="Widget.Theme.Gigforce1.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+        <item name="exampleColor">@color/light_blue_400</item>
+    </style>
+
+    <style name="chatImageView" parent="">
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+
+        <item name="cornerSize">5%</item>
+    </style>
+</resources>

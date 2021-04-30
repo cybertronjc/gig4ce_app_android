@@ -1,0 +1,13 @@
+<resources>
+    <color name="light_blue_400">#FF29B6F6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="gray_400">#FFBDBDBD</color>
+    <color name="gray_600">#FF757575</color>
+
+    <color name="dust_grey">#979797</color>
+    <color name="dove_grey">#646464</color>
+    <color name="red">#FF0000</color>
+
+    <color name="chat_incoming_mesage_background_color">#ffd9e6</color>
+    <color name="chat_outgoing_mesage_background_color">#e42c64</color>
+</resources>

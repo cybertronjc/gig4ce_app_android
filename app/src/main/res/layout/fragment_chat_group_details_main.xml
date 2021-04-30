@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FEFEFE">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cv_contactDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/back_btn"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                      app:srcCompat="@drawable/ic_arrow_back_black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/option_ellipses"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:visibility="gone"
+                      app:srcCompat="@drawable/ic_ellipses"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="226dp"
+                      app:srcCompat="@drawable/ic_group"
+                    app:layout_constraintTop_toBottomOf="@id/back_btn" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/white">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:id="@+id/group_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/lipstick"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Group Name" />
+
+                <TextView
+                    android:id="@+id/group_creation_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="#585858"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_name_tv"
+                    tools:text="Created on : 12 Aug 2020" />
+
+                <ImageView
+                    android:id="@+id/edit_group_name_iv"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                      app:srcCompat="@drawable/ic_edit_pink"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/black" />
+
+
+                <LinearLayout
+                    android:id="@+id/group_deactivated_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/group_creation_date_tv"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/contact_blocked_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/red"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="12dp"
+                        android:text="This group is deactivated"
+                        android:textColor="@color/white"
+                        />
+
+                </LinearLayout>
+
+
+                <View
+                    android:id="@+id/group_details_divider_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#d8d8d8"
+                    app:layout_constraintTop_toBottomOf="@id/group_deactivated_container"/>
+
+                <TextView
+                    android:id="@+id/media_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/lato"
+                    android:text="Media"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_1" />
+
+                <ImageView
+                    android:id="@+id/media_forward_iv"
+                    android:layout_width="18dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:scaleY="0.75"
+                    android:scaleX="0.75"
+                      app:srcCompat="@drawable/ic_forward"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_1" />
+
+                <TextView
+                    android:id="@+id/media_count_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toStartOf="@id/media_forward_iv"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_1"
+                    tools:text="8" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/media_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="@id/media_forward_iv"
+                    app:layout_constraintTop_toBottomOf="@id/media_label" />
+
+
+                <View
+                    android:id="@+id/group_details_divider_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#d8d8d8"
+                    app:layout_constraintTop_toBottomOf="@id/media_recyclerview" />
+
+
+                <TextView
+                    android:id="@+id/gigers_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/lato"
+                    android:text="Gigers"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_2" />
+
+                <ImageView
+                    android:id="@+id/gigers_forward_iv"
+                    android:layout_width="12dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                      app:srcCompat="@drawable/ic_forward"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_2" />
+
+                <TextView
+                    android:id="@+id/gigers_count_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lato"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toStartOf="@id/media_forward_iv"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_2"
+                    tools:text="8" />
+
+                <LinearLayout
+                    android:id="@+id/search_gigers_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#10888888"
+                    android:gravity="center_vertical"
+                    android:minHeight="35dp"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/gigers_label">
+
+                    <EditText
+                        android:id="@+id/search_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Search Giger" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                          app:srcCompat="@drawable/ic_search_calendar"
+                        app:tint="@color/colorPrimary" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/add_giger_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#10888888"
+                    android:gravity="center_vertical"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:minHeight="35dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/search_gigers_layout">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:elevation="0dp"
+                        app:borderWidth="0dp"
+                        android:id="@+id/add_contact_fab"
+                          app:srcCompat="@drawable/ic_plus_icon"
+                        android:textSize="20sp"
+                        app:tint="@color/white"
+                        android:backgroundTint="@color/colorPrimary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/search_gigers_layout" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/lato"
+                        android:textColor="@color/black_85"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        android:text="Add new Giger " />
+
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/user_list_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/add_giger_layout" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:id="@+id/deactivate_group_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="@dimen/size_36"
+                    android:layout_marginEnd="16dp"
+                    app:strokeColor="@color/colorPrimary"
+                    android:padding="8dp"
+                    android:textAllCaps="false"
+                    android:text="Deactivate Group"
+                    app:layout_constraintTop_toBottomOf="@id/user_list_recyclerview"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+</ScrollView>

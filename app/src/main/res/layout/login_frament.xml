@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_login"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:minHeight="@dimen/size_56"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:background="@drawable/toolbar_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/back_button_login"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_arrow_back_white"
+                app:tint="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/login_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/back_button_login"
+                android:textAlignment="center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:textSize="20sp"
+                android:text="@string/login" />
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_20"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_login">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tv_enter_mobile_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_24"
+                android:layout_marginTop="@dimen/size_89"
+                android:layout_marginEnd="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="7sp"
+                android:text="@string/enter_your_mobile_number"
+                android:textColor="#333333"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_send_otp_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_24"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_24"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/we_will_send_an_b_otp_b_on_this_number"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_enter_mobile_login" />
+
+            <TextView
+                android:id="@+id/tv_prefix_number_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_28"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/_91"
+                android:textColor="#2e2f30"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_send_otp_login" />
+
+
+            <AutoCompleteTextView
+                android:id="@+id/otp_mobile_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_15"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/rectangle_round_grey_solid"
+                android:digits="0123456789"
+                android:dropDownWidth="200dp"
+                android:dropDownHorizontalOffset="0dp"
+                android:dropDownVerticalOffset="0dp"
+                android:ems="10"
+                android:visibility="gone"
+                android:gravity="start"
+                android:inputType="phone"
+                android:letterSpacing="0.2"
+                android:maxLength="10"
+                android:paddingStart="@dimen/size_8"
+                android:paddingTop="@dimen/size_4"
+                android:paddingEnd="@dimen/size_8"
+                android:paddingBottom="@dimen/size_4"
+                android:textAlignment="textStart"
+                android:textColor="#333333"
+                android:textColorHint="#333333"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toEndOf="@+id/tv_prefix_number_login"
+                app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login" />
+
+            <include
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/some_id_if_needed"
+                layout="@layout/mobile_number_digit_layout"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
+                app:layout_constraintEnd_toEndOf="@+id/ll_note_login"
+                app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
+                app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"/>
+
+            <EditText
+                android:id="@+id/invisible_edit_mobile"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:background="@null"
+                android:textColor="@color/fui_transparent"
+                android:paddingTop="12dp"
+                android:inputType="phone"
+                android:longClickable="false"
+                android:textIsSelectable="false"
+                android:paddingBottom="12dp"
+                android:textSize="1sp"
+                android:cursorVisible="false"
+                android:layout_marginStart="@dimen/size8"
+                android:digits="0123456789"
+                android:maxLength="10"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_prefix_number_login"
+                app:layout_constraintEnd_toEndOf="@+id/ll_note_login"
+                app:layout_constraintStart_toEndOf="@id/tv_prefix_number_login"
+                app:layout_constraintTop_toTopOf="@+id/tv_prefix_number_login"></EditText>
+
+
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/br_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="tv_prefix_number_login, some_id_if_needed" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cvloginwrong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_46"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_4de02020_rad_4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/br_1">
+
+                <ImageView
+                    android:id="@+id/ivwronglogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_20"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_icon_metro_warning" />
+
+                <TextView
+                    android:id="@+id/tvwronglogin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_9"
+                    android:layout_marginBottom="@dimen/size_16"
+                    android:letterSpacing="0"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/you_have_entered_invalid_mobile_number_please_re_enter_valid_mobile_number"
+                    android:textColor="#E02020"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivwronglogin"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_note_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_30"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_4fffe9ef_rad_4"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cvloginwrong">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_12"
+                    android:layout_marginTop="@dimen/size_17"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/note"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_12"
+                        android:layout_marginTop="@dimen/size_15"
+                        app:srcCompat="@drawable/shape_circle_lipstick" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_9"
+                        android:layout_marginTop="@dimen/size_11"
+                        android:layout_marginEnd="@dimen/size_8"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/this_mobile_no_will_be_used_to_call_you_for_various_job_opportunities"
+                        android:textColor="@color/black"
+                        android:textSize="14dp"
+                        android:textStyle="normal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/size_16">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_12"
+                        android:layout_marginTop="@dimen/size_15"
+                        app:srcCompat="@drawable/shape_circle_lipstick" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/size_9"
+                        android:layout_marginTop="@dimen/size_11"
+                        android:layout_marginEnd="@dimen/size_8"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/this_overrides_any_dnd_requests_with_your_operator"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+                </TableRow>
+
+
+            </LinearLayout>
+
+
+            <!--        android:background="@drawable/app_gradient_button"-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/app_gradient_button_disabled"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:layout_marginBottom="@dimen/size_22"
+        android:gravity="center"
+        android:minHeight="@dimen/size_36"
+        android:text="Next"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="@+id/login_button"
+        app:layout_constraintStart_toStartOf="@+id/login_button"
+        app:layout_constraintTop_toTopOf="@+id/login_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

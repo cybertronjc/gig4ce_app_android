@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ಗಿಗ್ಫೋರ್ಸ್</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_profile">ಪ್ರೊಫೈಲ್ಆಕ್ಟಿವಿಟಿ</string>
+    <string name="english">Kannada</string>
+    <string name="hindi">हिंदी</string>
+    <string name="telgu">తెలుగు</string>
+    <string name="gujrati">ગુજરતી</string>
+    <string name="punjabi">ਪੰਜਾਬੀ</string>
+    <string name="francais">français</string>
+    <string name="marathi">मराठी</string>
+    <string name="kannada">ಕನ್ನಡ</string>
+    <string name="intro_slide1_title">ಗಿಗ್ಫೋರ್ಸ್ಗೆ ಸುಸ್ವಾಗತ</string>
+    <string name="intro_slide1_subtitle">ನೀವು ಯಾವಾಗಲೂ ಹೊಂದಿರುವ ಒಂದು ಕೆಲಸ</string>
+    <string name="intro_slide2_title">ವೃತ್ತಿಪರರಾಗಿರಿ</string>
+    <string name="intro_slide2_subtitle">ಪ್ರೊಫೈಲ್ ನಿರ್ಮಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಕೌಶಲ್ಯಗಳನ್ನು ನವೀಕರಿಸಲು ಕಲಿಯಿರಿ </string>
+    <string name="intro_slide3_title">ಕೆಲಸ ನಡೆಯಲಿ</string>
+    <string name="intro_slide3_subtitle">ನಿಮ್ಮ ಆದ್ಯತೆಯನ್ನು ಸೇರಿಸಿ ಮತ್ತು ಗಿಗ್ಸ್ ನಿಮ್ಮನ್ನು ಹುಡುಕುತ್ತದೆ</string>
+    <string name="ob_slide1_title">ಆನ್‌ಬೋರ್ಡಿಂಗ್</string>
+    <string name="ob_slide1_subtitle">ಹೇಗೆ - 1</string>
+    <string name="ob_slide2_title">ಆನ್‌ಬೋರ್ಡಿಂಗ್</string>
+    <string name="ob_slide2_subtitle">ಹೇಗೆ - 2</string>
+    <string name="ob_slide3_title">ಆನ್‌ಬೋರ್ಡಿಂಗ್</string>
+    <string name="ob_slide3_subtitle">ಹೇಗೆ - 3</string>
+    <string name="hello_world">ಹಲೋ ವರ್ಲ್ಡ್!</string>
+    <string name="messages_header">ಸಂದೇಶಗಳು</string>
+    <string name="sync_header">ಸಿಂಕ್ ಮಾಡಿ</string>
+    <string name="signature_title">ನಿಮ್ಮ ಸಹಿ</string>
+    <string name="reply_title">ಡೀಫಾಲ್ಟ್ ಪ್ರತ್ಯುತ್ತರ ಕ್ರಿಯೆ</string>
+    <string name="sync_title">ನಿಯತಕಾಲಿಕವಾಗಿ ಇಮೇಲ್ ಅನ್ನು ಸಿಂಕ್ ಮಾಡಿ</string>
+    <string name="attachment_title">ಒಳಬರುವ ಲಗತ್ತುಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="attachment_summary_on">ಒಳಬರುವ ಇಮೇಲ್‌ಗಳಿಗಾಗಿ ಲಗತ್ತುಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="attachment_summary_off">ಹಸ್ತಚಾಲಿತವಾಗಿ ವಿನಂತಿಸಿದಾಗ ಮಾತ್ರ ಲಗತ್ತುಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="rating_text">ರೇಟಿಂಗ್</string>
+    <string name="tasks_done_text">ಕಾರ್ಯ ಮುಗಿದಿದೆ</string>
+    <string name="connections_text">ಸಂಪರ್ಕಗಳು</string>
+    <string name="default_location_text">ಸ್ಥಳ</string>
+    <string name="default_distance_text">220 ಕಿ.ಮೀ ದೂರದಲ್ಲಿದೆ</string>
+    <string name="education_card_education_text">ಶಿಕ್ಷಣ</string>
+    <string name="education_card_content_placeholder">ಶಿಕ್ಷಣದ ವಿಷಯವನ್ನು ಇಲ್ಲಿ ನಮೂದಿಸಬೇಕು </string>
+    <string name="view_more_text">ಇನ್ನಷ್ಟು ವೀಕ್ಷಿಸಿ</string>
+    <string name="empty_dash_string">-</string>
+    <string name="about_card_about_text">ನನ್ನ ಬಗ್ಗೆ</string>
+    <string name="about_card_content_placeholder">ನನ್ನ ಬಗ್ಗೆ ವಿಷಯವನ್ನು ಇಲ್ಲಿ ನಮೂದಿಸಬೇಕು </string>
+    <string name="experience_card_experience_text">ಅನುಭವ</string>
+    <string name="experience_expanded_add_experience_text">ಅನುಭವವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="education_expanded_Education_text">ಶಿಕ್ಷಣ</string>
+    <string name="education_expanded_skills_text">ಕೌಶಲ್ಯಗಳು</string>
+    <string name="education_expanded_achievements_text">ಸಾಧನೆಗಳು</string>
+    <string name="education_expanded_add_education_text">ಶಿಕ್ಷಣವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="education_expanded_add_skill_text">+ ಕೌಶಲ್ಯ ಸೇರಿಸಿ</string>
+    <string name="education_expanded_add_achievement_text">+ ಸಾಧನೆಯನ್ನು ಸೇರಿಸಿ</string>
+    <string name="education_expanded_user_name">ಬಳಕೆದಾರ ಹೆಸರು</string>
+    <string name="nav_education_text">ಶಿಕ್ಷಣ</string>
+    <string name="nav_about_text">ನನ್ನ ಬಗ್ಗೆ</string>
+    <string name="nav_gigs_text">ಗಿಗ್ಸ್</string>
+    <string name="nav_experience_text">ಅನುಭವ</string>
+    <string name="add_skill_sheet_new_skill">ಹೊಸ ಕೌಶಲ್ಯ</string>
+    <string name="add_skill_sheet_category">ವರ್ಗ</string>
+    <string name="add_skill_sheet_skill_name">ಕೌಶಲ್ಯದ ಹೆಸರು</string>
+    <string name="add_achievement_sheet_new_achievement">ಹೊಸ ಸಾಧನೆ</string>
+    <string name="add_achievement_sheet_title">ಶೀರ್ಷಿಕೆ *</string>
+    <string name="add_achievement_sheet_issuing_authority">ಪ್ರಾಧಿಕಾರವನ್ನು ನೀಡಲಾಗುತ್ತಿದೆ *</string>
+    <string name="add_achievement_sheet_location">ಸ್ಥಳ</string>
+    <string name="add_achievement_sheet_year">ವರ್ಷ * (ಉದಾ</string>string>
+    <string name="add_education_sheet_new_education">ಹೊಸ ಶಿಕ್ಷಣ</string>
+    <string name="add_education_sheet_institution">ಸಂಸ್ಥೆ *</string>
+    <string name="add_education_sheet_course">ಕೋರ್ಸ್ *</string>
+    <string name="add_education_sheet_degree">ಪದವಿ *</string>
+    <string name="add_education_sheet_start_year">ಪ್ರಾರಂಭ ದಿನಾಂಕ *</string>
+    <string name="add_education_sheet_end_year">ಪೂರ್ಣಗೊಂಡ ದಿನಾಂಕ *</string>
+    <string name="add_contact_new_contact">ಹೊಸ ಸಂಪರ್ಕ</string>
+    <string name="add_contact_phone">ದೂರವಾಣಿ</string>
+    <string name="add_contact_email">ಇ-ಮೇಲ್</string>
+    <string name="about_expanded_bio_text">ಬಯೋ</string>
+    <string name="about_expanded_language_text">ತಿಳಿದಿರುವ ಭಾಷೆ</string>
+    <string name="about_expanded_add_language_text">+ ಭಾಷೆ ಸೇರಿಸಿ</string>
+    <string name="about_expanded_contact_text">ಸಂಪರ್ಕ ವಿವರಗಳು</string>
+    <string name="about_expanded_add_contact_text">+ ಸಂಪರ್ಕವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="add_language_new_language">ಹೊಸ ಭಾಷೆ</string>
+    <string name="add_language_name">ತಿಳಿದಿರುವ ಭಾಷೆ</string>
+    <string name="add_language_speaking_level">ಮಾತನಾಡುವ ಮಟ್ಟ</string>
+    <string name="add_language_writing_level">ಬರೆಯುವ ಮಟ್ಟ</string>
+    <string name="title_lang">ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="login">ಲಾಗಿನ್ ಮಾಡಿ</string>
+    <string name="title_login">ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಆಗಿ</string>
+    <string name="mobile_login">ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="confirm_login">ದೃ .ಪಡಿಸಲಾಗಿದೆ</string>
+    <string name="guidelines_video_resume">ಮಾರ್ಗಸೂಚಿಗಳು</string>
+    <string name="button_upload_video">ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="title_video_resume">ಸ್ವವಿವರದ ವಿಡಿಯೋ </string>
+    <string name="why_video_resume">ವೀಡಿಯೊ ಪುನರಾರಂಭವು ಏಕೆ ಇಂಪ್ ಆಗಿದೆ?</string>
+    <string name="desc1_video_resume">ನಿಮ್ಮ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ನಮಗೆ ತಿಳಿಸಿ</string>
+    <string name="desc2_video_resume">ಯಾವುದೇ ಪುನರಾರಂಭ ಮತ್ತು ಸಂದರ್ಶನವಿಲ್ಲ</string>
+    <string name="otp_sign_in_up">ಲಾಗಿನ್ ಮಾಡಿ</string>
+    <string name="otp_enter_mobile_num">Mobile n ಒಟಿಪಿ ಪರಿಶೀಲನೆಗಾಗಿ ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="otp_verify_account">ಖಾತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ</string>
+    <string name="mobile_verified">ಮೊಬೈಲ್ ಪರಿಶೀಲನೆ ಯಶಸ್ವಿಯಾಗಿದೆ!</string>
+    <string name="otp_notcorrect">ತಪ್ಪು ಪಾಸ್ವರ್ಡ್ !!</string>
+    <string name="otp_sent_otp_account">ನಾವು ಒಟಿಪಿಯನ್ನು ಸಂಖ್ಯೆಯಲ್ಲಿ ಕಳುಹಿಸಿದ್ದೇವೆ \ n ಕ್ಷೇತ್ರಗಳಿಗೆ ಸ್ವಯಂ ಅನ್ವಯಿಸುತ್ತದೆ</string>
+    <string name="otp_hint">_ _ _ _ _ _</string>
+    <string name="otp_verify">ಪರಿಶೀಲಿಸಿ</string>
+    <string name="otp_reenter_mobile">ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ಮರು ನಮೂದಿಸಿ</string>
+    <string name="otp_send_otp">OTP ಕಳುಹಿಸಿ</string>
+    <string name="add_experience_new_experience">ಹೊಸ ಅನುಭವ</string>
+    <string name="add_experience_title">ಪಾತ್ರ *</string>
+    <string name="add_experience_employment_type">ಉದ್ಯೋಗದ ರೀತಿ *</string>
+    <string name="add_experience_location">ಸ್ಥಳ *</string>
+    <string name="add_experience_start_date">ಪ್ರಾರಂಭ ದಿನಾಂಕ *</string>
+    <string name="add_experience_end_date">ಪೂರ್ಣಗೊಂಡ ದಿನಾಂಕ *</string>
+    <string name="add_experience_currently_working">ಪ್ರಸ್ತುತ ಇಲ್ಲಿ ಕೆಲಸ ಮಾಡಿ</string>
+    <string name="cancel_text">ರದ್ದುಮಾಡಿ</string>
+    <string name="save_text">ಉಳಿಸಿ</string>
+    <string name="back_text">ಹಿಂದೆ</string>
+    <string name="okay_text">ಸರಿ</string>
+    <string name="okay_text_cap">ಸರಿ</string>
+    <string name="add_more_text">ಇನ್ನಷ್ಟು ಸೇರಿಸಿ</string>
+    <string name="verified_text">ಪರಿಶೀಲಿಸಲಾಗಿದೆ</string>
+    <string name="tags_text">ಬಳಕೆದಾರರ ಟ್ಯಾಗ್‌ಗಳು</string>
+    <string name="about_me_text">ಬಳಕೆದಾರರ ನನ್ನ ಬಗ್ಗೆ</string>
+    <string name="to_be_filled_from_profile_data">ಪ್ರೊಫೈಲ್ ಡೇಟಾದಿಂದ ಭರ್ತಿ ಮಾಡಲು</string>
+    <string name="placeholder_image_view">ಲೋಡ್ ಮಾಡಬೇಕಾದ ಚಿತ್ರ</string>
+    <string name="institution">ಸಂಸ್ಥೆ</string>
+    <string name="course_name">ಕೋರ್ಸ್</string>
+    <string name="degree">ಪದವಿ</string>
+    <string name="start_date">ಪ್ರಾರಂಭ ದಿನಾಂಕ</string>
+    <string name="end_date">ಅಂತಿಮ ದಿನಾಂಕ</string>
+    <string name="delete">ಅಳಿಸಿ</string>
+    <string name="edit_achievement">ಸಾಧನೆಯನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="title">ಶೀರ್ಷಿಕೆ</string>
+    <string name="authority">ಪ್ರಾಧಿಕಾರ</string>
+    <string name="location">ಸ್ಥಳ</string>
+    <string name="year">ವರ್ಷ</string>
+    <string name="year_text">ವರ್ಷ</string>
+    <string name="edit_skill">ಕೌಶಲ್ಯವನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="edit_experience">ಅನುಭವವನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="employment_title">ಉದ್ಯೋಗದ ಶೀರ್ಷಿಕೆ</string>
+    <string name="employment_type">ಉದ್ಯೋಗದ ರೀತಿ</string>
+    <string name="new_tag_hint">ಹೊಸ ಟ್ಯಾಗ್</string>
+    <string name="go_back">ಹಿಂದೆ ಹೋಗು</string>
+    <string name="add">ಸೇರಿಸಿ</string>
+    <string name="veriScreenTitle">ನಮಸ್ಕಾರ ಗಿಗರ್!</string>
+    <string name="veri_address_title">ಹಂತ 1: ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_add_address">ವಿಳಾಸ</string>
+    <string name="veri_add_doc_front">ಫ್ರಂಟ್ ಸೈಡ್</string>
+    <string name="veri_add_doc_back">ಬ್ಯಾಕ್ ಸೈಡ್</string>
+    <string name="veri_pan_title">ಹಂತ 5: ನಿಮ್ಮ ಪ್ಯಾನ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_aadhaar_title">ಹಂತ 2: ನಿಮ್ಮ ಆಧಾರ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_no_aadhaar">ಇಲ್ಲ ಆಧಾರ್! ಬಿಟ್ಟುಬಿಡಿ >></string>
+    <string name="veri_dl_title">ಹಂತ 3: ನಿಮ್ಮ ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="veri_bank_title">ಹಂತ 4: ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_add_bank">ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="veri_done">ಹರ್ರೆ !!! K n ಕೆವೈಸಿ ದಾಖಲೆಗಳನ್ನು ಸಲ್ಲಿಸಲಾಗಿದೆ</string>string>
+    <string name="veri_hint_address_line1">ವಿಳಾಸ ಲೈನ್ 1</string>
+    <string name="veri_hint_address_line2">ವಿಳಾಸ ಸಾಲು 2</string>
+    <string name="veri_hint_city">ನಗರ</string>
+    <string name="veri_hint_state">ರಾಜ್ಯ</string>
+    <string name="veri_hint_pin">ಪಿನ್ಕೋಡ್</string>
+    <string name="veri_hint_account_name">ಖಾತೆದಾರರ ಹೆಸರು</string>
+    <string name="veri_hint_account_no">ಖಾತೆ ಸಂಖ್ಯೆ</string>
+    <string name="veri_hint_re_account_no">ಖಾತೆ ಸಂಖ್ಯೆಯನ್ನು ಮರು ನಮೂದಿಸಿ</string>
+    <string name="veri_hint_ifsc">ಐಎಫ್‌ಎಸ್‌ಸಿ ಕೋಡ್</string>
+    <string name="veri_hint_bank_name">ಬ್ಯಾಂಕಿನ ಹೆಸರು</string>
+    <string name="select_document_picture">ಆಯ್ಕೆ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="update_document_picture">ಚಿತ್ರವನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="remove_document_picture">ಚಿತ್ರವನ್ನು ತೆಗೆದುಹಾಕಿ</string>
+    <string name="document_picture">ಚಿತ್ರ ಆಯ್ಕೆ</string>
+    <string name="edit_education">ಶಿಕ್ಷಣವನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="bio_name">ಹೆಡ್‌ಲೈನ್</string>
+    <string name="bio_hint_text">ನಿಮ್ಮ ಬಗ್ಗೆ ಒಂದು ಸಾಲಿನಲ್ಲಿ ವಿವರಿಸಿ</string>
+    <string name="add_tags">ಟ್ಯಾಗ್‌ಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="hs_rv_title">ಡಂಜೊ ವಿತರಣೆಗಳು</string>
+    <string name="hs_rv_date">ಹನ್ನೊಂದು</string>
+    <string name="hs_rv_month">ಏಪ್ರಿಲ್</string>
+    <string name="hs_rv_comment">ಕೊನೆಯ ವಿತರಣೆಯು 20 ನಿಮಿಷಗಳ ಹಿಂದೆ</string>
+    <string name="homescreen_bs_alert">ಕೈಕ್ ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ</string>
+    string>
+    <string name="homescreen_bs_features">ವೈಶಿಷ್ಟ್ಯಗಳು</string>
+    <string name="select_skill">ಕೌಶಲ್ಯ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="add_mother_tongue_text">ನನ್ನ ಮಾತೃಭಾಷೆಯಾಗಿ ಸೇರಿಸಿ</string>
+    <string name="edit_language">ಭಾಷೆಯನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="edit_aboutme_text">ಬಯೋ</string>
+    <string name="add_address">ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="add_current_address">ಪ್ರಸ್ತುತ ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="around_current_address">ಪ್ರಸ್ತುತ ವಿಳಾಸದ ಸುತ್ತ 20 ಕಿ.ಮೀ.</string>
+    <string name="same_as_permanent_address">ಶಾಶ್ವತ ವಿಳಾಸದಂತೆಯೇ</string>
+    <string name="address_proof">ADDRESS PROOF</string>
+    <string name="current_address">ಪ್ರಸ್ತುತ ವಿಳಾಸ</string>
+    <string name="first_line">ಮೊದಲ ಸಾಲು</string>
+    <string name="second_line">ಎರಡನೇ ಸಾಲು</string>
+    <string name="state">ರಾಜ್ಯ</string>
+    <string name="city">ನಗರ</string>
+    <string name="pincode">ಪಿನ್ಕೋಡ್</string>
+    <string name="area">ಪ್ರದೇಶ</string>
+    <string name="permanent_address">ಶಾಶ್ವತ ವಿಳಾಸ</string>
+    <string name="address_proof_smalls">ಅಧಾರ್ ಕಾರ್ಡ್</string>
+    <string name="document_under_verification">ಪರಿಶೀಲನೆ ಅಡಿಯಲ್ಲಿ ಡಾಕ್ಯುಮೆಂಟ್</string>
+    <string name="cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="save">ಉಳಿಸಿ</string>
+    <string name="preferred_locations">ಆದ್ಯತೆಯ ಸ್ಥಳಗಳು</string>
+    <string name="select_area">ಪ್ರದೇಶವನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="empty_about_me_text">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬಗ್ಗೆ ನಮಗೆ ತಿಳಿಸಿ</string>
+    <string name="error_empty_mandatory_fields">* ದಯವಿಟ್ಟು ಕಡ್ಡಾಯ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ</string>
+    <string name="about_me_hint">ನಿಮ್ಮ ಬಗ್ಗೆ ವಿವರವಾಗಿ ಹೇಳಿ</string>
+    <string name="delete_confirmation_text">ಈ ಐಟಂ ಅನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
+    <string name="if_otp_not_received">"ನೀವು ಒಟಿಪಿ ಸ್ವೀಕರಿಸದಿದ್ದರೆ,"</string>
+    <string name="resend">ಮರುಹೊಂದಿಸಿ</string>
+    <string name="upcoming_gig">ಮುಂಬರುವ ಗಿಗ್</string>
+    <string name="features">ವೈಶಿಷ್ಟ್ಯಗಳು</string>
+    <string name="learning">ಕಲಿಕೆ</string>
+    <string name="assessment">ಮೌಲ್ಯಮಾಪನ</string>
+    <string name="kyc_verification_not_done">ಕೈಕ್ ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
+    <string name="video_resume_pending">ನಿಮ್ಮ ವೀಡಿಯೊ ಪುನರಾರಂಭವು ಬಾಕಿ ಉಳಿದಿದೆ, ಪೂರ್ಣಗೊಳಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
+    <string name="next">ಮುಂದಿನ</string>
+    <string name="cover_error_text">* ಪಠ್ಯವು 150 ಅಕ್ಷರಗಳನ್ನು ಮೀರಬಾರದು</string>
+    <string name="update_contact_details">ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="change_contact_message">ಈ ವಿವರಗಳನ್ನು ನವೀಕರಿಸಲು ಗಿಗರ್ ತಮ್ಮ ಆಧಾರ್ ಕ್ರಾಡ್ ಚಿತ್ರಗಳನ್ನು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡಬೇಕಾಗುತ್ತದೆ ಮತ್ತು ಮತ್ತೆ ಕೆವೈಸಿ ಪರಿಶೀಲನೆ ಪ್ರಕ್ರಿಯೆಗೆ ಒಳಗಾಗಬೇಕಾಗುತ್ತದೆ. ಅಗತ್ಯವಿದ್ದರೆ ನೀವು ಹೆಸರು ಅಥವಾ ವಿಳಾಸದ ವಿವರಗಳನ್ನು ಬದಲಾಯಿಸಬಾರದು ಎಂದು ನಾವು ಶಿಫಾರಸು ಮಾಡುತ್ತೇವೆ</string>
+    <string name="okay">ಸರಿ</string>
+    <string name="w_my_wallet">ನನ್ನ ವ್ಯಾಲೆಟ್</string>
+    <string name="w_my_wallet_balance">ನನ್ನ ವಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್</string>
+    <string name="w_rs">ರೂ</string>
+    <string name="w_transfer">ವರ್ಗಾವಣೆ</string>
+    <string name="settings">ಸಂಯೋಜನೆಗಳು</string>
+    <string name="location_preference">ಸ್ಥಳ ಆದ್ಯತೆ</string>
+    <string name="weekend">ವಾರಾಂತ್ಯ</string>
+    <string name="addline1">ವಿಳಾಸ ಸಾಲು 1</string>
+    <string name="addLine2">ವಿಳಾಸ ಸಾಲು 2</string>
+    <string name="preferred_distance">ಆದ್ಯತೆಯ ದೂರ</string>
+    <string name="earning">ಗಳಿಕೆ</string>
+    <string name="submit_documents">ದಾಖಲೆಗಳನ್ನು ಸಲ್ಲಿಸಿ</string>
+    <string name="giger_verification_desc">ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ನಾವು ಪರಿಶೀಲಿಸಬೇಕಾಗಿದೆ. ಗಿಗರ್ ಪರಿಶೀಲನೆಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ದಯವಿಟ್ಟು ಕೆಳಗಿನ ದಾಖಲೆಗಳನ್ನು ಸಲ್ಲಿಸಿ</string>
+    <string name="selfie_video">ಸೆಲ್ಫಿ ವಿಡಿಯೋ *</string>
+    <string name="tap_to_upload">ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
+    <string name="bank_details">ಬ್ಯಾಂಕ್ ವಿವರಗಳು</string>
+    <string name="driving_license">ಚಾಲನಾ ಪರವಾನಿಗೆ</string>
+    <string name="aadhar_card">ಆಧಾರ್ ಕಾರ್ಡ್ *</string>
+    <string name="pan_card">ಪ್ಯಾನ್ ಕಾರ್ಡ್</string>
+    <string name="do_you_have_pan_card">ನಿಮ್ಮ ಬಳಿ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಇದೆಯೇ?</string>
+    <string name="yes_i_have_pan_card">ಹೌದು, ನನ್ನ ಬಳಿ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಇದೆ.</string>
+    <string name="no_i_don_t_have_pan_card">ಇಲ್ಲ, ನನ್ನ ಬಳಿ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಇಲ್ಲ.</string>
+    <string name="please_upload_your_pan">ನಿಮ್ಮ ಪರಿಶೀಲನೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="do_you_have_driving_license">ನಿಮ್ಮ ಬಳಿ ಡ್ರೈವಿಂಗ್ ಲೈಸೆನ್ಸ್ ಇದೆಯೇ?</string>
+    <string name="yes_i_have_driving_license">ಹೌದು, ನನ್ನ ಬಳಿ ಡ್ರೈವಿಂಗ್ ಲೈಸೆನ್ಸ್ ಇದೆ</string>
+    <string name="no_i_don_t_have_driving_license">ಇಲ್ಲ, ನನಗೆ ಡ್ರೈವಿಂಗ್ ಲೈಸೆನ್ಸ್ ಇಲ್ಲ</string>
+    <string name="upload_your_driving_license">ನಿಮ್ಮ ಚಾಲನೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.</string>
+    <string name="upload_driving_license_back_side">ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ (ಹಿಂದಿನ ಭಾಗ)</string>
+    <string name="upload_driving_license_front_side">ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ (ಮುಂಭಾಗದ ಭಾಗ)</string>
+    <string name="no_i_don_t_have_aadhar_card">ಇಲ್ಲ, ನನ್ನ ಬಳಿ ಆಧಾರ್ ಕಾರ್ಡ್ ಇಲ್ಲ</string>
+    <string name="yes_i_have_aadhar_card">ಹೌದು, ನನ್ನ ಬಳಿ ಆಧಾರ್ ಕಾರ್ಡ್ ಇದೆ</string>
+    <string name="do_you_have_aadhar_card">ನಿಮ್ಮ ಬಳಿ ಆಧಾರ್ ಕಾರ್ಡ್ ಇದೆಯೇ?</string>
+    <string name="upload_aadhar_card_front_side">ಆಧಾರ್ ಕಾರ್ಡ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ (ಮುಂಭಾಗದ ಭಾಗ)</string>
+    <string name="upload_your_aadhar_card">ನಿಮ್ಮ ಪರಿಶೀಲನೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="upload_aadhar_card_back_side">ಆಧಾರ್ ಕಾರ್ಡ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ (ಹಿಂದಿನ ಭಾಗ)</string>
+    <string name="reupload"><u> ಮರುಲೋಡ್ </u></string>
+    <string name="save_all_caps">ಉಳಿಸಿ</string>
+    <string name="upload_pan_card">ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="please_confirm_the_following_information">ದಯವಿಟ್ಟು ಈ ಕೆಳಗಿನ ಮಾಹಿತಿಯನ್ನು ದೃಢೀಕರಿಸಿ </string>
+    <string name="name_with_colon">ಹೆಸರು :</string>
+    <string name="father_s_name_with_colon">ತಂದೆಯ ಹೆಸರು :</string>
+    <string name="date_of_birth">ಹುಟ್ತಿದ ದಿನ:</string>
+    <string name="pan_with_colon">ಶಾಶ್ವತ ಖಾತೆ ಸಂಖ್ಯೆ :</string>
+    <string name="yes_i_confirm_the_data_is_correct">ಹೌದು, ಡೇಟಾ ಸರಿಯಾಗಿದೆ ಎಂದು ನಾನು ಖಚಿತಪಡಿಸುತ್ತೇನೆ.</string>
+    <string name="why_do_we_need_this">ನಮಗೆ ಇದು ಏಕೆ ಬೇಕು?</string>
+    <string name="license_number_with_colon">ಪರವಾನಗಿ ಸಂಖ್ಯೆ :</string>
+    <string name="address_with_colon">ವಿಳಾಸ :</string>
+    <string name="license_validity_with_colon">ಪರವಾನಗಿ ಮಾನ್ಯತೆ :</string>
+    <string name="gender_with_colon">ಲಿಂಗ:</string>
+    <string name="aadhar_number_with_colon">ಆಧಾರ್ ಸಂಖ್ಯೆ :</string>
+    <string name="bank_account_details">ಬ್ಯಾಂಕ್ ಖಾತೆ ವಿವರಗಳು</string>
+    <string name="do_you_have_bank_passbook">ನಿಮ್ಮ ಬಳಿ ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಇದೆಯೇ?</string>
+    <string name="yes_i_have_bank_passbook">ಹೌದು, ನನ್ನ ಬಳಿ ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಇದೆ</string>
+    <string name="no_i_dont_have_bank_passbook">ಇಲ್ಲ, ನನ್ನ ಬಳಿ ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಇಲ್ಲ</string>
+    <string name="cif_number_with_colon">ಸಿಐಎಫ್ ಸಂಖ್ಯೆ :</string>
+    <string name="account_number_with_colon">ಖಾತೆ ಸಂಖ್ಯೆ:</string>
+    <string name="ifsc_with_colon">ಐಎಫ್‌ಎಸ್‌ಸಿ :</string>
+    <string name="upload_bank_passbook">ಚೆಕ್ / ಬ್ಯಾಂಕ್ ಪಾಸ್ಬುಕ್ ಅನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ (ಮೊದಲ ಪುಟ)</string>
+    <string name="upload_bank_passbook_sublabel">ನಿಮ್ಮ ಪರಿಶೀಲನೆಗಾಗಿ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="edit">ಸಂಪಾದಿಸಿ</string>
+    <string name="name">ಹೆಸರು</string>
+    <string name="date_of_birth_without_colon">ಹುಟ್ತಿದ ದಿನಾಂಕ</string>
+    <string name="gender_wo_colon">ಲಿಂಗ</string>
+    <string name="address_line">ವಿಳಾಸ ಸಾಲು</string>
+    <string name="father_s_name">ತಂದೆಯ ಹೆಸರು</string>
+    <string name="cif_number">ಸಿಐಎಫ್ ಸಂಖ್ಯೆ</string>
+    <string name="account_number">ಖಾತೆ ಸಂಖ್ಯೆ</string>
+    <string name="license_validity">ಪರವಾನಗಿ ಮಾನ್ಯತೆ</string>
+    <string name="permanent_account_number">ಶಾಶ್ವತ ಖಾತೆ ಸಂಖ್ಯೆ</string>
+    <string name="upload_document">ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="from_camera">ಕ್ಯಾಮೆರಾದಿಂದ</string>
+    <string name="from_gallery">ಗ್ಯಾಲರಿಯಿಂದ</string>
+    <string name="update">ನವೀಕರಿಸಿ</string>
+    <string name="how_to_record_selfie_video">ಸೆಲ್ಫಿ ವಿಡಿಯೋ ರೆಕಾರ್ಡ್ ಮಾಡುವುದು ಹೇಗೆ?</string>
+    <string name="why_learning_is_important">ಕಲಿಕೆ ಏಕೆ ಮುಖ್ಯ?</string>
+    <string name="increase_your_knowlegde">ನಿಮ್ಮ ಜ್ಞಾನವನ್ನು ಹೆಚ್ಚಿಸಿ</string>
+    <string name="anytime_anywhere">ಯಾವಾಗಲಾದರೂ ಎಲ್ಲಿಯಾದರೂ</string>
+    <string name="learning_based_on_nroles_and_industry">ಪಾತ್ರ ಮತ್ತು ಉದ್ಯಮದ ಆಧಾರದ ಮೇಲೆ ಕಲಿಕೆ</string>
+    <string name="recently_added">ಇತ್ತೀಚೆಗೆ ಸೇರಿಸಲಾಗಿದೆ</string>
+    <string name="assessment_based_on_learnings">ಕಲಿಕೆಯ ಆಧಾರದ ಮೇಲೆ ಮೌಲ್ಯಮಾಪನ</string>
+    <string name="explore_learnings">ಕಲಿಕೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ</string>
+    <string name="action_block">ನಿರ್ಬಂಧಿಸಿ</string>
+    <string name="action_report">ವರದಿ</string>
+    <string name="action_invite_friends">ಸ್ನೇಹಿತರನ್ನು ಆಹ್ವಾನಿಸಿ</string>
+    <string name="action_refresh">ರಿಫ್ರೆಶ್ ಮಾಡಿ</string>
+    <string name="uploaded">ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="let_s_go">ಹೋಗೋಣ</string>
+    <string name="thank_you">ಧನ್ಯವಾದಗಳು !</string>
+    <string name="documents_uploaded_long">ನಿಮ್ಮ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಪರಿಶೀಲನೆಯಾಗುವುದರಿಂದ, ನಿಮ್ಮ ಸಂಗೀತಗೋಷ್ಠಿಗಳನ್ನು ಪ್ರಾರಂಭಿಸಲು ನಿಮಗೆ ಸಾಧ್ಯವಾಗುತ್ತದೆ.</string>
+    <string name="sample_info"><b> ಲೊರೆಮ್ ಇಪ್ಸಮ್ </b> ಎಂಬುದು ಮುದ್ರಣ ಮತ್ತು ಟೈಪ್‌ಸೆಟ್ಟಿಂಗ್ ಉದ್ಯಮದ ನಕಲಿ ಪಠ್ಯವಾಗಿದೆ. ಲೊರೆಮ್ ಇಪ್ಸಮ್ 1500 ರ ದಶಕದಿಂದಲೂ ಉದ್ಯಮದ ಪ್ರಮಾಣಿತ ನಕಲಿ ಪಠ್ಯವಾಗಿದೆ, ಅಪರಿಚಿತ ಮುದ್ರಕವು ಒಂದು ಗ್ಯಾಲಿ ಪ್ರಕಾರವನ್ನು ತೆಗೆದುಕೊಂಡು ಅದನ್ನು ಒಂದು ಮಾದರಿಯ ಮಾದರಿಯ ಪುಸ್ತಕವನ್ನಾಗಿ ಮಾಡಲು ಸ್ಕ್ರಾಂಬಲ್ ಮಾಡಿದಾಗ.</string>
+    <string name="money_received_info"><b> ಹಣವನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ: </b> ಪೂರ್ಣಗೊಂಡ ಗಿಗ್ಸ್‌ಗಾಗಿ ಕ್ಲೈಂಟ್‌ನಿಂದ ಗಿಗ್‌ಫೋರ್ಸ್ ವ್ಯಾಲೆಟ್ನಲ್ಲಿ ಪಡೆದ ಮೊತ್ತ.</string>
+    <string name="money_withdrawn_info"><em> ಹಣವನ್ನು ಹಿಂತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ: </em> ಗಿಗ್ಫೋರ್ಸ್ ವ್ಯಾಲೆಟ್ನಿಂದ ಗಿಗರ್ ಖಾತೆಗೆ ವರ್ಗಾಯಿಸಲ್ಪಟ್ಟ ಮೊತ್ತ.</string>
+    <string name="earning_info"><b> ಗಳಿಕೆ: </b> ಈ ತಿಂಗಳಲ್ಲಿ ಪೂರ್ಣಗೊಂಡ ಗಿಗ್ಸ್‌ಗಾಗಿ ಪಡೆದ ಮೊತ್ತದ ಮೊತ್ತ + ಈ ತಿಂಗಳಲ್ಲಿ ಪೂರ್ಣಗೊಂಡ ಗಿಗ್ಸ್‌ಗಾಗಿ ಇನ್ನೂ ಸ್ವೀಕರಿಸಬೇಕಾದ ಮೊತ್ತ</string>
+    <string name="wallet_balance_info">ವಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್: ಗಿಗ್ಫೋರ್ಸ್ ವ್ಯಾಲೆಟ್ನಲ್ಲಿ ಇಲ್ಲಿಯವರೆಗೆ ಪಡೆದ ಮೊತ್ತದ ಮೊತ್ತ - ಇಲ್ಲಿಯವರೆಗೆ ಯಾವುದೇ ವರ್ಗಾವಣೆಗಳ ಮೂಲಕ ವ್ಯಾಲೆಟ್ನಿಂದ ಕಳೆಯಲಾದ ಮೊತ್ತ</string>
+    <string name="monthly_earning_info"><b> ಮಾಸಿಕ ಗಳಿಕೆ: </b> ಒಂದು ತಿಂಗಳಲ್ಲಿ ಸ್ವೀಕರಿಸಿದ ಮೊತ್ತ ಮತ್ತು ಪೂರ್ಣಗೊಂಡ ಗಿಗ್‌ಗಳಿಗೆ ಪಾವತಿಸಲು ಬಾಕಿ ಇರುವ ಮೊತ್ತ.</string>
+    <string name="monthly_goal_info"><b> ಮಾಸಿಕ ಗುರಿ ಅಥವಾ ಮಾಸಿಕ ಗಳಿಕೆಯ ಗುರಿ: </b> ಮಾಸಿಕ ಗಳಿಕೆಗಾಗಿ ಬಳಕೆದಾರರು ನಿಗದಿಪಡಿಸಿದ ಗುರಿ. ಗಿಗರ್ ಅನ್ನು ತೋರಿಸಲು ಇದು ಆಧಾರವಾಗಿದೆ</string>
+    <string name="payment_due_info"><b> ಪಾವತಿ ವಿವಾದ /ಪಾವತಿ ಬಾಕಿ: </b> ಕ್ಲೈಂಟ್ ಅನುಮೋದಿಸದ ಪೂರ್ಣಗೊಂಡ ಗಿಗ್‌ಗೆ ಪಾವತಿಸಬೇಕಾದ ಮೊತ್ತ.</string>
+    <string name="invoice_info"><b> ಸರಕುಪಟ್ಟಿ: </b> ಗಿಗ್ ಅನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದ ರಶೀದಿ ಮತ್ತು ಗಿಗರ್ಗೆ ಪಾವತಿಸಬೇಕಾದ ಪಾವತಿ.</string>
+    <string name="invoice_generated_info"><b> ಸರಕುಪಟ್ಟಿ ರಚಿಸಲಾಗಿದೆ: </b> ಗಿಗ್ ಪೂರ್ಣಗೊಂಡ ರಶೀದಿ ಮತ್ತು ಗಿಗರ್‌ಗೆ ಪಾವತಿಸಬೇಕಾದ ಪಾವತಿ ಅಂಗೀಕಾರ.</string>
+    <string name="pending_invoice_info"><b> ಇನ್‌ವಾಯ್ಸ್ ಬಾಕಿ ಉಳಿದಿದೆ: </b> ಗಿಗ್‌ಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ ಆದರೆ ಇನ್‌ವಾಯ್ಸ್ ಉತ್ಪತ್ತಿಯಾಗುವುದಿಲ್ಲ.</string>
+    <string name="please_let_us_know_more_about_your_gig">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಗಿಗ್ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ನಮಗೆ ತಿಳಿಸಿ.</string>
+    <string name="gig_location">ಗಿಗ್ ಸ್ಥಳ</string>
+    <string name="pan_card_image">ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಚಿತ್ರ</string>
+    <string name="please_provide_following_details">ದಯವಿಟ್ಟು ಈ ಕೆಳಗಿನ ವಿವರಗಳನ್ನು ನೀಡಿ.</string>
+    <string name="back_button">ಬ್ಯಾಕ್ ಬಟನ್</string>
+    <string name="assessment_dialog_background">ಅಸೆಸ್ಮೆಂಟ್ ಡೈಲಾಗ್ ಹಿನ್ನೆಲೆ</string>
+    <string name="good_luck">ಒಳ್ಳೆಯದಾಗಲಿ!!!</string>
+    <string name="start_assessment">ಮೌಲ್ಯಮಾಪನವನ್ನು ಪ್ರಾರಂಭಿಸಿ</string>
+    <string name="congrats">ಅಭಿನಂದನೆಗಳು</string>
+    <string name="assess_complete">ಮೌಲ್ಯಮಾಪನ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+    <string name="scorecard">ಸ್ಕೋರ್ಕಾರ್ಡ್</string>
+    <string name="oops">ಅಯ್ಯೋ!!!</string>
+    <string name="keep_it_up">ಹೀಗೇ ಮುಂದುವರಿಸು</string>
+    <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">ನಿಮಗಾಗಿ ಉತ್ತಮ ಸಂಗೀತಗೋಷ್ಠಿಗಳಿಗಾಗಿ ನಿಮಗೆ ಶೀಘ್ರದಲ್ಲೇ ಆಹ್ವಾನಗಳನ್ನು ಕಳುಹಿಸಲಾಗುವುದು</string>
+    <string name="time_taken">ತೆಗೆದುಕೊಂಡ ಸಮಯ:</string>
+    <string name="question_wise_summary">ಪ್ರಶ್ನೆವಾರು ಸಾರಾಂಶ</string>
+    <string name="suggested_learnings">ಸೂಚಿಸಲಾದ ಕಲಿಕೆಗಳು</string>
+    <string name="share">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="profile_image_gig_history">ಪ್ರೊಫೈಲ್ ಇಮೇಜ್ ಗಿಗ್ ಇತಿಹಾಸ</string>
+    <string name="my_gigs">ನನ್ನ ಗಿಗ್ಸ್</string>
+    <string name="punch_in">ಪಂಚ್ ಇನ್</string>
+    <string name="past">ಹಿಂದಿನದು</string>
+    <string name="upcoming">ಮುಂಬರುವ</string>
+    <string name="punch_out">ಪಂಚ್ .ಟ್</string>
+    <string name="hours">ಗಂ</string>
+    <string name="mins">ನಿಮಿಷಗಳು</string>
+    <string name="no_on_going_gigs">ನಡೆಯುತ್ತಿರುವ ಗಿಗ್ಸ್ ಇಲ್ಲ</string>
+    <string name="on_going_gigs">ನಡೆಯುತ್ತಿರುವ ಗಿಗ್ಸ್</string>
+    <string name="no_gigs_present">ಗಿಗ್ಸ್ ಪ್ರಸ್ತುತ ಇಲ್ಲ</string>
+    <string name="pending">ಬಾಕಿ ಉಳಿದಿದೆ</string>
+    <string name="explore_by_role">ಪಾತ್ರದಿಂದ ಅನ್ವೇಷಿಸಿ</string>
+    <string name="complete_now">ಈಗ ಪೂರ್ಣಗೊಳಿಸಿ</string>
+    <string name="completed">ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+    <string name="complete_your_verification">ನಿಮ್ಮ ಪರಿಶೀಲನೆಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ</string>
+    <string name="verification">ಪರಿಶೀಲನೆ</string>
+    <string name="verified_giger_s_get_recruited_first">ಪರಿಶೀಲಿಸಿದ ಗಿಗರ್ ಮೊದಲು ನೇಮಕಗೊಳ್ಳುತ್ತಾರೆ</string>
+    <string name="my_calendar">ನನ್ನ ಕ್ಯಾಲೆಂಡರ್</string>
+    <string name="giger_verification">ಗಿಗರ್ ಪರಿಶೀಲನೆ</string>
+    <string name="ifsc">ಐಎಫ್‌ಎಸ್‌ಸಿ ಕೋಡ್</string>
+    <string name="bank_name">ಬ್ಯಾಂಕ್ ಹೆಸರು *</string>
+    <string name="account_no">ಖಾತೆ ಸಂಖ್ಯೆ *</string>
+    <string name="bank_passbook_front_image">ಬ್ಯಾಂಕ್ ಪಾಸ್‌ಬುಕ್ (ಮುಂದಿನ ಚಿತ್ರ)</string>
+    <string name="ifsc_code">ಐಎಫ್‌ಎಸ್‌ಸಿ ಕೋಡ್:</string>
+    <string name="bank_name_with_colon">ಬ್ಯಾಂಕ್ ಹೆಸರು :</string>
+    <string name="bank_account_no">ಬ್ಯಾಂಕ್ ಖಾತೆ ಸಂಖ್ಯೆ:</string>
+    <string name="please_provide_the_following_information">ದಯವಿಟ್ಟು ಈ ಕೆಳಗಿನ ಮಾಹಿತಿಯನ್ನು ಒದಗಿಸಿ.</string>
+    <string name="aadhar_number">ಆಧಾರ್ ಸಂಖ್ಯೆ :</string>
+    <string name="state_pascal_case">ರಾಜ್ಯ</string>
+    <string name="driving_license_number">ಚಾಲನಾ ಪರವಾನಗಿ ಸಂಖ್ಯೆ *</string>
+    <string name="driving_license_front_image">ಚಾಲನಾ ಪರವಾನಗಿ (ಮುಂದಿನ ಚಿತ್ರ)</string>
+    <string name="driving_license_back_image">ಚಾಲನಾ ಪರವಾನಗಿ (ಹಿಂದಿನ ಚಿತ್ರ)</string>
+    <string name="dl_state_w_colon">ಡಿಎಲ್ ರಾಜ್ಯ:</string>
+    <string name="dl_no_w_colon">ಡಿಎಲ್ ಸಂಖ್ಯೆ:</string>
+    <string name="pan_number">ಪ್ಯಾನ್ ಸಂಖ್ಯೆ *</string>
+    <string name="video_recorded">ವೀಡಿಯೊ ರೆಕಾರ್ಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="why_do_we_need_this_pan">ಪ್ರೊಫೈಲ್ ಪರಿಶೀಲನೆಗಾಗಿ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಕಡ್ಡಾಯವಾಗಿದೆ. ಇದು ನಿಮ್ಮ ಹೆಸರು ಮತ್ತು ಹುಟ್ಟಿದ ದಿನಾಂಕವನ್ನು ಪರಿಶೀಲಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ ಪಾವತಿಸಲು ಸಹ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</string>
+    <string name="alert">ಎಚ್ಚರಿಕೆ</string>
+    <string name="you_are_reuploading_pan_card">ನಿಮ್ಮ ಪ್ಯಾನ್ ವಿವರಗಳನ್ನು ನೀವು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡುತ್ತಿದ್ದೀರಿ. ಅವುಗಳನ್ನು ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ, ಅದು 7 ದಿನಗಳವರೆಗೆ ತೆಗೆದುಕೊಳ್ಳಬಹುದು.</string>
+    <string name="enter_valid_pan">ಮಾನ್ಯ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ</string>
+    <string name="click_select_pan_image">ಮೊದಲು ನಿಮ್ಮ ಪ್ಯಾನ್ ಕಾರ್ಡ್ ಚಿತ್ರವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="pan_details_uploaded">ಪ್ಯಾನ್ ಕಾರ್ಡ್ ವಿವರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="unable_to_capture_image">ಚಿತ್ರವನ್ನು ಸೆರೆಹಿಡಿಯಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+    <string name="got_it">ಗೊತ್ತಾಯಿತು</string>
+    <string name="aadhar_card_front_image">ಆಧಾರ್ ಕಾರ್ಡ್ (ಮುಂದಿನ ಚಿತ್ರ)</string>
+    <string name="aadhar_card_back_image">ಆಧಾರ್ ಕಾರ್ಡ್ (ಹಿಂದಿನ ಚಿತ್ರ)</string>
+    <string name="why_we_need_this_aadhar">ಪ್ರೊಫೈಲ್ ಪರಿಶೀಲನೆಗಾಗಿ ಆಧಾರ್ ಅಥವಾ ಚಾಲಕರ ಪರವಾನಗಿಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದು ಕಡ್ಡಾಯವಾಗಿದೆ. ನಿಮ್ಮ ಹೆಸರು, ಹುಟ್ಟಿದ ದಿನಾಂಕ, ವಿಳಾಸ ಮತ್ತು ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಆಧಾರ್ ಕಾರ್ಡ್ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</string>
+    <string name="aadhar_card_details_uploaded">ಆಧಾರ್ ಕಾರ್ಡ್ ವಿವರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="you_are_reuploading_aadhar">ನಿಮ್ಮ ಆಧಾರ್ ವಿವರಗಳನ್ನು ನೀವು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡುತ್ತಿದ್ದೀರಿ. ಅವುಗಳನ್ನು ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ, ಅದು 7 ದಿನಗಳವರೆಗೆ ತೆಗೆದುಕೊಳ್ಳಬಹುದು.</string>
+    <string name="select_or_capture_both_sides_of_aadhar">ಆಧಾರ್ ಕಾರ್ಡ್‌ನ ಎರಡೂ ಬದಿಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಅಥವಾ ಸೆರೆಹಿಡಿಯಿರಿ</string>
+    <string name="enter_valid_aadhar_no">ಮಾನ್ಯ ಆಧಾರ್ ಕಾರ್ಡ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ</string>
+    <string name="video_uploaded">ವೀಡಿಯೊ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="why_we_need_this_dl">ಪ್ರೊಫೈಲ್ ಪರಿಶೀಲನೆಗಾಗಿ ಚಾಲಕರ ಪರವಾನಗಿ ಅಥವಾ ಆಧಾರ್ ಕಾರ್ಡ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡುವುದು ಕಡ್ಡಾಯವಾಗಿದೆ. ನಿಮ್ಮ ಹೆಸರು, ಹುಟ್ಟಿದ ದಿನಾಂಕ, ವಿಳಾಸ ಮತ್ತು ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಚಾಲಕರ ಪರವಾನಗಿ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</string>
+    <string name="dl_image_front_side">ಚಾಲನಾ ಪರವಾನಗಿ (ಮುಂಭಾಗದ ಭಾಗ)</string>
+    <string name="dl_image_back_side">ಚಾಲನಾ ಪರವಾನಗಿ (ಹಿಂದಿನ ಭಾಗ)</string>
+    <string name="dl_details_uploaded">ಚಾಲನಾ ಪರವಾನಗಿ ವಿವರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="reuploading_driving_license">ನಿಮ್ಮ ಚಾಲನಾ ಪರವಾನಗಿ ವಿವರಗಳನ್ನು ನೀವು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡುತ್ತಿದ್ದೀರಿ. ಅವುಗಳನ್ನು ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ, ಅದು 7 ದಿನಗಳವರೆಗೆ ತೆಗೆದುಕೊಳ್ಳಬಹುದು.</string>
+    <string name="capture_both_sides_dl">ಚಾಲನಾ ಪರವಾನಗಿಯ ಎರಡೂ ಬದಿಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಅಥವಾ ಸೆರೆಹಿಡಿಯಿರಿ</string>
+    <string name="enter_valid_dl">ಮಾನ್ಯ ಚಾಲನಾ ಪರವಾನಗಿಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="select_dl_state">ಚಾಲನಾ ಪರವಾನಗಿ ಸ್ಥಿತಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="why_we_need_this_bank">ಗಿಗ್ಸ್‌ನಿಂದ ನಿಮ್ಮ ಖಾತೆಗೆ ಪಾವತಿಗಳನ್ನು ಅನುಮೋದಿಸಲು ಮತ್ತು ಕಳುಹಿಸಲು ಬ್ಯಾಂಕ್ ವಿವರಗಳು ಕಡ್ಡಾಯವಾಗಿದೆ. ಇದು ನಿಮ್ಮ ಹೆಸರು, ವಿಳಾಸ, ಹುಟ್ಟಿದ ದಿನಾಂಕ ಮತ್ತು ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.</string>
+    <string name="enter_valid_ifsc">ಮಾನ್ಯ IFSC ಕೋಡ್ ನಮೂದಿಸಿ</string>
+    <string name="enter_bank_name">ಬ್ಯಾಂಕ್ ಹೆಸರನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="bank_name_too_short">ಬ್ಯಾಂಕ್ ಹೆಸರು ತುಂಬಾ ಚಿಕ್ಕದಾಗಿದೆ</string>
+    <string name="enter_valid_acc_no">ಮಾನ್ಯ ಖಾತೆ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ</string>
+    <string name="click_or_select_bank_passbook">ಮೊದಲು ನಿಮ್ಮ ಪಾಸ್‌ಬುಕ್ ಚಿತ್ರವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="your_are_reuploading_bank_details">ನಿಮ್ಮ ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ನೀವು ಮರು ಅಪ್‌ಲೋಡ್ ಮಾಡುತ್ತಿದ್ದೀರಿ. ಅವುಗಳನ್ನು ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಲಾಗುತ್ತದೆ, ಅದು 7 ದಿನಗಳವರೆಗೆ ತೆಗೆದುಕೊಳ್ಳಬಹುದು.</string>
+    <string name="bank_details_uploaded">ಬ್ಯಾಂಕ್ ವಿವರಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="under_verification">ಪರಿಶೀಲನೆ ಅಡಿಯಲ್ಲಿ</string>
+    <string name="verifying">ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ</string>
+    <string name="valid_upto">ಮಾನ್ಯವಾಗಿದೆ:</string>
+    <string name="giger_since">ಗಿಗರ್ ರಿಂದ</string>
+    <string name="gig_id">ಗಿಗ್ ಐಡಿ:</string>
+    <string name="gigforce_pvt_ltd">ಗಿಗ್ಫೋರ್ಸ್ ಪ್ರೈ. ಲಿಮಿಟೆಡ್.</string>
+    <string name="issued_on">ನೀಡಲಾಗಿದೆ</string>
+    <string name="go_to_settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಗೆ ಹೋಗಿ</string>
+    <string name="camera_and_audtio_permission_required_to_access_camera">ವೀಡಿಯೊ ರೆಕಾರ್ಡ್ ಮಾಡಲು ಕ್ಯಾಮೆರಾ ಮತ್ತು ಆಡಿಯೋ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ</string>
+    <string name="select_start_date">ದಯವಿಟ್ಟು ಮೊದಲು ಪ್ರಾರಂಭ ದಿನಾಂಕವನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="download_id_card">ಐಡಿ ಕಾರ್ಡ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="how_to_rec_selfie_video_content">your n ನಿಮ್ಮ 10 ಸೆಕೆಂಡುಗಳ ವೀಡಿಯೊವನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ the n ಕ್ಯಾಮೆರಾವನ್ನು ರಚಿಸಿ ಮತ್ತು “ಹಾಯ್, ನಾನು (ನಿಮ್ಮ ಹೆಸರು) ಮತ್ತು ನಾನು ಮಾಡಲು ಇಷ್ಟಪಡುತ್ತೇನೆ (ನೀವು ಮಾಡಲು ಇಷ್ಟಪಡುವ 2 ವಿಷಯಗಳನ್ನು ನಮೂದಿಸಿ.)</string>
+    <string name="pick_image_intent_text">ಚಿತ್ರವನ್ನು ಆರಿಸಿ</string>
+    <string name="add_bio">ಬಯೋ ಸೇರಿಸಿ</string>
+    <string name="provide_feedback">ಪ್ರತಿಕ್ರಿಯೆ ನೀಡಿ</string>
+    <string name="pending_rating_from_client">ಗ್ರಾಹಕರಿಂದ ರೇಟಿಂಗ್ ಬಾಕಿ ಉಳಿದಿದೆ</string>
+    <string name="you_have_rated_this_gig_as">ನೀವು ಈ ಗಿಗ್ ಅನ್ನು ರೇಟ್ ಮಾಡಿದ್ದೀರಿ</string>
+    <string name="rating_you_received">ನೀವು ಗ್ರಾಹಕರಿಂದ ಪಡೆದ ರೇಟಿಂಗ್</string>
+    <string name="is_whats_app_number">ವಾಟ್ಸಾಪ್ ಸಂಖ್ಯೆ</string>
+    <string name="this_is_my_whatsapp_number">ಇದು ನನ್ನ ವಾಟ್ಸಾಪ್ ಸಂಖ್ಯೆ</string>
+    <string name="add_contact">ಸಂಪರ್ಕ ಸೇರಿಸಿ</string>
+    <string name="edit_contact">ಸಂಪರ್ಕವನ್ನು ಸಂಪಾದಿಸಿ</string>
+    <string name="edit_email">ಇಮೇಲ್ ಸಂಪಾದಿಸಿ</string>
+    <string name="email">ಇ-ಮೇಲ್</string>
+    <string name="empty_string_validation">* ಕ್ಷೇತ್ರ ಖಾಲಿಯಾಗಿರಬಾರದು</string>
+    <string name="validation_phone">* ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="validation_email">* ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇಮೇಲ್ ಐಡಿ ನಮೂದಿಸಿ</string>
+    <string name="emails">ಇಮೇಲ್‌ಗಳು</string>
+    <string name="add_email">ಇಮೇಲ್ ಸೇರಿಸಿ</string>
+    <string name="contact">ಸಂಪರ್ಕಿಸಿ</string>
+    <string name="add_contacts">ಸಂಪರ್ಕಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="email_hyphen">ಇಮೇಲ್ -</string>
+    <string name="contact_hyphen">ಸಂಪರ್ಕಿಸಿ -</string>
+    <string name="ques">ಕ್ಯೂಸ್</string>
+    <string name="answer_the_ques">ಮುಂದುವರಿಸಲು ದಯವಿಟ್ಟು ಪ್ರಶ್ನೆಗೆ ಉತ್ತರಿಸಿ !!!</string>
+    <string name="scenario">ಸನ್ನಿವೇಶ:</string>
+    <string name="record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video">ನಿಮ್ಮ 10 ಸೆಕೆಂಡುಗಳ ವೀಡಿಯೊವನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ ಕ್ಯಾಮೆರಾವನ್ನು ಎದುರಿಸಿ ಮತ್ತು “ಹಾಯ್, ನಾನು (ನಿಮ್ಮ ಹೆಸರು) ಮತ್ತು ನಾನು ಮಾಡಲು ಇಷ್ಟಪಡುತ್ತೇನೆ (ನೀವು ಮಾಡಲು ಇಷ್ಟಪಡುವ 2 ವಿಷಯಗಳನ್ನು ನಮೂದಿಸಿ.)</string>
+    <string name="pan_number_eg_bttps4444a">ಪ್ಯಾನ್ ಸಂಖ್ಯೆ (ಉದಾ: ಬಿಟಿಟಿಪಿಎಸ್ 4444 ಎ)</string>
+    <string name="aadhar_number_eg_444433332222">ಆಧಾರ್ ಸಂಖ್ಯೆ * (ಉದಾ: 444433332222)</string>
+    <string name="driving_license_number_n_eg_if_the_driving_licence_number_is_rj_13_dlc_12_123456_rj1320120123456">ಚಾಲನಾ ಪರವಾನಗಿ ಸಂಖ್ಯೆ * (ಡಿಎಲ್‌ನ ಸ್ವೀಕೃತ ಸ್ವರೂಪಗಳು ಹೀಗಿವೆ: RJ0520091048627. ಇತರ ಸ್ವರೂಪಗಳಿಗಾಗಿ ದಯವಿಟ್ಟು ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಮೇಲ್ವಿಚಾರಕರನ್ನು ಕರೆ ಮಾಡಿ)</string>
+    <string name="ifsc_eg_sbin0000572_bkid0000048">IFSC * (ಉದಾ: SBIN0000572, BKID0000048)</string>
+    <string name="account_number_eg_10_16_digit_number_30000011111111111">ಖಾತೆ ಸಂಖ್ಯೆ * (ಉದಾ: 10-16 ಅಂಕಿಯ ಸಂಖ್ಯೆ: 30000011111111111)</string>
+    <string name="please_note_that_you_are_not_allowed_to_change_the_mobile_number_you_logged_in_with">ನೀವು ಲಾಗ್ ಇನ್ ಮಾಡಿದ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ಬದಲಾಯಿಸಲು ನಿಮಗೆ ಅನುಮತಿ ಇಲ್ಲ ಎಂಬುದನ್ನು ದಯವಿಟ್ಟು ಗಮನಿಸಿ.</string>
+    <string name="email_madatory">ಇ-ಮೇಲ್</string>
+    <string name="phone_mandatory">ದೂರವಾಣಿ</string>
+    <string name="assessment_colon">ಮೌಲ್ಯಮಾಪನ:</string>
+    <string name="total_questions">ಒಟ್ಟು ಪ್ರಶ್ನೆಗಳು</string>
+    <string name="time_duration">ಸಮಯದ ಅವಧಿ</string>
+    <string name="level">ಮಟ್ಟ</string>
+    <string name="u_attempt">ನೀವು ಪ್ರಯತ್ನಿಸುತ್ತೀರಿ</string>
+    <string name="questions">ಪ್ರಶ್ನೆಗಳು</string>
+    <string name="and_from">ಮತ್ತು ನಿಂದ</string>
+    <string name="that">ಅದು</string>
+    <string name="answer_is_correct">ಉತ್ತರ ಸರಿಯಾಗಿದೆ.</string>
+    <string name="attempt">ಪ್ರಯತ್ನ</string>
+    <string name="is_string">ಇದೆ</string>
+    <string name="seconds">ಸೆಕೆಂಡುಗಳು</string>
+    <string name="secs">ಸೆಕೆಂಡುಗಳು</string>
+    <string name="assessment_not_completed">ಮೌಲ್ಯಮಾಪನ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿಲ್ಲ</string>
+    <string name="hundred_percent">1</string>
+    <string name="woe_you_are_correct">ಅದ್ಭುತ ! ನೀನು ಸರಿ.</string>
+    <string name="you_are_incorrect">ಅಯ್ಯೋ ! ನೀವು ತಪ್ಪಾಗಿದ್ದೀರಿ.</string>
+    <string name="time_is_up">ಸಮಯ ಮುಗಿತು!!!!!</string>
+    <string-array name="india_banks">
+        <item>ಅಭುದಯ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಅಬು ಧಾಬಿ ವಾಣಿಜ್ಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಅಕೋಲಾ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಸೆಂಟ್ರಲ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಅಕೋಲಾ ಜನತಾ ವಾಣಿಜ್ಯ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್</item>
+        <item>ಅಲಹಾಬಾದ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಅಲ್ಮೋರಾ ಅರ್ಬನ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಆಂಧ್ರ ಬ್ಯಾಂಕ್</item>
+        <item>ಆಂಧ್ರ ಪ್ರಗತಿ ಗ್ರಾಮೀನಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಅಪ್ನಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಆಸ್ಟ್ರೇಲಿಯಾ ಮತ್ತು ನ್ಯೂ E ೀಲ್ಯಾಂಡ್ ಬ್ಯಾಂಕಿಂಗ್ ಗ್ರೂಪ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಆಕ್ಸಿಸ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಬ್ಯಾಂಕ್ ಇಂಟರ್ನ್ಯಾಷನಲ್ ಇಂಡೋನೇಷ್ಯಾ</item>
+        <item>ಅಮೆರಿಕದ ಬ್ಯಾಂಕ್</item>
+        <item>ಬ್ಯಾಂಕ್ ಆಫ್ ಬಹ್ರೇನ್ ಮತ್ತು ಕುವೈಟ್</item>
+        <item>ಬರೋಡಾದ ಬ್ಯಾಂಕ್</item>
+        <item>ಬ್ಯಾಂಕ್ ಆಫ್ ಸಿಲಾನ್</item>
+        <item>ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ</item>
+        <item>ಮಹಾರಾಷ್ಟ್ರದ ಬ್ಯಾಂಕ್</item>
+        <item>ಟೋಕಿಯೋ-ಮಿತ್ಸುಬಿಷಿ ಯುಎಫ್ಜೆ ಲಿಮಿಟೆಡ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಬಾರ್ಕ್ಲೇಸ್ ಬ್ಯಾಂಕ್ ಪಿಎಲ್‌ಸಿ</item>
+        <item>ಬಾಸ್ಸಿನ್ ಕ್ಯಾಥೊಲಿಕ್ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಭಾರತಿಯಾ ಮಹಿಲಾ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಬಿಎನ್‌ಪಿ ಪರಿಬಾಸ್</item>
+        <item>ಕ್ಯಾಲಿಯನ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಕೆನರಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಕ್ಯಾಪಿಟಲ್ ಲೋಕಲ್ ಏರಿಯಾ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕ್ಯಾಥೊಲಿಕ್ ಸಿರಿಯನ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸೆಂಟ್ರಲ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ</item>
+        <item>ಚೈನಾಟ್ರಸ್ಟ್ ವಾಣಿಜ್ಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಸಿಟಿಬ್ಯಾಂಕ್ ಎನ್.ಎ.</item>
+        <item>ಸಿಟಿಜನ್ಕ್ರೆಡಿಟ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸಿಟಿ ಯೂನಿಯನ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಆಸ್ಟ್ರೇಲಿಯಾದ ಕಾಮನ್ವೆಲ್ತ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಕಾರ್ಪೊರೇಷನ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಕ್ರೆಡಿಟ್ ಸ್ಯೂಸ್ ಎಜಿ</item>
+        <item>ಡಿಬಿಎಸ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಡೇನಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಡಾಯ್ಚ ಬ್ಯಾಂಕ್</item>
+        <item>ಡಾಯ್ಚು ಸೆಕ್ಯುರಿಟೀಸ್ ಇಂಡಿಯಾ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಡೆವಲಪ್ಮೆಂಟ್ ಕ್ರೆಡಿಟ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಧನ್ಲಾಕ್ಸ್ಮಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಡಿಐಸಿಸಿ</item>
+        <item>ಡೊಂಬಿವ್ಲಿ ನಗರಿ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಫರ್ಸ್ಟ್ರಾಂಡ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಗೋಪಿನಾಥ್ ಪಾಟೀಲ್ ಪಾರ್ಸಿಕ್ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಗುರ್ಗಾಂವ್ ಗ್ರ್ಯಾಮಿನ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಎಚ್‌ಡಿಎಫ್‌ಸಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಎಚ್‌ಎಸ್‌ಬಿಸಿ</item>
+        <item>ಐಸಿಐಸಿಐ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಐಡಿಬಿಐ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಐಡಿಆರ್ಬಿಟಿ</item>
+        <item>ಭಾರತೀಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಭಾರತೀಯ ಓವರ್‌ಸೀಸ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಇಂಡಸುಂಡ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಚೀನಾ ಲಿಮಿಟೆಡ್‌ನ ಕೈಗಾರಿಕಾ ಮತ್ತು ವಾಣಿಜ್ಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಐಎನ್ಜಿ ವೈಶ್ಯ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜಲ್ಗಾಂವ್ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜನಕಲ್ಯಾಣ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜನಸೇವ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ (ಬೋರಿವ್ಲಿ) ಲಿಮಿಟೆಡ್</item>
+        <item>ಜನಸೇವ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್ (ಪುಣೆ)</item>
+        <item>ಜೆಪಿ ಮೋರ್ಗಾನ್ ಚೇಸ್ ಬ್ಯಾಂಕ್ ಎನ್</item>
+        <item>ಕಲ್ಲಪ್ಪಣ್ಣ ಅವೇಡ್ ಇಚ್ ಜನತಾ ಎಸ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಕಪೋಲ್ ಸಿಒ ಒಪಿ ಬ್ಯಾಂಕ್</item>
+        <item>ಕರ್ನಾಟಕ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕರ್ನಾಟಕ ವಿಕಾಸ್ ಗ್ರಾಮೀನಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಕರುರ್ ವೈಶ್ಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಕೋಟಕ್ ಮಹೀಂದ್ರಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಕುರ್ಮಂಚಲ್ ನಗರ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮಹಾನಗರ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮಹಾರಾಷ್ಟ್ರ ಸ್ಟೇಟ್ ಕೋ ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಮಾಶ್ರೆಕ್ಬ್ಯಾಂಕ್ ಪಿಎಸ್ಸಿ</item>
+        <item>ಮಿಜುಹೋ ಕಾರ್ಪೊರೇಟ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮುಂಬೈ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಸೆಂಟ್ರಲ್ ಕೋ-ಒಪಿ</item>
+        <item>ನಾಗಪುರ ನಗರಿಕ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ರಾಷ್ಟ್ರೀಯ ಆಸ್ಟ್ರೇಲಿಯಾ ಬ್ಯಾಂಕ್</item>
+        <item>ನ್ಯೂ ಇಂಡಿಯಾ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>string>
+        <item>ಎನ್‌ಕೆಜಿಎಸ್‌ಬಿ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಉತ್ತರ ಮಲಬಾರ್ ಗ್ರಾಮೀಣ ಬ್ಯಾಂಕ್</item>
+        <item>ನೂತನ್ ನಗರಿಕ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಓಮನ್ ಇಂಟರ್ನ್ಯಾಷನಲ್ ಬ್ಯಾಂಕ್ ಸಾಗ್</item>
+        <item>ಓರಿಯೆಂಟಲ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಕಾಮರ್ಸ್</item>
+        <item>ಪಾರ್ಸಿಕ್ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಪ್ರಥಮಾ ಬ್ಯಾಂಕ್</item>
+        <item>ಪ್ರೈಮ್ ಕೋ ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಪಂಜಾಬ್ ಮತ್ತು ಮಹಾರಾಷ್ಟ್ರ ಕೋ-ಆಪ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಪಂಜಾಬ್ ಮತ್ತು ಸಿಂಡ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಪಂಜಾಬ್ ರಾಷ್ಟ್ರೀಯ ಬ್ಯಾಂಕ್</item>
+        <item>ರಾಬೊಬ್ಯಾಂಕ್ ಇಂಟರ್ನ್ಯಾಷನಲ್ (ಸಿಸಿಆರ್ಬಿ)</item>
+        <item>ರಾಜಗುರುನಗರ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ರಾಜಕೋಟ್ ನಗರಿಕ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಭಾರತದ ರಿಸರ್ವ್ ಬ್ಯಾಂಕ್</item>
+        <item>SBER BANK</item>
+        <item>ಶಿನ್ಹಾನ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಶ್ರೀ hat ತ್ರಪತಿ ರಾಜರ್ಷಿ ಶಾಹು ಅರ್ಬನ್ ಕೋ-ಆಪ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸೊಸೈಟಿ ಜೆನೆರಲ್</item>
+        <item>ಸೊಲಾಪುರ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ದಕ್ಷಿಣ ಭಾರತದ ಬ್ಯಾಂಕ್</item>
+        <item>ಸ್ಟ್ಯಾಂಡರ್ಡ್ ಚಾರ್ಟರ್ಡ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಬಿಕಾನೆರ್ ಮತ್ತು ಜೈಪುರದ ರಾಜ್ಯ ಬ್ಯಾಂಕ್</item>
+        <item>ಹೈದರಾಬಾದ್ ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ</item>
+        <item>ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಮಾರಿಷಸ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮೈಸೂರಿನ ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್</item>
+        <item>ಪಟಿಯಾಲಾದ ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್</item>
+        <item>ತಿರುವಾಂಕೂರಿನ ಬ್ಯಾಂಕ್</item>
+        <item>ಸುಮಿಟೋಮೊ ಮಿಟ್ಸುಯಿ ಬ್ಯಾಂಕಿಂಗ್ ಕಾರ್ಪೊರೇಶನ್</item>
+        <item>ಸಿಂಡಿಕೇಟ್ ಬ್ಯಾಂಕ್</item>
+        <item>ತಮಿಳುನಾಡ್ ಮರ್ಕೆಂಟೈಲ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಥಾನೆ ಭರತ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಎ</item>
+        <item>ಅಹಮದಾಬಾದ್ ಮರ್ಕೆಂಟೈಲ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಆಂಧ್ರಪ್ರದೇಶ ರಾಜ್ಯ ಕೋಪ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ನೋವಾ ಸ್ಕಾಟಿಯಾದ ಬ್ಯಾಂಕ್</item>
+        <item>ರಾಜಸ್ಥಾನ್ ಲಿಮಿಟೆಡ್ನ ಬ್ಯಾಂಕ್</item>
+        <item>ಭರತ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ (ಮುಂಬೈ) ಲಿಮಿಟೆಡ್</item>
+        <item>ದಿ ಕಾಸ್ಮೋಸ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ದೆಹಲಿ ಸ್ಟೇಟ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಫೆಡರಲ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಗ್ಯಾಡ್ಚಿರೋಲಿ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಸೆಂಟ್ರಲ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಗ್ರೇಟರ್ ಬಾಂಬೆ ಸಹಕಾರ</item>
+        <item>ಗುಜರಾತ್ ಸ್ಟೇಟ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜಲ್ಗಾನ್ ಜನರು ಸಹಕಾರ ಬ್ಯಾಂಕ್</item>
+        <item>ಜಮ್ಮು ಮತ್ತು ಕಶ್ಮೀರ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕಲಾಪುರ ವಾಣಿಜ್ಯ ಕಂ</item>
+        <item>ಕಲ್ಯಾಣ್ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕಾಂಗ್ರಾ ಸೆಂಟ್ರಲ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕಾಂಗ್ರಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ದಿ ಕರಡ್ ಅರ್ಬನ್ ಕೋ-ಆಪ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಕರ್ನಾಟಕ ರಾಜ್ಯ ಅಪೆಕ್ಸ್ ಕೋಪ್</item>
+        <item>ಲಕ್ಷ್ಮಿ ವಿಲಾಸ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮೆಹ್ಸಾನಾ ಅರ್ಬನ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಮುನ್ಸಿಪಲ್ ಕೋ ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್ ಮುಂಬೈ</item>
+        <item>ನೈನಿಟಲ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ನಾಸಿಕ್ ಮರ್ಚೆಂಟ್ಸ್ ಕೋ-ಒಪಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ರಾಜಸ್ಥಾನ್ ಸ್ಟೇಟ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ರತ್ನಕರ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸ್ಕಾಟ್ಲೆಂಡ್ನ ರಾಯಲ್ ಬ್ಯಾಂಕ್ ಎನ್</item>
+        <item>ಸಾಹೇಬ್ರಾವ್ ದೇಶ್ಮುಖ್ ಸಹಕಾರ</item>
+        <item>ಸರಸ್ವತ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸೆವಾ ವಿಕಾಸ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್ (ಎಸ್‌ವಿಬಿ)</item>
+        <item>ಶಮರಾವ್ ವಿಠಾಲ್ ಕೋ-ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸೂರತ್ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಕೋ ಆಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಸೂರತ್ ಜನರು ಸಹಕಾರ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ದಿ ಸುಟೆಕ್ಸ್ ಸಿಒ</item>
+        <item>ತಮಿಳುನಾಡು ಸ್ಟೇಟ್ ಅಪೆಕ್ಸ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಥೇನ್ ಡಿಸ್ಟ್ರಿಕ್ಟ್ ಸೆಂಟ್ರಲ್ ಕೋ-ಆಪ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಥಾನೇ ಜನತಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ವರಾಚಾ ಸಹಕಾರ</item>
+        <item>ವಿಶ್ವೇಶ್ವರ ಸಹಕಾರ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ವೆಸ್ಟ್ ಬೆಂಗಲ್ ಸ್ಟೇಟ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಟಿಜೆಎಸ್ಬಿ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ತುಮಕೂರು ಧಾನ್ಯ ವ್ಯಾಪಾರಿಗಳ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಯುಬಿಎಸ್ ಎಜಿ</item>
+        <item>ಯುಕೋ ಬ್ಯಾಂಕ್</item>
+        <item>ಯುನಿಯನ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ</item>
+        <item>ಯುನೈಟೆಡ್ ಬ್ಯಾಂಕ್ ಆಫ್ ಇಂಡಿಯಾ</item>
+        <item>ಯುನೈಟೆಡ್ ಓವರ್‌ಸೀಸ್ ಬ್ಯಾಂಕ್</item>
+        <item>ವಾಸೈ ವಿಕಾಸ್ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ವಿಜಯ ಬ್ಯಾಂಕ್</item>
+        <item>ವೆಸ್ಟ್ ಬೆಂಗಲ್ ಸ್ಟೇಟ್ ಕೋಪರೇಟಿವ್ ಬ್ಯಾಂಕ್</item>
+        <item>ವೆಸ್ಟ್‌ಪ್ಯಾಕ್ ಬ್ಯಾಂಕಿಂಗ್ ಕಾರ್ಪೊರೇಶನ್</item>
+        <item>ವೂರಿ ಬ್ಯಾಂಕ್</item>
+        <item>ಹೌದು ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್</item>
+        <item>ಜಿಲಾ ಸಹಕಾರಿ ಬ್ಯಾಂಕ್ ಲಿಮಿಟೆಡ್ ಘಜಿಯಾಬಾದ್</item>
+    </string-array>
+    <string name="about_me">ನನ್ನ ಬಗ್ಗೆ</string>
+    <string name="education">ಶಿಕ್ಷಣ</string>
+    <string name="experience">ಅನುಭವ</string>
+    <string name="bio_profile">ಬಯೋ</string>
+    <string name="add_bio_profile">ಬಯೋ ಸೇರಿಸಿ</string>
+    <string name="speaking">ಮಾತನಾಡುತ್ತಿದ್ದಾರೆ</string>
+    <string name="writing">ಬರೆಯುವುದು</string>
+    <string name="language">ಭಾಷೆ</string>
+    <string name="add_languages">ಭಾಷೆಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="phone_colon">ದೂರವಾಣಿ:</string>
+    <string name="email_colon">ಇಮೇಲ್:</string>
+    <string name="cta_not_implemented">CTA ಕಾರ್ಯಗತಗೊಂಡಿಲ್ಲ</string>
+    <string name="beginner">ಹರಿಕಾರ</string>
+    <string name="moderate">ಮಧ್ಯಮ</string>
+    <string name="advanced">ಸುಧಾರಿತ</string>
+    <string name="updated_achievement_sec">ಸಾಧನೆ ವಿಭಾಗವನ್ನು ನವೀಕರಿಸಲಾಗಿದೆ</string>
+    <string name="degree_mandatory">ಪದವಿ *</string>
+    <string name="full_time">ಪೂರ್ಣ ಸಮಯ</string>
+    <string name="internship">ಇಂಟರ್ನ್‌ಶಿಪ್</string>
+    <string name="part_time">ಅರೆಕಾಲಿಕ</string>
+    <string name="checked">ಪರಿಶೀಲಿಸಲಾಗಿದೆ</string>
+    <string name="driving">ಚಾಲನೆ</string>
+    <string name="cooking">ಅಡುಗೆ</string>
+    <string name="shopkeeping">ಅಂಗಡಿ ಕೀಪಿಂಗ್</string>
+    <string name="managing_catalog">ಕ್ಯಾಟಲಾಗ್ ಅನ್ನು ನಿರ್ವಹಿಸುವುದು</string>
+    <string name="cashier">ಕ್ಯಾಷಿಯರ್</string>
+    <string name="tele_calling">ದೂರವಾಣಿ ಕರೆ</string>
+    <string name="waiter">ಮಾಣಿ</string>
+    <string name="bartener">ಬಾರ್ಟೆಂಡರ್</string>
+    <string name="barback">ಬಾರ್ಬ್ಯಾಕ್</string>
+    <string name="fleet_management">ಫ್ಲೀಟ್ ನಿರ್ವಹಣೆ</string>
+    <string name="assembly_dismatling">ಅಸೆಂಬ್ಲಿ-ಕಿತ್ತುಹಾಕುವಿಕೆ</string>
+    <string name="e_commerce_delivery">ಇ-ಪ್ರಾರಂಭ ವಿತರಣೆ</string>
+    <string name="admin_assistant">ನಿರ್ವಹಣೆ ಸಹಾಯಕ</string>
+    <string name="store_manager">ಗೋದಾಮು ನಿರ್ವಾಹಕ</string>
+    <string name="in_store_promoter">ಅಂಗಡಿಯಲ್ಲಿನ ಪ್ರವರ್ತಕ</string>
+    <string name="record_keeper">ರೆಕಾರ್ಡ್ ಕೀಪರ್</string>
+    <string name="barista">ಬರಿಸ್ತಾ</string>
+    <string name="house_keeping">ಮನೆ ಕೀಪಿಂಗ್</string>
+    <string name="reception">ಆರತಕ್ಷತೆ</string>
+    <string name="artist">ಕಲಾವಿದ</string>
+    <string name="bio_limit">ಜೈವಿಕ> 150 ಅಕ್ಷರಗಳು> ಆಗಿರಬಾರದು</string>
+    <string name="tag_cannot_be_empty">ಅಮಾನ್ಯ ಟ್ಯಾಗ್, ಟ್ಯಾಗ್ ಖಾಲಿಯಾಗಿರಲು ಸಾಧ್ಯವಿಲ್ಲ ಅಥವಾ # ಅನ್ನು ಒಳಗೊಂಡಿಲ್ಲ</string>
+    <string name="certificate">ಪ್ರಮಾಣಪತ್ರ</string>
+    <string name="diploma">ಡಿಪ್ಲೊಮಾ</string>
+    <string name="bachelor">ಸ್ನಾತಕೋತ್ತರ</string>
+    <string name="masters">ಮಾಸ್ಟರ್ಸ್</string>
+    <string name="phd">ಪಿಎಚ್‌ಡಿ</string>
+    <string name="add_headline">ಹೆಡ್‌ಲೈನ್ ಸೇರಿಸಿ</string>
+    <string name="add_tag">ಟ್ಯಾಗ್ ಸೇರಿಸಿ</string>
+    <string name="newtag"># ನ್ಯೂಟ್ಯಾಗ್</string>
+    <string name="add_education">ಶಿಕ್ಷಣವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="skills">ಕೌಶಲ್ಯಗಳು</string>
+    <string name="achievement">ಸಾಧನೆ</string>
+    <string name="add_achievement">ಸಾಧನೆ ಸೇರಿಸಿ</string>
+    <string name="add_experience">ಅನುಭವವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="current">ಪ್ರಸ್ತುತ</string>
+    <string name="sel_year">ವರ್ಷವನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="giger">ಗಿಗರ್</string>
+    <string name="verified">ಪರಿಶೀಲಿಸಲಾಗಿದೆ</string>
+    <string name="add_skill">ಕೌಶಲ್ಯ ಸೇರಿಸಿ</string>
+    <string name="add_lang">ಭಾಷೆಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="company_name_mandatory">ಸಂಸ್ಥೆಯ ಹೆಸರು *</string>
+    <string name="proceed">ಮುಂದುವರೆಯಲು</string>
+    <string name="achievements_colon">ಸಾಧನೆಗಳು:</string>
+    <string name="add_hashtags">ಹ್ಯಾಶ್‌ಟ್ಯಾಗ್‌ಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="err_driving_license">ದೋಷ: ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಚಿತ್ರವು ಚಾಲನಾ ಪರವಾನಗಿ ಚಿತ್ರವಲ್ಲ</string>
+    <string name="recommended_learnings">ಶಿಫಾರಸು ಮಾಡಿದ ಕಲಿಕೆಗಳು</string>
+    <string name="most_popular_learnings">ಹೆಚ್ಚು ಜನಪ್ರಿಯ ಕಲಿಕೆಗಳು</string>
+    <string name="achieve_retail_goal">ನಿಮ್ಮ ಚಿಲ್ಲರೆ ಗುರಿ ಮಾರುಕಟ್ಟೆಯನ್ನು ಹೇಗೆ ಪಡೆಯುವುದು?</string>
+    <string name="industry_based">ಉದ್ಯಮ ಆಧಾರಿತ</string>
+    <string name="apply_driving_license">ಚಾಲನಾ ಪರವಾನಗಿಗಾಗಿ ಹೇಗೆ ಅರ್ಜಿ ಸಲ್ಲಿಸುವುದು?</string>
+    <string name="role_based">ಪಾತ್ರ ಆಧಾರಿತ</string>
+    <string name="retail_sales_executive">ಚಿಲ್ಲರೆ ಮಾರಾಟ ಕಾರ್ಯನಿರ್ವಾಹಕ</string>
+    <string name="demonstrate_products">ಗ್ರಾಹಕರಿಗೆ ಉತ್ಪನ್ನಗಳನ್ನು ಪ್ರದರ್ಶಿಸಿ</string>
+    <string name="driver">ಚಾಲಕ</string>
+    <string name="accept_ride">ಸವಾರಿಯನ್ನು ಹೇಗೆ ಸ್ವೀಕರಿಸುವುದು</string>
+    <string name="delivery">ವಿತರಣೆ</string>
+    <string name="maintaining_safety">ಗಿಗ್ನಲ್ಲಿ ನೈರ್ಮಲ್ಯ ಮತ್ತು ಸುರಕ್ಷತೆಯನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳುವುದು</string>
+    <string name="cook">ಕುಕ್</string>
+    <string name="cook_salt_meals">ಕಡಿಮೆ ಉಪ್ಪು cook ಟ ಬೇಯಿಸುವುದು ಹೇಗೆ</string>
+    <string name="basrista">ಬರಿಸ್ತಾ</string>
+    <string name="prepare_coffee">ಕಾಫಿ ತಯಾರಿಸುವುದು ಹೇಗೆ?</string>
+    <string name="housekeeping">ಮನೆಗೆಲಸ</string>
+    <string name="clean_floors">ವಿಭಿನ್ನ ಮಹಡಿಗಳನ್ನು ಸ್ವಚ್ clean ಗೊಳಿಸಲು ಸರಿಯಾದ ಕಾರಕವನ್ನು ಆರಿಸುವುದೇ?</string>
+    <string name="lessons">ಪಾಠಗಳು</string>
+    <string name="invite_friends">ಸ್ನೇಹಿತರನ್ನು ಆಹ್ವಾನಿಸಿ...</string>
+    <string name="refresh">ರಿಫ್ರೆಶ್ ...</string>
+    <string name="contacts">ಸಂಪರ್ಕಗಳು</string>
+    <string name="last_seen_at">ಕೊನೆಯದಾಗಿ ನೋಡಿದೆ</string>
+    <string name="na">ಎನ್ / ಎ</string>
+    <string name="type_a_message">ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ</string>
+    <string name="not_working">ಕೆಲಸಮಾಡುತ್ತಿಲ್ಲ</string>
+    <string name="marked_working">ಕೆಲಸ ಎಂದು ಗುರುತಿಸಲಾಗಿದೆ</string>
+    <string name="sure_working_on_this_day">ಈ ದಿನ ಕೆಲಸ ಮಾಡದಿರಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
+    <string name="screen_pending_show_gigs">ಈ ದಿನದ ಗಿಗ್ಸ್‌ಗಳ ಪಟ್ಟಿಯನ್ನು ತೋರಿಸಲು ಪರದೆ ಬಾಕಿ ಇದೆ.</string>
+    <string name="alright_no_new_gigs_assigned_on_this_day">ಸರಿ, ಈ ದಿನ ನಿಮಗೆ ಯಾವುದೇ ಹೊಸ ಸಂಗೀತಗೋಷ್ಠಿಗಳನ್ನು ನಿಯೋಜಿಸಲಾಗುವುದಿಲ್ಲ. ಆದಾಗ್ಯೂ, ನೀವು have "</string>
+    <string name="want_to_decline">\ "ನಿಮಗೆ ನಿಯೋಜಿಸಲಾಗಿದೆ. ನೀವು ಅದನ್ನು ನಿರಾಕರಿಸಲು ಬಯಸಿದರೆ ದಯವಿಟ್ಟು ಅದನ್ನು ಪ್ರತ್ಯೇಕವಾಗಿ ಮಾಡಿ.</string>
+    <string name="hello">ಹಲೋ!</string>
+    <string name="welcome_to_gigforce">ಗಿಗ್ಫೋರ್ಸ್ಗೆ ಸುಸ್ವಾಗತ!</string>
+    <string name="let_s_talk_about_what_s_a_gig_and_how_do_you_start_working_as_a_giger_at_gigforce">ಗಿಗ್ ಎಂದರೇನು ಮತ್ತು ಗಿಗ್‌ಫೋರ್ಸ್‌ನಲ್ಲಿ ನೀವು ಗಿಗರ್ ಆಗಿ ಕೆಲಸ ಮಾಡಲು ಹೇಗೆ ಪ್ರಾರಂಭಿಸುತ್ತೀರಿ ಎಂಬುದರ ಕುರಿತು ಮಾತನಾಡೋಣ.</string>
+    <string name="play_now">ಈಗ ಆಡು</string>
+    <string name="my_interest">ನನ್ನ ಆಸಕ್ತಿ</string>
+    <string name="explore_gigs_start_earning">ಗಳಿಕೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಗಿಗ್ಸ್ ಅನ್ನು ಅನ್ವೇಷಿಸಿ.</string>
+    <string name="explore_by_industry">ಉದ್ಯಮದಿಂದ ಅನ್ವೇಷಿಸಿ</string>
+    <string name="manage_your_schedule">ನಿಮ್ಮ ವೇಳಾಪಟ್ಟಿಯನ್ನು ನಿರ್ವಹಿಸಿ</string>
+    <string name="view">ನೋಟ</string>
+    <string name="not_now">ಈಗಲ್ಲ</string>
+    <string name="set_your_preferences">ನಿಮ್ಮ ಆದ್ಯತೆಗಳನ್ನು ಹೊಂದಿಸಿ</string>
+    <string name="add_your_preferences_to_get_gigs_that_suit_you">ನಿಮಗೆ ಸರಿಹೊಂದುವ ಗಿಗ್ಸ್ ಪಡೆಯಲು ನಿಮ್ಮ ಆದ್ಯತೆಗಳನ್ನು ಸೇರಿಸಿ</string>
+    <string name="help">ಸಹಾಯ</string>
+    <string name="see_more_underline"><u> ಇನ್ನಷ್ಟು ನೋಡಿ </u></string>
+    <string name="browse_all_help_topic">ಎಲ್ಲಾ ಸಹಾಯ ವಿಷಯವನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ</string>
+    <string name="contact_us">ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
+    <string name="invite_your_contacts">ನಿಮ್ಮ ಸಂಪರ್ಕಗಳನ್ನು ಆಹ್ವಾನಿಸಿ</string>
+    <string name="username">ಬಳಕೆದಾರ ಹೆಸರು</string>
+    <string name="are_you_sure">ನೀವು ಖಚಿತವಾಗಿರುವಿರಾ?</string>
+    <string name="signing_out_means_missing_out_on_gigs">ಸೈನ್ out ಟ್ ಮಾಡುವುದು ಎಂದರೆ ನಿಮ್ಮ ಸುತ್ತಲಿನ ಗಿಗ್‌ಗಳನ್ನು ಕಳೆದುಕೊಳ್ಳುವುದು.</string>
+    <string name="preferences">ಆದ್ಯತೆಗಳು</string>
+    <string name="category">ವರ್ಗ</string>
+    <string name="others">ಇತರರು</string>
+    <string name="config_data_not_loaded">ಕಾನ್ಫಿಗರ್ ಡೇಟಾ ಲೋಡ್ ಆಗಿಲ್ಲ !!</string>
+    <string name="day">ದಿನ</string>
+    <string name="days">ದಿನಗಳು</string>
+    <string name="yes">ಹೌದು</string>
+    <string name="no">ಇಲ್ಲ</string>
+    <string name="none">ಯಾವುದೂ</string>
+    <string name="day_and_time">ದಿನ ಮತ್ತು ಸಮಯ</string>
+    <string name="weekday">ವಾರದ ದಿನ</string>
+    <string name="_00_04days">00-04 ದಿನಗಳು</string>
+    <string name="weekends">ವಾರಾಂತ್ಯಗಳು</string>
+    <string name="rs">ರೂ</string>
+    <string name="zero_to_rs">Rs "ರೂ 0 - ರೂ \"</string>
+    <string name="days_camel_case">ದಿನಗಳು</string>
+    <string name="are_you_sure_change_preferences">ನೀವು ಆದ್ಯತೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಬಯಸುವಿರಾ?</string>
+    <string name="zero_to_four_days">00-04 ದಿನಗಳು</string>
+    <string name="four_to_eight">04-08 ದಿನಗಳು</string>
+    <string name="eight_to_fifteen">08-15 ದಿನಗಳು</string>
+    <string name="fifteen_to_thirty">15-30 ದಿನಗಳು</string>
+    <string name="working">ಕೆಲಸ</string>
+    <string name="prefered_no_days_work">ಆದ್ಯತೆ ಇಲ್ಲ. ಒಂದು ತಿಂಗಳಲ್ಲಿ ಕೆಲಸದ ದಿನಗಳು</string>
+    <string name="daily_goal">ದೈನಂದಿನ ಗುರಿ</string>
+    <string name="rs0_rs2000">ರೂ 0 - ರೂ .2000</string>
+    <string name="per_day_goal">ದಿನಕ್ಕೆ ಗುರಿ</string>
+    <string name="willing_to_do_monthly_contract">ಮಾಸಿಕ ಒಪ್ಪಂದ ಮಾಡಲು ಇಚ್ ing ೆ</string>
+    <string name="rs0_rs60000">ರೂ 0 - ರೂ .60000</string>
+    <string name="monthly_contract_earning_goal">ಮಾಸಿಕ ಒಪ್ಪಂದ ಗಳಿಸುವ ಗುರಿ</string>
+    <string name="km_around">ಪ್ರಸ್ತುತ ವಿಳಾಸದ ಸುತ್ತ ಕೆ.ಎಂ.</string>
+    <string name="please_add_current_address">ದಯವಿಟ್ಟು ಪ್ರಸ್ತುತ ವಿಳಾಸವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="work_from_home">ಮನೆಯಿಂದ ಕೆಲಸ</string>
+    <string name="preferred_location">ಆದ್ಯತೆಯ ಸ್ಥಳ</string>
+    <string name="around_current_add">ಪ್ರಸ್ತುತ ವಿಳಾಸದ ಸುತ್ತ</string>
+    <string name="jan">ಜನವರಿ</string>
+    <string name="feb">ಫೆಬ್ರವರಿ</string>
+    <string name="mar">ಮಾರ್ಚ್</string>
+    <string name="apr">ಏಪ್ರಿಲ್</string>
+    <string name="may">ಮೇ</string>
+    <string name="june">ಜೂನ್</string>
+    <string name="july">ಜುಲೈ</string>
+    <string name="aug">ಆಗಸ್ಟ್</string>
+    <string name="sep">ಸೆಪ್ಟೆಂಬರ್</string>
+    <string name="oct">ಅಕ್ಟೋಬರ್</string>
+    <string name="nov">ನವೆಂಬರ್</string>
+    <string name="dec">ಡಿಸೆಂಬರ್</string>
+    <string name="mon">ಸೋಮ</string>
+    <string name="tue">ಮಂಗಳ</string>
+    <string name="wed">ಬುಧ</string>
+    <string name="thur">ಥೂರ್</string>
+    <string name="fri">ಶುಕ್ರ</string>
+    <string name="sat">ಶನಿ</string>
+    <string name="sun">ಸೂರ್ಯ</string>
+    <string name="available">ಲಭ್ಯವಿದೆ</string>
+    <string name="no_transactions_yet">ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟು ನಡೆದಿಲ್ಲ</string>
+    <string name="looks_like_you_have_not_explored_much">ನೀವು ಹೆಚ್ಚು ಅನ್ವೇಷಿಸಿಲ್ಲ ಎಂದು ತೋರುತ್ತಿದೆ</string>
+    <string name="explore_now">ಈಗ ಅನ್ವೇಷಿಸಿ</string>
+    <string name="transactions">ವ್ಯವಹಾರಗಳು</string>
+    <string name="see_all">ಎಲ್ಲವನ್ನೂ ನೋಡು</string>
+    <string name="monthly_goal">ಮಾಸಿಕ ಗುರಿ</string>
+    <string name="total_balance">ಒಟ್ಟು ಬಾಕಿ</string>
+    <string name="current_month">ಈ ತಿಂಗಳು</string>
+    <string name="received">ಸ್ವೀಕರಿಸಲಾಗಿದೆ</string>
+    <string name="withdrawn">ಹಿಂತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ</string>
+    <string name="add_new_contact">ಹೊಸ ಸಂಪರ್ಕವನ್ನು ಸೇರಿಸಿ</string>
+    <string name="action">ಕ್ರಿಯೆ</string>
+    <string name="onback_operation">onBackPressed ಕಾರ್ಯಾಚರಣೆ</string>
+    <string name="search_operation">ಹುಡುಕಾಟ ಕಾರ್ಯಾಚರಣೆ ...</string>
+    <string name="today">ಇಂದು</string>
+    <string name="what_would_you_need_help_with">ನಿಮಗೆ ಏನು ಸಹಾಯ ಬೇಕು?</string>
+    <string name="my_current_gig">ನನ್ನ ಪ್ರಸ್ತುತ ಗಿಗ್</string>
+    <string name="my_past_gig">ನನ್ನ ಹಿಂದಿನ ಗಿಗ್</string>
+    <string name="my_upcoming_gig">ನನ್ನ ಮುಂಬರುವ ಗಿಗ್</string>
+    <string name="my_profile">ಸ್ವ ಭೂಮಿಕೆ</string>
+    <string name="my_preferences">ನನ್ನ ಆದ್ಯತೆಗಳು</string>
+    <string name="my_wallet">ನನ್ನ ವ್ಯಾಲೆಟ್</string>
+    <string name="my_learning">ನನ್ನ ಕಲಿಕೆ</string>
+    <string name="others_camel_case">ಇತರರು</string>
+    <string name="assessment_">ಮೌಲ್ಯಮಾಪನ</string>
+    <string name="good_morning">ಶುಭೋದಯ!</string>
+    <string name="version">ಆವೃತ್ತಿ</string>
+    <string name="click_here">ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ</string>
+    <string name="kyc_not_done">ಪರಿಶೀಲನೆ ಮಾಡಲಾಗಿಲ್ಲ, <font color='# 060606'> <u> ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ </u> </font>
+    ಪೂರ್ಣಗೊಳಿಸಲು.
+</string>
+    <string name="video_resume_pending_html">ನಿಮ್ಮ ವೀಡಿಯೊ ಪರಿಚಯ ಬಾಕಿ ಇದೆ, <font color='#060606'> <u> ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ </u> </font>
+    ಪೂರ್ಣಗೊಳಿಸಲು.
+</string>
+    <string name="check_out">ಪರಿಶೀಲಿಸಿ</string>
+    <string name="check_in">ಚೆಕ್ ಇನ್ ಮಾಡಿ</string>
+    <string name="upcoming_gig_">ಮುಂಬರುವ ಗಿಗ್</string>
+    <string name="explore_by_role_">ಪಾತ್ರದಿಂದ ಅನ್ವೇಷಿಸಿ</string>
+    <string name="monthy_goal">ಮಾಸಿಕ ಗುರಿ</string>
+    <string name="per_month_goal">ಪ್ರತಿ ತಿಂಗಳ ಗುರಿ</string>
+    <string name="same_as_permanent_address_">ಶಾಶ್ವತ ವಿಳಾಸದಂತೆಯೇ</string>
+    <string name="save_">ಉಳಿಸಿ</string>
+    <string name="more_detail">ಹೆಚ್ಚಿನ ವಿವರ ಅಗತ್ಯವಿದೆ !!</string>
+    <string name="pincode_not_correct">ಪಿನ್ಕೋಡ್ ಸರಿಯಾಗಿಲ್ಲ</string>
+    <string name="first_line_">ಮೊದಲ ಸಾಲು</string>
+    <string name="second_line_">ಎರಡನೇ ಸಾಲು</string>
+    <string name="area_">ಪ್ರದೇಶ</string>
+    <string name="city_">ನಗರ</string>
+    <string name="state_">ರಾಜ್ಯ</string>
+    <string name="pincode_">ಪಿನ್ಕೋಡ್</string>
+    <string name="address_proof_">ADDRESS PROOF</string>
+    <string name="adhaar_card_">ಅಧಾರ್ ಕಾರ್ಡ್</string>
+    <string name="document_under_verification_">ಪರಿಶೀಲನೆ ಅಡಿಯಲ್ಲಿ ಡಾಕ್ಯುಮೆಂಟ್</string>
+    <string name="km">ಕಿ.ಮೀ.</string>
+    <string name="prefered_distance_zero">ಆದ್ಯತೆಯ ದೂರ 0 ಆದ್ದರಿಂದ ನೀವು ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</string>
+    <string name="preferred_distance_">ಆದ್ಯತೆಯ ದೂರ</string>
+    <string name="around_current_address_">ಪ್ರಸ್ತುತ ವಿಳಾಸದ ಸುತ್ತ</string>
+    <string name="app_language">ಅಪ್ಲಿಕೇಶನ್ ಭಾಷೆ</string>
+    <string name="sign_out">ಸೈನ್ .ಟ್ ಮಾಡಿ</string>
+    <string name="invite_a_friend">ಸ್ನೇಹಿತನನ್ನು ಆಮಂತ್ರಿಸು</string>
+    <string name="refresh_">ರಿಫ್ರೆಶ್ ಮಾಡಿ</string>
+    <string name="refer_your_friends">ನಿಮ್ಮ ಸ್ನೇಹಿತರನ್ನು ನೋಡಿ</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">ಗಿಗ್‌ಫೋರ್ಸ್‌ನೊಂದಿಗೆ ಕೆಲಸ ಮಾಡುವ ಸಂತೋಷವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ ಮತ್ತು ನಿಮ್ಮ ಸ್ನೇಹಿತರನ್ನು ಆಹ್ವಾನಿಸಿ.</string>
+    <string name="share_now">ಈಗ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="thankyou">ಧನ್ಯವಾದ</string>
+    <string name="link_copied">ಲಿಂಕ್ ನಕಲಿಸಲಾಗಿದೆ</string>
+    <string name="looking_for_dynamic_working_hours">Flex ಹೊಂದಿಕೊಳ್ಳುವ ಕೆಲಸದ ಸಮಯವನ್ನು ಹುಡುಕುತ್ತಿರುವಿರಾ? ಗಿಗ್ಫೋರ್ಸ್ನಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಸೇರಿ:</string>
+    <string name="dl_hint_square_bracket">ಚಾಲನಾ ಪರವಾನಗಿ ಸಂಖ್ಯೆ * \ n (ಸ್ವೀಕರಿಸಿದ ಡಿಎಲ್ ಸ್ವರೂಪಗಳು: ಆರ್ಜೆ -13 / ಡಿಎಲ್ಸಿ / 12/123456, ಆರ್ಜೆ 1320120123456, ಆರ್ಜೆ -052009123456, ಮತ್ತು ಜಿಜೆ 18 ಎನ್ 2012123456. ಇತರ ಸ್ವರೂಪಗಳಿಗಾಗಿ ದಯವಿಟ್ಟು ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಮೇಲ್ವಿಚಾರಕರನ್ನು ಕರೆ ಮಾಡಿ.)</string>
+    <string name="plus_see_more">ಇನ್ನಷ್ಟು ನೋಡಿ</string>
+    <string name="plus_see_less">ಕಡಿಮೆ ನೋಡಿ</string>
+    <string name="new_version_available">ಹೊಸ ಆವೃತ್ತಿ ಲಭ್ಯವಿದೆ</string>
+    <string name="new_version_available_detail">ದಯವಿಟ್ಟು, ಮರು ಪೋಸ್ಟ್ ಮಾಡುವುದನ್ನು ಮುಂದುವರಿಸಲು ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಹೊಸ ಆವೃತ್ತಿಗೆ ನವೀಕರಿಸಿ</string>
+    <string name="you_helped">ನೀವು ಸಹಾಯ ಮಾಡಿದ್ದೀರಿ</string>
+    <string name="and">ಮತ್ತು</string>
+    <string name="more_comma">ಹೆಚ್ಚು,</string>
+    <string name="find_gigs_on">ಗಿಗ್ಫೋರ್ಸ್ನಲ್ಲಿ ಗಿಗ್ಸ್ ಹುಡುಕಿ.</string>
+    <string name="more">ಹೆಚ್ಚು</string>
+    <string name="cancel_update">ರದ್ದುಮಾಡಿ</string>
+    <string name="update_now">ಇದೀಗ ನವೀಕರಿಸಿ</string>
+    <string name="do_it_later"><u> ನಂತರ ಮಾಡಿ </u></string>
+    <string name="submit_all_caps">ಸಲ್ಲಿಸು</string>
+    <string name="yes_i_confirm_that_i_want_to_decline_this_gig">ಹೌದು, ನಾನು ಈ ಗಿಗ್ ಅನ್ನು ನಿರಾಕರಿಸಲು ಬಯಸುತ್ತೇನೆ ಎಂದು ಖಚಿತಪಡಿಸುತ್ತೇನೆ.</string>
+    <string name="reason">ಕಾರಣ</string>
+    <string name="this_gig_is_unsuitable_for_me">ಈ ಗಿಗ್ ನನಗೆ ಸೂಕ್ತವಲ್ಲ</string>
+    <string name="i_can_t_reach_the_location_today">ನಾನು ಇಂದು ಸ್ಥಳವನ್ನು ತಲುಪಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+    <string name="i_m_on_sick_leave_today">ನಾನು ಇಂದು ಅನಾರೋಗ್ಯ ರಜೆಯಲ್ಲಿದ್ದೇನೆ</string>
+    <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಕಾರಣವನ್ನು ನಮಗೆ ತಿಳಿಸಿ, ನೀವು ಈ ಗಿಗ್ ಅನ್ನು ಏಕೆ ನಿರಾಕರಿಸುತ್ತಿದ್ದೀರಿ.</string>
+    <string name="cancelling_out_a_gig">ಗಿಗ್ ರದ್ದುಗೊಳಿಸಲಾಗುತ್ತಿದೆ!</string>
+    <string name="i_am_on_leave_today">ನಾನು ಇಂದು ರಜೆಯಲ್ಲಿದ್ದೇನೆ</string>
+    <string name="see_more">ಇನ್ನೂ ಹೆಚ್ಚು ನೋಡು</string>
+    <string name="sort_by_popular">ಇವರಿಂದ ವಿಂಗಡಿಸಿ: ಜನಪ್ರಿಯ</string>
+    <string name="read_more">ಹೆಚ್ಚು</string>
+    <string name="read_less">ಕಡಿಮೆ</string>
+    <string name="what_does_a">ಏನು ಮಾಡುತ್ತದೆ</string>
+    <string name="do_question_mark">ಮಾಡುವುದೇ?</string>
+    <string name="earnings">ಗಳಿಕೆ</string>
+    <string name="plus_more">ಹೆಚ್ಚ</string>
+    <string name="requirements">ಅವಶ್ಯಕತೆಗಳು</string>
+    <string name="responsibilities">ಜವಾಬ್ದಾರಿಗಳನ್ನು</string>
+    <string name="mark_as_interest">ಆಸಕ್ತಿ</string>
+    <string name="marked_as_interest">ಆಸಕ್ತಿಯಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ</string>
+    <string name="marked_as_interest_exlamation">ಆಸಕ್ತಿಯಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ</string>
+    <string name="our_team_will_soon_contact_you_for_more_details_and_further_procedure">ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ ಮತ್ತು ಹೆಚ್ಚಿನ ಕಾರ್ಯವಿಧಾನಕ್ಕಾಗಿ ನಮ್ಮ ತಂಡವು ಶೀಘ್ರದಲ್ಲೇ ನಿಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸುತ್ತದೆ.</string>
+    <string name="update_your_profile">ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಅನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="explore_learning">ಕಲಿಕೆಯನ್ನು ಅನ್ವೇಷಿಸಿ</string>
+    <string name="explore_more_role">ಹೆಚ್ಚಿನ ಪಾತ್ರವನ್ನು ಅನ್ವೇಷಿಸಿ</string>
+    <string name="default_notification_channel_id">19871629</string>
+    <string name="learning_assign_to_you">ಕಲಿಕೆಯನ್ನು ನಿಮಗೆ ನಿಯೋಜಿಸಲಾಗಿದೆ</string>
+    <string name="as_you_clear_more_assessments">ನೀವು ಹೆಚ್ಚಿನ ಮೌಲ್ಯಮಾಪನಗಳನ್ನು ತೆರವುಗೊಳಿಸುವುದರಿಂದ ಸೂಕ್ತವಾದ ಗಿಗ್‌ಗಳನ್ನು ಶೀಘ್ರದಲ್ಲೇ ನಿಯೋಜಿಸಲಾಗುತ್ತದೆ</string>
+    <string name="you_have_scored">ನೀವು ಸ್ಕೋರ್ ಮಾಡಿದ್ದೀರಿ</string>
+    <string name="in_your_assessment">ನಿಮ್ಮ ಮೌಲ್ಯಮಾಪನದಲ್ಲಿ</string>
+    <string name="new_cert_added_underlined"><u> ಪ್ರೊಫೈಲ್‌ಗೆ ಹೊಸ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಸೇರಿಸಲಾಗಿದೆ. </u></string>
+    <string name="watch_lesson_again">ಪಾಠವನ್ನು ಮತ್ತೆ ವೀಕ್ಷಿಸಿ</string>
+    <string name="skip">ಬಿಟ್ಟುಬಿಡಿ</string>
+    <string name="new_bio">ಹೊಸ ಬಯೋ</string>
+    <string name="signed">ಸಹಿ</string>
+    <string name="unsigned">ಸಹಿ ಮಾಡಲಾಗಿಲ್ಲ</string>
+    <string name="add_bio_star">ಬಯೋ ಸೇರಿಸಿ</string>
+    <string name="new_language">ಹೊಸ ಭಾಷೆ</string>
+    <string name="total_number_of_days">ಒಟ್ಟು ದಿನಗಳ ಸಂಖ್ಯೆ</string>
+    <string name="total_working_days">ಒಟ್ಟು ಕೆಲಸದ ದಿನಗಳು</string>
+    <string name="number_of_offs">ಆಫ್‌ಗಳ ಸಂಖ್ಯೆ</string>
+    <string name="download_payslip">Download Payslip</string>
+    <string name="view_gig_details">View Gig Details</string>
+    <string name="earn_rs_50_per_giger_onboarding_no_limit_on_earning">Earn Rs. 50 per Giger Onboarding. No limit on earning.</string>
+
+    //Ambassador strings
+
+</resources>

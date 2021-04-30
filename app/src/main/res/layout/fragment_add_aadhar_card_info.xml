@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/white"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_back_add_aadhar_card_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_18"
+                    app:srcCompat="@drawable/ic_arrow_back_black" />
+
+                <TextView
+                    android:id="@+id/tv_title_add_aadhar_card_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_19"
+                    android:layout_toEndOf="@+id/iv_back_add_aadhar_card_info"
+                    android:letterSpacing="0"
+                    android:text="@string/giger_verification"
+                    android:textColor="#080808"
+                    android:textSize="@dimen/font_20" />
+
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/aadharEditLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_aadhar_card_info_main" />
+
+        <include
+            android:id="@+id/aadharViewLayout"
+            android:visibility="gone"
+            layout="@layout/fragment_add_aadhar_card_view" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

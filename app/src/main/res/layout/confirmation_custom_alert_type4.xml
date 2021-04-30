@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_cl"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="27dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_warning" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:text="Cancelling out on a gig !"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView42"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/sub_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="19dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
+        android:gravity="left"
+        android:letterSpacing="0"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Please let us know your reason, to mark unavailable ?"
+        android:textColor="#313131"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_cl" />
+
+    <RadioGroup
+        android:id="@+id/groupradio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:paddingStart="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sub_title">
+
+        <RadioButton
+            android:id="@+id/option1"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="en"
+            android:paddingLeft="11dp"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:text="I’m not feeling well"
+            android:textSize="14sp" />
+
+
+        <RadioButton
+            android:id="@+id/option2"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="hi"
+            android:paddingLeft="11dp"
+            android:textColor="@color/black"
+            android:letterSpacing="0"
+            android:text="I have other work"
+            android:textSize="14sp" />
+
+
+        <RadioButton
+            android:id="@+id/option3"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="te"
+            android:paddingLeft="11dp"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:text="This gig is unsuitable for me"
+            android:textSize="14sp" />
+
+
+        <RadioButton
+            android:id="@+id/option4"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="gu"
+            android:paddingLeft="11dp"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:text="I can’t reach the location"
+            android:textSize="14sp" />
+
+
+        <RadioButton
+            android:id="@+id/option5"
+            style="@style/Theme.RadioButtonLipstickPink"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_select_lang_item"
+            android:layout_marginLeft="15dp"
+            android:hint="pa"
+            android:paddingLeft="11dp"
+            android:letterSpacing="0"
+            android:textColor="@color/black"
+            android:text="I can’t do the gig today"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/yes"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rect_button_gradient"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:minHeight="@dimen/size_36"
+        android:text="Submit"
+        android:letterSpacing="0"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupradio"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

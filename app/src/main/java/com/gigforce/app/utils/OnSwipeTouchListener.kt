@@ -1,38 +1,19 @@
-package com.gigforce.app.utils
-
 import android.content.Context
 import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 
-private const val SWIPE_THRESHOLD:Int = 100
-private const val SWIPE_VELOCITY_THRESHOLD = 100
-
-class OnSwipeTouchListener(val context:Context, val swipeListner:SimpleSwipeGestureListener)
-    :View.OnTouchListener
-{
-    lateinit final var gestureDetector: GestureDetector
-
-    init {
-        gestureDetector = GestureDetector(context, GestureListener(swipeListner));
+open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
+    private val gestureDetector: GestureDetector
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event)
     }
 
-    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-        return gestureDetector.onTouchEvent(event);
-    }
-
-    interface SimpleSwipeGestureListener{
-        fun onSwipeRight()
-        fun onSwipeLeft()
-        fun onSwipeTop()
-        fun onSwipeBottom()
-    }
-
-    private final class GestureListener(val swipeListner:SimpleSwipeGestureListener)
-        : GestureDetector.SimpleOnGestureListener()
-    {
-        override fun onDown(e: MotionEvent?): Boolean {
-            return super.onDown(e)
+    private inner class GestureListener : SimpleOnGestureListener() {
+        override fun onDown(e: MotionEvent): Boolean {
+            return true
         }
 
         override fun onFling(
@@ -43,34 +24,55 @@ class OnSwipeTouchListener(val context:Context, val swipeListner:SimpleSwipeGest
         ): Boolean {
             var result = false
             try {
-                val diffY = e2!!.y - e1!!.y
-                val diffX = e2.x - e1.x
+                var e1x = e1?.x ?: 0.0.toFloat()
+                var e2x = e2?.x ?: 0.0.toFloat()
+                var e1y = e1?.y ?: 0.0.toFloat()
+                var e2y = e2?.y ?: 0.0.toFloat()
+                val diffY = e2y - e1y
+                val diffX = e2x - e1x
                 if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (Math.abs(diffX) > Companion.SWIPE_THRESHOLD && Math.abs(
+                            velocityX
+                        ) > Companion.SWIPE_VELOCITY_THRESHOLD
+                    ) {
                         if (diffX > 0) {
-                            swipeListner.onSwipeRight()
+                            onSwipeRight()
                         } else {
-                            swipeListner.onSwipeLeft()
+                            onSwipeLeft()
                         }
                         result = true
                     }
-                } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(
+                } else if (Math.abs(diffY) > Companion.SWIPE_THRESHOLD && Math.abs(
                         velocityY
-                    ) > SWIPE_VELOCITY_THRESHOLD
+                    ) > Companion.SWIPE_VELOCITY_THRESHOLD
                 ) {
                     if (diffY > 0) {
-                        swipeListner.onSwipeBottom()
+                        onSwipeBottom()
                     } else {
-                        swipeListner.onSwipeTop()
+                        onSwipeTop()
                     }
                     result = true
                 }
             } catch (exception: Exception) {
                 exception.printStackTrace()
             }
-            return result
+            return true
         }
 
 
+    }
+
+    open fun onSwipeRight() {}
+    open fun onSwipeLeft() {}
+    open fun onSwipeTop() {}
+    open fun onSwipeBottom() {}
+
+    init {
+        gestureDetector = GestureDetector(ctx, GestureListener())
+    }
+
+    companion object {
+        private const val SWIPE_THRESHOLD = 20
+        private const val SWIPE_VELOCITY_THRESHOLD = 20
     }
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="25dp"
+    android:background="@drawable/bck_gig_toolbar_pink">
+
+    <ImageView
+        android:id="@+id/gig_cross_btn"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/gig_ellipses_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_ellipses"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/company_logo_overlay_iv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_white"
+        style="@style/circleImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gig_cross_btn" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/company_logo_iv"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        app:srcCompat="@drawable/ic_location"
+        style="@style/circleImageView"
+        app:layout_constraintBottom_toBottomOf="@id/company_logo_overlay_iv"
+        app:layout_constraintEnd_toEndOf="@id/company_logo_overlay_iv"
+        app:layout_constraintStart_toStartOf="@id/company_logo_overlay_iv"
+        app:layout_constraintTop_toTopOf="@id/company_logo_overlay_iv" />
+
+    <TextView
+        android:id="@+id/gig_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="0"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/company_logo_iv"
+        app:layout_constraintTop_toBottomOf="@id/gig_cross_btn"
+        tools:text="Some Post anMe" />
+
+    <TextView
+        android:id="@+id/gig_company_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/gig_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/gig_title_tv"
+        tools:text="Procter &amp; Gamble" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

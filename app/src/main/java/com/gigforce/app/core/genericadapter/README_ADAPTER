@@ -1,0 +1,78 @@
+    Example :1
+
+    class DataItem{
+        var title:String = "Title";
+        var subTitle:String = "Sub Title";
+        var date:String = "15";
+        var comment:String = "below comments";
+        var month:String = "April";
+
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var datalist: ArrayList<DataItem> = ArrayList<DataItem>()
+        datalist.add(DataItem())
+
+        val recyclerGenericAdapter: RecyclerGenericAdapter<DataItem> =
+                RecyclerGenericAdapter<DataItem>(
+                        activity?.applicationContext,
+                        OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                        ItemInterface<DataItem?> { obj, viewHolder, position ->
+                            getView(viewHolder,R.id.constraintLayout)
+                            getTextView(viewHolder,R.id.item_title)
+                            getImageView(viewHolder,R.id.item_icon)
+                        })!!
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
+        rv_.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false
+        )
+        rv_.adapter = recyclerGenericAdapter
+    }
+
+
+    Example 2
+
+    val recyclerGenericAdapter : RecyclerGenericAdapter<DataItem> = RecyclerGenericAdapter<DataItem>(
+        activity?.applicationContext,
+        PFRecyclerViewAdapter.OnViewHolderClick <DataItem?> { view, position, item -> showToast("")},
+        RecyclerGenericAdapter.ItemInterface<DataItem?> { obj, viewHolder, position ->
+            val title:TextView = viewHolder.getView(R.id.hs1_title) as TextView
+            title.text = obj?.title
+            val subtitle:TextView = viewHolder.getView(R.id.hs1_subtitle) as TextView
+            subtitle.text = obj?.subTitle
+            val comment:TextView = viewHolder.getView(R.id.hs1_comment) as TextView
+            comment.text = obj?.comment
+            val month:TextView = viewHolder.getView(R.id.hs1_month) as TextView
+            month.text = obj?.month
+            val date:TextView = viewHolder.getView(R.id.hs1_date) as TextView
+            date.text = obj?.date
+        })!!
+            RecyclerGenericAdapter<DataItem>(
+                activity?.applicationContext,
+                OnViewHolderClick<Any?> { view, position, item -> showToast("")},
+                ItemInterface<DataItem?> { obj, viewHolder ->
+			val title:TextView = viewHolder.getView(R.id.hs1_title) as TextView
+		        title.text = obj?.title
+		        val subtitle:TextView = viewHolder.getView(R.id.hs1_subtitle) as TextView
+		        subtitle.text = obj?.subTitle
+		        val comment:TextView = viewHolder.getView(R.id.hs1_comment) as TextView
+		        comment.text = obj?.comment
+		        val month:TextView = viewHolder.getView(R.id.hs1_month) as TextView
+		        month.text = obj?.month
+		        val date:TextView = viewHolder.getView(R.id.hs1_date) as TextView
+		        date.text = obj?.date
+                })
+        recyclerGenericAdapter.setList(datalist)
+        recyclerGenericAdapter.setLayout(R.layout.home_screen_new_fragment)
+        rv_.setLayoutManager(
+            LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        )
+        rv_.adapter = recyclerGenericAdapter
+    }

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cities_layout"
+        android:visibility="visible">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/job_preferred_location_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="5sp"
+                android:text="Preferred Job location"
+                android:textColor="#131415"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp">
+
+                <EditText
+                    android:id="@+id/search_cities_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="40dp"
+                    android:background="@drawable/rectangle_round_light_blue"
+                    android:minHeight="36dp" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/ic_search"/>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/major_cities_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="#f4faff"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="Major Cities"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/major_cities_recyclerview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:nestedScrollingEnabled="true"
+                />
+
+
+            <TextView
+                android:id="@+id/other_cities_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="#f4faff"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:text="Other Cities"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/other_cities_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"
+                android:layout_marginEnd="16dp" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sub_cities_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/sub_cities_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="5sp"
+            android:text="Locality"
+            android:textColor="#131415"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/sub_cities_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#f4faff"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="Delhi - NCR"
+            android:textColor="#333333"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sub_cities_title"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sub_cities_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:nestedScrollingEnabled="true"
+            android:layout_marginBottom="106dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sub_cities_label"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/gradient_button"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone"
+        />
+
+
+</LinearLayout>
