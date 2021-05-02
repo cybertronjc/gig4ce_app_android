@@ -10,6 +10,7 @@ import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.age_group_item.*
@@ -17,10 +18,10 @@ import kotlinx.android.synthetic.main.name_gender_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
+class AgeGroupFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.SetInterfaceListener {
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AgeGroupFragment(formCompletionListener)
+        fun newInstance() = AgeGroupFragment()
     }
 
     @Inject lateinit var eventTracker: IEventTracker
@@ -36,12 +37,12 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AgeGroupViewModel::class.java)
         age_group.setOnCheckedChangeListener{ group, checkedId ->
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
         }
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -58,8 +59,12 @@ class AgeGroupFragment(val formCompletionListener: OnboardingFragmentNew.OnFragm
 
     override fun activeNextButton() {
         if(age_group.checkedRadioButtonId!=-1)
-            formCompletionListener.enableDisableNextButton(true)
-        else formCompletionListener.enableDisableNextButton(false)
+            formCompletionListener?.enableDisableNextButton(true)
+        else formCompletionListener?.enableDisableNextButton(false)
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 

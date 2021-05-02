@@ -369,7 +369,7 @@ class AddCurrentAddressFragment : BaseFragment() {
                     state_spinner.selectItemWithText(it.address.current.state)
 
                     Handler().postDelayed({
-                        city_spinner.selectItemWithText(it.address.current.city)
+                        city_spinner?.selectItemWithText(it.address.current.city)
                     }, 100)
                 }
 
