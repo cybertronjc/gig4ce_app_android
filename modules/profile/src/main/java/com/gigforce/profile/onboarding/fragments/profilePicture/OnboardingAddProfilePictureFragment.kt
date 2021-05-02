@@ -33,6 +33,7 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.OnboardingProfileData
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,7 +46,21 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OnboardingAddProfilePictureFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), ImageCropCallback, OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
+class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.SetInterfaceListener {
+
+    companion object {
+
+        private const val REQUEST_CAPTURE_IMAGE = 101
+        private const val REQUEST_PICK_IMAGE = 102
+
+        private const val PREFIX: String = "IMG"
+        private const val EXTENSION: String = ".jpg"
+
+        private const val REQUEST_STORAGE_PERMISSION = 102
+
+        fun newInstance() = OnboardingAddProfilePictureFragment()
+
+    }
 
     private var viewShownFirstTime = false
     private val viewModel: OnboardingViewModel by viewModels()
@@ -118,7 +133,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
             if(onboardingProfileData?.hasUserUploadedProfilePicture() == true){
                 showCameraSheetIfNotShown()
             } else {
-                formCompletionListener.profilePictureSkipPressed()
+                formCompletionListener?.profilePictureSkipPressed()
             }
         }
 //        editLayout.setOnClickListener {
@@ -168,7 +183,7 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
                                 skip_edit_textview.text = "Skip"
                             }
 
-                            formCompletionListener.checkForButtonText()
+                            formCompletionListener?.checkForButtonText()
                         }
                         is Lce.Error -> {
                             shimmerFrameLayout.stopShimmer()
@@ -336,23 +351,10 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
 
 
 
-    companion object {
 
-        private const val REQUEST_CAPTURE_IMAGE = 101
-        private const val REQUEST_PICK_IMAGE = 102
-
-        private const val PREFIX: String = "IMG"
-        private const val EXTENSION: String = ".jpg"
-
-        private const val REQUEST_STORAGE_PERMISSION = 102
-
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener): OnboardingAddProfilePictureFragment {
-            return OnboardingAddProfilePictureFragment(formCompletionListener)
-        }
-    }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -364,7 +366,12 @@ class OnboardingAddProfilePictureFragment(val formCompletionListener: Onboarding
     }
 
     override fun activeNextButton() {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
+    }
+
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 }

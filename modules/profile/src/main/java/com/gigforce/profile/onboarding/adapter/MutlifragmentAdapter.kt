@@ -14,7 +14,7 @@ import com.gigforce.profile.onboarding.fragments.namegender.NameGenderFragment
 import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 import com.gigforce.profile.onboarding.fragments.profilePicture.OnboardingAddProfilePictureFragment
 
-class MutlifragmentAdapter(activity: FragmentActivity,formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : FragmentStateAdapter(activity) {
+class MutlifragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int {
         return 9
@@ -22,15 +22,15 @@ class MutlifragmentAdapter(activity: FragmentActivity,formCompletionListener: On
 
     val fragmentArr = ArrayList<Fragment>()
     init {
-        fragmentArr.add(NameGenderFragment.newInstance(formCompletionListener))
-        fragmentArr.add(AgeGroupFragment.newInstance(formCompletionListener))
-        fragmentArr.add(HighestQualificationFragment.newInstance(formCompletionListener))
-        fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance(formCompletionListener))
-        fragmentArr.add(ExperienceFragment.newInstance(formCompletionListener))
-        fragmentArr.add(InterestFragment.newInstance(formCompletionListener))
-        fragmentArr.add(JobPreferenceFragment.newInstance(formCompletionListener))
-        fragmentArr.add(AssetOwnedFragment.newInstance(formCompletionListener))
-        fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance(formCompletionListener))
+        fragmentArr.add(NameGenderFragment.newInstance())
+        fragmentArr.add(AgeGroupFragment.newInstance())
+        fragmentArr.add(HighestQualificationFragment.newInstance())
+        fragmentArr.add(OnboardingPreferredJobLocationFragment.newInstance())
+        fragmentArr.add(ExperienceFragment.newInstance())
+        fragmentArr.add(InterestFragment.newInstance())
+        fragmentArr.add(JobPreferenceFragment.newInstance())
+        fragmentArr.add(AssetOwnedFragment.newInstance())
+        fragmentArr.add(OnboardingAddProfilePictureFragment.newInstance())
     }
 
     override fun createFragment(position: Int): Fragment {

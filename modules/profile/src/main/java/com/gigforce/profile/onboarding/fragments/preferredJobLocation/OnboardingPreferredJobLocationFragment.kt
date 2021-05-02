@@ -23,6 +23,7 @@ import com.gigforce.profile.adapters.*
 import com.gigforce.profile.analytics.OnboardingEvents
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import com.gigforce.profile.onboarding.SpaceItemDecoration
 import com.gigforce.profile.viewmodel.OnboardingViewModel
@@ -31,11 +32,11 @@ import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OnboardingPreferredJobLocationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),
+class OnboardingPreferredJobLocationFragment() : Fragment(),
         OnCitySelectedListener,
         OnboardingFragmentNew.FragmentSetLastStateListener,
         OnSubCitySelectedListener,
-        OnboardingFragmentNew.FragmentInteractionListener {
+        OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.SetInterfaceListener {
 
     private val viewModel: OnboardingViewModel by viewModels()
 
@@ -152,7 +153,7 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
 
 
     override fun onSubCitySelected(add: Boolean, text: String) {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
 
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
@@ -169,19 +170,18 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     }
 
     override fun onCitySelected(city: City) {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         selectedCity = city
     }
 
     companion object {
 
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener): OnboardingPreferredJobLocationFragment {
-            return OnboardingPreferredJobLocationFragment(formCompletionListener)
-        }
+        fun newInstance() =  OnboardingPreferredJobLocationFragment()
+
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         if (sub_cities_layout.isVisible) {
             cities_layout.visible()
             sub_cities_layout.gone()
@@ -252,16 +252,20 @@ class OnboardingPreferredJobLocationFragment(val formCompletionListener: Onboard
     override fun activeNextButton() {
         if (currentStep == 0) {
             if (selectedCity != null) {
-                formCompletionListener.enableDisableNextButton(true)
+                formCompletionListener?.enableDisableNextButton(true)
             } else {
-                formCompletionListener.enableDisableNextButton(false)
+                formCompletionListener?.enableDisableNextButton(false)
             }
         } else {
             if (confirmSubCityList.size > 0) {
-                formCompletionListener.enableDisableNextButton(true)
+                formCompletionListener?.enableDisableNextButton(true)
             } else {
-                formCompletionListener.enableDisableNextButton(false)
+                formCompletionListener?.enableDisableNextButton(false)
             }
         }
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 }

@@ -12,16 +12,17 @@ import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
+class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.SetInterfaceListener {
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = AssetOwnedFragment(formCompletionListener)
+        fun newInstance() = AssetOwnedFragment()
     }
 
     @Inject lateinit var eventTracker: IEventTracker
@@ -166,7 +167,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     private fun validateForm() {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
     }
 
     private fun resetSelected(icon: ImageView, option: TextView, view: View) {
@@ -236,7 +237,7 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -249,7 +250,11 @@ class AssetOwnedFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun activeNextButton() {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 }

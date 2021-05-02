@@ -60,6 +60,7 @@ class OnboardingCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingCityViewHolder, position: Int) {
+        if(filteredCityList.size > position)
         holder.bindValues(filteredCityList.get(position), position)
     }
 

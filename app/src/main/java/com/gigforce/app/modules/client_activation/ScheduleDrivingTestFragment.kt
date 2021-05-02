@@ -307,14 +307,14 @@ class ScheduleDrivingTestFragment : BaseFragment(),
 
     fun showResendOTPMessage(isShow: Boolean) {
         if (isShow) {
-            tv_number_otp.visibility = View.VISIBLE
-            otpnotcorrect_schedule_test.visibility = View.VISIBLE
+            tv_number_otp?.visibility = View.VISIBLE
+            otpnotcorrect_schedule_test?.visibility = View.VISIBLE
 //            resend_otp.visibility = View.VISIBLE
             setTextViewColor(timer_tv, R.color.time_up_color)
             timerStarted = false
         } else {
-            tv_number_otp.visibility = View.GONE
-            otpnotcorrect_schedule_test.visibility = View.GONE
+            tv_number_otp?.visibility = View.GONE
+            otpnotcorrect_schedule_test?.visibility = View.GONE
 //            resend_otp.visibility = View.GONE
             setTextViewColor(timer_tv, R.color.timer_color)
             timerStarted = true
