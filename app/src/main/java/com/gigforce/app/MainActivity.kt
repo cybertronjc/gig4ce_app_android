@@ -87,8 +87,10 @@ class MainActivity : AppCompatActivity(),
             val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
                     ?: return
 
-//
-            //
+            if(!isUserLoggedIn()){
+                Log.d("MainActivity","User Not logged in, not showing chat notification")
+                return
+            }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
                     navController.currentDestination?.label  != "fragment_chat_page")
@@ -119,6 +121,13 @@ class MainActivity : AppCompatActivity(),
 
         when {
             intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
+
+                if(!isUserLoggedIn())
+                {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_client_activation, bundleOf(
@@ -134,6 +143,13 @@ class MainActivity : AppCompatActivity(),
             }
 
             intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
+
+                if(!isUserLoggedIn())
+                {
+                    proceedWithNormalNavigation()
+                    return
+                }
+
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
                 navController.popBackStack()
                 navController.navigate(
@@ -181,11 +197,20 @@ class MainActivity : AppCompatActivity(),
         //mixpanel?.getPeople()?.identify(firebaseAuth.currentUser.phoneNumber);
     }
 
+    private fun isUserLoggedIn(): Boolean {
+       return FirebaseAuth.getInstance().currentUser != null
+    }
+
     private fun lookForNewChatMessages() {
         chatHeadersViewModel.startWatchingChatHeaders()
     }
 
     private fun handleDeepLink() {
+        if(!isUserLoggedIn()){
+            Log.d("MainActivity","User Not logged in, not handling deep link")
+            proceedWithNormalNavigation()
+            return
+        }
 
         val clickAction = intent.getStringExtra(NotificationConstants.INTENT_EXTRA_CLICK_ACTION)
         Log.d("MainActivity", "Click action received $clickAction ")
