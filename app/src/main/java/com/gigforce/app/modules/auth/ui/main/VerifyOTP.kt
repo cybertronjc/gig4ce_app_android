@@ -215,14 +215,9 @@ class VerifyOTP : BaseFragment() {
             if (it.stateResponse == STATE_SIGNIN_FAILED) {
                 showWrongOTPLayout(true)
 
-                var map = mapOf("Error" to it.msg)
-                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
-//                mixpanel?.track("Entered wrong OTP")
             } else if (it.stateResponse == STATE_SIGNIN_SUCCESS) {
 
                 countDownTimer?.cancel()
-
-//                navigate(R.id.action_verifyOTP_to_onOTPSuccess)
             }
         })
 
@@ -247,7 +242,7 @@ class VerifyOTP : BaseFragment() {
                         progressBar.visibility = View.GONE
                     }
                 }, 3000)
-                viewModel.verifyPhoneNumberWithCode(otpIn.toString())
+                viewModel.verifyPhoneNumberWithCode(otpIn.toString(), "+91" + mobile_number)
             } else {
                 showWrongOTPLayout(true)
             }
@@ -259,8 +254,11 @@ class VerifyOTP : BaseFragment() {
             if (otpresentcounter < 2) {
                 otpresentcounter++;
                 counterStart();
-                viewModel.sendVerificationCode("+91" + mobile_number)
-                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_RESEND_OTP, null))
+                viewModel.sendVerificationCode(
+                    phoneNumber = "+91" + mobile_number,
+                    isResendCall = true
+                )
+
             } else {
                 navigateToLoginScreen()
             }

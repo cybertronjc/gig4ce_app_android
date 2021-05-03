@@ -63,12 +63,6 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     private fun navigateToMainOnboarding() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
-
-        eventTracker.pushEvent(TrackingEventArgs(
-                eventName = AuthEvents.SIGN_SUCCESS,
-                props = null
-        ))
-
         navigate(R.id.onboardingfragment)
     }
 
