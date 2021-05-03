@@ -233,8 +233,6 @@ class Login : BaseFragment() {
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
                     showToast(it.msg)
-                    var map = mapOf("Error" to it.msg)
-                    eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
                     navigateToOTPVarificationScreen()
@@ -355,14 +353,6 @@ class Login : BaseFragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else {
-
-            eventTracker.pushEvent(TrackingEventArgs(
-                    eventName = AuthEvents.SIGN_UP_STARTED,
-                    props = mapOf(
-                            "phone_no" to phoneNumber
-                    )
-            ))
-
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
