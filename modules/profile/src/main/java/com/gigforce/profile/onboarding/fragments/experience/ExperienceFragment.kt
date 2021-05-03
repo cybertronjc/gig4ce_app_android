@@ -9,21 +9,23 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.experience_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
-    Fragment() ,OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener{
+class ExperienceFragment() :
+    Fragment() ,OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.SetInterfaceListener{
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
-            ExperienceFragment(formCompletionListener)
+        fun newInstance() =
+            ExperienceFragment()
     }
 
     @Inject lateinit var eventTracker: IEventTracker
@@ -68,9 +70,9 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     private fun validateForm() {
         if (!workStatus.equals("") && istotalExperienceSelected) {
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
         } else {
-            formCompletionListener.enableDisableNextButton(false)
+            formCompletionListener?.enableDisableNextButton(false)
         }
     }
 
@@ -108,7 +110,7 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -118,11 +120,17 @@ class ExperienceFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         var map = mapOf("WorkingStatus" to workStatus, "TotalExperience" to totalExperience)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_EXPERIENCE,map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Working Status", workStatus))
+        eventTracker.setProfileProperty(ProfilePropArgs("Total Experience", totalExperience))
         return false
     }
 
     override fun activeNextButton() {
         validateForm()
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 }

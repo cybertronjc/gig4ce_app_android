@@ -305,18 +305,20 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                         UtilMethods.hideLoading()
                         if (it.content.status.equals("Success")) {
                             allPostoffices = it.content.postOffice
-                            for (index in 0 until state_spinner.adapter.count) {
-                                val item = state_spinner.adapter.getItem(index)
-                                allPostoffices.mapIndexed { index1, postalOffice ->
-                                    if (item.toString().equals(postalOffice.state)) {
-                                        state_spinner.setSelection(index)
-                                        return@Observer
+                            state_spinner?.let {
+                                for (index in 0 until it.adapter.count) {
+                                    val item = it.adapter.getItem(index)
+                                    allPostoffices.mapIndexed { index1, postalOffice ->
+                                        if (item.toString().equals(postalOffice.state)) {
+                                            it.setSelection(index)
+                                            return@Observer
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            state_spinner.setSelection(0)
-                            city_spinner.setSelection(0)
+                            state_spinner?.setSelection(0)
+                            city_spinner?.setSelection(0)
                         }
                     }
                     is Lce.Error -> {
@@ -465,8 +467,8 @@ class AddUserCurrentAddressFragment : BaseFragment() {
             permanent_state_spinner.selectItemWithText(profileData!!.address.home.state)
 
             Handler().postDelayed({
-                permanent_city_spinner.selectItemWithText(profileData!!.address.home.city)
-                city_spinner.selectItemWithText(profileData!!.address.current.city)
+                permanent_city_spinner?.selectItemWithText(profileData!!.address.home.city)
+                city_spinner?.selectItemWithText(profileData!!.address.current.city)
             }, 500)
         }
     }

@@ -8,19 +8,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.highest_qualification_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HighestQualificationFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener {
+class HighestQualificationFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastStateListener,OnboardingFragmentNew.FragmentInteractionListener,OnboardingFragmentNew.SetInterfaceListener  {
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = HighestQualificationFragment(formCompletionListener)
+        fun newInstance() = HighestQualificationFragment()
     }
 
     @Inject lateinit var eventTracker: IEventTracker
@@ -80,10 +82,10 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
 
     private fun validateForm() {
         if(!selectedHighestQualification.equals("")){
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
         }
         else{
-            formCompletionListener.enableDisableNextButton(false)
+            formCompletionListener?.enableDisableNextButton(false)
         }
     }
 
@@ -125,7 +127,7 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -133,11 +135,16 @@ class HighestQualificationFragment(val formCompletionListener: OnboardingFragmen
         var map = mapOf("qualification" to selectedHighestQualification)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_HIGHEST_QUALIFICATION,map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("Highest Qualification", selectedHighestQualification))
         return false
     }
 
     override fun activeNextButton() {
         validateForm()
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 }

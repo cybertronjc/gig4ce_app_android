@@ -6,8 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,15 +16,13 @@ import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.getScreenWidth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.controls.Mode
-import com.otaliastudios.cameraview.size.AspectRatio
-import com.otaliastudios.cameraview.size.Size
 import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_picture_preview.*
 import kotlinx.android.synthetic.main.activity_picture_preview.cameraView
@@ -78,9 +76,9 @@ class ImageCaptureActivity : AppCompatActivity() {
     private fun uploadImage() {
         showToast("Uploading Image")
         progress_circular.visible()
-        val sd = Environment.getExternalStorageDirectory();
+
         val image = File(filesDir, "capture.jpg")
-        val bos =  BufferedOutputStream( FileOutputStream(image));
+        val bos = BufferedOutputStream(FileOutputStream(image));
         bos.write(pictureResult?.data);
         bos.flush();
         bos.close()
@@ -140,9 +138,60 @@ class ImageCaptureActivity : AppCompatActivity() {
 //        )
 //        cameraView.setPictureSize(result)
 //        cameraView.setVideoSize(result)
-        cameraView.setPreviewStreamSize(SizeSelectors.and(SizeSelectors.maxWidth(1000), SizeSelectors.biggest()))
+
+
+        FirebaseFirestore.getInstance()
+                .collection("Configuration")
+                .document("CameraProperties")
+                .get()
+                .addOnSuccessListener {
+
+                    val deviceAndDefaultSize = it.getString("gig_device_and_experimental_camera_width_size") ?: ""
+                    val defaultSize = it.getLong("gig_image_capture_default_size_selector_max_width") ?: 1000L
+
+                    initCamera2(
+                            deviceAndDefaultSize,
+                            defaultSize.toInt()
+                    )
+                }.addOnFailureListener {
+
+                    initCamera2(
+                            "",
+                            1000
+                    )
+                }
+    }
+
+    private fun initCamera2(
+            devicesThatNeedToUseDifferentPreviewSize : String,
+            defaultMaxWidth : Int
+    ){
+
+        val deviceAndTheirMaxWidthValues = devicesThatNeedToUseDifferentPreviewSize
+                .trim()
+                .split(";")
+                .filter { it.isNotBlank() }
+                .map {
+                    it.substring(0, it.indexOf(":")) to it.substring(it.indexOf(":") + 1, it.length)
+                }.toMap()
+
+
+        if (deviceAndTheirMaxWidthValues.containsKey(Build.MODEL)) {
+            val maxWidthForThisDevice = deviceAndTheirMaxWidthValues.get(Build.MODEL)?.toInt() ?: -1
+
+            if (maxWidthForThisDevice == -1) {
+                //No Restriction
+            } else {
+                cameraView.setPreviewStreamSize(SizeSelectors.and(SizeSelectors.maxWidth(maxWidthForThisDevice), SizeSelectors.biggest()))
+            }
+        } else {
+            cameraView.setPreviewStreamSize(SizeSelectors.and(SizeSelectors.maxWidth(defaultMaxWidth), SizeSelectors.biggest()))
+        }
+
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
+
+
     }
 
     fun showToast(str: String) {

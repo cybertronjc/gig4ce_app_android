@@ -11,27 +11,29 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.job_preference_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) :
+class JobPreferenceFragment() :
         Fragment(), OnboardingFragmentNew.FragmentInteractionListener,
-        OnboardingFragmentNew.FragmentSetLastStateListener {
+        OnboardingFragmentNew.FragmentSetLastStateListener, OnboardingFragmentNew.SetInterfaceListener {
 
     @Inject
     lateinit var eventTracker: IEventTracker
 
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) =
-                JobPreferenceFragment(formCompletionListener)
+        fun newInstance() =
+                JobPreferenceFragment()
     }
 
     private lateinit var viewModel: JobPreferenceViewModel
@@ -104,7 +106,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
             fullTimeJob = true
             resetAll()
             setSelected(icon_iv, full_time, imageTextCardcl)
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
             clickedOnPreferenceOptions = true
 
         })
@@ -112,7 +114,7 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
             fullTimeJob = false
             resetAll()
             setSelected(icon_iv1, part_time, imageTextCardcl_)
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
             clickedOnPreferenceOptions = true
 
         })
@@ -120,11 +122,11 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         workingDaysIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    formCompletionListener.enableDisableNextButton(true)
+                    formCompletionListener?.enableDisableNextButton(true)
                 } else if (anyCheckboxChecked(workingDaysIds)) {
-                    formCompletionListener.enableDisableNextButton(true)
+                    formCompletionListener?.enableDisableNextButton(true)
                 } else {
-                    formCompletionListener.enableDisableNextButton(false)
+                    formCompletionListener?.enableDisableNextButton(false)
                 }
             }
         }
@@ -132,11 +134,11 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         timeSlotsIds.forEach { obj ->
             obj.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    formCompletionListener.enableDisableNextButton(true)
+                    formCompletionListener?.enableDisableNextButton(true)
                 } else if (anyCheckboxChecked(timeSlotsIds)) {
-                    formCompletionListener.enableDisableNextButton(true)
+                    formCompletionListener?.enableDisableNextButton(true)
                 } else {
-                    formCompletionListener.enableDisableNextButton(false)
+                    formCompletionListener?.enableDisableNextButton(false)
                 }
             }
         }
@@ -228,6 +230,9 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         var map = mapOf("FullTimeJob" to false, "Days" to getWorkingDays(), "TimeSlots" to getTimeSlots())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_CURRENT_JOB_STATUS_SELECTED, map))
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("FullTimeJob", false))
+        eventTracker.setProfileProperty(ProfilePropArgs("Days", getWorkingDays()))
+        eventTracker.setProfileProperty(ProfilePropArgs("TimeSlots", getTimeSlots()))
     }
 
     private fun fullTimeJobTracker() {
@@ -236,19 +241,20 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
         eventTracker.removeUserProperty("Days")
         eventTracker.removeUserProperty("TimeSlots")
         eventTracker.setUserProperty(map)
+        eventTracker.setProfileProperty(ProfilePropArgs("FullTimeJob", true))
     }
 
 
     override fun activeNextButton() {
         when (currentStep) {
-            0 -> if (clickedOnPreferenceOptions) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
-            1 -> if (getWorkingDays().size > 0) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
-            else -> if (getTimeSlots().size > 0) formCompletionListener.enableDisableNextButton(true) else formCompletionListener.enableDisableNextButton(false)
+            0 -> if (clickedOnPreferenceOptions) formCompletionListener?.enableDisableNextButton(true) else formCompletionListener?.enableDisableNextButton(false)
+            1 -> if (getWorkingDays().size > 0) formCompletionListener?.enableDisableNextButton(true) else formCompletionListener?.enableDisableNextButton(false)
+            else -> if (getTimeSlots().size > 0) formCompletionListener?.enableDisableNextButton(true) else formCompletionListener?.enableDisableNextButton(false)
         }
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         if (currentStep == 2) {
             job_preferences.gone()
             work_days_cl.visible()
@@ -290,6 +296,10 @@ class JobPreferenceFragment(val formCompletionListener: OnboardingFragmentNew.On
                     )
             )
         }
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
 }

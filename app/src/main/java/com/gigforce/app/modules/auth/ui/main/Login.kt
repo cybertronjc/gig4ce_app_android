@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.view.View.GONE
@@ -16,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProviders
@@ -230,8 +233,6 @@ class Login : BaseFragment() {
                 }
                 LoginViewModel.STATE_VERIFY_FAILED -> {
                     showToast(it.msg)
-                    var map = mapOf("Error" to it.msg)
-                    eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_ERROR, map))
                 }
                 LoginViewModel.STATE_VERIFY_SUCCESS -> {
                     navigateToOTPVarificationScreen()
@@ -248,7 +249,7 @@ class Login : BaseFragment() {
                 findNavController().navigate(
                         LoginDirections.actionLogin2ToVerifyOTP(
                                 viewModel.verificationId!!,
-                                makeMobileNumberString()
+                                invisible_edit_mobile.text.toString()
                         )
                 )
             } catch (e: Exception) {
@@ -263,36 +264,39 @@ class Login : BaseFragment() {
             invisible_edit_mobile.requestFocus()
         }
 
-        invisible_edit_mobile.doAfterTextChanged {
-            showWrongMobileNoLayout(false)
-            if (invisible_edit_mobile.text.toString().length == 10) {
-                hideKeyboard()
-                login_button.isEnabled = true
-                login_button.background = resources.getDrawable(R.drawable.gradient_button)
-            } else {
-                login_button.isEnabled = false
-                login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+        invisible_edit_mobile.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
             }
-            if (it.toString().length > 0) {
-                //fill the boxes
-                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, it.toString()[it.toString().length - 1].toString(), true)
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                // going forward
+                if (before == 0 && count == 1){
+                    fillMobileDigitBoxes(text.toString().length, text.toString()[start].toString(), true)
+                }
+                // going backward
+                else if (before == 1 && count == 0){
+                    fillMobileDigitBoxes(text.toString().length, "", false)
+                }
             }
-            if (it.toString().length < makeMobileNumberString().length) {
-                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
+
+            override fun afterTextChanged(p0: Editable?) {
+                showWrongMobileNoLayout(false)
+                if (invisible_edit_mobile.text.toString().length == 10) {
+                    hideKeyboard()
+                    login_button.isEnabled = true
+                    login_button.background = resources.getDrawable(R.drawable.gradient_button)
+                } else {
+                    login_button.isEnabled = false
+                    login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
+                }
             }
-        }
+
+        })
 
 
         invisible_edit_mobile.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             cvloginwrong.visibility = GONE
-//            textView23.visibility = VISIBLE
-
-//            if( keyCode == KeyEvent.KEYCODE_DEL ) {
-//                //this is for backspace
-//                    Log.d("backspace", "here")
-//                fillMobileDigitBoxes(invisible_edit_mobile.text.toString().length, "", false)
-//            }
-
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 login_button.isEnabled = false
                 login_button.background = resources.getDrawable(R.drawable.app_gradient_button_disabled)
@@ -316,13 +320,13 @@ class Login : BaseFragment() {
 
     }
 
-    private fun fillMobileDigitBoxes(ind: Int, md: String, remove: Boolean) {
+    private fun fillMobileDigitBoxes(ind: Int, md: String, add: Boolean) {
 
-        if (!remove) {
-            Log.d("fill", md + "ind " + ind + " remove")
+        if (!add && ind < 11) {
+            Log.d("remove", md + "ind " + ind + " remove")
             arrayEditTexts1.get(ind).setText("")
-        } else {
-            Log.d("fill", md + "ind " + ind + " add")
+        } else if (add && ind > 0) {
+            Log.d("add", md + "ind " + ind + " add")
             arrayEditTexts1.get(ind - 1).setText(md)
         }
 
@@ -349,14 +353,6 @@ class Login : BaseFragment() {
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
         } else {
-
-            eventTracker.pushEvent(TrackingEventArgs(
-                    eventName = AuthEvents.SIGN_UP_STARTED,
-                    props = mapOf(
-                            "phone_no" to phoneNumber
-                    )
-            ))
-
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
@@ -371,16 +367,6 @@ class Login : BaseFragment() {
         }
         return true
     }
-
-    private fun makeMobileNumberString(): String {
-        val sb = StringBuilder()
-        for (i in 0..arrayEditTexts1.size - 1) {
-            sb.append(arrayEditTexts1.get(i).text.toString())
-        }
-
-        return sb.toString()
-    }
-
 
     private fun getAllEarlierMobileNumbers() {
         var deviceMobileNos = ArrayList<String>()

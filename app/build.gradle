@@ -281,11 +281,7 @@ dependencies {
     //for paralax
     //noinspection GradleCompatible
     implementation 'com.android.support:design:26.1.0'
-    //vision api for face detect
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
 
-    //vision api for face detect
-    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
     implementation 'com.github.yalantis:ucrop:2.2.4'
     // verification
     // https://github.com/square/retrofit
@@ -382,5 +378,11 @@ dependencies {
 
     implementation 'com.mixpanel.android:mixpanel-android:5.8.8'
     implementation 'com.appsflyer:af-android-sdk:5.4.0'
-    implementation 'com.android.installreferrer:installreferrer:2.2'
+
+
+    //Branch tool integration
+    implementation 'io.branch.sdk.android:library:5.+'
+    implementation 'com.google.firebase:firebase-appindexing:19.0.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:16+'
+
 }

@@ -9,9 +9,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.name_gender_item.*
@@ -24,10 +26,10 @@ import javax.inject.Inject
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) : Fragment(), OnboardingFragmentNew.FragmentSetLastStateListener,
-        OnboardingFragmentNew.FragmentInteractionListener {
+class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastStateListener,
+        OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.SetInterfaceListener {
     companion object {
-        fun newInstance(formCompletionListener: OnboardingFragmentNew.OnFragmentFormCompletionListener) = NameGenderFragment(formCompletionListener)
+        fun newInstance() = NameGenderFragment()
     }
 
     @Inject
@@ -97,9 +99,9 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
     private fun validateAllValues() {
         if (!gender.equals("") && !username.text.toString().equals("")) {
-            formCompletionListener.enableDisableNextButton(true)
+            formCompletionListener?.enableDisableNextButton(true)
         } else {
-            formCompletionListener.enableDisableNextButton(false)
+            formCompletionListener?.enableDisableNextButton(false)
         }
     }
 
@@ -153,7 +155,7 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
     }
 
     override fun lastStateFormFound(): Boolean {
-        formCompletionListener.enableDisableNextButton(true)
+        formCompletionListener?.enableDisableNextButton(true)
         return false
     }
 
@@ -163,6 +165,8 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
         props.put("gender", gender)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER, props))
         eventTracker.setUserProperty(props)
+        eventTracker.setProfileProperty(ProfilePropArgs("\$name", username.text.toString()))
+        eventTracker.setProfileProperty(ProfilePropArgs("Gender", gender))
 
         return false
     }
@@ -181,5 +185,9 @@ class NameGenderFragment(val formCompletionListener: OnboardingFragmentNew.OnFra
 
 // finally change the color
         win?.statusBarColor = resources.getColor(R.color.status_bar_gray)
+    }
+    var formCompletionListener: OnFragmentFormCompletionListener? = null
+    override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
+        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 }

@@ -33,13 +33,13 @@ class OnboardingViewModel constructor(
         private val firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : ViewModel() {
 
-    private val _submitUserDetailsState = MutableLiveData<Lse>()
-    val submitUserDetailsState: LiveData<Lse> = _submitUserDetailsState
+    private val _submitUserDetailsState = MutableLiveData<Lce<String>>()
+    val submitUserDetailsState: LiveData<Lce<String>> = _submitUserDetailsState
 
     fun uploadProfilePicture(
             uri: Uri
     ) = viewModelScope.launch(Dispatchers.IO) {
-        _submitUserDetailsState.postValue(Lse.loading())
+        _submitUserDetailsState.postValue(Lce.loading())
 
         Log.v("ProfilePicture", "started")
         val mReference =
@@ -56,10 +56,27 @@ class OnboardingViewModel constructor(
             val thumnailNameOnServer = uploadThumbnailAndReturnNameOnServer(fname, uri)
             profileFirebaseRepository.setProfileAvatarName(fname, thumnailNameOnServer)
 
-            _submitUserDetailsState.postValue(Lse.success())
+            _submitUserDetailsState.postValue(Lce.content(fname))
 //            _submitUserDetailsState.postValue(null)
+//            val urlTask = taskSnap.task.continueWith { task ->
+//                if (!task.isSuccessful) {
+//                    task.exception?.let {
+//                        throw it
+//                    }
+//                }
+//                mReference.downloadUrl
+//            }.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    val downloadUri = task.result
+//                    Log.d("image url", downloadUri.result.toString())
+//                } else {
+//                    // Handle failures
+//                    // ...
+//                    Log.d("image url", "failure")
+//                }
+//            }
 
-            Log.v("ProfilePicture", "Sucess")
+            Log.v("ProfilePicture", "Success")
         } catch (e: Exception) {
             Log.v("ProfilePicture", "error")
             e.printStackTrace()
@@ -68,7 +85,7 @@ class OnboardingViewModel constructor(
             FirebaseCrashlytics.getInstance().recordException(e)
 
             _submitUserDetailsState.postValue(
-                    Lse.error(e.message ?: "Unable to upload profile picture")
+                    Lce.error(e.message ?: "Unable to upload profile picture")
             )
             //           _submitUserDetailsState.postValue(null)
         }
@@ -235,6 +252,17 @@ class OnboardingViewModel constructor(
                     subLocation
             )
         } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun saveLeadSource(
+        leadSource: HashMap<String, String>
+    ) = viewModelScope.launch {
+        try {
+            profileFirebaseRepository.setLeadSource(leadSource)
+        }
+        catch (e: Exception){
             e.printStackTrace()
         }
     }
