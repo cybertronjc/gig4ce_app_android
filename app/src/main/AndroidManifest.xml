@@ -160,6 +160,13 @@
                     android:host="www.gig4ce.com"
                     android:scheme="https" />
             </intent-filter>
+
+            <intent-filter>
+                <data android:scheme="gigforceapp" android:host="open" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -212,7 +219,10 @@
         <!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
         <!--            </intent-filter>-->
         <!--        </receiver>-->
-
+        <!-- Branch init -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_cf1kHW4fcGP4SXVy31QE6ehoxyjgqLlW" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ph6gM53mhJM4J7Vt14O1OpkftwepAJEe" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
     </application>
 
 </manifest>

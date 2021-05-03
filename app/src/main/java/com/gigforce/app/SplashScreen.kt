@@ -8,6 +8,11 @@ import com.gigforce.app.core.base.shareddata.SharedDataImp
 import com.gigforce.app.utils.StringConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import io.branch.referral.Branch
+import io.branch.referral.Branch.BranchReferralInitListener
+import io.branch.referral.BranchError
+import org.json.JSONObject
+
 
 class SplashScreen : AppCompatActivity() {
 
@@ -111,4 +116,27 @@ class SplashScreen : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    override fun onStart() {
+        super.onStart()
+        Branch.sessionBuilder(this).withCallback(branchReferralInitListener)
+            .withData(if (intent != null) intent.data else null).init()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent);
+        // if activity is in foreground (or in backstack but partially visible) launching the same
+        // activity will skip onStart, handle this case with reInitSession
+        Branch.sessionBuilder(this).withCallback(branchReferralInitListener).reInit();
+    }
+
+    private val branchReferralInitListener: BranchReferralInitListener =
+        object : BranchReferralInitListener {
+            override fun onInitFinished(referringParams: JSONObject?, error: BranchError?) {
+                // do stuff with deep link data (nav to page, display content, etc)
+            }
+
+        }
+
 }

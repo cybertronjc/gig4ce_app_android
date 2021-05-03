@@ -13,6 +13,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.HiltAndroidApp
+import io.branch.referral.Branch
 
 @HiltAndroidApp
 class MainApplication : Application() {
@@ -30,12 +31,21 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        setUpBranchTool()
         setupCleverTap()
         setupMixpanel()
         setUpAppsFlyer()
         setUpUserOnAnalyticsAndCrashlytics()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+    }
+
+    private fun setUpBranchTool() {
+        // Branch logging for debugging
+        Branch.enableLogging();
+
+        // Branch object initialization
+        Branch.getAutoInstance(this);
     }
 
     private fun setUpAppsFlyer() {

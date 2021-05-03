@@ -379,4 +379,10 @@ dependencies {
     implementation 'com.mixpanel.android:mixpanel-android:5.8.8'
     implementation 'com.appsflyer:af-android-sdk:5.4.0'
 
+
+    //Branch tool integration
+    implementation 'io.branch.sdk.android:library:5.+'
+    implementation 'com.google.firebase:firebase-appindexing:19.0.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:16+'
+
 }
