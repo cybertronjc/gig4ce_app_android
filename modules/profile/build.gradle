@@ -81,4 +81,5 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 }

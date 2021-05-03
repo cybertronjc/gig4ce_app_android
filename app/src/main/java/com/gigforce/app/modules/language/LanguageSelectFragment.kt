@@ -37,7 +37,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
     }
 
     private var win: Window? = null
-    private lateinit var referrerClient: InstallReferrerClient
+
     @Inject lateinit var eventTracker: IEventTracker
 
     val SUPPORTED_LOCALES =
@@ -76,7 +76,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         setDefaultLanguage()
         listener()
         initViewModel()
-        setUpReferrer()
+
 
         //back press
         iv_back_language_fragment.setOnClickListener {
@@ -84,65 +84,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         }
     }
 
-    private fun setUpReferrer() {
-        referrerClient = InstallReferrerClient.newBuilder(context).build()
-        referrerClient.startConnection(object : InstallReferrerStateListener {
 
-            override fun onInstallReferrerSetupFinished(responseCode: Int) {
-                when (responseCode) {
-                    InstallReferrerClient.InstallReferrerResponse.OK -> {
-                        // Connection established.
-                        getReferrerDetails()
-                    }
-                    InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
-                        // API not available on the current Play Store app.
-                    }
-                    InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> {
-                        // Connection couldn't be established.
-                    }
-                }
-            }
-
-            override fun onInstallReferrerServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-            }
-        })
-    }
-
-    private fun getReferrerDetails(){
-        var response: ReferrerDetails? = null
-        try {
-            response = referrerClient.installReferrer
-            Log.d("response", response.toString())
-        } catch (e: RemoteException) {
-            e.printStackTrace()
-        }
-        val referrerUrl = response!!.installReferrer
-        Log.d("referrer link", referrerUrl)
-        try {
-            eventTracker.pushEvent(TrackingEventArgs("lead_source", getTagsMap(referrerUrl)))
-            eventTracker.setUserProperty(getTagsMap(referrerUrl))
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        referrerClient.endConnection()
-    }
-
-    private fun getTagsMap(url: String): HashMap<String, String>{
-
-        var map= HashMap<String, String>()
-        val strArray = url.split("&").toTypedArray()
-        for (i in 0 until strArray.size - 1){
-
-            var tagArray = strArray.get(i).split("=")
-            map.put(tagArray.get(0), tagArray.get(1))
-            Log.d("tagArray", tagArray.toString())
-        }
-
-        return map
-    }
 
     private fun initViewModel() {
 //        viewModel
