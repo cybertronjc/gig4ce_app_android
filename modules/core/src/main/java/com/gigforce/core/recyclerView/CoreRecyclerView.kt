@@ -61,4 +61,9 @@ open class CoreRecyclerView(
         set(value) {
             this.coreAdapter.collection = value
         }
+
+    var itemClickListener: ItemClickListener? = null
+        set(value) {
+            this.coreAdapter.itemClickListener = value
+        }
 }

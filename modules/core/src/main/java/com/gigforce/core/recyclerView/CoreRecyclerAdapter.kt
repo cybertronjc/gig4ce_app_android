@@ -5,14 +5,13 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
-import com.gigforce.core.IDataViewTypeGetter
 import com.gigforce.core.ICoreViewHolderFactory
-import java.lang.IllegalArgumentException
+import com.gigforce.core.IDataViewTypeGetter
 
 open class CoreRecyclerAdapter(
     context: Context,
     val iViewTypeFinder: ICoreViewHolderFactory
-) : RecyclerView.Adapter<CoreViewHolder>(){
+) : RecyclerView.Adapter<CoreViewHolder>() {
 
     companion object {
 
@@ -26,18 +25,22 @@ open class CoreRecyclerAdapter(
 //    lateinit var iViewTypeFinder: ICoreViewHolderFactory
 
     private var _collection: List<Any> = ArrayList()
-    var collection:List<Any>
+    var collection: List<Any>
         get() = _collection
         set(value) {
-            _collection = value;
-            this.notifyDataSetChanged();
+            _collection = value
+            this.notifyDataSetChanged()
         }
+
+
+    var itemClickListener: ItemClickListener? = null
+
 
     override fun getItemViewType(position: Int): Int {
         val data = collection.get(position)
         Log.i("Core/RV", (data).toString())
         Log.i("Core/RV", (data is IDataViewTypeGetter).toString())
-        if(data is IDataViewTypeGetter){
+        if (data is IDataViewTypeGetter) {
             return data.getViewType()
         }
 
@@ -65,6 +68,11 @@ open class CoreRecyclerAdapter(
         holder: CoreViewHolder,
         position: Int
     ) {
-        holder.IViewHolder.bind(collection[position]);
+        holder.IViewHolder.bind(collection[position])
+        itemClickListener?.let {
+            holder.itemView.setOnClickListener {
+                itemClickListener?.onItemClick(it,position,collection[position])
+            }
+        }
     }
 }

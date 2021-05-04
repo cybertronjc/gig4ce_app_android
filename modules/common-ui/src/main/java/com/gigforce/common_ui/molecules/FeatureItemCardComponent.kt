@@ -14,8 +14,10 @@ import com.gigforce.core.INavArgsProvider
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.NavArgs
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.feature_item_card.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,6 +59,7 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
                     navigation.navigateTo(it.navPath, it.args)
                 }
             }
+            if(data.isSelectedView) borderFrameLayout.visible() else borderFrameLayout.gone()
             setImage(data)
             setSubtitle(data)
 
