@@ -65,7 +65,7 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
 
     private fun setImage(data: FeatureItemCardDVM) {
         if (data.image is String) {
-            if(data.image.contains("http")) {
+            if(data.image.contains("http") or data.image.contains("https")) {
                 Glide.with(context)
                     .load(data.image)
                     .into(image)

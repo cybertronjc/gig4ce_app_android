@@ -608,7 +608,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 FeatureItemCardDVM(
                     image = e.coverPicture,
                     title = e.title,
-                    subtitle = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
+                    subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
                 )
             )
         }
