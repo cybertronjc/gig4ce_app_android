@@ -805,6 +805,10 @@ class LandingScreenFragment : BaseFragment() {
                 navigate(R.id.ambassadorProgramDetailsFragment)
             }
         }
+
+        see_more_button.setOnClickListener {
+            navigate(R.id.clientActiExploreList)
+        }
     }
 
     private fun initializeLearningModule() {
