@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.core.base.shareddata.SharedDataImp
 import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import io.branch.referral.Branch
@@ -23,7 +24,8 @@ class SplashScreen : AppCompatActivity() {
 
         //Handling if Firebase Dynamic link is being clicked in any other application
 
-
+//        val intent = Intent(this, CameraActivity::class.java)
+//        startActivityForResult(intent,23)
     }
 
     override fun onResume() {
