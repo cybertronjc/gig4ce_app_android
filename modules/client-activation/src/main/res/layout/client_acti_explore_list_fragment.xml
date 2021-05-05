@@ -76,6 +76,8 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -83,6 +85,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_explore_fragment">
+
+        <ProgressBar
+            android:id="@+id/explore_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <HorizontalScrollView
             android:id="@+id/hv_filters"
@@ -101,106 +114,85 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/new_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:paddingStart="8dp"
-                    android:textColor="@color/filter_text"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="New"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView"
+                    android:textColor="@color/filter_text"
+                    app:layout_constraintEnd_toStartOf="@+id/approved_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/approved_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/filter_text"
+                    android:background="@drawable/bg_explore_filter"
                     android:paddingStart="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Approved"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView4"
+                    android:textColor="@color/filter_text"
+                    app:layout_constraintEnd_toStartOf="@+id/pending_tv"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView2" />
+                    app:layout_constraintStart_toEndOf="@+id/new_tv" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/pending_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/filter_text"
+                    android:background="@drawable/bg_explore_filter"
                     android:paddingStart="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Pending"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView5"
+                    android:textColor="@color/filter_text"
+                    app:layout_constraintEnd_toStartOf="@+id/applied_tv"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView" />
+                    app:layout_constraintStart_toEndOf="@+id/approved_tv" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/applied_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/filter_text"
+                    android:background="@drawable/bg_explore_filter"
                     android:paddingStart="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="8dp"
                     android:text="Applied"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView6"
+                    android:textColor="@color/filter_text"
+                    app:layout_constraintEnd_toStartOf="@+id/rejected_tv"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView4" />
+                    app:layout_constraintStart_toEndOf="@+id/pending_tv" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/rejected_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_marginStart="8dp"
-                    android:textColor="@color/filter_text"
+                    android:background="@drawable/bg_explore_filter"
                     android:paddingStart="8dp"
+                    android:paddingTop="8dp"
                     android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Rejected"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView7"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView5" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_explore_filter"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginStart="8dp"
                     android:textColor="@color/filter_text"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="Pending"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/approved_tv"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView6" />
+                    app:layout_constraintStart_toEndOf="@+id/applied_tv" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </HorizontalScrollView>
 

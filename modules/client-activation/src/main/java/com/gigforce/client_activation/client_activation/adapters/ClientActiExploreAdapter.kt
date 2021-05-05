@@ -90,8 +90,8 @@ class ClientActiExploreAdapter(
                             charString,
                             true
                         )
-                    )
-                        filteredList.add(job)
+                    ) filteredList.add(job)
+
                 }
                 filteredJobList = filteredList
             }
@@ -124,7 +124,7 @@ class ClientActiExploreAdapter(
 
         fun bindValues(jobProfile: JobProfile, position: Int) {
             jobTitleTv.text = jobProfile.cardTitle
-            jobStatusTv.text = jobProfile.title
+            //jobStatusTv.text = jobProfile.subTitle
             GlideApp.with(context).load(jobProfile.cardImage).into(jobImage)
 
         }
@@ -142,8 +142,8 @@ class ClientActiExploreAdapter(
                 notifyItemChanged(selectedItemIndex)
             }
 
-//            val city = filteredCityList[newPosition]
-//            onCitySelectedListener?.onCitySelected(city)
+            val jobProfile = filteredJobList[newPosition]
+            onJobSelectedListener?.onJobSelected(jobProfile)
         }
 
     }
