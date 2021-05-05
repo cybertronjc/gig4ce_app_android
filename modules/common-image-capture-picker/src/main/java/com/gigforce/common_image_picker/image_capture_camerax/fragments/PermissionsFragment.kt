@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.gigforce.common_image_picker.R
@@ -26,6 +28,9 @@ class PermissionsFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(CaptureImageSharedViewModel::class.java)
     }
 
+    private lateinit var permissionListTV : TextView
+    private lateinit var cameraPermissionBtn : View
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -40,6 +45,28 @@ class PermissionsFragment : Fragment() {
             sharedCameraViewModel.allPermissionGranted()
         } else {
             // Request camera-related permissions
+            requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        permissionListTV = view.findViewById(R.id.camera_permission_list_textview)
+        val permissionList =  hashMapOf(
+            "CAMERA" to "To Click Image for CheckIn"
+        )
+
+        permissionListTV.text = buildSpannedString {
+            permissionList.forEach {
+
+                append(it.key)
+                append(" - ")
+                append(it.value)
+                append("\n")
+            }
+        }
+
+        view.findViewById<View>(R.id.camera_permission_okay_button).setOnClickListener {
             requestPermissions(PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE)
         }
     }

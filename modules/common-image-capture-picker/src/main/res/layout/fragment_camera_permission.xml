@@ -26,7 +26,7 @@
         android:textColor="#333333"
         android:textSize="16sp"
         android:textStyle="normal"
-        tools:text="Allow " />
+        android:text="Following permission are required to click image" />
 
 
     <TextView
@@ -34,9 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="Your location details will help us find you best
-Gig  near you
-" />
+  />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/camera_permission_okay_button"
