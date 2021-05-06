@@ -24,8 +24,6 @@ class SplashScreen : AppCompatActivity() {
 
         //Handling if Firebase Dynamic link is being clicked in any other application
 
-//        val intent = Intent(this, CameraActivity::class.java)
-//        startActivityForResult(intent,23)
     }
 
     override fun onResume() {
