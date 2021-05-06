@@ -14,12 +14,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.analytics.ClientActivationEvents
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,13 +96,15 @@ class ApplicationClientActivationFragment : Fragment(),
         tv_action_application_client_activation.setOnClickListener {
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
-            eventTracker.pushEvent(TrackingEventArgs(
+            eventTracker.pushEvent(
+                TrackingEventArgs(
                     eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
                     props = mapOf(
                             "id" to mJobProfileId,
                             "title" to bussinessTitle
                     )
-            ))
+            )
+            )
 
             onClickSubmit()
 

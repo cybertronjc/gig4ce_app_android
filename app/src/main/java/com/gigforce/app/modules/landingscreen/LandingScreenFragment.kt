@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.analytics.ClientActivationEvents
+import com.gigforce.client_activation.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
@@ -66,12 +66,10 @@ import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
 import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
 import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
 import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
 import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
@@ -81,13 +79,10 @@ import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.Lce
-import dagger.hilt.android.AndroidEntryPoint
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 @AndroidEntryPoint
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class LandingScreenFragment : BaseFragment() {

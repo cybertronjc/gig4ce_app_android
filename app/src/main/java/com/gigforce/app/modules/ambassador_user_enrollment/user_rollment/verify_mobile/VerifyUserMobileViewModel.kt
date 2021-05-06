@@ -11,15 +11,17 @@ import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class VerifyUserMobileViewModel @Inject constructor(
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+
     private var buildConfig: IBuildConfigVM
 ) : ViewModel() {
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
     private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
     private val userEnrollmentRepository: UserEnrollmentRepository =
         UserEnrollmentRepository(buildConfig = buildConfig)
@@ -35,11 +37,11 @@ class VerifyUserMobileViewModel @Inject constructor(
             val repsonse =
                 userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
             _checkMobileNo.value = Lce.content(repsonse)
-            _checkMobileNo.value = null
+//            _checkMobileNo.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _checkMobileNo.value = Lce.error(e.message ?: "Unable to check mobile number")
-            _checkMobileNo.value = null
+//            _checkMobileNo.value = null
         }
     }
 
@@ -61,69 +63,64 @@ class VerifyUserMobileViewModel @Inject constructor(
         try {
             _createProfile.value = Lce.loading()
 
-            var ambassadorMasterOtp = ""
-            ambassadorMasterOtp = firebaseRemoteConfig.getString("Ambassador_master_otp")
-
-            if (otp == ambassadorMasterOtp && mode == EnrollmentConstants.MODE_EDIT) {
-                //
-                _createProfile.value = Lce.content(CreateUserResponse(
-                        phoneNumber = mobile,
-                        uid = null,
-                        error = null
-                ))
-
-                if (userId != null) {
-                    userEnrollmentRepository.addEditLocationInLocationLogs(
-                            userId = userId,
-                            latitude = latitude,
-                            longitude = longitude,
-                            fullAddress = fullAddress,
-                            editedUsingMasterOtp = true
-                    )
-                }
-
-            } else {
                 val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
                 if (mode == EnrollmentConstants.MODE_EDIT) {
                     if (verifyOtpResponse.isVerified) {
-                        _createProfile.value = Lce.content(CreateUserResponse(
+                        _createProfile.value = Lce.content(
+                            CreateUserResponse(
                                 phoneNumber = mobile,
                                 uid = null,
                                 error = null
-                        ))
+                            )
+                        )
 
-                    if (userId != null) {
-                        userEnrollmentRepository.addEditLocationInLocationLogs(
+                        if (userId != null) {
+                            userEnrollmentRepository.addEditLocationInLocationLogs(
                                 userId = userId,
                                 latitude = latitude,
                                 longitude = longitude,
                                 fullAddress = fullAddress
+
+
                         )
+
+                        if (!profile.isUserAmbassador)
+
+                            profileFirebaseRepository.setUserAsAmbassador()
+
+                        _createProfile.value = Lce.content(response)
+
+                    } else {
+
+                        _createProfile.value = Lce.error("Otp does not match")
+
+                    }
+
+
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
                     }
                 } else {
-                    _createProfile.value = Lce.error("Otp does not match")
-                }
-            } else {
-                if (verifyOtpResponse.isVerified) {
-                    val profile = profileFirebaseRepository.getProfileData()
-                    val response = userEnrollmentRepository.createUser(
-                        createUserUrl = buildConfig.getCreateUserUrl(),
+                    if (verifyOtpResponse.isVerified) {
+                        val profile = profileFirebaseRepository.getProfileData()
+                        val response = userEnrollmentRepository.createUser(
+                            createUserUrl = buildConfig.getCreateUserUrl(),
                             mobile = mobile,
                             enrolledByName = profile.name,
                             latitude = latitude,
                             longitude = longitude,
                             fullAddress = fullAddress
-                    )
-                    if (!profile.isUserAmbassador)
-                        profileFirebaseRepository.setUserAsAmbassador()
-                    _createProfile.value = Lce.content(response)
-                } else {
-                    _createProfile.value = Lce.error("Otp does not match")
+                        )
+                        if (!profile.isUserAmbassador)
+                            profileFirebaseRepository.setUserAsAmbassador()
+                        _createProfile.value = Lce.content(response)
+                    } else {
+                        _createProfile.value = Lce.error("Otp does not match")
+                    }
                 }
-            }
 
-        } catch (e: Exception) {
-            _createProfile.value = Lce.error(e.message ?: "Unable to create user")
+            } catch (e: Exception) {
+                _createProfile.value = Lce.error(e.message ?: "Unable to create user")
+            }
         }
     }
-}

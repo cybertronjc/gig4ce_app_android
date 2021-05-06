@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.core.datamodels.login.LoginResponse
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.analytics.AuthEvents
+import com.gigforce.client_activation.analytics.AuthEvents
 import com.gigforce.app.modules.profile.models.ProfileData
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.core.IEventTracker

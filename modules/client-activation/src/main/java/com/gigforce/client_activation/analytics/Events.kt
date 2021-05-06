@@ -1,4 +1,4 @@
-package com.gigforce.app.analytics
+package com.gigforce.client_activation.analytics
 
 object ClientActivationEvents{
 

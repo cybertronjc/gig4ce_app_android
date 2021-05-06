@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
-import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.common_ui.StringConstants

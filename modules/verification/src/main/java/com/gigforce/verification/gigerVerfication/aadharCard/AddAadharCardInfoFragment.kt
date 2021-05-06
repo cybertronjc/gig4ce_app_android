@@ -470,32 +470,36 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.FRONT_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+//        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
 
     }
 
     private fun openCameraAndGalleryOptionForBackSideImage() {
         currentlyClickingImageOfSide = AadharCardSides.BACK_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+//        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -506,11 +510,11 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
                 if (AadharCardSides.FRONT_SIDE == currentlyClickingImageOfSide) {
                     aadharFrontImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showFrontAadharCard(aadharFrontImagePath!!)
                 } else if (AadharCardSides.BACK_SIDE == currentlyClickingImageOfSide) {
                     aadharBackImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showBackAadharCard(aadharBackImagePath!!)
                 }
 
