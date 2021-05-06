@@ -161,6 +161,7 @@ dependencies {
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
     implementation project(path: ':modules:profile')
+    implementation project(path: ':modules:common-image-capture-picker')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 

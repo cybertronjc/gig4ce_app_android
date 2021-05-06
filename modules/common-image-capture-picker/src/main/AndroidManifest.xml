@@ -2,4 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gigforce.common_image_picker">
 
+    <application>
+        <activity android:name=".image_capture_camerax.CameraActivity"
+            android:screenOrientation="portrait"
+            />
+    </application>
+
 </manifest>

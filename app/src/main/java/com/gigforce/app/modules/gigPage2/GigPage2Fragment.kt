@@ -39,6 +39,7 @@ import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
+import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -376,8 +377,10 @@ class GigPage2Fragment : BaseFragment(),
 
                     when (it) {
                         Lce.Loading -> {
+                            checkInCheckOutSliderBtn.isEnabled = false
                         }
                         is Lce.Content -> {
+                            checkInCheckOutSliderBtn.isEnabled = true
 
                             if (it.content == AttendanceType.CHECK_OUT) {
                                 showToast("Checkout Marked.")
@@ -387,6 +390,7 @@ class GigPage2Fragment : BaseFragment(),
                             }
                         }
                         is Lce.Error -> {
+                            checkInCheckOutSliderBtn.isEnabled = true
                             showAlertDialog("Error while marking attendance, $it")
                         }
                         else -> {
@@ -721,10 +725,17 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-        val intent = Intent(context, ImageCaptureActivity::class.java)
-        startActivityForResult(
-                intent,
-                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+//        val intent = Intent(context, ImageCaptureActivity::class.java)
+//        startActivityForResult(
+//                intent,
+//                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+//        )
+
+        CameraActivity.launch(
+            this,
+            destImage = null,
+            shouldUploadToServerToo = true,
+            serverParentPath = "attendance"
         )
     }
 
@@ -749,9 +760,12 @@ class GigPage2Fragment : BaseFragment(),
                     checkForLateOrEarlyCheckIn()
                 }
             }
-//            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
-//                    requireActivity() as AppCompatActivity
-//            )
+            CameraActivity.REQUEST_CODE_CAPTURE_IMAGE_2 -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    imageClickedPath = data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
+                    checkForLateOrEarlyCheckIn()
+                }
+            }
             else -> {
             }
         }
@@ -925,9 +939,9 @@ class GigPage2Fragment : BaseFragment(),
 
         const val REQUEST_PERMISSIONS = 100
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
+        const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE_2 = 2334
         const val REQUEST_UPGRADE_GPS_SETTINGS = 2321
         const val REQUEST_UPDATE_GPS_SETTINGS_MANUALLY = 2322
-
 
         private const val ID_IDENTITY_CARD = "apodZsdEbx"
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
