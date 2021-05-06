@@ -28,6 +28,9 @@ class CurrentGigCard(
         var startDateTime : Timestamp,
         var endDateTime : Timestamp
     ): MaterialCardView(context) {
+
+    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+
     init {
         View.inflate(context, R.layout.current_gig_card, this)
         setCardHeight()
@@ -37,7 +40,6 @@ class CurrentGigCard(
         if (isFullDay) setFullDay()
     }
 
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     fun setTitle() {
         gig_title.text = title

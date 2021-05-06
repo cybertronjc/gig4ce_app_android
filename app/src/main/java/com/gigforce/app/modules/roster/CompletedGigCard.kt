@@ -32,6 +32,7 @@ class CompletedGigCard(
 ): MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
+    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     init {
         View.inflate(context, R.layout.completed_gig_card, this)
@@ -47,7 +48,7 @@ class CompletedGigCard(
         if (isFullDay) setFullDay()
     }
 
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+
 
     fun setGigSuccess() {
         if (gigSuccess) {
