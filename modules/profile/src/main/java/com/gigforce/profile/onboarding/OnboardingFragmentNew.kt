@@ -88,6 +88,7 @@ class OnboardingFragmentNew : Fragment(){
 
     private fun setUpViewForOnboarding() {
         next.visible()
+        enableNextButton(false)
         onboarding_root_layout.visible()
 
         viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)

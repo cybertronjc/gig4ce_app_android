@@ -170,10 +170,18 @@ class OnboardingMajorCityAdapter(
                             id = city.id,
                             name = city.name,
                             stateCode = city.stateCode
-                    )
+                    ),true
             )
         }
 
+    }
+
+    fun uncheckedSelection(){
+        if(selectedItemIndex!=-1){
+            var position = selectedItemIndex
+            selectedItemIndex = -1
+            notifyItemChanged(position)
+        }
     }
 
 }
