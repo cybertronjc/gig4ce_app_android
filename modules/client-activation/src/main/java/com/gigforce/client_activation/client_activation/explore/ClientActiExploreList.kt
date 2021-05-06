@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
@@ -40,7 +41,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
     lateinit var navigation : INavigation
     private lateinit var viewModel: ClientActiExploreListViewModel
     private val clientActiExploreAdapter: ClientActiExploreAdapter by lazy {
-        ClientActiExploreAdapter(requireContext()).apply {
+        ClientActiExploreAdapter(requireContext(), this).apply {
             setOnJobSelectedListener(this@ClientActiExploreList)
         }
     }
@@ -83,19 +84,18 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
     }
 
     private fun initClientActivation() {
-        viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { jobProfiles ->
-            run {
-                jobProfiles?.let {
-                    showClientActivations(jobProfiles)
-                }
 
+        viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
+            run {
+                it?.let {
+                    showClientActivations(it)
+                }
             }
         })
-
         viewModel.getJobProfiles()
     }
 
-    private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
+    private fun showClientActivations(jobProfiles: ArrayList<JpExplore>) {
         if (jobProfiles.isNullOrEmpty()) {
             explore_rv.gone()
             explore_error.visible()
@@ -136,6 +136,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
                 explore_text.visible()
                 iv_search_explore.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
                 search_item.setText("")
+                clientActiExploreAdapter.filter.filter("")
             }
             else{
                 search_item.visible()
@@ -144,83 +145,76 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
             }
         }
 
-//        search_item.doOnTextChanged { text, start, before, count ->
-//            if (clientActiExploreAdapter.itemCount != 0){
-//                clientActiExploreAdapter.filter.filter(text)
-//            }
-//        }
-        search_item.doAfterTextChanged {
+        search_item.doOnTextChanged { text, start, before, count ->
             if (clientActiExploreAdapter.itemCount != 0){
-                Log.d("text", it.toString() + " count: "+ clientActiExploreAdapter.itemCount)
-                clientActiExploreAdapter.filter.filter(it.toString())
+                clientActiExploreAdapter.filter.filter(text)
             }
         }
 
-
-        new_tv.setOnClickListener {
-            if (new_selected){
-                resetSelected(new_tv)
-                new_selected = false
-            }
-            else{
-                setSelected(new_tv)
-                new_selected = true
-                clientActiExploreAdapter.filter.filter("New")
-            }
-
-        }
-
-        approved_tv.setOnClickListener {
-            if (approved_selected){
-                resetSelected(approved_tv)
-                approved_selected = false
-            }
-            else{
-                setSelected(approved_tv)
-                approved_selected = true
-                clientActiExploreAdapter.filter.filter("Approved")
-            }
-
-        }
-
-        pending_tv.setOnClickListener {
-            if (pending_selected){
-                resetSelected(pending_tv)
-                pending_selected = false
-            }
-            else{
-                setSelected(pending_tv)
-                pending_selected = true
-                clientActiExploreAdapter.filter.filter("Pending")
-            }
-
-        }
-
-        applied_tv.setOnClickListener {
-            if (applied_selected){
-                resetSelected(applied_tv)
-                applied_selected = false
-            }
-            else{
-                setSelected(applied_tv)
-                applied_selected = true
-                clientActiExploreAdapter.filter.filter("Applied")
-            }
-
-        }
-
-        rejected_tv.setOnClickListener {
-            if (rejected_selected){
-                resetSelected(rejected_tv)
-                rejected_selected = false
-            }
-            else{
-                setSelected(rejected_tv)
-                rejected_selected = true
-                clientActiExploreAdapter.filter.filter("Rejected")
-            }
-
-        }
+//        new_tv.setOnClickListener {
+//            if (new_selected){
+//                resetSelected(new_tv)
+//                new_selected = false
+//            }
+//            else{
+//                setSelected(new_tv)
+//                new_selected = true
+//                clientActiExploreAdapter.filter.filter("New")
+//            }
+//
+//        }
+//
+//        approved_tv.setOnClickListener {
+//            if (approved_selected){
+//                resetSelected(approved_tv)
+//                approved_selected = false
+//            }
+//            else{
+//                setSelected(approved_tv)
+//                approved_selected = true
+//                clientActiExploreAdapter.filter.filter("Approved")
+//            }
+//
+//        }
+//
+//        pending_tv.setOnClickListener {
+//            if (pending_selected){
+//                resetSelected(pending_tv)
+//                pending_selected = false
+//            }
+//            else{
+//                setSelected(pending_tv)
+//                pending_selected = true
+//                clientActiExploreAdapter.filter.filter("Pending")
+//            }
+//
+//        }
+//
+//        applied_tv.setOnClickListener {
+//            if (applied_selected){
+//                resetSelected(applied_tv)
+//                applied_selected = false
+//            }
+//            else{
+//                setSelected(applied_tv)
+//                applied_selected = true
+//                clientActiExploreAdapter.filter.filter("Applied")
+//            }
+//
+//        }
+//
+//        rejected_tv.setOnClickListener {
+//            if (rejected_selected){
+//                resetSelected(rejected_tv)
+//                rejected_selected = false
+//            }
+//            else{
+//                setSelected(rejected_tv)
+//                rejected_selected = true
+//                clientActiExploreAdapter.filter.filter("Rejected")
+//            }
+//
+//        }
 
     }
 
@@ -237,12 +231,24 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         }
     }
 
-    override fun onJobSelected(jobProfile: JobProfile) {
+    override fun onJobSelected(jpExplore: JpExplore) {
+        Log.d("id", jpExplore.id)
         navigation.navigateTo("client_activation",
-            bundleOf(StringConstants.JOB_PROFILE_ID.value to jobProfile.id)
-            )
+            bundleOf(StringConstants.JOB_PROFILE_ID.value to jpExplore.id)
+        )
+    }
 
-        showToast("Clicked: "+ jobProfile.title)
+    public fun takeAction(action: String, id: String){
+        Log.d("action", action)
+        Log.d("id", id)
+        when(action){
+            "Apply Now" ->  navigation.navigateTo(
+                    "client_activation/applicationClientActivation", bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to id
+
+            )
+            )
+        }
     }
 
 }

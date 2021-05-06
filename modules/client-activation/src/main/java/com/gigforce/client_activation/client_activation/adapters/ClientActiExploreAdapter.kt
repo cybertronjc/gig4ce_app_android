@@ -13,18 +13,20 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.client_activation.explore.ClientActiExploreList
 import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.core.utils.GlideApp
 
 class ClientActiExploreAdapter(
-    private val context: Context
+    private val context: Context, private val clientActiExploreList: ClientActiExploreList
 ) : RecyclerView.Adapter<ClientActiExploreAdapter.ClientActiExploreViewHolder>(),
     Filterable {
 
 
-    private var originalJobList: List<JobProfile> = emptyList()
-    private var filteredJobList: List<JobProfile> = emptyList()
+    private var originalJobList: List<JpExplore> = emptyList()
+    private var filteredJobList: List<JpExplore> = emptyList()
 
     private val jobsFilter = JobsFilter()
 
@@ -66,7 +68,7 @@ class ClientActiExploreAdapter(
         holder.bindValues(filteredJobList.get(position), position)
     }
 
-    fun setData(contacts: List<JobProfile>) {
+    fun setData(contacts: List<JpExplore>) {
 
         this.selectedItemIndex = -1
         this.originalJobList = contacts
@@ -84,14 +86,13 @@ class ClientActiExploreAdapter(
             if (charString.isEmpty()) {
                 filteredJobList = originalJobList
             } else {
-                val filteredList: MutableList<JobProfile> = mutableListOf()
+                val filteredList: MutableList<JpExplore> = mutableListOf()
                 for (job in originalJobList) {
                     if (job.title.contains(
                             charString,
                             true
                         )
                     ) filteredList.add(job)
-
                 }
                 filteredJobList = filteredList
             }
@@ -102,7 +103,7 @@ class ClientActiExploreAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredJobList = results?.values as List<JobProfile>
+            filteredJobList = results?.values as List<JpExplore>
             notifyDataSetChanged()
         }
     }
@@ -116,32 +117,43 @@ class ClientActiExploreAdapter(
         private var jobTitleTv: TextView = itemView.findViewById(R.id.gig_title)
         private var jobStatusTv: TextView = itemView.findViewById(R.id.gig_status)
         private var jobImage: ImageView = itemView.findViewById(R.id.card_image)
-
+        private var jobStatusIcon: ImageView = itemView.findViewById(R.id.status_icon)
+        private var jobActionTv: TextView = itemView.findViewById(R.id.apply_now)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindValues(jobProfile: JobProfile, position: Int) {
-            jobTitleTv.text = jobProfile.cardTitle
-            //jobStatusTv.text = jobProfile.subTitle
-            GlideApp.with(context).load(jobProfile.cardImage).into(jobImage)
+        fun bindValues(jobProfile: JpExplore, position: Int) {
+            jobTitleTv.text = jobProfile.title
+            jobStatusTv.text = jobProfile.status
+            GlideApp.with(context).load(jobProfile.image).into(jobImage)
+
+            when (jobProfile.status){
+
+                "Pending" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
+                                jobActionTv.setText("Complete Application")}
+                "Submitted" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
+                                jobActionTv.setText("View Application")}
+                "New" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+                            jobActionTv.setText("Apply Now")}
+                "Approved" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+                                jobActionTv.setText("Share Gig")}
+                "Applied" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
+                    jobActionTv.setText("View Application")}
+                "Rejected" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+                                jobActionTv.setText("Apply Again")}
+
+            }
+
+            jobActionTv.setOnClickListener {
+                clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId)
+            }
 
         }
 
         override fun onClick(v: View?) {
             val newPosition = adapterPosition
-
-            if (selectedItemIndex != -1) {
-                val tempIndex = selectedItemIndex
-                selectedItemIndex = newPosition
-                notifyItemChanged(tempIndex)
-                notifyItemChanged(selectedItemIndex)
-            } else {
-                selectedItemIndex = newPosition
-                notifyItemChanged(selectedItemIndex)
-            }
-
             val jobProfile = filteredJobList[newPosition]
             onJobSelectedListener?.onJobSelected(jobProfile)
         }

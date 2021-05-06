@@ -397,11 +397,11 @@
                         android:id="@+id/client_activation_rv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="100dp"
+                        android:layout_marginEnd="48dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
                         android:paddingStart="@dimen/size_16"
-                        android:paddingEnd="10dp"
+                        android:paddingEnd="108dp"
                         android:paddingBottom="@dimen/size_4"
                         android:visibility="gone" >
                     </androidx.recyclerview.widget.RecyclerView>

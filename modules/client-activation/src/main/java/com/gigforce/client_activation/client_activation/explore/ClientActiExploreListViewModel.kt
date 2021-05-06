@@ -1,50 +1,85 @@
 package com.gigforce.client_activation.client_activation.explore
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.client_activation.repository.ClientActiExploreRepository
 import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class ClientActiExploreListViewModel constructor(
     private val clientActiExploreRepository: ClientActiExploreRepository = ClientActiExploreRepository()
-) : ViewModel(), ClientActiCallbacks.ResponseCallbacks {
+) : ViewModel() {
 
-    private var callbacks: ClientActiCallbacks? = null
-    private val _observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
-        SingleLiveEvent<ArrayList<JobProfile>>()
+    private val _observableJobProfile: SingleLiveEvent<ArrayList<JpExplore>> by lazy {
+        SingleLiveEvent<ArrayList<JpExplore>>()
     }
-    val observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> get() = _observableJobProfile
+    val observableJobProfile: SingleLiveEvent<ArrayList<JpExplore>> get() = _observableJobProfile
+
+    private val _observableError: SingleLiveEvent<String> by lazy {
+        SingleLiveEvent<String>()
+    }
+    val observableError: SingleLiveEvent<String> get() = _observableError
 
 
-    init {
-        callbacks = ClientActiExploreRepository()
+     fun getJobProfiles(){
+         viewModelScope.launch {
+             try {
+                 val allClientActivations = ArrayList<JpExplore>()
+                 val items = clientActiExploreRepository.db.collection("Job_Profiles")
+                     .whereEqualTo("isActive", true).get()
+                     .await()
+
+                 if (items.documents.isNullOrEmpty()){
+                     _observableJobProfile.value = allClientActivations
+                 }
+                 val toObjects = items.toObjects(JobProfile::class.java)
+                 for (i in 0..items.size() - 1 ){
+                     val obj = toObjects[i]
+                     obj.id = items.documents[i].id
+                     if (obj.id != null){
+                         val jpObject = getJPApplication(obj.id!!)
+                         Log.d("object", jpObject.toString())
+                         val jpExplore = JpExplore(obj.id!!,jpId = jpObject.id, profileId = obj.profileId, obj.title, obj.cardImage, jpObject.status)
+                         allClientActivations.add(jpExplore)
+                     }
+                 }
+                 _observableJobProfile.value = allClientActivations
+
+             }catch (e: Exception){
+                 _observableError.value = e.message
+             }
+
+         }
+
     }
 
-    fun getJobProfiles(){
-        callbacks?.getJobProfiles(this)
-    }
+    suspend fun getJPApplication(jobProfileId: String): JpApplication {
+        try {
+            val items =
+                clientActiExploreRepository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
+                    .whereEqualTo("gigerId", clientActiExploreRepository.getUID()).get()
+                    .await()
 
-     override fun getJobProfilesResponse(
-        querySnapshot: QuerySnapshot?,
-        error: FirebaseFirestoreException?
-    ) {
-        if (error == null) {
-            if (querySnapshot?.documents?.isNotEmpty() == true) {
-                var allClientActivations = ArrayList<JobProfile>()
-                for (clientActi in querySnapshot.documents) {
-                    val jobProfileData = clientActi.toObject(JobProfile::class.java)
-                    jobProfileData?.let {
-                        jobProfileData.id = clientActi.id
-                        allClientActivations.add(jobProfileData)
-                    }
-                }
-                _observableJobProfile.value = allClientActivations
+            if (items.documents.isNullOrEmpty()) {
+                return JpApplication(JPId = jobProfileId, gigerId = clientActiExploreRepository.getUID())
             }
-
+            val toObject = items.toObjects(JpApplication::class.java).get(0)
+            toObject.id = items.documents[0].id
+            return toObject
+        } catch (e: Exception) {
+            _observableError.value = e.message
         }
+        return JpApplication()
+
     }
+
 }
