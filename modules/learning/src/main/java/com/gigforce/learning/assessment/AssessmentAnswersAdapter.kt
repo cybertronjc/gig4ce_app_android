@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.learning.R
 import com.gigforce.learning.assessment.models.OptionsArr
-import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.modules.assessment.models.OptionsArr
-import kotlinx.android.synthetic.main.layout_message_rv_answers_access_frag.view.*
 import kotlinx.android.synthetic.main.layout_rv_answers_adapter.view.*
 
 class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

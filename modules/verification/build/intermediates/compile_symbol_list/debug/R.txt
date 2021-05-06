@@ -138,7 +138,6 @@ int attr allowStacking 0x0
 int attr alpha 0x0
 int attr alphabeticModifiers 0x0
 int attr altSrc 0x0
-int attr angle 0x0
 int attr animate_completion 0x0
 int attr animate_relativeTo 0x0
 int attr animationMode 0x0
@@ -159,7 +158,6 @@ int attr autoSizeStepGranularity 0x0
 int attr autoSizeTextType 0x0
 int attr autoTransition 0x0
 int attr auto_show 0x0
-int attr auto_start 0x0
 int attr background 0x0
 int attr backgroundColor 0x0
 int attr backgroundInsetBottom 0x0
@@ -179,7 +177,6 @@ int attr bar_height 0x0
 int attr barrierAllowsGoneWidgets 0x0
 int attr barrierDirection 0x0
 int attr barrierMargin 0x0
-int attr base_alpha 0x0
 int attr behavior_autoHide 0x0
 int attr behavior_autoShrink 0x0
 int attr behavior_draggable 0x0
@@ -471,7 +468,6 @@ int attr drawerArrowStyle 0x0
 int attr drawerLayoutStyle 0x0
 int attr dropDownListViewStyle 0x0
 int attr dropdownListPreferredItemHeight 0x0
-int attr dropoff 0x0
 int attr duration 0x0
 int attr editTextBackground 0x0
 int attr editTextColor 0x0
@@ -525,8 +521,6 @@ int attr fastScrollVerticalThumbDrawable 0x0
 int attr fastScrollVerticalTrackDrawable 0x0
 int attr fastforward_increment 0x0
 int attr firstBaselineToTopHeight 0x0
-int attr fixed_height 0x0
-int attr fixed_width 0x0
 int attr floatingActionButtonStyle 0x0
 int attr flow_firstHorizontalBias 0x0
 int attr flow_firstHorizontalStyle 0x0
@@ -611,7 +605,6 @@ int attr indicatorSize 0x0
 int attr initialActivityCount 0x0
 int attr inner_color 0x0
 int attr insetForeground 0x0
-int attr intensity 0x0
 int attr isLightTheme 0x0
 int attr isMaterialTheme 0x0
 int attr itemBackground 0x0
@@ -905,11 +898,6 @@ int attr region_heightLessThan 0x0
 int attr region_heightMoreThan 0x0
 int attr region_widthLessThan 0x0
 int attr region_widthMoreThan 0x0
-int attr relative_height 0x0
-int attr relative_width 0x0
-int attr repeat_count 0x0
-int attr repeat_delay 0x0
-int attr repeat_mode 0x0
 int attr repeat_toggle_modes 0x0
 int attr resize_mode 0x0
 int attr reverseLayout 0x0
@@ -937,12 +925,31 @@ int attr selectableItemBackground 0x0
 int attr selectableItemBackgroundBorderless 0x0
 int attr selectionRequired 0x0
 int attr selectorSize 0x0
-int attr shape 0x0
 int attr shapeAppearance 0x0
 int attr shapeAppearanceLargeComponent 0x0
 int attr shapeAppearanceMediumComponent 0x0
 int attr shapeAppearanceOverlay 0x0
 int attr shapeAppearanceSmallComponent 0x0
+int attr shimmer_auto_start 0x0
+int attr shimmer_base_alpha 0x0
+int attr shimmer_base_color 0x0
+int attr shimmer_clip_to_children 0x0
+int attr shimmer_colored 0x0
+int attr shimmer_direction 0x0
+int attr shimmer_dropoff 0x0
+int attr shimmer_duration 0x0
+int attr shimmer_fixed_height 0x0
+int attr shimmer_fixed_width 0x0
+int attr shimmer_height_ratio 0x0
+int attr shimmer_highlight_alpha 0x0
+int attr shimmer_highlight_color 0x0
+int attr shimmer_intensity 0x0
+int attr shimmer_repeat_count 0x0
+int attr shimmer_repeat_delay 0x0
+int attr shimmer_repeat_mode 0x0
+int attr shimmer_shape 0x0
+int attr shimmer_tilt 0x0
+int attr shimmer_width_ratio 0x0
 int attr showAnimationBehavior 0x0
 int attr showAsAction 0x0
 int attr showDelay 0x0
@@ -1109,7 +1116,6 @@ int attr tickMark 0x0
 int attr tickMarkTint 0x0
 int attr tickMarkTintMode 0x0
 int attr tickVisible 0x0
-int attr tilt 0x0
 int attr time_bar_min_update_interval 0x0
 int attr tint 0x0
 int attr tintMode 0x0
@@ -2249,6 +2255,7 @@ int drawable border_26_979797_rad_2 0x0
 int drawable border_27979797_rad_4 0x0
 int drawable border_61979797_rad_4 0x0
 int drawable border_lipstick_rad_4 0x0
+int drawable border_option_dark 0x0
 int drawable btn_checkbox_checked_mtrl 0x0
 int drawable btn_checkbox_checked_to_unchecked_mtrl_animation 0x0
 int drawable btn_checkbox_unchecked_mtrl 0x0
@@ -2673,6 +2680,7 @@ int id blocking 0x0
 int id body_scroll 0x0
 int id bold 0x0
 int id bottom 0x0
+int id bottom_to_top 0x0
 int id bounce 0x0
 int id browser_actions_header_text 0x0
 int id browser_actions_menu_item_icon 0x0
@@ -2765,10 +2773,6 @@ int id custom 0x0
 int id customPanel 0x0
 int id cut 0x0
 int id cv_top 0x0
-int id cw_0 0x0
-int id cw_180 0x0
-int id cw_270 0x0
-int id cw_90 0x0
 int id dark 0x0
 int id dash 0x0
 int id date_picker_actions 0x0
@@ -3009,6 +3013,7 @@ int id layout_title 0x0
 int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
+int id left_to_right 0x0
 int id licenseNoET 0x0
 int id licenseNoLabel 0x0
 int id licenseValidityET 0x0
@@ -3205,6 +3210,7 @@ int id right 0x0
 int id rightToLeft 0x0
 int id right_icon 0x0
 int id right_side 0x0
+int id right_to_left 0x0
 int id rl_no_dl 0x0
 int id root 0x0
 int id rotate_scroll_wheel 0x0
@@ -3366,6 +3372,7 @@ int id topSeaparator2 0x0
 int id top_cl 0x0
 int id top_level_view 0x0
 int id top_progress_bar 0x0
+int id top_to_bottom 0x0
 int id torch 0x0
 int id touch_outside 0x0
 int id transition_current_scene 0x0
@@ -6767,22 +6774,27 @@ int styleable ShapeableImageView_shapeAppearance 7
 int styleable ShapeableImageView_shapeAppearanceOverlay 8
 int styleable ShapeableImageView_strokeColor 9
 int styleable ShapeableImageView_strokeWidth 10
-int[] styleable ShimmerFrameLayout { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
-int styleable ShimmerFrameLayout_angle 0
-int styleable ShimmerFrameLayout_auto_start 1
-int styleable ShimmerFrameLayout_base_alpha 2
-int styleable ShimmerFrameLayout_dropoff 3
-int styleable ShimmerFrameLayout_duration 4
-int styleable ShimmerFrameLayout_fixed_height 5
-int styleable ShimmerFrameLayout_fixed_width 6
-int styleable ShimmerFrameLayout_intensity 7
-int styleable ShimmerFrameLayout_relative_height 8
-int styleable ShimmerFrameLayout_relative_width 9
-int styleable ShimmerFrameLayout_repeat_count 10
-int styleable ShimmerFrameLayout_repeat_delay 11
-int styleable ShimmerFrameLayout_repeat_mode 12
-int styleable ShimmerFrameLayout_shape 13
-int styleable ShimmerFrameLayout_tilt 14
+int[] styleable ShimmerFrameLayout { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable ShimmerFrameLayout_shimmer_auto_start 0
+int styleable ShimmerFrameLayout_shimmer_base_alpha 1
+int styleable ShimmerFrameLayout_shimmer_base_color 2
+int styleable ShimmerFrameLayout_shimmer_clip_to_children 3
+int styleable ShimmerFrameLayout_shimmer_colored 4
+int styleable ShimmerFrameLayout_shimmer_direction 5
+int styleable ShimmerFrameLayout_shimmer_dropoff 6
+int styleable ShimmerFrameLayout_shimmer_duration 7
+int styleable ShimmerFrameLayout_shimmer_fixed_height 8
+int styleable ShimmerFrameLayout_shimmer_fixed_width 9
+int styleable ShimmerFrameLayout_shimmer_height_ratio 10
+int styleable ShimmerFrameLayout_shimmer_highlight_alpha 11
+int styleable ShimmerFrameLayout_shimmer_highlight_color 12
+int styleable ShimmerFrameLayout_shimmer_intensity 13
+int styleable ShimmerFrameLayout_shimmer_repeat_count 14
+int styleable ShimmerFrameLayout_shimmer_repeat_delay 15
+int styleable ShimmerFrameLayout_shimmer_repeat_mode 16
+int styleable ShimmerFrameLayout_shimmer_shape 17
+int styleable ShimmerFrameLayout_shimmer_tilt 18
+int styleable ShimmerFrameLayout_shimmer_width_ratio 19
 int[] styleable SignInButton { 0x0, 0x0, 0x0 }
 int styleable SignInButton_buttonSize 0
 int styleable SignInButton_colorScheme 1

@@ -37,7 +37,7 @@ fun Fragment.startShimmer(
         )
         view.layoutParams = layoutParams
         val shimmerLayout = view.findViewById<ShimmerFrameLayout>(shimmerId)
-        shimmerLayout?.startShimmerAnimation()
+        shimmerLayout?.startShimmer()//startShimmerAnimation()
     }
 }
 
@@ -46,7 +46,7 @@ fun Fragment.stopShimmer(view: LinearLayout, shimmerId: Int) {
     for (i in 0 until view.childCount) {
         val nestedView = view.getChildAt(i)
         val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(shimmerId)
-        shimmerLayout.stopShimmerAnimation()
+        shimmerLayout.stopShimmer()//Animation()
     }
     view.removeAllViews()
     view.gone()

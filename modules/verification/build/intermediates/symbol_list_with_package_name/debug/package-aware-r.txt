@@ -139,7 +139,6 @@ attr allowStacking
 attr alpha
 attr alphabeticModifiers
 attr altSrc
-attr angle
 attr animate_completion
 attr animate_relativeTo
 attr animationMode
@@ -160,7 +159,6 @@ attr autoSizeStepGranularity
 attr autoSizeTextType
 attr autoTransition
 attr auto_show
-attr auto_start
 attr background
 attr backgroundColor
 attr backgroundInsetBottom
@@ -180,7 +178,6 @@ attr bar_height
 attr barrierAllowsGoneWidgets
 attr barrierDirection
 attr barrierMargin
-attr base_alpha
 attr behavior_autoHide
 attr behavior_autoShrink
 attr behavior_draggable
@@ -472,7 +469,6 @@ attr drawerArrowStyle
 attr drawerLayoutStyle
 attr dropDownListViewStyle
 attr dropdownListPreferredItemHeight
-attr dropoff
 attr duration
 attr editTextBackground
 attr editTextColor
@@ -526,8 +522,6 @@ attr fastScrollVerticalThumbDrawable
 attr fastScrollVerticalTrackDrawable
 attr fastforward_increment
 attr firstBaselineToTopHeight
-attr fixed_height
-attr fixed_width
 attr floatingActionButtonStyle
 attr flow_firstHorizontalBias
 attr flow_firstHorizontalStyle
@@ -612,7 +606,6 @@ attr indicatorSize
 attr initialActivityCount
 attr inner_color
 attr insetForeground
-attr intensity
 attr isLightTheme
 attr isMaterialTheme
 attr itemBackground
@@ -906,11 +899,6 @@ attr region_heightLessThan
 attr region_heightMoreThan
 attr region_widthLessThan
 attr region_widthMoreThan
-attr relative_height
-attr relative_width
-attr repeat_count
-attr repeat_delay
-attr repeat_mode
 attr repeat_toggle_modes
 attr resize_mode
 attr reverseLayout
@@ -938,12 +926,31 @@ attr selectableItemBackground
 attr selectableItemBackgroundBorderless
 attr selectionRequired
 attr selectorSize
-attr shape
 attr shapeAppearance
 attr shapeAppearanceLargeComponent
 attr shapeAppearanceMediumComponent
 attr shapeAppearanceOverlay
 attr shapeAppearanceSmallComponent
+attr shimmer_auto_start
+attr shimmer_base_alpha
+attr shimmer_base_color
+attr shimmer_clip_to_children
+attr shimmer_colored
+attr shimmer_direction
+attr shimmer_dropoff
+attr shimmer_duration
+attr shimmer_fixed_height
+attr shimmer_fixed_width
+attr shimmer_height_ratio
+attr shimmer_highlight_alpha
+attr shimmer_highlight_color
+attr shimmer_intensity
+attr shimmer_repeat_count
+attr shimmer_repeat_delay
+attr shimmer_repeat_mode
+attr shimmer_shape
+attr shimmer_tilt
+attr shimmer_width_ratio
 attr showAnimationBehavior
 attr showAsAction
 attr showDelay
@@ -1110,7 +1117,6 @@ attr tickMark
 attr tickMarkTint
 attr tickMarkTintMode
 attr tickVisible
-attr tilt
 attr time_bar_min_update_interval
 attr tint
 attr tintMode
@@ -2250,6 +2256,7 @@ drawable border_26_979797_rad_2
 drawable border_27979797_rad_4
 drawable border_61979797_rad_4
 drawable border_lipstick_rad_4
+drawable border_option_dark
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -2674,6 +2681,7 @@ id blocking
 id body_scroll
 id bold
 id bottom
+id bottom_to_top
 id bounce
 id browser_actions_header_text
 id browser_actions_menu_item_icon
@@ -2766,10 +2774,6 @@ id custom
 id customPanel
 id cut
 id cv_top
-id cw_0
-id cw_180
-id cw_270
-id cw_90
 id dark
 id dash
 id date_picker_actions
@@ -3010,6 +3014,7 @@ id layout_title
 id left
 id leftToRight
 id left_aligned
+id left_to_right
 id licenseNoET
 id licenseNoLabel
 id licenseValidityET
@@ -3206,6 +3211,7 @@ id right
 id rightToLeft
 id right_icon
 id right_side
+id right_to_left
 id rl_no_dl
 id root
 id rotate_scroll_wheel
@@ -3367,6 +3373,7 @@ id topSeaparator2
 id top_cl
 id top_level_view
 id top_progress_bar
+id top_to_bottom
 id torch
 id touch_outside
 id transition_current_scene
@@ -5310,7 +5317,7 @@ styleable ScrollingViewBehavior_Layout behavior_overlapTop
 styleable SearchView android_focusable android_imeOptions android_inputType android_maxWidth closeIcon commitIcon defaultQueryHint goIcon iconifiedByDefault layout queryBackground queryHint searchHintIcon searchIcon submitBackground suggestionRowLayout voiceIcon
 styleable ShapeAppearance cornerFamily cornerFamilyBottomLeft cornerFamilyBottomRight cornerFamilyTopLeft cornerFamilyTopRight cornerSize cornerSizeBottomLeft cornerSizeBottomRight cornerSizeTopLeft cornerSizeTopRight
 styleable ShapeableImageView contentPadding contentPaddingBottom contentPaddingEnd contentPaddingLeft contentPaddingRight contentPaddingStart contentPaddingTop shapeAppearance shapeAppearanceOverlay strokeColor strokeWidth
-styleable ShimmerFrameLayout angle auto_start base_alpha dropoff duration fixed_height fixed_width intensity relative_height relative_width repeat_count repeat_delay repeat_mode shape tilt
+styleable ShimmerFrameLayout shimmer_auto_start shimmer_base_alpha shimmer_base_color shimmer_clip_to_children shimmer_colored shimmer_direction shimmer_dropoff shimmer_duration shimmer_fixed_height shimmer_fixed_width shimmer_height_ratio shimmer_highlight_alpha shimmer_highlight_color shimmer_intensity shimmer_repeat_count shimmer_repeat_delay shimmer_repeat_mode shimmer_shape shimmer_tilt shimmer_width_ratio
 styleable SignInButton buttonSize colorScheme scopeUris
 styleable SlideToActView animate_completion animation_duration area_margin border_radius bump_vibration icon_margin inner_color outer_color rotate_icon slider_height slider_icon slider_icon_color slider_locked slider_reversed text text_appearance text_color text_size text_style
 styleable SlideToActViewTheme slideToActViewStyle
