@@ -18,9 +18,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
+import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
+import com.gigforce.app.modules.gigPage.GigsListForDeclineAdapter
+import com.gigforce.app.modules.gigPage.GigsListForDeclineAdapterListener
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -30,7 +38,7 @@ import java.time.LocalDate
 
 
 class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
-        DeclineGigDialogFragmentResultListener, GigsListForDeclineAdapterListener {
+    DeclineGigDialogFragmentResultListener, GigsListForDeclineAdapterListener {
 
     private val mAdapter: GigsListForDeclineAdapter by lazy {
         GigsListForDeclineAdapter(requireContext()).apply {

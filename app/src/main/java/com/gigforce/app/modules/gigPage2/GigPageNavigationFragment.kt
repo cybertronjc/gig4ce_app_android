@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.Lce

@@ -28,7 +28,7 @@ import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.utils.openPopupMenu
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible

@@ -1,58 +1,59 @@
 package com.gigforce.app.modules.gighistory
 
-import android.util.Log
+//import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
+//import com.gigforce.core.datamodels.gigpage.DocChange
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
-import com.gigforce.core.datamodels.gigpage.DocChange
-import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.SingleLiveEvent
+import com.gigforce.app.modules.gigPage2.models.DocChange
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gighistory.models.GigsResponse
+import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 
 class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
-        ViewModel(), DataCallbacks.ResponseCallbacks {
+    ViewModel(), DataCallbacks.ResponseCallbacks {
     var eventState: Int = AdapterGigHistory.EVENT_PAST
     private var lastVisibleItem: DocumentSnapshot? = null
     var isLastPage: Boolean = false
     var isLoading: Boolean = true
     var pastGigs: Boolean = true
-    var isInitialDataLoaded = false;
+    var isInitialDataLoaded = false
     private val limit: Long = 10
 
     private val _observerProgress: SingleLiveEvent<Int> by lazy {
-        SingleLiveEvent<Int>();
+        SingleLiveEvent<Int>()
     }
     val observerShowProgress: SingleLiveEvent<Int> get() = _observerProgress
 
     private val _observableOnGoingGigs: SingleLiveEvent<GigsResponse> by lazy {
-        SingleLiveEvent<GigsResponse>();
+        SingleLiveEvent<GigsResponse>()
     }
     val observableOnGoingGigs: SingleLiveEvent<GigsResponse> get() = _observableOnGoingGigs
     private val _observableScheduledGigs: SingleLiveEvent<GigsResponse> by lazy {
-        SingleLiveEvent<GigsResponse>();
+        SingleLiveEvent<GigsResponse>()
     }
     val observableScheduledGigs: SingleLiveEvent<GigsResponse> get() = _observableScheduledGigs
     private val _observableError: SingleLiveEvent<String> by lazy {
-        SingleLiveEvent<String>();
+        SingleLiveEvent<String>()
     }
     val observableError: SingleLiveEvent<String> get() = _observableError
     private val _observableShowExplore: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>();
+        SingleLiveEvent<Boolean>()
     }
     val observableShowExplore: SingleLiveEvent<Boolean> get() = _observableShowExplore
     private val _observableDocChange: SingleLiveEvent<DocChange> by lazy {
-        SingleLiveEvent<DocChange>();
+        SingleLiveEvent<DocChange>()
     }
     val observableDocChange: SingleLiveEvent<DocChange> get() = _observableDocChange
 
     fun getData() {
         repositoryCallbacks.getOnGoingGigs(
-                this,
-                observableOnGoingGigs.value == null || observableOnGoingGigs.value!!.data == null || observableOnGoingGigs.value?.data?.isEmpty()!!
+            this,
+            observableOnGoingGigs.value == null || observableOnGoingGigs.value!!.data == null || observableOnGoingGigs.value?.data?.isEmpty()!!
         )
         if (!isInitialDataLoaded) {
             showProgress(true)
@@ -64,22 +65,22 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     }
 
     override fun onGoingGigsResponse(
-            querySnapshot: QuerySnapshot?,
-            error: FirebaseFirestoreException?,
-            initialLoading: Boolean
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?,
+        initialLoading: Boolean
     ) {
         if (querySnapshot != null) observableOnGoingGigs.value = GigsResponse(
-                true,
-                "On Going Gigs Loaded Successfully",
-                ArrayList(getGigsWithId(
-                        querySnapshot,
-                        checkForCompletedGigs = false,
-                        fetchOnGoing = initialLoading,
-                        getUpcomingGig = false
-                ).filter {
-                    val gigStatus = GigStatus.fromGig(it)
-                    gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
-                })
+            true,
+            "On Going Gigs Loaded Successfully",
+            ArrayList(getGigsWithId(
+                querySnapshot,
+                checkForCompletedGigs = false,
+                fetchOnGoing = initialLoading,
+                getUpcomingGig = false
+            ).filter {
+                val gigStatus = GigStatus.fromGig(it)
+                gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
+            })
         ) else {
             error?.message?.let {
                 observableError.value = it
@@ -90,8 +91,8 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     }
 
     override fun pastGigsResponse(
-            querySnapshot: QuerySnapshot?,
-            error: FirebaseFirestoreException?
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
     ) {
         if (querySnapshot != null) {
             if (querySnapshot.documents.isNotEmpty())
@@ -99,9 +100,9 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
             isLastPage = querySnapshot.documents.size < limit
 
             observableScheduledGigs.value = GigsResponse(
-                    true,
-                    "Past Gigs Loaded Successfully",
-                    getGigsWithId(querySnapshot, true, fetchOnGoing = false, getUpcomingGig = false)
+                true,
+                "Past Gigs Loaded Successfully",
+                getGigsWithId(querySnapshot, true, fetchOnGoing = false, getUpcomingGig = false)
             )
             repositoryCallbacks.removeListener()
         } else {
@@ -115,17 +116,17 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     }
 
     override fun upcomingGigsResponse(
-            querySnapshot: QuerySnapshot?,
-            error: FirebaseFirestoreException?
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
     ) {
         if (querySnapshot != null) {
             if (querySnapshot.documents.isNotEmpty())
                 lastVisibleItem = querySnapshot.documents[querySnapshot.size() - 1]
             isLastPage = querySnapshot.documents.size < limit
             observableScheduledGigs.value = GigsResponse(
-                    true,
-                    "Upcoming Gigs Loaded Successfully",
-                    getGigsWithId(querySnapshot, false, fetchOnGoing = false, getUpcomingGig = true)
+                true,
+                "Upcoming Gigs Loaded Successfully",
+                getGigsWithId(querySnapshot, false, fetchOnGoing = false, getUpcomingGig = true)
             )
             repositoryCallbacks.removeListener()
         } else {
@@ -137,8 +138,8 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     }
 
     override fun gigsCountResponse(
-            querySnapshot: QuerySnapshot?,
-            error: FirebaseFirestoreException?
+        querySnapshot: QuerySnapshot?,
+        error: FirebaseFirestoreException?
     ) {
         if (querySnapshot != null) {
             if (querySnapshot.isEmpty) {
@@ -163,7 +164,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
 
     fun getGigs(pastGigs: Boolean, resetPageCount: Boolean) {
         showProgress(true)
-        this.pastGigs = pastGigs;
+        this.pastGigs = pastGigs
         if (resetPageCount) {
             isLastPage = false
             isLoading = true
@@ -184,10 +185,10 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
     }
 
     private fun getGigsWithId(
-            querySnapshot: QuerySnapshot,
-            checkForCompletedGigs: Boolean,
-            fetchOnGoing: Boolean,
-            getUpcomingGig : Boolean
+        querySnapshot: QuerySnapshot,
+        checkForCompletedGigs: Boolean,
+        fetchOnGoing: Boolean,
+        getUpcomingGig: Boolean
     ): ArrayList<Gig> {
         var userGigs: MutableList<Gig> = mutableListOf()
         querySnapshot.documents.forEach { t ->
@@ -208,7 +209,7 @@ class GigHistoryViewModel(private val repositoryCallbacks: DataCallbacks) :
                 gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
 
             }
-        } else if(getUpcomingGig){
+        } else if (getUpcomingGig) {
             userGigs.retainAll { element ->
 
                 val gigStatus = GigStatus.fromGig(element)

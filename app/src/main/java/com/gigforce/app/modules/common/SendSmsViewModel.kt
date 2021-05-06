@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.common.models.SendSmsRequest
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.utils.Lse
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.retrofit.RetrofitFactory
+import com.gigforce.core.utils.Lse
 import kotlinx.coroutines.launch
 
 class SendSmsViewModel(

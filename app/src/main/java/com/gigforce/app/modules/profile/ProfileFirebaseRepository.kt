@@ -5,6 +5,7 @@ import com.gigforce.app.core.replace
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
+import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
@@ -368,7 +369,6 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
         name: String,
         dateOfBirth: Date,
         gender: String,
-        pincode: String,
         highestQualification: String
     ) {
 

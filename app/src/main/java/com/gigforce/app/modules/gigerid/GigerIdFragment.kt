@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage2.GigPage2Fragment
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.ViewModelProviderFactory

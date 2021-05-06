@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigPage.GigViewModel
+//import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible

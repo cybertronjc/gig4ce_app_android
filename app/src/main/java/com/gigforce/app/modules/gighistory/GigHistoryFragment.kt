@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage2.GigNavigation
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.common_ui.listeners.PaginationScrollListener

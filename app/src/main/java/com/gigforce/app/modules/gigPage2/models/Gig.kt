@@ -3,6 +3,10 @@ package com.gigforce.app.modules.gigPage2.models
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.gigforce.app.core.toLocalDateTime
+import com.gigforce.core.datamodels.gigpage.GigAttendance
+import com.gigforce.core.datamodels.gigpage.GigContactDetails
+import com.gigforce.core.datamodels.gigpage.GigRegularisationRequest
+import com.gigforce.core.extensions.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
@@ -17,206 +21,206 @@ import java.util.concurrent.TimeUnit
 @Keep
 data class Gig(
 
-        @get:PropertyName("tag")
+    @get:PropertyName("tag")
         @set:PropertyName("tag")
         var tag: String = "",
 
-        @DocumentId
+    @DocumentId
         @get:PropertyName("gigId")
         @set:PropertyName("gigId")
         var gigId: String = "",
 
-        @get:PropertyName("gigerId")
+    @get:PropertyName("gigerId")
         @set:PropertyName("gigerId")
         var gigerId: String = "",
 
-        @get:PropertyName("title")
+    @get:PropertyName("title")
         @set:PropertyName("title")
         var title: String = "",
 
-        @get:PropertyName("description")
+    @get:PropertyName("description")
         @set:PropertyName("description")
         var description: String = "",
 
-        @get:PropertyName("bannerImage")
+    @get:PropertyName("bannerImage")
         @set:PropertyName("bannerImage")
         var bannerImage: String? = null,
 
-        @get:PropertyName("address")
+    @get:PropertyName("address")
         @set:PropertyName("address")
         var address: String = "",
 
-        @get:PropertyName("geoPoint")
+    @get:PropertyName("geoPoint")
         @set:PropertyName("geoPoint")
         var geoPoint: GeoPoint? = null,
 
-        @get:PropertyName("latitude")
+    @get:PropertyName("latitude")
         @set:PropertyName("latitude")
         var latitude: Double? = null,
 
-        @get:PropertyName("longitude")
+    @get:PropertyName("longitude")
         @set:PropertyName("longitude")
         var longitude: Double? = null,
 
-        @get:PropertyName("gigAmount")
+    @get:PropertyName("gigAmount")
         @set:PropertyName("gigAmount")
         var gigAmount: Double = 0.0,
 
-        @get:PropertyName("invoiceGenerationDate")
+    @get:PropertyName("invoiceGenerationDate")
         @set:PropertyName("invoiceGenerationDate")
         var invoiceGenerationDate: Timestamp? = null,
 
-        @get:PropertyName("paymentStatus")
+    @get:PropertyName("paymentStatus")
         @set:PropertyName("paymentStatus")
         var paymentStatus: String = "Processing",
 
-        @get:PropertyName("cancellationReason")
+    @get:PropertyName("cancellationReason")
         @set:PropertyName("cancellationReason")
         var cancellationReason: String = "",
 
-        @get:PropertyName("companyName")
+    @get:PropertyName("companyName")
         @set:PropertyName("companyName")
         var companyName: String? = null,
 
-        @get:PropertyName("companyLogo")
+    @get:PropertyName("companyLogo")
         @set:PropertyName("companyLogo")
         var companyLogo: String? = null,
 
-        @get:PropertyName("startDateTime")
+    @get:PropertyName("startDateTime")
         @set:PropertyName("startDateTime")
         var startDateTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInBeforeSlot")
+    @get:PropertyName("checkInBeforeSlot")
         @set:PropertyName("checkInBeforeSlot")
         var checkInBeforeTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInBeforeBuffer")
+    @get:PropertyName("checkInBeforeBuffer")
         @set:PropertyName("checkInBeforeBuffer")
         var checkInBeforeBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInAfterBuffer")
+    @get:PropertyName("checkInAfterBuffer")
         @set:PropertyName("checkInAfterBuffer")
         var checkInAfterBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkInAfterSlot")
+    @get:PropertyName("checkInAfterSlot")
         @set:PropertyName("checkInAfterSlot")
         var checkInAfterTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("endDateTime")
+    @get:PropertyName("endDateTime")
         @set:PropertyName("endDateTime")
         var endDateTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutBeforeSlot")
+    @get:PropertyName("checkOutBeforeSlot")
         @set:PropertyName("checkOutBeforeSlot")
         var checkOutBeforeTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutBeforeBuffer")
+    @get:PropertyName("checkOutBeforeBuffer")
         @set:PropertyName("checkOutBeforeBuffer")
         var checkOutBeforeBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutAfterBuffer")
+    @get:PropertyName("checkOutAfterBuffer")
         @set:PropertyName("checkOutAfterBuffer")
         var checkOutAfterBufferTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("checkOutAfterSlot")
+    @get:PropertyName("checkOutAfterSlot")
         @set:PropertyName("checkOutAfterSlot")
         var checkOutAfterTime: Timestamp = Timestamp.now(),
 
-        @get:PropertyName("agencyContact")
+    @get:PropertyName("agencyContact")
         @set:PropertyName("agencyContact")
         var agencyContact: ContactPerson? = null,
 
-        @get:PropertyName("businessContact")
+    @get:PropertyName("businessContact")
         @set:PropertyName("businessContact")
         var businessContact: ContactPerson? = null,
 
-        @get:PropertyName("assignedOn")
+    @get:PropertyName("assignedOn")
         @set:PropertyName("assignedOn")
         var assignedOn: Timestamp = Timestamp.now(),
 
-        var checkInBeforeTimeBufferInMins: Long = 60,
-        var checkInAfterTimeBufferInMins: Long = 60,
-        var checkOutBeforeTimeBufferInMins: Long = 60,
-        var checkOutAfterTimeBufferInMins: Long = 60,
+    var checkInBeforeTimeBufferInMins: Long = 60,
+    var checkInAfterTimeBufferInMins: Long = 60,
+    var checkOutBeforeTimeBufferInMins: Long = 60,
+    var checkOutAfterTimeBufferInMins: Long = 60,
 
-        @get:PropertyName("gigStatus")
+    @get:PropertyName("gigStatus")
         @set:PropertyName("gigStatus")
         var gigStatus: String = "upcoming",
 
-        @get:PropertyName("isGigActivated")
+    @get:PropertyName("isGigActivated")
         @set:PropertyName("isGigActivated")
         var isGigActivated: Boolean = true, //TODO change this
 
-        @get:PropertyName("isFavourite")
+    @get:PropertyName("isFavourite")
         @set:PropertyName("isFavourite")
         var isFavourite: Boolean = false,
 
-        @get:PropertyName("isGigCompleted")
+    @get:PropertyName("isGigCompleted")
         @set:PropertyName("isGigCompleted")
         var isGigCompleted: Boolean = false,
 
-        @get:PropertyName("isPaymentDone")
+    @get:PropertyName("isPaymentDone")
         @set:PropertyName("isPaymentDone")
         var isPaymentDone: Boolean = false,
 
-        @get:PropertyName("isMonthlyGig")
+    @get:PropertyName("isMonthlyGig")
         @set:PropertyName("isMonthlyGig")
         var isMonthlyGig: Boolean = false,
 
-        @get:PropertyName("isFullDay")
+    @get:PropertyName("isFullDay")
         @set:PropertyName("isFullDay")
         var isFullDay: Boolean = false,
 
 
-        @get:PropertyName("gigOrderId")
+    @get:PropertyName("gigOrderId")
         @set:PropertyName("gigOrderId")
         var gigOrderId: String = "",
 
-        @get:PropertyName("profile")
+    @get:PropertyName("profile")
         @set:PropertyName("profile")
         var profile: JobProfile = JobProfile(),
 
-        @get:PropertyName("legalEntity")
+    @get:PropertyName("legalEntity")
         @set:PropertyName("legalEntity")
         var legalEntity: LegalEntity? = null,
 
-        var keywords: List<String> = emptyList(),
+    var keywords: List<String> = emptyList(),
 
-        var gigRating: Float = 0.0F,
-        var gigUserFeedback: String? = null,
-        var gigUserFeedbackAttachments: List<String> = emptyList(),
-        var locationPictures: List<String> = emptyList(),
+    var gigRating: Float = 0.0F,
+    var gigUserFeedback: String? = null,
+    var gigUserFeedbackAttachments: List<String> = emptyList(),
+    var locationPictures: List<String> = emptyList(),
 
-        var ratingUserReceived: Float = -1.0F,
-        var feedbackUserReceived: String? = null,
-        var ratingUserReceivedAttachments: List<String> = emptyList(),
+    var ratingUserReceived: Float = -1.0F,
+    var feedbackUserReceived: String? = null,
+    var ratingUserReceivedAttachments: List<String> = emptyList(),
 
-        var gigType: String? = null,
-        var gigHighlights: List<String> = emptyList(),
-        var gigRequirements: List<String> = emptyList(),
-        var gigResponsibilities: List<String> = listOf(),
-        var attendance: GigAttendance? = null,
-        var gigContactDetails: GigContactDetails? = null,
+    var gigType: String? = null,
+    var gigHighlights: List<String> = emptyList(),
+    var gigRequirements: List<String> = emptyList(),
+    var gigResponsibilities: List<String> = listOf(),
+    var attendance: GigAttendance? = null,
+    var gigContactDetails: GigContactDetails? = null,
 
-        @get:PropertyName("declinedBy")
+    @get:PropertyName("declinedBy")
         @set:PropertyName("declinedBy")
         var declinedBy: String? = null,
 
-        @get:PropertyName("declineReason")
+    @get:PropertyName("declineReason")
         @set:PropertyName("declineReason")
         var declineReason: String? = null,
 
-        var payoutDetails: String? = null,
+    var payoutDetails: String? = null,
 
-        @get:PropertyName("isNewGig")
+    @get:PropertyName("isNewGig")
         @set:PropertyName("isNewGig")
         var isNewGig: Boolean? = null,
 
-        @get:PropertyName("regularisationRequest")
+    @get:PropertyName("regularisationRequest")
         @set:PropertyName("regularisationRequest")
         var regularisationRequest: GigRegularisationRequest? = null,
 
-        @field:Exclude
+    @field:Exclude
         var chatInfo: Map<String, Any>? = null
 
 ) {

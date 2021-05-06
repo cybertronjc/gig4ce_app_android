@@ -9,8 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible

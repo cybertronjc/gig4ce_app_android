@@ -39,10 +39,11 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.models.JobProfile
+//import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
@@ -52,6 +53,7 @@ import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.learning.learning.models.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
@@ -444,7 +446,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                             R.id.iv_message
                         ).setImageResource(R.drawable.ic_chat)
 
-                        if (obj.openNewGig() && obj.agencyContact?.uid != null) {
+                        if (obj!!.openNewGig() && obj!!.agencyContact?.uid != null) {
 
                             getView(viewHolder, R.id.messageCardView).visible()
                             getView(viewHolder, R.id.messageCardView).setOnClickListener {
@@ -506,10 +508,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getView(viewHolder, R.id.card_view).layoutParams = lp
                         getView(viewHolder, R.id.card_view).layoutParams = lp
                         getTextView(viewHolder, R.id.textView41).text = obj?.getGigTitle()
-                        getTextView(viewHolder, R.id.contactPersonTV).text = if (obj.openNewGig())
+                        getTextView(viewHolder, R.id.contactPersonTV).text = if (obj!!.openNewGig())
                             obj?.agencyContact?.name
                         else
-                            obj.gigContactDetails?.contactName
+                            obj?.gigContactDetails?.contactName
 
                         val gigStatus = GigStatus.fromGig(obj!!)
                         when (gigStatus) {

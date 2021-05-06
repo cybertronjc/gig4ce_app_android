@@ -1,7 +1,8 @@
 package com.gigforce.app.modules.gighistory
 
 import android.util.Log
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.fb.BaseFirestoreDBRepository
+//import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration

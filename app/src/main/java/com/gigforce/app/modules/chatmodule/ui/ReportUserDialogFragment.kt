@@ -15,7 +15,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
+//import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_report_user.*
@@ -44,7 +44,7 @@ class ReportUserDialogFragment : DialogFragment() {
 
     }
 
-    private val viewModel: ChatMessagesViewModel by viewModels()
+//    private val viewModel: ChatMessagesViewModel by viewModels()
 
     private lateinit var headerId: String
     private lateinit var userUid: String
@@ -69,7 +69,7 @@ class ReportUserDialogFragment : DialogFragment() {
             headerId = it.getString(INTENT_EXTRA_CHAT_HEADER_ID)!!
         }
         initView()
-        initViewModel()
+//        initViewModel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -79,31 +79,31 @@ class ReportUserDialogFragment : DialogFragment() {
     }
 
 
-    private fun initViewModel() {
-        viewModel.blockingOrUnblockingUser.observe(viewLifecycleOwner, Observer {
-
-            when (it) {
-                Lse.Loading -> {
-                    reportUserMainLayout.invisible()
-                    progressBar.visible()
-                }
-                Lse.Success -> {
-                    Toast.makeText(requireContext(), "User reported", Toast.LENGTH_LONG)
-                        .show()
-                    dismiss()
-                }
-                is Lse.Error -> {
-                    progressBar.gone()
-                    reportUserMainLayout.visible()
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Alert")
-                        .setMessage("Unable to report user, ${it.error}")
-                        .setPositiveButton("Okay") { _, _ -> }
-                        .show()
-                }
-            }
-        })
-    }
+//    private fun initViewModel() {
+//        viewModel.blockingOrUnblockingUser.observe(viewLifecycleOwner, Observer {
+//
+//            when (it) {
+//                Lse.Loading -> {
+//                    reportUserMainLayout.invisible()
+//                    progressBar.visible()
+//                }
+//                Lse.Success -> {
+//                    Toast.makeText(requireContext(), "User reported", Toast.LENGTH_LONG)
+//                        .show()
+//                    dismiss()
+//                }
+//                is Lse.Error -> {
+//                    progressBar.gone()
+//                    reportUserMainLayout.visible()
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle("Alert")
+//                        .setMessage("Unable to report user, ${it.error}")
+//                        .setPositiveButton("Okay") { _, _ -> }
+//                        .show()
+//                }
+//            }
+//        })
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -169,7 +169,7 @@ class ReportUserDialogFragment : DialogFragment() {
                 reason_radio_group.findViewById<RadioButton>(checkedRadioButtonId).text.toString()
             }
 
-            viewModel.reportAndBlockUser(headerId, userUid, reason)
+//            viewModel.reportAndBlockUser(headerId, userUid, reason)
         }
     }
 }

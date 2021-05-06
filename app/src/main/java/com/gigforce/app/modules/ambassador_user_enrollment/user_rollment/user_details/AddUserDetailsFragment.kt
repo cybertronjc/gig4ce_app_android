@@ -221,7 +221,7 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
                 uid = userId,
                 phoneNumber = phoneNumber,
                 name = user_name_et.text.toString(),
-                dateOfBirth = dateOfBirth,
+                dateOfBirth = dateOfBirth?:Date(),
                 gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
                 highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
         )

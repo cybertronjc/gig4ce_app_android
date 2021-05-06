@@ -1,6 +1,7 @@
 package com.gigforce.app.modules.referrals
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestoreException

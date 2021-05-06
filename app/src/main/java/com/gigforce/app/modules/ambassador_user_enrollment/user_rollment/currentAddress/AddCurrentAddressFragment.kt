@@ -24,6 +24,7 @@ import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.ambassador.PostalOffice
 import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
+import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.utils.Lce

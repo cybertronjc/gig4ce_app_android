@@ -17,6 +17,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth

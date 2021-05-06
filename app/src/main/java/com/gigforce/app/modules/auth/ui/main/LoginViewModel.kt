@@ -7,10 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.core.datamodels.login.LoginResponse
 import androidx.lifecycle.viewModelScope
 import com.gigforce.client_activation.analytics.AuthEvents
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.getOrThrow
+//import com.gigforce.app.modules.profile.models.ProfileData
+//import com.gigforce.app.utils.getOrThrow
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

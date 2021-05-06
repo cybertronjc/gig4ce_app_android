@@ -36,7 +36,7 @@ import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.client_activation.client_activation.models.JobProfile
-import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+//import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -79,10 +79,9 @@ import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.Lce
+import javax.inject.Inject
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
-@AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LandingScreenFragment : BaseFragment() {

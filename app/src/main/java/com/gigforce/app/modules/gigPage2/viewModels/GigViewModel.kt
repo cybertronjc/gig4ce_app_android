@@ -9,11 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.core.toDate
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
-import com.gigforce.app.modules.gigPage2.models.Gig
+//import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.AttendanceType
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.utils.EventLogs.getOrThrow
@@ -140,10 +141,10 @@ class GigViewModel constructor(
                 remarks = remarks
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
-            _markingAttendanceState.postValue(null)
+//            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
-            _markingAttendanceState.postValue(null)
+//            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -170,10 +171,10 @@ class GigViewModel constructor(
                 remarks = remarks
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
-            _markingAttendanceState.value = null
+//            _markingAttendanceState.value = null
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
-            _markingAttendanceState.postValue(null)
+//            _markingAttendanceState.postValue(null)
         }
     }
 
@@ -614,10 +615,10 @@ class GigViewModel constructor(
             }
 
             _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
-            _todaysGigs.value = null
+//            _todaysGigs.value = null
         } catch (e: Exception) {
             _todaysGigs.value = Lce.error(e.message!!)
-            _todaysGigs.value = null
+//            _todaysGigs.value = null
         }
 
     }

@@ -53,33 +53,38 @@ class UserDetailsViewModel @Inject constructor(
     val pincodeResponse: LiveData<Lce<PincodeResponse>> = _pincodeResponse
 
     fun updateUserDetails(
-            uid: String,
-            phoneNumber: String,
-            name: String,
-            dateOfBirth: Date?,
-            gender: String,
-            highestQualification: String
+        uid: String,
+        phoneNumber: String,
+        name: String,
+        dateOfBirth: Date,
+        gender: String,
+        highestQualification: String
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
             profileFirebaseRepository.updateUserDetails(
-                    uid = uid,
-                    phoneNumber = phoneNumber,
-                    name = name,
-                    dateOfBirth = dateOfBirth,
-                    gender = gender,
-                    highestQualification = highestQualification
+                uid = uid,
+
+                phoneNumber = phoneNumber,
+
+                name = name,
+
+                dateOfBirth = dateOfBirth,
+
+                gender = gender,
+
+                highestQualification = highestQualification
             )
             enrolledUserListRepository.updateUserProfileName(uid, name)
             //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
 
             _submitUserDetailsState.value = Lse.success()
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         }
     }
 
@@ -113,11 +118,11 @@ class UserDetailsViewModel @Inject constructor(
                 userEnrollmentRepository.setCurrentAddressAsUploaded(uid)
 
             _submitUserDetailsState.value = Lse.success()
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         }
     }
 

@@ -27,26 +27,13 @@ import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
+//import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.doYouHavePanCardLabel
+import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.helpIconIV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardAvailaibilityOptionRG
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panCardEditText
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panDataCorrectCB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panEditOverallErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageEditErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panImageHolder
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panInfoLayout
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoEditErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panNoRB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panSubmitSliderBtn
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panYesRB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.whyWeNeedThisTV
+//import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panDataCorrectCB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
 class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
@@ -107,7 +94,8 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         disableSubmitButton()
 
-        toolbar_layout.apply {
+        toolbar_layout?.apply {
+
             showTitle(getString(R.string.upload_pan_details))
             hideActionMenu()
             setBackButtonListener{

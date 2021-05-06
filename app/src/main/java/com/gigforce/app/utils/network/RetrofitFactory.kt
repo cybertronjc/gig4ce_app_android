@@ -1,7 +1,9 @@
 package com.gigforce.app.utils.network
 
-import com.gigforce.app.modules.chatmodule.remote.SyncContactsService
+//import com.gigforce.app.modules.chatmodule.remote.SyncContactsService
 import com.gigforce.core.AppConstants
+import com.gigforce.core.retrofit.GeneratePaySlipService
+import com.gigforce.modules.feature_chat.service.SyncContactsService
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient

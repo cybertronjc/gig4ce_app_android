@@ -12,6 +12,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.datamodels.profile.ProfileData
 
 import com.google.firebase.auth.FirebaseAuth

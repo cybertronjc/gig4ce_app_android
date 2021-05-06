@@ -15,8 +15,10 @@ import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrollViewModel
 import com.gigforce.app.modules.ambassador_user_enrollment.SendOtpResponseData
-import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.datamodels.ambassador.EnrolledUser
+import com.gigforce.core.utils.Lce
+//import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
+//import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_sending_otp_for_ambassador_edit.*
 
@@ -32,9 +34,9 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
         private const val INTENT_EXTRA_ENROLLED_USER = "enrolled_user"
 
         fun launch(
-                enrolledUser: EnrolledUser,
-                fragmentManager: FragmentManager,
-                okayClickListener: UserDetailsFilledDialogFragmentResultListener
+            enrolledUser: EnrolledUser,
+            fragmentManager: FragmentManager,
+            okayClickListener: UserDetailsFilledDialogFragmentResultListener
         ) {
             val frag = EditProfileConsentAndSendOtpDialogFragment()
             frag.arguments = bundleOf(

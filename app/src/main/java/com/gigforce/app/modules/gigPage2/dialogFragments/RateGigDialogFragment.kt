@@ -18,7 +18,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.invisible
 import com.gigforce.app.core.visible
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse

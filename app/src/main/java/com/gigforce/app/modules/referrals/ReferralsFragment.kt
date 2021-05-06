@@ -27,11 +27,14 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.utils.getViewWidth
 import com.gigforce.core.AppConstants
+import com.gigforce.core.PermissionUtils
 import com.gigforce.core.utils.GlideApp
+//import com.gigforce.core.utils.PermissionUtils
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -45,7 +48,8 @@ import java.io.FileOutputStream
 
 
 class ReferralsFragment : BaseFragment(),
-    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener,LocationUpdates.LocationUpdateCallbacks {
+    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener,
+    LocationUpdates.LocationUpdateCallbacks {
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(
@@ -412,7 +416,7 @@ class ReferralsFragment : BaseFragment(),
     override fun onPause() {
         super.onPause()
         try {
-            locationUpdates.stopLocationUpdates()
+            locationUpdates.stopLocationUpdates(activity)
         } catch (e: Exception) {
             e.printStackTrace()
         }

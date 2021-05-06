@@ -327,8 +327,8 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
                 progressBar.gone()
 
                 if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                    if (it.drivingLicenseDataModel.userHasDL != null) {
-                        if (it.drivingLicenseDataModel.userHasDL) {
+                    if (it.drivingLicenseDataModel!!.userHasDL != null) {
+                        if (it.drivingLicenseDataModel!!.userHasDL!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

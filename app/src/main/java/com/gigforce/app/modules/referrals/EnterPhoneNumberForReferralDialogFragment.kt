@@ -10,17 +10,17 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.common.SendSmsViewModel
-import com.gigforce.app.utils.Lse
 import com.gigforce.core.extensions.invisible
+import com.gigforce.core.utils.Lse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_invite_direct_message.*
 import kotlinx.android.synthetic.main.fragment_invite_direct_message_main.*
-import java.util.*
 
 
 class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
@@ -44,7 +44,8 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
     }
 
     private var inviteLink: String = ""
-    private var inviteLinkSentListener: EnterPhoneNumberForReferralDialogFragmentEventListener? = null
+    private var inviteLinkSentListener: EnterPhoneNumberForReferralDialogFragmentEventListener? =
+        null
     private val sendSmsViewModel: SendSmsViewModel by viewModels()
 
     //View
@@ -84,7 +85,6 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
     private fun initViewModel() {
         sendSmsViewModel.sendSms
             .observe(viewLifecycleOwner, {
-
                 when (it) {
                     Lse.Loading -> {
                         invite_direct_main.invisible()
