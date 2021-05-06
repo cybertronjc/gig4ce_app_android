@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,10 +25,6 @@ import com.michaldrabik.classicmaterialtimepicker.OnDatePickedListener
 import com.michaldrabik.classicmaterialtimepicker.model.CmtpDate
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.*
-import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.skip_btn
-import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.submitBtn
-import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.toolbar_layout
-import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -78,7 +73,7 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
         val cal = Calendar.getInstance()
         CmtpDateDialogFragment.newInstance().apply {
 
-            this.setInitialDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1 , 1995)
+            this.setInitialDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, 1995)
             this.setCustomYearRange(1950, cal.get(Calendar.YEAR))
             this.setOnDatePickedListener(this@AddUserDetailsFragment)
             this.setCustomSeparator("/")
@@ -86,8 +81,8 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_ambsd_user_details, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -153,18 +148,18 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
         toolbar_layout.apply {
             showTitle(getString(R.string.user_details))
             hideActionMenu()
-            setBackButtonListener{
+            setBackButtonListener {
                 showGoBackConfirmationDialog()
             }
         }
 
         skip_btn.setOnClickListener {
             navigate(
-                    R.id.addProfilePictureFragment, bundleOf(
+                R.id.addProfilePictureFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
                     EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
                     EnrollmentConstants.INTENT_EXTRA_MODE to mode
-            )
+                )
             )
         }
 
@@ -218,79 +213,79 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
         }
 
         viewModel.updateUserDetails(
-                uid = userId,
-                phoneNumber = phoneNumber,
-                name = user_name_et.text.toString(),
-                dateOfBirth = dateOfBirth?:Date(),
-                gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
-                highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
+            uid = userId,
+            phoneNumber = phoneNumber,
+            name = user_name_et.text.toString(),
+            dateOfBirth = dateOfBirth ?: Date(),
+            gender = gender_chip_group.findViewById<Chip>(gender_chip_group.checkedChipId).text.toString(),
+            highestQualification = highest_qual_chipgroup.findViewById<Chip>(highest_qual_chipgroup.checkedChipId).text.toString()
         )
     }
 
     private fun showAlertDialog(title: String, message: String) {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
-                .show()
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+            .show()
     }
 
     private fun initViewModel() {
 
         viewModel.profile
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                    when (it) {
-                        Lce.Loading -> {
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                when (it) {
+                    Lce.Loading -> {
 
-                            user_details_main_layout.gone()
-                            user_details_error.gone()
-                            user_details_progressbar.visible()
-                        }
-                        is Lce.Content -> {
-                            showUserDetailsMainLayout(
-                                    showEditActions = true
-                            )
-                            showUserDetailsOnView(it.content)
-                        }
-                        is Lce.Error -> {
-                            user_details_progressbar.gone()
-                            user_details_main_layout.gone()
-                            user_details_error.visible()
-
-                            user_details_error.text = it.error
-                        }
+                        user_details_main_layout.gone()
+                        user_details_error.gone()
+                        user_details_progressbar.visible()
                     }
-                })
+                    is Lce.Content -> {
+                        showUserDetailsMainLayout(
+                            showEditActions = true
+                        )
+                        showUserDetailsOnView(it.content)
+                    }
+                    is Lce.Error -> {
+                        user_details_progressbar.gone()
+                        user_details_main_layout.gone()
+                        user_details_error.visible()
+
+                        user_details_error.text = it.error
+                    }
+                }
+            })
 
         viewModel.submitUserDetailsState
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    when (it) {
-                        Lse.Loading -> {
+                when (it) {
+                    Lse.Loading -> {
 
 //                            submitBtn.showProgress {
 //                                this.progressColor = Color.WHITE
 //                            }
-                        }
-                        Lse.Success -> {
-//                            submitBtn.hideProgress()
-
-                            showToast(getString(R.string.user_details_submitted))
-                            navigate(
-                                    R.id.addProfilePictureFragment, bundleOf(
-                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
-                                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                            )
-                            )
-                        }
-                        is Lse.Error -> {
-//                            submitBtn.hideProgress()
-
-                            showAlertDialog(getString(R.string.cannot_submit_info), it.error)
-                        }
                     }
-                })
+                    Lse.Success -> {
+//                            submitBtn.hideProgress()
+
+                        showToast(getString(R.string.user_details_submitted))
+                        navigate(
+                            R.id.addProfilePictureFragment, bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                                EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                            )
+                        )
+                    }
+                    is Lse.Error -> {
+//                            submitBtn.hideProgress()
+
+                        showAlertDialog(getString(R.string.cannot_submit_info), it.error)
+                    }
+                }
+            })
     }
 
     private fun showUserDetailsMainLayout(showEditActions: Boolean) {
@@ -327,11 +322,11 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
 
     private fun showGoBackConfirmationDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.alert))
-                .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
-                .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
-                .setNegativeButton(getString(R.string.no)) { _, _ -> }
-                .show()
+            .setTitle(getString(R.string.alert))
+            .setMessage(getString(R.string.are_u_sure_u_want_to_go_back))
+            .setPositiveButton(getString(R.string.yes)) { _, _ -> goBackToUsersList() }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
     }
 
     private fun goBackToUsersList() {

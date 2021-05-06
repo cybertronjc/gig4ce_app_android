@@ -2295,6 +2295,7 @@ drawable profile_avatar
 drawable profile_mock
 drawable radio_button_drawable
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
+drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
 drawable test_custom_background
@@ -2445,6 +2446,7 @@ id beginning
 id blocking
 id body_scroll
 id bonus_text
+id borderFrameLayout
 id bottom
 id bottom_to_top
 id bounce

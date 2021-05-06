@@ -2294,6 +2294,7 @@ int drawable profile_avatar 0x0
 int drawable profile_mock 0x0
 int drawable radio_button_drawable 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
+int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
 int drawable shape_circle_lipstick 0x0
 int drawable test_custom_background 0x0
@@ -2444,6 +2445,7 @@ int id beginning 0x0
 int id blocking 0x0
 int id body_scroll 0x0
 int id bonus_text 0x0
+int id borderFrameLayout 0x0
 int id bottom 0x0
 int id bottom_to_top 0x0
 int id bounce 0x0
