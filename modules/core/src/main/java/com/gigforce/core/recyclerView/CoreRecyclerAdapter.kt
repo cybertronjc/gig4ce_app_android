@@ -5,14 +5,13 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.CoreViewHolder
-import com.gigforce.core.IDataViewTypeGetter
 import com.gigforce.core.ICoreViewHolderFactory
-import java.lang.IllegalArgumentException
+import com.gigforce.core.IDataViewTypeGetter
 
 open class CoreRecyclerAdapter(
     context: Context,
     val iViewTypeFinder: ICoreViewHolderFactory
-) : RecyclerView.Adapter<CoreViewHolder>(){
+) : RecyclerView.Adapter<CoreViewHolder>() {
 
     companion object {
 
@@ -35,6 +34,10 @@ open class CoreRecyclerAdapter(
             _originalCollection = value
             this.notifyDataSetChanged()
         }
+
+
+    var itemClickListener: ItemClickListener? = null
+
 
     override fun getItemViewType(position: Int): Int {
         val data = collection.get(position)
@@ -68,7 +71,12 @@ open class CoreRecyclerAdapter(
         holder: CoreViewHolder,
         position: Int
     ) {
-        holder.IViewHolder.bind(collection[position]);
+        holder.IViewHolder.bind(collection[position])
+        itemClickListener?.let {
+            holder.itemView.setOnClickListener {
+                itemClickListener?.onItemClick(it,position,collection[position])
+            }
+        }
     }
 
     fun filter(predicate: (Any) -> Boolean){

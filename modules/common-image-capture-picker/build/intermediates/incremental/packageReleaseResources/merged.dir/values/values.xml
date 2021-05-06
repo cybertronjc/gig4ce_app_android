@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="topBarDark">#d72467</color>
+    <string name="crop_and_rotate">Crop and Rotate</string>
+    <string name="pick_image_intent_text">Choose Image</string>
+</resources>

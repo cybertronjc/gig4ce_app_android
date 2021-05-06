@@ -78,4 +78,9 @@ open class CoreRecyclerView(
     fun resetFilter() {
         this.coreAdapter.resetFilter()
     }
+
+    var itemClickListener: ItemClickListener? = null
+        set(value) {
+            this.coreAdapter.itemClickListener = value
+        }
 }
