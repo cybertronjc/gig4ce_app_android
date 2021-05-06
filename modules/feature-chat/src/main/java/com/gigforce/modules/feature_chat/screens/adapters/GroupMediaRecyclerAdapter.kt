@@ -11,6 +11,12 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
+//import com.gigforce.app.R
+//import com.gigforce.app.core.gone
+//import com.gigforce.app.core.visible
+//import com.gigforce.app.modules.chatmodule.ChatConstants
+//import com.gigforce.app.modules.chatmodule.models.GroupMedia
+//import com.gigforce.core.utils.FirebaseUtils
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -170,7 +176,7 @@ class GroupMediaRecyclerAdapter(
                     videoLengthLayout.visible()
                     videoLength.text =
                         convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
-
+                    requestManager.load(groupMedia.thumbnail).into(thumbnailIV)
                     requestManager.load(R.drawable.ic_play).into(attachmentTypeIcon)
 
                     if (groupMedia.thumbnail != null)

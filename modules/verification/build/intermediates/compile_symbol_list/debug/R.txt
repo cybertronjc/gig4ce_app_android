@@ -87,6 +87,9 @@ int animator mtrl_fab_show_motion_spec 0x0
 int animator mtrl_fab_transformation_sheet_collapse_spec 0x0
 int animator mtrl_fab_transformation_sheet_expand_spec 0x0
 int animator slidetoact_animator_ic_check 0x0
+int array com_google_android_gms_fonts_certs 0x0
+int array com_google_android_gms_fonts_certs_dev 0x0
+int array com_google_android_gms_fonts_certs_prod 0x0
 int array gender_values 0x0
 int array indian_states 0x0
 int attr action 0x0
@@ -1381,6 +1384,7 @@ int color light_blue 0x0
 int color light_grey 0x0
 int color light_pink 0x0
 int color lipstick 0x0
+int color lipstick_2 0x0
 int color material_blue_grey_800 0x0
 int color material_blue_grey_900 0x0
 int color material_blue_grey_950 0x0
@@ -2346,6 +2350,8 @@ int drawable gradient_onboarding_progressbar_bg 0x0
 int drawable gradient_onboarding_progressbar_gradient 0x0
 int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_black 0x0
+int drawable ic_arrow_back_white 0x0
+int drawable ic_arrow_forward 0x0
 int drawable ic_arrow_forward_white 0x0
 int drawable ic_attachment_grey 0x0
 int drawable ic_attachment_pink 0x0
@@ -2366,6 +2372,8 @@ int drawable ic_dl 0x0
 int drawable ic_down 0x0
 int drawable ic_download_24 0x0
 int drawable ic_edit 0x0
+int drawable ic_error_loading_image 0x0
+int drawable ic_error_loading_image_red 0x0
 int drawable ic_homescreen_chat 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_learning_default_back 0x0
@@ -2384,6 +2392,7 @@ int drawable ic_question 0x0
 int drawable ic_question_mark 0x0
 int drawable ic_record 0x0
 int drawable ic_repeat 0x0
+int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_stop 0x0
 int drawable ic_three_dots 0x0
@@ -2441,7 +2450,9 @@ int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
 int drawable test_custom_background 0x0
+int drawable toolbar_background 0x0
 int drawable toolbar_bg_client_activation 0x0
+int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
 int drawable ucrop_crop 0x0
@@ -2629,6 +2640,7 @@ int id autoCompleteToEnd 0x0
 int id autoCompleteToStart 0x0
 int id autoFocus 0x0
 int id back 0x0
+int id back_arrow 0x0
 int id bankAccDetailsLabel 0x0
 int id bankAccNoEditErrorMessage 0x0
 int id bankAccountLabel 0x0
@@ -2975,7 +2987,6 @@ int id ivDL1 0x0
 int id ivPan1 0x0
 int id ivVeriDD1 0x0
 int id iv_back_add_aadhar_card_info 0x0
-int id iv_back_add_bank_details_info 0x0
 int id iv_back_add_driving_license 0x0
 int id iv_back_add_pan_card_info 0x0
 int id iv_back_add_selfie 0x0
@@ -3105,6 +3116,7 @@ int id off 0x0
 int id on 0x0
 int id optionIconIV 0x0
 int id optionTitleTV 0x0
+int id option_menu_iv 0x0
 int id outline 0x0
 int id outward 0x0
 int id oval_gradient_iv 0x0
@@ -3216,7 +3228,10 @@ int id search_bar 0x0
 int id search_button 0x0
 int id search_close_btn 0x0
 int id search_edit_frame 0x0
+int id search_et 0x0
 int id search_go_btn 0x0
+int id search_icon 0x0
+int id search_layout 0x0
 int id search_mag_icon 0x0
 int id search_plate 0x0
 int id search_src_text 0x0
@@ -3281,6 +3296,7 @@ int id status_iv 0x0
 int id stereo 0x0
 int id stop 0x0
 int id stretch 0x0
+int id subTitleTV 0x0
 int id submenuarrow 0x0
 int id submitDocDescriptionLayout 0x0
 int id submit_area 0x0
@@ -3341,6 +3357,7 @@ int id titleTV 0x0
 int id title_template 0x0
 int id toggle_full_screen 0x0
 int id toolbar 0x0
+int id toolbar_image_iv 0x0
 int id toolbar_title 0x0
 int id top 0x0
 int id topPanel 0x0
@@ -3391,7 +3408,6 @@ int id tv_rv_preferred_location 0x0
 int id tv_schedule_test 0x0
 int id tv_title 0x0
 int id tv_title_add_aadhar_card_info 0x0
-int id tv_title_add_bank_details_info 0x0
 int id tv_title_add_driving_license 0x0
 int id tv_title_add_pan_card_info 0x0
 int id tv_title_add_selfie 0x0
@@ -3580,6 +3596,7 @@ int layout fragment_play_video_full_screen 0x0
 int layout fragment_select_image_source 0x0
 int layout fragment_verification_image_holder 0x0
 int layout fragment_view_image_full_screen 0x0
+int layout fragment_view_image_fullscreen 0x0
 int layout fragment_we_why_need_this 0x0
 int layout fui_activity_invisible 0x0
 int layout fui_activity_register_email 0x0
@@ -3606,6 +3623,7 @@ int layout fui_welcome_back_idp_prompt_layout 0x0
 int layout fui_welcome_back_password_prompt_layout 0x0
 int layout gig_info_card 0x0
 int layout hour_selected_outline 0x0
+int layout icon_text_card_mol 0x0
 int layout image 0x0
 int layout image_uploader_driving_license 0x0
 int layout item_power_menu_library_skydoves 0x0
@@ -3624,6 +3642,7 @@ int layout layout_sp_city_dropdown 0x0
 int layout layout_sp_completion_year 0x0
 int layout layout_sp_driving_license_state 0x0
 int layout layout_sp_state_dl 0x0
+int layout layout_toolbar 0x0
 int layout layout_upload_driving_certificate 0x0
 int layout layout_verification 0x0
 int layout layout_verification_aadhaar 0x0
@@ -4660,6 +4679,7 @@ int style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year 0x0
 int style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox 0x0
 int style ShapeAppearanceOverlay_TopLeftCut 0x0
 int style ShapeAppearanceOverlay_TopRightDifferentCornerSize 0x0
+int style ShapeAppearanceOverlay_toolbar_card_custom_corners 0x0
 int style ShapeAppearance_MaterialComponents 0x0
 int style ShapeAppearance_MaterialComponents_LargeComponent 0x0
 int style ShapeAppearance_MaterialComponents_MediumComponent 0x0
@@ -4931,6 +4951,7 @@ int style Theme_MaterialComponents_Light_NoActionBar_Bridge 0x0
 int style Theme_MaterialComponents_NoActionBar 0x0
 int style Theme_MaterialComponents_NoActionBar_Bridge 0x0
 int style Theme_RadioButtonLipstickPink 0x0
+int style ToolbarCustomCardViewStyle 0x0
 int style VideoInfoCardTitle 0x0
 int style VideoInfoItemCardTitle 0x0
 int style VideoInfoItemTimeCardTitle 0x0
@@ -5143,6 +5164,7 @@ int style Widget_MaterialProgressBar_ProgressBar_NoPadding 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding 0x0
 int style Widget_Support_CoordinatorLayout 0x0
+int style circleImageView 0x0
 int style ucrop_ImageViewWidgetIcon 0x0
 int style ucrop_TextViewCropAspectRatio 0x0
 int style ucrop_TextViewWidget 0x0

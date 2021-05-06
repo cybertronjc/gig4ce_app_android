@@ -5,8 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 
 
 class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:RecyclerItemTouchHelperListener):ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {

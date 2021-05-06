@@ -2,10 +2,11 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
+import androidx.lifecycle.viewModelScope
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

@@ -30,7 +30,6 @@ import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.gigforce.modules.feature_chat.screens.vm.factories.GroupChatViewModelFactory
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list.*
 import kotlinx.android.synthetic.main.fragment_chat_group_media_list_main.*
-
 import java.io.File
 
 

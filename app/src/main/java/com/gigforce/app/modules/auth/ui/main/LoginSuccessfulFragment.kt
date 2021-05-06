@@ -26,7 +26,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.gigPage.GigPageFragment
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.location.FusedLocationProviderClient

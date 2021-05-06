@@ -27,17 +27,19 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
 dependencies {
 
     implementation project(path: ':modules:core')
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     testImplementation 'junit:junit:4.12'
 
@@ -73,7 +75,14 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+//    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+
+    implementation "com.github.skydoves:powermenu:2.1.9"
+
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 
 }

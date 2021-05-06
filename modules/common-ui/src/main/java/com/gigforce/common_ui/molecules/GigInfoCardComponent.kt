@@ -3,9 +3,7 @@ package com.gigforce.common_ui.molecules
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.util.AttributeSet
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +11,10 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.util.TextDrawable
+import com.gigforce.common_ui.utils.TextDrawable
 import com.gigforce.common_ui.viewdatamodels.GigContactDetails
 import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.core.IViewHolder

@@ -1,13 +1,12 @@
 package com.gigforce.app.modules.gigPage2.repositories
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigAttendance
 import com.gigforce.app.modules.gigPage2.models.JobProfileFull
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.getOrThrow
-import com.gigforce.app.utils.updateOrThrow
+import com.gigforce.core.extensions.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await

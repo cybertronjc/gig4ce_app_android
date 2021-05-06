@@ -9,13 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toLocalDateTime
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -26,20 +26,21 @@ import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GigRegulariseAttendanceFragment  : BaseFragment() {
+class GigRegulariseAttendanceFragment : BaseFragment() {
 
-    private val viewModel : GigViewModel by viewModels()
+    private val viewModel: GigViewModel by viewModels()
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     private val punchInTimePicker: TimePickerDialog by lazy {
 
         val cal = Calendar.getInstance()
-        TimePickerDialog(requireContext(),
+        TimePickerDialog(
+            requireContext(),
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 
                 val gig = viewModel.currentGig ?: return@OnTimeSetListener
-                val gigStartTime = gig.startDateTime!!.toLocalDateTime()
+                val gigStartTime = gig.startDateTime.toLocalDateTime()
 
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -48,7 +49,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
                 newCal.set(Calendar.MILLISECOND, 0)
 
                 newCal.set(Calendar.YEAR, gigStartTime.year)
-                newCal.set(Calendar.MONTH, gigStartTime.monthValue -1)
+                newCal.set(Calendar.MONTH, gigStartTime.monthValue - 1)
                 newCal.set(Calendar.DAY_OF_MONTH, gigStartTime.dayOfMonth)
 
                 punchInTime = Timestamp(newCal.time)
@@ -63,11 +64,12 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
     private val punchOutTimePicker: TimePickerDialog by lazy {
 
         val cal = Calendar.getInstance()
-        TimePickerDialog(requireContext(),
+        TimePickerDialog(
+            requireContext(),
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
 
                 val gig = viewModel.currentGig ?: return@OnTimeSetListener
-                val gigStartTime = gig.startDateTime!!.toLocalDateTime()
+                val gigStartTime = gig.startDateTime.toLocalDateTime()
 
                 val newCal = Calendar.getInstance()
                 newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -75,7 +77,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
                 newCal.set(Calendar.SECOND, 0)
                 newCal.set(Calendar.MILLISECOND, 0)
                 newCal.set(Calendar.YEAR, gigStartTime.year)
-                newCal.set(Calendar.MONTH, gigStartTime.monthValue -1)
+                newCal.set(Calendar.MONTH, gigStartTime.monthValue - 1)
                 newCal.set(Calendar.DAY_OF_MONTH, gigStartTime.dayOfMonth)
 
                 punchOutTime = Timestamp(newCal.time)
@@ -87,10 +89,10 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         )
     }
 
-    private lateinit var gigId : String
+    private lateinit var gigId: String
 
-    private var punchInTime : Timestamp? = null
-    private var punchOutTime : Timestamp? = null
+    private var punchInTime: Timestamp? = null
+    private var punchOutTime: Timestamp? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +102,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(arguments,savedInstanceState)
+        getDataFromIntents(arguments, savedInstanceState)
         initView()
 
         initViewModel()
@@ -118,22 +120,24 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         if (::gigId.isLateinit.not()) {
             FirebaseCrashlytics.getInstance()
                 .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
-            FirebaseCrashlytics.getInstance().log("GigRegulariseAttendanceFragment: No Gig id found")
+            FirebaseCrashlytics.getInstance()
+                .log("GigRegulariseAttendanceFragment: No Gig id found")
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(INTENT_EXTRA_GIG_ID,gigId)
+        outState.putString(INTENT_EXTRA_GIG_ID, gigId)
     }
 
     private fun initView() {
-        regularise_slider_btn.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener{
+        regularise_slider_btn.onSlideCompleteListener =
+            object : SlideToActView.OnSlideCompleteListener {
 
-            override fun onSlideComplete(view: SlideToActView) {
-                submitRegularisationRequest()
+                override fun onSlideComplete(view: SlideToActView) {
+                    submitRegularisationRequest()
+                }
             }
-        }
 
         punch_in_time_tv.setOnClickListener {
             punchInTimePicker.show()
@@ -161,7 +165,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
             .observe(viewLifecycleOwner, Observer {
                 when (it) {
                     Lse.Loading -> submittingRegularisationRequest()
-                     Lse.Success -> regularisationRequestSubmitted()
+                    Lse.Success -> regularisationRequestSubmitted()
                     is Lse.Error -> errorInSubmittingRegularisationRequest(it.error)
                 }
             })
@@ -180,7 +184,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         regularise_details_progress_bar.gone()
         regularise_main_layout.visible()
 
-        dateTV.text = dateFormatter.format(content.startDateTime!!.toDate())
+        dateTV.text = dateFormatter.format(content.startDateTime.toDate())
     }
 
     private fun showErrorInLoadingAttendanceDetails(error: String) {
@@ -210,17 +214,17 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Alert")
             .setMessage("Unable to submit regularisation request , $error")
-            .setPositiveButton(R.string.okay_text){_,_ ->
+            .setPositiveButton(R.string.okay_text) { _, _ ->
 
             }.show()
     }
 
     private fun submitRegularisationRequest() {
-        if(punchInTime == null){
+        if (punchInTime == null) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Alert")
                 .setMessage("Select Punch-in time")
-                .setPositiveButton(R.string.okay_text){_,_ ->
+                .setPositiveButton(R.string.okay_text) { _, _ ->
 
                 }.show()
 
@@ -228,11 +232,11 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
             return
         }
 
-        if(punchOutTime == null){
+        if (punchOutTime == null) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Alert")
                 .setMessage("Select Punch-out time")
-                .setPositiveButton(R.string.okay_text){_,_ ->
+                .setPositiveButton(R.string.okay_text) { _, _ ->
 
                 }.show()
 
@@ -243,11 +247,11 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         val punchIn = punchInTime!!.toLocalDateTime()
         val punchOut = punchOutTime!!.toLocalDateTime()
 
-        if(punchIn.isAfter(punchOut) || punchIn.isEqual(punchOut)){
+        if (punchIn.isAfter(punchOut) || punchIn.isEqual(punchOut)) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Alert")
                 .setMessage("Punch-out time should be greater than punch-in time")
-                .setPositiveButton(R.string.okay_text){_,_ ->
+                .setPositiveButton(R.string.okay_text) { _, _ ->
                 }.show()
 
             regularise_slider_btn.resetSlider()
@@ -257,7 +261,7 @@ class GigRegulariseAttendanceFragment  : BaseFragment() {
         viewModel.requestRegularisation(gigId, punchInTime!!, punchOutTime!!)
     }
 
-    companion object{
+    companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
     }
 }

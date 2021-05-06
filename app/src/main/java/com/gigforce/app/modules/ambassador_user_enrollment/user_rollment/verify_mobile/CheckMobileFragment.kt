@@ -9,8 +9,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.verification.UtilMethods
-import com.gigforce.app.utils.Lce
+import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*

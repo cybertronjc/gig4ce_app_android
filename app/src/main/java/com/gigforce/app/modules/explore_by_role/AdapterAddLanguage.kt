@@ -10,10 +10,10 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
-import com.gigforce.app.modules.profile.models.Language
-import com.gigforce.app.utils.PushDownAnim
+import com.gigforce.core.datamodels.profile.Language
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.app.utils.ThumbTextSeekBar
-import com.gigforce.app.utils.addAsteriskHint
+import com.gigforce.common_ui.utils.addAsteriskHint
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_language.view.*
 

@@ -92,7 +92,6 @@ class GroupDetailsFragment : Fragment(),
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
 
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -450,7 +449,6 @@ class GroupDetailsFragment : Fragment(),
 
     private var contactLongPressed: ContactModel? = null
     override fun onGroupMemberItemLongPressed(view: View, position: Int, contact: ContactModel) {
-
         contactLongPressed = contact
         val popUp = PopupMenu(requireContext(), view)
         popUp.setOnMenuItemClickListener(this)

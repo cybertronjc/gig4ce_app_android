@@ -4,8 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.app.core.base.shareddata.SharedDataImp
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.base.shareddata.SharedDataImp
+import com.gigforce.common_ui.StringConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import io.branch.referral.Branch

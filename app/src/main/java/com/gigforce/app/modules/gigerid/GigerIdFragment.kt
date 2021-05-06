@@ -17,9 +17,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage2.GigPage2Fragment
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigOrder
-import com.gigforce.app.utils.*
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.utils.getScreenShot
+import com.gigforce.core.utils.*
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
@@ -38,7 +42,9 @@ import kotlin.jvm.Throws
 
 class GigerIdFragment : BaseFragment() {
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ViewModelGigerIDFragment(GigerIdRepository()))
+        ViewModelProviderFactory(
+            ViewModelGigerIDFragment(GigerIdRepository())
+        )
     }
     private val viewModelGigerID: ViewModelGigerIDFragment by lazy {
         ViewModelProvider(this, viewModelFactory).get(ViewModelGigerIDFragment::class.java)
@@ -172,7 +178,7 @@ class GigerIdFragment : BaseFragment() {
         gig.assignedOn.let {
 
             tv_issued_date_giger_id.text =
-                    "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
+                "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
         }
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)

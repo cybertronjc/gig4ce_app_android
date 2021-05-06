@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.core.datamodels.login.LoginResponse
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.modules.profile.models.ProfileData
@@ -57,7 +58,12 @@ class LoginViewModel @Inject constructor(
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
-            liveState.postValue(LoginResponse(STATE_VERIFY_SUCCESS, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_VERIFY_SUCCESS,
+                    ""
+                )
+            )
             signInWithPhoneAuthCredential(credential)
         }
 
@@ -81,7 +87,12 @@ class LoginViewModel @Inject constructor(
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
-            liveState.postValue(LoginResponse(STATE_CODE_SENT, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_CODE_SENT,
+                    ""
+                )
+            )
         }
     }
 
@@ -151,8 +162,8 @@ class LoginViewModel @Inject constructor(
                 TimeUnit.SECONDS, // Unit of timeout
                 activity!!, // Activity (for callback binding)
                 callbacks // OnVerificationStateChangedCallbacks
-            ) // ForceResendingToken from callbacks
-        }
+        ) // ForceResendingToken from callbacks
+    }
 
 
     fun verifyPhoneNumberWithCode(
@@ -174,7 +185,6 @@ class LoginViewModel @Inject constructor(
         }
 
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        Log.d(TAG, "code: " + code)
         signInWithPhoneAuthCredential(credential)
     }
 
@@ -246,11 +256,21 @@ class LoginViewModel @Inject constructor(
                     val token = it.result?.token
                     registerTokenOnServer(currentUser.uid, token!!)
                 } else {
-                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                    liveState.postValue(
+                        LoginResponse(
+                            STATE_SIGNIN_SUCCESS,
+                            ""
+                        )
+                    )
                 }
             }
         } else {
-            liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+            liveState.postValue(
+                LoginResponse(
+                    STATE_SIGNIN_SUCCESS,
+                    ""
+                )
+            )
         }
     }
 

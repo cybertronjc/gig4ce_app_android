@@ -33,19 +33,20 @@ import com.gigforce.app.core.base.language.LanguageUtilImp
 import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
-import com.gigforce.app.core.base.shareddata.SharedDataImp
-import com.gigforce.app.core.base.shareddata.SharedDataInterface
-import com.gigforce.app.core.base.utilfeatures.UtilAndValidationImp
-import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
+import com.gigforce.core.base.shareddata.SharedDataImp
+import com.gigforce.core.base.shareddata.SharedDataInterface
+import com.gigforce.core.base.utilfeatures.UtilAndValidationImp
+import com.gigforce.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.NavFragmentsData
-import com.gigforce.app.utils.configrepository.ConfigDataModel
-import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.common_ui.configrepository.ConfigDataModel
+import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -53,8 +54,10 @@ import com.gigforce.app.utils.ui_models.ShimmerModel
  * Use the [BaseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-        SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
+open class BaseFragment : Fragment(),
+    ViewsFromViewsInterface, NavigationInterface,
+    IOnBackPressedOverride,
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
@@ -131,7 +134,7 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         this.configrepositoryObj?.configCollectionListener()
     }
 
-    open fun onBackPressed(): Boolean {
+    override fun onBackPressed(): Boolean {
         return false
     }
 

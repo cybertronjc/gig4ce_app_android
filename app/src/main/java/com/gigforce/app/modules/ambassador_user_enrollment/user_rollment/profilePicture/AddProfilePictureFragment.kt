@@ -19,19 +19,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.ImagePicker
+import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
-import com.gigforce.app.utils.StringConstants
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
+import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -48,6 +48,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class AddProfilePictureFragment : BaseFragment(),
         ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener {
@@ -192,7 +193,6 @@ class AddProfilePictureFragment : BaseFragment(),
             }
         }
 
-
         skipButton.setOnClickListener {
 
             navigate(
@@ -208,7 +208,7 @@ class AddProfilePictureFragment : BaseFragment(),
 
     private fun checkForPermissionElseShowCameraGalleryBottomSheet() {
         if (hasStoragePermissions())
-            ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+            ClickOrSelectImageBottomSheet.launch(childFragmentManager, false,this)
         else
             requestStoragePermission()
     }
@@ -357,7 +357,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 }
 
                 if (allPermsGranted)
-                    ClickOrSelectImageBottomSheet.launch(childFragmentManager, this)
+                    ClickOrSelectImageBottomSheet.launch(childFragmentManager, false,this)
                 else {
                     showToast(getString(R.string.please_grant_storage_permission))
                 }
@@ -373,6 +373,10 @@ class AddProfilePictureFragment : BaseFragment(),
     override fun onPickImageThroughCameraClicked() {
         val intents = ImagePicker.getPickImageIntentsOnly(requireContext())
         startActivityForResult(intents, REQUEST_PICK_IMAGE)
+    }
+
+    override fun removeProfilePic() {
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

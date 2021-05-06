@@ -11,9 +11,9 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.profile.models.Experience
-import com.gigforce.app.utils.ItemDecorationAddContact
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.common_ui.decors.ItemDecorationAddContact
+import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.layout_add_experience_fragment.*
 
 class AddExperienceFragment : BaseFragment(), AdapterAddExperience.AdapterAddEducationCallbacks {
@@ -106,7 +106,11 @@ class AddExperienceFragment : BaseFragment(), AdapterAddExperience.AdapterAddEdu
 
     private fun setUpRecycler() {
         rv_add_experience.layoutManager = LinearLayoutManager(requireActivity())
-        rv_add_experience.addItemDecoration(ItemDecorationAddContact(requireContext()))
+        rv_add_experience.addItemDecoration(
+            ItemDecorationAddContact(
+                requireContext()
+            )
+        )
         adapter = AdapterAddExperience()
         rv_add_experience.adapter = adapter
         adapter?.addData(mutableListOf(Experience()))

@@ -9,7 +9,7 @@ import com.gigforce.app.BuildConfig
 import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener

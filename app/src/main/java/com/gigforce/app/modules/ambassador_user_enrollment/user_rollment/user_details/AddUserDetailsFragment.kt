@@ -1,5 +1,6 @@
 package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,9 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.selectChipWithText
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.michaldrabik.classicmaterialtimepicker.CmtpDateDialogFragment

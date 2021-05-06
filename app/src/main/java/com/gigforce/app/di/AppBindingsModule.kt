@@ -1,12 +1,20 @@
 package com.gigforce.app.di
 
 import com.gigforce.app.di.implementations.EventTrackerImp
+import com.gigforce.app.di.implementations.BuildConfigImp
+import com.gigforce.app.di.implementations.BuildConfigVMImp
 import com.gigforce.app.di.implementations.MyViewHolderFactory
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
+import com.gigforce.common_ui.ILoginInfoRepo
+import com.gigforce.common_ui.LoginInfoRepo
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
 import com.gigforce.learning.repo.ILearningDataRepository
@@ -16,7 +24,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
-import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -47,6 +54,9 @@ interface AppBindingsModule {
     fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
 
     @Binds
+    fun provideBuildConfig(imp:BuildConfigImp): IBuildConfig
+
+    @Binds
     fun provideEventTracker(imp:EventTrackerImp) : IEventTracker
 }
 
@@ -59,6 +69,12 @@ interface ViewModelBindings {
 
     @Binds
     fun provideBSDataRepo(imp: BSDataRepository): IBSDataRepository
+
+    @Binds
+    fun privideProfileRepo(imp:ProfileFirebaseRepository): IProfileFirestoreRepository
+
+    @Binds
+    fun provideBuildVMConfig(imp:BuildConfigVMImp): IBuildConfigVM
 
     @Binds
     fun provideViewModelEventTracker(imp:EventTrackerImp) : IEventTracker

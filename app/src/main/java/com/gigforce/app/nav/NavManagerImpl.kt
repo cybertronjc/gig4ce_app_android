@@ -3,37 +3,39 @@ package com.gigforce.app.nav
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.modules.client_activation.PlayVideoDialogWithUrl
-import com.gigforce.app.modules.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.DocViewerActivity
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 class NavManagerImpl @Inject constructor(
     @ActivityContext val context: Context
-    ) : BaseNavigationImpl()
-{
+) : BaseNavigationImpl() {
 
     override fun getNavController(): NavController {
         return (context as MainActivity).getNavController()
     }
-    
+
     override fun getActivity(): Activity {
         return context as MainActivity
     }
+
     override fun registerAllRoutes() {
+        this.registerRoute("referrals", R.id.referrals_fragment)
+        this.registerRoute("login", R.id.Login)
+        this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("profile", R.id.profileFragment)
         this.registerRoute("loader_screen",R.id.onboardingLoaderfragment)
-        this.registerRoute("bottom_sheet",R.id.bsFragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
+        this.registerRoute("main_home_screen", R.id.mainHomeScreen)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
@@ -43,10 +45,11 @@ class NavManagerImpl @Inject constructor(
         NavForClientActivatonModule(this)
         NavForVerificationModule(this)
         NavForCommonModule(this)
+        NavForWalletModule(this)
     }
 
-    private fun registerForWalletAndPayouts(){
-        val moduleName:String = "wallet"
+    private fun registerForWalletAndPayouts() {
+        val moduleName: String = "wallet"
         this.registerRoute("${moduleName}/main", R.id.walletBalancePage)
     }
 

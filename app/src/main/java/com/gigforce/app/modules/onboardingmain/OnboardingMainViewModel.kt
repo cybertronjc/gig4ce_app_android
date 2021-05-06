@@ -3,12 +3,10 @@ package com.gigforce.app.modules.onboardingmain
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.EnrollmentInfo
-import com.gigforce.app.modules.profile.models.ErrorWhileSettingUserAsAmbassador
-import com.gigforce.app.modules.profile.models.Invites
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.EnrollmentInfo
+import com.gigforce.core.datamodels.profile.Invites
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*

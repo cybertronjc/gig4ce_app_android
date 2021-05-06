@@ -24,14 +24,14 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.VerificationValidations
-import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.gigerVerfication.drivingLicense.DrivingLicenseDataModel
-import com.gigforce.app.modules.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
+import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
@@ -536,21 +536,21 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         dlSubmitSliderBtn.text = getString(R.string.update)
 
         drivingLicenseEditText.setText(dlData.dlNo)
-        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState)
+        if (dlData.dlState != null) stateSpinner.selectItemWithText(dlData.dlState!!)
 
         dlAvailaibilityOptionRG.check(R.id.dlYesRB)
 
 
         if (dlData.frontImage != null) {
 
-            if (dlData.frontImage.startsWith("http", true)) {
+            if (dlData.frontImage!!.startsWith("http", true)) {
                 showFrontDrivingLicense(Uri.parse(dlData.frontImage))
             } else {
 
                 val imageRef = firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(dlData.frontImage)
+                        .reference
+                        .child("verification")
+                        .child(dlData.frontImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showFrontDrivingLicense(it)
@@ -562,14 +562,14 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
         if (dlData.backImage != null) {
 
-            if (dlData.backImage.startsWith("http", true)) {
+            if (dlData.backImage!!.startsWith("http", true)) {
                 showBackDrivingLicense(Uri.parse(dlData.backImage))
             } else {
 
                 val imageRef = firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(dlData.backImage)
+                        .reference
+                        .child("verification")
+                        .child(dlData.backImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showBackDrivingLicense(it)
@@ -598,7 +598,7 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
         if (dlDetails.frontImage != null) {
 
-            if (dlDetails.frontImage.startsWith("http", true)) {
+            if (dlDetails.frontImage!!.startsWith("http", true)) {
                 Glide.with(requireContext())
                     .load(dlDetails.frontImage)
                     .placeholder(getCircularProgressDrawable())
@@ -606,22 +606,22 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(dlDetails.frontImage)
-                    .downloadUrl.addOnSuccessListener {
-                        Glide.with(requireContext()).load(it)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(dlFrontImageIV)
-                    }.addOnFailureListener {
-                        print("ee")
-                    }
+                        .reference
+                        .child("verification")
+                        .child(dlDetails.frontImage!!)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext()).load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(dlFrontImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
             }
         }
         dlFrontErrorMessage.gone()
 
         if (dlDetails.backImage != null) {
-            if (dlDetails.backImage.startsWith("http", true)) {
+            if (dlDetails.backImage!!.startsWith("http", true)) {
                 Glide.with(requireContext())
                     .load(dlDetails.backImage)
                     .placeholder(getCircularProgressDrawable())
@@ -629,16 +629,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 firebaseStorage
-                    .reference
-                    .child("verification")
-                    .child(dlDetails.backImage)
-                    .downloadUrl.addOnSuccessListener {
-                        Glide.with(requireContext()).load(it)
-                            .placeholder(getCircularProgressDrawable())
-                            .into(dlBackImageIV)
-                    }.addOnFailureListener {
-                        print("ee")
-                    }
+                        .reference
+                        .child("verification")
+                        .child(dlDetails.backImage!!)
+                        .downloadUrl.addOnSuccessListener {
+                            Glide.with(requireContext()).load(it)
+                                    .placeholder(getCircularProgressDrawable())
+                                    .into(dlBackImageIV)
+                        }.addOnFailureListener {
+                            print("ee")
+                        }
             }
         }
         dlBackErrorMessage.gone()

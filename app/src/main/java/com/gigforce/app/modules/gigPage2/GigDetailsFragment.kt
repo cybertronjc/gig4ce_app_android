@@ -20,24 +20,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
 import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.openPopupMenu
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.utils.openPopupMenu
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toLocalDateTime
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.Lce
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.learning.learning.models.Course
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -52,7 +52,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 class GigDetailsFragment : BaseFragment(),
-        DeclineGigDialogFragmentResultListener, PopupMenu.OnMenuItemClickListener {
+    DeclineGigDialogFragmentResultListener, PopupMenu.OnMenuItemClickListener {
 
     private val viewModel: GigViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
@@ -62,10 +62,11 @@ class GigDetailsFragment : BaseFragment(),
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_page_2_details, inflater, container)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +87,7 @@ class GigDetailsFragment : BaseFragment(),
 
         if (::gigId.isLateinit.not()) {
             FirebaseCrashlytics.getInstance()
-                    .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
+                .setUserId(FirebaseAuth.getInstance().currentUser?.uid!!)
             FirebaseCrashlytics.getInstance().log("GigPage2Fragment: No Gig id found")
         }
     }
@@ -99,7 +100,12 @@ class GigDetailsFragment : BaseFragment(),
 
         roleBasedLearningTV.text = "Related Learnings"
         iv_options_gig_details.setOnClickListener {
-            openPopupMenu(it, R.menu.menu_gig_attendance, GigDetailsFragment@ this, requireActivity())
+            openPopupMenu(
+                it,
+                R.menu.menu_gig_attendance,
+                GigDetailsFragment@ this,
+                requireActivity()
+            )
         }
         gigRequirementsSeeMoreTV.setOnClickListener {
 
@@ -109,10 +115,10 @@ class GigDetailsFragment : BaseFragment(),
             if (gig_req_container.childCount == 4) {
                 //Collapsed
                 inflateGigRequirements(
-                        viewModel.currentGig!!.gigRequirements.subList(
-                                4,
-                                viewModel.currentGig!!.gigRequirements.size
-                        )
+                    viewModel.currentGig!!.gigRequirements.subList(
+                        4,
+                        viewModel.currentGig!!.gigRequirements.size
+                    )
                 )
                 gigRequirementsSeeMoreTV.text = getString(R.string.plus_see_less)
             } else {
@@ -127,13 +133,13 @@ class GigDetailsFragment : BaseFragment(),
 
     private fun initViewModel() {
         viewModel.gigDetails
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lce.Loading -> showGigDetailsAsLoading()
-                        is Lce.Content -> setGigDetailsOnView(it.content)
-                        is Lce.Error -> showErrorWhileLoadingGigData(it.error)
-                    }
-                })
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> showGigDetailsAsLoading()
+                    is Lce.Content -> setGigDetailsOnView(it.content)
+                    is Lce.Error -> showErrorWhileLoadingGigData(it.error)
+                }
+            })
 
 
         viewModel.getGigWithDetails(gigId)
@@ -141,15 +147,15 @@ class GigDetailsFragment : BaseFragment(),
 
     private fun initLearningViewModel() {
         learningViewModel
-                .roleBasedCourses
-                .observe(viewLifecycleOwner, Observer {
+            .roleBasedCourses
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lce.Loading -> showRoleBasedLearningProgress()
-                        is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
-                        is Lce.Error -> showRoleBasedLearningError(it.error)
-                    }
-                })
+                when (it) {
+                    Lce.Loading -> showRoleBasedLearningProgress()
+                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
+                    is Lce.Error -> showRoleBasedLearningError(it.error)
+                }
+            })
 
         learningViewModel.getRoleBasedCourses()
     }
@@ -165,9 +171,15 @@ class GigDetailsFragment : BaseFragment(),
     }
 
     private fun showRoleBasedLearningProgress() {
-        startShimmer(learning_based_horizontal_progress as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+        startShimmer(
+            learning_based_horizontal_progress as LinearLayout,
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 
@@ -181,9 +193,9 @@ class GigDetailsFragment : BaseFragment(),
 
 
 
-        if(content.size != 0){
+        if (content.size != 0) {
             learning_based_role_layout.visible()
-        } else{
+        } else {
             learning_based_role_layout.gone()
         }
 
@@ -194,67 +206,67 @@ class GigDetailsFragment : BaseFragment(),
         // model will change when integrated with DB
 
         val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-                RecyclerGenericAdapter<Course>(
-                        activity?.applicationContext,
-                        PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                            val course = item as Course
+            RecyclerGenericAdapter<Course>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+                    val course = item as Course
 
-                            navigate(
-                                    R.id.learningCourseDetails,
-                                    bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                            )
-                        },
-                        RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
-                            val lp = view.layoutParams
-                            lp.height = lp.height
-                            lp.width = itemWidth
-                            view.layoutParams = lp
+                    navigate(
+                        R.id.learningCourseDetails,
+                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+                    )
+                },
+                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+                    var view = getView(viewHolder, R.id.card_view)
+                    val lp = view.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title_)
-                            title.text = obj?.name
+                    var title = getTextView(viewHolder, R.id.title_)
+                    title.text = obj?.name
 
-                            var subtitle = getTextView(viewHolder, R.id.title)
-                            subtitle.text = obj?.level
+                    var subtitle = getTextView(viewHolder, R.id.title)
+                    subtitle.text = obj?.level
 
-                            var comImg = getImageView(viewHolder, R.id.completed_iv)
-                            comImg.isVisible = obj?.completed ?: false
+                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+                    comImg.isVisible = obj?.completed ?: false
 
-                            var img = getImageView(viewHolder, R.id.learning_img)
-                            if (!obj!!.coverPicture.isNullOrBlank()) {
-                                if (obj.coverPicture!!.startsWith("http", true)) {
+                    var img = getImageView(viewHolder, R.id.learning_img)
+                    if (!obj!!.coverPicture.isNullOrBlank()) {
+                        if (obj.coverPicture!!.startsWith("http", true)) {
+
+                            GlideApp.with(requireContext())
+                                .load(obj.coverPicture!!)
+                                .placeholder(getCircularProgressDrawable())
+                                .error(R.drawable.ic_learning_default_back)
+                                .into(img)
+                        } else {
+                            FirebaseStorage.getInstance()
+                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                                .child(obj.coverPicture!!)
+                                .downloadUrl
+                                .addOnSuccessListener { fileUri ->
 
                                     GlideApp.with(requireContext())
-                                            .load(obj.coverPicture!!)
-                                            .placeholder(getCircularProgressDrawable())
-                                            .error(R.drawable.ic_learning_default_back)
-                                            .into(img)
-                                } else {
-                                    FirebaseStorage.getInstance()
-                                            .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                            .child(obj.coverPicture!!)
-                                            .downloadUrl
-                                            .addOnSuccessListener { fileUri ->
-
-                                                GlideApp.with(requireContext())
-                                                        .load(fileUri)
-                                                        .placeholder(getCircularProgressDrawable())
-                                                        .error(R.drawable.ic_learning_default_back)
-                                                        .into(img)
-                                            }
-                                }
-                            } else {
-                                GlideApp.with(requireContext())
-                                        .load(R.drawable.ic_learning_default_back)
+                                        .load(fileUri)
+                                        .placeholder(getCircularProgressDrawable())
+                                        .error(R.drawable.ic_learning_default_back)
                                         .into(img)
-                            }
-                        })
+                                }
+                        }
+                    } else {
+                        GlideApp.with(requireContext())
+                            .load(R.drawable.ic_learning_default_back)
+                            .into(img)
+                    }
+                })
         recyclerGenericAdapter.list = content
         recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
         learning_based_role_rv.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         learning_based_role_rv.adapter = recyclerGenericAdapter
     }
@@ -271,7 +283,7 @@ class GigDetailsFragment : BaseFragment(),
     private fun setGigDetailsOnView(gig: Gig) {
 
         tv_title_gig_details.text = gig.getGigTitle()
-        roleNameTV.text = gig?.getGigTitle()
+        roleNameTV.text = gig.getGigTitle()
         company_rating_tv.text = if (gig.gigRating != 0.0f) gig.gigRating.toString() else "-"
         gig_desc_tv.text = gig.description
 
@@ -307,9 +319,9 @@ class GigDetailsFragment : BaseFragment(),
 
         gig_earning_container.removeAllViews()
         inflateGigPayments(
-                listOf(
-                        earningRow
-                )
+            listOf(
+                earningRow
+            )
         )
 
 //        gig_others_container.removeAllViews()
@@ -333,9 +345,9 @@ class GigDetailsFragment : BaseFragment(),
         keywords.forEach {
 
             val chip = layoutInflater.inflate(
-                    R.layout.fragment_gig_page_2_details_chips,
-                    gig_keywords_group,
-                    false
+                R.layout.fragment_gig_page_2_details_chips,
+                gig_keywords_group,
+                false
             ) as Chip
             chip.text = it
             gig_keywords_group.addView(chip)
@@ -345,9 +357,9 @@ class GigDetailsFragment : BaseFragment(),
     private fun inflateGigChips(gig: Gig) {
         if (gig.gigType != null) {
             var chip = layoutInflater.inflate(
-                    R.layout.fragment_gig_page_2_details_chips,
-                    gig_chip_group,
-                    false
+                R.layout.fragment_gig_page_2_details_chips,
+                gig_chip_group,
+                false
             ) as Chip
             chip.text = gig.gigType
             gig_chip_group.addView(chip)
@@ -355,9 +367,9 @@ class GigDetailsFragment : BaseFragment(),
 
         var chip: Chip
         chip = layoutInflater.inflate(
-                R.layout.fragment_gig_page_2_details_chips,
-                gig_chip_group,
-                false
+            R.layout.fragment_gig_page_2_details_chips,
+            gig_chip_group,
+            false
         ) as Chip
         chip.text = if (gig.isMonthlyGig) "Monthly" else "Daily"
         gig_chip_group.addView(chip)
@@ -365,9 +377,9 @@ class GigDetailsFragment : BaseFragment(),
 
         if (gig.gigAmount != 0.0) {
             chip = layoutInflater.inflate(
-                    R.layout.fragment_gig_page_2_details_chips,
-                    gig_chip_group,
-                    false
+                R.layout.fragment_gig_page_2_details_chips,
+                gig_chip_group,
+                false
             ) as Chip
             chip.text = "Rs ${gig.gigAmount}"
             gig_chip_group.addView(chip)
@@ -379,7 +391,7 @@ class GigDetailsFragment : BaseFragment(),
         if (it.contains(":")) {
             gig_req_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                    gig_req_container.getChildAt(gig_req_container.childCount - 1) as LinearLayout
+                gig_req_container.getChildAt(gig_req_container.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -391,7 +403,7 @@ class GigDetailsFragment : BaseFragment(),
         } else {
             gig_req_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                    gig_req_container.getChildAt(gig_req_container.childCount - 1) as LinearLayout
+                gig_req_container.getChildAt(gig_req_container.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
@@ -402,7 +414,7 @@ class GigDetailsFragment : BaseFragment(),
         if (it.contains(":")) {
             gig_resp_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                    gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
+                gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -414,7 +426,7 @@ class GigDetailsFragment : BaseFragment(),
         } else {
             gig_resp_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                    gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
+                gig_resp_container.getChildAt(gig_resp_container.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
@@ -425,7 +437,7 @@ class GigDetailsFragment : BaseFragment(),
         if (it.contains(":")) {
             gig_earning_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                    gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
+                gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -437,7 +449,7 @@ class GigDetailsFragment : BaseFragment(),
         } else {
             gig_earning_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                    gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
+                gig_earning_container.getChildAt(gig_earning_container.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
@@ -448,7 +460,7 @@ class GigDetailsFragment : BaseFragment(),
         if (it.contains(":")) {
             gig_others_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                    gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
+                gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -460,7 +472,7 @@ class GigDetailsFragment : BaseFragment(),
         } else {
             gig_others_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                    gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
+                gig_others_container.getChildAt(gig_others_container.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
@@ -472,7 +484,7 @@ class GigDetailsFragment : BaseFragment(),
         if (it.contains(":")) {
             gig_faq_container.inflate(R.layout.gig_requirement_item, true)
             val gigItem: LinearLayout =
-                    gig_faq_container.getChildAt(gig_faq_container.childCount - 1) as LinearLayout
+                gig_faq_container.getChildAt(gig_faq_container.childCount - 1) as LinearLayout
             val gigTitleTV: TextView = gigItem.findViewById(R.id.title)
             val contentTV: TextView = gigItem.findViewById(R.id.content)
 
@@ -484,7 +496,7 @@ class GigDetailsFragment : BaseFragment(),
         } else {
             gig_faq_container.inflate(R.layout.gig_details_item, true)
             val gigItem: LinearLayout =
-                    gig_faq_container.getChildAt(gig_faq_container.childCount - 1) as LinearLayout
+                gig_faq_container.getChildAt(gig_faq_container.childCount - 1) as LinearLayout
             val gigTextTV: TextView = gigItem.findViewById(R.id.text)
             gigTextTV.text = fromHtml(it)
         }
@@ -516,14 +528,14 @@ class GigDetailsFragment : BaseFragment(),
                 if (viewModel.currentGig == null)
                     return true
 
-                if (viewModel.currentGig!!.startDateTime!!.toLocalDateTime() < LocalDateTime.now()) {
+                if (viewModel.currentGig!!.startDateTime.toLocalDateTime() < LocalDateTime.now()) {
                     //Past or ongoing gig
 
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Cannot decline past or ongoing gig")
-                            .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
-                            .show()
+                        .setTitle("Alert")
+                        .setMessage("Cannot decline past or ongoing gig")
+                        .setPositiveButton(getString(R.string.okay_text)) { _, _ -> }
+                        .show()
 
                     return true
                 }

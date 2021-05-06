@@ -8,15 +8,12 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.gigforce.app.MainApplication
 import com.gigforce.app.R
 import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.TrackingEventArgs
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.datamodels.profile.ProfileData
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -56,8 +53,6 @@ class OnboardingLoaderFragment : BaseFragment() {
 
     private fun navigateToLandingHomeScreen() {
         popFragmentFromStack(R.id.onboardingLoaderfragment)
-//        navigate(R.id.onboardingNew)
-//        navigate(R.id.onboardingPreferredJobLocationFragment)
         navigate(R.id.landinghomefragment)
     }
 
@@ -122,7 +117,8 @@ class OnboardingLoaderFragment : BaseFragment() {
                     StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true,
                     StringConstants.INVITE_USER_ID.value to navFragmentsData?.getData()
                             ?.getString(StringConstants.INVITE_USER_ID.value),
-                    StringConstants.AUTO_REDIRECT_TO_APPL.value to navFragmentsData?.getData()?.getBoolean(StringConstants.AUTO_REDIRECT_TO_APPL.value ,false)
+                    StringConstants.AUTO_REDIRECT_TO_APPL.value to navFragmentsData?.getData()?.getBoolean(
+                        StringConstants.AUTO_REDIRECT_TO_APPL.value ,false)
             )
 
             )

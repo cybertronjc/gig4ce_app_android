@@ -19,8 +19,8 @@ class UpcomingGigCard(
     var cardHeight: Int = 0,
     var isFullDay: Boolean = false,
     var gigId: String = "",
-    var isNewGigPage : Boolean
-): MaterialCardView(context) {
+    var isNewGigPage: Boolean
+) : MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.upcoming_gig_card, this)
         setCardHeight()
@@ -41,18 +41,21 @@ class UpcomingGigCard(
 
     fun setTimings() {
         var endHour = startHour + duration.toInt()
-        var endMinute = ((duration - duration.toInt())*100).toInt()
+        var endMinute = ((duration - duration.toInt()) * 100).toInt()
         gig_timing.text = (
                 String.format("%02d", startHour) + ":" + String.format("%02d", startMinute) +
-                        "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
+                        "-" + String.format("%02d", endHour) + ":" + String.format(
+                    "%02d",
+                    endMinute
+                ))
     }
 
     fun setFullDay() {
-            gig_timing.text = ""
-            cardHeight = 40.px
+        gig_timing.text = ""
+        cardHeight = 40.px
 
         this.setOnClickListener {
-            GigNavigation.openGigMainPage(findNavController(), isNewGigPage,gigId)
+            GigNavigation.openGigMainPage(findNavController(), isNewGigPage, gigId)
         }
     }
 }

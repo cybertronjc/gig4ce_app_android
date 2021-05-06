@@ -19,13 +19,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.VerificationValidations
-import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.gigerVerfication.bankDetails.BankDetailsDataModel
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
@@ -288,8 +288,8 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
                     if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
-                        if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                            if (it.bankUploadDetailsDataModel.userHasPassBook) {
+                        if (it.bankUploadDetailsDataModel!!.userHasPassBook != null) {
+                            if (it.bankUploadDetailsDataModel!!.userHasPassBook!!) {
                                 setDataOnViewLayout(it)
                             } else {
                                 setDataOnEditLayout(null)
@@ -466,14 +466,14 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
         if (bankDetails.passbookImagePath != null) {
 
-            if (bankDetails.passbookImagePath.startsWith("http", true)) {
+            if (bankDetails.passbookImagePath!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(bankDetails.passbookImagePath)
                         .placeholder(getCircularProgressDrawable()).into(bankViewImageIV)
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(bankDetails.passbookImagePath)
+                        .child(bankDetails.passbookImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             Glide.with(requireContext())
                                     .load(it)
@@ -525,13 +525,13 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
 
         if (bankData.passbookImagePath != null) {
 
-            if (bankData.passbookImagePath.startsWith("http", true)) {
+            if (bankData.passbookImagePath!!.startsWith("http", true)) {
                 showPassbookInfoCard(Uri.parse(bankData.passbookImagePath))
             } else {
                 firebaseStorage
                         .reference
                         .child("verification")
-                        .child(bankData.passbookImagePath)
+                        .child(bankData.passbookImagePath!!)
                         .downloadUrl.addOnSuccessListener {
                             showPassbookInfoCard(it)
                         }.addOnFailureListener {

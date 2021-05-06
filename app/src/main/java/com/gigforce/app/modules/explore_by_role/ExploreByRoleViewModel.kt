@@ -2,9 +2,9 @@ package com.gigforce.app.modules.explore_by_role
 
 import android.location.Location
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.gigerVerfication.VerificationBaseModel
-import com.gigforce.app.modules.client_activation.models.Role
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.datamodels.verification.VerificationBaseModel
+import com.gigforce.client_activation.client_activation.models.Role
+import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException

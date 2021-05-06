@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.models.DocChange
 import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.decors.ItemDecorationOnGoingGigs
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.*
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.FirebaseStorage
@@ -337,8 +340,8 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun addOnGoingGigs(
-            onGoingGigs: List<Gig>?,
-            scheduledGigsLoaded: Boolean
+        onGoingGigs: List<Gig>?,
+        scheduledGigsLoaded: Boolean
     ) {
         this.onGoingGigs?.clear()
         this.onGoingGigs?.addAll(onGoingGigs!!)

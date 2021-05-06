@@ -18,14 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage.*
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.PushDownAnim
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.utils.Lce
+import com.gigforce.common_ui.utils.PushDownAnim
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

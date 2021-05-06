@@ -8,6 +8,7 @@ import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.R
+import com.gigforce.common_ui.StringConstants
 import java.net.URLEncoder
 
 class DocViewerActivity : AppCompatActivity() {

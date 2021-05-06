@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.client_activation.models.Cities
-import com.gigforce.app.modules.client_activation.models.JpApplication
-import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.client_activation.client_activation.models.Cities
+import com.gigforce.core.datamodels.client_activation.JpApplication
+import com.gigforce.client_activation.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.QuestionnaireResponse
 import com.gigforce.app.modules.questionnaire.models.Questions

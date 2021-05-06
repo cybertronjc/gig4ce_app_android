@@ -23,22 +23,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
+import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.modules.referrals.ReferralsFragment
+import com.gigforce.app.modules.chatmodule.ui.ChatFragment
+import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.utils.*
-import com.gigforce.common_ui.views.GigforceToolbar
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.PermissionUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -206,7 +202,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
 
         enrolled_users_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
-        enrolled_users_rv.addItemDecoration(VerticalItemDecorator(30))
+        enrolled_users_rv.addItemDecoration(
+            VerticalItemDecorator(
+                30
+            )
+        )
         enrolled_users_rv.adapter = enrolledUserAdapter
 
         share_link.setOnClickListener {

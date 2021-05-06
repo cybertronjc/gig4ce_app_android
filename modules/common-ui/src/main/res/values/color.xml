@@ -54,4 +54,9 @@
     <color name="light_blue">#c6ddf3</color>
 
     <color name="disabled_button_color">#888888</color>
+    <color name="background">#dddddd</color>
+    <color name="app_orange">#fa6400</color>
+    <color name="warm_grey">#888888</color>
+    <color name="black_two">#313131</color>
+
 </resources>

@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-                <com.gigforce.app.utils.widgets.CircleImageView
+                <com.gigforce.common_ui.widgets.CircleImageView
                     android:id="@+id/cv_profile_pic"
                     android:layout_width="@dimen/size_104"
                     android:layout_height="@dimen/size_104"
@@ -175,14 +175,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_gig_since_giger_id">
 
 
-                <com.gigforce.app.utils.widgets.CircleImageView
+                <com.gigforce.common_ui.widgets.CircleImageView
                     android:id="@+id/iv_qr_code_giger_id"
                     android:layout_width="@dimen/size_177"
                     android:layout_height="@dimen/size_177"
                     app:civ_border_color="@color/black_85"
                     app:civ_is_qr="true" />
 
-                <com.gigforce.app.utils.widgets.CircleImageView
+                <com.gigforce.common_ui.widgets.CircleImageView
                     android:layout_width="@dimen/size_24"
                     android:layout_height="19dp"
                     android:layout_gravity="center"

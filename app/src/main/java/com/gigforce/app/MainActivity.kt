@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -29,8 +28,9 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.app.utils.NavFragmentsData
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -154,7 +154,8 @@ class MainActivity : AppCompatActivity(),
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_role_details, bundleOf(
-                        StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value),
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(
+                            StringConstants.ROLE_ID.value),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),
@@ -322,7 +323,7 @@ class MainActivity : AppCompatActivity(),
             navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
-            handled = (fragmentholder as BaseFragment).onBackPressed()
+            handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
         } catch (e: Exception) {
         }
 

@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.landingscreen
 
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
-
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -31,30 +29,32 @@ import com.gigforce.app.R
 import com.gigforce.app.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
+import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.*
-import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.core.datamodels.profile.ProfileData
+//import com.gigforce.app.utils.*
+import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
@@ -65,6 +65,26 @@ import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
+import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
+import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
+import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
+import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
+import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
+import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
+import kotlin.collections.ArrayList
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.AppConstants
+import com.gigforce.core.utils.Lce
+import dagger.hilt.android.AndroidEntryPoint
+
+//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+@AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -119,6 +139,7 @@ class LandingScreenFragment : BaseFragment() {
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
+//        checkForDeepLink()
         setTipsInViewModel()
         initUI()
         initializeExploreByRole()
@@ -129,7 +150,7 @@ class LandingScreenFragment : BaseFragment() {
         observers()
         broadcastReceiverForLanguageCahnge()
         checkforForceupdate()
-        //checkForDeepLink()
+
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
             when (comingFromOrGoingToScreen) {
@@ -824,9 +845,14 @@ class LandingScreenFragment : BaseFragment() {
         learning_rv.gone()
         learning_learning_error.gone()
         startShimmer(loader_learning_home as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
     }
 
     private fun showErrorWhileLoadingCourse(error: String) {
@@ -1029,8 +1055,12 @@ class LandingScreenFragment : BaseFragment() {
 
             }
         })
-        startShimmer(loader_explore_gigs as LinearLayout, ShimmerModel(marginRight = R.dimen.size_1,
-                orientation = LinearLayout.HORIZONTAL))
+        startShimmer(loader_explore_gigs as LinearLayout,
+            ShimmerModel(
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         landingScreenViewModel.getJobProfile()
     }
 

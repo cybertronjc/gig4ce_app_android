@@ -14,9 +14,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.firebase.Timestamp
@@ -33,7 +30,8 @@ val Int.dp: Int
         return (this * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun View.gone() {
     visibility = View.GONE
@@ -73,6 +71,26 @@ fun Spinner.selectItemWithText(text: String) {
     }
 }
 
+fun Date.toLocalDate(): LocalDate {
+    return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
+fun Date?.toFirebaseTimeStamp(): Timestamp? {
+
+    return if (this == null)
+        null
+    else
+        Timestamp(this)
+}
+
+fun Timestamp.toLocalDateTime(): LocalDateTime {
+
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
+fun Timestamp.toLocalDate(): LocalDate {
+    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+}
 
 fun Timestamp.toDisplayText(): String {
     val date = this.toDate()

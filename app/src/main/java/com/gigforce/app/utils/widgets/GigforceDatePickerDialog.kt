@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
-import com.gigforce.app.utils.getScreenWidth
+import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.calendar_dialog.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +31,10 @@ class GigforceDatePickerDialog : DialogFragment() {
         super.onStart()
         val dialog: Dialog? = dialog
         if (dialog != null) {
-            dialog.window?.setLayout(getScreenWidth(requireActivity()).width - resources.getDimensionPixelSize(R.dimen.size_4), ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                getScreenWidth(
+                    requireActivity()
+                ).width - resources.getDimensionPixelSize(R.dimen.size_4), ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
 

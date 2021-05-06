@@ -4,9 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.marginTop
-import androidx.core.view.updateMargins
 import com.gigforce.app.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.hour_selected_outline.view.*

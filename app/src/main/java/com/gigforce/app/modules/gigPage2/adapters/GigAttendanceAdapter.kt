@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.core.extensions.toLocalDateTime
 import kotlinx.android.synthetic.main.recycler_item_gig_attendance.view.*
 import java.text.SimpleDateFormat
 import java.time.format.TextStyle
@@ -25,14 +25,13 @@ class GigAttendanceAdapter(
 
     private var originalGigs: List<Gig> = emptyList()
     private var gigs: List<Gig> = emptyList()
-
     private lateinit var mLayoutInflater: LayoutInflater
     private var otherOptionClickListener: GigAttendanceAdapterClickListener? = null
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
 
     fun setListener(otherOptionClickListener: GigAttendanceAdapterClickListener) {
         this.otherOptionClickListener = otherOptionClickListener
-    }//9983088869
+    }
 
     fun updateAttendanceList(gigs: List<Gig>) {
         this.originalGigs = gigs

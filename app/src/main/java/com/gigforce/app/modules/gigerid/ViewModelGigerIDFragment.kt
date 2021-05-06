@@ -3,12 +3,12 @@ package com.gigforce.app.modules.gigerid
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigAndGigOrder
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAndGigOrder
 import com.gigforce.app.modules.gigerid.models.URLQrCode
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.PermissionUtils
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.utils.PermissionUtils
+import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.StorageReference

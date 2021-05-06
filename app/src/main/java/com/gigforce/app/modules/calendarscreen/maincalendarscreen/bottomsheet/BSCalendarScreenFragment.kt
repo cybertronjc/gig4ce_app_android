@@ -35,27 +35,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.MainLearningViewModel
-import com.gigforce.app.modules.learning.models.Course
-import com.gigforce.app.modules.learning.models.CourseContent
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.MainLearningViewModel
+import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.*
-import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.datamodels.profile.ProfileData
+//import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.AppConstants
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -148,14 +154,14 @@ class BSCalendarScreenFragment : BaseFragment() {
         gigViewModel.upcomingGigs
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                when (it) {
-                    Lce.Loading -> {
+                    when (it) {
+                        Lce.Loading -> {
+                        }
+                        is Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
+                        is Lce.Error -> {
+                        }
                     }
-                    is Lce.Content -> initializeUpcomingGigBottomSheet(it.content)
-                    is Lce.Error -> {
-                    }
-                }
-            })
+                })
 
         gigViewModel.watchUpcomingGigs()
     }

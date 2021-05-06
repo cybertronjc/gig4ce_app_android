@@ -23,11 +23,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import com.gigforce.app.R
-import com.gigforce.app.core.ImagePicker
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
+import com.gigforce.common_ui.widgets.ImagePicker
+//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.ImageUtils
+import com.gigforce.core.utils.ImageUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -47,7 +47,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PhotoCrop : AppCompatActivity() {
-
 
     companion object {
         var profilePictureOptionsBottomSheetFragment: ProfilePictureOptionsBottomSheetFragment =
@@ -88,7 +87,7 @@ class PhotoCrop : AppCompatActivity() {
     private lateinit var purpose: String
     private var outputFile: File? = null
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+//    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
 
     var mStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -308,7 +307,7 @@ class PhotoCrop : AppCompatActivity() {
     /**
      * To get uri from the data received when using the camera to capture image
      */
-    open fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
+     fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes)
         val path =

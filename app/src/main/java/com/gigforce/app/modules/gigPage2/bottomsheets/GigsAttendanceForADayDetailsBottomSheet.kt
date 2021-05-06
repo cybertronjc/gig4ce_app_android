@@ -17,7 +17,8 @@ import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details.*
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details_main.*
@@ -69,8 +70,8 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
 
         regularisation_text.setOnClickListener {
 
-           val gig =  viewModel.currentGig ?: return@setOnClickListener
-            if(!gig.hasRequestRegularisation()) {
+            val gig = viewModel.currentGig ?: return@setOnClickListener
+            if (!gig.hasRequestRegularisation()) {
                 findNavController().navigate(
                     R.id.gigRegulariseAttendanceFragment, bundleOf(
                         GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
@@ -140,12 +141,12 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
             regularise_layout.gone()
         } else {
 
-            if(gig.hasRequestRegularisation()){
+            if (gig.hasRequestRegularisation()) {
                 regularisation_text.text = "Your regularisation request is sent to your supervisor."
                 punch_in_time.text = "Punch In\n--:--"
                 gig_timer_tv.text = "00 : 00 mins"
                 punch_out_time.text = "Punch Out\n--:--"
-            } else{
+            } else {
 
                 //Check if eligible for regularisation
                 val currentTime = LocalDateTime.now()
@@ -160,12 +161,14 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
                                 "Punch In\n${timeFormatter.format(gig.attendance!!.checkInTime)}"
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
-                            regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+                            regularisation_text.text =
+                                "Looks like you forgot to Checkout. Regularise"
                         } else {
                             punch_in_time.text = "Punch In\n--:--"
                             gig_timer_tv.text = "00 : 00 mins"
                             punch_out_time.text = "Punch Out\n--:--"
-                            regularisation_text.text = "Looks like you forgot to Checkout. Regularise"
+                            regularisation_text.text =
+                                "Looks like you forgot to Checkout. Regularise"
                         }
                     } else {
                         //Not eligible

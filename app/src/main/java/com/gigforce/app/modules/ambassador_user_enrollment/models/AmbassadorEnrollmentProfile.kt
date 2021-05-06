@@ -2,7 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.gigforce.app.utils.TranslationNeeded
+import com.gigforce.core.TranslationNeeded
 import com.gigforce.app.utils.lang_models.BaseLangModel
 
 data class AmbassadorEnrollmentProfile(

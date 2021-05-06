@@ -375,7 +375,6 @@ id ivDL1
 id ivPan1
 id ivVeriDD1
 id iv_back_add_aadhar_card_info
-id iv_back_add_bank_details_info
 id iv_back_add_driving_license
 id iv_back_add_pan_card_info
 id iv_back_add_selfie
@@ -493,7 +492,6 @@ id tv_contract_status_label
 id tv_no_driving_cert
 id tv_schedule_test
 id tv_title_add_aadhar_card_info
-id tv_title_add_bank_details_info
 id tv_title_add_driving_license
 id tv_title_add_pan_card_info
 id tv_title_add_selfie

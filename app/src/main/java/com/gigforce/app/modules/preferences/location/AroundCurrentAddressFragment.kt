@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
-import com.gigforce.app.modules.profile.models.AddressModel
+import com.gigforce.core.datamodels.profile.AddressModel
 import kotlinx.android.synthetic.main.around_current_address_fragment.*
 
 class AroundCurrentAddressFragment : BaseFragment() {

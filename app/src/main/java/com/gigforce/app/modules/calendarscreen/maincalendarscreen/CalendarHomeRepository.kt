@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 
 class CalendarHomeRepository : BaseFirestoreDBRepository() {
 

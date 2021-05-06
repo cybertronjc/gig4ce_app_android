@@ -5,7 +5,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+
+//import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 
 interface ViewsFromViewsInterface {
     //from holder
@@ -25,6 +27,4 @@ interface ViewsFromViewsInterface {
     fun setTextViewColor(textView: TextView, color: Int)
     fun setTextViewSize(textView: TextView, size: Float)
     fun setViewBackgroundColor(view: View, color: Int)
-
-
 }

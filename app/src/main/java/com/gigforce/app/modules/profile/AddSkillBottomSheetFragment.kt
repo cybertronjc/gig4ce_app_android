@@ -1,18 +1,12 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
-import android.os.DropBoxManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Skill
+import com.gigforce.core.datamodels.profile.Skill
 import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 

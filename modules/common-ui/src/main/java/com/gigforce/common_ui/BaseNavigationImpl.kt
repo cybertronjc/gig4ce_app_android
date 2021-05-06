@@ -1,10 +1,13 @@
 package com.gigforce.common_ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.getStartOfDay
 import java.lang.Exception
 
 abstract class BaseNavigationImpl(): INavigation {
@@ -23,7 +26,6 @@ abstract class BaseNavigationImpl(): INavigation {
         if(this.navMap.containsKey(dest))
              navController.navigate(this.navMap[dest]!!, args, navOptions)
     }
-
     override fun popBackStack() {
         val navController = getNavController()
         navController.popBackStack()
@@ -40,7 +42,6 @@ abstract class BaseNavigationImpl(): INavigation {
         if(this.navMap.containsKey(des))
             navController.getBackStackEntry(this.navMap[des]!!)
     }
-
 
     fun registerRoute(dest:String, destResId:Int){
         if(this.navMap.containsKey(dest)){

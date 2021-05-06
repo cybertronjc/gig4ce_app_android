@@ -16,12 +16,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.toDate
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.gigforce.app.modules.gigPage2.GigPage2Fragment
 import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.core.extensions.toDate
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
 import java.time.LocalDateTime
@@ -54,14 +54,15 @@ class HourViewFragment : RosterBaseFragment() {
             "21:00", "22:00", "23:00", "24:00", "-"))
 
     var timeToHourMap = HashMap<String, Int>(
-            hashMapOf(Pair("00:00", 0), Pair("01:00", 1), Pair("02:00", 2), Pair("03:00", 3),
-                    Pair("04:00", 4), Pair("05:00", 5), Pair("06:00", 6), Pair("07:00", 7),
-                    Pair("08:00", 8), Pair("09:00", 9), Pair("10:00", 10), Pair("11:00", 11),
-                    Pair("12:00", 12), Pair("13:00", 13), Pair("14:00", 14), Pair("15:00", 15),
-                    Pair("16:00", 16), Pair("17:00", 17), Pair("18:00", 18), Pair("19:00", 19),
-                    Pair("20:00", 20), Pair("21:00", 21), Pair("22:00", 22), Pair("23:00", 23),
-                    Pair("24:00", 24)
-            )
+        hashMapOf(
+            Pair("00:00", 0), Pair("01:00", 1), Pair("02:00", 2), Pair("03:00", 3),
+            Pair("04:00", 4), Pair("05:00", 5), Pair("06:00", 6), Pair("07:00", 7),
+            Pair("08:00", 8), Pair("09:00", 9), Pair("10:00", 10), Pair("11:00", 11),
+            Pair("12:00", 12), Pair("13:00", 13), Pair("14:00", 14), Pair("15:00", 15),
+            Pair("16:00", 16), Pair("17:00", 17), Pair("18:00", 18), Pair("19:00", 19),
+            Pair("20:00", 20), Pair("21:00", 21), Pair("22:00", 22), Pair("23:00", 23),
+            Pair("24:00", 24)
+        )
     )
 
     var upcomingGigs = ArrayList<Gig>()
@@ -88,7 +89,7 @@ class HourViewFragment : RosterBaseFragment() {
         dayTag = rosterViewModel.getTagFromDate(activeDateTime.toDate)
         if (dayTag !in rosterViewModel.allGigs.keys) {
             rosterViewModel.allGigs.put(
-                    dayTag, MutableLiveData(ArrayList())
+                dayTag, MutableLiveData(ArrayList())
             )
             rosterViewModel.getGigs(activeDateTime.toDate)
         }
@@ -97,14 +98,14 @@ class HourViewFragment : RosterBaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         viewModelCustomPreference =
-                ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
-                        CustomPreferencesViewModel::class.java
-                )
+            ViewModelProvider(this, ParamCustPreferViewModel(viewLifecycleOwner)).get(
+                CustomPreferencesViewModel::class.java
+            )
 
         return inflateView(R.layout.roster_day_hour_view, inflater, container)
     }
@@ -168,13 +169,17 @@ class HourViewFragment : RosterBaseFragment() {
 
             val date = activeDateTime.toDate
             upcomingGigs = rosterViewModel.getFilteredGigs(
-                    date, "upcoming")
+                date, "upcoming"
+            )
             completedGigs = rosterViewModel.getFilteredGigs(
-                    date, "completed")
+                date, "completed"
+            )
             currentGigs = rosterViewModel.getFilteredGigs(
-                    date, "current")
+                date, "current"
+            )
             fullDayGigs = rosterViewModel.getFilteredGigs(
-                    date, "fullday")
+                date, "fullday"
+            )
 
             addGigCards(upcomingGigs, "upcoming")
             addGigCards(completedGigs, "completed")
@@ -230,7 +235,8 @@ class HourViewFragment : RosterBaseFragment() {
         val datetime = LocalDateTime.now()
         // set current time divider
         current_time_divider.visibility = View.VISIBLE
-        val marginTop = (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
+        val marginTop =
+            (itemHeight * datetime.hour + ((datetime.minute / 60.0) * itemHeight).toInt()).px
         val layoutParams = current_time_divider.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(marginCardStart - 8.px, marginTop, 0, 0)
         current_time_divider.requestLayout()
@@ -242,19 +248,23 @@ class HourViewFragment : RosterBaseFragment() {
                 // add upcoming gigs
                 gigs.forEach { gig ->
                     val upcomingCard = UpcomingGigCard(
-                            requireContext(),
-                            startHour = gig.startHour,
-                            startMinute = gig.startMinute,
-                            duration = gig.duration,
-                            title = gig.getGigTitle(),
-                            cardHeight = (itemHeight * gig.duration).toInt().px,
-                            isNewGigPage = gig.openNewGig()
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.getGigTitle(),
+                        cardHeight = (itemHeight * gig.duration).toInt().px,
+                        isNewGigPage = gig.openNewGig()
                     )
                     upcomingCard.id = View.generateViewId()
                     upcomingCard.tag = gig.tag
 
                     upcomingCard.setOnClickListener {
-                        GigNavigation.openGigMainPage(findNavController(), gig.openNewGig(), gig.gigId)
+                        GigNavigation.openGigMainPage(
+                            findNavController(),
+                            gig.openNewGig(),
+                            gig.gigId
+                        )
                     }
 
                     day_times.addView(upcomingCard)
@@ -265,24 +275,28 @@ class HourViewFragment : RosterBaseFragment() {
                 // add completed gigs
                 gigs.forEach { gig ->
                     val completedCard = CompletedGigCard(
-                            requireContext(),
-                            startHour = gig.startHour,
-                            startMinute = gig.startMinute,
-                            duration = gig.duration,
-                            title = gig.getGigTitle(),
-                            amount = gig.gigAmount,
-                            rating = gig.gigRating,
-                            gigSuccess = gig.isGigCompleted,
-                            paymentSuccess = gig.isPaymentDone,
-                            cardHeight = (itemHeight * gig.duration).toInt().px,
-                            isMonthlyGig = gig.isMonthlyGig,
-                            isNewgigPage = gig.openNewGig()
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.getGigTitle(),
+                        amount = gig.gigAmount,
+                        rating = gig.gigRating,
+                        gigSuccess = gig.isGigCompleted,
+                        paymentSuccess = gig.isPaymentDone,
+                        cardHeight = (itemHeight * gig.duration).toInt().px,
+                        isMonthlyGig = gig.isMonthlyGig,
+                        isNewgigPage = gig.openNewGig()
                     )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
                     // TODO ask if navigation is correct
                     completedCard.setOnClickListener {
-                        GigNavigation.openGigMainPage(findNavController(), gig.openNewGig(), gig.gigId)
+                        GigNavigation.openGigMainPage(
+                            findNavController(),
+                            gig.openNewGig(),
+                            gig.gigId
+                        )
                     }
 
                     day_times.addView(completedCard)
@@ -293,13 +307,13 @@ class HourViewFragment : RosterBaseFragment() {
                 // add current gigs
                 gigs.forEach { gig ->
                     val currentCard = CurrentGigCard(
-                            requireContext(),
-                            startHour = gig.startHour,
-                            startMinute = gig.startMinute,
-                            duration = gig.duration,
-                            title = gig.getGigTitle(),
-                            cardHeight = (itemHeight * gig.duration).toInt().px,
-                            isNewGigPage = gig.openNewGig()
+                        requireContext(),
+                        startHour = gig.startHour,
+                        startMinute = gig.startMinute,
+                        duration = gig.duration,
+                        title = gig.getGigTitle(),
+                        cardHeight = (itemHeight * gig.duration).toInt().px,
+                        isNewGigPage = gig.openNewGig()
                     )
                     currentCard.id = View.generateViewId()
                     currentCard.tag = gig.tag
@@ -337,8 +351,11 @@ class HourViewFragment : RosterBaseFragment() {
                     (gigCard.startMinute / 60.0F) * itemHeight).toInt()).px
         }
 
-        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        card.setLayoutParams(params)
+        val params = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+        card.layoutParams = params
 
         val constraintSet = ConstraintSet()
         constraintSet.clone(day_times)
@@ -468,8 +485,8 @@ class HourViewFragment : RosterBaseFragment() {
 //    }
 
     private fun getViewsByTag(
-            root: ViewGroup,
-            tag: String
+        root: ViewGroup,
+        tag: String
     ): ArrayList<View>? {
         val views = ArrayList<View>()
         val childCount = root.childCount
@@ -490,7 +507,7 @@ class HourViewFragment : RosterBaseFragment() {
     override fun onResume() {
         super.onResume()
         rosterViewModel.resetDayTimeAvailability(
-                viewModelCustomPreference, day_times, configDataModel
+            viewModelCustomPreference, day_times, configDataModel
         )
         rosterViewModel.scrollToPosition(activeDateTime.toDate)
     }

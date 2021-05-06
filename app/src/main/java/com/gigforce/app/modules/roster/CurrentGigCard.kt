@@ -22,7 +22,7 @@ class CurrentGigCard(
     var isFullDay: Boolean = false,
     var gigId: String = "",
     var isNewGigPage: Boolean
-    ): MaterialCardView(context) {
+) : MaterialCardView(context) {
     init {
         View.inflate(context, R.layout.current_gig_card, this)
         setCardHeight()
@@ -43,10 +43,13 @@ class CurrentGigCard(
 
     fun setTimings() {
         var endHour = startHour + duration.toInt()
-        var endMinute = ((duration - duration.toInt())*100).toInt()
+        var endMinute = ((duration - duration.toInt()) * 100).toInt()
         gig_timing.text = (
                 String.format("%02d", startHour) + ":" + String.format("%02d", startMinute) +
-                        "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
+                        "-" + String.format("%02d", endHour) + ":" + String.format(
+                    "%02d",
+                    endMinute
+                ))
     }
 
     fun setFullDay() {

@@ -88,6 +88,9 @@ animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
 animator slidetoact_animator_ic_check
+array com_google_android_gms_fonts_certs
+array com_google_android_gms_fonts_certs_dev
+array com_google_android_gms_fonts_certs_prod
 array gender_values
 array indian_states
 attr action
@@ -1382,6 +1385,7 @@ color light_blue
 color light_grey
 color light_pink
 color lipstick
+color lipstick_2
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -2347,6 +2351,8 @@ drawable gradient_onboarding_progressbar_bg
 drawable gradient_onboarding_progressbar_gradient
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
+drawable ic_arrow_back_white
+drawable ic_arrow_forward
 drawable ic_arrow_forward_white
 drawable ic_attachment_grey
 drawable ic_attachment_pink
@@ -2367,6 +2373,8 @@ drawable ic_dl
 drawable ic_down
 drawable ic_download_24
 drawable ic_edit
+drawable ic_error_loading_image
+drawable ic_error_loading_image_red
 drawable ic_homescreen_chat
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back
@@ -2385,6 +2393,7 @@ drawable ic_question
 drawable ic_question_mark
 drawable ic_record
 drawable ic_repeat
+drawable ic_search
 drawable ic_set_preference
 drawable ic_stop
 drawable ic_three_dots
@@ -2442,7 +2451,9 @@ drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
 drawable test_custom_background
+drawable toolbar_background
 drawable toolbar_bg_client_activation
+drawable toolbar_search_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 drawable ucrop_crop
@@ -2630,6 +2641,7 @@ id autoCompleteToEnd
 id autoCompleteToStart
 id autoFocus
 id back
+id back_arrow
 id bankAccDetailsLabel
 id bankAccNoEditErrorMessage
 id bankAccountLabel
@@ -2976,7 +2988,6 @@ id ivDL1
 id ivPan1
 id ivVeriDD1
 id iv_back_add_aadhar_card_info
-id iv_back_add_bank_details_info
 id iv_back_add_driving_license
 id iv_back_add_pan_card_info
 id iv_back_add_selfie
@@ -3106,6 +3117,7 @@ id off
 id on
 id optionIconIV
 id optionTitleTV
+id option_menu_iv
 id outline
 id outward
 id oval_gradient_iv
@@ -3217,7 +3229,10 @@ id search_bar
 id search_button
 id search_close_btn
 id search_edit_frame
+id search_et
 id search_go_btn
+id search_icon
+id search_layout
 id search_mag_icon
 id search_plate
 id search_src_text
@@ -3282,6 +3297,7 @@ id status_iv
 id stereo
 id stop
 id stretch
+id subTitleTV
 id submenuarrow
 id submitDocDescriptionLayout
 id submit_area
@@ -3342,6 +3358,7 @@ id titleTV
 id title_template
 id toggle_full_screen
 id toolbar
+id toolbar_image_iv
 id toolbar_title
 id top
 id topPanel
@@ -3392,7 +3409,6 @@ id tv_rv_preferred_location
 id tv_schedule_test
 id tv_title
 id tv_title_add_aadhar_card_info
-id tv_title_add_bank_details_info
 id tv_title_add_driving_license
 id tv_title_add_pan_card_info
 id tv_title_add_selfie
@@ -3581,6 +3597,7 @@ layout fragment_play_video_full_screen
 layout fragment_select_image_source
 layout fragment_verification_image_holder
 layout fragment_view_image_full_screen
+layout fragment_view_image_fullscreen
 layout fragment_we_why_need_this
 layout fui_activity_invisible
 layout fui_activity_register_email
@@ -3607,6 +3624,7 @@ layout fui_welcome_back_idp_prompt_layout
 layout fui_welcome_back_password_prompt_layout
 layout gig_info_card
 layout hour_selected_outline
+layout icon_text_card_mol
 layout image
 layout image_uploader_driving_license
 layout item_power_menu_library_skydoves
@@ -3625,6 +3643,7 @@ layout layout_sp_city_dropdown
 layout layout_sp_completion_year
 layout layout_sp_driving_license_state
 layout layout_sp_state_dl
+layout layout_toolbar
 layout layout_upload_driving_certificate
 layout layout_verification
 layout layout_verification_aadhaar
@@ -4661,6 +4680,7 @@ style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year
 style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox
 style ShapeAppearanceOverlay_TopLeftCut
 style ShapeAppearanceOverlay_TopRightDifferentCornerSize
+style ShapeAppearanceOverlay_toolbar_card_custom_corners
 style ShapeAppearance_MaterialComponents
 style ShapeAppearance_MaterialComponents_LargeComponent
 style ShapeAppearance_MaterialComponents_MediumComponent
@@ -4932,6 +4952,7 @@ style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_RadioButtonLipstickPink
+style ToolbarCustomCardViewStyle
 style VideoInfoCardTitle
 style VideoInfoItemCardTitle
 style VideoInfoItemTimeCardTitle
@@ -5144,6 +5165,7 @@ style Widget_MaterialProgressBar_ProgressBar_NoPadding
 style Widget_MaterialProgressBar_ProgressBar_Small
 style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding
 style Widget_Support_CoordinatorLayout
+style circleImageView
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
 style ucrop_TextViewWidget

@@ -3,17 +3,16 @@ package com.gigforce.app.modules.preferences
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.R
 import com.gigforce.app.modules.preferences.earnings.EarningDataModel
 import com.gigforce.app.modules.preferences.location.CitiesRepository
 import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
-import com.gigforce.app.modules.profile.models.AddressModel
+import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 
-import com.gigforce.app.modules.profile.models.AddressFirestoreModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.configrepository.ConfigDataModel
+import com.gigforce.core.datamodels.profile.AddressFirestoreModel
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener

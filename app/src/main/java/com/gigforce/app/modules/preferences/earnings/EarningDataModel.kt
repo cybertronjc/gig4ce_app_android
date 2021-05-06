@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.preferences.earnings
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 
 class EarningDataModel : BaseFirestoreDataModel {
     constructor():super("earning")

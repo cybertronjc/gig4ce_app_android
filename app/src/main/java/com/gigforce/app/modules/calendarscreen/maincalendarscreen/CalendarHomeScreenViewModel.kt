@@ -8,12 +8,17 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.google.firebase.firestore.*
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.google.firebase.firestore.DocumentSnapshot
+import com.gigforce.app.modules.gigPage2.models.GigStatus
+
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
+import com.google.firebase.firestore.ServerTimestamp
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,7 +32,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
     var mainHomeLiveDataModel: MutableLiveData<MainHomeCompleteGigModel> =
             MutableLiveData<MainHomeCompleteGigModel>()
     var arrMainHomeDataModel: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
-    var currentDateCalendar: Calendar = Calendar.getInstance();
+    var currentDateCalendar: Calendar = Calendar.getInstance()
     var preferencesRepository: PreferencesRepository = PreferencesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> =
             MutableLiveData<PreferencesDataModel>()
@@ -46,14 +51,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
                             querySnapshot.documents.forEach { t ->
 
                                 Log.d("gig id : data", t.id.toString())
-                                t.toObject(Gig::class.java)
-                                        ?.let {
-
-                                            val gigStatus = GigStatus.fromGig(it)
-
-                                            if (gigStatus != GigStatus.DECLINED &&  gigStatus != GigStatus.CANCELLED)
-                                                arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it))
-                                        }
+                                t.toObject(GigData::class.java)
+                                        ?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
                             }
                             mainHomeLiveDataModel.postValue(
                                     MainHomeCompleteGigModel()
@@ -103,8 +102,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
         var calendar: Calendar = Calendar.getInstance();
         var temp: Int = -1
         if (dataItem != null) {
-            calendar.set(Calendar.YEAR, dataItem.year);
-            calendar.set(Calendar.MONTH, dataItem.month);
+            calendar.set(Calendar.YEAR, dataItem.year)
+            calendar.set(Calendar.MONTH, dataItem.month)
             temp = calendar.get(Calendar.MONTH)
             calendar.set(Calendar.DATE, dataItem.date + 1)
         } else {
@@ -113,9 +112,9 @@ class CalendarHomeScreenViewModel : ViewModel() {
         for (x in 0..180) {
             if ((calendar.get(Calendar.MONTH) - temp) != 0) {
                 if (isPreviousDay) {
-                    var newcalendar: Calendar = Calendar.getInstance();
-                    newcalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
-                    newcalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                    var newcalendar: Calendar = Calendar.getInstance()
+                    newcalendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+                    newcalendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH))
                     newcalendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1)
                     datalist.add(0, VerticalCalendarDataItemModel.getMonthObject(newcalendar))
                 } else
@@ -200,7 +199,7 @@ class CalendarHomeScreenViewModel : ViewModel() {
                 }
 
                 temp = calendar.get(Calendar.MONTH)
-                var newDate = calendar.get(Calendar.DATE);
+                var newDate = calendar.get(Calendar.DATE)
                 if (isPreviousDay) {
                     newDate -= 1
                 } else {
@@ -227,4 +226,84 @@ class CalendarHomeScreenViewModel : ViewModel() {
     }
 
 
+    //Below code will be removed later
+    class GigRepository : BaseFirestoreDBRepository() {
+        var custguid: String = ""
+        override fun getCollectionName(): String {
+            return "Gigs"
+        }
+
+        override fun getCustomUid(): String? {
+            return custguid
+        }
+
+        fun setGigData(arrGigs: ArrayList<GigData>) {
+            arrGigs.forEachIndexed { index, gig ->
+                custguid = (index * 54321).toString()
+                getCustomDBCollection().set(gig)
+            }
+        }
+
+    }
+
+    private fun getStartDateTime(
+            date: Int,
+            month: Int,
+            year: Int,
+            hour: Int,
+            minute: Int,
+            am_pm: Int
+    ): Date {
+        var calendar = Calendar.getInstance()
+        calendar.set(Calendar.DATE, date)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.HOUR, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.AM_PM, am_pm)
+        return calendar.time
+    }
+
+    private fun getGigData(
+            date: Int,
+            month: Int,
+            year: Int,
+            title: String,
+            gigDetails: ArrayList<GigsDetail>,
+            available: Boolean
+    ): AllotedGigDataModel {
+        var data = AllotedGigDataModel()
+        data.date = date
+        data.month = month
+        data.year = year
+        data.title = title
+        data.gigDetails = gigDetails
+        data.available = available
+        return data
+    }
+
+    private fun getGigDetailData(title: String, isCompleted: Boolean): ArrayList<GigsDetail> {
+        var arrayListGigDetail = ArrayList<GigsDetail>()
+        var data = GigsDetail()
+        data.subTitle = title
+        data.gigCompleted = isCompleted
+        arrayListGigDetail.add(data)
+        return arrayListGigDetail
+    }
+
+
+    //            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
+//                if (e != null) {
+//                    return@EventListener
+//                }
+//                var data: MainHomeCompleteGigModel? = value!!.toObject(
+//                    MainHomeCompleteGigModel::class.java
+//                )
+//
+////                arrMainHomeDataModel = data?.all_gigs
+//                arrMainHomeDataModel = getAllGigData()
+//                mainHomeLiveDataModel.postValue(
+//                    data
+//                )
+//            })
 }

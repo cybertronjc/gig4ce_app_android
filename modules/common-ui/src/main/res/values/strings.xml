@@ -1,4 +1,10 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pick_image_intent_text">Choose Image</string>
+    <string name="allow_gigforce_to_access_this_device_s_location">Allow Gigforce to access this device’s location?</string>
+    <string name="your_location_details_will_help_us_find_you_best_gig_near_you">Your location details will help us find you best Gig near you</string>
+    <string name="allow_access_location">Allow Access Location</string>
+    <string name="read_more">more</string>
+    <string name="read_less">less</string>
 </resources>

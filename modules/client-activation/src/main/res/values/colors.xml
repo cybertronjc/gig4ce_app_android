@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_three">#333333</color>
+    <color name="activated_color">#4E9405</color>
+    <color name="rejected_color">#FF000F</color>
+    <color name="pending_color">#F7B500</color>
+    <color name="gray_color1">#cdcdcd</color>
+    <color name="black_85">#d9000000</color>
+    <color name="schedule_doc_sub_bg">#f7f7f7</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="light_grey">#dddddd</color>
+    <color name="black_33">#54000000</color>
+    <color name="time_up_color">#6d7278</color>
+    <color name="timer_color">#e82e66</color>
+    <color name="lipstick">#d72467</color>
+
+</resources>

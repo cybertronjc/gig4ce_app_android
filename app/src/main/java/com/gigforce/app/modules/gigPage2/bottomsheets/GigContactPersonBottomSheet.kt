@@ -10,19 +10,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.invisible
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage2.models.ContactPerson
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.Lce
-import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.datamodels.gigpage.ContactPerson
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_gig_contact_person_details.*
-import java.util.*
 
 
 class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
@@ -33,9 +31,9 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
     private val firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.fragment_gig_contact_person_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,7 +64,10 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
     private fun initView() {
 
         call_card_view.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", contactPersonDetail.contactNumber.toString(), null))
+            val intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.fromParts("tel", contactPersonDetail.contactNumber.toString(), null)
+            )
             startActivity(intent)
         }
 
@@ -153,40 +154,40 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
 
     private fun initViewModel() {
         profileViewModel
-                .profile
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            .profile
+            .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
 
-                    when (it) {
-                        Lce.Loading -> {
-                            message_card_view.invisible()
-                            getting_profile_details_pb.visible()
-                        }
-                        is Lce.Content -> {
-                            getting_profile_details_pb.gone()
-                            message_card_view.visible()
+                when (it) {
+                    Lce.Loading -> {
+                        message_card_view.invisible()
+                        getting_profile_details_pb.visible()
+                    }
+                    is Lce.Content -> {
+                        getting_profile_details_pb.gone()
+                        message_card_view.visible()
 
-                            if (it.content != null) {
-                                startChatScreen(it.content.id!!)
-                            } else {
-                                MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle("Alert")
-                                        .setMessage("Looks like user is not on gig force App")
-                                        .setPositiveButton("Okay") { _, _ -> }
-                                        .show()
-                            }
-                        }
-                        is Lce.Error -> {
-                            getting_profile_details_pb.gone()
-                            message_card_view.visible()
-
+                        if (it.content != null) {
+                            startChatScreen(it.content!!.id!!)
+                        } else {
                             MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Alert")
-                                    .setMessage("Unable to fetch user details, ${it.error}")
-                                    .setPositiveButton("Okay") { _, _ -> }
-                                    .show()
+                                .setTitle("Alert")
+                                .setMessage("Looks like user is not on gig force App")
+                                .setPositiveButton("Okay") { _, _ -> }
+                                .show()
                         }
                     }
-                })
+                    is Lce.Error -> {
+                        getting_profile_details_pb.gone()
+                        message_card_view.visible()
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Alert")
+                            .setMessage("Unable to fetch user details, ${it.error}")
+                            .setPositiveButton("Okay") { _, _ -> }
+                            .show()
+                    }
+                }
+            })
     }
 
     private fun startChatScreen(id: String) {

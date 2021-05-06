@@ -12,22 +12,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage.GigViewModel
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toLocalDate
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*
-import java.time.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.TextStyle
 import java.util.*
 
@@ -37,7 +40,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
     private val adapter: GigAttendanceAdapter by lazy {
         GigAttendanceAdapter(
-                requireContext()
+            requireContext()
         ).apply {
             setListener(this@GigMonthlyAttendanceFragment)
         }
@@ -51,9 +54,9 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
     private var currentlySelectedMonthYear: LocalDate = LocalDate.now()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ) = inflateView(R.layout.fragment_gig_monthly_attendance, inflater, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +85,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
             companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
             gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                    "Gig order id not passed in intent"
+                "Gig order id not passed in intent"
             )
         }
 
@@ -93,7 +96,7 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
             companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
             companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
             gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                    "Gig order id not passed in saved intent"
+                "Gig order id not passed in saved intent"
             )
         }
     }
@@ -120,9 +123,9 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         }
 
         attendance_monthly_rv.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
         )
         attendance_monthly_rv.adapter = adapter
 
@@ -130,18 +133,18 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
             if (companyLogo!!.startsWith("http", true)) {
 
                 Glide.with(requireContext())
-                        .load(companyLogo)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(company_logo_iv)
+                    .load(companyLogo)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(company_logo_iv)
             } else {
                 val imageRef = FirebaseStorage.getInstance()
-                        .getReference("companies_gigs_images")
-                        .child(companyLogo!!)
+                    .getReference("companies_gigs_images")
+                    .child(companyLogo!!)
 
                 Glide.with(requireContext())
-                        .load(imageRef)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(company_logo_iv)
+                    .load(imageRef)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(company_logo_iv)
             }
         } else {
             val companyInitials = if (companyLogo.isNullOrBlank())
@@ -149,8 +152,8 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
             else
                 companyLogo!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
-                    companyInitials,
-                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
             )
 
             company_logo_iv.setImageDrawable(drawable)
@@ -171,26 +174,26 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
     private fun initViewModel() {
         viewModel.monthlyGigs
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lce.Loading -> {
-                            attendance_monthly_learning_error.gone()
-                            attendance_montly_progress_bar.visible()
-                        }
-                        is Lce.Content -> {
-                            attendance_monthly_learning_error.gone()
-                            attendance_montly_progress_bar.gone()
-
-                            setGigAttendanceOnView(it.content)
-                        }
-                        is Lce.Error -> {
-                            attendance_montly_progress_bar.gone()
-                            attendance_monthly_learning_error.visible()
-
-                            attendance_monthly_learning_error.text = it.error
-                        }
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> {
+                        attendance_monthly_learning_error.gone()
+                        attendance_montly_progress_bar.visible()
                     }
-                })
+                    is Lce.Content -> {
+                        attendance_monthly_learning_error.gone()
+                        attendance_montly_progress_bar.gone()
+
+                        setGigAttendanceOnView(it.content)
+                    }
+                    is Lce.Error -> {
+                        attendance_montly_progress_bar.gone()
+                        attendance_monthly_learning_error.visible()
+
+                        attendance_monthly_learning_error.text = it.error
+                    }
+                }
+            })
     }
 
     private fun setGigAttendanceOnView(content: List<Gig>) {
@@ -239,8 +242,8 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
     fun showMonthCalendar() {
 
         val selectedDate: Pair<Int, Int> = Pair(
-                currentlySelectedMonthYear.monthValue,
-                currentlySelectedMonthYear.year
+            currentlySelectedMonthYear.monthValue,
+            currentlySelectedMonthYear.year
         )
         val maxDate = Date().time
 
@@ -249,10 +252,10 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
         val defaultMinTime: Long = zdt.toInstant().toEpochMilli()
 
         MonthYearPickerDialogFragment.getInstance(
-                selectedDate.first - 1,
-                selectedDate.second,
-                defaultMinTime,
-                maxDate
+            selectedDate.first - 1,
+            selectedDate.second,
+            defaultMinTime,
+            maxDate
         ).apply {
             setOnDateSetListener { year, monthOfYear ->
 
@@ -276,16 +279,16 @@ class GigMonthlyAttendanceFragment : BaseFragment(), GigAttendanceAdapterClickLi
 
     private fun showMonthYearValueOnViewAndStartFetchingData() {
         val monthName = currentlySelectedMonthYear.month.getDisplayName(
-                TextStyle.SHORT,
-                Locale.getDefault()
+            TextStyle.SHORT,
+            Locale.getDefault()
         )
         val year = currentlySelectedMonthYear.year
         dateYearTV.text = "$monthName - $year"
 
         viewModel.getGigsForMonth(
-                gigOrderId = gigOrderId,
-                month = currentlySelectedMonthYear.monthValue,
-                year = currentlySelectedMonthYear.year
+            gigOrderId = gigOrderId,
+            month = currentlySelectedMonthYear.monthValue,
+            year = currentlySelectedMonthYear.year
         )
     }
 

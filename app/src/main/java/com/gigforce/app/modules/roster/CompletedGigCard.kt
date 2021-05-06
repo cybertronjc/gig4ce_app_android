@@ -7,7 +7,6 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
-import kotlinx.android.synthetic.main.completed_gig_card.view.gig_timing
 
 class CompletedGigCard(
     context: Context,
@@ -23,8 +22,8 @@ class CompletedGigCard(
     var isFullDay: Boolean = false,
     var gigId: String = "",
     var isMonthlyGig: Boolean = false,
-    var isNewgigPage : Boolean
-): MaterialCardView(context) {
+    var isNewgigPage: Boolean
+) : MaterialCardView(context) {
     //constructor(context: Context): super(context)
     //constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
@@ -66,7 +65,7 @@ class CompletedGigCard(
 
     fun setGigRating(value: Float) {
         rating = value
-        if(value > 0) {
+        if (value > 0) {
             gig_rating.text = value.toString()
         }
     }
@@ -74,27 +73,30 @@ class CompletedGigCard(
     fun setGigAmount(value: Double) {
         amount = value
 
-        if(value == 0.0) {
+        if (value == 0.0) {
             rupee_value.text = "As per contract"
-        }else {
+        } else {
             rupee_value.text = if (isMonthlyGig) "Rs. $value /month" else "Rs. $value /hr"
         }
     }
 
     fun setTimings() {
         var endHour = startHour + duration.toInt()
-        var endMinute = ((duration - duration.toInt())*100).toInt()
+        var endMinute = ((duration - duration.toInt()) * 100).toInt()
         gig_timing.text = (
                 String.format("%02d", startHour) + ":" + String.format("%02d", startMinute) +
-                        "-" + String.format("%02d", endHour) + ":" + String.format("%02d", endMinute))
+                        "-" + String.format("%02d", endHour) + ":" + String.format(
+                    "%02d",
+                    endMinute
+                ))
     }
 
     fun setFullDay() {
-            gig_timing.text = ""
-            cardHeight = 70.px
+        gig_timing.text = ""
+        cardHeight = 70.px
 
         this.setOnClickListener {
-            GigNavigation.openGigMainPage(findNavController(),isNewgigPage, gigId)
+            GigNavigation.openGigMainPage(findNavController(), isNewgigPage, gigId)
         }
     }
 }

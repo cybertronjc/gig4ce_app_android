@@ -8,27 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
+import kotlinx.android.synthetic.main.fragment_help_video.*
 import com.gigforce.core.extensions.gone
 import com.jaeger.library.StatusBarUtil
-import kotlinx.android.synthetic.main.fragment_help_video.*
 
-
-class HelpVideosFragment : BaseFragment() {
+class HelpVideosFragment : Fragment() {
 
     private val viewModel: HelpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_help_video, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_help_video, container)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,11 +83,10 @@ class HelpVideosFragment : BaseFragment() {
                         requireContext().startActivity(webIntent)
                     }
                 },
-
                 RecyclerGenericAdapter.ItemInterface<HelpVideo> { obj, viewHolder, position ->
 
-                    var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
-                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getShimmerDrawable()).into(iconIV)
+                    /*var iconIV = getImageView(viewHolder, R.id.help_first_card_img)
+                    Glide.with(requireContext()).load(obj?.getThumbNailUrl()).placeholder(getCircularProgressDrawable()).into(iconIV)
 
                     var titleTV = getTextView(viewHolder, R.id.titleTV)
                     titleTV.text = obj?.videoTitle
@@ -100,7 +98,7 @@ class HelpVideosFragment : BaseFragment() {
                         "$minutes:$secs"
                     } else {
                         "00:${obj.videoLength}"
-                    }
+                    }*/
 
 
 //                    var img = getImageView(viewHolder, R.id.learning_img)

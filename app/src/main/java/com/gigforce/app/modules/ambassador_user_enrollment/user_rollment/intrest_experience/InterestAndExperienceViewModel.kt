@@ -4,20 +4,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.profile.models.Experience
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
+import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class InterestAndExperienceViewModel constructor(
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+@HiltViewModel
+class InterestAndExperienceViewModel @Inject constructor(
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
+    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val userEnrollmentRepository: UserEnrollmentRepository =
+        UserEnrollmentRepository(buildConfig = buildConfig)
 
     private val _submitInterestState = MutableLiveData<Lse>()
     val submitInterestState: LiveData<Lse> = _submitInterestState
@@ -72,7 +78,7 @@ class InterestAndExperienceViewModel constructor(
             val experienceList = profileData.experiences ?: return@launch
             val skills = profileData.skills ?: return@launch
 
-            if(experienceList.size == profileData.skills!!.size) {
+            if (experienceList.size == profileData.skills!!.size) {
 
                 for (i in experienceList.indices) {
                     if (experienceList[i].title == experience.title) {
@@ -115,19 +121,20 @@ class InterestAndExperienceViewModel constructor(
         }
     }
 
-    fun skipCurrentExperienceAndFetchNextOne(userId: String, expName: String) = viewModelScope.launch {
-        _saveExpAndReturnNextOne.value = Lce.loading()
+    fun skipCurrentExperienceAndFetchNextOne(userId: String, expName: String) =
+        viewModelScope.launch {
+            _saveExpAndReturnNextOne.value = Lce.loading()
 
-        try {
-            val profileData = profileFirebaseRepository.getProfileData(userId)
-            val experienceList = profileData.experiences ?: return@launch
-            val skills = profileData.skills ?: return@launch
+            try {
+                val profileData = profileFirebaseRepository.getProfileData(userId)
+                val experienceList = profileData.experiences ?: return@launch
+                val skills = profileData.skills ?: return@launch
 
 
-            if(experienceList.size == profileData.skills!!.size) {
+                if (experienceList.size == profileData.skills!!.size) {
 
-                for (i in experienceList.indices) {
-                    if (experienceList[i].title == expName) {
+                    for (i in experienceList.indices) {
+                        if (experienceList[i].title == expName) {
 
                         if (i == experienceList.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)

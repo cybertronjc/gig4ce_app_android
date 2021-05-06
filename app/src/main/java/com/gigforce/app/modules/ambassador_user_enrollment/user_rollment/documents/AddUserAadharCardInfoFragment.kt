@@ -20,17 +20,36 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.app.modules.gigerVerfication.aadharCard.AadharCardDataModel
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.Lse
+import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharEditLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharViewLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharCardET
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageHolder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharInfoLayout
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharSubmitSliderBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharYesRB
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.doYouHaveAadharLabel
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.helpIconViewIV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.topSeaparator
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
@@ -264,15 +283,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
-                    if (it.aadharCardDataModel.userHasAadharCard != null) {
-                        if (it.aadharCardDataModel.userHasAadharCard) {
+                    it.aadharCardDataModel!!.userHasAadharCard?.let { it1 ->
+                        if (it1) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)
                             aadharAvailaibilityOptionRG.check(R.id.aadharNoRB)
                         }
-
-                    } else {
+                    } ?: let {
                         //Uncheck both and hide capture layout
                         setDataOnEditLayout(null)
                         aadharAvailaibilityOptionRG.clearCheck()
@@ -481,15 +499,15 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             )
         )
 
-        if (aadharDetails.frontImage != null) {
-            if (aadharDetails.frontImage.startsWith("http", true)) {
+        aadharDetails.frontImage?.let {
+            if (it.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.frontImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
             } else {
                 val storageRef = firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.frontImage)
+                    .child(it)
 
                 Glide.with(requireContext())
                     .load(storageRef)
@@ -498,16 +516,15 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             }
         }
         aadharViewFrontErrorMessage.gone()
-
-        if (aadharDetails.backImage != null) {
-            if (aadharDetails.backImage.startsWith("http", true)) {
+        aadharDetails.backImage?.let {
+            if (it.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.backImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
             } else {
                 val imageRef = firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharDetails.backImage)
+                    .child(it)
 
                 Glide
                     .with(requireContext())
@@ -516,6 +533,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
                     .into(aadharViewBackImageIV)
             }
         }
+
         aadharViewBackErrorMessageTV.gone()
 
         aadharNoTV.text = aadharDetails.aadharCardNo
@@ -546,14 +564,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharCardET.setText(aadharData.aadharCardNo)
 
 
-        if (aadharData.frontImage != null) {
-            if (aadharData.frontImage.startsWith("http", true)) {
+        aadharData.frontImage?.let {
+            if (it.startsWith("http", true)) {
                 showFrontAadharCard(Uri.parse(aadharData.frontImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.frontImage)
+                    .child(it)
                     .downloadUrl.addOnSuccessListener {
                         showFrontAadharCard(it)
                     }.addOnFailureListener {
@@ -562,14 +580,14 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             }
         }
 
-        if (aadharData.backImage != null) {
-            if (aadharData.backImage.startsWith("http", true)) {
+        aadharData.backImage?.let {
+            if (it.startsWith("http", true)) {
                 showBackAadharCard(Uri.parse(aadharData.backImage))
             } else {
                 firebaseStorage
                     .reference
                     .child("verification")
-                    .child(aadharData.backImage)
+                    .child(it)
                     .downloadUrl.addOnSuccessListener {
                         showBackAadharCard(it)
                     }.addOnFailureListener {

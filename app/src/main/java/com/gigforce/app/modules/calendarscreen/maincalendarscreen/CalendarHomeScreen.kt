@@ -28,8 +28,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
@@ -43,10 +43,9 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
-import com.gigforce.app.utils.TextDrawable
-import com.gigforce.app.utils.configrepository.ConfigRepository
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.core.utils.Lce
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics

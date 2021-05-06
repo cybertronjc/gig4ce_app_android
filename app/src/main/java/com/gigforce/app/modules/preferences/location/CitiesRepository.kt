@@ -1,14 +1,12 @@
 package com.gigforce.app.modules.preferences.location
 
 import android.util.Log
-import androidx.annotation.NonNull
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import io.reactivex.internal.util.HalfSerializer.onComplete
 
 class CitiesRepository : BaseFirestoreDBRepository() {
     var COLLECTION_NAME = "Cities"

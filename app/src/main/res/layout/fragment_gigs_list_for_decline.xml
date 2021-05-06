@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingTop="20dp"
     android:paddingBottom="10dp"
-    tools:context=".modules.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet">
+    tools:context="com.gigforce.verification.gigerVerfication.drivingLicense.EditDrivingLicenseInfoBottomSheet">
 
     <ImageView
         android:id="@+id/cross_iv"

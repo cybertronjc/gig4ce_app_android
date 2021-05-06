@@ -52,32 +52,39 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
         this.data = data
         this.setOnClickListener(null)
         if (data is FeatureItemCardDVM) {
-
             getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
                     navigation.navigateTo(it.navPath, it.args)
                 }
             }
+            setImage(data)
+            setSubtitle(data)
 
-            if (data.image is String) {
-                if(data.image.contains("http")) {
-                    Glide.with(context)
-                        .load(data.image)
-                        .into(image)
-                }
-            } else if (data.image is Int) {
-                image.setImageResource(data.image)
-            } else {
-
-            }
-            if (data.title.isNotBlank())
-                title.text = data.title
-            else title.gone()
-            if (data.subtitle?.isNotBlank()?:false) {
-                subtitle.text = data.subtitle
-            }
-            else subtitle.gone()
         }
+    }
+
+    private fun setImage(data: FeatureItemCardDVM) {
+        if (data.image is String) {
+            if(data.image.contains("http")) {
+                Glide.with(context)
+                    .load(data.image)
+                    .into(image)
+            }
+        } else if (data.image is Int) {
+            image.setImageResource(data.image)
+        } else {
+
+        }
+    }
+
+    private fun setSubtitle(data:FeatureItemCardDVM) {
+        if (data.title.isNotBlank())
+            title.text = data.title
+        else title.gone()
+        if (data.subtitle?.isNotBlank()?:false) {
+            subtitle.text = data.subtitle
+        }
+        else subtitle.gone()
     }
 
 }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Achievement
+import com.gigforce.core.datamodels.profile.Achievement
 import kotlinx.android.synthetic.main.add_achievement_bottom_sheet.*
 
 

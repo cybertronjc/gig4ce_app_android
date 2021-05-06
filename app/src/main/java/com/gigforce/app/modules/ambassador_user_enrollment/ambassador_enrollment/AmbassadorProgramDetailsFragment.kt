@@ -20,23 +20,25 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
+import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.learning.LearningConstants
-import com.gigforce.app.modules.learning.LearningViewModel
-import com.gigforce.app.modules.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.app.modules.learning.models.Course
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
+import com.gigforce.learning.learning.models.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.Lce
+//import com.gigforce.core.utils.Lce
 import com.gigforce.app.utils.LocationUpdates
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_ambassador_program_details.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
+import kotlinx.android.synthetic.main.learning_bs_item.*
 
 class AmbassadorProgramDetailsFragment : BaseFragment(),
         Toolbar.OnMenuItemClickListener, LocationUpdates.LocationUpdateCallbacks {
@@ -115,8 +117,13 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
 
     private fun showRoleBasedLearningProgress() {
         startShimmer(learning_based_horizontal_progress as LinearLayout,
-                ShimmerModel(minHeight = R.dimen.size_148, minWidth = R.dimen.size_300, marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL))
+            ShimmerModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            )
+        )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 
@@ -146,22 +153,23 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
                             )
                         },
                         RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-                            var view = getView(viewHolder, R.id.card_view)
+                            val view = card_view//getView(viewHolder, R.id.card_view)
+
                             val lp = view.layoutParams
                             lp.height = lp.height
                             lp.width = itemWidth
                             view.layoutParams = lp
 
-                            var title = getTextView(viewHolder, R.id.title_)
+                            val title = title_//getTextView(viewHolder, R.id.title_)
                             title.text = obj?.name
 
-                            var subtitle = getTextView(viewHolder, R.id.title)
+                            val subtitle = title //getTextView(viewHolder, R.id.title)
                             subtitle.text = obj?.level
 
-                            var comImg = getImageView(viewHolder, R.id.completed_iv)
+                            val comImg = completed_iv//getImageView(viewHolder, R.id.completed_iv)
                             comImg.isVisible = obj?.completed ?: false
 
-                            var img = getImageView(viewHolder, R.id.learning_img)
+                            val img = learning_img//getImageView(viewHolder, R.id.learning_img)
                             if (!obj!!.coverPicture.isNullOrBlank()) {
                                 if (obj.coverPicture!!.startsWith("http", true)) {
 

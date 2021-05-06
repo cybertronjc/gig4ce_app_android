@@ -8,11 +8,11 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toLocalDateTime
+import com.gigforce.core.extensions.visible
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -23,11 +23,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class GigPagerTimerView(
-        context: Context,
-        attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : FrameLayout(
-        context,
-        attrs
+    context,
+    attrs
 ) {
 
     //Views
@@ -50,14 +50,14 @@ class GigPagerTimerView(
     init {
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(
-                R.layout.fragment_gig_page_2_timer_layout,
-                this,
-                true
+            R.layout.fragment_gig_page_2_timer_layout,
+            this,
+            true
         )
         findViews(view)
     }
 
-    private fun findViews(view : View) {
+    private fun findViews(view: View) {
         rootCardView = view.findViewById(R.id.timer_root_card_layout)
 
         gigTimerAndDetailsLayout = view.findViewById(R.id.timer_and_attendance_layout)
@@ -158,7 +158,7 @@ class GigPagerTimerView(
     }
 
     private fun showUpcomingGigDetails(
-            gig: Gig
+        gig: Gig
     ) {
         gigAttendanceDetailsLayout.gone()
         gigTimerAndDetailsLayout.visible()
@@ -168,11 +168,11 @@ class GigPagerTimerView(
 //        )
 
         val daysDiff = Duration.between(
-                LocalDate.now().atStartOfDay(),
-                gig.startDateTime.toLocalDateTime()
+            LocalDate.now().atStartOfDay(),
+            gig.startDateTime.toLocalDateTime()
         ).toDays()
 
-        if (daysDiff > 1 ) {
+        if (daysDiff > 1) {
             //Show Date only
             gigTimerTV.text = "$daysDiff Days"
         } else {
@@ -261,8 +261,8 @@ class GigPagerTimerView(
     private fun formatGigDateForTimer(startDateTime: Timestamp): String {
 
         val daysDiff = Duration.between(
-                startDateTime.toLocalDateTime(),
-                LocalDate.now().atStartOfDay()
+            startDateTime.toLocalDateTime(),
+            LocalDate.now().atStartOfDay()
         ).toDays()
 
         if (daysDiff == 0L) {

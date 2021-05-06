@@ -10,7 +10,7 @@ import android.widget.DatePicker
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Education
+import com.gigforce.core.datamodels.profile.Education
 import com.gigforce.app.utils.DropdownAdapter
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_education_bottom_sheet.*

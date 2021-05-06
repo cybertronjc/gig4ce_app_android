@@ -87,6 +87,9 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
+array com_google_android_gms_fonts_certs
+array com_google_android_gms_fonts_certs_dev
+array com_google_android_gms_fonts_certs_prod
 attr action
 attr actionBarDivider
 attr actionBarItemBackground
@@ -1370,6 +1373,7 @@ color highlighted_text_material_light
 color light_blue
 color light_pink
 color lipstick
+color lipstick_2
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -2195,7 +2199,10 @@ drawable fui_idp_button_background_twitter
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable ic_arrow_back_24
 drawable ic_arrow_back_black
+drawable ic_arrow_back_white
+drawable ic_arrow_forward
 drawable ic_backward
 drawable ic_balance_expanded
 drawable ic_baseline_autorenew_24
@@ -2210,6 +2217,8 @@ drawable ic_clock_orange
 drawable ic_cross_grey
 drawable ic_cross_red
 drawable ic_earning
+drawable ic_error_loading_image
+drawable ic_error_loading_image_red
 drawable ic_filled_circle
 drawable ic_forward
 drawable ic_fullscreen_white_18dp
@@ -2230,8 +2239,10 @@ drawable ic_mtrl_chip_close_circle
 drawable ic_ok
 drawable ic_oval_top_landingscreen
 drawable ic_payment_dispute
+drawable ic_search
 drawable ic_set_preference
 drawable ic_small_square
+drawable ic_three_dots
 drawable ic_time_help_
 drawable ic_tip
 drawable ic_wallet_happy
@@ -2280,6 +2291,8 @@ drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rounded_layout
 drawable shape_circle_lipstick
 drawable test_custom_background
+drawable toolbar_background
+drawable toolbar_search_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 drawable ucrop_crop
@@ -2411,6 +2424,7 @@ id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
 id avg_earning
+id back_arrow
 id back_button
 id balance_card
 id banner_body
@@ -2798,6 +2812,7 @@ id notification_main_column_container
 id notify_text
 id off
 id on
+id option_menu_iv
 id outline
 id outside
 id outward
@@ -2823,6 +2838,7 @@ id payment_due
 id payment_ic
 id payment_ic_forward
 id payment_summary
+id payslip_label
 id payslip_monthly_details_error
 id payslip_monthly_main_layout
 id payslip_monthly_progress_bar
@@ -2885,8 +2901,10 @@ id search_bar
 id search_button
 id search_close_btn
 id search_edit_frame
+id search_et
 id search_go_btn
 id search_icon
+id search_layout
 id search_mag_icon
 id search_plate
 id search_src_text
@@ -2941,6 +2959,7 @@ id status_iv
 id status_text
 id stop
 id stretch
+id subTitleTV
 id submenuarrow
 id submit_area
 id submit_confirmation_code
@@ -2996,10 +3015,12 @@ id timeline
 id timelineview
 id title
 id titleDividerNoCustom
+id titleTV
 id title_template
 id toggle_full_screen
 id toggle_terminology
 id toolbar
+id toolbar_image_iv
 id toolbar_title
 id top
 id topPanel
@@ -3192,6 +3213,7 @@ layout fragment_play_video_controls
 layout fragment_play_video_full_screen
 layout fragment_play_video_main
 layout fragment_view_image_full_screen
+layout fragment_view_image_fullscreen
 layout fui_activity_invisible
 layout fui_activity_register_email
 layout fui_activity_register_phone
@@ -3218,6 +3240,7 @@ layout fui_welcome_back_password_prompt_layout
 layout gig_info_card
 layout help_expanded_page
 layout help_row
+layout icon_text_card_mol
 layout image
 layout invoice_collapsed_card
 layout invoice_status_page
@@ -3232,6 +3255,7 @@ layout layout_power_menu_library_skydoves
 layout layout_round_corner_progress_bar
 layout layout_rv_role_details
 layout layout_text_round_corner_progress_bar
+layout layout_toolbar
 layout material_chip_input_combo
 layout material_clock_display
 layout material_clock_display_divider
@@ -4060,6 +4084,7 @@ style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year
 style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox
 style ShapeAppearanceOverlay_TopLeftCut
 style ShapeAppearanceOverlay_TopRightDifferentCornerSize
+style ShapeAppearanceOverlay_toolbar_card_custom_corners
 style ShapeAppearance_MaterialComponents
 style ShapeAppearance_MaterialComponents_LargeComponent
 style ShapeAppearance_MaterialComponents_MediumComponent
@@ -4330,6 +4355,7 @@ style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_RadioButtonLipstickPink
+style ToolbarCustomCardViewStyle
 style VideoInfoCardTitle
 style VideoInfoItemCardTitle
 style VideoInfoItemTimeCardTitle
@@ -4542,6 +4568,7 @@ style Widget_MaterialProgressBar_ProgressBar_NoPadding
 style Widget_MaterialProgressBar_ProgressBar_Small
 style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding
 style Widget_Support_CoordinatorLayout
+style circleImageView
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
 style ucrop_TextViewWidget

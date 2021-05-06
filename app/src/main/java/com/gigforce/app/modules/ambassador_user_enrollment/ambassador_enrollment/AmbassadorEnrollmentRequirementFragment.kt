@@ -10,12 +10,12 @@ import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.gigerVerfication.GigVerificationViewModel
-import com.gigforce.app.modules.gigerVerfication.GigerVerificationStatus
-import com.gigforce.app.modules.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.StringConstants
 import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_screen.*
 
 @ExperimentalStdlibApi

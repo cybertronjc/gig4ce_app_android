@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getScreenWidth
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*

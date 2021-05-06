@@ -1,9 +1,9 @@
 package com.gigforce.app.modules.gigerid
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigAndGigOrder
-import com.gigforce.app.modules.gigPage2.models.GigOrder
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigAndGigOrder
+import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import kotlinx.coroutines.tasks.await
 
@@ -54,8 +54,8 @@ class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
         val gigOrder = getGigOrderQuery.toObject(GigOrder::class.java)!!
 
         return GigAndGigOrder(
-                gig,
-                gigOrder
+            gig,
+            gigOrder
         )
     }
 

@@ -12,8 +12,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.modules.profile.models.AddressModel
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.datamodels.profile.AddressModel
+import com.gigforce.core.datamodels.profile.ProfileData
 import kotlinx.android.synthetic.main.location_settings_fragment.*
 
 class LocationFragment : BaseFragment() {
