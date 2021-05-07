@@ -40,6 +40,7 @@ import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
+import com.gigforce.app.modules.landingscreen.adapters.ExploreGigsAdapter
 import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
@@ -75,8 +76,10 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 @AndroidEntryPoint
@@ -806,9 +809,6 @@ class LandingScreenFragment : BaseFragment() {
             }
         }
 
-        see_more_button.setOnClickListener {
-            navigate(R.id.clientActiExploreList)
-        }
     }
 
     private fun initializeLearningModule() {
@@ -1057,6 +1057,7 @@ class LandingScreenFragment : BaseFragment() {
 
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
 
+
         stopShimmer(loader_explore_gigs as LinearLayout)
         client_activation_rv.visible()
 
@@ -1069,60 +1070,59 @@ class LandingScreenFragment : BaseFragment() {
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
-                    RecyclerGenericAdapter<JobProfile>(
-                            activity?.applicationContext,
-                            PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
-                                navigate(
-                                        R.id.fragment_client_activation,
-                                        bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
-                                )
-                            },
-                            RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
+            val exploreGigsAdapter = context?.let { ExploreGigsAdapter(it, this) }
 
-                                var view = getView(viewHolder, R.id.top_to_cardview)
-                                val lp = view.layoutParams
-                                lp.height = lp.height
-                                lp.width = itemWidth
-                                view.layoutParams = lp
-
-                                showGlideImage(
-                                        obj?.cardImage ?: "",
-                                        getImageView(viewHolder, R.id.iv_client_activation)
-                                )
-                                getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
-                                getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
-
-                                //img.setImageResource(obj?.imgIcon!!)
-                            })!!
-            recyclerGenericAdapter.setList(jobProfiles)
-            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+            var arrayAny: ArrayList<Any> = jobProfiles as ArrayList<Any>
+            arrayAny.add("See More")
+//
+//            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
+//                    RecyclerGenericAdapter<JobProfile>(
+//                            activity?.applicationContext,
+//                            PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
+//                                navigate(
+//                                        R.id.fragment_client_activation,
+//                                        bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
+//                                )
+//                            },
+//                            RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
+//
+//                                var view = getView(viewHolder, R.id.top_to_cardview)
+//                                val lp = view.layoutParams
+//                                lp.height = lp.height
+//                                lp.width = itemWidth
+//                                view.layoutParams = lp
+//
+//                                showGlideImage(
+//                                        obj?.cardImage ?: "",
+//                                        getImageView(viewHolder, R.id.iv_client_activation)
+//                                )
+//                                getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
+//                                getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
+//
+//                                //img.setImageResource(obj?.imgIcon!!)
+//                            })!!
+            exploreGigsAdapter?.setData(jobProfiles)
             client_activation_rv.layoutManager = LinearLayoutManager(
                     activity?.applicationContext,
                     LinearLayoutManager.HORIZONTAL,
                     false
             )
 
-            client_activation_rv.adapter = recyclerGenericAdapter
+            client_activation_rv.adapter = exploreGigsAdapter
 
         }
     }
+
+    fun navigateToExploreGigs(){
+        navigate(
+            R.id.clientActiExploreList,
+            )
+    }
+
+    fun navigateToGig(id: String?){
+        navigate(
+            R.id.fragment_client_activation,
+            bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+        )
+    }
 }
-
-
-//
-//class CustomLinearLayoutManager extends LinearLayoutManager {
-//    private boolean isScrollEnabled = true;
-//
-//    public CustomLinearLayoutManager (Context context) {
-//        super(context);
-//    }
-//
-//    public CustomLinearLayoutManager (Context context, int orientation, boolean reverseLayout) {
-//        super(context, orientation, reverseLayout);
-//    }
-//
-//    public CustomLinearLayoutManager (Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        super(context, attrs, defStyleAt)
-//    }
-//}
