@@ -1102,8 +1102,27 @@ class LandingScreenFragment : BaseFragment() {
                     LinearLayoutManager.HORIZONTAL,
                     false
             )
+
             client_activation_rv.adapter = recyclerGenericAdapter
 
         }
     }
 }
+
+
+//
+//class CustomLinearLayoutManager extends LinearLayoutManager {
+//    private boolean isScrollEnabled = true;
+//
+//    public CustomLinearLayoutManager (Context context) {
+//        super(context);
+//    }
+//
+//    public CustomLinearLayoutManager (Context context, int orientation, boolean reverseLayout) {
+//        super(context, orientation, reverseLayout);
+//    }
+//
+//    public CustomLinearLayoutManager (Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        super(context, attrs, defStyleAt)
+//    }
+//}

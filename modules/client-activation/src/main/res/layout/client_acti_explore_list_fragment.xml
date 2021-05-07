@@ -49,7 +49,7 @@
             <EditText
                 android:id="@+id/search_item"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="36dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
@@ -128,6 +128,7 @@
                     android:paddingBottom="8dp"
                     android:text="New"
                     android:textColor="@color/filter_text"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/approved_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -144,6 +145,7 @@
                     android:paddingBottom="8dp"
                     android:text="Approved"
                     android:textColor="@color/filter_text"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/pending_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/new_tv" />
@@ -160,6 +162,7 @@
                     android:paddingBottom="8dp"
                     android:text="Pending"
                     android:textColor="@color/filter_text"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/applied_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/approved_tv" />
@@ -176,6 +179,7 @@
                     android:paddingBottom="8dp"
                     android:text="Applied"
                     android:textColor="@color/filter_text"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/rejected_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/pending_tv" />
@@ -192,6 +196,7 @@
                     android:paddingBottom="8dp"
                     android:text="Rejected"
                     android:textColor="@color/filter_text"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/approved_tv"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/applied_tv" />
@@ -209,16 +214,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <ImageView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/no_gigs"
+                android:visibility="gone"
+                android:src="@drawable/ic_no_gigs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:id="@+id/explore_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:text="Unable to fetch job profiles"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="No Gigs to show!"
+                android:textSize="@dimen/size_24"
+                android:textColor="@color/lipstick"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"></TextView>
+                app:layout_constraintTop_toBottomOf="@id/no_gigs"></TextView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/explore_rv"

@@ -10,7 +10,7 @@
                 />
 
             <solid
-                android:color="#ffffff" />
+                android:color="#ffe9ef" />
 
         </shape>
     </item>
