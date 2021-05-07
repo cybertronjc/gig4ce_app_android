@@ -5,39 +5,58 @@ import com.gigforce.client_activation.client_activation.models.City
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.gigforce.common_ui.R
-import com.gigforce.core.utils.GlideApp
-import kotlinx.android.synthetic.main.layout_rv_role_details.view.*
-
+import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
+import com.gigforce.client_activation.client_activation.models.JpExplore
+import com.gigforce.client_activation.R
 class ActiveLocationsAdapter(
     private val context: Context
-) : RecyclerView.Adapter<ActiveLocationsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ActiveLocationsAdapter.LocationViewHolder>(){
 
-    private var items= ArrayList<City>()
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    private var originalJobList: List<City> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_rv_role_details, parent, false)
-        )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): LocationViewHolder {
+        val view = LayoutInflater.from(
+            parent.context
+        ).inflate(R.layout.active_location_item_view, parent, false)
+        return LocationViewHolder(view)
     }
+
 
     override fun getItemCount(): Int {
-        return if (items != null) items?.size!! else 0
+        return originalJobList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.city_name_tv.text = items.get(position).name ?: ""
-        GlideApp.with(context).load(items.get(position).image).into(holder.itemView.city_image_iv)
-
+    override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
+        holder.bindValues(originalJobList.get(position), position)
     }
 
-    fun addData(items: ArrayList<City>) {
-        this.items = items
+    fun setData(contacts: List<City>) {
+        this.originalJobList = contacts
         notifyDataSetChanged()
     }
+
+    inner class LocationViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView){
+
+        private var jobTitleTv: TextView = itemView.findViewById(R.id.city_name_tv)
+        private var jobImage: ImageView = itemView.findViewById(R.id.city_image_iv)
+
+
+        fun bindValues(jobProfile: City, position: Int) {
+            jobTitleTv.text = jobProfile.name
+            Glide.with(context).load(jobProfile.image).into(jobImage)
+
+        }
+
+    }
+
 }

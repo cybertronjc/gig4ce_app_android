@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
+import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.Media
 import com.gigforce.common_ui.MenuItem
@@ -245,7 +246,11 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             tv_businessname_client_activation.text = it.title + " - "+ it.subTitle
             tv_role_client_activation.text = it.subTitle
             it.locationList?.map { item -> item.location }?.let { locations ->
-                adapterPreferredLocation?.addData(locations)
+                var cityList = ArrayList<City>()
+                for (i in 0..locations.size - 1){
+                    cityList.add(City(locations.get(i), getCityIcon(locations.get(i))))
+                }
+                adapterPreferredLocation?.setData(cityList)
             }
             tv_earning_client_activation.text = Html.fromHtml(it.payoutNote)
             ll_role_desc.removeAllViews()
@@ -367,7 +372,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private fun setupPreferredLocationRv() {
 
 
-        adapterPreferredLocation = ActiveLocationsAdapter()
+        adapterPreferredLocation = context?.let { ActiveLocationsAdapter(it) }
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
 
         val layoutManager = LinearLayoutManager(requireContext())
@@ -868,6 +873,16 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
             }
         }
+    }
+
+    fun getCityIcon(city: String?) : Int? {
+        var cityMap = mapOf<String, Int>("Banglore" to R.drawable.ic_banglore,"Chennai" to R.drawable.ic_chennai,"Chandigarh" to R.drawable.ic_chandigarh,"Delhi" to R.drawable.ic_delhi,"Guwahati" to R.drawable.ic_guwahati,"Hyderabad" to R.drawable.ic_hyderabad,"Jaipur" to R.drawable.ic_jaipur,"Kolkata" to R.drawable.ic_kolkata, "Lukhnow" to R.drawable.ic_lukhnow, "Mumbai" to R.drawable.ic_mumbai, "Pune" to R.drawable.ic_pune )
+
+        var icon: Int? = R.drawable.ic_delhi
+        if (city?.length != 0 && cityMap.containsKey(city)){
+            icon = cityMap.get(city)
+        }
+        return icon
     }
 
 }
