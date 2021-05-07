@@ -1,15 +1,21 @@
-package com.gigforce.common_ui.adapter
+package com.gigforce.client_activation.client_activation.adapters
 
+import android.content.Context
+import com.gigforce.client_activation.client_activation.models.City
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
+import com.gigforce.core.utils.GlideApp
 import kotlinx.android.synthetic.main.layout_rv_role_details.view.*
 
-class AdapterPreferredLocation : RecyclerView.Adapter<AdapterPreferredLocation.ViewHolder>() {
+class ActiveLocationsAdapter(
+    private val context: Context
+) : RecyclerView.Adapter<ActiveLocationsAdapter.ViewHolder>() {
 
-    private var items: List<String?>? = null
+    private var items= ArrayList<City>()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -25,11 +31,12 @@ class AdapterPreferredLocation : RecyclerView.Adapter<AdapterPreferredLocation.V
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.city_name_tv.text = items?.get(position) ?: ""
+        holder.itemView.city_name_tv.text = items.get(position).name ?: ""
+        GlideApp.with(context).load(items.get(position).image).into(holder.itemView.city_image_iv)
 
     }
 
-    fun addData(items: List<String?>) {
+    fun addData(items: ArrayList<City>) {
         this.items = items
         notifyDataSetChanged()
     }

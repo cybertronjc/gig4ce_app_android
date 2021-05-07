@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -48,9 +47,9 @@
                 android:id="@+id/tv_businessname_client_activation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_21"
-                android:layout_marginTop="@dimen/size_30"
-                android:layout_marginEnd="@dimen/size_25"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
                 android:fontFamily="@font/lato"
                 android:textColor="@color/lipstick"
                 android:textSize="@dimen/font_24"
@@ -58,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_header_client_activation"
-                tools:text="DRIVER - North 21 " />
+                tools:text="North 21 - Driver" />
 
             <TextView
                 android:id="@+id/tv_role_client_activation"
@@ -71,6 +70,7 @@
                 android:fontFamily="@font/lato"
                 android:textColor="@color/lipstick"
                 android:textSize="@dimen/font_20"
+                android:visibility="gone"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,60 +85,90 @@
                 android:layout_marginRight="@dimen/size_8"
                 android:drawablePadding="@dimen/size_4"
                 android:fontFamily="@font/lato"
-                android:gravity="start|center"
-                android:paddingStart="@dimen/size_8"
-                android:paddingEnd="@dimen/size_18"
-                android:text="@string/pending"
+                android:text="Pending"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/font_12"
                 android:textStyle="normal"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:drawableStartCompat="@drawable/ic_status_pending"
-                app:layout_constraintBottom_toTopOf="@+id/tv_role_client_activation"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_businessname_client_activation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_businessname_client_activation" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/earning_client_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_learning_text_client"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_businessname_client_activation">
+
+           <ImageView
+               android:id="@+id/earning_client_icon"
+               android:layout_width="56dp"
+               android:layout_height="56dp"
+               android:visibility="gone"
+               android:layout_marginStart="4dp"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_earning_client_activation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_20"
+                android:fontFamily="@font/lato"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/size_14"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="@dimen/size_20"
+                android:textColor="@color/learning_text_color"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toEndOf="@id/earning_client_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Earn upto 2000 /Day by working as Retail Executive /n Monthly earn up to Rs. 31000" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_pref_loc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_15"
+                android:background="#fdf2f5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_role_client_activation">
+                app:layout_constraintTop_toBottomOf="@id/earning_client_layout">
 
+                <TextView
+                    android:id="@+id/tv_active_locations"
+                    android:layout_width="166dp"
+                    android:layout_height="19dp"
+                    android:text="Active locations"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:layout_marginStart="@dimen/size_16"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_preferred_locations_client_activation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@id/tv_active_locations"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_24"
                     android:clipToPadding="false"
-                    android:paddingStart="@dimen/size_21"
-                    android:paddingEnd="@dimen/size_8" />
+                    />
             </RelativeLayout>
-
-
-            <TextView
-                android:id="@+id/tv_earning_client_activation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_16"
-                android:background="@color/darkinsh_pink_two_op_thirty_seven"
-                android:fontFamily="@font/lato"
-                android:gravity="center"
-                android:lineSpacingExtra="@dimen/size_14"
-                android:paddingStart="@dimen/size_10"
-                android:paddingTop="@dimen/size_18"
-                android:paddingEnd="@dimen/size_11"
-                android:paddingBottom="@dimen/size_19"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_pref_loc"
-                tools:text="Earn upto 2000 /Day by working as Retail Executive /n Monthly earn up to Rs. 31000" />
 
             <LinearLayout
                 android:id="@+id/ll_role_desc"
@@ -147,7 +177,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_earning_client_activation" />
+                app:layout_constraintTop_toBottomOf="@+id/rl_pref_loc" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/learning_cl"

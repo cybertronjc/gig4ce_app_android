@@ -9,9 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -25,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.Media
 import com.gigforce.common_ui.MenuItem
@@ -42,7 +41,6 @@ import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
@@ -75,8 +73,9 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private lateinit var mJobProfileId: String
     private var mRedirectToApplication: Boolean? = null
     private lateinit var viewModel: ClientActivationViewmodel
-    private var adapterPreferredLocation: AdapterPreferredLocation? = null
+    private var adapterPreferredLocation: ActiveLocationsAdapter? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
+    private lateinit var window: Window
 
     @Inject
     lateinit var navigation: INavigation
@@ -94,6 +93,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //make status bar transparent
+        makeStatusTransparent()
         viewModel =
             ViewModelProvider(
                 this,
@@ -107,6 +108,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         initClicks()
         initObservers()
 
+    }
+
+    private fun makeStatusTransparent() {
+        window = activity?.window!!
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+// finally change the color
+        window.setStatusBarColor(resources.getColor(R.color.fui_transparent))
     }
 
     private fun checkForApplicationRedirection() {
@@ -229,7 +242,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     requireContext()
                 )
             ).into(iv_main_client_activation)
-            tv_businessname_client_activation.text = it.title
+            tv_businessname_client_activation.text = it.title + " - "+ it.subTitle
             tv_role_client_activation.text = it.subTitle
             it.locationList?.map { item -> item.location }?.let { locations ->
                 adapterPreferredLocation?.addData(locations)
@@ -242,7 +255,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
 
                 if (!element.icon.isNullOrEmpty()) {
-                    GlideApp.with(requireContext())
+                    Glide.with(requireContext())
                         .load(element.icon)
                         .placeholder(getCircularProgressDrawable())
                         .into(viewRoleDesc.iv_what)
@@ -260,7 +273,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             learning_cl.visible()
             textView120.text = it.requiredMedia?.title
             if (!it.requiredMedia?.icon.isNullOrEmpty()) {
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                     .load(it.requiredMedia?.icon)
                     .placeholder(getCircularProgressDrawable())
                     .into(imageView36)
@@ -354,14 +367,11 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private fun setupPreferredLocationRv() {
 
 
-        adapterPreferredLocation =
-            AdapterPreferredLocation()
+        adapterPreferredLocation = ActiveLocationsAdapter()
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
 
-        val layoutManager = FlexboxLayoutManager(requireContext())
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.FLEX_START
-        layoutManager.alignItems = AlignItems.FLEX_START
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rv_preferred_locations_client_activation.layoutManager = layoutManager
         rv_preferred_locations_client_activation.addItemDecoration(
             HorizontaltemDecoration(
@@ -482,7 +492,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                        if (!obj!!.coverPicture.isNullOrBlank()) {
 //                            if (obj.coverPicture!!.startsWith("http", true)) {
 //
-//                                GlideApp.with(requireContext())
+//                                Glide.with(requireContext())
 //                                    .load(obj.coverPicture!!)
 //                                    .placeholder(getCircularProgressDrawable())
 //                                    .error(R.drawable.ic_learning_default_back)
@@ -494,7 +504,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                                    .downloadUrl
 //                                    .addOnSuccessListener { fileUri ->
 //
-//                                        GlideApp.with(requireContext())
+//                                        Glide.with(requireContext())
 //                                            .load(fileUri)
 //                                            .placeholder(getCircularProgressDrawable())
 //                                            .error(R.drawable.ic_learning_default_back)
@@ -503,7 +513,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                            }
 //                        } else {
 //
-//                            GlideApp.with(requireContext())
+//                            Glide.with(requireContext())
 //                                .load(R.drawable.ic_learning_default_back)
 //                                .into(img)
 //                        }
@@ -528,95 +538,103 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
                 override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
                     return LessonViewHolder(
-                        view,
-                        activity,
-                        this@ClientActivationFragment,
-                        viewModel
+                            view,
+                            activity,
+                            this@ClientActivationFragment,
+                            viewModel
                     )
                 }
+//            val layoutManager = LinearLayoutManager(context)
+//            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+//            learning_rv.layoutManager = LinearLayoutManager(
+//                activity?.applicationContext,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//            )
             }
-            learning_rv.layoutManager = LinearLayoutManager(context)
+
+            learning_rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             learning_rv.setHasFixedSize(true)
             learning_rv.adapter = myAdapter
-
-
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
-        outState.putBoolean(
-            StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
-            mClientViaDeeplink ?: false
-        )
-        outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
-        outState.putBoolean(
-            StringConstants.AUTO_REDIRECT_TO_APPL.value,
-            mRedirectToApplication ?: false
-        )
-
-
-    }
-
-
-    fun buildDeepLink(deepLink: Uri): Uri {
-        val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse(deepLink.toString()))
-            .setDomainUriPrefix(buildConfig.getReferralBaseUrl())//BuildConfig.REFERRAL_BASE_URL
-            // Open links with this app on Android
-            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-            // Open links with com.example.ios on iOS
-            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
-            .setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder()
-                    .setTitle("Gigforce")
-                    .setDescription("Flexible work and learning platform")
-                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
-                    .build()
-            ).buildDynamicLink()
-
-        return dynamicLink.uri
-    }
-
-    fun shareToAnyApp(url: String) {
-        try {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "image/png"
-            shareIntent.putExtra(
-                Intent.EXTRA_SUBJECT,
-                getString(R.string.app_name)
+        override fun onSaveInstanceState(outState: Bundle) {
+            super.onSaveInstanceState(outState)
+            outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
+            outState.putBoolean(
+                    StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
+                    mClientViaDeeplink ?: false
             )
-            val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            val bitmap =
-                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+            outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
+            outState.putBoolean(
+                    StringConstants.AUTO_REDIRECT_TO_APPL.value,
+                    mRedirectToApplication ?: false
+            )
 
-            //save bitmap to app cache folder
 
-            //save bitmap to app cache folder
-            val outputFile = File(requireContext().cacheDir, "share" + ".png")
-            val outPutStream = FileOutputStream(outputFile)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
-            outPutStream.flush()
-            outPutStream.close()
-            outputFile.setReadable(true, false)
-            shareIntent.putExtra(
-                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    requireContext(),
-                    requireContext().packageName + ".provider",
-                    outputFile
+        }
+
+
+        fun buildDeepLink(deepLink: Uri): Uri {
+            val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                    .setLink(Uri.parse(deepLink.toString()))
+                    .setDomainUriPrefix(buildConfig.getReferralBaseUrl())//BuildConfig.REFERRAL_BASE_URL
+                    // Open links with this app on Android
+                    .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+                    // Open links with com.example.ios on iOS
+                    .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+                    .setSocialMetaTagParameters(
+                            DynamicLink.SocialMetaTagParameters.Builder()
+                                    .setTitle("Gigforce")
+                                    .setDescription("Flexible work and learning platform")
+                                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                                    .build()
+                    ).buildDynamicLink()
+
+            return dynamicLink.uri
+        }
+
+        fun shareToAnyApp(url: String) {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "image/png"
+                shareIntent.putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        getString(R.string.app_name)
                 )
-            )
-            startActivity(Intent.createChooser(shareIntent, "choose one"))
-        } catch (e: Exception) {
-            //e.toString();
-        }
-        pb_client_activation.gone()
-    }
+                val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                val bitmap =
+                        BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
-    var locationUpdates: LocationUpdates? = LocationUpdates()
-    var location: Location? = null
+                //save bitmap to app cache folder
+
+                //save bitmap to app cache folder
+                val outputFile = File(requireContext().cacheDir, "share" + ".png")
+                val outPutStream = FileOutputStream(outputFile)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outPutStream)
+                outPutStream.flush()
+                outPutStream.close()
+                outputFile.setReadable(true, false)
+                shareIntent.putExtra(
+                        Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        requireContext(),
+                        requireContext().packageName + ".provider",
+                        outputFile
+                )
+                )
+                startActivity(Intent.createChooser(shareIntent, "choose one"))
+            } catch (e: Exception) {
+                //e.toString();
+            }
+            pb_client_activation.gone()
+        }
+
+
+        var locationUpdates: LocationUpdates? = LocationUpdates()
+        var location: Location? = null
+
     override fun onDestroy() {
         super.onDestroy()
         locationUpdates?.stopLocationUpdates(requireActivity())
@@ -759,7 +777,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 if (!obj.coverPicture.isNullOrBlank()) {
                     if (obj.coverPicture!!.startsWith("http", true)) {
 
-                        GlideApp.with(it)
+                        Glide.with(it)
                             .load(obj.coverPicture!!)
                             .placeholder(fragment?.getCircularProgressDrawable())
                             .error(R.drawable.ic_learning_default_back)
@@ -771,7 +789,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                             .downloadUrl
                             .addOnSuccessListener { fileUri ->
 
-                                GlideApp.with(it)
+                                Glide.with(it)
                                     .load(fileUri)
                                     .placeholder(fragment?.getCircularProgressDrawable())
                                     .error(R.drawable.ic_learning_default_back)
@@ -780,7 +798,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     }
                 } else {
 
-                    GlideApp.with(it)
+                    Glide.with(it)
                         .load(R.drawable.ic_learning_default_back)
                         .into(img)
                 }
