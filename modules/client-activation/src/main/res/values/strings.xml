@@ -35,7 +35,7 @@
     <string name="no_worries">No Worries!!</string>
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
     <string name="explore_gigs">Explore Gigs</string>
-    <string name="search_jobs">Search Job Profiles</string>
+    <string name="search_jobs">Search Gig</string>
 
 
 </resources>

@@ -374,6 +374,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <FrameLayout
                     android:id="@+id/client_activation_frame"
                     android:layout_width="match_parent"
@@ -384,24 +385,14 @@
                     android:minHeight="170dp">
 
 
-                    <ImageView
-                        android:id="@+id/see_more_button"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="24dp"
-                        android:src="@drawable/ic_see_more_btn" />
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/client_activation_rv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="48dp"
+                        android:layout_marginEnd="8dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
                         android:paddingStart="@dimen/size_16"
-                        android:paddingEnd="108dp"
                         android:paddingBottom="@dimen/size_4"
                         android:visibility="gone" >
                     </androidx.recyclerview.widget.RecyclerView>
@@ -422,6 +413,7 @@
                         tools:text="Unable to load your stuff" />
 
                 </FrameLayout>
+
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

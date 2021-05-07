@@ -99,10 +99,12 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         if (jobProfiles.isNullOrEmpty()) {
             explore_rv.gone()
             explore_error.visible()
+            no_gigs.visible()
             explore_progress_bar.gone()
         } else {
             explore_rv.visible()
             explore_error.gone()
+            no_gigs.gone()
             explore_progress_bar.gone()
             //val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
