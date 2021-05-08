@@ -20,6 +20,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.models.SkillsDetails
 import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
@@ -38,12 +39,15 @@ class InterestFragment() :
         fun newInstance() =
                 InterestFragment()
 
-        private var allInterestList = ArrayList<InterestDM?>()
+        private var allInterestList = ArrayList<InterestDM>()
+        private var skillDetailsList = ArrayList<SkillsDetails>()
+
 
     }
 
     @Inject
     lateinit var eventTracker: IEventTracker
+
 
     private lateinit var viewModel: InterestViewModel
     var experiencedInDeliveryExecutive = false
@@ -60,59 +64,39 @@ class InterestFragment() :
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
 
         //getting skills from DB
+        viewModel.getSkills()
         viewModel.skills.observe(viewLifecycleOwner, Observer {
             allInterestList = it
+            setUpRecyclerView(it)
         })
 
-//        allInterestList.clear()
-//        allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
-//        allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, DELIVERY_EXECUTIVE))
-//        allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))
-//        allInterestList.add(InterestDM(R.drawable.ic_technician, "Technician"))
-//        allInterestList.add(InterestDM(R.drawable.ic_trolley, "Helper"))
-//        allInterestList.add(InterestDM(R.drawable.ic_security, "Security"))
-//        allInterestList.add(InterestDM(R.drawable.ic_technician, "Tele Calling"))
-//        allInterestList.add(InterestDM(R.drawable.ic_supervisor, "Supervisor"))
-//        allInterestList.add(InterestDM(R.drawable.ic_cleaning, "Cleaner"))
-//        allInterestList.add(InterestDM(R.drawable.ic_plant_in_hand, "Farmers"))
         listener()
+    }
+
+    private fun setUpSkillDetailsRV(skillsDetails: List<SkillsDetails>){
         context?.let {
-            all_interests_rv.layoutManager = GridLayoutManager(
-                    activity, 4,
-                    GridLayoutManager.VERTICAL, false
+            skill_details_rv.layoutManager = GridLayoutManager(
+                activity, 4,
+                GridLayoutManager.VERTICAL, false
             )
-            all_interests_rv.adapter = AllInterestAdapter(
-                    it,
-                    allInterestList,
-                    object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
-                        override fun onclick(view: View, position: Int) {
-                            var foundSelected = false
-                            if (allInterestList.get(position)?.selected == true) {
-                                resetSelected(view.icon_iv, view.interest_name, view)
-                                allInterestList.get(position)?.selected = false
-                                foundSelected = true
-                            }
-
-                            if (getSelectedInterestCount() < 3) {
-                                if (!foundSelected) {
-                                    setSelected(view.icon_iv, view.interest_name, view)
-                                    allInterestList.get(position)?.selected = true
-                                }
-                            } else {
-                                Toast.makeText(
-                                        context,
-                                        "Maximum three interest can be selected!!",
-                                        Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                            if (getSelectedInterestCount() > 0) {
-                                formCompletionListener?.enableDisableNextButton(true)
-                            } else {
-                                formCompletionListener?.enableDisableNextButton(false)
-                            }
-                        }
-                    })
+            skill_details_rv.adapter = SkillDetailsAdapter(
+                it,
+                skillsDetails,
+                object : SkillDetailsAdapter.OnDeliveryExecutiveClickListener {
+                    override fun onclick(view: View, position: Int) {
+                        var foundSelected = false
+//                        if (skillDetailsList.get(position).selected) {
+//                            resetSelected(view.icon_iv, view.interest_name, view)
+//                            skillDetailsList.get(position).selected = false
+//                            foundSelected = true
+//                        }
+//                        else{
+//                            setSelected(view.icon_iv, view.interest_name, view)
+//                            skillDetailsList.get(position).selected = true
+//                        }
+                    }
+                }, this
+            )
 
 //            all_interests_rv.addItemDecoration(
 //                SpaceItemDecoration(
@@ -120,12 +104,67 @@ class InterestFragment() :
 //                )
 //            )
             context?.let {
-                val itemDecoration = MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                val itemDecoration =
+                    MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
+                skill_details_rv.addItemDecoration(itemDecoration)
+//                all_interests_rv.addItemDecoration(SeparatorDecoration(it, Color.GREEN,1f))
+            }
+        }
+    }
+
+    private fun setUpRecyclerView(allInterestList: ArrayList<InterestDM>) {
+        context?.let {
+            all_interests_rv.layoutManager = GridLayoutManager(
+                activity, 4,
+                GridLayoutManager.VERTICAL, false
+            )
+            all_interests_rv.adapter = AllInterestAdapter(
+                it,
+                allInterestList,
+                object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
+                    override fun onclick(view: View, position: Int) {
+                        var foundSelected = false
+                        if (allInterestList.get(position)?.selected == true) {
+                            resetSelected(view.icon_iv, view.interest_name, view)
+                            allInterestList.get(position)?.selected = false
+                            foundSelected = true
+                        }
+
+                        if (getSelectedInterestCount() < 3) {
+                            if (!foundSelected) {
+                                setSelected(view.icon_iv, view.interest_name, view)
+                                allInterestList.get(position)?.selected = true
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Maximum three interest can be selected!!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        if (getSelectedInterestCount() > 0) {
+                            formCompletionListener?.enableDisableNextButton(true)
+                        } else {
+                            formCompletionListener?.enableDisableNextButton(false)
+                        }
+                    }
+                }, this
+            )
+
+//            all_interests_rv.addItemDecoration(
+//                SpaceItemDecoration(
+//                    resources.getDimensionPixelSize(R.dimen.size1)
+//                )
+//            )
+            context?.let {
+                val itemDecoration =
+                    MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
                 itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
                 all_interests_rv.addItemDecoration(itemDecoration)
 //                all_interests_rv.addItemDecoration(SeparatorDecoration(it, Color.GREEN,1f))
             }
-
         }
     }
 
@@ -133,16 +172,24 @@ class InterestFragment() :
     private fun getSelectedInterestCount(): Int {
         var count = 0
         allInterestList.forEach { obj ->
-            if (obj?.selected == true) {
+            if (obj.selected) {
                 count++
             }
         }
         return count
     }
 
+    private fun isSkillDetailsFound(iDM: InterestDM): Boolean{
+            if (iDM.selected && iDM.skillDetails.size != 0){
+                Log.d("here", iDM.skillDetails.toString())
+                return true
+            }
+        return false
+    }
+
     private fun isDeliveryExecutiveSelected(): Boolean {
         allInterestList.forEach { obj ->
-            if (obj?.skill.equals(DELIVERY_EXECUTIVE)) {
+            if (obj.skill.equals(DELIVERY_EXECUTIVE)) {
                 return true
             }
         }
@@ -265,7 +312,7 @@ class InterestFragment() :
 //        var selectedInterests = ArrayList<String>()
         allInterestList.forEach { interest ->
             if (interest?.selected == true) {
-                var skillModelData = SkillModel(id = interest?.skill,skillDetail = getSkillDetailData(interest?.skill))
+                var skillModelData = SkillModel(id = interest.skill,skillDetail = getSkillDetailData(interest.skill))
                 skills.add(skillModelData)
             }
         }
@@ -293,11 +340,11 @@ class InterestFragment() :
     var DELIVERY_EXECUTIVE = "Delivery Executive"
     override fun nextButtonActionFound(): Boolean {
         when (currentStep) {
-            0 -> getselectedInterest().forEach {
+            0 -> allInterestList.forEach {
                 Log.d("test flow","first")
-                if (it.id.equals(DELIVERY_EXECUTIVE)) {
+                if (isSkillDetailsFound(it)) {
                     Log.d("test flow","second")
-
+                    setUpSkillDetailsRV(it.skillDetails)
                     interest_cl.gone()
                     delivery_executive_detail_cl.visible()
                     formCompletionListener?.enableDisableNextButton(false)
@@ -318,13 +365,31 @@ class InterestFragment() :
     fun getSelectedInterestsForAnalytics(): ArrayList<String> {
         var skills = ArrayList<String>()
         allInterestList.forEach { interest ->
-            if (interest?.selected == true) {
-                skills.add(interest?.skill)
+            if (interest.selected) {
+                skills.add(interest.skill)
             }
         }
         return skills
     }
 
+    fun getSkillLocalIcon(name: String) : Int{
+        var icon = R.drawable.ic_driving_wheel
+        var map = mapOf<String, Int>("Driving" to R.drawable.ic_driving_wheel,
+            "DELIVERY_EXECUTIVE" to R.drawable.ic_delivery_truck,
+            "Sales" to R.drawable.ic_sale,
+            "Technician" to R.drawable.ic_technician,
+            "Helper" to R.drawable.ic_trolley,
+            "Security" to R.drawable.ic_security,
+            "Tele Calling" to R.drawable.ic_technician,
+            "Supervisor" to R.drawable.ic_supervisor,
+            "Cleaner" to R.drawable.ic_cleaning,
+            "Farmers" to R.drawable.ic_plant_in_hand,)
+
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
+    }
 
     private fun setMainInterestTracker() {
         var map = mapOf("interests" to getSelectedInterestsForAnalytics())

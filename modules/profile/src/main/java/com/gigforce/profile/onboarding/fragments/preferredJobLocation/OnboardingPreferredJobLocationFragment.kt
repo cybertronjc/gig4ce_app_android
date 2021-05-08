@@ -51,7 +51,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private var spaceItemDecoration: SpaceItemDecoration? = null
 
     private val majorCitiesAdapter: OnboardingMajorCityAdapter by lazy {
-        OnboardingMajorCityAdapter(requireContext(), glide).apply {
+        OnboardingMajorCityAdapter(requireContext(), glide, this).apply {
             setOnCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
         }
     }
@@ -125,6 +125,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private fun initViewModel() {
         viewModel.majorCities
                 .observe(viewLifecycleOwner, {
+                    Log.d("cities", it.toString())
                     showMajorCities(it)
                 })
 
@@ -138,7 +139,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         cityAdapter.setData(it.sortedBy { it.name })
     }
 
-    private fun showMajorCities(it: List<CityWithImage>) {
+    private fun showMajorCities(it: ArrayList<CityWithImage>) {
         majorCitiesAdapter.setData(it)
 
 
@@ -274,5 +275,17 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     var formCompletionListener: OnFragmentFormCompletionListener? = null
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
+    }
+
+    fun getMajorCityIcon(name: String): Int {
+        var icon = R.drawable.ic_delhi
+        var map = mapOf<String, Int>("Chandigarh" to R.drawable.ic_chandigarh, "Delhi-NCR" to R.drawable.ic_delhi, "Hyderabad" to R.drawable.ic_hyderabad,
+            "Mumbai" to R.drawable.ic_mumbai,"Jaipur" to R.drawable.ic_jaipur,"Chennai" to R.drawable.ic_chennai,
+            "Bangalore" to R.drawable.ic_banglore,"Kolkata" to R.drawable.ic_kolkata,"Guwahati" to R.drawable.ic_guwahati,
+            "Lucknow" to R.drawable.ic_lucknow,"Pune" to R.drawable.ic_pune)
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 }

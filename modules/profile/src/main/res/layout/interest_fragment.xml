@@ -235,10 +235,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/which_delivery">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/skill_details_rv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/size16"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginRight="@dimen/size16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/imageTextCardMol"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:visibility="gone"
                     android:layout_marginRight="1dp"
                     android:background="@drawable/rect_left_cornor_card"
                     app:layout_constraintEnd_toStartOf="@+id/imageTextCardMol4"
@@ -280,6 +292,7 @@
                     android:layout_height="82dp"
                     android:background="@color/white"
                     android:layout_marginRight="1dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/imageTextCardMolfirst"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/imageTextCardMol"
@@ -316,6 +329,7 @@
                     android:id="@+id/imageTextCardMolfirst"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:visibility="gone"
                     android:background="@color/white"
                     app:layout_constraintEnd_toStartOf="@+id/imageTextCardMol3"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -353,6 +367,7 @@
                     android:id="@+id/imageTextCardMol3"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:visibility="gone"
                     android:layout_marginLeft="1dp"
                     android:background="@drawable/rect_right_cornor_card"
                     app:layout_constraintEnd_toEndOf="parent"
