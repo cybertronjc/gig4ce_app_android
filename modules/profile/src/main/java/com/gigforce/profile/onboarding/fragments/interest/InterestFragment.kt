@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.core.IEventTracker
@@ -37,7 +38,7 @@ class InterestFragment() :
         fun newInstance() =
                 InterestFragment()
 
-        private var allInterestList = ArrayList<InterestDM>()
+        private var allInterestList = ArrayList<InterestDM?>()
 
     }
 
@@ -57,17 +58,23 @@ class InterestFragment() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
-        allInterestList.clear()
-        allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
-        allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, DELIVERY_EXECUTIVE))
-        allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))
-        allInterestList.add(InterestDM(R.drawable.ic_technician, "Technician"))
-        allInterestList.add(InterestDM(R.drawable.ic_trolley, "Helper"))
-        allInterestList.add(InterestDM(R.drawable.ic_security, "Security"))
-        allInterestList.add(InterestDM(R.drawable.ic_technician, "Tele Calling"))
-        allInterestList.add(InterestDM(R.drawable.ic_supervisor, "Supervisor"))
-        allInterestList.add(InterestDM(R.drawable.ic_cleaning, "Cleaner"))
-        allInterestList.add(InterestDM(R.drawable.ic_plant_in_hand, "Farmers"))
+
+        //getting skills from DB
+        viewModel.skills.observe(viewLifecycleOwner, Observer {
+            allInterestList = it
+        })
+
+//        allInterestList.clear()
+//        allInterestList.add(InterestDM(R.drawable.ic_driving_wheel, "Driving"))
+//        allInterestList.add(InterestDM(R.drawable.ic_delivery_truck, DELIVERY_EXECUTIVE))
+//        allInterestList.add(InterestDM(R.drawable.ic_sale, "Sales"))
+//        allInterestList.add(InterestDM(R.drawable.ic_technician, "Technician"))
+//        allInterestList.add(InterestDM(R.drawable.ic_trolley, "Helper"))
+//        allInterestList.add(InterestDM(R.drawable.ic_security, "Security"))
+//        allInterestList.add(InterestDM(R.drawable.ic_technician, "Tele Calling"))
+//        allInterestList.add(InterestDM(R.drawable.ic_supervisor, "Supervisor"))
+//        allInterestList.add(InterestDM(R.drawable.ic_cleaning, "Cleaner"))
+//        allInterestList.add(InterestDM(R.drawable.ic_plant_in_hand, "Farmers"))
         listener()
         context?.let {
             all_interests_rv.layoutManager = GridLayoutManager(
@@ -80,16 +87,16 @@ class InterestFragment() :
                     object : AllInterestAdapter.OnDeliveryExecutiveClickListener {
                         override fun onclick(view: View, position: Int) {
                             var foundSelected = false
-                            if (allInterestList.get(position).selected) {
+                            if (allInterestList.get(position)?.selected == true) {
                                 resetSelected(view.icon_iv, view.interest_name, view)
-                                allInterestList.get(position).selected = false
+                                allInterestList.get(position)?.selected = false
                                 foundSelected = true
                             }
 
                             if (getSelectedInterestCount() < 3) {
                                 if (!foundSelected) {
                                     setSelected(view.icon_iv, view.interest_name, view)
-                                    allInterestList.get(position).selected = true
+                                    allInterestList.get(position)?.selected = true
                                 }
                             } else {
                                 Toast.makeText(
@@ -122,10 +129,11 @@ class InterestFragment() :
         }
     }
 
+
     private fun getSelectedInterestCount(): Int {
         var count = 0
         allInterestList.forEach { obj ->
-            if (obj.selected) {
+            if (obj?.selected == true) {
                 count++
             }
         }
@@ -134,7 +142,7 @@ class InterestFragment() :
 
     private fun isDeliveryExecutiveSelected(): Boolean {
         allInterestList.forEach { obj ->
-            if (obj.interestName.equals(DELIVERY_EXECUTIVE)) {
+            if (obj?.skill.equals(DELIVERY_EXECUTIVE)) {
                 return true
             }
         }
@@ -256,8 +264,8 @@ class InterestFragment() :
         var skills = ArrayList<SkillModel>()
 //        var selectedInterests = ArrayList<String>()
         allInterestList.forEach { interest ->
-            if (interest.selected) {
-                var skillModelData = SkillModel(id = interest.interestName,skillDetail = getSkillDetailData(interest.interestName))
+            if (interest?.selected == true) {
+                var skillModelData = SkillModel(id = interest?.skill,skillDetail = getSkillDetailData(interest?.skill))
                 skills.add(skillModelData)
             }
         }
@@ -310,8 +318,8 @@ class InterestFragment() :
     fun getSelectedInterestsForAnalytics(): ArrayList<String> {
         var skills = ArrayList<String>()
         allInterestList.forEach { interest ->
-            if (interest.selected) {
-                skills.add(interest.interestName)
+            if (interest?.selected == true) {
+                skills.add(interest?.skill)
             }
         }
         return skills

@@ -8,12 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.gigforce.profile.R
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
 
 class AllInterestAdapter(
     val context: Context,
-    val allInterestList: ArrayList<InterestDM>,
+    val allInterestList: ArrayList<InterestDM?>,
     val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener
 ) :
     RecyclerView.Adapter<AllInterestAdapter.ViewHolder>() {
@@ -32,7 +33,7 @@ class AllInterestAdapter(
 
     //this method is binding the data on the list
     override fun onBindViewHolder(holder: AllInterestAdapter.ViewHolder, position: Int) {
-        holder.bindItems(allInterestList.get(position), position)
+        allInterestList.get(position)?.let { holder.bindItems(it, position) }
     }
 
     //this method is giving the size of the list
@@ -46,8 +47,9 @@ class AllInterestAdapter(
         fun bindItems(interestDM: InterestDM, position: Int) {
             val icon = itemView.icon_iv as ImageView
             val interestName = itemView.interest_name as TextView
-            icon.setImageResource(interestDM.image)
-            interestName.text = interestDM.interestName
+            Glide.with(context).load(interestDM.icon).into(icon)
+            //icon.setImageResource(interestDM.icon)
+            interestName.text = interestDM.skill
 
             itemView.setOnClickListener({
                 onDeliveryExecutiveClickListener.onclick(it,position)

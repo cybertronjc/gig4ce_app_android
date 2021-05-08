@@ -1,5 +1,11 @@
 package com.gigforce.profile.onboarding.fragments.interest
 
-data class InterestDM(val image: Int, val interestName:String, var selected: Boolean = false){
+data class InterestDM(
+    var id: String,
+    var icon: String,
+    var image: Int,
+    var index: Int,
+    var skill:String,
+    var selected: Boolean = false){
 
 }
