@@ -180,8 +180,8 @@ class InterestFragment() :
     }
 
     private fun isSkillDetailsFound(iDM: InterestDM): Boolean{
-            if (iDM.selected && iDM.skillDetails.size != 0){
-                Log.d("here", iDM.skillDetails.toString())
+            if (iDM.selected && iDM.skillDetails?.size != 0){
+                Log.d("here", iDM.skillDetails?.toString())
                 return true
             }
         return false
@@ -344,7 +344,7 @@ class InterestFragment() :
                 Log.d("test flow","first")
                 if (isSkillDetailsFound(it)) {
                     Log.d("test flow","second")
-                    setUpSkillDetailsRV(it.skillDetails)
+                    setUpSkillDetailsRV(it.skillDetails!!)
                     interest_cl.gone()
                     delivery_executive_detail_cl.visible()
                     formCompletionListener?.enableDisableNextButton(false)
