@@ -133,15 +133,15 @@ class ClientActiExploreAdapter(
 
                 "Pending" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
                                 jobActionTv.setText("Complete Application")}
-                "Submitted" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
+                "Submitted" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
                                 jobActionTv.setText("View Application")}
                 "New" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
                             jobActionTv.setText("Apply Now")}
-                "Approved" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+                "Approved" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
                                 jobActionTv.setText("Share Gig")}
                 "Applied" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
                     jobActionTv.setText("View Application")}
-                "Rejected" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+                "Rejected" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_application_rejected))
                                 jobActionTv.setText("Apply Again")}
 
             }

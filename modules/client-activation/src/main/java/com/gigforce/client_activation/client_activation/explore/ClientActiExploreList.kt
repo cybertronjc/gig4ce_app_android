@@ -240,17 +240,55 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         )
     }
 
-    public fun takeAction(action: String, id: String){
+     fun takeAction(action: String, id: String){
         Log.d("action", action)
         Log.d("id", id)
         when(action){
-            "Apply Now" ->  navigation.navigateTo(
+            //navigate to Application
+            "Apply Now"  ->  navigation.navigateTo(
                     "client_activation/applicationClientActivation", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to id
 
-            )
-            )
+            ))
+            //share gig for approved
+            "Approved" -> shareGig()
+
+            //rejected
+            "Apply Again" -> navigation.navigateTo(
+                "client_activation/applicationClientActivation", bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to id
+
+                ))
+            //completed applicaiton
+            "Complete Application" -> navigation.navigateTo(
+                "client_activation/applicationClientActivation", bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to id
+
+                ))
+            //Submitted applicaiton
+            "View Application" -> navigation.navigateTo(
+                "client_activation", bundleOf(
+                    StringConstants.JOB_PROFILE_ID.value to id
+
+                ))
         }
     }
+
+    private fun shareGig() {
+//        Firebase..dynamicLinks.shortLinkAsync {
+//            longLink =
+//                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+//        }.addOnSuccessListener { result ->
+//            // Short link created
+//            val shortLink = result.shortLink
+//            shareToAnyApp(shortLink.toString())
+//        }.addOnFailureListener {
+//            // Error
+//            // ...
+//            showToast(it.message!!)
+//        }
+    }
+
+
 
 }
