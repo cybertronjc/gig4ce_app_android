@@ -114,9 +114,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private fun initListeners() {
         search_cities_et.doOnTextChanged { text, start, before, count ->
 
-            if (cityAdapter.itemCount != 0)
-                cityAdapter.filter.filter(text)
-
+            cityAdapter.filter.filter(text)
             majorCitiesAdapter.filter.filter(text)
         }
     }
