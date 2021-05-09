@@ -167,9 +167,16 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         }
     }
 
-    override fun onCitySelected(city: City) {
+    override fun onCitySelected(city: City,isMajorCity : Boolean) {
         formCompletionListener?.enableDisableNextButton(true)
         selectedCity = city
+        if(isMajorCity){
+            cityAdapter.uncheckedSelection()
+        }
+        else{
+            majorCitiesAdapter.uncheckedSelection()
+        }
+
     }
 
     companion object {
