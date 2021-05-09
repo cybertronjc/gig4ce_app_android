@@ -248,7 +248,9 @@ class HourViewFragment : RosterBaseFragment() {
                             duration = gig.duration,
                             title = gig.getGigTitle(),
                             cardHeight = (itemHeight * gig.duration).toInt().px,
-                            isNewGigPage = gig.openNewGig()
+                            isNewGigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     upcomingCard.id = View.generateViewId()
                     upcomingCard.tag = gig.tag
@@ -276,7 +278,9 @@ class HourViewFragment : RosterBaseFragment() {
                             paymentSuccess = gig.isPaymentDone,
                             cardHeight = (itemHeight * gig.duration).toInt().px,
                             isMonthlyGig = gig.isMonthlyGig,
-                            isNewgigPage = gig.openNewGig()
+                            isNewgigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
@@ -299,7 +303,9 @@ class HourViewFragment : RosterBaseFragment() {
                             duration = gig.duration,
                             title = gig.getGigTitle(),
                             cardHeight = (itemHeight * gig.duration).toInt().px,
-                            isNewGigPage = gig.openNewGig()
+                            isNewGigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     currentCard.id = View.generateViewId()
                     currentCard.tag = gig.tag

@@ -2,6 +2,7 @@ package com.gigforce.profile.adapters
 
 import android.content.Context
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,8 +61,9 @@ class OnboardingCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingCityViewHolder, position: Int) {
-        if(filteredCityList.size > position)
-        holder.bindValues(filteredCityList.get(position), position)
+        if(position != RecyclerView.NO_POSITION) {
+            holder.bindValues(filteredCityList.get(position), position)
+        }
     }
 
     fun setData(contacts: List<City>) {
@@ -81,6 +83,7 @@ class OnboardingCityAdapter(
 
             if (charString.isEmpty()) {
                 filteredCityList = originalCityList
+                Log.d("FilteredL","${filteredCityList.size}")
             } else {
                 val filteredList: MutableList<City> = mutableListOf()
                 for (contact in originalCityList) {
@@ -89,9 +92,10 @@ class OnboardingCityAdapter(
                                     true
                             )
                     )
-                        filteredList.add(contact)
+                    filteredList.add(contact)
                 }
                 filteredCityList = filteredList
+                Log.d("FilteredL","${filteredList.size}")
             }
 
             val filterResults = FilterResults()
@@ -100,7 +104,6 @@ class OnboardingCityAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredCityList = results?.values as List<City>
             notifyDataSetChanged()
         }
     }

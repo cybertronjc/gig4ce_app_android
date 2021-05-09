@@ -165,6 +165,10 @@ class LanguageAdapter(
 //            }
 //            notifyDataSetChanged()
             notifyDataSetChanged()
+
+            if(newPosition == -1)
+                return
+
             val language = filteredLanguageList[newPosition]
             onLanguageSelectedListener?.onLanguageSelected(
                     language,allViewHolder.get(newPosition)

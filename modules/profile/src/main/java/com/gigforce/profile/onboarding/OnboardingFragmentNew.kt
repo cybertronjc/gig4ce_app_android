@@ -387,14 +387,16 @@ class OnboardingFragmentNew : Fragment(){
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
-        val referrerUrl = response!!.installReferrer
-        Log.d("referrer link", referrerUrl)
+
+        val referrerUrl = response?.installReferrer?: ""
 
         //send source event to mixpanel
         try {
+
+            Log.d("referrer link", referrerUrl)
             eventTracker.pushEvent(TrackingEventArgs("lead_source", getTagsMap(referrerUrl)))
             eventTracker.setUserProperty(getTagsMap(referrerUrl))
-        } catch (e: JSONException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
