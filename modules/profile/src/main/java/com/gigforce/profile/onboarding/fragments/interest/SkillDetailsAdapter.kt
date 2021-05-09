@@ -54,7 +54,7 @@ class SkillDetailsAdapter(
                 Glide.with(context).load(interestDM.icon).into(icon)
             }
             else{
-                icon.setImageResource(interestFragment.getSkillLocalIcon(interestDM.name))
+                icon.setImageResource(interestFragment.getSkillDetailLocalIcon(interestDM.name))
             }
             interestName.setText(interestDM.name)
 

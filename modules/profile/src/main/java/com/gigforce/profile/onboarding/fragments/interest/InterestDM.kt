@@ -9,7 +9,7 @@ data class InterestDM(
     var index: Int = -1,
     var isActive: Boolean = false,
     var skill:String = "",
-    @SerializedName("skillDetails")var skillDetails: List<SkillsDetails>? = null,
+    @SerializedName("skillDetails")var skillDetails: List<SkillsDetails>? = listOf(),
     var selected: Boolean = false){
 
 }

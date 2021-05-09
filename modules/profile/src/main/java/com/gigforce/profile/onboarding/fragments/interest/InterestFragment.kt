@@ -85,15 +85,16 @@ class InterestFragment() :
                 object : SkillDetailsAdapter.OnDeliveryExecutiveClickListener {
                     override fun onclick(view: View, position: Int) {
                         var foundSelected = false
-//                        if (skillDetailsList.get(position).selected) {
-//                            resetSelected(view.icon_iv, view.interest_name, view)
-//                            skillDetailsList.get(position).selected = false
-//                            foundSelected = true
-//                        }
-//                        else{
-//                            setSelected(view.icon_iv, view.interest_name, view)
-//                            skillDetailsList.get(position).selected = true
-//                        }
+                        if (skillDetailsList.get(position).selected) {
+                            resetSelected(view.icon_iv, view.interest_name, view)
+                            skillDetailsList.get(position).selected = false
+                            foundSelected = true
+                        }
+                        else{
+                            setSelected(view.icon_iv, view.interest_name, view)
+                            skillDetailsList.get(position).selected = true
+                        }
+                        validateForm()
                     }
                 }, this
             )
@@ -180,8 +181,8 @@ class InterestFragment() :
     }
 
     private fun isSkillDetailsFound(iDM: InterestDM): Boolean{
-            if (iDM.selected && iDM.skillDetails?.size != 0){
-                Log.d("here", iDM.skillDetails?.toString())
+            if (iDM.skillDetails?.size != 0){
+                Log.d("here", "true")
                 return true
             }
         return false
@@ -190,6 +191,7 @@ class InterestFragment() :
     private fun isDeliveryExecutiveSelected(): Boolean {
         allInterestList.forEach { obj ->
             if (obj.skill.equals(DELIVERY_EXECUTIVE)) {
+
                 return true
             }
         }
@@ -287,7 +289,7 @@ class InterestFragment() :
             view.setBackgroundDrawable(
                     ContextCompat.getDrawable(
                             it,
-                            R.drawable.option_default_border
+                            R.drawable.rect_gray_border
                     )
             )
         }
@@ -326,10 +328,21 @@ class InterestFragment() :
         return null
     }
 
+    private fun getSelectedSkillDetails(): ArrayList<String>{
+        var list = ArrayList<String>()
+        for (i in 0..skillDetailsList.size - 1){
+            if (skillDetailsList.get(i).selected){
+                list.add(skillDetailsList.get(i).name)
+                Log.d("selected", "true")
+            }
+        }
+        return list
+    }
+
     fun validateForm() {
         if (getSelectedInterestCount() > 0) {
             if (isDeliveryExecutiveSelected()) {
-                if (!experiencedInDeliveryExecutive || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
+                if (!experiencedInDeliveryExecutive || getSelectedSkillDetails().size > 0) {
                     formCompletionListener?.enableDisableNextButton(true)
                 } else formCompletionListener?.enableDisableNextButton(false)
             } else formCompletionListener?.enableDisableNextButton(true)
@@ -342,14 +355,18 @@ class InterestFragment() :
         when (currentStep) {
             0 -> allInterestList.forEach {
                 Log.d("test flow","first")
-                if (isSkillDetailsFound(it)) {
+                if (it.selected &&  isSkillDetailsFound(it)) {
                     Log.d("test flow","second")
-                    setUpSkillDetailsRV(it.skillDetails!!)
-                    interest_cl.gone()
-                    delivery_executive_detail_cl.visible()
-                    formCompletionListener?.enableDisableNextButton(false)
-                    currentStep = 1
-                    return true
+                    if (it.skillDetails != null){
+                        interest_cl.gone()
+                        delivery_executive_detail_cl.visible()
+                        setUpSkillDetailsRV(it.skillDetails!!)
+                        skillDetailsList.addAll(it.skillDetails!!)
+                        formCompletionListener?.enableDisableNextButton(false)
+                        currentStep = 1
+                        return true
+                    }
+
                 }
             }
             else -> {
@@ -391,6 +408,29 @@ class InterestFragment() :
         return icon
     }
 
+    fun getSkillDetailLocalIcon(name: String) : Int{
+        var icon = R.drawable.ic_driving_wheel
+        var map = mapOf<String, Int>("Food" to R.drawable.ic_food,
+                "Grocery" to R.drawable.ic_grocery,
+                "Ecom" to R.drawable.ic_food,
+                "Milk" to R.drawable.ic_milk)
+
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
+    }
+
+    private fun getExperiencedIn(): HashMap<String, Boolean> {
+        var map = HashMap<String, Boolean>()
+        skillDetailsList.forEach {
+            if (it.selected){
+                map.put(it.name, it.selected)
+            }
+        }
+        return map
+    }
+
     private fun setMainInterestTracker() {
         var map = mapOf("interests" to getSelectedInterestsForAnalytics())
         Log.d("interestMap", map.toString())
@@ -402,7 +442,7 @@ class InterestFragment() :
     }
 
     fun setDeliveryExecutiveInterestTracker() {
-        var map = mapOf("interests" to getSelectedInterestsForAnalytics(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to mapOf("Food" to foodSelected, "Grocery" to grocerySelected, "Ecom" to ecomSelected, "Milk" to milkSelected))
+        var map = mapOf("interests" to getSelectedInterestsForAnalytics(), "DeliveryExperience" to (clickedOnExperiencedOptions && !experiencedInDeliveryExecutive), "ExperienceIn" to getExperiencedIn())
         Log.d("interestDel", map.toString())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_INTREST, map))
         eventTracker.setUserProperty(map)
@@ -412,7 +452,7 @@ class InterestFragment() :
     override fun activeNextButton() {
         when (currentStep) {
             0 -> if (getSelectedInterestCount() > 0) formCompletionListener?.enableDisableNextButton(true)
-            1 -> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (foodSelected || grocerySelected || ecomSelected || milkSelected)) {
+            1 -> if ((clickedOnExperiencedOptions && !experiencedInDeliveryExecutive) || (getSelectedSkillDetails().size > 0)) {
                 formCompletionListener?.enableDisableNextButton(true)
             } else formCompletionListener?.enableDisableNextButton(false)
         }
