@@ -727,8 +727,9 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-       val shouldUserOldCam =  firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
+        val shouldUserOldCamString = firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
+        val shouldUserOldCam = if(shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
         if(shouldUserOldCam) {
             val intent = Intent(context, ImageCaptureActivity::class.java)
             startActivityForResult(
