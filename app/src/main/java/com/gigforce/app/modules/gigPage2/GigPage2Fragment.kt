@@ -52,6 +52,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
@@ -83,6 +84,7 @@ class GigPage2Fragment : BaseFragment(),
     private var location: Location? = null
     private var imageClickedPath: String? = null
     private var isRequestingLocation = false
+    private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
 //    private val locationUpdates: LocationUpdates by lazy {
 //        LocationUpdates()
@@ -725,18 +727,22 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-//        val intent = Intent(context, ImageCaptureActivity::class.java)
-//        startActivityForResult(
-//                intent,
-//                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-//        )
+       val shouldUserOldCam =  firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
-        CameraActivity.launch(
-            this,
-            destImage = null,
-            shouldUploadToServerToo = true,
-            serverParentPath = "attendance"
-        )
+        if(shouldUserOldCam) {
+            val intent = Intent(context, ImageCaptureActivity::class.java)
+            startActivityForResult(
+                    intent,
+                    REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+            )
+        } else {
+            CameraActivity.launch(
+                    this,
+                    destImage = null,
+                    shouldUploadToServerToo = true,
+                    serverParentPath = "attendance"
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -946,6 +952,8 @@ class GigPage2Fragment : BaseFragment(),
         private const val ID_IDENTITY_CARD = "apodZsdEbx"
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
+
+        const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
 
         private val IDENTITY_CARD = OtherOption(
                 id = ID_IDENTITY_CARD,
