@@ -406,9 +406,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
-        activity?.let {
-            navigation.test(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(),this)
-        }
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 

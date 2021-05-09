@@ -98,10 +98,7 @@ class PanUpload: Fragment() {
         panFront.setOnClickListener {
             photoCropIntent.putExtra("file", "panfront.jpg")
 //            startActivityForResult(photoCropIntent, PHOTO_CROP)
-            activity?.let {
-                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,it)
-
-            }
+            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,requireContext(),this)
         }
         panBack.setOnClickListener {
             if(panFront.drawable==null) {
@@ -113,11 +110,7 @@ class PanUpload: Fragment() {
             else {
                 photoCropIntent.putExtra("file", "panback.jpg")
 //                startActivityForResult(photoCropIntent, PHOTO_CROP)
-                activity?.let {
-                    navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,it)
-
-                }
-
+                    navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,requireContext(),this)
             }
         }
 

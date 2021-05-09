@@ -18,9 +18,6 @@ interface INavigation {
     fun navigateToDocViewerActivity(activity: Activity,url:String)
     fun navigateToPlayVideoDialogFragment(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPlayVideoDialogWithUrl(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
-    fun navigateToPhotoCrop(intent : Intent, requestCode:Int, fragment: FragmentActivity)
+    fun navigateToPhotoCrop(photoCropIntent: Intent, requestCodeUploadPanImage: Int, requireContext: Context, fragment: Fragment)
     fun navigateUp()
-    fun test(photoCropIntent: Intent, requestCodeUploadPanImage: Int, requireContext: Context, addPanCardInfoFragment: Fragment)
-//    fun test(intent : Intent, requestCode:Int, fragment: FragmentActivity)
-
 }

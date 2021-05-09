@@ -540,9 +540,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
-        activity?.let {
-            navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_CAPTURE_BANK_PHOTO,it)
-        }
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_CAPTURE_BANK_PHOTO,requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_CAPTURE_BANK_PHOTO)
     }
 

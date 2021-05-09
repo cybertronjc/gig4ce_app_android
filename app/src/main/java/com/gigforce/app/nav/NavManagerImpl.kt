@@ -94,28 +94,12 @@ class NavManagerImpl @Inject constructor(
         )
     }
 
-    override fun navigateToPhotoCrop(intent: Intent, requestCode: Int, fragment: FragmentActivity) {
-        val photoCropIntent = Intent(fragment, PhotoCrop::class.java)
-        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
-        if (intent.hasExtra("uid"))
-            photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
-        photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
-        photoCropIntent.putExtra("folder", intent.getStringExtra("folder"))
-        photoCropIntent.putExtra("detectFace", 0)
-        if (intent.hasExtra("file"))
-            photoCropIntent.putExtra("file", intent.getStringExtra("file"))
-
-        fragment.startActivityForResult(intent, requestCode)
-    }
-
-    override fun test(
-        intent: Intent,
-        requestCodeUploadPanImage: Int,
-        requireContext: Context,
-        addPanCardInfoFragment: Fragment
-    ) {
+    override fun navigateToPhotoCrop(intent: Intent,
+                                     requestCodeUploadPanImage: Int,
+                                     requireContext: Context,
+                                     fragment: Fragment) {
         val photoCropIntent = Intent(requireContext, PhotoCrop::class.java)
-        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
+        photoCropIntent.putExtra("purpose", intent.getStringExtra("purpose"))
         if (intent.hasExtra("uid"))
             photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
         photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
@@ -124,20 +108,8 @@ class NavManagerImpl @Inject constructor(
         if (intent.hasExtra("file"))
             photoCropIntent.putExtra("file", intent.getStringExtra("file"))
 
-        addPanCardInfoFragment.startActivityForResult(intent, requestCodeUploadPanImage)
+        fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
     }
 
-//    override fun test(intent: Intent, requestCode: Int, fragment: FragmentActivity) {
-//        val photoCropIntent = Intent(fragment, PhotoCrop::class.java)
-//        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
-//        if (intent.hasExtra("uid"))
-//            photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
-//        photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
-//        photoCropIntent.putExtra("folder", intent.getStringExtra("folder"))
-//        photoCropIntent.putExtra("detectFace", 0)
-//        if (intent.hasExtra("file"))
-//            photoCropIntent.putExtra("file", intent.getStringExtra("file"))
-//        Intent()
-//        fragment.startActivityForResult(intent, requestCode)
-//    }
+
 }

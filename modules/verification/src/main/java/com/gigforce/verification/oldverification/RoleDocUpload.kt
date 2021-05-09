@@ -195,10 +195,7 @@ class RoleDocUpload : Fragment() {
         ddFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
 //            startActivityForResult(photoCropIntent, PHOTO_CROP)
-            activity?.let {
-                navigation.navigateToPhotoCrop(photoCropIntent, PHOTO_CROP, it)
-
-            }
+            navigation.navigateToPhotoCrop(photoCropIntent, PHOTO_CROP, requireContext(),this)
         }
         ddBack.setOnClickListener {
             if (ddFront.drawable == null) {
@@ -210,10 +207,7 @@ class RoleDocUpload : Fragment() {
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
 //                startActivityForResult(photoCropIntent, PHOTO_CROP)
-                activity?.let {
-                    navigation.navigateToPhotoCrop(photoCropIntent, PHOTO_CROP, it)
-
-                }
+                navigation.navigateToPhotoCrop(photoCropIntent, PHOTO_CROP, requireContext(),this)
 
             }
         }
