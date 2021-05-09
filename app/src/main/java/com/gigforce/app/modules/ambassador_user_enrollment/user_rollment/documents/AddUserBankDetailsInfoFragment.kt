@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -41,7 +42,7 @@ class AddUserBankDetailsInfoFragment : BaseFragment() {
         const val REQUEST_CODE_CAPTURE_BANK_PHOTO = 2333
     }
 
-    private val viewModel: GigVerificationViewModel by viewModels()
+    private val viewModel: GigVerificationViewModel by activityViewModels()
     private var clickedImagePath: Uri? = null
     private lateinit var userId: String
     private lateinit var userName: String

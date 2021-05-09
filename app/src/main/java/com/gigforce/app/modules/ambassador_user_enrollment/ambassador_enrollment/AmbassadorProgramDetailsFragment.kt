@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,7 +45,7 @@ class AmbassadorProgramDetailsFragment : BaseFragment(),
         Toolbar.OnMenuItemClickListener, LocationUpdates.LocationUpdateCallbacks {
 
 
-    private val learningViewModel: LearningViewModel by viewModels()
+    private val learningViewModel: LearningViewModel by activityViewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater,

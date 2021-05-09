@@ -57,7 +57,7 @@ data class GigerVerificationStatus(
 }
 
 @HiltViewModel
-open class GigVerificationViewModel @Inject constructor(
+class GigVerificationViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
     private val gigerVerificationRepository: GigerVerificationRepository =

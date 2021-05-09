@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -35,7 +36,7 @@ import java.util.*
 
 class AddUserCurrentAddressFragment : BaseFragment() {
 
-    private val viewModel: UserDetailsViewModel by viewModels()
+    private val viewModel: UserDetailsViewModel by activityViewModels()
     private lateinit var userId: String
     private lateinit var userName: String
     var allPostoffices = ArrayList<PostalOffice>()

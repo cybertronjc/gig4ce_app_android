@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PayslipMonthlyFragment : Fragment() {
 
-    private val viewModel: PayslipMonthlyViewModel by viewModels()
+    private val viewModel: PayslipMonthlyViewModel by activityViewModels()
     @Inject lateinit var buildConfig : IBuildConfig
     private val mAdapter: MonthlyPayslipsAdapter by lazy {
         MonthlyPayslipsAdapter(requireContext())

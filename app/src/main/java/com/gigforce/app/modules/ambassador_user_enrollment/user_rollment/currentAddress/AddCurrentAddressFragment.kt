@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -36,8 +37,8 @@ import java.util.*
 
 class AddCurrentAddressFragment : BaseFragment() {
 
-    private val viewModel: UserDetailsViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val viewModel: UserDetailsViewModel by activityViewModels()
+    private val profileViewModel: ProfileViewModel by activityViewModels()
     private var userId: String? = null
     private var userName: String? = null
     private var cameFromEnrollment = false

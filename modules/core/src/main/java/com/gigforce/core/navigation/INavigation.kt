@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavOptions
 
 interface INavigation {
@@ -17,7 +18,9 @@ interface INavigation {
     fun navigateToDocViewerActivity(activity: Activity,url:String)
     fun navigateToPlayVideoDialogFragment(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
     fun navigateToPlayVideoDialogWithUrl(fragment: Fragment, lessonId:String, shouldShowFeedbackDialog:Boolean)
-    fun navigateToPhotoCrop(intent : Intent, requestCode:Int, fragment: Fragment)
+    fun navigateToPhotoCrop(intent : Intent, requestCode:Int, fragment: FragmentActivity)
     fun navigateUp()
+    fun test(photoCropIntent: Intent, requestCodeUploadPanImage: Int, requireContext: Context, addPanCardInfoFragment: Fragment)
+//    fun test(intent : Intent, requestCode:Int, fragment: FragmentActivity)
 
 }

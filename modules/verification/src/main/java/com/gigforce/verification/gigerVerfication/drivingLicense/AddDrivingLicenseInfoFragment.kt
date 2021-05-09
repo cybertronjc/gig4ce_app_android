@@ -537,7 +537,10 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,this)
+        activity?.let {
+            navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,it)
+
+        }
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL
@@ -558,8 +561,10 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-                REQUEST_CODE_UPLOAD_DL,this)
+        activity?.let {
+            navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,it)
+        }
+
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL

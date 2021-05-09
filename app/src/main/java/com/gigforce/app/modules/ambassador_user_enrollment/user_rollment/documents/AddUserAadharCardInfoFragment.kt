@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -47,7 +48,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
     }
 
-    private val viewModel: GigVerificationViewModel by viewModels()
+    private val viewModel: GigVerificationViewModel by activityViewModels()
     private lateinit var userId: String
     private lateinit var userName: String
 

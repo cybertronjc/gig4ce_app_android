@@ -10,6 +10,7 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
@@ -50,7 +51,7 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
 
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
     private val sendSmsViewModel: SendSmsViewModel by viewModels()
 
     private lateinit var userId: String

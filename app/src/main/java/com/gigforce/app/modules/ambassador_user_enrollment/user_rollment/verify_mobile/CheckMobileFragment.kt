@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -18,7 +19,7 @@ import java.util.regex.Pattern
 
 class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentActionListener {
 
-    private val viewModel: VerifyUserMobileViewModel by viewModels()
+    private val viewModel: VerifyUserMobileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

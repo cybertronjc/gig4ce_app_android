@@ -78,7 +78,7 @@ class ProfileFragment : BaseFragment() {
     private var FROM_CLIENT_ACTIVATION = false
     private var profilePicUploadInProgress = false
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
     val viewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

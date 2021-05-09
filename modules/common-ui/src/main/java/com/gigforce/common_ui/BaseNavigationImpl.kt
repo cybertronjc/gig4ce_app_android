@@ -61,4 +61,5 @@ abstract class BaseNavigationImpl(): INavigation {
     override fun navigateUp() {
         getNavController().navigateUp()
     }
+
  }

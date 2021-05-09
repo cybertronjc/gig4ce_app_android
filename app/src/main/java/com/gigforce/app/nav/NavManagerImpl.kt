@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
@@ -33,7 +34,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("login", R.id.Login)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("profile", R.id.profileFragment)
-        this.registerRoute("loader_screen",R.id.onboardingLoaderfragment)
+        this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
         this.registerForWalletAndPayouts()
@@ -93,8 +94,8 @@ class NavManagerImpl @Inject constructor(
         )
     }
 
-    override fun navigateToPhotoCrop(intent: Intent, requestCode: Int, fragment: Fragment) {
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
+    override fun navigateToPhotoCrop(intent: Intent, requestCode: Int, fragment: FragmentActivity) {
+        val photoCropIntent = Intent(fragment, PhotoCrop::class.java)
         photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
         if (intent.hasExtra("uid"))
             photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
@@ -106,4 +107,37 @@ class NavManagerImpl @Inject constructor(
 
         fragment.startActivityForResult(intent, requestCode)
     }
+
+    override fun test(
+        intent: Intent,
+        requestCodeUploadPanImage: Int,
+        requireContext: Context,
+        addPanCardInfoFragment: Fragment
+    ) {
+        val photoCropIntent = Intent(requireContext, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
+        if (intent.hasExtra("uid"))
+            photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
+        photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
+        photoCropIntent.putExtra("folder", intent.getStringExtra("folder"))
+        photoCropIntent.putExtra("detectFace", 0)
+        if (intent.hasExtra("file"))
+            photoCropIntent.putExtra("file", intent.getStringExtra("file"))
+
+        addPanCardInfoFragment.startActivityForResult(intent, requestCodeUploadPanImage)
+    }
+
+//    override fun test(intent: Intent, requestCode: Int, fragment: FragmentActivity) {
+//        val photoCropIntent = Intent(fragment, PhotoCrop::class.java)
+//        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
+//        if (intent.hasExtra("uid"))
+//            photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
+//        photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
+//        photoCropIntent.putExtra("folder", intent.getStringExtra("folder"))
+//        photoCropIntent.putExtra("detectFace", 0)
+//        if (intent.hasExtra("file"))
+//            photoCropIntent.putExtra("file", intent.getStringExtra("file"))
+//        Intent()
+//        fragment.startActivityForResult(intent, requestCode)
+//    }
 }

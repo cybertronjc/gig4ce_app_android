@@ -91,7 +91,10 @@ class AadhaarUpload : Fragment() {
         AadhaarFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
 //            startActivityForResult(photoCropIntent, PHOTO_CROP)
-            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
+            activity?.let {
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,it)
+
+            }
         }
         AadhaarBack.setOnClickListener {
             if (AadhaarFront.drawable == null) {
@@ -99,7 +102,10 @@ class AadhaarUpload : Fragment() {
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
 //                startActivityForResult(photoCropIntent, PHOTO_CROP)
-                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
+                activity?.let {
+                    navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,it)
+
+                }
             }
         }
 
