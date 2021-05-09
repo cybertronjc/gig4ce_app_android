@@ -333,7 +333,6 @@ class InterestFragment() :
         for (i in 0..skillDetailsList.size - 1){
             if (skillDetailsList.get(i).selected){
                 list.add(skillDetailsList.get(i).name)
-                Log.d("selected", "true")
             }
         }
         return list
@@ -392,7 +391,7 @@ class InterestFragment() :
     fun getSkillLocalIcon(name: String) : Int{
         var icon = R.drawable.ic_driving_wheel
         var map = mapOf<String, Int>("Driving" to R.drawable.ic_driving_wheel,
-            "DELIVERY_EXECUTIVE" to R.drawable.ic_delivery_truck,
+            "Delivery Executive" to R.drawable.ic_delivery_truck,
             "Sales" to R.drawable.ic_sale,
             "Technician" to R.drawable.ic_technician,
             "Helper" to R.drawable.ic_trolley,

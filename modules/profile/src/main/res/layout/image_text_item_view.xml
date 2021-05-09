@@ -4,7 +4,7 @@
      android:id="@+id/imageTextCardcl"
         android:layout_width="82dp"
         android:layout_height="82dp"
-        android:background="@drawable/rect_gray_border"
+        android:background="@drawable/rect_light_blue_border"
         app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
