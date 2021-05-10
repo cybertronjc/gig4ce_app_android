@@ -1,6 +1,7 @@
 package com.gigforce.profile.onboarding.fragments.interest
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.gigforce.profile.R
 import kotlinx.android.synthetic.main.image_text_item_view.view.*
+import javax.sql.DataSource
 
 class AllInterestAdapter(
     val context: Context,
@@ -52,6 +57,7 @@ class AllInterestAdapter(
             val interestName = itemView.interest_name as TextView
             if (interestDM.icon.isNotEmpty()) {
                 Glide.with(context).load(interestDM.icon).into(icon)
+
             }
             else{
                 icon.setImageResource(getSkillLocalIcon(interestDM.skill))

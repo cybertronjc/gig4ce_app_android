@@ -33,6 +33,7 @@ class InterestViewModel: ViewModel() {
                             }
                         }
                     }
+                    skillsData.sortBy { it -> it.index }
                     _skillsData.value = skillsData
                 }
             }

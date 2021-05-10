@@ -161,6 +161,7 @@ class OnboardingViewModel constructor(
                             }
                         }
                     }
+                    majorCityData.sortBy { it -> it.index }
                     _majorCities.value = majorCityData
             }
         } catch (e: Exception) {

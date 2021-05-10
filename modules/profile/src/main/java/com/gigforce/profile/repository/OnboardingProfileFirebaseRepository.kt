@@ -1,12 +1,15 @@
 package com.gigforce.profile.repository
 
+import androidx.lifecycle.LiveData
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.profile.models.OnboardingProfileData
+import com.gigforce.profile.onboarding.fragments.assetsowned.AssestDM
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -139,14 +142,14 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .updateOrThrow("leadSource", sourceMap)
     }
 
-     fun getSkills(): CollectionReference {
+     fun getSkills(): Query {
 
-          val collectionRef =  firebaseDB.collection(skillsCollectionName)
+         val collectionRef =  firebaseDB.collection(skillsCollectionName).whereEqualTo("isActive", true)
          return collectionRef
     }
 
-     fun getAssets(): CollectionReference {
-         val collectionRef = firebaseDB.collection(assetsCollectionName)
+     fun getAssets(): Query {
+         val collectionRef = firebaseDB.collection(assetsCollectionName).whereEqualTo("isActive", true)
          return collectionRef
     }
 }
