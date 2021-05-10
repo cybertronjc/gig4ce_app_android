@@ -142,10 +142,18 @@ class OnboardingCityAdapter(
                 notifyItemChanged(selectedItemIndex)
             }
 
-//            val city = filteredCityList[newPosition]
-//            onCitySelectedListener?.onCitySelected(city)
+            val city = filteredCityList[newPosition]
+            onCitySelectedListener?.onCitySelected(city,false)
         }
 
+    }
+
+    fun uncheckedSelection(){
+        if(selectedItemIndex!=-1){
+            var position = selectedItemIndex
+            selectedItemIndex = -1
+            notifyItemChanged(position)
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import com.gigforce.profile.models.City
 interface OnCitySelectedListener {
 
     fun onCitySelected(
-            city : City
+            city : City,
+            ismajorCity:Boolean
     )
 }

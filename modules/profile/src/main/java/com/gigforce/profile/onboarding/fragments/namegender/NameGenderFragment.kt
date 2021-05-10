@@ -2,6 +2,8 @@ package com.gigforce.profile.onboarding.fragments.namegender
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -26,8 +28,8 @@ import javax.inject.Inject
  * create an instance of this fragment.
  */
 @AndroidEntryPoint
-class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastStateListener,
-        OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.SetInterfaceListener {
+class NameGenderFragment : Fragment(), OnboardingFragmentNew.FragmentSetLastStateListener,
+    OnboardingFragmentNew.FragmentInteractionListener, OnboardingFragmentNew.SetInterfaceListener {
     companion object {
         fun newInstance() = NameGenderFragment()
     }
@@ -37,8 +39,8 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
     var gender = ""
     private var win: Window? = null
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         changeStatusBarColor()
@@ -63,10 +65,10 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
             it.isFocusableInTouchMode = true
             it.requestFocus()
             val inputMethodManager =
-                    activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
             inputMethodManager!!.toggleSoftInputFromWindow(
-                    it.applicationWindowToken,
-                    InputMethodManager.SHOW_FORCED, 0
+                it.applicationWindowToken,
+                InputMethodManager.SHOW_FORCED, 0
             )
         }
 
@@ -95,10 +97,25 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
             validateAllValues()
             hideKeyboard()
         })
+        username.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                validateAllValues()
+
+            }
+        })
+
     }
 
     private fun validateAllValues() {
-        if (!gender.equals("") && !username.text.toString().equals("")) {
+        if (!gender.equals("") && !username.text.toString().equals("") )  {
             formCompletionListener?.enableDisableNextButton(true)
         } else {
             formCompletionListener?.enableDisableNextButton(false)
@@ -117,10 +134,10 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
             icon.setColorFilter(ContextCompat.getColor(it, R.color.default_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.default_color))
             view.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            it,
-                            R.drawable.option_default_border
-                    )
+                ContextCompat.getDrawable(
+                    it,
+                    R.drawable.option_default_border
+                )
             )
         }
     }
@@ -130,10 +147,10 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
             icon.setColorFilter(ContextCompat.getColor(it, R.color.selected_image_color))
             option.setTextColor(ContextCompat.getColor(it, R.color.selected_text_color))
             view.setBackgroundDrawable(
-                    ContextCompat.getDrawable(
-                            it,
-                            R.drawable.option_selection_border
-                    )
+                ContextCompat.getDrawable(
+                    it,
+                    R.drawable.option_selection_border
+                )
             )
         }
 
@@ -142,7 +159,7 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
     fun hideKeyboard() {
         activity?.let {
             val imm: InputMethodManager =
-                    it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                it.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             //Find the currently focused view, so we can grab the correct window token from it.
             var view: View? = it.currentFocus ?: null
             //If no view currently has focus, create a new one, just so we can grab a window token from it
@@ -163,7 +180,12 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
         var props = HashMap<String, Any>()
         props.put("name", username.text.toString())
         props.put("gender", gender)
-        eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER, props))
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                OnboardingEvents.EVENT_USER_UPDATED_NAME_GENDER,
+                props
+            )
+        )
         eventTracker.setUserProperty(props)
         eventTracker.setProfileProperty(ProfilePropArgs("\$name", username.text.toString()))
         eventTracker.setProfileProperty(ProfilePropArgs("Gender", gender))
@@ -186,8 +208,9 @@ class NameGenderFragment() : Fragment(), OnboardingFragmentNew.FragmentSetLastSt
 // finally change the color
         win?.statusBarColor = resources.getColor(R.color.status_bar_gray)
     }
+
     var formCompletionListener: OnFragmentFormCompletionListener? = null
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
-        formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
+        formCompletionListener = formCompletionListener ?: onFragmentFormCompletionListener
     }
 }
