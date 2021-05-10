@@ -61,19 +61,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/two_wheeler_cl"
-            android:layout_width="252dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
-            android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
             android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/two_wheeler_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
@@ -113,6 +121,7 @@
                 android:id="@+id/imageTextCardcl_"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/imageTextCardcl_x"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -151,6 +160,7 @@
                 android:id="@+id/imageTextCardcl_x"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:layout_marginLeft="1dp"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -208,20 +218,28 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/three_wheeler_cl"
-            android:layout_width="168dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
-            android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
             android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/three_wheeler_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_1"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:layout_marginRight="1dp"
+                android:visibility="gone"
                 android:background="@drawable/rect_top_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_2"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -267,6 +285,7 @@
                 android:layout_width="82dp"
                 android:layout_height="82dp"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageTextCardcl_1"
@@ -322,19 +341,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/three_wheeler_cl1"
-            android:layout_width="168dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size16"
-            android:background="@drawable/rect_light_blue_fill"
             android:padding="1dp"
             android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/other_assets_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl_3"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_top_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_4"
@@ -375,6 +402,7 @@
                 android:id="@+id/imageTextCardcl_4"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -435,19 +463,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/it_assets"
-            android:layout_width="253dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size32"
-            android:background="@drawable/rect_gray_fill"
             android:padding="2dp"
             android:layout_marginLeft="@dimen/size16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/it_assets_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/imageTextCardcl5"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/rect_left_cornor_card"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_6"
@@ -487,6 +523,7 @@
                 android:id="@+id/imageTextCardcl_6"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:background="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_7"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -528,6 +565,7 @@
                 android:id="@+id/imageTextCardcl_7"
                 android:layout_width="82dp"
                 android:layout_height="82dp"
+                android:visibility="gone"
                 android:layout_marginLeft="1dp"
                 android:background="@drawable/rect_right_cornor_card"
 

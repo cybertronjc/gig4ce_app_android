@@ -44,21 +44,11 @@ data class City(
 
 data class CityWithImage(
 
-    @get:PropertyName("id")
-    @set:PropertyName("id")
     var id: String = "",
-
-    @get:PropertyName("name")
-    @set:PropertyName("name")
     var name: String = "",
-
-    @get:PropertyName("state_code")
-    @set:PropertyName("state_code")
     var stateCode: String = "",
-
-    @get:PropertyName("state_code")
-    @set:PropertyName("state_code")
-    var image: Int = -1
+    var image: Int = -1,
+    var icon: String = "",
 ){
 
     override fun toString(): String {

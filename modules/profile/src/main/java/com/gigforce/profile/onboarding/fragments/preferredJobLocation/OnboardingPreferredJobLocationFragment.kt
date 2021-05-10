@@ -123,6 +123,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private fun initViewModel() {
         viewModel.majorCities
                 .observe(viewLifecycleOwner, {
+                    Log.d("cities", it.toString())
                     showMajorCities(it)
                 })
 
@@ -136,7 +137,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         cityAdapter.setData(it.sortedBy { it.name })
     }
 
-    private fun showMajorCities(it: List<CityWithImage>) {
+    private fun showMajorCities(it: ArrayList<CityWithImage>) {
         majorCitiesAdapter.setData(it)
 
 
@@ -273,4 +274,6 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
+
+
 }

@@ -18,6 +18,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.models.OnboardingProfileData
+import com.gigforce.profile.onboarding.fragments.interest.InterestDM
 import com.gigforce.profile.repository.OnboardingProfileFirebaseRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
@@ -138,83 +139,33 @@ class OnboardingViewModel constructor(
     }
 
 
-    private val _majorCities = MutableLiveData<List<CityWithImage>>()
-    val majorCities: LiveData<List<CityWithImage>> = _majorCities
+    private val _majorCities = MutableLiveData<ArrayList<CityWithImage>>()
+    val majorCities: LiveData<ArrayList<CityWithImage>> = _majorCities
 
-    fun getAllMajorCities() {
+    fun getAllMajorCities()  = viewModelScope.launch{
 
-        val majorCities = listOf(
-                CityWithImage(
-                        id = "YC5BxjzW7U6VA856n9cz",
-                        name = "Chandigarh",
-                        image = R.drawable.ic_chandigarh,
-                        stateCode = "in_chandigarh"
-                ),
-                CityWithImage(
-                        id = "oGpypK2Tolf2YTDLvsMq",
-                        name = "Delhi-NCR",
-                        image = R.drawable.ic_delhi,
-                        stateCode = "in_delhi"
-                ),
-                CityWithImage(
-                        id = "hkz04AWh6foLbYgnc6Gy",
-                        name = "Hyderabad",
-                        image = R.drawable.ic_hyderabad,
-                        stateCode = "in_telangana"
-                ),
-                CityWithImage(
-                        id = "yF7PESNLX0NAtQ5xZmPT",
-                        name = "Mumbai",
-                        image = R.drawable.ic_mumbai,
-                        stateCode = "in_maharashtra"
-                ),
-                CityWithImage(
-                        id = "KZYBKIV826r3Vuw4aqku",
-                        name = "Jaipur",
-                        image = R.drawable.ic_jaipur,
-                        stateCode = "in_rajasthan"
-                ),
-                CityWithImage(
-                        id = "gyDk0qQS1iRHzBl2Bo3C",
-                        name = "Chennai",
-                        image = R.drawable.ic_chennai,
-                        stateCode = "in_tamil_nadu"
-                ),
-                CityWithImage(
-                        id = "53LnescEeZEd9kLlX4Lo",
-                        name = "Bangalore",
-                        image = R.drawable.ic_banglore,
-                        stateCode = "in_karnataka"
-                ),
-                CityWithImage(
-                        id = "XWLZ6JRy6QGrE5p3e19a",
-                        name = "Kolkata",
-                        image = R.drawable.ic_kolkata,
-                        stateCode = "in_west_bengal"
-                ),
-                CityWithImage(
-                        id = "CpBqv35f9ejJEcTvisu1",
-                        name = "Guwahati",
-                        image = R.drawable.ic_guwahati,
-                        stateCode = "in_assam"
-                ),
-                CityWithImage(
-                        id = "UIooNfjngZRTBMYW2tel",
-                        name = "Lucknow",
-                        image = R.drawable.ic_lucknow,
-                        stateCode = "in_uttar_pradesh"
-                ),
-                CityWithImage(
-                        id = "cmE2a6bHNMyLt2oF5AjR",
-                        name = "Pune",
-                        image = R.drawable.ic_pune,
-                        stateCode = "in_maharashtra"
-                )
-        )
+        try {
+            val majorCityData =  ArrayList<CityWithImage>()
+            firebaseFirestore
+                .collection("Mst_Cities").whereEqualTo("majorCity", true)
+                .addSnapshotListener { value, error ->
+                    error?.printStackTrace()
 
-        _majorCities.postValue(
-                majorCities
-        )
+                    value.let {
+                        it?.documents?.forEach { majorCity ->
+                            majorCity.toObject(CityWithImage::class.java).let {
+                                it?.id = majorCity.id
+                                if (it != null) {
+                                    majorCityData.add(it)
+                                }
+                            }
+                        }
+                    }
+                    _majorCities.value = majorCityData
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private val _allCities = MutableLiveData<List<City>>()
