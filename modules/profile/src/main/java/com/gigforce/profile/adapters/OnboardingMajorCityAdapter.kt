@@ -120,7 +120,7 @@ class OnboardingMajorCityAdapter(
 
         fun bindValues(city: CityWithImage, position: Int) {
             if (city.icon.isNotEmpty()){
-                requestManager.load(city.image).into(cityImageIV)
+                requestManager.load(city.icon).into(cityImageIV)
             }
             else{
                 cityImageIV.setImageResource(getMajorCityIcon(city.name))
