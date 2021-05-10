@@ -77,7 +77,7 @@ class AssetAdapter(
     fun getAssetLocalIcon(name: String) : Int{
         var icon = R.drawable.ic_driving_wheel
         var map = mapOf<String, Int>("Bicycle" to R.drawable.ic_bicycle,
-                "E-Bike" to R.drawable.ic_electric_bike,
+                "Electric Bike" to R.drawable.ic_electric_bike,
                 "Motor Bike" to R.drawable.ic_motor_bike,
                 "E-rickshaw" to R.drawable.ic_e_rickshaw,
                 "Auto-rickshaw" to R.drawable.ic_auto_rickshaw,

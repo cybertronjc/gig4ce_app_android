@@ -200,8 +200,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
         if (currentStep == 0) {
-            val delhiId = "oGpypK2Tolf2YTDLvsMq"
-            if (selectedCity?.id == delhiId) {
+            if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
 
