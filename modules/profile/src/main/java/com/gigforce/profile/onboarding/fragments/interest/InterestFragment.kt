@@ -308,6 +308,7 @@ class InterestFragment() :
                         interest_cl.gone()
                         delivery_executive_detail_cl.visible()
                         setUpSkillDetailsRV(it.skillDetails!!)
+                        skillDetailsList.clear()
                         skillDetailsList.addAll(it.skillDetails!!)
                         formCompletionListener?.enableDisableNextButton(false)
                         currentStep = 1

@@ -174,7 +174,8 @@ class OnboardingMajorCityAdapter(
                     City(
                             id = city.id,
                             name = city.name,
-                            stateCode = city.stateCode
+                            stateCode = city.state_code,
+                            subLocationFound = city.subLocationFound
                     ),true
             )
         }

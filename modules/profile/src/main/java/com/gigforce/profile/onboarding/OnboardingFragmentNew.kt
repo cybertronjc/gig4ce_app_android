@@ -258,7 +258,11 @@ class OnboardingFragmentNew : Fragment(){
     private fun setAssetsData() {
         var assetsowned =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as AssetOwnedFragment)
-        viewModel.saveAssets(assetsowned.getAssetsData())
+        //viewModel.saveAssets(mapOf("assetsOwned" to mapOf( assetsowned.getTwoWheeler(), assetsowned.getThreeWheeler())))
+           viewModel.saveAssets(assetsowned.getTwoWheeler())
+        viewModel.saveAssets(assetsowned.getThreeWheeler())
+        viewModel.saveAssets(assetsowned.getOtherAssets())
+        viewModel.saveAssets(assetsowned.getItAssets())
     }
 
     private fun setJobPreference() {
