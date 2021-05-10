@@ -64,9 +64,9 @@ class InterestFragment() :
         viewModel = ViewModelProvider(this).get(InterestViewModel::class.java)
 
         //getting skills from DB
-        viewModel.getSkills()
-        viewModel.skills.observe(viewLifecycleOwner, Observer {
+        viewModel.getSkillsList().observe(viewLifecycleOwner, Observer {
             allInterestList = it
+            Log.d("list", allInterestList.toString())
             setUpRecyclerView(it)
         })
 
@@ -96,7 +96,7 @@ class InterestFragment() :
                         }
                         validateForm()
                     }
-                }, this
+                }
             )
 
 //            all_interests_rv.addItemDecoration(
@@ -151,7 +151,7 @@ class InterestFragment() :
                             formCompletionListener?.enableDisableNextButton(false)
                         }
                     }
-                }, this
+                }
             )
 
 //            all_interests_rv.addItemDecoration(
@@ -182,19 +182,8 @@ class InterestFragment() :
 
     private fun isSkillDetailsFound(iDM: InterestDM): Boolean{
             if (iDM.skillDetails?.size != 0){
-                Log.d("here", "true")
                 return true
             }
-        return false
-    }
-
-    private fun isDeliveryExecutiveSelected(): Boolean {
-        allInterestList.forEach { obj ->
-            if (obj.skill.equals(DELIVERY_EXECUTIVE)) {
-
-                return true
-            }
-        }
         return false
     }
 
@@ -219,66 +208,16 @@ class InterestFragment() :
             formCompletionListener?.enableDisableNextButton(true)
             validateForm()
         }
-
-        imageTextCardMol.setOnClickListener {
-            if (foodSelected) {
-                resetSelected(icon, food, imageTextCardMol)
-                foodSelected = false
-            } else {
-                setSelected(icon, food, imageTextCardMol)
-                formCompletionListener?.enableDisableNextButton(true)
-                foodSelected = true
-            }
-            validateForm()
-        }
-
-        imageTextCardMol4.setOnClickListener {
-            if (grocerySelected) {
-                resetSelected(icon1, grocery, imageTextCardMol4)
-                grocerySelected = false
-            } else {
-                setSelected(icon1, grocery, imageTextCardMol4)
-                formCompletionListener?.enableDisableNextButton(true)
-                grocerySelected = true
-            }
-            validateForm()
-        }
-
-        imageTextCardMolfirst.setOnClickListener {
-            if (ecomSelected) {
-                resetSelected(icon1f, ecom, imageTextCardMolfirst)
-                ecomSelected = false
-            } else {
-                setSelected(icon1f, ecom, imageTextCardMolfirst)
-                formCompletionListener?.enableDisableNextButton(true)
-                ecomSelected = true
-            }
-        }
-        imageTextCardMol3.setOnClickListener {
-            if (milkSelected) {
-                resetSelected(icon2, milk, imageTextCardMol3)
-                milkSelected = false
-            } else {
-                setSelected(icon2, milk, imageTextCardMol3)
-                formCompletionListener?.enableDisableNextButton(true)
-                milkSelected = true
-            }
-            validateForm()
-        }
-
     }
 
-    var foodSelected = false
-    var grocerySelected = false
-    var ecomSelected = false
-    var milkSelected = false
 
     fun getDeliveryExecutiveExperiences(): ArrayList<String> {
         var experiences = ArrayList<String>()
-        if (foodSelected) experiences.add("Food")
-        if (grocerySelected) experiences.add("Grocery")
-        if (ecomSelected) experiences.add("Ecom")
-        if (milkSelected) experiences.add("Milk")
+        skillDetailsList.forEach {
+            if (it.selected){
+                experiences.add(it.name)
+            }
+        }
         return experiences
     }
 
@@ -289,7 +228,7 @@ class InterestFragment() :
             view.setBackgroundDrawable(
                     ContextCompat.getDrawable(
                             it,
-                            R.drawable.rect_gray_border
+                            R.drawable.rect_light_blue_border
                     )
             )
         }
@@ -338,9 +277,18 @@ class InterestFragment() :
         return list
     }
 
+    fun hasSkillDetails(): Boolean{
+        for (i in 0..allInterestList.size - 1){
+            if(allInterestList.get(i).skillDetails != null){
+                return true
+            }
+        }
+        return false
+    }
+
     fun validateForm() {
         if (getSelectedInterestCount() > 0) {
-            if (isDeliveryExecutiveSelected()) {
+            if (hasSkillDetails()) {
                 if (!experiencedInDeliveryExecutive || getSelectedSkillDetails().size > 0) {
                     formCompletionListener?.enableDisableNextButton(true)
                 } else formCompletionListener?.enableDisableNextButton(false)
@@ -388,37 +336,6 @@ class InterestFragment() :
         return skills
     }
 
-    fun getSkillLocalIcon(name: String) : Int{
-        var icon = R.drawable.ic_driving_wheel
-        var map = mapOf<String, Int>("Driving" to R.drawable.ic_driving_wheel,
-            "Delivery Executive" to R.drawable.ic_delivery_truck,
-            "Sales" to R.drawable.ic_sale,
-            "Technician" to R.drawable.ic_technician,
-            "Helper" to R.drawable.ic_trolley,
-            "Security" to R.drawable.ic_security,
-            "Tele Calling" to R.drawable.ic_technician,
-            "Supervisor" to R.drawable.ic_supervisor,
-            "Cleaner" to R.drawable.ic_cleaning,
-            "Farmers" to R.drawable.ic_plant_in_hand,)
-
-        if (map.containsKey(name)){
-            icon = map.get(name)!!
-        }
-        return icon
-    }
-
-    fun getSkillDetailLocalIcon(name: String) : Int{
-        var icon = R.drawable.ic_driving_wheel
-        var map = mapOf<String, Int>("Food" to R.drawable.ic_food,
-                "Grocery" to R.drawable.ic_grocery,
-                "Ecom" to R.drawable.ic_food,
-                "Milk" to R.drawable.ic_milk)
-
-        if (map.containsKey(name)){
-            icon = map.get(name)!!
-        }
-        return icon
-    }
 
     private fun getExperiencedIn(): HashMap<String, Boolean> {
         var map = HashMap<String, Boolean>()

@@ -16,8 +16,7 @@ import kotlinx.android.synthetic.main.image_text_item_view.view.*
 class AllInterestAdapter(
     val context: Context,
     val allInterestList: ArrayList<InterestDM>,
-    val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener,
-    val interestFragment: InterestFragment
+    val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener
 ) :
     RecyclerView.Adapter<AllInterestAdapter.ViewHolder>() {
     var adapter: AllInterestAdapter? = null
@@ -55,7 +54,7 @@ class AllInterestAdapter(
                 Glide.with(context).load(interestDM.icon).into(icon)
             }
             else{
-                icon.setImageResource(interestFragment.getSkillLocalIcon(interestDM.skill))
+                icon.setImageResource(getSkillLocalIcon(interestDM.skill))
             }
             interestName.setText(interestDM.skill)
 
@@ -69,5 +68,24 @@ class AllInterestAdapter(
 
     interface OnDeliveryExecutiveClickListener {
         fun onclick(view:View,position: Int)
+    }
+
+    fun getSkillLocalIcon(name: String) : Int{
+        var icon = R.drawable.ic_driving_wheel
+        var map = mapOf<String, Int>("Driving" to R.drawable.ic_driving_wheel,
+                "Delivery Executive" to R.drawable.ic_delivery_truck,
+                "Sales" to R.drawable.ic_sale,
+                "Technician" to R.drawable.ic_technician,
+                "Helper" to R.drawable.ic_trolley,
+                "Security" to R.drawable.ic_security,
+                "Tele Calling" to R.drawable.ic_technician,
+                "Supervisor" to R.drawable.ic_supervisor,
+                "Cleaner" to R.drawable.ic_cleaning,
+                "Farmers" to R.drawable.ic_plant_in_hand,)
+
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 }

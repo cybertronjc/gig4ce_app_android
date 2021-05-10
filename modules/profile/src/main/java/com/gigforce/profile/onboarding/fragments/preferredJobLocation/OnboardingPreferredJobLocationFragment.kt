@@ -51,7 +51,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private var spaceItemDecoration: SpaceItemDecoration? = null
 
     private val majorCitiesAdapter: OnboardingMajorCityAdapter by lazy {
-        OnboardingMajorCityAdapter(requireContext(), glide, this).apply {
+        OnboardingMajorCityAdapter(requireContext(), glide).apply {
             setOnCitySelectedListener(this@OnboardingPreferredJobLocationFragment)
         }
     }
@@ -277,15 +277,5 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
-    fun getMajorCityIcon(name: String): Int {
-        var icon = R.drawable.ic_delhi
-        var map = mapOf<String, Int>("Chandigarh" to R.drawable.ic_chandigarh, "Delhi-NCR" to R.drawable.ic_delhi, "Hyderabad" to R.drawable.ic_hyderabad,
-            "Mumbai" to R.drawable.ic_mumbai,"Jaipur" to R.drawable.ic_jaipur,"Chennai" to R.drawable.ic_chennai,
-            "Bangalore" to R.drawable.ic_banglore,"Kolkata" to R.drawable.ic_kolkata,"Guwahati" to R.drawable.ic_guwahati,
-            "Lucknow" to R.drawable.ic_lucknow,"Pune" to R.drawable.ic_pune)
-        if (map.containsKey(name)){
-            icon = map.get(name)!!
-        }
-        return icon
-    }
+
 }

@@ -4,6 +4,7 @@ import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
 import com.gigforce.profile.models.OnboardingProfileData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
@@ -16,7 +17,8 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
     var uid = FirebaseAuth.getInstance().currentUser?.uid!!
     var profileCollectionName = "Profiles"
     var tagsCollectionName = "Tags"
-
+    var skillsCollectionName = "Mst_Skills"
+    var assetsCollectionName = "Mst_Assets"
     var COLLECTION_NAME = "Profiles"
 
     override fun getCollectionName(): String {
@@ -137,5 +139,14 @@ class OnboardingProfileFirebaseRepository : BaseFirestoreDBRepository() {
             .updateOrThrow("leadSource", sourceMap)
     }
 
+     fun getSkills(): CollectionReference {
 
+          val collectionRef =  firebaseDB.collection(skillsCollectionName)
+         return collectionRef
+    }
+
+     fun getAssets(): CollectionReference {
+         val collectionRef = firebaseDB.collection(assetsCollectionName)
+         return collectionRef
+    }
 }

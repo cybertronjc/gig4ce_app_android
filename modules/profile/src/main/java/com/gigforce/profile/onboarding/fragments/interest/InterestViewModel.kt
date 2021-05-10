@@ -4,29 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.profile.repository.OnboardingProfileFirebaseRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 
-class InterestViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
-    var firebaseDB = FirebaseFirestore.getInstance()
-    var COLLECTION_NAME = "Mst_Skills"
+class InterestViewModel: ViewModel() {
 
-    private val _skillsData = MutableLiveData<ArrayList<InterestDM>>()
-    val skills: LiveData<ArrayList<InterestDM>> = _skillsData
+    val onboardingProfileFirebaseRepository =  OnboardingProfileFirebaseRepository()
+    private var _skillsData = MutableLiveData<ArrayList<InterestDM>>()
+    var skills: LiveData<ArrayList<InterestDM>> = _skillsData
 
-
-    fun getCollectionName(): String {
-        return COLLECTION_NAME
-    }
-
-     fun getSkills()  {
-
-        try {
-            val skillsData =  ArrayList<InterestDM>()
-            firebaseDB.collection(getCollectionName())
-                .addSnapshotListener { value, error ->
-                    error?.printStackTrace()
-
+    fun getSkillsList(): LiveData<ArrayList<InterestDM>>{
+            try {
+                onboardingProfileFirebaseRepository.getSkills().addSnapshotListener { value, error ->
+                    if (error != null) {
+                        _skillsData.value = ArrayList<InterestDM>()
+                    }
+                    var skillsData = ArrayList<InterestDM>()
                     value.let {
                         it?.documents?.forEach { skill ->
                             Log.d("skill", skill.toString())
@@ -35,15 +30,16 @@ class InterestViewModel : ViewModel() {
                                 if (it != null) {
                                     skillsData.add(it)
                                 }
-                                Log.d("fb", it.toString())
                             }
                         }
                     }
                     _skillsData.value = skillsData
                 }
-        }
-        catch (e: Exception){
+            }
+            catch (e: Exception){
 
-        }
+            }
+
+        return _skillsData
     }
 }

@@ -16,8 +16,7 @@ import kotlinx.android.synthetic.main.image_text_item_view.view.*
 class SkillDetailsAdapter(
     val context: Context,
     val allSkillDetailsList: List<SkillsDetails>,
-    val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener,
-    val interestFragment: InterestFragment
+    val onDeliveryExecutiveClickListener: OnDeliveryExecutiveClickListener
 ) :
     RecyclerView.Adapter<SkillDetailsAdapter.ViewHolder>() {
     var adapter: SkillDetailsAdapter? = null
@@ -54,7 +53,7 @@ class SkillDetailsAdapter(
                 Glide.with(context).load(interestDM.icon).into(icon)
             }
             else{
-                icon.setImageResource(interestFragment.getSkillDetailLocalIcon(interestDM.name))
+                icon.setImageResource(getSkillDetailLocalIcon(interestDM.name))
             }
             interestName.setText(interestDM.name)
 
@@ -68,5 +67,18 @@ class SkillDetailsAdapter(
 
     interface OnDeliveryExecutiveClickListener {
         fun onclick(view: View, position: Int)
+    }
+
+    fun getSkillDetailLocalIcon(name: String) : Int{
+        var icon = R.drawable.ic_driving_wheel
+        var map = mapOf<String, Int>("Food" to R.drawable.ic_food,
+                "Grocery" to R.drawable.ic_grocery,
+                "Ecom" to R.drawable.ic_food,
+                "Milk" to R.drawable.ic_milk)
+
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 }

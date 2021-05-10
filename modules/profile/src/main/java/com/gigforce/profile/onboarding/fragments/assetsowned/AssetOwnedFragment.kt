@@ -56,8 +56,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
 
     private fun observer() {
         //getting assets from DB
-        viewModel.getAssets()
-        viewModel.assets.observe(viewLifecycleOwner, Observer {
+        viewModel.getAssetList().observe(viewLifecycleOwner, Observer {
             allAssetsList = it
             Log.d("asset list", allAssetsList.toString())
             setUpTypedRecyclerView("two_wheeler", allAssetsList)
@@ -92,7 +91,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
                                 }
                                 validateForm()
                             }
-                        }, this
+                        }
                     )
                     context?.let {
                         val itemDecoration =
@@ -125,7 +124,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
                                 }
                                 validateForm()
                             }
-                        }, this
+                        }
                     )
                     context?.let {
                         val itemDecoration =
@@ -158,7 +157,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
                                 }
                                 validateForm()
                             }
-                        }, this
+                        }
                     )
                     context?.let {
                         val itemDecoration =
@@ -191,7 +190,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
                                 }
                                 validateForm()
                             }
-                        }, this
+                        }
                     )
                     context?.let {
                         val itemDecoration =
@@ -380,15 +379,6 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
         return map
     }
 
-//    fun getAssetsData(): Map<String,Any> {
-//        return mapOf("assetsOwned" to mapOf("twoWheeler" to mapOf("ownedBicycle" to owned_bicycle, "ElectricBike" to owned_electric_bike,"MotorBike" to owned_motor_bike),
-//                    "threeWheeler" to mapOf("eRickshaw" to owned_e_rickshaw,"autoRickshaw" to owned_auto_rickshaw),
-//                "other" to mapOf("car" to owned_car,"commercialVehicle" to owned_commercial_vehicle),
-//                "it" to mapOf("laptop" to owned_laptop,"smartPhone" to owned_smart_phone, "pc" to owned_pc))
-//        )
-//    }
-
-
     fun getAssetsData(): Map<String, Any> {
         return mapOf("assetsOwned" to mapOf("twoWheeler" to getDataForAnalytics("two_wheeler"),
                 "threeWheeler" to getDataForAnalytics("three_wheeler"),
@@ -450,23 +440,6 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
 
-    fun getAssetLocalIcon(name: String) : Int{
-        var icon = R.drawable.ic_driving_wheel
-        var map = mapOf<String, Int>("Bicycle" to R.drawable.ic_bicycle,
-            "E-Bike" to R.drawable.ic_electric_bike,
-            "Motor Bike" to R.drawable.ic_motor_bike,
-            "E-rickshaw" to R.drawable.ic_e_rickshaw,
-            "Auto-rickshaw" to R.drawable.ic_auto_rickshaw,
-            "Car" to R.drawable.ic_car,
-            "Commercial" to R.drawable.ic_truck_commercial,
-            "Laptop" to R.drawable.ic_laptop,
-            "Smartphone" to R.drawable.ic_smartphone,
-            "PC" to R.drawable.ic_computer,)
 
-        if (map.containsKey(name)){
-            icon = map.get(name)!!
-        }
-        return icon
-    }
 
 }

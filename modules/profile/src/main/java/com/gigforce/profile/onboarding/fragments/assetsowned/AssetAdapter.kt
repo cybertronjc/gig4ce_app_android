@@ -18,8 +18,7 @@ import kotlinx.android.synthetic.main.image_text_item_view.view.*
 class AssetAdapter(
     val context: Context,
     val allInterestList: ArrayList<AssestDM>,
-    val onAssestClickListener: OnAssestClickListener,
-    val assetOwnedFragment: AssetOwnedFragment
+    val onAssestClickListener: OnAssestClickListener
 ) :
     RecyclerView.Adapter<AssetAdapter.ViewHolder>() {
     var adapter: AssetAdapter? = null
@@ -55,7 +54,7 @@ class AssetAdapter(
             if (assetDM.icon.isNotEmpty()) {
                 Glide.with(context).load(assetDM.icon).into(icon)
             } else {
-                icon.setImageResource(assetOwnedFragment.getAssetLocalIcon(assetDM.name))
+                icon.setImageResource(getAssetLocalIcon(assetDM.name))
             }
             interestName.setText(assetDM.name)
 
@@ -69,5 +68,24 @@ class AssetAdapter(
 
     interface OnAssestClickListener {
         fun onclick(view: View, position: Int)
+    }
+
+    fun getAssetLocalIcon(name: String) : Int{
+        var icon = R.drawable.ic_driving_wheel
+        var map = mapOf<String, Int>("Bicycle" to R.drawable.ic_bicycle,
+                "E-Bike" to R.drawable.ic_electric_bike,
+                "Motor Bike" to R.drawable.ic_motor_bike,
+                "E-rickshaw" to R.drawable.ic_e_rickshaw,
+                "Auto-rickshaw" to R.drawable.ic_auto_rickshaw,
+                "Car" to R.drawable.ic_car,
+                "Commercial" to R.drawable.ic_truck_commercial,
+                "Laptop" to R.drawable.ic_laptop,
+                "Smartphone" to R.drawable.ic_smartphone,
+                "PC" to R.drawable.ic_computer,)
+
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 }

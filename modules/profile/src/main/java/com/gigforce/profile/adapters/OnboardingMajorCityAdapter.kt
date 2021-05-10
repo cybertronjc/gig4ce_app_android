@@ -16,12 +16,9 @@ import com.gigforce.profile.onboarding.fragments.preferredJobLocation.Onboarding
 
 class OnboardingMajorCityAdapter(
         private val context: Context,
-        private val requestManager: RequestManager,
-        private val onboardingPreferredJobLocationFragment: OnboardingPreferredJobLocationFragment
+        private val requestManager: RequestManager
 ) : RecyclerView.Adapter<OnboardingMajorCityAdapter.OnboardingMajorCityViewHolder>(),
         Filterable {
-
-    private var isUserGroupManager: Boolean = false
 
     private var originalCityList= ArrayList<CityWithImage>()
     private var filteredCityList= ArrayList<CityWithImage>()
@@ -126,7 +123,7 @@ class OnboardingMajorCityAdapter(
                 requestManager.load(city.image).into(cityImageIV)
             }
             else{
-                cityImageIV.setImageResource(onboardingPreferredJobLocationFragment.getMajorCityIcon(city.name))
+                cityImageIV.setImageResource(getMajorCityIcon(city.name))
             }
 
             cityNameTv.text = city.name
@@ -190,6 +187,18 @@ class OnboardingMajorCityAdapter(
             selectedItemIndex = -1
             notifyItemChanged(position)
         }
+    }
+
+    fun getMajorCityIcon(name: String): Int {
+        var icon = R.drawable.ic_delhi
+        var map = mapOf<String, Int>("Chandigarh" to R.drawable.ic_chandigarh, "Delhi-NCR" to R.drawable.ic_delhi, "Hyderabad" to R.drawable.ic_hyderabad,
+                "Mumbai" to R.drawable.ic_mumbai,"Jaipur" to R.drawable.ic_jaipur,"Chennai" to R.drawable.ic_chennai,
+                "Bangalore" to R.drawable.ic_banglore,"Kolkata" to R.drawable.ic_kolkata,"Guwahati" to R.drawable.ic_guwahati,
+                "Lucknow" to R.drawable.ic_lucknow,"Pune" to R.drawable.ic_pune)
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 
 }
