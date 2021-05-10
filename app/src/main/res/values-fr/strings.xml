@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Gigforce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Bonjour fragment vierge</string>
     <string name="title_activity_profile">ProfileActivity</string>
