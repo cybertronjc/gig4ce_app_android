@@ -17,4 +17,5 @@
     <color name="title_color">#d9000000</color>
     <color name="barrier_color">#BFBEBE</color>
     <color name="status_bar_pink">#e53369</color>
+    <color name="application_back">#f0f6fb</color>
 </resources>
