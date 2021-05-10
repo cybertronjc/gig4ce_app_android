@@ -48,6 +48,7 @@ data class CityWithImage(
     var name: String = "",
     var stateCode: String = "",
     var image: Int = -1,
+    var index: Int = -1,
     var icon: String = "",
 ){
 

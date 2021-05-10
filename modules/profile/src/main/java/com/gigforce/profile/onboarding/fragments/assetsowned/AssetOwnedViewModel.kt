@@ -33,6 +33,7 @@ class AssetOwnedViewModel : ViewModel() {
                         }
                     }
                 }
+                assetsData.sortBy { it.index }
                 _assetsData.value = assetsData
             }
         }
