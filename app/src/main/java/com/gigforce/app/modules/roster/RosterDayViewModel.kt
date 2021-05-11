@@ -510,7 +510,9 @@ class RosterDayViewModel constructor(
                         cardHeight = itemHeight.px,
                         isFullDay = true,
                         gigId = it.gigId,
-                        isNewgigPage = it.openNewGig()
+                        isNewgigPage = it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
@@ -524,7 +526,9 @@ class RosterDayViewModel constructor(
                         cardHeight = itemHeight.px,
                         isFullDay = true,
                         gigId = it.gigId,
-                        isNewGigPage =  it.openNewGig()
+                        isNewGigPage =  it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
@@ -537,7 +541,9 @@ class RosterDayViewModel constructor(
                         cardHeight = itemHeight.px,
                         isFullDay = true,
                         gigId = it.gigId,
-                        isNewGigPage = it.openNewGig()
+                        isNewGigPage = it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else {

@@ -356,6 +356,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     private fun shareToAnyApp(url: String) {
+        if(!isAdded) return
 
         val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
         navigate(

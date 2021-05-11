@@ -45,8 +45,8 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 99
-        versionName "1.29.0"
+        versionCode 100
+        versionName "1.29.1"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -161,6 +161,7 @@ dependencies {
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
     implementation project(path: ':modules:profile')
+    implementation project(path: ':modules:common-image-capture-picker')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 

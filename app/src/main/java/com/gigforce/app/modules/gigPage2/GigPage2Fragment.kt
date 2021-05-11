@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -38,12 +39,20 @@ import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
+import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
+import com.gigforce.core.location.GpsSettingsCheckCallback
+import com.gigforce.core.location.LocationHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
@@ -75,9 +84,32 @@ class GigPage2Fragment : BaseFragment(),
     private var location: Location? = null
     private var imageClickedPath: String? = null
     private var isRequestingLocation = false
+    private val firebaseRemoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
-    private val locationUpdates: LocationUpdates by lazy {
-        LocationUpdates()
+//    private val locationUpdates: LocationUpdates by lazy {
+//        LocationUpdates()
+//    }
+
+    private val locationHelper: LocationHelper by lazy {
+        LocationHelper(requireContext())
+                .apply {
+                    setRequiredGpsPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    setLocationCallback(locationCallback)
+                    init()
+                }
+    }
+
+    private val locationCallback = object : LocationCallback() {
+
+        override fun onLocationResult(locationResult: LocationResult?) {
+            if (locationResult == null )
+                return
+
+            location = Location("User Location").apply {
+                latitude = locationResult.lastLocation.latitude
+                longitude = locationResult.lastLocation.longitude
+            }
+        }
     }
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -101,7 +133,11 @@ class GigPage2Fragment : BaseFragment(),
         getDataFromIntents(arguments, savedInstanceState)
         initUi()
         initViewModel()
-        startLocationUpdates()
+
+        if(isNecessaryPermissionGranted())
+            checkForGpsStatus()
+        else
+            showPermissionRequiredAndTheirReasonsDialog()
     }
 
 
@@ -242,15 +278,43 @@ class GigPage2Fragment : BaseFragment(),
                 null
         ))
 
-        if (isRequestingLocation) {
+        if (location == null) {
             startLocationUpdates()
+        } else {
+            Log.d(TAG,"onResume() : Location already found")
         }
     }
 
     private fun startLocationUpdates() {
-        locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
-        locationUpdates.setLocationUpdateCallbacks(this)
-        isRequestingLocation = true
+        locationHelper.startLocationUpdates()
+    }
+
+    private fun checkForGpsStatus() {
+
+
+        locationHelper.checkForGpsSettings(object : GpsSettingsCheckCallback {
+
+            override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
+
+                startIntentSenderForResult(
+                        status.resolution.intentSender,
+                        REQUEST_UPGRADE_GPS_SETTINGS,
+                        null,
+                        0,
+                        0,
+                        0,
+                        null
+                )
+            }
+
+            override fun requiredGpsSettingAreAvailable() {
+                locationHelper.startLocationUpdates()
+            }
+
+            override fun gpsSettingsNotAvailable() {
+                //showRedirectToGpsPageDialog()
+            }
+        })
     }
 
     override fun onPause() {
@@ -315,8 +379,10 @@ class GigPage2Fragment : BaseFragment(),
 
                     when (it) {
                         Lce.Loading -> {
+                            checkInCheckOutSliderBtn.isEnabled = false
                         }
                         is Lce.Content -> {
+                            checkInCheckOutSliderBtn.isEnabled = true
 
                             if (it.content == AttendanceType.CHECK_OUT) {
                                 showToast("Checkout Marked.")
@@ -326,6 +392,7 @@ class GigPage2Fragment : BaseFragment(),
                             }
                         }
                         is Lce.Error -> {
+                            checkInCheckOutSliderBtn.isEnabled = true
                             showAlertDialog("Error while marking attendance, $it")
                         }
                         else -> {
@@ -634,11 +701,11 @@ class GigPage2Fragment : BaseFragment(),
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (
-                    PermissionUtils.permissionsGrantedCheck(grantResults)
-            ) {
-                locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
-            }
+//            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (
+//                    PermissionUtils.permissionsGrantedCheck(grantResults)
+//            ) {
+//                locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
+//            }
             REQUEST_PERMISSIONS -> {
 
                 var allPermsGranted = true
@@ -650,7 +717,8 @@ class GigPage2Fragment : BaseFragment(),
                 }
 
                 if (allPermsGranted) {
-                    startCameraForCapturingSelfie()
+                    checkForGpsStatus()
+//                    startCameraForCapturingSelfie()
                 } else {
                     showToast("Please grant all permissions")
                 }
@@ -659,29 +727,69 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-        val intent = Intent(context, ImageCaptureActivity::class.java)
-        startActivityForResult(
-                intent,
-                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-        )
+        val shouldUserOldCamString = firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
+
+        val shouldUserOldCam = if(shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
+        if(shouldUserOldCam) {
+            val intent = Intent(context, ImageCaptureActivity::class.java)
+            startActivityForResult(
+                    intent,
+                    REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+            )
+        } else {
+            CameraActivity.launch(
+                    this,
+                    destImage = null,
+                    shouldUploadToServerToo = true,
+                    serverParentPath = "attendance"
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
+            REQUEST_UPGRADE_GPS_SETTINGS -> {
+
+                if (resultCode == Activity.RESULT_OK) {
+                    locationHelper.startLocationUpdates()
+                } else if (resultCode == Activity.RESULT_CANCELED)
+                    showRedirectToGpsPageDialog()
+
+            }
+            REQUEST_UPDATE_GPS_SETTINGS_MANUALLY -> {
+                locationHelper.startLocationUpdates()
+            }
             REQUEST_CODE_UPLOAD_SELFIE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     imageClickedPath = data?.getStringExtra("image_name")
                     checkForLateOrEarlyCheckIn()
                 }
             }
-            LocationUpdates.REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) locationUpdates.startUpdates(
-                    requireActivity() as AppCompatActivity
-            )
+            CameraActivity.REQUEST_CODE_CAPTURE_IMAGE_2 -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    imageClickedPath = data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
+                    checkForLateOrEarlyCheckIn()
+                }
+            }
             else -> {
             }
         }
+    }
+
+    private fun showRedirectToGpsPageDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Gps not turned on")
+                .setMessage("Please turn on location service and set Gps Accuracy to High")
+                .setPositiveButton("Okay"){_,_ ->
+
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivityForResult(
+                            intent,
+                            REQUEST_UPDATE_GPS_SETTINGS_MANUALLY
+                    )
+                }.show()
     }
 
 
@@ -800,7 +908,8 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun stopLocationUpdates() {
         this.isRequestingLocation = false
-        locationUpdates.stopLocationUpdates()
+//        locationUpdates.stopLocationUpdates()
+        locationHelper.stopLocationUpdates()
     }
 
     override fun lastLocationReceiver(location: Location?) {}
@@ -837,10 +946,15 @@ class GigPage2Fragment : BaseFragment(),
 
         const val REQUEST_PERMISSIONS = 100
         const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE = 2333
+        const val REQUEST_CODE_UPLOAD_SELFIE_IMAGE_2 = 2334
+        const val REQUEST_UPGRADE_GPS_SETTINGS = 2321
+        const val REQUEST_UPDATE_GPS_SETTINGS_MANUALLY = 2322
 
         private const val ID_IDENTITY_CARD = "apodZsdEbx"
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
+
+        const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
 
         private val IDENTITY_CARD = OtherOption(
                 id = ID_IDENTITY_CARD,
