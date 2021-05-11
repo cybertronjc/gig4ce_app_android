@@ -88,13 +88,12 @@
 
                 <TextView
                     android:id="@+id/tv_thanks_application"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_24"
                     android:fontFamily="@font/lato"
-                    android:paddingStart="@dimen/size_38"
-                    android:paddingEnd="@dimen/size_35"
                     android:textStyle="bold"
+                    android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -131,6 +132,7 @@ class ApplicationClientActivationFragment : Fragment(),
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             jpSettings = it
+            Log.d("jpsettings", jpSettings.toString())
             Glide.with(this).load(it?.coverImg).placeholder(
                 com.gigforce.common_ui.utils.getCircularProgressDrawable(
                     requireContext()
@@ -189,6 +191,7 @@ class ApplicationClientActivationFragment : Fragment(),
         if (!viewModel.redirectToNextStep) return
         for (i in adapter.items.indices) {
             if (!adapter.items[i].isDone) {
+                Log.d("type", adapter.items[i].toString())
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
                         navigation.navigateTo(
@@ -224,6 +227,16 @@ class ApplicationClientActivationFragment : Fragment(),
                                     INTENT_EXTRA_COURSE_ID to adapter.items[i].courseId,
                                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
                             )
+                    )
+
+                    "aadhar_card" -> navigation.navigateTo(
+                        "verification/aadhaarUpload",
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    )
+
+                    "pan_card" -> navigation.navigateTo(
+                        "verification/panUpload",
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                 }
                 break
@@ -341,6 +354,16 @@ class ApplicationClientActivationFragment : Fragment(),
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                 )
+
+            "aadhar_card" -> navigation.navigateTo(
+                "verification/aadhaarUpload",
+                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
+
+            "pan_card" -> navigation.navigateTo(
+                "verification/panUpload",
+                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
         }
     }
 

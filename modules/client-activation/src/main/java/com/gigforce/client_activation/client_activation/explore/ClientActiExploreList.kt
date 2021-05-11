@@ -1,6 +1,7 @@
 package com.gigforce.client_activation.client_activation.explore
 
 import android.app.Activity
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,9 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.*
 import java.util.ArrayList
@@ -152,7 +156,6 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
 
         search_item.doOnTextChanged { text, start, before, count ->
             clientActiExploreAdapter.filter.filter(text)
-
         }
 
 //        new_tv.setOnClickListener {
@@ -242,7 +245,6 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         )
     }
 
-    fun takeAction(action: String, id: String){
      fun takeAction(action: String, id: String){
         Log.d("action", action)
         Log.d("id", id)
@@ -254,7 +256,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
 
             ))
             //share gig for approved
-            "Approved" -> shareGig()
+            "Approved" -> shareGig(id)
 
             //rejected
             "Apply Again" -> navigation.navigateTo(
@@ -277,10 +279,10 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         }
     }
 
-    private fun shareGig() {
-//        Firebase..dynamicLinks.shortLinkAsync {
+    private fun shareGig(id: String) {
+//        Firebase.dynamicLinks.shortLinkAsync {
 //            longLink =
-//                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+//                Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$id&invite=${viewModel.getUID()}")).toString())
 //        }.addOnSuccessListener { result ->
 //            // Short link created
 //            val shortLink = result.shortLink
