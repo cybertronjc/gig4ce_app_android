@@ -4,7 +4,7 @@
      android:id="@+id/imageTextCardcl"
         android:layout_width="82dp"
         android:layout_height="82dp"
-        android:background="@drawable/rect_left_cornor_card"
+        android:background="@drawable/rect_light_blue_border"
         app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -13,8 +13,8 @@
 
     <ImageView
         android:id="@+id/icon_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_chat"
         app:layout_constraintLeft_toLeftOf="parent"

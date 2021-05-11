@@ -114,9 +114,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private fun initListeners() {
         search_cities_et.doOnTextChanged { text, start, before, count ->
 
-            if (cityAdapter.itemCount != 0)
-                cityAdapter.filter.filter(text)
-
+            cityAdapter.filter.filter(text)
             majorCitiesAdapter.filter.filter(text)
         }
     }
@@ -125,6 +123,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     private fun initViewModel() {
         viewModel.majorCities
                 .observe(viewLifecycleOwner, {
+                    Log.d("cities", it.toString())
                     showMajorCities(it)
                 })
 
@@ -138,7 +137,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         cityAdapter.setData(it.sortedBy { it.name })
     }
 
-    private fun showMajorCities(it: List<CityWithImage>) {
+    private fun showMajorCities(it: ArrayList<CityWithImage>) {
         majorCitiesAdapter.setData(it)
 
 
@@ -201,8 +200,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     var currentStep = 0
     override fun nextButtonActionFound(): Boolean {
         if (currentStep == 0) {
-            val delhiId = "oGpypK2Tolf2YTDLvsMq"
-            if (selectedCity?.id == delhiId) {
+            if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
 
@@ -275,4 +273,6 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
+
+
 }

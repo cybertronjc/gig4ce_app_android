@@ -1,21 +1,34 @@
 package com.gigforce.profile.onboarding.fragments.assetsowned
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.profile.R
 import com.gigforce.profile.analytics.OnboardingEvents
+import com.gigforce.profile.onboarding.MiddleDividerItemDecoration
 import com.gigforce.profile.onboarding.OnFragmentFormCompletionListener
 import com.gigforce.profile.onboarding.OnboardingFragmentNew
+import com.gigforce.profile.onboarding.fragments.interest.InterestDM
+import com.gigforce.profile.onboarding.fragments.interest.InterestFragment
+import com.gigforce.profile.onboarding.fragments.interest.SkillDetailsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.asset_owned_fragment.*
+import kotlinx.android.synthetic.main.asset_owned_fragment.icon_iv1
+import kotlinx.android.synthetic.main.asset_owned_fragment.icon_iv_1
+import kotlinx.android.synthetic.main.asset_owned_fragment.imageTextCardcl
+import kotlinx.android.synthetic.main.asset_owned_fragment.imageTextCardcl_
+import kotlinx.android.synthetic.main.image_text_item_view.view.*
+import kotlinx.android.synthetic.main.interest_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +36,10 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
 
     companion object {
         fun newInstance() = AssetOwnedFragment()
+        //private var allAssetsList = ArrayList<AssestDM>()
+        private var twoWheelerList = ArrayList<AssestDM>()
+        private var threeWheelerList = ArrayList<AssestDM>()
+        private var otherAssetsList = ArrayList<AssestDM>()
     }
 
     @Inject lateinit var eventTracker: IEventTracker
@@ -36,9 +53,132 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AssetOwnedViewModel::class.java)
+        observer()
         listeners()
         setSelected(icon_iv_6, smart_phone, imageTextCardcl_6)
         owned_smart_phone = true
+    }
+
+    private fun observer() {
+        //getting assets from DB
+        viewModel.getAssetList().observe(viewLifecycleOwner, Observer {
+            twoWheelerList = getTypedAssetsList("two_wheeler", it)
+            threeWheelerList = getTypedAssetsList("three_wheeler", it)
+            otherAssetsList = getTypedAssetsList("other", it)
+            setUpTypedRecyclerView("two_wheeler")
+            setUpTypedRecyclerView("three_wheeler")
+            setUpTypedRecyclerView("other")
+        })
+    }
+
+    private fun setUpTypedRecyclerView(type: String){
+        when(type){
+            "two_wheeler" -> {
+                context?.let {
+                    two_wheeler_rv.layoutManager = GridLayoutManager(
+                        activity, 4,
+                        GridLayoutManager.VERTICAL, false
+                    )
+                    two_wheeler_rv.adapter = AssetAdapter(
+                        it,
+                       twoWheelerList,
+                        object : AssetAdapter.OnAssestClickListener {
+                            override fun onclick(view: View, position: Int) {
+                                if (twoWheelerList.get(position).selected) {
+                                    resetSelected(view.icon_iv, view.interest_name, view)
+                                    twoWheelerList.get(position).selected = false
+                                }
+                                else{
+                                    setSelected(view.icon_iv, view.interest_name, view)
+                                    twoWheelerList.get(position).selected = true
+                                }
+                                validateForm()
+                            }
+                        }
+                    )
+                    context?.let {
+                        val itemDecoration =
+                            MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                        itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
+                        two_wheeler_rv.addItemDecoration(itemDecoration)
+                    }
+                }
+            }
+            "three_wheeler" -> {
+                context?.let {
+                    three_wheeler_rv.layoutManager = GridLayoutManager(
+                        activity, 4,
+                        GridLayoutManager.VERTICAL, false
+                    )
+                    three_wheeler_rv.adapter = AssetAdapter(
+                        it,
+                       threeWheelerList,
+                        object : AssetAdapter.OnAssestClickListener {
+                            override fun onclick(view: View, position: Int) {
+                                if (threeWheelerList.get(position).selected) {
+                                    resetSelected(view.icon_iv, view.interest_name, view)
+                                    threeWheelerList.get(position).selected = false
+                                }
+                                else{
+                                    setSelected(view.icon_iv, view.interest_name, view)
+                                    threeWheelerList.get(position).selected = true
+                                }
+                                validateForm()
+                            }
+                        }
+                    )
+                    context?.let {
+                        val itemDecoration =
+                            MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                        itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
+                        three_wheeler_rv.addItemDecoration(itemDecoration)
+                    }
+                }
+            }
+            "other" -> {
+                context?.let {
+                    other_assets_rv.layoutManager = GridLayoutManager(
+                        activity, 4,
+                        GridLayoutManager.VERTICAL, false
+                    )
+                    other_assets_rv.adapter = AssetAdapter(
+                        it,
+                       otherAssetsList,
+                        object : AssetAdapter.OnAssestClickListener {
+                            override fun onclick(view: View, position: Int) {
+
+                                if (otherAssetsList.get(position).selected) {
+                                    resetSelected(view.icon_iv, view.interest_name, view)
+                                    otherAssetsList.get(position).selected = false
+                                }
+                                else{
+                                    setSelected(view.icon_iv, view.interest_name, view)
+                                    otherAssetsList.get(position).selected = true
+                                }
+                                validateForm()
+                            }
+                        }
+                    )
+                    context?.let {
+                        val itemDecoration =
+                            MiddleDividerItemDecoration(it, MiddleDividerItemDecoration.ALL)
+                        itemDecoration.setDividerColor(ContextCompat.getColor(it, R.color.light_blue_cards))
+                        other_assets_rv.addItemDecoration(itemDecoration)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun getTypedAssetsList(type: String, assetsList: ArrayList<AssestDM>): ArrayList<AssestDM>{
+        var list : ArrayList<AssestDM> = arrayListOf()
+        for (i in 0..assetsList.size - 1){
+            if (assetsList.get(i).assetsType == type){
+                list.add(assetsList.get(i))
+            }
+        }
+        return list
     }
 
     var owned_bicycle = false
@@ -177,7 +317,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
             view.setBackgroundDrawable(
                     ContextCompat.getDrawable(
                             it,
-                            R.drawable.option_default_border
+                            R.drawable.rect_light_blue_border
                     )
             )
         }
@@ -197,12 +337,39 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
 
     }
 
-    fun getAssetsData(): Map<String,Any> {
-        return mapOf("assetsOwned" to mapOf("twoWheeler" to mapOf("ownedBicycle" to owned_bicycle, "ElectricBike" to owned_electric_bike,"MotorBike" to owned_motor_bike),
-                    "threeWheeler" to mapOf("eRickshaw" to owned_e_rickshaw,"autoRickshaw" to owned_auto_rickshaw),
-                "other" to mapOf("car" to owned_car,"commercialVehicle" to owned_commercial_vehicle),
-                "it" to mapOf("laptop" to owned_laptop,"smartPhone" to owned_smart_phone, "pc" to owned_pc))
-        )
+    fun getParticularAssetsSelected(list: ArrayList<AssestDM>): HashMap<Int, Any> {
+        var map = HashMap<Int, Any>()
+        list.forEachIndexed { index, assestDM ->
+            var map1 = mapOf<String, Any>("isSelected" to assestDM.selected, "name" to assestDM.name)
+            map.put(index , map1)
+        }
+        return map
+    }
+
+    fun getTwoWheeler(): Map<String, Any> {
+        var arr = arrayListOf<Map<String, Any>>()
+        twoWheelerList.forEach {
+            arr.add(mapOf("isSelected" to it.selected, "name" to it.name))
+        }
+        return mapOf("twoWheelerAssets" to arr )
+    }
+    fun getThreeWheeler(): Map<String, Any> {
+        var arr = arrayListOf<Map<String, Any>>()
+        threeWheelerList.forEach {
+            arr.add(mapOf("isSelected" to it.selected, "name" to it.name))
+        }
+        return mapOf("threeWheelerAssets" to arr )
+    }
+    fun getOtherAssets(): Map<String, Any> {
+        var arr = arrayListOf<Map<String, Any>>()
+        otherAssetsList.forEach {
+            arr.add(mapOf("isSelected" to it.selected, "name" to it.name))
+        }
+        return mapOf("otherAssets" to arr )
+    }
+
+    fun getItAssets(): Map<String, Any> {
+        return mapOf("itAssets" to mapOf("laptop" to owned_laptop,"smartPhone" to owned_smart_phone, "pc" to owned_pc))
     }
 
     fun getAssetsDataForAnalytics(): Map<String,Any> {
@@ -242,7 +409,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
     }
 
     override fun nextButtonActionFound(): Boolean {
-        var assetsData = getAssetsDataForAnalytics()
+        var assetsData = mapOf<String, Any>("twoWheeler" to getTwoWheeler(), "threeWheeler" to getThreeWheeler(), "otherAssets" to getOtherAssets(), "itAssets" to getItAssets())
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_ASSETS_SELECTED,assetsData))
         eventTracker.setUserProperty(assetsData)
         eventTracker.setProfileProperty(ProfilePropArgs("Assets Owned", assetsData))
@@ -256,5 +423,7 @@ class AssetOwnedFragment() : Fragment(),OnboardingFragmentNew.FragmentSetLastSta
     override fun setInterface(onFragmentFormCompletionListener: OnFragmentFormCompletionListener) {
         formCompletionListener = formCompletionListener?:onFragmentFormCompletionListener
     }
+
+
 
 }
