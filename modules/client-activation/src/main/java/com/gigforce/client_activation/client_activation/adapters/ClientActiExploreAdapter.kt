@@ -17,7 +17,7 @@ import com.gigforce.client_activation.client_activation.explore.ClientActiExplor
 import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
-import com.gigforce.core.utils.GlideApp
+
 
 class ClientActiExploreAdapter(
     private val context: Context, private val clientActiExploreList: ClientActiExploreList
@@ -127,7 +127,7 @@ class ClientActiExploreAdapter(
         fun bindValues(jobProfile: JpExplore, position: Int) {
             jobTitleTv.text = jobProfile.title
             jobStatusTv.text = jobProfile.status
-            GlideApp.with(context).load(jobProfile.image).into(jobImage)
+            Glide.with(context).load(jobProfile.image).into(jobImage)
 
             when (jobProfile.status){
 

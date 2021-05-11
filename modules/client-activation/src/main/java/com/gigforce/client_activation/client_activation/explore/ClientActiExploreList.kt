@@ -1,9 +1,11 @@
 package com.gigforce.client_activation.client_activation.explore
 
+import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.LinearLayout
@@ -138,6 +140,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
                 explore_text.visible()
                 iv_search_explore.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
                 search_item.setText("")
+                hideKeyboard()
                 clientActiExploreAdapter.filter.filter("")
             }
             else{
@@ -148,9 +151,8 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         }
 
         search_item.doOnTextChanged { text, start, before, count ->
-            if (clientActiExploreAdapter.itemCount != 0){
-                clientActiExploreAdapter.filter.filter(text)
-            }
+            clientActiExploreAdapter.filter.filter(text)
+
         }
 
 //        new_tv.setOnClickListener {
@@ -240,6 +242,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         )
     }
 
+    fun takeAction(action: String, id: String){
      fun takeAction(action: String, id: String){
         Log.d("action", action)
         Log.d("id", id)
@@ -290,5 +293,18 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
     }
 
 
+
+    fun hideKeyboard() {
+        val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view = activity?.currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        view ?: run {
+            view = View(activity)
+        }
+        view?.let {
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
 
 }
