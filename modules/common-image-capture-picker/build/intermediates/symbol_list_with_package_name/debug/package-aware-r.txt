@@ -1788,7 +1788,12 @@ id bottom
 id bounce
 id buttonPanel
 id camera_layout
+id camera_permission_image_view
+id camera_permission_label_text_view
+id camera_permission_list_textview
+id camera_permission_okay_button
 id cancel_button
+id capture_button
 id center
 id chain
 id change_photo_label
@@ -1848,10 +1853,12 @@ id fixed
 id flip
 id floating
 id forever
+id fragment_container
 id fragment_container_view_tag
 id gallery_layout
 id ghost_view
 id ghost_view_holder
+id glide_custom_view_target_tag
 id gone
 id group_divider
 id home
@@ -1930,6 +1937,7 @@ id notification_main_column_container
 id off
 id on
 id outline
+id overlay
 id packed
 id parallax
 id parent
@@ -1948,6 +1956,7 @@ id progress_circular
 id progress_horizontal
 id radio
 id rectangles
+id retake_image
 id reverseSawtooth
 id right
 id right_icon
@@ -1978,6 +1987,8 @@ id search_voice_btn
 id select_dialog_listview
 id selected
 id shortcut
+id show_img_cl
+id show_pic
 id sin
 id slide
 id smallLabel
@@ -2055,8 +2066,11 @@ id unchecked
 id uniform
 id unlabeled
 id up
+id upload_img
+id view_finder
 id view_offset_helper
 id view_overlay
+id view_tree_lifecycle_owner
 id visible
 id visible_removing_fragment_view_tag
 id wide
@@ -2130,6 +2144,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_camera
 layout activity_photo_crop
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -2147,7 +2162,10 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout fragment_camera
+layout fragment_camera_permission
 layout fragment_click_or_select_profile_picture
+layout fragment_image_viewer
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions
 layout mtrl_alert_dialog_title

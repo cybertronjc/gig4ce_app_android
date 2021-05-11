@@ -10,4 +10,14 @@
 9        android:targetSdkVersion="30" />
 9-->/Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 10
-11</manifest>
+11    <application>
+11-->/Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:5:5-9:19
+12        <activity
+12-->/Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:9-8:15
+13            android:name="com.gigforce.common_image_picker.image_capture_camerax.CameraActivity"
+13-->/Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:19-71
+14            android:screenOrientation="portrait" />
+14-->/Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:7:13-49
+15    </application>
+16
+17</manifest>

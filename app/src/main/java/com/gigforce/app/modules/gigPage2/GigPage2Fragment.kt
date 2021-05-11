@@ -42,15 +42,11 @@ import com.gigforce.app.utils.LocationUtils
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.common_ui.utils.LocationUpdates
-//import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.PermissionUtils
-import com.gigforce.app.modules.markattendance.ImageCaptureActivity
-import com.gigforce.app.utils.*
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper
@@ -745,7 +741,7 @@ class GigPage2Fragment : BaseFragment(),
 
         val shouldUserOldCam = if(shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
         if(shouldUserOldCam) {
-            val intent = Intent(context, ImageCaptureActivity::class.java)
+            val intent = Intent(context, AttendanceImageCaptureActivity::class.java)
             startActivityForResult(
                     intent,
                     REQUEST_CODE_UPLOAD_SELFIE_IMAGE

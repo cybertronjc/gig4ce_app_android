@@ -8,4 +8,10 @@
         android:minSdkVersion="21"
         android:targetSdkVersion="30" />
 
+    <application>
+        <activity
+            android:name="com.gigforce.common_image_picker.image_capture_camerax.CameraActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
 </manifest>
