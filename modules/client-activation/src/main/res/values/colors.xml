@@ -18,4 +18,5 @@
     <color name="barrier_color">#BFBEBE</color>
     <color name="status_bar_pink">#e53369</color>
     <color name="learning_text_color">#051369</color>
+    <color name="application_back">#f0f6fb</color>
 </resources>

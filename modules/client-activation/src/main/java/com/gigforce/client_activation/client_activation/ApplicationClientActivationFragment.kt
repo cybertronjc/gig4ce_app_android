@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -39,6 +37,7 @@ class ApplicationClientActivationFragment : Fragment(),
         AdapterApplicationClientActivation()
     }
     private lateinit var mJobProfileId: String
+    private var win: Window? = null
 
 
     override fun onCreateView(
@@ -59,6 +58,7 @@ class ApplicationClientActivationFragment : Fragment(),
                 this,
                 ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(ApplicationClientActivationViewModel::class.java)
+        changeStatusBarColor()
         getDataFromIntents(savedInstanceState)
         checkForBackPress()
         setupRecycler()
@@ -287,6 +287,18 @@ class ApplicationClientActivationFragment : Fragment(),
 
     }
 
+    private fun changeStatusBarColor(){
+                win = activity?.window
+                // clear FLAG_TRANSLUCENT_STATUS flag:
+                win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+                win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+                win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
+            }
+
     override fun onItemClick(dependency: Dependency) {
         viewModel.redirectToNextStep = true
 
@@ -349,6 +361,8 @@ class ApplicationClientActivationFragment : Fragment(),
 
 
     }
+
+
 
 
 }
