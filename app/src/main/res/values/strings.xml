@@ -310,9 +310,9 @@
     <string name="gender_with_colon">Gender :</string>
     <string name="aadhar_number_with_colon">Aadhar Number :</string>
     <string name="bank_account_details">Bank Account Details</string>
-    <string name="do_you_have_bank_passbook">Do you have Bank Passbook ?</string>
-    <string name="yes_i_have_bank_passbook">Yes, I have Bank Passbook</string>
-    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Passbook</string>
+    <string name="do_you_have_bank_passbook">Do you have Bank Account ?</string>
+    <string name="yes_i_have_bank_passbook">Yes, I have Bank Account</string>
+    <string name="no_i_dont_have_bank_passbook">No, I dont have Bank Account</string>
     <string name="cif_number_with_colon">CIF Number :</string>
     <string name="account_number_with_colon">Account Number :</string>
     <string name="ifsc_with_colon">IFSC :</string>
@@ -1294,9 +1294,9 @@
     <string name="what_does_a_ambassador_do">What does a Ambassador do ?</string>
     <string name="you_have_to_onboard_potential_gigers_on_gigforce_app_by_creating_their_app_you_will_be_paid_based_on_the_number_of_profiles_created">You have to onboard potential Gigers on Gigforce app by creating their profile. You will be paid based on the number of Profiles created</string>
     <string name="enter_user_s_mobile_number">Enter User’s mobile number</string>
-    <string name="we_will_send_an_otp_on_this_number">We will send an OTP on this number.</string>
+    <string name="we_will_send_an_otp_on_this_number">We will send a Verification code on this number.</string>
     <string name="country_code">+91-</string>
-    <string name="enter_code_sent_on_mobile">Enter code sent to User’s number</string>
+    <string name="enter_code_sent_on_mobile">Enter verification code sent to User’s number</string>
     <string name="pin_code">Pin Code</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="address_line_2">Address Line 2</string>
@@ -1518,4 +1518,8 @@
     </string-array>
 
 
+    <string name="cancel_underlined"><u>Cancel</u></string>
+    <string name="password">Password</string>
+    <string name="select_language">Language</string>
+    <string name="step_language">Step 01/09</string>
 </resources>

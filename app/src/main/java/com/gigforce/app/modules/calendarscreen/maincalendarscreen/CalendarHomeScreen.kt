@@ -34,12 +34,11 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
-import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
@@ -47,10 +46,12 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
+import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.calendar_home_screen.cardView
@@ -137,6 +138,14 @@ class CalendarHomeScreen : BaseFragment(),
         observers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(),
+                ResourcesCompat.getColor(resources,R.color.white,null)
+        )
+    }
+
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
@@ -206,7 +215,7 @@ class CalendarHomeScreen : BaseFragment(),
         cardView.setOnClickListener(View.OnClickListener { navigate(R.id.profileFragment) })
 //        tv_hs1bs_alert.setOnClickListener(View.OnClickListener { navigate(R.id.verification) })
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
         month_year.setOnClickListener(View.OnClickListener {
             changeVisibilityCalendarView()
@@ -824,7 +833,7 @@ class CalendarHomeScreen : BaseFragment(),
 
         view.findViewById<TextView>(R.id.dialog_message_tv)
             .text =
-            "You have $gigOnDay active on this day. These gigs will get cancelled as well."
+            "You have $gigOnDay Active Gig(s) on this day. All Gigs will be declined for selected day."
 
         view.findViewById<View>(R.id.yesBtn)
             .setOnClickListener {

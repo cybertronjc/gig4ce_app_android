@@ -39,11 +39,11 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.client_activation.client_activation.models.JobProfile
-import com.gigforce.app.modules.gigPage.GigNavigation
-import com.gigforce.app.modules.gigPage.GigViewModel
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.app.modules.client_activation.models.JobProfile
+import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
@@ -53,12 +53,15 @@ import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.learning.learning.models.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.DateHelper
+import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
@@ -97,26 +100,26 @@ class BSCalendarScreenFragment : BaseFragment() {
     }
 
     private fun initProfileViewModel() {
-        profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
-            val profile: ProfileData = profileObs!!
-
-            ambassador_layout.visible()
-            if (profile.isUserAmbassador) {
-                join_as_amb_label.text = getString(R.string.ambassador_program)
-                amb_join_open_btn.text = getString(R.string.open)
-            } else {
-                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
-                amb_join_open_btn.text = getString(R.string.join_now)
-            }
-        })
+//        profileViewModel.getProfileData().observe(viewLifecycleOwner, Observer { profileObs ->
+//            val profile: ProfileData = profileObs!!
+//
+//            ambassador_layout.visible()
+//            if (profile.isUserAmbassador) {
+//                join_as_amb_label.text = getString(R.string.ambassador_program)
+//                amb_join_open_btn.text = getString(R.string.open)
+//            } else {
+//                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
+//                amb_join_open_btn.text = getString(R.string.join_now)
+//            }
+//        })
 
         amb_join_open_btn.setOnClickListener {
 
-            if (amb_join_open_btn.text == getString(R.string.open)) {
+//            if (amb_join_open_btn.text == getString(R.string.open)) {
                 navigate(R.id.ambassadorEnrolledUsersListFragment)
-            } else {
-                navigate(R.id.ambassadorProgramDetailsFragment)
-            }
+//            } else {
+//                navigate(R.id.ambassadorProgramDetailsFragment)
+//            }
         }
     }
 
@@ -443,7 +446,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                             R.id.iv_message
                         ).setImageResource(R.drawable.ic_chat)
 
-                        if (obj.openNewGig() && obj.agencyContact?.uid != null) {
+                        if (obj!!.openNewGig() && obj!!.agencyContact?.uid != null) {
 
                             getView(viewHolder, R.id.messageCardView).visible()
                             getView(viewHolder, R.id.messageCardView).setOnClickListener {
@@ -451,10 +454,11 @@ class BSCalendarScreenFragment : BaseFragment() {
                                 val agencyContact =
                                     upcomingGigs[viewHolder.adapterPosition].agencyContact ?: return@setOnClickListener
                                 navigate(
-                                    R.id.chatScreenFragment, bundleOf(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
+                                    R.id.chatPageFragment, bundleOf(
+                                        ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to agencyContact.uid,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to agencyContact.profilePicture,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to agencyContact.name)
                                     )
                             }
 
@@ -465,20 +469,21 @@ class BSCalendarScreenFragment : BaseFragment() {
                                     val bundle = Bundle()
                                     val map = upcomingGigs[viewHolder.adapterPosition].chatInfo
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
                                         (AppConstants.IMAGE_URL as String)
                                     )
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_NAME,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
                                         (AppConstants.CONTACT_NAME as String)
                                     )
+                                    bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,ChatConstants.CHAT_TYPE_USER)
 
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID,
+                                        ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,
                                         map?.get("chatHeaderId") as String
                                     )
                                     bundle.putString(
-                                        ChatFragment.INTENT_EXTRA_OTHER_USER_ID,
+                                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID,
                                         map?.get("otherUserId") as String
                                     )
                                     bundle.putString(
@@ -489,7 +494,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                                         StringConstants.FROM_CLIENT_ACTIVATON.value,
                                         map?.get(StringConstants.FROM_CLIENT_ACTIVATON.value) as Boolean
                                     )
-                                    navigate(R.id.chatScreenFragment, bundle)
+                                    navigate(R.id.chatPageFragment, bundle)
                                 }
 
                             } else {
@@ -503,10 +508,10 @@ class BSCalendarScreenFragment : BaseFragment() {
                         getView(viewHolder, R.id.card_view).layoutParams = lp
                         getView(viewHolder, R.id.card_view).layoutParams = lp
                         getTextView(viewHolder, R.id.textView41).text = obj?.getGigTitle()
-                        getTextView(viewHolder, R.id.contactPersonTV).text = if (obj.openNewGig())
+                        getTextView(viewHolder, R.id.contactPersonTV).text = if (obj!!.openNewGig())
                             obj?.agencyContact?.name
                         else
-                            obj.gigContactDetails?.contactName
+                            obj?.gigContactDetails?.contactName
 
                         val gigStatus = GigStatus.fromGig(obj!!)
                         when (gigStatus) {
@@ -692,7 +697,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            navigate(R.id.fakeGigContactScreenFragment)
+           // navigate(R.id.fakeGigContactScreenFragment)
         }
     }
 
@@ -772,7 +777,7 @@ class BSCalendarScreenFragment : BaseFragment() {
             FeatureModel(
                 "Chat",
                 R.drawable.ic_homescreen_chat,
-                R.id.contactScreenFragment
+                R.id.chatListFragment
             )
         )
         // datalist.add(FeatureModel("Chat 2", R.drawable.ic_homescreen_chat, R.id.nav_graph_chat))
@@ -784,7 +789,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 //                R.id.landinghomefragment
 //            )
 //        )
-        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
+//        datalist.add(FeatureModel("Explore", R.drawable.ic_landinghome_search, -1))
         datalist.add(
             FeatureModel(
                 "Verification",
@@ -1010,7 +1015,7 @@ class BSCalendarScreenFragment : BaseFragment() {
 
 
         contact_us_bs_calendar_screen.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+           // navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact_bs_calendar_screen.setOnClickListener {

@@ -190,19 +190,19 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                             return
                         }
 
-                        val dlNo =
-                            drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                        if (!VerificationValidations.isDLNumberValid(dlNo)) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_dl))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-
-                            dlSubmitSliderBtn.resetSlider()
-                            return
-                        }
+                            val dlNo =
+                                    drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+//                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.enter_valid_dl))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//
+//                                dlSubmitSliderBtn.resetSlider()
+//                                return
+//                            }
 
                         if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
@@ -491,9 +491,9 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
 
             if (!it.bankDetailsUploaded) {
                 navigation.navigateTo("verification/addBankDetailsInfoFragment")
-            } else if (!it.selfieVideoUploaded) {
+            } else /*if (!it.selfieVideoUploaded) {
                 navigation.navigateTo("verification/addSelfieVideoFragment")
-            } else if (!it.panCardDetailsUploaded) {
+            } else */if (!it.panCardDetailsUploaded) {
                 navigation.navigateTo("verification/addPanCardInfoFragment")
             } else if (!it.aadharCardDetailsUploaded) {
                 navigation.navigateTo("verification/addAadharCardInfoFragment")
@@ -537,7 +537,7 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,this)
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,requireContext(),this)
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL
@@ -558,8 +558,8 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-                REQUEST_CODE_UPLOAD_DL,this)
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,requireContext(),this)
+
 //        startActivityForResult(
 //            photoCropIntent,
 //            REQUEST_CODE_UPLOAD_DL

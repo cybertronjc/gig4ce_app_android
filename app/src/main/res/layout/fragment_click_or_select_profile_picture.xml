@@ -18,12 +18,12 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
         android:lineSpacingExtra="3sp"
-        android:text="Change Photo "
         android:textColor="#171314"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Upload Profile Photo " />
 
     <LinearLayout
         android:id="@+id/remove_profile_pic"

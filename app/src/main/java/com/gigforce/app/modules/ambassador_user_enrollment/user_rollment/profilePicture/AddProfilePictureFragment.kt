@@ -33,12 +33,17 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.common_ui.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.google.firebase.storage.StorageReference
 import com.yalantis.ucrop.UCrop
+import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.*
 import kotlinx.android.synthetic.main.fragment_ambsd_profile_picture.*
+import kotlinx.android.synthetic.main.fragment_ambsd_profile_picture.submitBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_profile_picture.toolbar_layout
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
@@ -55,6 +60,10 @@ class AddProfilePictureFragment : BaseFragment(),
     private var pincode = ""
     private var mode: Int = EnrollmentConstants.MODE_UNSPECIFIED
     private var cameFromEnrollment = false
+
+    private val currentUser: FirebaseUser by lazy {
+        FirebaseAuth.getInstance().currentUser!!
+    }
 
     private val options = with(FirebaseVisionFaceDetectorOptions.Builder()) {
         setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
@@ -83,10 +92,14 @@ class AddProfilePictureFragment : BaseFragment(),
     }
 
     private fun getProfilePictureForUser() {
+        if(mode != EnrollmentConstants.MODE_EDIT){
+            checkForPermissionElseShowCameraGalleryBottomSheet()
+        }
+
         if (mode == EnrollmentConstants.MODE_ADD) {
             //dont fetch doc
 
-            profile_pic_Uploading.gone()
+            shimmerFrameLayout.gone()
             submitBtn.visible()
             skipButton.gone()
             submitBtn.text = "Upload Photo"
@@ -155,7 +168,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 }
             } else {
 
-                if (mode == EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT&&submitBtn.text=="Next") {
+                if (mode == EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT && submitBtn.text == "Next") {
                     popBackState()
                 } else {
                     checkForPermissionElseShowCameraGalleryBottomSheet()
@@ -163,15 +176,20 @@ class AddProfilePictureFragment : BaseFragment(),
             }
         }
 
-        ic_back_btn.setOnClickListener {
-            if (userId == null) {
-                if (cameFromEnrollment) {
-                    onBackPressed()
-                    return@setOnClickListener
+        toolbar_layout.apply {
+            showTitle(getString(R.string.upload_profile_picture))
+            hideActionMenu()
+            setBackButtonListener {
+
+                if (userId == null) {
+                    if (cameFromEnrollment) {
+                        onBackPressed()
+                        return@setBackButtonListener
+                    }
+                    activity?.onBackPressed()
+                } else {
+                    showGoBackConfirmationDialog()
                 }
-                activity?.onBackPressed()
-            } else {
-                showGoBackConfirmationDialog()
             }
         }
 
@@ -233,10 +251,15 @@ class AddProfilePictureFragment : BaseFragment(),
                 .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                     when (it) {
                         Lce.Loading -> {
-                            profile_pic_Uploading.visible()
+                            imageView13.gone()
+                            shimmerFrameLayout.visible()
+                            shimmerFrameLayout.startShimmer()
                         }
                         is Lce.Content -> {
-                            profile_pic_Uploading.gone()
+
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
 
                             submitBtn.visible()
                             if (it.content.hasUserUploadedProfilePicture()) {
@@ -249,7 +272,10 @@ class AddProfilePictureFragment : BaseFragment(),
                             }
                         }
                         is Lce.Error -> {
-                            profile_pic_Uploading.gone()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
                             showToast(it.error)
                         }
                     }
@@ -261,23 +287,32 @@ class AddProfilePictureFragment : BaseFragment(),
 
                     when (it) {
                         Lse.Loading -> {
-                            profile_pic_Uploading.visible()
+
+                            imageView13.gone()
+                            shimmerFrameLayout.visible()
+                            shimmerFrameLayout.startShimmer()
                         }
                         Lse.Success -> {
-                            profile_pic_Uploading.gone()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
                             viewModel.getProfileForUser(userId)
 
 //                            if (userId == null) {
 //                                //Normal User login
 //                                submitBtn.text = "Back"
 //                            } else {
-                                submitBtn.text = "Next"
+                            submitBtn.text = "Next"
 //                            }
 
                             showToast(getString(R.string.profile_pic_uploaded))
                         }
                         is Lse.Error -> {
-                            profile_pic_Uploading.gone()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.gone()
+                            imageView13.visible()
+
                             showAlertDialog(getString(R.string.could_not_submit_info), it.error)
                         }
                     }
@@ -355,7 +390,7 @@ class AddProfilePictureFragment : BaseFragment(),
                 showToast(getString(R.string.issue_in_cap_image))
             }
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            val imageUriResultCrop: Uri? = UCrop.getOutput((data!!))
+            val imageUriResultCrop: Uri? = UCrop.getOutput(data!!)
             Log.d("ImageUri", imageUriResultCrop.toString())
 
             val baos = ByteArrayOutputStream()
@@ -458,7 +493,9 @@ class AddProfilePictureFragment : BaseFragment(),
             onBackPressed()
             return
         }
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+
+        findNavController().navigateUp()
+        //findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
 

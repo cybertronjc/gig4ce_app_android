@@ -46,6 +46,7 @@
 
     <style name="Theme.RadioButtonLipstickPink" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="buttonTint">@drawable/radio_button_drawable</item>
+
     </style>
 
     <style name="Theme.CheckBoxLipstickPink" parent="Widget.AppCompat.CompoundButton.CheckBox">
@@ -410,11 +411,7 @@
         <item name="colorControlActivated">#ffc107</item>
     </style>
 
-    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:colorBackground">@android:color/transparent</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
+
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@color/colorPrimary</item>
@@ -600,6 +597,20 @@
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="DialogTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
 </resources>

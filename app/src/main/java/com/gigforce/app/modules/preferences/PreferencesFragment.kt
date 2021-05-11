@@ -14,17 +14,23 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.client_activation.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preferences_fragment.*
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class PreferencesFragment : BaseFragment() {
     companion object {
         fun newInstance() =
@@ -39,6 +45,9 @@ class PreferencesFragment : BaseFragment() {
         var storage = FirebaseStorage.getInstance()
 
     }
+
+    @Inject
+    lateinit var eventTracker :IEventTracker
 
     private lateinit var viewModel: SharedPreferenceViewModel
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<PreferencesScreenItem>
@@ -284,6 +293,12 @@ class PreferencesFragment : BaseFragment() {
         val yesBtn = dialog.findViewById(R.id.yes) as TextView
         val noBtn = dialog.findViewById(R.id.cancel) as TextView
         yesBtn.setOnClickListener {
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = AuthEvents.SIGN_OUT_SUCCESS,
+                    props = null
+            ))
+
             FirebaseAuth.getInstance().signOut()
             removeIntroComplete()
             popFragmentFromStack(R.id.settingFragment)

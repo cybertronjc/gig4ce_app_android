@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
 
 class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentActionListener {
 
-    private val viewModel: VerifyUserMobileViewModel by viewModels()
+    private val viewModel: VerifyUserMobileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +38,8 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
             validateDataAndsubmit()
         }
 
-        ic_back_iv.setOnClickListener {
+        toolbar_layout.hideActionMenu()
+        toolbar_layout.setBackButtonListener{
             activity?.onBackPressed()
         }
     }

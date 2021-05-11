@@ -64,6 +64,7 @@ class InterestAndExperienceViewModel @Inject constructor(
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
+            _saveExpAndReturnNextOne.value = null
         }
     }
 
@@ -84,9 +85,11 @@ class InterestAndExperienceViewModel @Inject constructor(
 
                         if (i == experienceList.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
                         } else {
-                            _saveExpAndReturnNextOne.value =
-                                Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value = null
+
                         }
                         return@launch
                     }
@@ -97,17 +100,24 @@ class InterestAndExperienceViewModel @Inject constructor(
 
                         if (i == skills.size - 1) {
                             _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
                         } else {
                             _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            _saveExpAndReturnNextOne.value = null
                         }
                         return@launch
                     }
                 }
             }
             _saveExpAndReturnNextOne.value = Lce.content(null)
+            _saveExpAndReturnNextOne.value = null
+
         } catch (e: Exception) {
+
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+            _saveExpAndReturnNextOne.value = null
+
         }
     }
 
@@ -126,35 +136,47 @@ class InterestAndExperienceViewModel @Inject constructor(
                     for (i in experienceList.indices) {
                         if (experienceList[i].title == expName) {
 
-                            if (i == experienceList.size - 1) {
-                                _saveExpAndReturnNextOne.value = Lce.content(null)
-                            } else {
-                                _saveExpAndReturnNextOne.value =
-                                    Lce.content(experienceList[i + 1].title)
-                            }
-                            return@launch
-                        }
-                    }
-                } else {
-                    for (i in skills.indices) {
-                        if (skills[i].id == expName) {
+                        if (i == experienceList.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
 
-                            if (i == skills.size - 1) {
-                                _saveExpAndReturnNextOne.value = Lce.content(null)
-                            } else {
-                                _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
-                            }
-                            return@launch
+                        } else {
+
+                            _saveExpAndReturnNextOne.value = Lce.content(experienceList[i + 1].title)
+                            _saveExpAndReturnNextOne.value = null
                         }
+                        return@launch
                     }
                 }
+            } else {
+                for (i in skills.indices) {
+                    if (skills[i].id == expName) {
 
-                _saveExpAndReturnNextOne.value = Lce.content(null)
-            } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().recordException(e)
-                _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+                        if (i == skills.size - 1) {
+                            _saveExpAndReturnNextOne.value = Lce.content(null)
+                            _saveExpAndReturnNextOne.value = null
+
+                        } else {
+                            _saveExpAndReturnNextOne.value = Lce.content(skills[i + 1].id)
+                            _saveExpAndReturnNextOne.value = null
+
+                        }
+                        return@launch
+                    }
+                }
             }
+
+            _saveExpAndReturnNextOne.value = Lce.content(null)
+            _saveExpAndReturnNextOne.value = null
+
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+
+            _saveExpAndReturnNextOne.value = Lce.error(e.message!!)
+            _saveExpAndReturnNextOne.value = null
+
         }
+    }
 
 
     private suspend fun checkForPendingInterestExperience(userId: String) {
@@ -169,12 +191,16 @@ class InterestAndExperienceViewModel @Inject constructor(
             if (pendingInts.isEmpty()) {
                 userEnrollmentRepository.setExperienceAsUploaded(userId)
                 _saveExpAndReturnNextOne.value = Lce.content(null)
+                _saveExpAndReturnNextOne.value = null
             } else {
                 _saveExpAndReturnNextOne.value = Lce.content(pendingInts.first().id)
+                _saveExpAndReturnNextOne.value = null
             }
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
             _saveExpAndReturnNextOne.value = Lce.error("Unable to save Exp : ${e.message}")
+            _saveExpAndReturnNextOne.value = null
+
         }
     }
 

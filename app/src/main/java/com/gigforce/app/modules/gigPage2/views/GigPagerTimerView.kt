@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
@@ -145,8 +145,7 @@ class GigPagerTimerView(
 
         if (gig.attendance == null || gig.attendance?.checkInTime == null) {
 
-            val e =
-                IllegalStateException("status is completed but attendance null ,attendance null =  ${gig.attendance == null} or checkin null = ${gig.attendance?.checkInTime == null} or checkout null = ${gig.attendance?.checkOutTime == null}")
+            val e = IllegalStateException("status is completed but attendance null ,attendance null =  ${gig.attendance == null} or checkin null = ${gig.attendance?.checkInTime == null} or checkout null = ${gig.attendance?.checkOutTime == null}")
             FirebaseCrashlytics.getInstance().apply {
                 this.log("Gig Id : ${gig.gigId}")
                 this.recordException(e)

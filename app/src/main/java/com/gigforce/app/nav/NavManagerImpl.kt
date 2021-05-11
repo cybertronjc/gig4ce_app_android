@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
@@ -32,6 +33,8 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("referrals", R.id.referrals_fragment)
         this.registerRoute("login", R.id.Login)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
+        this.registerRoute("profile", R.id.profileFragment)
+        this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
         this.registerForWalletAndPayouts()
@@ -42,9 +45,9 @@ class NavManagerImpl @Inject constructor(
         NavForChatModule(this)
         NavForClientActivatonModule(this)
         NavForVerificationModule(this)
+        NavForCommonModule(this)
         NavForWalletModule(this)
     }
-
 
     private fun registerForWalletAndPayouts() {
         val moduleName: String = "wallet"
@@ -91,9 +94,12 @@ class NavManagerImpl @Inject constructor(
         )
     }
 
-    override fun navigateToPhotoCrop(intent: Intent, requestCode: Int, fragment: Fragment) {
-        val photoCropIntent = Intent(context, PhotoCrop::class.java)
-        photoCropIntent.putExtra("purpose", intent.getStringExtra("verification"))
+    override fun navigateToPhotoCrop(intent: Intent,
+                                     requestCodeUploadPanImage: Int,
+                                     requireContext: Context,
+                                     fragment: Fragment) {
+        val photoCropIntent = Intent(requireContext, PhotoCrop::class.java)
+        photoCropIntent.putExtra("purpose", intent.getStringExtra("purpose"))
         if (intent.hasExtra("uid"))
             photoCropIntent.putExtra("uid", intent.getStringExtra("uid"))
         photoCropIntent.putExtra("fbDir", intent.getStringExtra("fbDir"))
@@ -102,6 +108,8 @@ class NavManagerImpl @Inject constructor(
         if (intent.hasExtra("file"))
             photoCropIntent.putExtra("file", intent.getStringExtra("file"))
 
-        fragment.startActivityForResult(intent, requestCode)
+        fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
     }
+
+
 }

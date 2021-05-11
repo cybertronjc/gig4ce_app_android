@@ -5,8 +5,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
 import com.google.android.material.chip.Chip
@@ -89,9 +94,11 @@ fun Timestamp.toLocalDate(): LocalDate {
 
 fun Timestamp.toDisplayText(): String {
     val date = this.toDate()
-    return if (DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat(
-        "dd MMM, hh:mm a"
-    ).format(date)
+    return if(DateUtils.isToday(date.time)) SimpleDateFormat("hh:mm a").format(date) else SimpleDateFormat("dd MMM, hh:mm a").format(date)
+}
+
+fun Date.toDisplayText(): String {
+    return if(DateUtils.isToday(this.time)) SimpleDateFormat("hh:mm a").format(this) else SimpleDateFormat("dd MMM, hh:mm a").format(this)
 }
 
 fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.apply {
@@ -158,3 +165,30 @@ fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
     }
 }
 
+fun EditText.onTextChanged(onTextChange: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onTextChange.invoke(s.toString())
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+        }
+    })
+}
+
+public fun <T> Sequence<T>.batch(n: Int): Sequence<List<T>> {
+    return BatchingSequence(this, n)
+}
+
+private class BatchingSequence<T>(val source: Sequence<T>, val batchSize: Int) : Sequence<List<T>> {
+    override fun iterator(): Iterator<List<T>> = object : AbstractIterator<List<T>>() {
+        val iterate = if (batchSize > 0) source.iterator() else emptyList<T>().iterator()
+        override fun computeNext() {
+            if (iterate.hasNext()) setNext(iterate.asSequence().take(batchSize).toList())
+            else done()
+        }
+    }
+}

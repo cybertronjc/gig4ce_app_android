@@ -41,7 +41,6 @@ class WalletViewModel @Inject constructor(private val profileFirebaseRepository:
                 }
             })
     }
-
     init {
         getUserWallet()
         getProfileData()

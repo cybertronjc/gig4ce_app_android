@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,7 @@ import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.view.*
@@ -30,7 +32,7 @@ import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 
-
+@AndroidEntryPoint
 class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         AddContactBottomSheetFragment.AddContactBottomSheetCallbacks {
     companion object {
@@ -52,7 +54,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         ).get(ViewModelAboutExpandedFragment::class.java)
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

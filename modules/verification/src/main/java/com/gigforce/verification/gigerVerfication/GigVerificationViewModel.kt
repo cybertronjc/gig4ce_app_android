@@ -57,7 +57,7 @@ data class GigerVerificationStatus(
 }
 
 @HiltViewModel
-open class GigVerificationViewModel @Inject constructor(
+class GigVerificationViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
     private val gigerVerificationRepository: GigerVerificationRepository =
@@ -117,7 +117,7 @@ open class GigVerificationViewModel @Inject constructor(
                         aadharCardDataModel = it.aadhar_card,
                         dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
                         drivingLicenseDataModel = it.driving_license,
-                        bankDetailsUploaded = it.bank_details?.userHasPassBook != null && it.bank_details?.userHasPassBook == true,
+                        bankDetailsUploaded = it.bank_details?.userHasPassBook != null ,
                         bankUploadDetailsDataModel = it.bank_details,
                         everyDocumentUploaded = everyDocumentUploaded
                     )
@@ -147,7 +147,7 @@ open class GigVerificationViewModel @Inject constructor(
                     aadharCardDataModel = it.aadhar_card,
                     dlCardDetailsUploaded = it.driving_license?.userHasDL != null,
                     drivingLicenseDataModel = it.driving_license,
-                    bankDetailsUploaded = it.bank_details?.userHasPassBook != null && it.bank_details?.userHasPassBook == true,
+                    bankDetailsUploaded = it.bank_details?.userHasPassBook != null,
                     bankUploadDetailsDataModel = it.bank_details,
                     everyDocumentUploaded = everyDocumentUploaded
                 )

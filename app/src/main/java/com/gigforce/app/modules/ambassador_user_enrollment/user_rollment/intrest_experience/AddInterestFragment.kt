@@ -22,6 +22,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.skip_btn
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.submitBtn
 
 class AddUserInterestFragment : BaseFragment() {
 
@@ -95,6 +97,18 @@ class AddUserInterestFragment : BaseFragment() {
                 return@setOnClickListener
             }
 
+            if (interest_chipgroup.checkedChipIds.size > 3) {
+
+                MaterialAlertDialogBuilder(requireContext())
+                        .setMessage("You can select only max 3 Chips")
+                        .setPositiveButton(
+                                getString(R.string.okay).capitalize()
+                        ) { _, _ -> }.show()
+
+                return@setOnClickListener
+            }
+
+
             submitInterests()
         }
 
@@ -108,8 +122,12 @@ class AddUserInterestFragment : BaseFragment() {
             ))
         }
 
-        ic_back_iv.setOnClickListener {
-            showGoBackConfirmationDialog()
+        toolbar_layout.apply {
+            showTitle(getString(R.string.add_interest))
+            hideActionMenu()
+            setBackButtonListener{
+                showGoBackConfirmationDialog()
+            }
         }
     }
 
@@ -223,6 +241,7 @@ class AddUserInterestFragment : BaseFragment() {
     }
 
     private fun goBackToUsersList() {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        findNavController().navigateUp()
+//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 }

@@ -38,6 +38,8 @@ class AssessmentDialog : DialogFragment() {
 
     private lateinit var mModuleId: String
     private lateinit var mLessonId: String
+    private var isPassed: Boolean?=false
+
     private var assessmentResultWithNextDest: AssessmentResult? = null
 
     private var assessmentDialogCallbacks: AssessmentDialogCallbacks? = null;
@@ -61,9 +63,10 @@ class AssessmentDialog : DialogFragment() {
         arguments?.let {
             mLessonId = it.getString(INTENT_EXTRA_LESSON_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
+            isPassed = it.getBoolean(INTENT_EXTRA_ISPASSED) ?: return@let
         }
 
-        initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value))
+        initUIAsPerState(arguments?.getInt(StringConstants.ASSESSMENT_DIALOG_STATE.value),isPassed)
         initViewModel()
     }
 
@@ -97,10 +100,10 @@ class AssessmentDialog : DialogFragment() {
             })
     }
 
-    private fun initUIAsPerState(state: Int?) {
+    private fun initUIAsPerState(state: Int?,isPassed:Boolean?) {
         when (state) {
-            STATE_PASS -> viewModel.saveAssessmentState(mModuleId, mLessonId, state)
-            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, mLessonId, state)
+            STATE_PASS -> viewModel.saveAssessmentState(mModuleId, mLessonId, state,isPassed)
+            STATE_REAPPEAR -> viewModel.saveAssessmentState(mModuleId, mLessonId, state,isPassed)
             else -> {
 
                 isCancelable = true
@@ -284,12 +287,17 @@ class AssessmentDialog : DialogFragment() {
             .setOnClickListener(View.OnClickListener {
 
                 dismiss()
+
                 assessmentDialogCallbacks?.assessmentState(
                     arguments?.getInt(
                         StringConstants.ASSESSMENT_DIALOG_STATE.value,
                         0
                     )!!,
-                    viewModel.nextDest?.id
+                    viewModel.nextDest?.id,
+                    arguments?.getBoolean(
+                        INTENT_EXTRA_ISPASSED,
+                        false
+                    )
                 )
 
             })
@@ -321,12 +329,15 @@ class AssessmentDialog : DialogFragment() {
             return assessmentDialog
         }
 
-        fun newInstance(moduleId: String, lessonId: String, state: Int): AssessmentDialog {
+        fun newInstance(moduleId: String, lessonId: String, state: Int,isPassed:Boolean?): AssessmentDialog {
             //Setting Dialog State Before Initializing the dialog object
             val bundle = Bundle()
             bundle.putInt(StringConstants.ASSESSMENT_DIALOG_STATE.value, state)
             bundle.putString(INTENT_EXTRA_MODULE_ID, moduleId)
             bundle.putString(INTENT_EXTRA_LESSON_ID, lessonId)
+            isPassed?.let {
+                bundle.putBoolean(INTENT_EXTRA_ISPASSED,it)
+            }
             val assessmentDialog = AssessmentDialog()
             assessmentDialog.arguments = bundle
             return assessmentDialog
@@ -338,10 +349,11 @@ class AssessmentDialog : DialogFragment() {
 
         const val INTENT_EXTRA_MODULE_ID = "module_id"
         const val INTENT_EXTRA_LESSON_ID = "lesson_id"
+        const val INTENT_EXTRA_ISPASSED = "is_passed"
     }
 
     interface AssessmentDialogCallbacks {
-        fun assessmentState(state: Int, nextLesson: String?)
+        fun assessmentState(state: Int, nextLesson: String?,isPassed: Boolean?)
         fun doItLaterPressed()
 
 

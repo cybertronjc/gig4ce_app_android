@@ -1,110 +1,155 @@
 package com.gigforce.modules.feature_chat.models
 
-import java.time.LocalDate
+import android.graphics.Bitmap
+import com.gigforce.core.SimpleDVM
+import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.modules.feature_chat.core.ViewTypes
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.PropertyName
 
-enum class MessageType {
-    DATE,
-    TEXT,
-    TEXT_WITH_IMAGE,
-    TEXT_WITH_VIDEO,
-    TEXT_WITH_LOCATION,
-    TEXT_WITH_CONTACT,
-    TEXT_WITH_AUDIO,
-    TEXT_WITH_DOCUMENT,
-    NOT_SUPPORTED;
-}
+class ChatMessage(
+    @DocumentId
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String = "",
 
-//Base Class for Chat Messages
-open class ChatMessage(
-    private val messageType: MessageType,
-    private val message : Message? = null
-) {
+    @get:PropertyName("senderMessageId")
+    @set:PropertyName("senderMessageId")
+    var senderMessageId: String = "",
 
-    fun getMessageType(): MessageType = messageType
+    @get:PropertyName("headerId")
+    @set:PropertyName("headerId")
+    var headerId: String = "",
 
-    fun toMessage(): Message {
+    @get:PropertyName("flowType")
+    @set:PropertyName("flowType")
+    var flowType: String = "",
 
-        if (messageType == MessageType.DATE){
-            throw IllegalArgumentException("date item cannot be converted into chat message")
+    @get:PropertyName("timestamp")
+    @set:PropertyName("timestamp")
+    var timestamp: Timestamp? = null,
+
+    @get:PropertyName("status")
+    @set:PropertyName("status")
+    var status: Int = 0,
+
+    @get:PropertyName("type")
+    @set:PropertyName("type")
+    override var type: String = "",
+
+    /**
+     * One to one chat or group Chat
+     */
+    @get:PropertyName("chatType")
+    @set:PropertyName("chatType")
+    var chatType: String = "",
+
+    @get:PropertyName("content")
+    @set:PropertyName("content")
+    var content: String = "",
+
+    @get:PropertyName("videoLength")
+    @set:PropertyName("videoLength")
+    var videoLength: Long = 0,
+
+    /**
+     * Attachment Path- full path of image, video etc
+     */
+    @get:PropertyName("thumbnail")
+    @set:PropertyName("thumbnail")
+    var thumbnail: String? = null,
+
+
+    @get:PropertyName("attachmentName")
+    @set:PropertyName("attachmentName")
+    override var attachmentName: String? = null,
+
+    /**
+     * Attachment Path- full path of image, video etc
+     */
+    @get:PropertyName("attachmentPath")
+    @set:PropertyName("attachmentPath")
+    override var attachmentPath: String? = null,
+
+    /**
+     * Contact details Specific Fields
+     */
+    @get:PropertyName("contactName")
+    @set:PropertyName("contactName")
+    var contactName: String = "",
+
+    @get:PropertyName("contactNumber")
+    @set:PropertyName("contactNumber")
+    var contactNumber: String = "",
+
+
+    /**
+     * Location message payload
+     */
+
+    @get:PropertyName("locationPhysicalAddress")
+    @set:PropertyName("locationPhysicalAddress")
+    var locationPhysicalAddress: String = "",
+
+    @get:PropertyName("location")
+    @set:PropertyName("location")
+    var location: GeoPoint? = null,
+
+    @get:PropertyName("senderInfo")
+    @set:PropertyName("senderInfo")
+    var senderInfo: UserInfo = UserInfo(),
+
+    @get:PropertyName("receiverInfo")
+    @set:PropertyName("receiverInfo")
+    var receiverInfo: UserInfo? = UserInfo(),
+
+    @get:Exclude
+    @set:Exclude
+    var thumbnailBitmap: Bitmap? = null
+
+) : SimpleDVM(
+        defaultViewType = -1,
+        onClickNavPath = null
+),
+    IMediaMessage {
+
+    override fun getViewType(): Int {
+
+        if (this.chatType == ChatConstants.CHAT_TYPE_USER) {
+            return when (this.type) {
+                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.flowType == "in") ViewTypes.IN_TEXT else ViewTypes.OUT_TEXT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.flowType == "in") ViewTypes.IN_LOCATION else ViewTypes.OUT_LOCATION
+                else -> -1
+            }
+        } else if (this.chatType == ChatConstants.CHAT_TYPE_GROUP) {
+
+            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+            return when (this.type) {
+                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_TEXT else ViewTypes.GROUP_OUT_TEXT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_IMAGE else ViewTypes.GROUP_OUT_IMAGE
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
+                else -> -1
+            }
         }
 
-        return message!!
+        return -1
     }
 
-    companion object {
 
-        fun fromMessage(message: Message) : ChatMessage = when(message.type){
-            Message.MESSAGE_TYPE_TEXT -> TextChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_IMAGE -> ImageChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_VIDEO -> VideoChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_AUDIO -> AudioChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> DocumentChatMessage(message)
-            Message.MESSAGE_TYPE_TEXT_WITH_CONTACT -> ContactChatMessage(message)
-            else -> UnsupportedChatMessage()
-        }
-    }
 }
 
-class DateChatMessage : ChatMessage(
-    MessageType.DATE
-)
-
-class TextChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT,
-    message
-)
-
-class ImageChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_IMAGE,
-    message
-)
-
-class VideoChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_VIDEO,
-    message
-)
-
-class LocationChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_LOCATION,
-    message
-)
-
-class ContactChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_CONTACT,
-    message
-)
-
-class AudioChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_AUDIO,
-    message
-)
-
-class DocumentChatMessage(message: Message) : ChatMessage(
-    MessageType.TEXT_WITH_DOCUMENT,
-    message
-)
-
-class UnsupportedChatMessage : ChatMessage(
-    MessageType.NOT_SUPPORTED
-)
-
-class ChatDateItem constructor(
-    private val date : LocalDate
-) : ChatMessage(
-    MessageType.DATE
-){
-
-    fun createItemTypeFor(date: LocalDate): ChatMessage {
-        return ChatDateItem(date)
-    }
-
-    fun createDateItemForToday(): ChatMessage {
-        return createItemTypeFor(LocalDate.now())
-    }
-
-    fun getDate() = date
+interface IMediaMessage {
+    var type: String
+    var attachmentName: String?
+    var attachmentPath: String?
 }
-
-
-
-

@@ -195,7 +195,10 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
         ddFront.setOnClickListener {
             photoCropIntent.putExtra("file", "adfront.jpg")
 //            startActivityForResult(photoCropIntent, PHOTO_CROP)
-            navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
+            activity?.let {
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,requireContext(),this)
+
+            }
         }
         ddBack.setOnClickListener {
             if (ddFront.drawable == null) {
@@ -207,7 +210,7 @@ class AlternateAddressUpload : Fragment(), IOnBackPressedOverride {
             } else {
                 photoCropIntent.putExtra("file", "adback.jpg")
 //                startActivityForResult(photoCropIntent, PHOTO_CROP)
-                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,this)
+                navigation.navigateToPhotoCrop(photoCropIntent,PHOTO_CROP,requireContext(),this)
             }
         }
 

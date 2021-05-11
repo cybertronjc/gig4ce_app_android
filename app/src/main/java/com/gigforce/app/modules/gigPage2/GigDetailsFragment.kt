@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.gigPage2
 
-//import com.gigforce.core.utils.Lce
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -25,11 +24,11 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
 import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
-import com.gigforce.app.modules.gigPage.GigViewModel
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.utils.openPopupMenu
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
@@ -518,7 +517,7 @@ class GigDetailsFragment : BaseFragment(),
 
         return when (item.itemId) {
             R.id.action_help -> {
-                navigate(R.id.contactScreenFragment)
+              //  navigate(R.id.contactScreenFragment)
                 true
             }
             R.id.action_share -> {

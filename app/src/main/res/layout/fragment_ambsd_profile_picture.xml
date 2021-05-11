@@ -6,71 +6,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+ >
 
 
-    <LinearLayout
+    <com.gigforce.common_ui.views.GigforceToolbar
         android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lipstick_two"
-        android:gravity="center_vertical"
-        android:minHeight="72dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/ic_back_btn"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:clickable="true"
-            android:focusable="true"
-              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/lato"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="4sp"
-            android:text="@string/upload_profile_picture"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="normal" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/profile_picture_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:lineSpacingExtra="3sp"
-        android:text="@string/profile_picture"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        />
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:text="@string/profile_picture"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout" />
 
-    <ImageView
-        android:id="@+id/imageView13"
+    <FrameLayout
+        android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="360dp"
-        android:layout_margin="16dp"
-          app:srcCompat="@drawable/avatar"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true"
         android:scaleType="fitXY"
         app:layout_constraintTop_toBottomOf="@id/profile_picture_tv"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:layout_editor_absoluteX="16dp">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <!-- Adding 15 rows of placeholders -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:background="@color/grey" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="fitXY"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/profile_picture_tv"
+            app:srcCompat="@drawable/ic_profile_avatar_pink"
+            tools:layout_editor_absoluteX="16dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/editLayout"
@@ -81,15 +83,15 @@
         android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/imageView13"
-        app:layout_constraintBottom_toTopOf="@id/imageView13">
+        app:layout_constraintBottom_toTopOf="@id/image_container"
+        app:layout_constraintEnd_toEndOf="@id/image_container">
 
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:tint="@color/colorPrimary"
-              app:srcCompat="@drawable/ic_edit" />
+            app:srcCompat="@drawable/ic_edit_pink"
+            app:tint="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -102,35 +104,25 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/profile_pic_Uploading"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView13"
-        app:layout_constraintEnd_toEndOf="@+id/imageView13"
-        app:layout_constraintStart_toStartOf="@+id/imageView13"
-        app:layout_constraintTop_toTopOf="@+id/imageView13" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
-        android:background="@drawable/gradient_button"
         android:enabled="true"
-        android:fontFamily="@font/lato_bold"
-        android:minHeight="@dimen/size_36"
+        android:fontFamily="@font/lato"
         android:gravity="center"
-        android:text="@string/next"
+        android:text="@string/next_camel_case"
+        android:textAllCaps="false"
         android:visibility="visible"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/skipButton"
-    />
+        app:strokeColor="@color/lipstick"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/skipButton"
@@ -139,16 +131,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
-        android:minHeight="@dimen/size_36"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="12dp"
         android:enabled="true"
         android:fontFamily="@font/lato_bold"
         android:gravity="center"
-        android:text="@string/skip"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        android:minHeight="0dp"
+        android:text="@string/skip_underline"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"
+        android:textAllCaps="false"
+        android:textColor="@color/warm_grey"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

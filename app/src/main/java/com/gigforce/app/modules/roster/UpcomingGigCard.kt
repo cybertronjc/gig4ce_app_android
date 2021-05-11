@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.navigation.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage.GigNavigation
+import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*
 

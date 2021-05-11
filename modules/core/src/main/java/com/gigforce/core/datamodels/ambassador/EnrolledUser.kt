@@ -1,9 +1,12 @@
 package com.gigforce.core.datamodels.ambassador
 
+import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class EnrolledUser(
 
         @get:PropertyName("id")
@@ -50,8 +53,9 @@ data class EnrolledUser(
         @set:PropertyName("locationLogs")
         var locationLogs: List<LocationLog> = emptyList()
 
-)
+) : Parcelable
 
+@Parcelize
 data class EnrollmentStepsCompleted(
         @get:PropertyName("profilePicUploaded")
         @set:PropertyName("profilePicUploaded")
@@ -88,17 +92,17 @@ data class EnrollmentStepsCompleted(
         @get:PropertyName("experienceUploaded")
         @set:PropertyName("experienceUploaded")
         var experienceUploaded: Boolean = false
-) {
+) : Parcelable {
 
     @Exclude
     fun allStepsCompleted() = aadharDetailsUploaded
             || panDetailsUploaded
             || drivingLicenseDetailsUploaded
-            || bankDetailsUploaded
 
 }
 
 
+@Parcelize
 data class LocationLog(
         @get:PropertyName("completeAddress")
         @set:PropertyName("completeAddress")
@@ -118,5 +122,9 @@ data class LocationLog(
 
         @get:PropertyName("addedOn")
         @set:PropertyName("addedOn")
-        var addedOn: Timestamp = Timestamp.now()
-)
+        var addedOn: Timestamp = Timestamp.now(),
+
+        @get:PropertyName("editedUsingMasterOtp")
+        @set:PropertyName("editedUsingMasterOtp")
+        var editedUsingMasterOtp: Boolean = false,
+) : Parcelable

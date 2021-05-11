@@ -21,19 +21,21 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_app_icon_with_grad"
-        android:name=".MainApplication"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_app_icon_with_grad_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup">
+        android:theme="@style/GigforceTheme"
+        tools:node="merge"
+        tools:replace="android:label,android:allowBackup">
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
             <category android:name="android.intent.category.DEFAULT" />
@@ -49,26 +51,29 @@
                app to run.
         -->
 
-<!--        <meta-data-->
-<!--            android:name="com.google.android.geo.API_KEY"-->
-<!--            android:value="your API key" />-->
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
-            tools:replace="android:value"
-            />
+            tools:replace="android:value" />
 
-        <!--        <meta-data-->
-        <!--            android:name="CLEVERTAP_ACCOUNT_ID"-->
-        <!--            android:value="67Z-W98-795Z"/>-->
-        <!--        <meta-data-->
-        <!--            android:name="CLEVERTAP_TOKEN"-->
-        <!--            android:value="bc0-1a6"/>-->
-        <!--        &lt;!&ndash; IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ &ndash;&gt;-->
-        <!--        <meta-data-->
-        <!--            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"-->
-        <!--            android:value="1"/>-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCNgKMbX24olXyDp4xSa_UZZET0VPK2ZOE" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="CLEVERTAP_ACCOUNT_ID"
+            android:value="67Z-W98-795Z" />
+        <meta-data
+            android:name="CLEVERTAP_TOKEN"
+            android:value="bc0-1a6" />
+        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
+        <meta-data
+            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
+            android:value="1" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -88,11 +93,11 @@
             </intent-filter>
         </service>
 
+
         <service
-            android:name=".modules.chatmodule.service.FetchContactsService"
+            android:name="com.gigforce.modules.feature_chat.service.SyncContactsService"
             android:enabled="true"
             android:exported="true" />
-
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
@@ -111,6 +116,15 @@
         <!--                <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
         <!--            </intent-filter>-->
         <!--        </service>-->
+
+
+        <!--        <receiver-->
+        <!--            android:name=".modules.auth.ui.main.SmsRetrieverBroadcastReceiver"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -146,6 +160,13 @@
                 <data
                     android:host="www.gig4ce.com"
                     android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter>
+                <data android:scheme="gigforceapp" android:host="open" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
         <activity
@@ -203,7 +224,10 @@
         <!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
         <!--            </intent-filter>-->
         <!--        </receiver>-->
-
+        <!-- Branch init -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_cf1kHW4fcGP4SXVy31QE6ehoxyjgqLlW" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ph6gM53mhJM4J7Vt14O1OpkftwepAJEe" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
     </application>
 
 </manifest>

@@ -17,11 +17,13 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage.GigsRepository
+//import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
 import com.gigforce.core.extensions.toDate
 import com.gigforce.core.extensions.toLocalDate
 import com.google.firebase.auth.FirebaseAuth
@@ -118,15 +120,20 @@ class RosterDayViewModel constructor(
                             removed.add(gig)
 //                            allGigs[tag]!!.value!!.remove(gig)
 //                            allGigs[tag]!!.value = allGigs[tag]!!.value
-                        }
-                        DocumentChange.Type.MODIFIED -> {
-                            val gig = it.document.toObject(Gig::class.java)
-                            modified.add(gig)
+                            }
+                            DocumentChange.Type.MODIFIED -> {
+                                val gig = it.document.toObject(Gig::class.java)
+                                modified.add(gig)
+                            }
                         }
                     }
-                }
-                allGigs[tag]!!.value!!.addAll(added)
-                allGigs[tag]!!.value!!.removeAll(removed)
+
+                    added.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED && GigStatus.fromGig(it) != GigStatus.CANCELLED }
+                    removed.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED  && GigStatus.fromGig(it) != GigStatus.CANCELLED }
+                    modified.retainAll { GigStatus.fromGig(it) != GigStatus.DECLINED && GigStatus.fromGig(it) != GigStatus.CANCELLED }
+
+                    allGigs[tag]!!.value!!.addAll(added)
+                    allGigs[tag]!!.value!!.removeAll(removed)
 
                 var modifiedKeys = ArrayList<String>()
                 modified.forEach {

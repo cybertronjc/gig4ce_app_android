@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigPage.GigPageFragment
-import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.GigPage2Fragment
+import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
@@ -31,6 +31,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
+import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -61,6 +62,7 @@ class GigerIdFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
@@ -97,7 +99,7 @@ class GigerIdFragment : BaseFragment() {
             showToast(it!!)
         })
         viewModelGigerID.observableUserProfileDataSuccess.observe(viewLifecycleOwner, Observer {
-            viewModelGigerID.getGigDetails(arguments?.getString(GigPageFragment.INTENT_EXTRA_GIG_ID))
+            viewModelGigerID.getGigDetails(arguments?.getString(GigPage2Fragment.INTENT_EXTRA_GIG_ID))
 
             viewModelGigerID.getProfilePicture(it?.profileAvatarName ?: "--")
             tv_giger_name_giger_id.text = it?.name ?: "--"
@@ -122,7 +124,7 @@ class GigerIdFragment : BaseFragment() {
         })
         viewModelGigerID.observableURLS.observe(viewLifecycleOwner, Observer {
             genQrCode(
-                    it?.base_url + it?.qr_code_scanner?.qrcode + viewModelGigerID.observableUserProfileDataSuccess.value?.id
+                    "https://gigforce.in/users/" + viewModelGigerID.observableUserProfileDataSuccess.value?.id
             )
         })
     }
@@ -171,18 +173,13 @@ class GigerIdFragment : BaseFragment() {
         }
         tv_brand_name_giger_id.text = "@${gig.getFullCompanyName()}"
         tv_gig_id_giger_id.text = "${getString(R.string.gig_id)} ${gig.gigId}"
-//        gig.startDateTime?.let {
-//            tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", it.toDate())
-//            tv_issued_date_giger_id.text =
-//                "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
-//        }
+
         tv_gig_date_giger_id.text = parseTime("dd MMM yyyy", gigOrder.endDate.toDate())
         gig.assignedOn.let {
 
             tv_issued_date_giger_id.text =
                 "${getString(R.string.issued_on)} ${parseTime("dd MMM yyyy", it.toDate())}"
         }
-
         iv_share_giger_id.setOnClickListener {
             viewModelGigerID.showProgress(true)
             viewModelGigerID.checkForPermissionsAndInitSharing(checkForRequiredPermissions())

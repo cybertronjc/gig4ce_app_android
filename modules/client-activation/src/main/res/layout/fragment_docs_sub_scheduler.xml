@@ -139,7 +139,7 @@
                     android:layout_marginLeft="@dimen/size_16"
                     android:layout_marginTop="@dimen/size_16"
                     android:layout_marginRight="@dimen/size_16"
-                    android:background="@drawable/rect_lipstick_border"
+                    android:background="@drawable/rect_light_blue_border"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView141">
@@ -523,7 +523,7 @@
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5"
-                    app:srcCompat="@drawable/ic_location" />
+                    app:srcCompat="@drawable/ic_location_grey" />
 
 
                 <View

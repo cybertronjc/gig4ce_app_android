@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -42,7 +43,7 @@ class EducationExpandedFragment : ProfileBaseFragment() {
 
     private var cameFromLandingPage = false
     private var action: Int = -1
-    private val gigerVerificationViewModel : GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel : GigVerificationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

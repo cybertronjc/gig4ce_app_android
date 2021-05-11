@@ -1,6 +1,5 @@
 package com.gigforce.app.modules.gigerid
 
-import com.gigforce.core.datamodels.gigpage.GigAndGigOrder
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.StorageReference

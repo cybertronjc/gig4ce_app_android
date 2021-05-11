@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@color/lipstick">
+    android:background="@color/lipstick_2">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ic_close_giger_id"
@@ -53,7 +53,7 @@
                 android:id="@+id/cv_profile_giger_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lipstick"
+                android:background="@color/lipstick_2"
                 android:paddingBottom="@dimen/size_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

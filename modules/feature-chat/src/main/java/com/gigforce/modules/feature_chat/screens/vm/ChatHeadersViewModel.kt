@@ -4,17 +4,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatHeader
-import com.gigforce.modules.feature_chat.models.UserInfo
+import com.gigforce.modules.feature_chat.repositories.ChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class ChatHeadersViewModel: ViewModel() {
+class ChatHeadersViewModel constructor(
+        private val chatRepository: ChatRepository = ChatRepository()
+) : ViewModel() {
 
-    private var _chatHeaders: MutableLiveData<ArrayList<ChatHeader>> = MutableLiveData()
-    val chatHeaders: LiveData<ArrayList<ChatHeader>> = _chatHeaders
+    private var _chatHeaders: MutableLiveData<List<ChatHeader>> = MutableLiveData()
+    val chatHeaders: LiveData<List<ChatHeader>> = _chatHeaders
 
     private val _unreadMessageCount: MutableLiveData<Int> = MutableLiveData()
     val unreadMessageCount: LiveData<Int> = _unreadMessageCount
@@ -29,52 +34,58 @@ class ChatHeadersViewModel: ViewModel() {
 
     fun startWatchingChatHeaders() {
         val reference = firebaseDB
-            .collection("chats")
-            .document(uid)
-            .collection("headers")
-            .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
+                .collection("chats")
+                .document(uid)
+                .collection("headers")
+                .orderBy("lastMsgTimestamp", Query.Direction.DESCENDING)
 
         chatHeadersSnapshotListener = reference
-            .addSnapshotListener { querySnapshot, exception ->
-                exception?.let {
-                    Log.e("chatheaders/viewmodel", exception.message!!)
-                    return@addSnapshotListener
-                }
-
-                // extract chatHeaders from querySnapshot
-                querySnapshot?.let {
-                    val tempChatHeaders: ArrayList<ChatHeader> = ArrayList<ChatHeader>()
-                    for (doc in querySnapshot.documents) {
-                        tempChatHeaders.add(
-                            ChatHeader(
-                                doc.id,
-                                forUserId = doc.getString("forUserId") ?: "",
-                                otherUserId = doc.getString("otherUserId") ?: "",
-                                unseenCount = doc.getDouble("unseenCount")?.toInt() ?: 0,
-                                lastMsgText = doc.getString("lastMsgText") ?: "",
-                                chatType = doc.getString("chatType") ?: "",
-                                lastMessageType = doc.getString("lastMessageType") ?: "",
-                                lastMsgTimestamp = doc.getTimestamp("lastMsgTimestamp"),
-                                groupId = doc.getString("groupId") ?: "",
-                                groupName = doc.getString("groupName") ?: "",
-                                groupAvatar = doc.getString("groupAvatar") ?: "",
-                                otherUser = UserInfo(
-                                    name = doc.getString("otherUser.name") ?: "",
-                                    type = doc.getString("otherUser.type") ?: "",
-                                    profilePic = doc.getString("otherUser.profilePic") ?: ""
-                                )
-                            )
-                        )
+                .addSnapshotListener { querySnapshot, exception ->
+                    exception?.let {
+                        Log.e("chatheaders/viewmodel", exception.message!!)
+                        return@addSnapshotListener
                     }
-                    _chatHeaders.postValue(tempChatHeaders)
+                    querySnapshot?.let {
+                        Log.e("chat/header/viewmodel", "Data Loaded from Server")
 
-                    var unreadMessageCount = 0
-                    tempChatHeaders.forEach {
-                        unreadMessageCount += it.unseenCount
+                        val messages = it.documents.map { docSnap ->
+                            docSnap.toObject(ChatHeader::class.java)!!.apply {
+                                this.id = docSnap.id
+                            }
+                        }
+
+                        _chatHeaders.postValue(messages)
+
+                        var unreadMessageCount = 0
+                        messages.forEach { chatHeader ->
+                            unreadMessageCount += chatHeader.unseenCount
+
+                            if (chatHeader.unseenCount != 0) {
+
+                                if (chatHeader.chatType == ChatConstants.CHAT_TYPE_USER) {
+                                    setMessagesAsDeliveredForChat(
+                                            chatHeader.id,
+                                            chatHeader.otherUserId
+                                    )
+                                }
+                            }
+                        }
+                        _unreadMessageCount.postValue(unreadMessageCount)
                     }
-
-                    _unreadMessageCount.postValue(unreadMessageCount)
                 }
-            }
+    }
+
+    private fun setMessagesAsDeliveredForChat(
+            chatHeader: String,
+            otherUserId: String
+    ) = GlobalScope.launch {
+
+        try {
+
+                chatRepository.sentMessagesSentMessageAsDelivered(chatHeader, otherUserId)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

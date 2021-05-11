@@ -35,6 +35,7 @@ class PreferredLocationFragment : BaseFragment() {
     private lateinit var viewModel: SharedPreferenceViewModel
     lateinit var recyclerGenericAdapter: RecyclerGenericAdapter<String>
     val arrPrefrancesList : ArrayList<String> = ArrayList<String> ()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

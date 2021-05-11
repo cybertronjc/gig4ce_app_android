@@ -98,12 +98,17 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         passbookImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_bank_passbook_sublabel)
 
-        iv_back_add_bank_details_info.setOnClickListener {
-            if (didUserCameFromAmbassadorScreen) {
-                onBackPressed()
-            } else {
-                navigation.popBackStack("verification/main",inclusive = false)
-//                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener{
+
+                if (didUserCameFromAmbassadorScreen) {
+                    onBackPressed()
+                } else {
+                    navigation.popBackStack("verification/main",inclusive = false)
+//                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+                }
             }
         }
 
@@ -480,9 +485,9 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         } else {
             gigerVerificationStatus?.let {
 
-                if (!it.selfieVideoUploaded) {
+                /*if (!it.selfieVideoUploaded) {
                     navigation.navigateTo("verification/addSelfieVideoFragment")
-                } else if (!it.panCardDetailsUploaded) {
+                } else*/ if (!it.panCardDetailsUploaded) {
                     navigation.navigateTo("verification/addPanCardInfoFragment")
                 } else if (!it.aadharCardDetailsUploaded) {
                     navigation.navigateTo("verification/addAadharCardInfoFragment")
@@ -535,7 +540,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_CAPTURE_BANK_PHOTO,this)
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_CAPTURE_BANK_PHOTO,requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_CAPTURE_BANK_PHOTO)
     }
 

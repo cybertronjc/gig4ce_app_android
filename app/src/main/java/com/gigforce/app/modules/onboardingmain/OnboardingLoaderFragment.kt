@@ -12,15 +12,23 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.datamodels.profile.ProfileData
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OnboardingLoaderFragment : BaseFragment() {
     companion object {
         fun newInstance() = OnboardingLoaderFragment()
     }
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     private lateinit var viewModel: LoginSuccessfulViewModel
     private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(

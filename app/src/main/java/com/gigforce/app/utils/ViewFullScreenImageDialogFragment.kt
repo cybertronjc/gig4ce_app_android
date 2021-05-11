@@ -17,8 +17,8 @@ class ViewFullScreenImageDialogFragment : DialogFragment() {
     companion object {
         private const val TAG = "ViewFullScreenImageDialogFragment"
 
-        private const val INTENT_EXTRA_IMAGE_URI = "image_uri"
-        private const val INTENT_EXTRA_IMAGE_PATH = "image_path"
+        const val INTENT_EXTRA_IMAGE_URI = "image_uri"
+        const val INTENT_EXTRA_IMAGE_PATH = "image_path"
 
         @JvmStatic
         fun showImage(fragmentManager: FragmentManager, file: File) {
@@ -49,13 +49,15 @@ class ViewFullScreenImageDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        setStyle(STYLE_NO_TITLE, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViews(view)
     }
+
+//    override fun getTheme(): Int = R.style.DialogTheme
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -288,8 +288,8 @@ class UploadDrivingCertificate : Fragment() {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent,
-                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL,this)
+            navigation.navigateToPhotoCrop(photoCropIntent,
+                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL,requireContext(),this)
 //        startActivityForResult(
 //            photoCropIntent,
 //            AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL
@@ -311,7 +311,7 @@ class UploadDrivingCertificate : Fragment() {
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
         navigation.navigateToPhotoCrop(photoCropIntent,
-                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL,this)
+                AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL,requireContext(),this)
 //        startActivityForResult(
 //            photoCropIntent,
 //            AddDrivingLicenseInfoFragment.REQUEST_CODE_UPLOAD_DL

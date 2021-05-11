@@ -50,13 +50,16 @@ abstract class BaseNavigationImpl(): INavigation {
         }
         this.navMap[dest] = destResId
     }
-
     override fun popAllBackStates() {
         val navController = getNavController()
         var hasBackStack = true;
         while (hasBackStack) {
             hasBackStack = navController.popBackStack()
         }
+    }
+
+    override fun navigateUp() {
+        getNavController().navigateUp()
     }
 
  }

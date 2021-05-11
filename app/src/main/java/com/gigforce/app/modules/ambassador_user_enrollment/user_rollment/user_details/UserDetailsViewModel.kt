@@ -58,7 +58,6 @@ class UserDetailsViewModel @Inject constructor(
         name: String,
         dateOfBirth: Date,
         gender: String,
-        pinCode: String,
         highestQualification: String
     ) = viewModelScope.launch {
 
@@ -66,66 +65,64 @@ class UserDetailsViewModel @Inject constructor(
         try {
             profileFirebaseRepository.updateUserDetails(
                 uid = uid,
+
                 phoneNumber = phoneNumber,
+
                 name = name,
+
                 dateOfBirth = dateOfBirth,
+
                 gender = gender,
-                highestQualification = highestQualification,
-                pincode = pinCode
+
+                highestQualification = highestQualification
             )
             enrolledUserListRepository.updateUserProfileName(uid, name)
             //  enrolledUserListRepository.setUserDetailsAsFilled(uid)
 
             _submitUserDetailsState.value = Lse.success()
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         }
     }
 
 
     fun updateUserCurrentAddressDetails(
-        uid: String?,
-        pinCode: String,
-        addressLine1: String,
-        addressLine2: String,
-        state: String,
-        city: String,
-        preferredDistanceInKm: Int,
-        readyToChangeLocationForWork: Boolean,
-        homeCity: String = "",
-        homeState: String = "",
-        howDidYouCameToKnowOfCurrentJob: String = ""
+            uid: String?,
+            pinCode: String,
+            addressLine1: String,
+            addressLine2: String,
+            state: String,
+            city: String,
+            homeCity: String = "",
+            homeState: String = ""
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
 
             profileFirebaseRepository.updateCurrentAddressDetails(
-                uid = uid,
-                pinCode = pinCode,
-                addressLine1 = addressLine1,
-                addressLine2 = addressLine2,
-                state = state,
-                city = city,
-                preferredDistanceInKm = preferredDistanceInKm,
-                readyToChangeLocationForWork = readyToChangeLocationForWork,
-                homeCity = homeCity,
-                homeState = homeState,
-                howDidYouCameToKnowOfCurrentJob = howDidYouCameToKnowOfCurrentJob
+                    uid = uid,
+                    pinCode = pinCode,
+                    addressLine1 = addressLine1,
+                    addressLine2 = addressLine2,
+                    state = state,
+                    city = city,
+                    homeCity = homeCity,
+                    homeState = homeState
             )
 
             if (uid != null)
                 userEnrollmentRepository.setCurrentAddressAsUploaded(uid)
 
             _submitUserDetailsState.value = Lse.success()
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         } catch (e: Exception) {
             e.printStackTrace()
             _submitUserDetailsState.value = Lse.error(e.message ?: "Unable to submit user details")
-            _submitUserDetailsState.value = null
+//            _submitUserDetailsState.value = null
         }
     }
 

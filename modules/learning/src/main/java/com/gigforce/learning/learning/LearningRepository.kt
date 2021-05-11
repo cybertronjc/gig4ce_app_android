@@ -331,7 +331,8 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCurrentLessonAsComplete(
         moduleId: String,
-        lessonId: String
+        lessonId: String,
+        isPassed:Boolean?
     ): CourseContent? {
 
         val moduleProgress = getModuleProgress(moduleId) ?: return null
@@ -364,18 +365,30 @@ class LearningRepository : BaseFirestoreDBRepository() {
         val updatedLessonProgressList =
             moduleProgress.lessonsProgress.filter { it.isActive }.sortedBy { it.priority }
         var nextLessonProgress: LessonProgress? = null
+        var currentLessonFound = false
+        for (i in updatedLessonProgressList.indices) {
+            if (updatedLessonProgressList[i].lessonId == lessonId) {
+                currentLessonFound = true
+            }
+            if (currentLessonFound == false && updatedLessonProgressList[i].lessonType == "assessment" && updatedLessonProgressList[i].completed == false) {
+                nextLessonProgress = updatedLessonProgressList[i]
+            }
+        }
+
+
 
         for (i in updatedLessonProgressList.indices) {
             if (updatedLessonProgressList[i].lessonId == lessonId) {
 
+                var _isPassed = false
+                isPassed?.let { _isPassed = it }
                 updatedLessonProgressList[i].apply {
                     ongoing = false
-                    completed = true
+                    completed = _isPassed
                     completionProgress = 0L
                     lessonCompletionDate = Timestamp.now()
                 }
-
-                if (i < updatedLessonProgressList.size - 1) {
+                if (nextLessonProgress == null && i < updatedLessonProgressList.size - 1) {
                     nextLessonProgress = updatedLessonProgressList[i + 1]
                 }
                 break

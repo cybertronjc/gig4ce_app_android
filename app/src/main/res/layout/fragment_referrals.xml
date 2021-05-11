@@ -10,39 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.gigforce.common_ui.views.GigforceToolbar
             android:id="@+id/ll_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_39"
-            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_back_referrals_frag"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/size_23"
-                android:adjustViewBounds="true"
-
-                android:paddingStart="@dimen/size_18"
-                android:scaleType="centerCrop"
-                  app:srcCompat="@drawable/ic_arrow_back_24" />
-
-            <TextView
-                android:id="@+id/tv_title_referrals_frag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_24"
-                android:letterSpacing="0"
-                android:text="@string/refer_your_friends"
-                android:textColor="@color/black_85"
-                android:textSize="@dimen/font_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_back_referrals_frag"
-                app:layout_constraintTop_toTopOf="@+id/iv_back_referrals_frag" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
         <RelativeLayout
@@ -59,7 +33,7 @@
             android:paddingTop="@dimen/size_16"
             android:paddingEnd="@dimen/size_11"
             android:paddingBottom="@dimen/size_16"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ll_top">
@@ -145,90 +119,173 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_bg_referrals_frag" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/iv_copy_link_referrals_frag"
-            android:layout_width="@dimen/size_56"
-            android:layout_height="@dimen/size_56"
-            android:layout_marginTop="@dimen/size_24"
-            android:layout_marginBottom="@dimen/size_4"
-            android:translationZ="@dimen/size_4"
-
-            app:cardCornerRadius="@dimen/size_4"
-            app:layout_constraintEnd_toStartOf="@+id/iv_whatsapp_referrals_frag"
-
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
-
-            <ImageView
-                android:layout_width="@dimen/size_27"
-                android:layout_height="@dimen/size_29"
-                android:layout_gravity="center"
-                  app:srcCompat="@drawable/ic_copy" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/iv_whatsapp_referrals_frag"
-            android:layout_width="@dimen/size_56"
-            android:layout_height="@dimen/size_56"
-            android:layout_marginStart="@dimen/size_34"
-            android:layout_marginTop="@dimen/size_24"
-            android:layout_marginEnd="@dimen/size_34"
-            android:translationZ="@dimen/size_4"
-
-            app:cardCornerRadius="@dimen/size_4"
-            app:layout_constraintEnd_toStartOf="@+id/iv_more_referrals_frag"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/iv_copy_link_referrals_frag"
-            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
-
-            <ImageView
-                android:layout_width="@dimen/size_27"
-                android:layout_height="@dimen/size_29"
-                android:layout_gravity="center"
-                  app:srcCompat="@drawable/ic_whatsapp" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/iv_more_referrals_frag"
-            android:layout_width="@dimen/size_56"
-            android:layout_height="@dimen/size_56"
-            android:layout_marginTop="@dimen/size_24"
-            android:translationZ="@dimen/size_4"
-
-            app:cardCornerRadius="@dimen/size_4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/iv_whatsapp_referrals_frag"
-            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag">
-
-            <ImageView
-                android:layout_width="@dimen/size_27"
-                android:layout_height="@dimen/size_29"
-                android:layout_gravity="center"
-                  app:srcCompat="@drawable/ic_more" />
-        </androidx.cardview.widget.CardView>
-
         <TextView
-            android:id="@+id/tv_share_now_referral_frag"
-            android:layout_width="0dp"
+            android:id="@+id/start_referring_textview"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_26"
-            android:layout_marginTop="@dimen/size_25"
-            android:layout_marginEnd="@dimen/size_27"
-            android:background="@drawable/border_lipstick_rad_4"
-            android:gravity="center_horizontal"
-            android:letterSpacing="0"
-            android:paddingTop="@dimen/size_10"
-            android:paddingBottom="@dimen/size_11"
-
-            android:text="@string/share_now"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:textSize="14sp"
             android:textColor="@color/lipstick"
-            android:textSize="@dimen/font_12"
-            android:visibility="gone"
+            android:lineSpacingExtra="3sp"
+            android:layout_marginTop="14dp"
+            android:text="Start referring Now"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_whatsapp_referrals_frag" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_share_joy_referrals_frag"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_referring_textview"
+            >
+
+
+            <LinearLayout
+                android:id="@+id/send_direct_message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_24"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16">
+
+
+                <ImageView
+                    android:id="@+id/direct_message_iv"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_copy"/>
+
+                <TextView
+                    android:id="@+id/direct_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Send direct message"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
+                    app:srcCompat="@drawable/ic_forward" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/send_via_whatsapp_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16">
+
+
+                <ImageView
+                    android:id="@+id/send_whatsapp_image"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_whatsapp"/>
+
+                <TextView
+                    android:id="@+id/send_via_whatsapp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Send via Whatsapp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
+                    app:srcCompat="@drawable/ic_forward" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/send_via_other_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/size_16">
+
+
+                <ImageView
+                    android:id="@+id/others_apps_iv"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_ellipses_round"/>
+
+                <TextView
+                    android:id="@+id/others_apps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="Send via other apps"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="22dp"
+                    app:tint="#c7c7cc"
+                    app:srcCompat="@drawable/ic_forward" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_share_now_referral_frag"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="@dimen/size_26"-->
+<!--            android:layout_marginTop="@dimen/size_25"-->
+<!--            android:layout_marginEnd="@dimen/size_27"-->
+<!--            android:background="@drawable/border_lipstick_rad_4"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:letterSpacing="0"-->
+<!--            android:paddingTop="@dimen/size_10"-->
+<!--            android:paddingBottom="@dimen/size_11"-->
+
+<!--            android:text="@string/share_now"-->
+<!--            android:textColor="@color/lipstick"-->
+<!--            android:textSize="@dimen/font_12"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/iv_whatsapp_referrals_frag" />-->
 
         <ProgressBar
             android:id="@+id/pb_referrals_frag"

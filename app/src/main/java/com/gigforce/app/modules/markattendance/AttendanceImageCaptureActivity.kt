@@ -6,8 +6,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +16,13 @@ import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.common_ui.utils.getScreenWidth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.otaliastudios.cameraview.BitmapCallback
 import com.otaliastudios.cameraview.CameraLogger
 import com.otaliastudios.cameraview.PictureResult
+import com.otaliastudios.cameraview.controls.Mode
 import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_picture_preview.*
 import java.io.*
@@ -42,8 +44,16 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
         capture_icon.setOnClickListener {
 
             if (!show_img_cl.isVisible) {
-                cameraView.takePicture()
 
+                if (cameraView.mode == Mode.VIDEO) {
+                    Log.e("ImageCaptureActivity", "Camera Is In Video Mode, Skipping Click Picture")
+                    return@setOnClickListener
+                }
+
+                if (cameraView.isTakingPicture || cameraView.isTakingVideo)
+                    return@setOnClickListener
+
+                cameraView.takePicture()
             }
         }
 
@@ -64,18 +74,18 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
     private fun uploadImage() {
         showToast("Uploading Image")
         progress_circular.visible()
-        val sd = Environment.getExternalStorageDirectory();
+
         val image = File(filesDir, "capture.jpg")
-        val bos = BufferedOutputStream(FileOutputStream(image));
-        bos.write(pictureResult?.data);
-        bos.flush();
+        val bos = BufferedOutputStream(FileOutputStream(image))
+        bos.write(pictureResult?.data)
+        bos.flush()
         bos.close()
         val bitmap = getBitmap(image.absolutePath)!!
         val compressByteArray = bitmapToByteArray(getResizedBitmap(bitmap, 750))
         val selfieImg = getTimeStampAsName() + getTimeStampAsName() + ".jpg"
         val mReference = FirebaseStorage.getInstance().reference
-                .child("attendance")
-                .child(selfieImg)
+            .child("attendance")
+            .child(selfieImg)
         lateinit var uploadTask: UploadTask
 //            if (uriImg != null)
 //                uploadTask = mReference.putFile(uriImg)
@@ -114,9 +124,81 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
     private fun initCamera() {
 
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE)
-        val size = getScreenWidth(this)
-        val width = SizeSelectors.minWidth(size.width)
-        cameraView.setPreviewStreamSize(SizeSelectors.and(width, SizeSelectors.biggest()));
+//        val size = getScreenWidth(this)
+//        val width = SizeSelectors.minWidth(size.width)
+//        val height = SizeSelectors.minHeight(size.height)
+//        val dimensions = SizeSelectors.and(width, height) // Matches sizes bigger than 1000x2000.
+//        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(Size(size.width, size.height)), 0f) // Matches 1:1 sizes.
+//        val result = SizeSelectors.or(
+//                SizeSelectors.and(ratio, dimensions),  // Try to match both constraints
+//                ratio,  // If none is found, at least try to match the aspect ratio
+//                SizeSelectors.biggest() // If none is found, take the biggest
+//        )
+//        cameraView.setPictureSize(result)
+//        cameraView.setVideoSize(result)
+
+
+        FirebaseFirestore.getInstance()
+            .collection("Configuration")
+            .document("CameraProperties")
+            .get()
+            .addOnSuccessListener {
+
+                val deviceAndDefaultSize =
+                    it.getString("gig_device_and_experimental_camera_width_size") ?: ""
+                val defaultSize =
+                    it.getLong("gig_image_capture_default_size_selector_max_width") ?: 1000L
+
+                initCamera2(
+                    deviceAndDefaultSize,
+                    defaultSize.toInt()
+                )
+            }.addOnFailureListener {
+
+                initCamera2(
+                    "",
+                    1000
+                )
+            }
+    }
+
+    private fun initCamera2(
+        devicesThatNeedToUseDifferentPreviewSize: String,
+        defaultMaxWidth: Int
+    ) {
+
+        val deviceAndTheirMaxWidthValues = devicesThatNeedToUseDifferentPreviewSize
+            .trim()
+            .split(";")
+            .filter { it.isNotBlank() }
+            .map {
+                it.substring(0, it.indexOf(":")) to it.substring(it.indexOf(":") + 1, it.length)
+            }.toMap()
+
+
+        if (deviceAndTheirMaxWidthValues.containsKey(Build.MODEL)) {
+            val maxWidthForThisDevice = deviceAndTheirMaxWidthValues.get(Build.MODEL)?.toInt() ?: -1
+
+            if (maxWidthForThisDevice == -1) {
+                //No Restriction
+            } else {
+                cameraView.setPreviewStreamSize(
+                    SizeSelectors.and(
+                        SizeSelectors.maxWidth(
+                            maxWidthForThisDevice
+                        ), SizeSelectors.biggest()
+                    )
+                )
+            }
+        } else {
+            cameraView.setPreviewStreamSize(
+                SizeSelectors.and(
+                    SizeSelectors.maxWidth(defaultMaxWidth),
+                    SizeSelectors.biggest()
+                )
+            )
+        }
+
         cameraView.setLifecycleOwner(this)
         cameraView.addCameraListener(CameraListener())
     }
@@ -142,15 +224,15 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
                 result.toBitmap(BitmapCallback {
                     it?.let { it1 ->
                         show_pic.scaleType =
-                                if (it1.width > it1.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
+                            if (it1.width > it1.height) ImageView.ScaleType.FIT_CENTER else ImageView.ScaleType.CENTER_CROP
                         show_pic.setImageBitmap(it1)
                     }
 
 //                    show_pic_bg.setImageBitmap(it)
-                });
+                })
             } catch (e: UnsupportedOperationException) {
-                show_pic.setImageDrawable(ColorDrawable(Color.GREEN));
-                showToast("Can't preview this format: ");
+                show_pic.setImageDrawable(ColorDrawable(Color.GREEN))
+                showToast("Can't preview this format: ")
             }
 //            uploadImage(result)
 //            show_pic.setImageBitmap(byteArrayToBitmap(result.data))
@@ -162,15 +244,15 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
 
     private fun getTimeStampAsName(): String {
         val timeStamp = SimpleDateFormat(
-                "yyyyMMdd_HHmmss",
-                Locale.getDefault()
+            "yyyyMMdd_HHmmss",
+            Locale.getDefault()
         ).format(Date())
         return timeStamp
     }
 
     fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
-        var width = image.getWidth()
-        var height = image.getHeight()
+        var width = image.width
+        var height = image.height
         val bitmapRatio = width.toFloat() / height.toFloat()
         if (bitmapRatio > 1) {
             width = maxSize
@@ -188,8 +270,8 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
 
     fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
         var stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-        return stream.toByteArray();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+        return stream.toByteArray()
     }
 
 //    fun rotateImageIfRequire(bitmap: Bitmap): Bitmap {
@@ -229,9 +311,9 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
     }
 
     fun decodeSampledBitmapFromResource(
-            byteArray: ByteArray,
-            reqWidth: Int,
-            reqHeight: Int
+        byteArray: ByteArray,
+        reqWidth: Int,
+        reqHeight: Int
     ): Bitmap {
         // First decode with inJustDecodeBounds=true to check dimensions
         return BitmapFactory.Options().run {
@@ -240,7 +322,7 @@ class AttendanceImageCaptureActivity : AppCompatActivity() {
             inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
             // Decode bitmap with inSampleSize set
             inJustDecodeBounds = false
-            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this);
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, this)
         }
     }
 

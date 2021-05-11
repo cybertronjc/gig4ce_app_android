@@ -2,6 +2,7 @@ package com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.docume
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -28,36 +30,11 @@ import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharEditLayout
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.aadharViewLayout
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharAvailaibilityOptionRG
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageEditErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharBackImageHolder
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharCardET
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharEditOverallErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageEditErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharFrontImageHolder
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharInfoLayout
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoEditErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharNoRB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharSubmitSliderBtn
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharYesRB
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.doYouHaveAadharLabel
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.helpIconViewIV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.topSeaparator
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
+//import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
+import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
+//import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNoTV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharNumberViewErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackErrorMessageTV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewBackImageIV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontErrorMessage
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.aadharViewFrontImageIV
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.editLayout
-import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.statusTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 
 enum class AadharCardSides {
@@ -71,7 +48,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
     }
 
-    private val viewModel: GigVerificationViewModel by viewModels()
+    private val viewModel: GigVerificationViewModel by activityViewModels()
     private lateinit var userId: String
     private lateinit var userName: String
 
@@ -132,10 +109,23 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharBackImageHolder.documentUploadSubLabelTV.text =
             getString(R.string.upload_your_aadhar_card)
 
-        aadharSubmitSliderBtn.isEnabled = false
+        disableSubmitButton()
 
+        ambsd_aadhar_aahdar_skip_btn.setOnClickListener {
 
-        ic_back_iv.setOnClickListener {
+            navigate(
+                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                )
+            )
+
+        }
+
+        toolbar_layout.showTitle(getString(R.string.upload_aadhar_details))
+        toolbar_layout.hideActionMenu()
+        toolbar_layout.setBackButtonListener{
+
             showGoBackConfirmationDialog()
         }
 
@@ -152,46 +142,17 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             if (checkedId == R.id.aadharYesRB) {
                 showAadharImageAndInfoLayout()
                 showImageInfoLayout()
-
-                if (aadharDataCorrectCB.isChecked
-                    && ((aadharSubmitSliderBtn.text == getString(R.string.update)
-                            || (aadharFrontImagePath != null && aadharBackImagePath != null)))
-                ) {
-                    enableSubmitButton()
-                } else {
-                    disableSubmitButton()
-                }
+                enableSubmitButton()
 
             } else if (checkedId == R.id.aadharNoRB) {
                 hideAadharImageAndInfoLayout()
 
                 aadharSubmitSliderBtn.visible()
-                aadharDataCorrectCB.visible()
-
-                if (aadharDataCorrectCB.isChecked)
-                    enableSubmitButton()
-                else
-                    disableSubmitButton()
-
+                enableSubmitButton()
             } else {
                 hideAadharImageAndInfoLayout()
                 disableSubmitButton()
             }
-        }
-
-        aadharDataCorrectCB.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-
-                if (aadharYesRB.isChecked && ((aadharSubmitSliderBtn.text == getString(R.string.update)
-                            || (aadharFrontImagePath != null && aadharBackImagePath != null)))
-                )
-                    enableSubmitButton()
-                else if (aadharNoRB.isChecked)
-                    enableSubmitButton()
-                else
-                    disableSubmitButton()
-            } else
-                disableSubmitButton()
         }
 
         aadharFrontImageHolder.uploadDocumentCardView.setOnClickListener {
@@ -232,7 +193,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
                     setDataOnEditLayout(aadharCardDataModel)
                     aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
-                    aadharSubmitSliderBtn.isEnabled = true
+                    enableSubmitButton()
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -240,54 +201,51 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
 
 
-        aadharSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+        aadharSubmitSliderBtn.setOnClickListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
+            if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
+                if (aadharCardET.text!!.length != 12) {
 
-                    if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
-                        if (aadharCardET.text!!.length != 12) {
-
-                            aadharEditLayout.post {
-                                aadharEditLayout.scrollTo(0, topSeaparator.y.toInt())
-                            }
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_aadhar_no))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
-                        }
-
-
-                        if (aadharSubmitSliderBtn.text != getString(R.string.update) && (aadharFrontImagePath == null || aadharBackImagePath == null)) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
-                        }
-
-                        val aadharNo = aadharCardET.text.toString()
-
-                        viewModel.updateAadharData(
-                            true,
-                            aadharFrontImagePath,
-                            aadharBackImagePath,
-                            aadharNo,
-                            userId
-                        )
-
-                    } else if (aadharNoRB.isChecked) {
-                        viewModel.updateAadharData(false, null, null, null, userId)
+                    aadharEditLayout.post {
+                        aadharEditLayout.scrollTo(0, topSeaparator.y.toInt())
                     }
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.enter_valid_aadhar_no))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+
+                    return@setOnClickListener
                 }
+
+
+                if (aadharSubmitSliderBtn.text != getString(R.string.update) && (aadharFrontImagePath == null || aadharBackImagePath == null)) {
+
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
+
+                val aadharNo = aadharCardET.text.toString()
+
+                viewModel.updateAadharData(
+                    true,
+                    aadharFrontImagePath,
+                    aadharBackImagePath,
+                    aadharNo,
+                    userId
+                )
+
+            } else if (aadharNoRB.isChecked) {
+                viewModel.updateAadharData(false, null, null, null, userId)
             }
+
+        }
+
 
 
     }
@@ -343,7 +301,6 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         progressBar.visibility = View.GONE
         aadharViewLayout.gone()
         aadharEditLayout.visibility = View.VISIBLE
-        aadharSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -353,7 +310,9 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.aadhar_card_details_uploaded))
+
+        if (aadharYesRB.isChecked)
+            showToast(getString(R.string.aadhar_card_details_uploaded))
 
         navigate(
             R.id.addUserDrivingLicenseInfoFragment, bundleOf(
@@ -379,7 +338,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     }
 
     private fun goBackToUsersList() {
-        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
+        findNavController().navigateUp()
+//        findNavController().popBackStack(R.id.ambassadorEnrolledUsersListFragment, false)
     }
 
     override fun onBackPressed(): Boolean {
@@ -434,18 +394,10 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
                     showBackAadharCard(aadharBackImagePath!!)
                 }
 
-                if (aadharDataCorrectCB.isChecked
-                    && aadharFrontImagePath != null
-                    && aadharBackImagePath != null
-                ) {
-                    enableSubmitButton()
-                } else {
-                    disableSubmitButton()
-                }
+                enableSubmitButton()
 
                 if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
                     aadharSubmitSliderBtn.visible()
-                    aadharDataCorrectCB.visible()
                 }
 
             } else {
@@ -473,19 +425,18 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
     private fun enableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = true
 
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        aadharSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        )
     }
 
     private fun disableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = false
 
-        aadharSubmitSliderBtn.outerColor =
+        aadharSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
             ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+        )
+
     }
 
     private fun showImageInfoLayout() {

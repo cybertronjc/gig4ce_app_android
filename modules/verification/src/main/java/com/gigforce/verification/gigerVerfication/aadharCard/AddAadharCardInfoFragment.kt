@@ -428,9 +428,9 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                 navigation.navigateTo("verification/addDrivingLicenseInfoFragment")
             } else if (!it.bankDetailsUploaded) {
                 navigation.navigateTo("verification/addBankDetailsInfoFragment")
-            } else if (!it.selfieVideoUploaded) {
+            } else /*if (!it.selfieVideoUploaded) {
                 navigation.navigateTo("verification/addSelfieVideoFragment")
-            } else if (!it.panCardDetailsUploaded) {
+            } else */if (!it.panCardDetailsUploaded) {
                 navigation.navigateTo("verification/addPanCardInfoFragment")
             } else {
                 showDetailsUploaded()
@@ -480,7 +480,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
 
     }
@@ -498,7 +498,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, this)
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 

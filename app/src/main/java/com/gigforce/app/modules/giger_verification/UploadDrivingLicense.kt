@@ -44,7 +44,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlBackEditErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlEditOverallErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlFrontEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
+import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlBackImageHolder
@@ -240,19 +244,19 @@ class UploadDrivingLicense : Fragment(),
                             return
                         }
 
-                        val dlNo =
-                            drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
-                        if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.enter_valid_dl))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-
-                            dlSubmitSliderBtn_client_act.resetSlider()
-                            return
-                        }
+                            val dlNo =
+                                    drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+//                            if (!dlNo.isNullOrBlank() && !VerificationValidations.isDLNumberValid(dlNo)) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.enter_valid_dl))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//
+//                                dlSubmitSliderBtn_client_act.resetSlider()
+//                                return
+//                            }
 
                         if (dlSubmitSliderBtn_client_act.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
@@ -286,6 +290,7 @@ class UploadDrivingLicense : Fragment(),
                     }
                 }
             }
+
 
 
 //        tv_action_upld_dl_cl_act.setOnClickListener {
@@ -764,7 +769,9 @@ class UploadDrivingLicense : Fragment(),
     }
 
     private fun documentUploaded() {
-        showToast(getString(R.string.dl_details_uploaded))
+        if (dlYesRB.isChecked)
+            showToast(getString(R.string.dl_details_uploaded))
+
         navigation.popBackStack()
     }
 

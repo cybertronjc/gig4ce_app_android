@@ -1,0 +1,7 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="less_than_tenth"><![CDATA["<10th"]]></string>
+    <string name="skip_underlined"><u>Skip</u></string>
+    <string name="introduction">Introduction</string>
+</resources>

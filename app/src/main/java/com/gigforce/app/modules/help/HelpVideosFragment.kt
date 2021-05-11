@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,7 +17,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import kotlinx.android.synthetic.main.fragment_help_video.*
-
+import com.gigforce.core.extensions.gone
+import com.jaeger.library.StatusBarUtil
 
 class HelpVideosFragment : Fragment() {
 
@@ -33,15 +35,29 @@ class HelpVideosFragment : Fragment() {
         initViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                R.color.lipstick_two,
+                null
+        ))
+    }
+
     private fun initView() {
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        shimmerFrameLayout.startShimmer()
     }
 
     private fun initViewModel() {
         viewModel.helpVideos
             .observe(viewLifecycleOwner, Observer {
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.gone()
                 setHelpVideosOnView(it)
             })
 

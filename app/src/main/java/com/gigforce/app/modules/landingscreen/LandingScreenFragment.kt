@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.client_activation.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
@@ -55,19 +56,21 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.ambassador_layout
 import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
 import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
 import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.join_as_amb_label
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
 import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
 import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
@@ -82,6 +85,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+
 @AndroidEntryPoint
 class LandingScreenFragment : BaseFragment() {
 
@@ -93,6 +97,10 @@ class LandingScreenFragment : BaseFragment() {
         private const val SCREEN_GIG = 11
 
     }
+
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
@@ -123,7 +131,7 @@ class LandingScreenFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val notificationToken = FirebaseInstanceId.getInstance().getToken()
+
         viewModel = ViewModelProvider(this).get(LandingScreenViewModel::class.java)
         val displayMetrics = DisplayMetrics()
         activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
@@ -158,6 +166,8 @@ class LandingScreenFragment : BaseFragment() {
                 }
             }
         }
+
+//        chat_icon_iv.performClick()
 
     }
 
@@ -384,15 +394,6 @@ class LandingScreenFragment : BaseFragment() {
             displayImage(profile.profileAvatarName)
             if (profile.name != null && !profile.name.equals(""))
                 profile_name.text = profile.name
-
-            ambassador_layout.visible()
-            if (profile.isUserAmbassador) {
-                join_as_amb_label.text = getString(R.string.ambassador_program)
-                amb_join_open_btn.text = getString(R.string.open)
-            } else {
-                join_as_amb_label.text = getString(R.string.join_us_as_an_ambassador)
-                amb_join_open_btn.text = getString(R.string.join_now)
-            }
         })
 
         verificationViewModel
@@ -623,7 +624,7 @@ class LandingScreenFragment : BaseFragment() {
                     false
             )
             gigforce_tip.adapter = recyclerGenericAdapter
-            if(gigforce_tip.onFlingListener==null){
+            if (gigforce_tip.onFlingListener == null) {
                 var pagerHelper = PagerSnapHelper()
                 pagerHelper.attachToRecyclerView(gigforce_tip)
             }
@@ -765,11 +766,11 @@ class LandingScreenFragment : BaseFragment() {
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
-            navigate(R.id.contactScreenFragment)
+            navigate(R.id.chatListFragment)
         }
 
         contact_us.setOnClickListener {
-            navigate(R.id.fakeGigContactScreenFragment)
+            //  navigate(R.id.fakeGigContactScreenFragment)
         }
 
         invite_contact.setOnClickListener {
@@ -799,14 +800,14 @@ class LandingScreenFragment : BaseFragment() {
         }
         amb_join_open_btn.setOnClickListener {
 
-            if (profile == null)
-                return@setOnClickListener
-
-            if (profile!!.isUserAmbassador) {
-                navigate(R.id.ambassadorEnrolledUsersListFragment)
-            } else {
-                navigate(R.id.ambassadorProgramDetailsFragment)
-            }
+//            if (profile == null)
+//                return@setOnClickListener
+//
+//            if (profile!!.isUserAmbassador) {
+            navigate(R.id.ambassadorEnrolledUsersListFragment)
+//            } else {
+//                navigate(R.id.ambassadorProgramDetailsFragment)
+//            }
         }
 
     }
@@ -826,6 +827,15 @@ class LandingScreenFragment : BaseFragment() {
 
 
         learningViewModel.getRoleBasedCourses()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        ))
     }
 
     private fun showLearningAsLoading() {
@@ -897,18 +907,15 @@ class LandingScreenFragment : BaseFragment() {
                                                 .error(R.drawable.ic_learning_default_back)
                                                 .into(img)
                                     } else {
-                                        FirebaseStorage.getInstance()
+                                        val imageRef = FirebaseStorage.getInstance()
                                                 .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                                                 .child(obj!!.coverPicture!!)
-                                                .downloadUrl
-                                                .addOnSuccessListener { fileUri ->
 
-                                                    GlideApp.with(requireContext())
-                                                            .load(fileUri)
-                                                            .placeholder(getCircularProgressDrawable())
-                                                            .error(R.drawable.ic_learning_default_back)
-                                                            .into(img)
-                                                }
+                                        GlideApp.with(requireContext())
+                                                .load(imageRef)
+                                                .placeholder(getCircularProgressDrawable())
+                                                .error(R.drawable.ic_learning_default_back)
+                                                .into(img)
                                     }
                                 } else {
 

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learning.R
 import com.gigforce.learning.assessment.models.OptionsArr
-import kotlinx.android.synthetic.main.layout_message_rv_answers_access_frag.view.*
 import kotlinx.android.synthetic.main.layout_rv_answers_adapter.view.*
 
 class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -57,14 +56,16 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     items!![holder.adapterPosition - 1].reason
                 if (obj.selectedAnswer != null && obj.selectedAnswer!!) {
                     val color =
-                        if (obj.is_answer == true) ColorAndBg(
-                            holder.itemView.context.getColor(R.color.app_green),
-                            holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
-                        ) else
-                            ColorAndBg(
-                                holder.itemView.context.getColor(R.color.red),
-                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
-                            )
+//                        if (obj.is_answer == true)
+                        ColorAndBg(
+                            holder.itemView.context.getColor(R.color.app_orange),
+                            holder.itemView.context.getDrawable(R.drawable.border_option_dark)!!
+                        )
+//                        else
+//                            ColorAndBg(
+//                                holder.itemView.context.getColor(R.color.red),
+//                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
+//                            )
 
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
@@ -75,27 +76,30 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                         if (obj.reason.isEmpty()) View.GONE else (if (obj.showReason == true) View.VISIBLE else View.GONE)
 
                 } else {
-                    val color =
-                        if (obj.clickStatus == true) ColorAndBg(
-                            holder.itemView.context.getColor(R.color.black_85),
-                            holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
-                        )
-                        else (when {
-                            obj.is_answer == true -> ColorAndBg(
-                                holder.itemView.context.getColor(R.color.app_green),
-                                holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
-                            )
-                            obj.showReason == false -> ColorAndBg(
-                                holder.itemView.context.getColor(R.color.black_85),
-                                holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
-                            )
-                            else -> ColorAndBg(
-                                holder.itemView.context.getColor(R.color.red),
-                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
-                            )
-                        })
+//                    val color =
+//                        if (obj.clickStatus == true) ColorAndBg(
+//                            holder.itemView.context.getColor(R.color.black_85),
+//                            holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+//                        )
+//                        else (when {
+//                            obj.is_answer == true -> ColorAndBg(
+//                                holder.itemView.context.getColor(R.color.app_green),
+//                                holder.itemView.context.getDrawable(R.drawable.border_option_green)!!
+//                            )
+//                            obj.showReason == false -> ColorAndBg(
+//                                holder.itemView.context.getColor(R.color.black_85),
+//                                holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+//                            )
+//                            else -> ColorAndBg(
+//                                holder.itemView.context.getColor(R.color.red),
+//                                holder.itemView.context.getDrawable(R.drawable.border_option_red)!!
+//                            )
+//                        })
 
-
+                    val color = ColorAndBg(
+                        holder.itemView.context.getColor(R.color.black_85),
+                        holder.itemView.context.getDrawable(R.drawable.border_tv_rv_answers_assess_frag)!!
+                    )
                     holder.itemView.tv_number_rv_access_frag.setTextColor(color.color)
                     holder.itemView.tv_option_rv_access_frag.setTextColor(color.color)
                     holder.itemView.tv_option_rv_access_frag.background = color.drawable
@@ -136,7 +140,8 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                 }
 
                 holder.itemView.layoutParams = params
-                holder.itemView.tv_message_rv_answers_access_frag.text = message ?: ""
+//                holder.itemView.tv_message_rv_answers_access_frag.gone()
+//                holder.itemView.tv_message_rv_answers_access_frag.text = message ?: ""
             }
 
         }
@@ -151,7 +156,7 @@ class AssessmentAnswersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     fun addData(items: ArrayList<OptionsArr>, showAnswerStatus: Boolean, message: String) {
         this.items = items;
         this.showAnswerStatus = showAnswerStatus
-        this.message = message;
+//        this.message = message;
         notifyDataSetChanged()
     }
 

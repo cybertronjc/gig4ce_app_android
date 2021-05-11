@@ -2,8 +2,10 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.core.datamodels.gigpage.Gig
+import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+//import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
 import io.reactivex.Observable
@@ -38,10 +40,10 @@ class BSCalendarScreenViewModel : ViewModel() {
                 if (!success?.documents.isNullOrEmpty()) {
                     val toObject = success?.documents?.get(0)?.toObject(ProfileData::class.java)
                     gig.chatInfo = mapOf(
-                            ChatFragment.INTENT_EXTRA_OTHER_USER_IMAGE to (toObject?.profileAvatarName ?: ""),
-                            ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to (toObject?.name ?: ""),
-                            ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
-                            ChatFragment.INTENT_EXTRA_OTHER_USER_ID to (success?.documents?.get(0)?.id ?: ""),
+                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to (toObject?.profileAvatarName ?: ""),
+                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to (toObject?.name ?: ""),
+                            ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
+                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to (success?.documents?.get(0)?.id ?: ""),
                             StringConstants.MOBILE_NUMBER.value to (toObject?.loginMobile ?: ""),
                             StringConstants.FROM_CLIENT_ACTIVATON.value to true
 

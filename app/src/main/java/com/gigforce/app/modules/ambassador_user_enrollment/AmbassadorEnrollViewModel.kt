@@ -46,9 +46,13 @@ class AmbassadorEnrollViewModel @Inject constructor(
                         }
                     }
 
-                    _enrolledUsers.postValue(enrolledUsers)
+                        _enrolledUsers.postValue(
+                                enrolledUsers.sortedByDescending {
+                                    it.enrolledOn.seconds
+                                })
+//                        _enrolledUsers.postValue(null)
+                    }
                 }
-            }
     }
 
     private val _sendOtpToPhoneNumber = MutableLiveData<Lce<SendOtpResponseData>>()

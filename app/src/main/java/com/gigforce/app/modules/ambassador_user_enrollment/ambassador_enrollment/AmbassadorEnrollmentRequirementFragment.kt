@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
@@ -22,8 +23,8 @@ import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_sc
 class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
         AmbassadorEnrolledSuccessfullyDialogFragmentListeners {
 
-    private val profileViewModel: ProfileViewModel by viewModels()
-    private val gigVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val gigVerificationViewModel: GigVerificationViewModel by activityViewModels()
 
     private var profileData: ProfileData? = null
     private var gigerVerificationStatus: GigerVerificationStatus? = null

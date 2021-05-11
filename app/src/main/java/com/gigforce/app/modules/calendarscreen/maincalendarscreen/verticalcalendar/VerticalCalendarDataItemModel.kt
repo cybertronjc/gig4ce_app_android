@@ -175,6 +175,7 @@ class VerticalCalendarDataItemModel(
                 }
             }
 
+            dataModel.isUnavailable = false
             return dataModel
         }
 

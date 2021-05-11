@@ -5,6 +5,7 @@ import com.gigforce.app.core.replace
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
+import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
@@ -368,7 +369,6 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
         name: String,
         dateOfBirth: Date,
         gender: String,
-        pincode: String,
         highestQualification: String
     ) {
 
@@ -376,31 +376,27 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
 
         if (profileData == null) {
             profileData = ProfileData(
-                name = name,
-                gender = gender,
-                loginMobile = getNumberWithNineone(phoneNumber),
-                address = AddressFirestoreModel(
-                    current = AddressModel(pincode = pincode)
-                ),
-                dateOfBirth = Timestamp(dateOfBirth),
-                highestEducation = highestQualification,
-                contact = ArrayList(
-                    listOf(
-                        Contact(
-                            phone = phoneNumber,
-                            email = ""
-                        )
-                    )
-                ),
-                createdOn = Timestamp.now(),
-                isonboardingdone = true
+                    name = name,
+                    gender = gender,
+                    loginMobile = getNumberWithNineone(phoneNumber),
+                    dateOfBirth = dateOfBirth?.toFirebaseTimeStamp(),
+                    highestEducation = highestQualification,
+                    contact = ArrayList(
+                            listOf(
+                                    Contact(
+                                            phone = phoneNumber,
+                                            email = ""
+                                    )
+                            )
+                    ),
+                    createdOn = Timestamp.now(),
+                    isonboardingdone = true
             )
         } else {
             profileData.apply {
                 this.name = name
-                this.dateOfBirth = Timestamp(dateOfBirth)
+                this.dateOfBirth = dateOfBirth?.toFirebaseTimeStamp()
                 this.gender = gender
-                this.address.current.pincode = pincode
                 this.highestEducation = highestQualification
                 this.isonboardingdone = true
             }
@@ -419,52 +415,46 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
     }
 
     suspend fun updateCurrentAddressDetails(
-        uid: String?,
-        pinCode: String,
-        addressLine1: String,
-        addressLine2: String,
-        state: String,
-        city: String,
-        preferredDistanceInKm: Int,
-        readyToChangeLocationForWork: Boolean,
-        homeCity: String = "",
-        homeState: String = "",
-        howDidYouCameToKnowOfCurrentJob: String = ""
+            uid: String?,
+            pinCode: String,
+            addressLine1: String,
+            addressLine2: String,
+            state: String,
+            city: String,
+            homeCity: String = "",
+            homeState: String = ""
     ) {
         if (uid == null) {
             firebaseDB
-                .collection(profileCollectionName)
-                .document(getUID())
-                .updateOrThrow(
-                    mapOf(
-                        "address.current.firstLine" to addressLine1,
-                        "address.current.area" to addressLine2,
-                        "address.current.pincode" to pinCode,
-                        "address.current.state" to state,
-                        "address.current.city" to city,
-                        "address.current.empty" to false
+                    .collection(profileCollectionName)
+                    .document(getUID())
+                    .updateOrThrow(
+                            mapOf(
+                                    "address.current.firstLine" to addressLine1,
+                                    "address.current.area" to addressLine2,
+                                    "address.current.pincode" to pinCode,
+                                    "address.current.state" to state,
+                                    "address.current.city" to city,
+                                    "address.current.empty" to false
+                            )
                     )
-                )
         } else {
             firebaseDB
-                .collection(profileCollectionName)
-                .document(uid)
-                .updateOrThrow(
-                    mapOf(
-                        "address.current.firstLine" to addressLine1,
-                        "address.current.area" to addressLine2,
-                        "address.current.pincode" to pinCode,
-                        "address.current.state" to state,
-                        "address.current.city" to city,
-                        "address.home.state" to homeState,
-                        "address.home.city" to homeCity,
-                        "address.howDidYouCameToKnowOfCurrentJob" to howDidYouCameToKnowOfCurrentJob,
-                        "address.current.empty" to false,
-                        "address.current.preferredDistanceActive" to true,
-                        "address.current.preferred_distance" to preferredDistanceInKm,
-                        "readyToChangeLocationForWork" to readyToChangeLocationForWork
+                    .collection(profileCollectionName)
+                    .document(uid)
+                    .updateOrThrow(
+                            mapOf(
+                                    "address.current.firstLine" to addressLine1,
+                                    "address.current.area" to addressLine2,
+                                    "address.current.pincode" to pinCode,
+                                    "address.current.state" to state,
+                                    "address.current.city" to city,
+                                    "address.home.state" to homeState,
+                                    "address.home.city" to homeCity,
+                                    "address.current.empty" to false,
+                                    "address.current.preferredDistanceActive" to true
+                            )
                     )
-                )
         }
     }
 

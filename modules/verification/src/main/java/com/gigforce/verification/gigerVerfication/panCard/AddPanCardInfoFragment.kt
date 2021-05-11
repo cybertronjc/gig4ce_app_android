@@ -356,9 +356,9 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
                 navigation.navigateTo("verification/addDrivingLicenseInfoFragment")
             } else if (!it.bankDetailsUploaded) {
                 navigation.navigateTo("verification/addBankDetailsInfoFragment")
-            } else if (!it.selfieVideoUploaded) {
+            } else /*if (!it.selfieVideoUploaded) {
                 navigation.navigateTo("verification/addSelfieVideoFragment")
-            } else {
+            } else */{
                 showDetailsUploaded()
             }
         }
@@ -406,7 +406,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "pan_card.jpg")
-        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE, this)
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 

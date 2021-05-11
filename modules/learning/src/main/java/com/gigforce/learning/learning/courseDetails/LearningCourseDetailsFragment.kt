@@ -1,13 +1,13 @@
 package com.gigforce.learning.learning.courseDetails
 
 import android.os.Bundle
-import android.os.Handler
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -17,31 +17,24 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learning.R
-//import com.gigforce.app.R
-//import com.gigforce.app.core.gone
-//import com.gigforce.app.core.visible
-//import com.gigforce.learning.assessment.AssessmentFragment
-//import com.gigforce.learning.assessment.AssessmentListFragment
-import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.courseContent.CourseContentListFragment
-import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.Course
-import com.gigforce.core.datamodels.learning.CourseContent
-import com.gigforce.learning.learning.models.Module
-import com.gigforce.learning.learning.slides.SlidesFragment
-//import com.gigforce.app.utils.Lce
-//import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.core.NavFragmentsData
 import com.gigforce.core.StringConstants
+import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-//import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.learning.learning.courseContent.CourseContentListFragment
+import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
+import com.gigforce.learning.learning.models.Course
+import com.gigforce.learning.learning.models.Module
+import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
@@ -69,7 +62,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_learning_course_details, container,false)
+    ) = inflater.inflate(R.layout.fragment_learning_course_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -167,7 +160,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
 
         learningBackButton.setOnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
 
         assessmentSeeMoreButton.setOnClickListener {
@@ -370,9 +363,9 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
     private fun loadModulesInfoInView() {
 
         val moduleNo =
-            if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
-                viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
-            } else 0
+                if (viewModel.currentModules != null && viewModel.currentlySelectedModule != null) {
+                    viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
+                } else 0
 
         levelTV.text =
             "Module $moduleNo Of ${viewModel.currentModules?.size}"
@@ -402,14 +395,14 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         }
 
         complitionStatusTv.text =
-            "$lessonsCompleted/$totalLessons Lessons Completed"
+                "$lessonsCompleted/$totalLessons Lessons Completed"
         assessmentCountTv.text =
-            if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                "0 Assessments"
-            else if (assignmentsCompleted == 1)
-                "$assignmentsCompleted/$totalAssignments Assessment Completed"
-            else
-                "$assignmentsCompleted/$totalAssignments Assessments Completed"
+                if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
+                    "0 Assessments"
+                else if (assignmentsCompleted == 1)
+                    "$assignmentsCompleted/$totalAssignments Assessment Completed"
+                else
+                    "$assignmentsCompleted/$totalAssignments Assessments Completed"
 
         lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
@@ -450,10 +443,8 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
     }
 
 
-//    private var recyclerGenericAdapter: RecyclerGenericAdapter<Module>? = null
+    //    private var recyclerGenericAdapter: RecyclerGenericAdapter<Module>? = null
     private var linearLayoutManager: LinearLayoutManager? = null
-
-
     private fun setModulesOnView(content: List<Module>) {
 //        var width: Int = 0
 //        val displayMetrics = DisplayMetrics()
@@ -589,18 +580,45 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 //        learning_details_modules_rv.layoutManager = linearLayoutManager
 //        learning_details_modules_rv.adapter = recyclerGenericAdapter
 
-        learning_details_modules_rv.collection = getAllCourses(content)
-        Handler().postDelayed({
-            if (viewModel.currentlySelectedModulePosition != 0)
-                linearLayoutManager?.scrollToPositionWithOffset(
-                    viewModel.currentlySelectedModulePosition,
-                    40
+        learning_details_modules_rv.collection = getAllModules(content)
+        learning_details_modules_rv.itemClickListener = object : ItemClickListener {
+            override fun onItemClick(view: View, position: Int, dataModel: Any) {
+                val module = content.get(position)
+                viewModel.currentlySelectedModule = module
+
+                viewModel.getCourseLessonsAndAssessments(
+                    courseId = mCourseId,
+                    moduleId = module.id
                 )
-        }, 200)
+
+                course_details_main_layout.post {
+                    course_details_main_layout.scrollTo(0, modulesLabel.y.toInt())
+                }
+
+                var oldPostion = viewModel.currentlySelectedModulePosition
+                viewModel.currentlySelectedModulePosition = position
+
+                if (oldPostion != viewModel.currentlySelectedModulePosition) {
+                    (learning_details_modules_rv?.collection?.get(oldPostion) as FeatureItemCardDVM).isSelectedView =
+                        false
+                    (learning_details_modules_rv?.collection?.get(position) as FeatureItemCardDVM).isSelectedView =
+                        true
+
+                    learning_details_modules_rv?.coreAdapter?.notifyItemChanged(oldPostion)
+                    learning_details_modules_rv?.coreAdapter?.notifyItemChanged(viewModel.currentlySelectedModulePosition)
+                    (learning_details_modules_rv?.layoutManager as LinearLayoutManager )?.scrollToPositionWithOffset(
+                        viewModel.currentlySelectedModulePosition,
+                        40
+                    )
+//                        learning_details_modules_rv.scrollTP(viewModel.currentlySelectedModulePosition)
+                }
+            }
+        }
+
 
     }
 
-    private fun getAllCourses(content: List<Module>): ArrayList<FeatureItemCardDVM> {
+    private fun getAllModules(content: List<Module>): ArrayList<FeatureItemCardDVM> {
         var moduleList = ArrayList<FeatureItemCardDVM>()
 //        var abc = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
         content.forEach { e ->
@@ -608,10 +626,11 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 FeatureItemCardDVM(
                     image = e.coverPicture,
                     title = e.title,
-                    subtitle = "$e.lessonsCompleted} / ${e.totalLessons} Completed"
+                    subtitle = "${e.lessonsCompleted} / ${e.totalLessons} Completed"
                 )
             )
         }
+        moduleList.get(0).isSelectedView = true
         return moduleList
     }
 

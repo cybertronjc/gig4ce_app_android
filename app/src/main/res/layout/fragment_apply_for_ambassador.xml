@@ -8,7 +8,7 @@
     android:layout_marginRight="20dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="3dp"
-    tools:context=".modules.gigPage.RateGigDialogFragment">
+    tools:context=".modules.gigPage2.dialogFragments.RateGigDialogFragment">
 
 
     <include

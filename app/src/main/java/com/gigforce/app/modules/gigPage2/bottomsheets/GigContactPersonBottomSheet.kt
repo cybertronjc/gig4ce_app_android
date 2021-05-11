@@ -10,13 +10,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.chatmodule.ui.ChatFragment
+import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
+import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -191,13 +192,12 @@ class GigContactPersonBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun startChatScreen(id: String) {
-        findNavController().navigate(
-            R.id.chatScreenFragment, bundleOf(
-                ChatFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
-                ChatFragment.INTENT_EXTRA_OTHER_USER_ID to id,
-                ChatFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
-            )
-        )
+        findNavController().navigate(R.id.chatPageFragment, bundleOf(
+                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
+                ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to id,
+                ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to contactPersonDetail.name
+        ))
     }
 
     companion object {

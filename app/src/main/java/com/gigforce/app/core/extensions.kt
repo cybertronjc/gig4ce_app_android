@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -102,6 +103,10 @@ fun Date.toLocalDate(): LocalDate {
     return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 }
 
+fun Date.toLocalDateTime(): LocalDateTime {
+    return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
 fun Date?.toFirebaseTimeStamp(): Timestamp? {
 
     return if (this == null)
@@ -110,10 +115,10 @@ fun Date?.toFirebaseTimeStamp(): Timestamp? {
         Timestamp(this)
 }
 
-fun Timestamp.toLocalDateTime(): LocalDateTime {
-
-    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-}
+//fun Timestamp.toLocalDateTime(): LocalDateTime {
+//
+//    return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+//}
 
 fun Timestamp.toLocalDate(): LocalDate {
     return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -149,6 +154,21 @@ fun <V> Map<String, V>.toBundle(bundle: Bundle = Bundle()): Bundle = bundle.appl
             else -> throw IllegalArgumentException("$v is of a type that is not currently supported")
 //      is Array<*> -> TODO()
 //      is List<*> -> TODO()
+        }
+    }
+}
+
+fun Bundle.printDebugLog(parentKey: String = "") {
+    if (keySet().isEmpty()) {
+        Log.d("printDebugLog", "$parentKey is empty")
+    } else {
+        for (key in keySet()) {
+            val value = this[key]
+            when (value) {
+                is Bundle -> value.printDebugLog(key)
+                is Array<*> -> Log.d("printDebugLog", "$parentKey.$key : ${value.joinToString()}")
+                else -> Log.d("printDebugLog", "$parentKey.$key : $value")
+            }
         }
     }
 }

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".onboarding.fragments.jobpreference.JobPreferenceFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/job_preferences"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/lato"
+            android:text="Set Your preferences"
+            android:textColor="#131415"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/experience_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+            <TextView
+                android:id="@+id/major_cities_tv"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/size16"
+                android:background="#f4faff"
+                android:fontFamily="@font/lato"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/size16"
+                android:text="Job preference"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:layout_width="222dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size16"
+            android:background="@drawable/rect_light_blue_fill"
+            android:padding="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/experience_status">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/rect_top_left_cornor_card"
+                app:layout_constraintEnd_toStartOf="@+id/imageTextCardcl_"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_full_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/full_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Full Time"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageTextCardcl_"
+                android:layout_width="109dp"
+                android:layout_height="109dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageTextCardcl"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/icon_iv1"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_part_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/part_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato"
+                    android:letterSpacing="0"
+                    android:text="Part Time"
+                    android:textColor="#2e2f30"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/icon_iv1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/work_days_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/lato"
+            android:text="Set Your preferences"
+            android:textColor="#333333"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/work_days"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/size16"
+            android:background="#f4faff"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/size16"
+            android:text="Work Days"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size16"
+            app:layout_constraintTop_toBottomOf="@+id/work_days">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="308dp"
+                >
+
+
+                <CheckBox
+                    android:id="@+id/monday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Monday"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:text="Monday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/tuesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:tag="Tuesday"
+                    android:layout_weight="1"
+                    android:text="Tuesday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/wednesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Wednesday"
+                    android:text="Wednesday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+                <CheckBox
+                    android:id="@+id/thursday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Thursday"
+                    android:text="Thursday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/friday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Friday"
+                    android:text="Friday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/saturday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Saturday"
+                    android:text="Saturday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/sunday"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="Sunday"
+                    android:text="Sunday"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/timing_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView4_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/lato"
+            android:text="Set Your preferences"
+            android:textColor="#333333"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/work_days_"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/size16"
+            android:background="#f4faff"
+            android:fontFamily="@font/lato"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/size16"
+            android:text="Time Slots"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/textView4_" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/size16"
+            app:layout_constraintTop_toBottomOf="@+id/work_days_">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="108dp">
+
+                <CheckBox
+                    android:id="@+id/early_morning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_marginBottom="@dimen/size16"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:text="5 am - 8 am"
+                    android:tag="5 am - 8 am"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+                <CheckBox
+                    android:id="@+id/morning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_marginBottom="@dimen/size16"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:text="8 am - 12 pm"
+                    android:tag="8 am - 12 pm"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+                <CheckBox
+                    android:id="@+id/day_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:text="12 pm - 4 pm"
+                    android:tag="12 pm - 4 pm"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+                <CheckBox
+                    android:id="@+id/evening"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:text="4 pm - 8 pm"
+                    android:tag="4 pm - 8 pm"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+
+
+                <CheckBox
+                    android:id="@+id/night"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/size16"
+                    android:tag="8 pm - 12 am"
+                    android:background="@drawable/experience_options_background"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="@dimen/size16"
+                    android:text="8 pm - 12 am"
+                    android:checked="true"
+                    style="@style/Theme.CheckBoxLipstickPink"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

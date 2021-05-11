@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pick_image_intent_text">Choose Image</string>
+    <string name="crop_and_rotate">Crop and Rotate</string>
+</resources>

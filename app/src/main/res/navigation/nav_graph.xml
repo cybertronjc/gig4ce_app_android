@@ -54,27 +54,25 @@
         tools:layout="@layout/date_time_fragment" />
 
     <fragment
-        android:id="@+id/onboardingfragment"
+        android:id="@+id/onboardingfragmentold"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingMainFragment"
         tools:layout="@layout/onboarding_main_fragment" />
+
+    <fragment
+        android:id="@+id/onboardingfragment"
+        android:name="com.gigforce.profile.onboarding.OnboardingFragmentNew"
+        tools:layout="@layout/onboarding_fragment_new_fragment" />
+
+
     <fragment
         android:id="@+id/onboardingLoaderfragment"
         android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
         tools:layout="@layout/onboarding_loader_fragment" />
-    <fragment
-        android:id="@+id/chatScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatFragment"
-        tools:layout="@layout/fragment_chat_screen" />
 
     <fragment
         android:id="@+id/jdScreenFragment"
         android:name="com.gigforce.app.modules.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
         tools:layout="@layout/j_d_screen_fragment" />
-
-    <fragment
-        android:id="@+id/contactScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ChatListFragment"
-        tools:layout="@layout/contact_screen_fragment" />
 
     <fragment
         android:id="@+id/weekEndFragment"
@@ -141,20 +139,6 @@
             android:id="@+id/action_profileFragment_to_editCoverBottomSheet"
             app:destination="@id/editCoverBottomSheet" />
     </fragment>
-    <fragment
-        android:id="@+id/chatsHomeFragment"
-        android:name="com.gigforce.app.modules.chat.ChatsHomeFragment"
-        android:label="chats_home_fragment"
-        tools:layout="@layout/fragment_chats_home">
-        <action
-            android:id="@+id/action_chatsHomeFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.gigforce.app.modules.chat.ChatFragment"
-        android:label="chat_fragment"
-        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/landinghomefragment"
@@ -164,8 +148,8 @@
         <action
             android:id="@+id/action_landinghomefragment_to_gigerVerificationFragment"
             app:destination="@id/gigerVerificationFragment"
-            app:enterAnim="@anim/fragment_close_enter"
-            app:exitAnim="@anim/fragment_close_exit"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
@@ -243,7 +227,7 @@
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.gigforce.app.utils.LanguageSelectFragment"
+        android:name="com.gigforce.app.modules.language.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
@@ -541,11 +525,6 @@
         android:name="com.gigforce.learning.learning.MainLearningFragment"
         android:label="fragment_main_learning"
         tools:layout="@layout/fragment_main_learning" />
-    <fragment
-        android:id="@+id/helpChatFragment"
-        android:name="com.gigforce.app.modules.chat.help.HelpChatFragment"
-        android:label="fragment_help_chat"
-        tools:layout="@layout/fragment_help_chat" />
 
     <fragment
         android:id="@+id/gigPageExpanded"
@@ -571,38 +550,15 @@
         android:name="com.gigforce.wallet.HelpExpandedPage"
         android:label="HelpExpandedPage"
         tools:layout="@layout/help_expanded_page" />
-    <fragment
-        android:id="@+id/presentGigPageFragment"
-        android:name="com.gigforce.app.modules.gigPage.GigPageFragment"
-        android:label="fragment_gig_page_present"
-        tools:layout="@layout/fragment_gig_page_present">
 
-        <argument
-            android:name="gig_id"
-            app:argType="string" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/gigAttendancePageFragment"
-        android:name="com.gigforce.app.modules.gigPage.GigAttendancePageFragment"
-        android:label="GigAttendancePageFragment">
-
-        <argument
-            android:name="gig_id"
-            app:argType="string" />
-        <deepLink
-            android:id="@+id/gig_attendance_deeplink"
-            app:uri="www.gigforce.com/gig/attendance/{gig_id}" />
-
-    </fragment>
     <fragment
         android:id="@+id/gigPageNavigationFragment"
-        android:name="com.gigforce.app.modules.gigPage.GigPageNavigationFragment"
+        android:name="com.gigforce.app.modules.gigPage2.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
     <fragment
         android:id="@+id/rateGigDialogFragment"
-        android:name="com.gigforce.app.modules.gigPage.RateGigDialogFragment"
+        android:name="com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment"
         android:label="fragment_rate_gig_dialog"
         tools:layout="@layout/fragment_rate_gig_dialog" />
     <fragment
@@ -621,17 +577,13 @@
 
     <fragment
         android:id="@+id/gig_history_fragment"
-        android:name="com.gigforce.app.modules.earn.gighistory.GigHistoryFragment"
+        android:name="com.gigforce.app.modules.gighistory.GigHistoryFragment"
         android:label="GigHistoryFragment" />
     <fragment
         android:id="@+id/giger_id_fragment"
         android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
         android:label="GigerIdFragment" />
-    <fragment
-        android:id="@+id/fakeGigContactScreenFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.FakeGigContactScreenFragment"
-        android:label="fragment_fake_contact_screen"
-        tools:layout="@layout/fragment_fake_contact_screen" />
+
     <fragment
         android:id="@+id/slidesFragment"
         android:name="com.gigforce.learning.learning.slides.SlidesFragment"
@@ -708,14 +660,14 @@
 
         tools:layout="@layout/home_screen_bottom_sheet_fragment" >
 
-        <action
-            android:id="@+id/action_fragment_to_second_graph"
-            app:destination="@id/nav_graph_chat" />
+<!--        <action-->
+<!--            android:id="@+id/action_fragment_to_second_graph"-->
+<!--            app:destination="@id/nav_graph_chat" />-->
         
     </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet"
+        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
     <fragment
         android:id="@+id/gigPage2Fragment"
@@ -778,22 +730,7 @@
         android:id="@+id/payslipMonthlyFragment"
         android:name="com.gigforce.wallet.PayslipMonthlyFragment"
         android:label="PayslipMonthlyFragment" />
-    <fragment
-        android:id="@+id/chatNewContactFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.ContactsFragment"
-        android:label="ChatNewContactFragment" />
-    <fragment
-        android:id="@+id/groupChatFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.GroupChatFragment"
-        android:label="GroupChatFragment" />
-    <fragment
-        android:id="@+id/groupDetailsFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.GroupDetailsFragment"
-        android:label="GroupDetailsFragment" />
-    <fragment
-        android:id="@+id/groupMediaListFragment"
-        android:name="com.gigforce.app.modules.chatmodule.ui.GroupMediaListFragment"
-        android:label="GroupMediaListFragment" />
+
 
     <fragment
         android:id="@+id/application_questionnaire"
@@ -931,6 +868,44 @@
         android:id="@+id/clientActiExploreList"
         android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
         android:label="ClientActiExploreList" />
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list"/>
+
+    <fragment
+        android:id="@+id/chatPageFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ChatPageFragment"
+        android:label="fragment_chat_page"
+        tools:layout="@layout/fragment_chat_old" />
+
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.ContactsFragment"
+        android:label="ContactsFragment" />
+
+    <dialog
+        android:id="@+id/viewFullScreenImageDialogFragment"
+        android:name="com.gigforce.app.utils.ViewFullScreenImageDialogFragment"
+        android:label="ViewFullScreenImageDialogFragment" />
+    <dialog
+        android:id="@+id/viewFullScreenVideoDialogFragment"
+        android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
+        android:label="ViewFullScreenVideoDialogFragment" />
+    <fragment
+        android:id="@+id/groupDetailsFragment2"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupDetailsFragment"
+        android:label="GroupDetailsFragment" />
+    <fragment
+        android:id="@+id/groupMediaListFragment2"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupMediaListFragment2"
+        android:label="GroupMediaListFragment2" />
+    <fragment
+        android:id="@+id/onboardingPreferredJobLocationFragment"
+        android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
+        android:label="OnboardingPreferredJobLocationFragment" />
+
 
 </navigation>
 

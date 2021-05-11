@@ -25,27 +25,33 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigPage.GigPageFragment
+//import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.IEventTracker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_page_present.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginSuccessfulFragment : BaseFragment() {
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
-    var layout: View? = null;
+    var layout: View? = null
     private lateinit var viewModel: LoginSuccessfulViewModel
-    private lateinit var profileData: ProfileData
+    private var profileData: ProfileData? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 //        this.setDarkStatusBarTheme()
-        layout = inflateView(R.layout.fragment_login_success, inflater, container);
+        layout = inflateView(R.layout.fragment_login_success, inflater, container)
         return layout
     }
 
@@ -66,26 +72,24 @@ class LoginSuccessfulFragment : BaseFragment() {
         checkForGpsPermissionsAndGpsStatus()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun observer() {
         viewModel.userProfileData.observe(viewLifecycleOwner, Observer { profile ->
             profileData = profile
-            if (profile != null) {
-                if (profile.status) {
+
+            profileData?.let {
+                if (it.status) {
                     popFragmentFromStack(R.id.loginSuccessfulFragment)
-                    if (profile.isonboardingdone != null && profile.isonboardingdone) {
+                    if (it.isonboardingdone != null && it.isonboardingdone) {
                         saveOnBoardingCompleted()
 //                        navigateWithAllPopupStack(R.id.landinghomefragment)
                         navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
+
                         navigateWithAllPopupStack(R.id.onboardingfragment)
 
                     }
                 } else
-                    showToast(profile.errormsg)
+                    showToast(it.errormsg)
             }
         })
     }
@@ -98,12 +102,12 @@ class LoginSuccessfulFragment : BaseFragment() {
         if (userGpsDialogActionCount == 0 && !is_gps_enabled) {
             showEnableGPSDialog()
             checkInCheckOutSliderBtn?.resetSlider()
-            return;
+            return
         }
 
         val has_permission_coarse_location = ContextCompat.checkSelfPermission(
-            requireActivity(),
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                requireActivity(),
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         if (userGpsDialogActionCount == 1 || has_permission_coarse_location) {
@@ -120,21 +124,21 @@ class LoginSuccessfulFragment : BaseFragment() {
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ), GigPageFragment.PERMISSION_FINE_LOCATION
+                ), PERMISSION_FINE_LOCATION
             )
         }
     }
 
     private fun turnGPSOn() {
         val provider = Settings.Secure.getString(
-            context?.contentResolver,
-            Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+                context?.contentResolver,
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED
         )
         if (!provider.contains("gps")) { //if gps is disabled
             val poke = Intent()
             poke.setClassName(
-                "com.android.settings",
-                "com.android.settings.widget.SettingsAppWidgetProvider"
+                    "com.android.settings",
+                    "com.android.settings.widget.SettingsAppWidgetProvider"
             )
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
             poke.data = Uri.parse("3")
@@ -143,7 +147,7 @@ class LoginSuccessfulFragment : BaseFragment() {
             } ?: run {
 
                 FirebaseCrashlytics.getInstance()
-                    .log("Context found null in GigPageFragment/turnGPSOn()")
+                        .log("Context found null in GigPageFragment/turnGPSOn()")
             }
         }
     }
@@ -173,7 +177,8 @@ class LoginSuccessfulFragment : BaseFragment() {
             viewModel.getProfileData(0.0, 0.0, "")
             userGpsDialogActionCount = 1
 
-            dialog.dismiss() }
+            dialog.dismiss()
+        }
         dialog.show()
     }
 
@@ -205,15 +210,15 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     private fun initializeGPS() {
         fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
+                LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     private fun checkAndUpdateUserDetails() {
         val manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val is_GPS_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val has_GPS_permission = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         if (is_GPS_enabled && has_GPS_permission) {
@@ -252,19 +257,19 @@ class LoginSuccessfulFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == REQUEST_CODE_TOGGLE_GPS_MANUAL){
+        if (requestCode == REQUEST_CODE_TOGGLE_GPS_MANUAL) {
             checkForGpsPermissionsAndGpsStatus()
         }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            GigPageFragment.PERMISSION_FINE_LOCATION -> {
+            PERMISSION_FINE_LOCATION -> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     isGPSRequestCompleted = true
                     initializeGPS()
@@ -276,7 +281,8 @@ class LoginSuccessfulFragment : BaseFragment() {
         }
     }
 
-    companion object{
+    companion object {
         const val REQUEST_CODE_TOGGLE_GPS_MANUAL = 121
+        const val PERMISSION_FINE_LOCATION = 233
     }
 }

@@ -318,8 +318,8 @@ class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
 
     fun showResendOTPMessage(isShow: Boolean) {
         if (isShow) {
-            tv_number_otp.visibility = View.VISIBLE
-            otpnotcorrect_schedule_test.visibility = View.VISIBLE
+            tv_number_otp?.visibility = View.VISIBLE
+            otpnotcorrect_schedule_test?.visibility = View.VISIBLE
 //            resend_otp.visibility = View.VISIBLE
             activity?.let {
                 timer_tv.setTextColor(
@@ -331,8 +331,8 @@ class ScheduleDrivingTestFragment : Fragment(), IOnBackPressedOverride,
             }
             timerStarted = false
         } else {
-            tv_number_otp.visibility = View.GONE
-            otpnotcorrect_schedule_test.visibility = View.GONE
+            tv_number_otp?.visibility = View.GONE
+            otpnotcorrect_schedule_test?.visibility = View.GONE
 //            resend_otp.visibility = View.GONE
             activity?.let {
                 timer_tv.setTextColor(

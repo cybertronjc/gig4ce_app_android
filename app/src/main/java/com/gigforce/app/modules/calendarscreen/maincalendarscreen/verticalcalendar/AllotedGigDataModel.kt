@@ -2,14 +2,15 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalen
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
+import com.gigforce.app.modules.gigPage2.models.Gig
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AllotedGigDataModel : BaseFirestoreDataModel {
     companion object{
-        fun getGigData(gig: CalendarHomeScreenViewModel.GigData):AllotedGigDataModel{
+        fun getGigData(gig: Gig):AllotedGigDataModel{
             var calendarObj = Calendar.getInstance()
-            calendarObj.time = gig.startDateTime
+            calendarObj.time = gig.startDateTime.toDate()
             var data = AllotedGigDataModel()
             data.date = calendarObj.get(Calendar.DATE)
             data.month = calendarObj.get(Calendar.MONTH)

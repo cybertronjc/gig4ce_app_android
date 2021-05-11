@@ -11,6 +11,6 @@ class NavForGigPageModule(
         val moduleName:String = "gig"
         baseImplementation.registerRoute("${moduleName}/mygig", R.id.gig_history_fragment)
 
-        baseImplementation.registerRoute("${moduleName}/attendance", R.id.gigAttendancePageFragment)
+        baseImplementation.registerRoute("${moduleName}/attendance", R.id.gigPage2Fragment)
     }
 }

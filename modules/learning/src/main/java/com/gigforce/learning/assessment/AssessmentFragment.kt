@@ -446,7 +446,6 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
             viewModelAssessmentFragment.observableAssessmentData.value!!.assessment!!.size
         val isPassed =
             (answers / questions.toFloat()) * 100 >= viewModelAssessmentFragment.observableAssessmentData.value?.passing_percentage!!
-
         showDialog(
             AssessmentDialog.STATE_PASS,
             bundleOf(
@@ -454,11 +453,11 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
                 StringConstants.ASSESSMENT_DIALOG_STATE.value to if (isPassed) AssessmentDialog.STATE_PASS else AssessmentDialog.STATE_REAPPEAR,
                 StringConstants.QUESTIONS_COUNT.value to questions
             ),
-            mModuleId
+            mModuleId,
+            isPassed
         )
 
     }
-
     private fun initUI() {
         sv_assess_frag.visibility = View.VISIBLE
         iv_scroll_more_access_frag.visibility = View.VISIBLE
@@ -492,10 +491,14 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
     private fun showDialog(
         state: Int,
         bundle: Bundle?,
-        moduleId: String? = null
+        moduleId: String? = null,
+        isPassed:Boolean?=false
     ) {
+
+
+
         val dialog = if (moduleId != null)
-            AssessmentDialog.newInstance(moduleId, mLessonId, state)
+            AssessmentDialog.newInstance(moduleId, mLessonId, state,isPassed)
         else
             AssessmentDialog.newInstance(state)
 
@@ -503,6 +506,10 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
 
         bundle?.putString(INTENT_MODULE_ID, moduleId)
         bundle?.putString(INTENT_LESSON_ID, mLessonId)
+        isPassed?.let {
+            bundle?.putBoolean(INTENT_EXTRA_ISPASSED, it)
+        }
+
         dialog.arguments = bundle
 
         dialog.show(parentFragmentManager, AssessmentDialog::class.java.name)
@@ -515,8 +522,8 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
     }
 
 
-    override fun assessmentState(state: Int, nextLesson: String?) {
-        viewModelAssessmentFragment.switchAsPerState(state, nextLesson)
+    override fun assessmentState(state: Int, nextLesson: String?,isPassed:Boolean?) {
+        viewModelAssessmentFragment.switchAsPerState(state, nextLesson,isPassed)
     }
 
     override fun doItLaterPressed() {
@@ -539,13 +546,13 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
         while (iterate?.hasNext() == true) {
             val obj = iterate.next()
             if (isCorrect) {
-                if (obj.selectedAnswer != true) {
+//                if (obj.selectedAnswer != true) {
                     obj.showReason = false
-                }
+//                }
             } else {
-                if (obj.selectedAnswer != true && obj.is_answer != true) {
+//                if (obj.selectedAnswer != true && obj.is_answer != true) {
                     obj.showReason = false
-                }
+//                }
             }
             obj.clickStatus = false
         }
@@ -648,6 +655,7 @@ class AssessmentFragment : Fragment(), IOnBackPressedOverride,
         const val INTENT_MODULE_ID = "module_id"
         const val INTENT_LESSON_ID = "lesson_id"
         const val INTENT_NEXT_LESSON_ID = "next_lesson_id"
+        const val INTENT_EXTRA_ISPASSED = "is_passed"
     }
 
 }

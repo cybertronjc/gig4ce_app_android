@@ -1,5 +1,6 @@
 package com.gigforce.app.di
 
+import com.gigforce.app.di.implementations.EventTrackerImp
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.app.di.implementations.BuildConfigVMImp
 import com.gigforce.app.di.implementations.MyViewHolderFactory
@@ -10,6 +11,7 @@ import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.common_ui.LoginInfoRepo
 import com.gigforce.core.ICoreViewHolderFactory
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
@@ -53,6 +55,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideBuildConfig(imp:BuildConfigImp): IBuildConfig
+
+    @Binds
+    fun provideEventTracker(imp:EventTrackerImp) : IEventTracker
 }
 
 @InstallIn(ViewModelComponent::class)
@@ -70,4 +75,7 @@ interface ViewModelBindings {
 
     @Binds
     fun provideBuildVMConfig(imp:BuildConfigVMImp): IBuildConfigVM
+
+    @Binds
+    fun provideViewModelEventTracker(imp:EventTrackerImp) : IEventTracker
 }

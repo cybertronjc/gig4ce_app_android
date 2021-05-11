@@ -200,7 +200,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                      app:srcCompat="@drawable/ic_forward" />
+                    app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                      app:srcCompat="@drawable/ic_forward" />
+                    app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
 
@@ -280,7 +280,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="24dp"
-                      app:srcCompat="@drawable/ic_forward" />
+                    app:srcCompat="@drawable/ic_forward" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

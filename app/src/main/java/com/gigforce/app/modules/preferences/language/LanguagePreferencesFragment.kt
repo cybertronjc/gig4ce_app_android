@@ -15,7 +15,6 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
 import com.gigforce.common_ui.configrepository.ConfigViewModel
 import kotlinx.android.synthetic.main.fragment_language_preferences.*
-import kotlinx.android.synthetic.main.fragment_select_language.groupradio
 
 
 /**

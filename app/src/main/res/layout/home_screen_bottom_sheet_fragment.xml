@@ -156,14 +156,20 @@
         android:layout_marginTop="@dimen/size_22"
         android:layout_marginEnd="@dimen/size_16"
         android:layout_marginBottom="@dimen/size_16"
-        app:cardBackgroundColor="@color/light_pink">
+        app:cardBackgroundColor="#c6ddf3">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:padding="16dp">
 
+            <ImageView
+                android:layout_width="118dp"
+                android:layout_height="118dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/ic_ambassador_enroll_card_background"/>
 
             <ImageView
                 android:id="@+id/imageView11"
@@ -182,7 +188,7 @@
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/join_us_as_an_ambassador"
+                android:text="Register and Earn"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -198,9 +204,9 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/lato"
                 android:lineSpacingExtra="3sp"
-                android:text="@string/more_you_create_profiles_more_you_earn"
+                android:text="Create other people’s profile and earn bonus."
                 android:textColor="#d9000000"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="@+id/amb_join_open_btn"
                 app:layout_constraintStart_toEndOf="@+id/imageView11"
@@ -218,7 +224,7 @@
                 android:textColor="@color/lipstick"
                 android:lineSpacingExtra="3sp"
                 android:gravity="center_horizontal"
-                android:text="@string/join_now"
+                android:text="Create Now"
                 android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -640,6 +646,7 @@
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginLeft="20dp"
+            android:visibility="gone"
             android:background="@color/shadow_color"
             app:layout_constraintStart_toEndOf="@+id/textView125"
             app:layout_constraintTop_toBottomOf="@+id/help_topic_bs_calendar_screen" />
@@ -650,6 +657,7 @@
             android:layout_height="55dp"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView127" />
 
@@ -660,6 +668,7 @@
             android:layout_height="24dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
               app:srcCompat="@drawable/ic_contact_us"
             app:layout_constraintLeft_toLeftOf="@+id/contact_us_bs_calendar_screen"
             app:layout_constraintTop_toTopOf="@+id/contact_us_bs_calendar_screen" />
@@ -673,6 +682,7 @@
             android:text="@string/contact_us"
             android:textColor="#000000"
             android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/contact_icon_bs_calendar_screen"
             app:layout_constraintStart_toEndOf="@+id/contact_icon_bs_calendar_screen"
             app:layout_constraintTop_toTopOf="@+id/contact_icon_bs_calendar_screen" />

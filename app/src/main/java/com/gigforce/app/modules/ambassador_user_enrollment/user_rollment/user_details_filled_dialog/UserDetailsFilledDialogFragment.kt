@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.app.modules.common.SendSmsViewModel
+import com.gigforce.core.utils.Lse
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import kotlinx.android.synthetic.main.fragment_user_enrolled_dialog.*
 
@@ -31,15 +35,15 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
         const val TAG = "DeclineGigDialogFragment"
 
         fun launch(
-                userId: String,
-                userName: String,
-                fragmentManager: FragmentManager,
-                okayClickListener: UserDetailsFilledDialogFragmentResultListener
+            userId: String,
+            userName: String,
+            fragmentManager: FragmentManager,
+            okayClickListener: UserDetailsFilledDialogFragmentResultListener
         ) {
             val frag = UserDetailsFilledDialogFragment()
             frag.arguments = bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
             )
             frag.mOkayResultListener = okayClickListener
             frag.show(fragmentManager, TAG)
@@ -47,7 +51,8 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
 
     }
 
-    private val gigerVerificationViewModel: GigVerificationViewModel by viewModels()
+    private val gigerVerificationViewModel: GigVerificationViewModel by activityViewModels()
+    private val sendSmsViewModel: SendSmsViewModel by viewModels()
 
     private lateinit var userId: String
     private lateinit var userName: String
@@ -55,9 +60,9 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     private lateinit var mOkayResultListener: UserDetailsFilledDialogFragmentResultListener
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user_enrolled_dialog, container, false)
     }
@@ -95,8 +100,8 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             setBackgroundDrawableResource(R.drawable.dialog_round_bg)
 
             setLayout(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -113,9 +118,11 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
             bold {
                 append(" $userName's ")
             }
-            append(getString(R.string.details_exclamation)+"\n" +
-                    "\n")
-            append(getString(R.string.soon_gigs_will_assign))
+            append(
+                getString(R.string.details_exclamation) + "\n" +
+                        "\n"
+            )
+            append("Invite link will be shared via SMS on registered number.")
         }
 
         submitBtn.setOnClickListener {
@@ -136,19 +143,41 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
 
     private fun initViewModel() {
         gigerVerificationViewModel.gigerVerificationStatus
-                .observe(viewLifecycleOwner, Observer {
+            .observe(viewLifecycleOwner, Observer {
 
-                    if (it.aadharCardDataModel?.aadharCardNo != null ||
-                            it.bankUploadDetailsDataModel?.passbookImagePath != null ||
-                            it.drivingLicenseDataModel?.frontImage != null ||
-                            it.panCardDetails?.panCardImagePath != null
-                    ) {
+                if (it.aadharCardDataModel?.aadharCardNo != null ||
+                    it.drivingLicenseDataModel?.frontImage != null ||
+                    it.panCardDetails?.panCardImagePath != null
+                ) {
+                    sendSmsToEnrolledUser()
+                } else {
+                    showAtLeastOneDocumentNecessaryCard()
+                }
+            })
 
-                        showDocumentUploadedCard()
-                    } else {
-                        showAtLeastOneDocumentNecessaryCard()
+        sendSmsViewModel.sendSms
+            .observe(viewLifecycleOwner, Observer {
+
+                when (it) {
+                    Lse.Loading -> {
                     }
-                })
+                    Lse.Success -> {
+                        showDocumentUploadedCard()
+                    }
+                    is Lse.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Unable to send invite link to user",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        showDocumentUploadedCard()
+                    }
+                }
+            })
+    }
+
+    private fun sendSmsToEnrolledUser() {
+        sendSmsViewModel.sendEnrollmentCompleteSms(userId, userName)
     }
 
     private fun showAtLeastOneDocumentNecessaryCard() {
@@ -159,7 +188,6 @@ class UserDetailsFilledDialogFragment : DialogFragment() {
     }
 
     private fun showDocumentUploadedCard() {
-
         loading_progresbar.gone()
         upload_at_least_one_document_layout.gone()
         document_uploaded_layout.visible()
