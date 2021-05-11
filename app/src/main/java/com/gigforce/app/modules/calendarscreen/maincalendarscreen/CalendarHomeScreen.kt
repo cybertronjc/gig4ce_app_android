@@ -700,6 +700,10 @@ class CalendarHomeScreen : BaseFragment(),
             layoutManager = rv_.layoutManager as LinearLayoutManager
         }
         val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+
+        if(firstVisibleItem == -1)
+            return
+
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < selectedMonthModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
             ).year == selectedMonthModel.year && recyclerGenericAdapter.list.get(firstVisibleItem).month < selectedMonthModel.currentMonth)

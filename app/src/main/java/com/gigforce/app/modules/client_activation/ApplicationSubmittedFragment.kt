@@ -103,6 +103,12 @@ class ApplicationSubmittedFragment : BaseFragment() {
 
     fun shareToAnyApp(url: String) {
         try {
+            pb_client_activation.gone()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
             shareIntent.putExtra(
@@ -134,6 +140,6 @@ class ApplicationSubmittedFragment : BaseFragment() {
         } catch (e: Exception) {
             //e.toString();
         }
-        pb_client_activation.gone()
+
     }
 }

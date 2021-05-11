@@ -117,7 +117,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
                         val selectedGig = mAdapter.getSelectedGig().map {
                             it.gigId
                         }
-                        if (selectedGig.isNotEmpty()) {
+                        if (selectedGig.isNotEmpty() && isAdded) {
                             DeclineGigDialogFragment.launch(
                                     selectedGig,
                                     childFragmentManager,
