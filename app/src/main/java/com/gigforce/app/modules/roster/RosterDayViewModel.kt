@@ -529,44 +529,50 @@ class RosterDayViewModel constructor(
         fullDayGig.forEach {
             if (it.isPastGig()) {
                 val widget = CompletedGigCard(
-                    topBar!!.context,
-                    title = it.getGigTitle(),
-                    gigSuccess = it.isGigCompleted,
-                    paymentSuccess = it.isPaymentDone,
-                    rating = it.gigRating,
-                    amount = it.gigAmount,
-                    duration = 0.0F,
-                    cardHeight = itemHeight.px,
-                    isFullDay = true,
-                    gigId = it.gigId,
-                    isNewgigPage = it.openNewGig()
+                        topBar!!.context,
+                        title = it.getGigTitle(),
+                        gigSuccess = it.isGigCompleted,
+                        paymentSuccess = it.isPaymentDone,
+                        rating = it.gigRating,
+                        amount = it.gigAmount,
+                        duration = 0.0F,
+                        cardHeight = itemHeight.px,
+                        isFullDay = true,
+                        gigId = it.gigId,
+                        isNewgigPage = it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isPresentGig()) {
                 // TODO: Implement current day gig card
                 val widget = CurrentGigCard(
-                    topBar!!.context,
-                    title = it.getGigTitle(),
-                    startHour = it.startHour,
-                    startMinute = it.startMinute,
-                    duration = 0.0F,
-                    cardHeight = itemHeight.px,
-                    isFullDay = true,
-                    gigId = it.gigId,
-                    isNewGigPage = it.openNewGig()
+                        topBar!!.context,
+                        title = it.getGigTitle() ?: "",
+                        startHour = it.startHour,
+                        startMinute = it.startMinute,
+                        duration = 0.0F,
+                        cardHeight = itemHeight.px,
+                        isFullDay = true,
+                        gigId = it.gigId,
+                        isNewGigPage =  it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else if (it.isUpcomingGig()) {
                 val widget = UpcomingGigCard(
-                    topBar!!.context,
-                    title = it.getGigTitle(),
-                    startHour = it.startHour,
-                    startMinute = it.startMinute,
-                    duration = 0.0F,
-                    cardHeight = itemHeight.px,
-                    isFullDay = true,
-                    gigId = it.gigId,
-                    isNewGigPage = it.openNewGig()
+                        topBar!!.context,
+                        title = it.getGigTitle(),
+                        startHour = it.startHour,
+                        startMinute = it.startMinute,
+                        duration = 0.0F,
+                        cardHeight = itemHeight.px,
+                        isFullDay = true,
+                        gigId = it.gigId,
+                        isNewGigPage = it.openNewGig(),
+                        startDateTime = it.startDateTime,
+                        endDateTime = it.endDateTime
                 )
                 topBar!!.fullDayGigCard = widget
             } else {

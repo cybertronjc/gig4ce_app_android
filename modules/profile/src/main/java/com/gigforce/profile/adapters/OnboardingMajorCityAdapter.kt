@@ -12,6 +12,7 @@ import com.bumptech.glide.RequestManager
 import com.gigforce.profile.R
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
+import com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment
 
 class OnboardingMajorCityAdapter(
         private val context: Context,
@@ -19,10 +20,8 @@ class OnboardingMajorCityAdapter(
 ) : RecyclerView.Adapter<OnboardingMajorCityAdapter.OnboardingMajorCityViewHolder>(),
         Filterable {
 
-    private var isUserGroupManager: Boolean = false
-
-    private var originalCityList: List<CityWithImage> = emptyList()
-    private var filteredCityList: List<CityWithImage> = emptyList()
+    private var originalCityList= ArrayList<CityWithImage>()
+    private var filteredCityList= ArrayList<CityWithImage>()
 
     private val contactsFilter = CityFilter()
 
@@ -64,7 +63,7 @@ class OnboardingMajorCityAdapter(
         holder.bindValues(filteredCityList.get(position), position)
     }
 
-    fun setData(contacts: List<CityWithImage>) {
+    fun setData(contacts: ArrayList<CityWithImage>) {
 
         this.selectedItemIndex = -1
         this.originalCityList = contacts
@@ -82,7 +81,7 @@ class OnboardingMajorCityAdapter(
             if (charString.isEmpty()) {
                 filteredCityList = originalCityList
             } else {
-                val filteredList: MutableList<CityWithImage> = mutableListOf()
+                val filteredList = ArrayList<CityWithImage>()
                 for (contact in originalCityList) {
                     if (contact.name.contains(
                                     charString,
@@ -100,7 +99,7 @@ class OnboardingMajorCityAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredCityList = results?.values as List<CityWithImage>
+            filteredCityList = results?.values as ArrayList<CityWithImage>
             notifyDataSetChanged()
         }
     }
@@ -120,7 +119,13 @@ class OnboardingMajorCityAdapter(
         }
 
         fun bindValues(city: CityWithImage, position: Int) {
-            requestManager.load(city.image).into(cityImageIV)
+            if (city.icon.isNotEmpty()){
+                requestManager.load(city.icon).into(cityImageIV)
+            }
+            else{
+                cityImageIV.setImageResource(getMajorCityIcon(city.name))
+            }
+
             cityNameTv.text = city.name
 
             if (selectedItemIndex == position) {
@@ -169,11 +174,32 @@ class OnboardingMajorCityAdapter(
                     City(
                             id = city.id,
                             name = city.name,
-                            stateCode = city.stateCode
-                    )
+                            stateCode = city.state_code,
+                            subLocationFound = city.subLocationFound
+                    ),true
             )
         }
 
+    }
+
+    fun uncheckedSelection(){
+        if(selectedItemIndex!=-1){
+            var position = selectedItemIndex
+            selectedItemIndex = -1
+            notifyItemChanged(position)
+        }
+    }
+
+    fun getMajorCityIcon(name: String): Int {
+        var icon = R.drawable.ic_delhi
+        var map = mapOf<String, Int>("Chandigarh" to R.drawable.ic_chandigarh, "Delhi-NCR" to R.drawable.ic_delhi, "Hyderabad" to R.drawable.ic_hyderabad,
+                "Mumbai" to R.drawable.ic_mumbai,"Jaipur" to R.drawable.ic_jaipur,"Chennai" to R.drawable.ic_chennai,
+                "Bangalore" to R.drawable.ic_banglore,"Kolkata" to R.drawable.ic_kolkata,"Guwahati" to R.drawable.ic_guwahati,
+                "Lucknow" to R.drawable.ic_lucknow,"Pune" to R.drawable.ic_pune)
+        if (map.containsKey(name)){
+            icon = map.get(name)!!
+        }
+        return icon
     }
 
 }

@@ -35,6 +35,11 @@ data class City(
     @get:PropertyName("sub_location")
     @set:PropertyName("sub_location")
     var subLocation: List<String> = emptyList(),
+
+    @get:PropertyName("subLocationFound")
+    @set:PropertyName("subLocationFound")
+    var subLocationFound:  Boolean = false,
+
 ){
 
     override fun toString(): String {
@@ -44,21 +49,13 @@ data class City(
 
 data class CityWithImage(
 
-    @get:PropertyName("id")
-    @set:PropertyName("id")
     var id: String = "",
-
-    @get:PropertyName("name")
-    @set:PropertyName("name")
     var name: String = "",
-
-    @get:PropertyName("state_code")
-    @set:PropertyName("state_code")
-    var stateCode: String = "",
-
-    @get:PropertyName("state_code")
-    @set:PropertyName("state_code")
-    var image: Int = -1
+    var state_code: String = "",
+    var image: Int = -1,
+    var index: Int = -1,
+    var icon: String = "",
+    var subLocationFound: Boolean = false,
 ){
 
     override fun toString(): String {

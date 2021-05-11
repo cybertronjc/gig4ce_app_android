@@ -145,7 +145,8 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                 if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
                     val items = adapter.items.filter { questions ->
-                        questions.type == "mcq" && !questions.options[questions.selectedAnswer].isAnswer ||
+                        questions.type == "mcq" &&
+                                (questions.options.size > questions.selectedAnswer && !questions.options[questions.selectedAnswer].isAnswer) ||
                                 questions.type == "date" && checkForDateRange(questions)
                     }
                     if (items.isEmpty()) {

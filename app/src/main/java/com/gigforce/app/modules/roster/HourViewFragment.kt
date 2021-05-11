@@ -248,13 +248,15 @@ class HourViewFragment : RosterBaseFragment() {
                 // add upcoming gigs
                 gigs.forEach { gig ->
                     val upcomingCard = UpcomingGigCard(
-                        requireContext(),
-                        startHour = gig.startHour,
-                        startMinute = gig.startMinute,
-                        duration = gig.duration,
-                        title = gig.getGigTitle(),
-                        cardHeight = (itemHeight * gig.duration).toInt().px,
-                        isNewGigPage = gig.openNewGig()
+                            requireContext(),
+                            startHour = gig.startHour,
+                            startMinute = gig.startMinute,
+                            duration = gig.duration,
+                            title = gig.getGigTitle(),
+                            cardHeight = (itemHeight * gig.duration).toInt().px,
+                            isNewGigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     upcomingCard.id = View.generateViewId()
                     upcomingCard.tag = gig.tag
@@ -275,18 +277,20 @@ class HourViewFragment : RosterBaseFragment() {
                 // add completed gigs
                 gigs.forEach { gig ->
                     val completedCard = CompletedGigCard(
-                        requireContext(),
-                        startHour = gig.startHour,
-                        startMinute = gig.startMinute,
-                        duration = gig.duration,
-                        title = gig.getGigTitle(),
-                        amount = gig.gigAmount,
-                        rating = gig.gigRating,
-                        gigSuccess = gig.isGigCompleted,
-                        paymentSuccess = gig.isPaymentDone,
-                        cardHeight = (itemHeight * gig.duration).toInt().px,
-                        isMonthlyGig = gig.isMonthlyGig,
-                        isNewgigPage = gig.openNewGig()
+                            requireContext(),
+                            startHour = gig.startHour,
+                            startMinute = gig.startMinute,
+                            duration = gig.duration,
+                            title = gig.getGigTitle(),
+                            amount = gig.gigAmount,
+                            rating = gig.gigRating,
+                            gigSuccess = gig.isGigCompleted,
+                            paymentSuccess = gig.isPaymentDone,
+                            cardHeight = (itemHeight * gig.duration).toInt().px,
+                            isMonthlyGig = gig.isMonthlyGig,
+                            isNewgigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     completedCard.id = View.generateViewId()
                     completedCard.tag = gig.tag
@@ -307,13 +311,15 @@ class HourViewFragment : RosterBaseFragment() {
                 // add current gigs
                 gigs.forEach { gig ->
                     val currentCard = CurrentGigCard(
-                        requireContext(),
-                        startHour = gig.startHour,
-                        startMinute = gig.startMinute,
-                        duration = gig.duration,
-                        title = gig.getGigTitle(),
-                        cardHeight = (itemHeight * gig.duration).toInt().px,
-                        isNewGigPage = gig.openNewGig()
+                            requireContext(),
+                            startHour = gig.startHour,
+                            startMinute = gig.startMinute,
+                            duration = gig.duration,
+                            title = gig.getGigTitle(),
+                            cardHeight = (itemHeight * gig.duration).toInt().px,
+                            isNewGigPage = gig.openNewGig(),
+                            startDateTime = gig.startDateTime,
+                            endDateTime = gig.endDateTime
                     )
                     currentCard.id = View.generateViewId()
                     currentCard.tag = gig.tag

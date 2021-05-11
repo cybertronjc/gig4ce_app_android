@@ -88,6 +88,7 @@ class OnboardingFragmentNew : Fragment(){
 
     private fun setUpViewForOnboarding() {
         next.visible()
+        enableNextButton(false)
         onboarding_root_layout.visible()
 
         viewModel = ViewModelProvider(this).get(OnboardingFragmentNewViewModel::class.java)
@@ -257,7 +258,11 @@ class OnboardingFragmentNew : Fragment(){
     private fun setAssetsData() {
         var assetsowned =
                 (((onboarding_pager.adapter as MutlifragmentAdapter).getFragment(onboarding_pager.currentItem)) as AssetOwnedFragment)
-        viewModel.saveAssets(assetsowned.getAssetsData())
+        //viewModel.saveAssets(mapOf("assetsOwned" to mapOf( assetsowned.getTwoWheeler(), assetsowned.getThreeWheeler())))
+           viewModel.saveAssets(assetsowned.getTwoWheeler())
+        viewModel.saveAssets(assetsowned.getThreeWheeler())
+        viewModel.saveAssets(assetsowned.getOtherAssets())
+        viewModel.saveAssets(assetsowned.getItAssets())
     }
 
     private fun setJobPreference() {
@@ -386,14 +391,16 @@ class OnboardingFragmentNew : Fragment(){
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
-        val referrerUrl = response!!.installReferrer
-        Log.d("referrer link", referrerUrl)
+
+        val referrerUrl = response?.installReferrer?: ""
 
         //send source event to mixpanel
         try {
+
+            Log.d("referrer link", referrerUrl)
             eventTracker.pushEvent(TrackingEventArgs("lead_source", getTagsMap(referrerUrl)))
             eventTracker.setUserProperty(getTagsMap(referrerUrl))
-        } catch (e: JSONException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
