@@ -10,7 +10,7 @@ apply plugin: 'dagger.hilt.android.plugin'
 android {
 
     signingConfigs {
-        debug {
+        development {
             storeFile file('../keystore/gigforceapp.jks')
             storePassword 'gigforce'
             keyAlias 'key0'
@@ -45,22 +45,17 @@ android {
         applicationId "com.gigforce.app"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 101
-        versionName "1.29.2"
-
         vectorDrawables.useSupportLibrary = true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
         debug {
+            signingConfig null
             minifyEnabled false
             crunchPngs false
             splits.abi.enable = false
             splits.density.enable = false
-
         }
 
         release {
@@ -79,6 +74,12 @@ android {
         production {
             dimension "default"
             signingConfig signingConfigs.production
+
+            applicationId "com.gigforce.app"
+            resValue "string", "app_name", "Gigforce"
+            versionCode 101
+            versionName "1.29.2"
+
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -97,8 +98,13 @@ android {
          */
         development {
             dimension "default"
+
+            applicationId "com.gigforce.app.dev"
+            resValue "string", "app_name", "Gigforce Dev"
+            versionCode 1
+            versionName "1.0.0"
             versionNameSuffix '-Dev'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.development
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://qwny706375.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -115,7 +121,11 @@ android {
 
         staging {
             dimension "default"
-            versionNameSuffix '-staging'
+            applicationId "com.gigforce.app.staging"
+            resValue "string", "app_name", "Gigforce Staging"
+            versionCode 1
+            versionName "1.0.0"
+            versionNameSuffix '-Staging'
             signingConfig signingConfigs.staging
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gigforce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://d38v9ehujf.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-dev"'

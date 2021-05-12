@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gigforce</string>
     <string name="hello_blank_fragment">હેલો ખાલી ટુકડો</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="english">ઇંગલિશ</string>
