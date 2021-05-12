@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.*
+import kotlin.collections.ArrayList
 
 class HelpViewModel : ViewModel() {
 
-    private val _helpVideos = MutableLiveData<List<HelpVideo>>()
-    val helpVideos : LiveData<List<HelpVideo>> = _helpVideos
+    private val _helpVideos = MutableLiveData<ArrayList<HelpVideo>>()
+    val helpVideos : LiveData<ArrayList<HelpVideo>> = _helpVideos
 
     fun getTopHelpVideos(){
 
@@ -26,7 +27,7 @@ class HelpViewModel : ViewModel() {
             videoYoutubeId = "PnnhrIZCWeA"
         )
 
-        _helpVideos.value = listOf(vid1,vid2)
+        _helpVideos.value = arrayListOf(vid1,vid2)
     }
 
     fun getAllHelpVideos(){
@@ -124,7 +125,7 @@ class HelpViewModel : ViewModel() {
             videoYoutubeId = "AjF50egitnA"
         )
 
-        _helpVideos.value = listOf(
+        _helpVideos.value = arrayListOf(
             vid1,
             vid2,
             vid3,

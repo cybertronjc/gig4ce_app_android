@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -28,7 +29,7 @@ class ConfirmOtpFragment : BaseFragment(), LocationUpdates.LocationUpdateCallbac
     private val locationUpdates: LocationUpdates by lazy {
         LocationUpdates()
     }
-    private val viewModel: VerifyUserMobileViewModel by viewModels()
+    private val viewModel: VerifyUserMobileViewModel by activityViewModels()
 
     private lateinit var verificationToken: String
     private lateinit var mobileNo: String
