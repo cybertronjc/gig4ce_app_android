@@ -48,7 +48,7 @@ class ClientActiExploreListViewModel constructor(
                      if (obj.id != null){
                          val jpObject = getJPApplication(obj.id!!)
                          Log.d("object", jpObject.toString())
-                         val jpExplore = JpExplore(obj.id!!,jpId = jpObject.id, profileId = obj.profileId, obj.title, obj.cardImage, jpObject.status)
+                         val jpExplore = JpExplore(obj.id!!,jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.title, obj.cardImage, jpObject.status)
                          allClientActivations.add(jpExplore)
                      }
                  }

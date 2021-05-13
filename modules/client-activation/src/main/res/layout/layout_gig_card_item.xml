@@ -25,26 +25,16 @@
         <TextView
             android:id="@+id/gig_title"
             android:layout_width="0dp"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="Drive - 21North"
             android:textSize="16sp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/title_color"
-            app:layout_constraintEnd_toStartOf="@id/status_icon"
+            app:layout_constraintEnd_toStartOf="@id/gig_status"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_image"/>
-
-        <ImageView
-            android:id="@+id/status_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_star_border_24"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/gig_title"
-            app:layout_constraintTop_toTopOf="@id/gig_title"
-            app:layout_constraintEnd_toStartOf="@+id/gig_status"/>
 
         <TextView
             android:id="@+id/gig_status"

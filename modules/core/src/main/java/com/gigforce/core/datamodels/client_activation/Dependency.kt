@@ -21,6 +21,9 @@ data class Dependency(
 
         @get:Exclude
         var drawable: Drawable? = null,
+
+        @get:Exclude
+        var isOptional: Boolean = false,
         @JvmField
         var refresh: Boolean = false
 

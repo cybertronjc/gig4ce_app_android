@@ -9,6 +9,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,6 +18,9 @@ import com.gigforce.client_activation.client_activation.explore.ClientActiExplor
 import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
 
 
 class ClientActiExploreAdapter(
@@ -117,7 +121,6 @@ class ClientActiExploreAdapter(
         private var jobTitleTv: TextView = itemView.findViewById(R.id.gig_title)
         private var jobStatusTv: TextView = itemView.findViewById(R.id.gig_status)
         private var jobImage: ImageView = itemView.findViewById(R.id.card_image)
-        private var jobStatusIcon: ImageView = itemView.findViewById(R.id.status_icon)
         private var jobActionTv: TextView = itemView.findViewById(R.id.apply_now)
 
         init {
@@ -125,26 +128,54 @@ class ClientActiExploreAdapter(
         }
 
         fun bindValues(jobProfile: JpExplore, position: Int) {
-            jobTitleTv.text = jobProfile.title
-            jobStatusTv.text = jobProfile.status
+            jobTitleTv.text = jobProfile.profileName
             Glide.with(context).load(jobProfile.image).into(jobImage)
 
-            when (jobProfile.status){
-
-                "Pending" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
-                                jobActionTv.setText("Complete Application")}
-                "Submitted" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
-                                jobActionTv.setText("View Application")}
-                "New" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
-                            jobActionTv.setText("Apply Now")}
-                "Approved" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
-                                jobActionTv.setText("Share Gig")}
-                "Applied" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
-                    jobActionTv.setText("View Application")}
-                "Rejected" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_application_rejected))
-                                jobActionTv.setText("Apply Again")}
-
+            if (jobProfile.status == "")
+                jobStatusTv.gone()
+            else
+                jobStatusTv.visible()
+            jobStatusTv.text =
+                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess") "Pending" else jobProfile.status
+            jobStatusTv.setCompoundDrawablesWithIntrinsicBounds(
+                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.drawable.ic_status_pending else if (jobProfile.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
+                0,
+                0,
+                0
+            )
+            context?.applicationContext?.let {
+                jobStatusTv.setTextColor(
+                    ContextCompat.getColor(
+                        it,
+                        if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.color.pending_color else if (jobProfile.status == "Activated") R.color.activated_color else R.color.rejected_color
+                    )
+                )
             }
+
+            var actionButtonText =
+                if (jobProfile.status == "Interested") "Complete Application" else if (jobProfile.status == "Inprocess") "Complete Application"
+                else if (jobProfile.status == "") "Apply Now" else ""
+            if (actionButtonText == "")
+                jobActionTv.gone()
+            else
+                jobActionTv.text = actionButtonText
+
+//            when (jobProfile.status){
+//
+//                "Pending" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_status_pending))
+//                                jobActionTv.setText("Complete Application")}
+//                "Submitted" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
+//                                jobActionTv.setText("View Application")}
+//                "New" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_star_border_24))
+//                            jobActionTv.setText("Apply Now")}
+//                "Approved" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
+//                                jobActionTv.setText("Share Gig")}
+//                "Applied" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_applied))
+//                    jobActionTv.setText("View Application")}
+//                "Rejected" -> { jobStatusIcon.setImageDrawable(context.getDrawable(R.drawable.ic_application_rejected))
+//                                jobActionTv.setText("Apply Again")}
+//
+//            }
 
             jobActionTv.setOnClickListener {
                 clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId)

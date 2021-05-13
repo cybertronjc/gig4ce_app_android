@@ -2536,6 +2536,7 @@ id aadharFrontImageHolder
 id aadharInfoLayout
 id aadharLabel
 id aadharLayout
+id aadharMainLayout
 id aadharNoEditErrorMessage
 id aadharNoLabel
 id aadharNoRB
@@ -2549,6 +2550,7 @@ id aadharViewFrontErrorMessage
 id aadharViewFrontImageIV
 id aadharViewFrontLabel
 id aadharViewLayout
+id aadharViewLayout1
 id aadharYesRB
 id accLabel
 id accNoLabel
@@ -2744,6 +2746,9 @@ id cifLabel
 id cifNumberET
 id circle_center
 id circular
+id city_image_iv
+id city_name_tv
+id city_root_layout
 id clear_text
 id clickedImageIV
 id clockwise
@@ -2998,6 +3003,7 @@ id iv_back_add_driving_license
 id iv_back_add_pan_card_info
 id iv_back_add_selfie
 id iv_back_application_client_activation
+id iv_back_upload_aadhar_card_client_activation
 id iv_back_verification_page
 id iv_download_giger_verification
 id iv_options_verification_page
@@ -3142,6 +3148,7 @@ id panImageHolder
 id panInfoLayout
 id panLabel
 id panLayout
+id panMainLayout1
 id panNoEditErrorMessage
 id panNoLabel
 id panNoRB
@@ -3149,6 +3156,7 @@ id panSubmitSliderBtn
 id panViewImageErrorMessage
 id panViewImageIV
 id panViewLayout
+id panViewLayout1
 id panViewNoErrorMessage
 id panViewNoTV
 id panYesRB
@@ -3195,6 +3203,7 @@ id primary_button
 id profile_image
 id profile_name
 id progressBar
+id progressBar1
 id progress_circular
 id progress_horizontal
 id radial
@@ -3406,6 +3415,7 @@ id tvVeriDone
 id tv_action_giger_verification
 id tv_action_upld_dl_cert
 id tv_action_upld_dl_cl_act
+id tv_action_upload_pan
 id tv_allow_access
 id tv_cities
 id tv_client_activation
@@ -3414,7 +3424,6 @@ id tv_contract_status_label
 id tv_desc
 id tv_no_driving_cert
 id tv_pop_menu_normal
-id tv_rv_preferred_location
 id tv_schedule_test
 id tv_title
 id tv_title_add_aadhar_card_info
@@ -3749,7 +3758,9 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upload_aadhar_card_fragment
 layout upload_car_client_activation
+layout upload_pan_card_fragment
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password

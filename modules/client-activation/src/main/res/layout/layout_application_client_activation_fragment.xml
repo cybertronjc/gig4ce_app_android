@@ -14,6 +14,7 @@
         android:minHeight="@dimen/size_72"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:elevation="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -78,10 +79,10 @@
                 app:layout_constraintEnd_toEndOf="parent">
                 <ImageView
                     android:id="@+id/iv_application_client_activation"
-                    android:layout_width="@dimen/size_90"
-                    android:layout_height="@dimen/size_91"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_16"
-                    app:srcCompat="@drawable/ic_application_client_application"
+                    app:srcCompat="@drawable/ic_about_me_rafiki"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

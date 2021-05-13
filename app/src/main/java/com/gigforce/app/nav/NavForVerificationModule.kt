@@ -12,6 +12,8 @@ class NavForVerificationModule(
 
         baseImplementation.registerRoute("${moduleName}/main", R.id.gigerVerificationFragment)
         baseImplementation.registerRoute("${moduleName}/DLCA", R.id.fragment_upload_dl_cl_act)
+        baseImplementation.registerRoute("${moduleName}/AADHAR", R.id.uploadAadharCard)
+        baseImplementation.registerRoute("${moduleName}/PAN", R.id.uploadPanCard)
         baseImplementation.registerRoute("${moduleName}/uploadDropDown", R.id.uploadDropDown)
         baseImplementation.registerRoute("${moduleName}/aadhaarUpload", R.id.aadhaarUpload)
         baseImplementation.registerRoute("${moduleName}/bankUpload2", R.id.bankUpload2)

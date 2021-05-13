@@ -36,7 +36,7 @@ import com.gigforce.app.core.toBundle
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.client_activation.client_activation.models.JobProfile
-import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
+//import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.app.modules.help.HelpVideo
@@ -64,7 +64,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
 import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role

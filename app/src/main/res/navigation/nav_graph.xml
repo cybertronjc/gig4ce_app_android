@@ -863,7 +863,7 @@
         android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
-    <include app:graph="@navigation/nav_graph_chat" />
+<!--    <include app:graph="@navigation/nav_graph_chat" />-->
     <fragment
         android:id="@+id/clientActiExploreList"
         android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
@@ -905,6 +905,14 @@
         android:id="@+id/onboardingPreferredJobLocationFragment"
         android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
         android:label="OnboardingPreferredJobLocationFragment" />
+    <fragment
+        android:id="@+id/uploadAadharCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadAadharCard"
+        android:label="UploadAadharCard" />
+    <fragment
+        android:id="@+id/uploadPanCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
+        android:label="UploadPanCard" />
 
 
 </navigation>

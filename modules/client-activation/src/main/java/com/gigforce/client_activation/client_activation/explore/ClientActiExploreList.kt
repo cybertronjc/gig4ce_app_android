@@ -114,6 +114,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
             explore_progress_bar.gone()
             //val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
+            Log.d("jobProfiles", jobProfiles.toString())
 
             explore_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,

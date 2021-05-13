@@ -150,11 +150,11 @@ class ApplicationClientActivationFragment : Fragment(),
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             jpSettings = it
             Log.d("jpsettings", jpSettings.toString())
-            Glide.with(this).load(it?.coverImg).placeholder(
-                com.gigforce.common_ui.utils.getCircularProgressDrawable(
-                    requireContext()
-                )
-            ).into(iv_application_client_activation)
+//            Glide.with(this).load(it?.coverImg).placeholder(
+//                com.gigforce.common_ui.utils.getCircularProgressDrawable(
+//                    requireContext()
+//                )
+//            ).into(iv_application_client_activation)
 
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
             tv_completion_application.text = it?.subTitle ?: ""
@@ -247,12 +247,12 @@ class ApplicationClientActivationFragment : Fragment(),
                     )
 
                     "aadhar_card" -> navigation.navigateTo(
-                        "verification/aadhaarUpload",
+                        "verification/AADHAR",
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
 
                     "pan_card" -> navigation.navigateTo(
-                        "verification/panUpload",
+                        "verification/PAN",
                         bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
                     )
                 }
@@ -271,7 +271,7 @@ class ApplicationClientActivationFragment : Fragment(),
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
 
-        Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
+        Observable.fromIterable(adapter.items.dropWhile { !it.isOptional }).all { item -> item.isDone }.subscribe({ success ->
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
         Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
@@ -286,6 +286,7 @@ class ApplicationClientActivationFragment : Fragment(),
 
                     h_pb_application_frag.visible()
                 })
+
 
     }
 
@@ -373,12 +374,12 @@ class ApplicationClientActivationFragment : Fragment(),
                 )
 
             "aadhar_card" -> navigation.navigateTo(
-                "verification/aadhaarUpload",
+                "verification/AADHAR",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
 
             "pan_card" -> navigation.navigateTo(
-                "verification/panUpload",
+                "verification/PAN",
                 bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
             )
         }

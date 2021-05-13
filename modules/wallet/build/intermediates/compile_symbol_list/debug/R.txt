@@ -2488,6 +2488,9 @@ int id chip_group 0x0
 int id chronometer 0x0
 int id circle_center 0x0
 int id circular 0x0
+int id city_image_iv 0x0
+int id city_name_tv 0x0
+int id city_root_layout 0x0
 int id clear_text 0x0
 int id clockwise 0x0
 int id close_click_layout 0x0
@@ -3057,7 +3060,6 @@ int id tv_allow_access 0x0
 int id tv_desc 0x0
 int id tv_pop_menu_normal 0x0
 int id tv_progress 0x0
-int id tv_rv_preferred_location 0x0
 int id tv_title 0x0
 int id txt_message 0x0
 int id ucrop 0x0
