@@ -25,7 +25,7 @@ android {
         }
 
         staging {
-            storeFile file('../keystore/gigforcestaging')
+            storeFile file('../keystore/gigforcestaging.jks')
             storePassword 'gigforce'
             keyAlias 'gigforce'
             keyPassword 'gigforce'
