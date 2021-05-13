@@ -2,7 +2,11 @@ package com.gigforce.app.modules.preferences
 
 import com.gigforce.app.modules.ambassador_user_enrollment.models.City
 import com.gigforce.app.modules.ambassador_user_enrollment.models.State
+import com.gigforce.app.modules.profile.models.Skill
+import com.gigforce.app.modules.profile.models.Skill2
 import com.gigforce.app.utils.getOrThrow
+import com.gigforce.profile.models.SkillsDetails
+import com.gigforce.profile.onboarding.models.SkillModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -53,6 +57,19 @@ class AppConfigurationRepository constructor(
 
         return citiesQuery.documents.map {
             it.toObject(City::class.java)!!.apply {
+                this.id = it.id
+            }
+        }
+    }
+
+    suspend fun getSkillsForAmbassadorEnrollment() : List<Skill2>{
+        val ambassadorSkillsQuery =  firebaseFireStore
+                .collection("Mst_Skills")
+                .whereEqualTo("shouldShowInAmbassasdorSkillsScreen", true)
+                .getOrThrow()
+
+        return ambassadorSkillsQuery.documents.map {
+            it.toObject(Skill2::class.java)!!.apply {
                 this.id = it.id
             }
         }
