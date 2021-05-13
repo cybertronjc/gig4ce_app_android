@@ -10,5 +10,9 @@ data class Skill2(
 
         @get:PropertyName("skill")
         @set:PropertyName("skill")
-        var skill: String = ""
+        var skill: String = "",
+
+        @get:PropertyName("roles")
+        @set:PropertyName("roles")
+        var roles: List<String> = emptyList()
 )

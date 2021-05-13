@@ -224,7 +224,8 @@ class InterestAndExperienceViewModel constructor(
                 _experience.value = Lce.content(
                     InterestAndExperienceData(
                         interestName = pendingInts.first().id,
-                        experience = null
+                        experience = null,
+                        roles = getRolesForInterest(pendingInts.first().id)
                     )
                 )
             }
@@ -251,14 +252,16 @@ class InterestAndExperienceViewModel constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 }
@@ -270,14 +273,16 @@ class InterestAndExperienceViewModel constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 }
@@ -317,9 +322,16 @@ class InterestAndExperienceViewModel constructor(
         }
     }
 
+    private suspend fun getRolesForInterest(
+            interestName :String
+    ):List<String> =  appConfigurationRepository.getRolesForSkill(interestName)
+
 }
+
+
 
 data class InterestAndExperienceData(
     val interestName: String,
-    val experience: Experience?
+    val experience: Experience?,
+    val roles : List<String>
 )
