@@ -7,20 +7,19 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.invisible
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.toLocalDateTime
-//import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details.*
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details_main.*
 import java.text.SimpleDateFormat
@@ -29,14 +28,17 @@ import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
 
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
 
     private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
+
+    @Inject lateinit var navigation : INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,11 +75,14 @@ class GigsAttendanceForADayDetailsBottomSheet : BottomSheetDialogFragment() {
 
             val gig = viewModel.currentGig ?: return@setOnClickListener
             if (!gig.hasRequestRegularisation()) {
-                findNavController().navigate(
-                    R.id.gigRegulariseAttendanceFragment, bundleOf(
-                        GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
-                    )
-                )
+                navigation.navigateTo("gig/gigRegulariseAttendanceFragment",bundleOf(
+                    GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
+                ))
+//                findNavController().navigate(
+//                    R.id.gigRegulariseAttendanceFragment, bundleOf(
+//                        GigRegulariseAttendanceFragment.INTENT_EXTRA_GIG_ID to gigId
+//                    )
+//                )
             }
         }
     }

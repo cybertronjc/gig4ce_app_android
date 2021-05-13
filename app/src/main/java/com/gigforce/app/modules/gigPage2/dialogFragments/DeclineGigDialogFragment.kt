@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage
+package com.gigforce.app.modules.gigPage2.dialogFragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,11 +12,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.invisible
-import com.gigforce.app.core.visible
 import com.gigforce.core.utils.Lse
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
+import com.gigforce.core.extensions.visible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*

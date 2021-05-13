@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage
+package com.gigforce.app.modules.gigPage2.adapters
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -12,5 +12,6 @@ class NavForGigPageModule(
         baseImplementation.registerRoute("${moduleName}/mygig", R.id.gig_history_fragment)
 
         baseImplementation.registerRoute("${moduleName}/attendance", R.id.gigPage2Fragment)
+        baseImplementation.registerRoute("${moduleName}/gigRegulariseAttendanceFragment",R.id.gigRegulariseAttendanceFragment)
     }
 }

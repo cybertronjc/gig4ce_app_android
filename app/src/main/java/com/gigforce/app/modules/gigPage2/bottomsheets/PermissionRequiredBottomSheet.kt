@@ -11,7 +11,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.FragmentManager
-import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
