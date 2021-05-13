@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-//import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GigRegulariseAttendanceFragment : BaseFragment() {
+class GigRegulariseAttendanceFragment : Fragment() {
 
     private val viewModel: GigViewModel by viewModels()
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -99,7 +99,7 @@ class GigRegulariseAttendanceFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_gig_regularise_attendance, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_gig_regularise_attendance, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

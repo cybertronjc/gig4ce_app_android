@@ -13,5 +13,10 @@ class NavForGigPageModule(
 
         baseImplementation.registerRoute("${moduleName}/attendance", R.id.gigPage2Fragment)
         baseImplementation.registerRoute("${moduleName}/gigRegulariseAttendanceFragment",R.id.gigRegulariseAttendanceFragment)
+        baseImplementation.registerRoute("${moduleName}/gigDetailsFragment",R.id.gigDetailsFragment)
+        baseImplementation.registerRoute("${moduleName}/gigerIdFragment",R.id.giger_id_fragment)
+        baseImplementation.registerRoute("${moduleName}/gigMonthlyAttendanceFragment",R.id.gigMonthlyAttendanceFragment)
+
+
     }
 }

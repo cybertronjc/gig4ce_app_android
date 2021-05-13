@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
+import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.app.utils.DocViewerActivity
 import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
@@ -37,6 +38,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
+        this.registerRoute("gigContactPersonBottomSheet",R.id.gigContactPersonBottomSheet)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
@@ -108,6 +110,16 @@ class NavManagerImpl @Inject constructor(
         if (intent.hasExtra("file"))
             photoCropIntent.putExtra("file", intent.getStringExtra("file"))
 
+        fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
+    }
+
+    override fun navigateToAttendanceImageCaptureActivity(
+        intent: Intent,
+        requestCodeUploadPanImage: Int,
+        requireContext: Context,
+        fragment: Fragment
+    ) {
+        val photoCropIntent = Intent(requireContext, AttendanceImageCaptureActivity::class.java)
         fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
     }
 

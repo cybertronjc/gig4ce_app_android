@@ -16,7 +16,7 @@ import com.example.learning.R
 //import com.gigforce.app.core.gone
 //import com.gigforce.app.core.visible
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 //import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.common_ui.core.IOnBackPressedOverride

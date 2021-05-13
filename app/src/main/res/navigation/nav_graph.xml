@@ -882,7 +882,7 @@
 
     <dialog
         android:id="@+id/viewFullScreenImageDialogFragment"
-        android:name="com.gigforce.app.utils.ViewFullScreenImageDialogFragment"
+        android:name="com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment"
         android:label="ViewFullScreenImageDialogFragment" />
     <dialog
         android:id="@+id/viewFullScreenVideoDialogFragment"

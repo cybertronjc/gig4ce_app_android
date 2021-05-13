@@ -14,19 +14,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.toLocalDateTime
-import com.gigforce.app.modules.gigPage.*
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapter
 import com.gigforce.app.modules.gigPage2.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.app.modules.gigPage2.adapters.OtherOptionClickListener
@@ -34,25 +31,27 @@ import com.gigforce.app.modules.gigPage2.adapters.OtherOptionsAdapter
 import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.PermissionRequiredBottomSheet
+import com.gigforce.app.modules.gigPage2.dialogFragments.DeclineGigDialogFragment
+import com.gigforce.app.modules.gigPage2.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment
 import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
-import com.gigforce.app.utils.LocationUtils
+import com.gigforce.common_ui.utils.LocationUtils
+import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.utils.Lce
-import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
 import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
-
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -64,6 +63,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_address.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_feedback.*
@@ -77,8 +77,10 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+import javax.inject.Inject
 
-class GigPage2Fragment : BaseFragment(),
+@AndroidEntryPoint
+class GigPage2Fragment : Fragment(),
     OtherOptionClickListener,
     PopupMenu.OnMenuItemClickListener,
     DeclineGigDialogFragmentResultListener,
@@ -98,19 +100,21 @@ class GigPage2Fragment : BaseFragment(),
 //        LocationUpdates()
 //    }
 
+    @Inject lateinit var navigation : INavigation
+
     private val locationHelper: LocationHelper by lazy {
         LocationHelper(requireContext())
-                .apply {
-                    setRequiredGpsPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    setLocationCallback(locationCallback)
-                    init()
-                }
+            .apply {
+                setRequiredGpsPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                setLocationCallback(locationCallback)
+                init()
+            }
     }
 
     private val locationCallback = object : LocationCallback() {
 
         override fun onLocationResult(locationResult: LocationResult?) {
-            if (locationResult == null )
+            if (locationResult == null)
                 return
 
             location = Location("User Location").apply {
@@ -132,7 +136,7 @@ class GigPage2Fragment : BaseFragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_gig_page_2, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_gig_page_2, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -142,12 +146,11 @@ class GigPage2Fragment : BaseFragment(),
         initUi()
         initViewModel()
 
-        if(isNecessaryPermissionGranted())
+        if (isNecessaryPermissionGranted())
             checkForGpsStatus()
         else
             showPermissionRequiredAndTheirReasonsDialog()
     }
-
 
 
     private fun checkIfFragmentIsVisible() {
@@ -179,11 +182,14 @@ class GigPage2Fragment : BaseFragment(),
 
         details_label.setOnClickListener {
             Log.d(TAG, "Opening Details Page for gig ${viewModel.currentGig?.gigId}")
-            navigate(
-                R.id.gigDetailsFragment, bundleOf(
-                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
-            )
+            navigation.navigateTo("gig/gigDetailsFragment",bundleOf(
+                GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+            ))
+//            navigate(
+//                R.id.gigDetailsFragment, bundleOf(
+//                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+//                )
+//            )
         }
 
         image_view.setOnClickListener {
@@ -221,11 +227,14 @@ class GigPage2Fragment : BaseFragment(),
 //        }
 
         expand_iv.setOnClickListener {
-            navigate(
-                R.id.gigDetailsFragment, bundleOf(
-                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
-                )
-            )
+            navigation.navigateTo("gig/gigDetailsFragment",bundleOf(
+                GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+            ))
+//            navigate(
+//                R.id.gigDetailsFragment, bundleOf(
+//                    GigDetailsFragment.INTENT_EXTRA_GIG_ID to viewModel.currentGig?.gigId
+//                )
+//            )
         }
 
         gig_cross_btn.setOnClickListener {
@@ -247,8 +256,9 @@ class GigPage2Fragment : BaseFragment(),
             viewModel.currentGig?.let {
 
                 val status = GigStatus.fromGig(it)
-                popupMenu.menu.findItem(R.id.action_decline_gig).setVisible(status == GigStatus.UPCOMING || status == GigStatus.PENDING)
-                popupMenu.menu.findItem(R.id.action_feedback).setVisible(status == GigStatus.COMPLETED)
+                popupMenu.menu.findItem(R.id.action_decline_gig).isVisible = status == GigStatus.UPCOMING || status == GigStatus.PENDING
+                popupMenu.menu.findItem(R.id.action_feedback)
+                    .setVisible(status == GigStatus.COMPLETED)
             }
 
             popupMenu.setOnMenuItemClickListener(this@GigPage2Fragment)
@@ -282,16 +292,18 @@ class GigPage2Fragment : BaseFragment(),
     override fun onResume() {
         super.onResume()
 
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(), ResourcesCompat.getColor(
                 resources,
                 R.color.lipstick_two,
                 null
-        ))
+            )
+        )
 
         if (location == null) {
             startLocationUpdates()
         } else {
-            Log.d(TAG,"onResume() : Location already found")
+            Log.d(TAG, "onResume() : Location already found")
         }
     }
 
@@ -307,13 +319,13 @@ class GigPage2Fragment : BaseFragment(),
             override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
 
                 startIntentSenderForResult(
-                        status.resolution.intentSender,
-                        REQUEST_UPGRADE_GPS_SETTINGS,
-                        null,
-                        0,
-                        0,
-                        0,
-                        null
+                    status.resolution.intentSender,
+                    REQUEST_UPGRADE_GPS_SETTINGS,
+                    null,
+                    0,
+                    0,
+                    0,
+                    null
                 )
             }
 
@@ -347,21 +359,21 @@ class GigPage2Fragment : BaseFragment(),
 
         val locationPhysicalAddress = if (location != null) {
             LocationUtils.getPhysicalAddressFromLocation(
-                    context = requireContext(),
-                    latitude = location!!.latitude,
-                    longitude = location!!.longitude
+                context = requireContext(),
+                latitude = location!!.latitude,
+                longitude = location!!.longitude
             )
         } else {
             ""
         }
 
         viewModel.markAttendance(
-                latitude = location?.latitude ?: 0.0,
-                longitude = location?.longitude ?: 0.0,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = imageClickedPath!!,
-                checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = "test"
+            latitude = location?.latitude ?: 0.0,
+            longitude = location?.longitude ?: 0.0,
+            locationPhysicalAddress = locationPhysicalAddress,
+            image = imageClickedPath!!,
+            checkInTimeAccToUser = checkInTimeAccToUser,
+            remarks = "test"
         )
     }
 
@@ -384,31 +396,31 @@ class GigPage2Fragment : BaseFragment(),
             })
 
         viewModel.markingAttendanceState
-                .observe(viewLifecycleOwner, Observer {
-                    it ?: return@Observer
+            .observe(viewLifecycleOwner, Observer {
+                it ?: return@Observer
 
-                    when (it) {
-                        Lce.Loading -> {
-                            checkInCheckOutSliderBtn.isEnabled = false
-                        }
-                        is Lce.Content -> {
-                            checkInCheckOutSliderBtn.isEnabled = true
+                when (it) {
+                    Lce.Loading -> {
+                        checkInCheckOutSliderBtn.isEnabled = false
+                    }
+                    is Lce.Content -> {
+                        checkInCheckOutSliderBtn.isEnabled = true
 
-                            if (it.content == AttendanceType.CHECK_OUT) {
-                                showToast("Checkout Marked.")
-                                showFeedbackBottomSheet()
-                            } else {
-                                showToast("Check-in marked")
-                            }
-                        }
-                        is Lce.Error -> {
-                            checkInCheckOutSliderBtn.isEnabled = true
-                            showAlertDialog("Error while marking attendance, $it")
-                        }
-                        else -> {
+                        if (it.content == AttendanceType.CHECK_OUT) {
+                            showToast("Checkout Marked.")
+                            showFeedbackBottomSheet()
+                        } else {
+                            showToast("Check-in marked")
                         }
                     }
-                })
+                    is Lce.Error -> {
+                        checkInCheckOutSliderBtn.isEnabled = true
+                        showAlertDialog("Error while marking attendance, $it")
+                    }
+                    else -> {
+                    }
+                }
+            })
 
         viewModel.watchGig(gigId, true)
     }
@@ -446,7 +458,8 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         val status = GigStatus.fromGig(gig)
-        gig_ellipses_iv.isVisible = status == GigStatus.COMPLETED || status == GigStatus.UPCOMING || status == GigStatus.PENDING
+        gig_ellipses_iv.isVisible =
+            status == GigStatus.COMPLETED || status == GigStatus.UPCOMING || status == GigStatus.PENDING
     }
 
     private fun setAttendanceButtonVisibility(gig: Gig) = when (GigStatus.fromGig(gig)) {
@@ -616,30 +629,47 @@ class GigPage2Fragment : BaseFragment(),
 
         when (option.id) {
             ID_IDENTITY_CARD -> {
-                navigate(R.id.giger_id_fragment, Bundle().apply {
+                navigation.navigateTo("gig/gigerIdFragment",Bundle().apply {
                     this.putString(
-                            INTENT_EXTRA_GIG_ID,
-                            viewModel.currentGig?.gigId
+                        INTENT_EXTRA_GIG_ID,
+                        viewModel.currentGig?.gigId
                     )
                 })
+//                navigate(R.id.giger_id_fragment, Bundle().apply {
+//                    this.putString(
+//                        INTENT_EXTRA_GIG_ID,
+//                        viewModel.currentGig?.gigId
+//                    )
+//                })
             }
             ID_ATTENDANCE_HISTORY -> {
                 val gig = viewModel.currentGig ?: return
 
                 val currentDate = LocalDate.now()
-                navigate(
-                    R.id.gigMonthlyAttendanceFragment, bundleOf(
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
-                            currentDate.year,
-                            currentDate.monthValue,
-                            1
-                        ),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
-                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
-                    )
-                )
+                navigation.navigateTo("gig/gigMonthlyAttendanceFragment",bundleOf(
+                    GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
+                        currentDate.year,
+                        currentDate.monthValue,
+                        1
+                    ),
+                    GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
+                    GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
+                    GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
+                    GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
+                ))
+//                navigate(
+//                    R.id.gigMonthlyAttendanceFragment, bundleOf(
+//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_SELECTED_DATE to LocalDate.of(
+//                            currentDate.year,
+//                            currentDate.monthValue,
+//                            1
+//                        ),
+//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_LOGO to gig.getFullCompanyLogo(),
+//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_COMPANY_NAME to gig.getFullCompanyName(),
+//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_GIG_ORDER_ID to gig.gigOrderId,
+//                        GigMonthlyAttendanceFragment.INTENT_EXTRA_ROLE to gig.getGigTitle()
+//                    )
+//                )
             }
             ID_DECLINE_GIG -> {
                 showDeclineGigDialog()
@@ -737,21 +767,25 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun startCameraForCapturingSelfie() {
-        val shouldUserOldCamString = firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
+        val shouldUserOldCamString =
+            firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
-        val shouldUserOldCam = if(shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
-        if(shouldUserOldCam) {
-            val intent = Intent(context, AttendanceImageCaptureActivity::class.java)
-            startActivityForResult(
-                    intent,
-                    REQUEST_CODE_UPLOAD_SELFIE_IMAGE
-            )
+        val shouldUserOldCam =
+            if (shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
+        if (shouldUserOldCam) {
+
+            val intent = Intent()
+//            startActivityForResult(
+//                intent,
+//                REQUEST_CODE_UPLOAD_SELFIE_IMAGE
+//            )
+            navigation.navigateToAttendanceImageCaptureActivity(intent,REQUEST_CODE_UPLOAD_SELFIE_IMAGE,requireContext(),this)
         } else {
             CameraActivity.launch(
-                    this,
-                    destImage = null,
-                    shouldUploadToServerToo = true,
-                    serverParentPath = "attendance"
+                this,
+                destImage = null,
+                shouldUploadToServerToo = true,
+                serverParentPath = "attendance"
             )
         }
     }
@@ -779,7 +813,8 @@ class GigPage2Fragment : BaseFragment(),
             }
             CameraActivity.REQUEST_CODE_CAPTURE_IMAGE_2 -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    imageClickedPath = data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
+                    imageClickedPath =
+                        data?.getStringExtra(CameraActivity.INTENT_EXTRA_UPLOADED_PATH_IN_FIREBASE_STORAGE)
                     checkForLateOrEarlyCheckIn()
                 }
             }
@@ -790,25 +825,28 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun showRedirectToGpsPageDialog() {
         MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Gps not turned on")
-                .setMessage("Please turn on location service and set Gps Accuracy to High")
-                .setPositiveButton("Okay"){_,_ ->
+            .setTitle("Gps not turned on")
+            .setMessage("Please turn on location service and set Gps Accuracy to High")
+            .setPositiveButton("Okay") { _, _ ->
 
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivityForResult(
-                            intent,
-                            REQUEST_UPDATE_GPS_SETTINGS_MANUALLY
-                    )
-                }.show()
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivityForResult(
+                    intent,
+                    REQUEST_UPDATE_GPS_SETTINGS_MANUALLY
+                )
+            }.show()
     }
 
 
     override fun onPeopleToExpectClicked(option: ContactPerson) {
-        navigate(
-            R.id.gigContactPersonBottomSheet, bundleOf(
-                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
-            )
-        )
+        navigation.navigateTo("gigContactPersonBottomSheet",bundleOf(
+            GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
+        ))
+//        navigate(
+//            R.id.gigContactPersonBottomSheet, bundleOf(
+//                GigContactPersonBottomSheet.INTENT_GIG_CONTACT_PERSON_DETAILS to option
+//            )
+//        )
     }
 
     override fun onCallManagerClicked(manager: ContactPerson) {
@@ -819,13 +857,20 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     override fun onChatWithManagerClicked(manager: ContactPerson) {
-
-        navigate(R.id.chatPageFragment, bundleOf(
-                ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-                ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
-                ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
-                ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to manager.name)
-        )
+        navigation.navigateTo("chats/chatPage",bundleOf(
+            AppConstants.INTENT_EXTRA_CHAT_TYPE to AppConstants.CHAT_TYPE_USER,
+            AppConstants.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
+            AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
+            AppConstants.INTENT_EXTRA_OTHER_USER_NAME to manager.name
+        ))
+//        navigate(
+//            R.id.chatPageFragment, bundleOf(
+//                AppConstants.INTENT_EXTRA_CHAT_TYPE to AppConstants.CHAT_TYPE_USER,
+//                AppConstants.INTENT_EXTRA_OTHER_USER_ID to manager.uid,
+//                AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE to manager.profilePicture,
+//                AppConstants.INTENT_EXTRA_OTHER_USER_NAME to manager.name
+//            )
+//        )
     }
 
     override fun onPermissionOkayClicked() {

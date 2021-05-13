@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,59 +12,55 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.gigPage.DeclineGigDialogFragment
-import com.gigforce.app.modules.gigPage.DeclineGigDialogFragmentResultListener
+import com.gigforce.app.modules.gigPage2.adapters.GigDetailAdapter
+import com.gigforce.app.modules.gigPage2.dialogFragments.DeclineGigDialogFragment
+import com.gigforce.app.modules.gigPage2.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.roster.inflate
-import com.gigforce.app.utils.ui_models.ShimmerModel
-import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.common_ui.utils.openPopupMenu
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
-import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.LearningViewModel
-import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_info.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_keywords.*
 import kotlinx.android.synthetic.main.fragment_main_learning_role_based_learnings.*
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.util.*
+import javax.inject.Inject
 
-class GigDetailsFragment : BaseFragment(),
+@AndroidEntryPoint
+class GigDetailsFragment : Fragment(),
     DeclineGigDialogFragmentResultListener, PopupMenu.OnMenuItemClickListener {
 
     private val viewModel: GigViewModel by viewModels()
-    private val learningViewModel: LearningViewModel by viewModels()
+//    private val learningViewModel: LearningViewModel by viewModels()
     private lateinit var gigId: String
 
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    private val timeFormatter = SimpleDateFormat("hh.mm aa", Locale.getDefault())
-
+    @Inject lateinit var navigation : INavigation
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_gig_page_2_details, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_gig_page_2_details, container,false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,25 +141,25 @@ class GigDetailsFragment : BaseFragment(),
     }
 
     private fun initLearningViewModel() {
-        learningViewModel
-            .roleBasedCourses
-            .observe(viewLifecycleOwner, Observer {
-
-                when (it) {
-                    Lce.Loading -> showRoleBasedLearningProgress()
-                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
-                    is Lce.Error -> showRoleBasedLearningError(it.error)
-                }
-            })
-
-        learningViewModel.getRoleBasedCourses()
+//        learningViewModel
+//            .roleBasedCourses
+//            .observe(viewLifecycleOwner, Observer {
+//
+//                when (it) {
+//                    Lce.Loading -> showRoleBasedLearningProgress()
+//                    is Lce.Content -> showRoleBasedLearnings(it.content.sortedBy { it.priority })
+//                    is Lce.Error -> showRoleBasedLearningError(it.error)
+//                }
+//            })
+//
+//        learningViewModel.getRoleBasedCourses()
     }
 
     var width = 0
     private fun showRoleBasedLearningError(error: String) {
 
         learning_based_role_rv.gone()
-        stopShimmer(learning_based_horizontal_progress as LinearLayout)
+        stopShimmer(learning_based_horizontal_progress as LinearLayout,R.id.shimmer_controller)
         role_based_learning_error.visible()
         role_based_learning_error.text = error
 
@@ -173,12 +168,12 @@ class GigDetailsFragment : BaseFragment(),
     private fun showRoleBasedLearningProgress() {
         startShimmer(
             learning_based_horizontal_progress as LinearLayout,
-            ShimmerModel(
+            ShimmerDataModel(
                 minHeight = R.dimen.size_148,
                 minWidth = R.dimen.size_300,
                 marginRight = R.dimen.size_1,
                 orientation = LinearLayout.HORIZONTAL
-            )
+            ),R.id.shimmer_controller
         )
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
@@ -189,7 +184,7 @@ class GigDetailsFragment : BaseFragment(),
         learning_based_horizontal_progress.gone()
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
-        stopShimmer(learning_based_horizontal_progress as LinearLayout)
+        stopShimmer(learning_based_horizontal_progress as LinearLayout,R.id.shimmer_controller)
 
 
 
@@ -199,76 +194,97 @@ class GigDetailsFragment : BaseFragment(),
             learning_based_role_layout.gone()
         }
 
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        width = displayMetrics.widthPixels
-        val itemWidth = ((width / 3) * 2).toInt()
-        // model will change when integrated with DB
+        context?.let {
+            var gigDetailAdapter = GigDetailAdapter(it)
+            gigDetailAdapter.setOnClickListener( object : GigDetailAdapter.IOnclickListener {
+                override fun onclickListener(course: Course) {
+                    navigation.navigateTo("learning/coursedetails", bundleOf(
+                        "course_id" to course.id))
+                }
 
-        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-            RecyclerGenericAdapter<Course>(
-                activity?.applicationContext,
-                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-                    val course = item as Course
-
-                    navigate(
-                        R.id.learningCourseDetails,
-                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-                    )
-                },
-                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
-                    title.text = obj?.name
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
-                    subtitle.text = obj?.level
-
-                    var comImg = getImageView(viewHolder, R.id.completed_iv)
-                    comImg.isVisible = obj?.completed ?: false
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj.coverPicture!!)
-                                .placeholder(getCircularProgressDrawable())
-                                .error(R.drawable.ic_learning_default_back)
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
-
-                                    GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
-                                        .error(R.drawable.ic_learning_default_back)
-                                        .into(img)
-                                }
-                        }
-                    } else {
-                        GlideApp.with(requireContext())
-                            .load(R.drawable.ic_learning_default_back)
-                            .into(img)
-                    }
-                })
-        recyclerGenericAdapter.list = content
-        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-        learning_based_role_rv.layoutManager = LinearLayoutManager(
+            })
+            gigDetailAdapter.data = content
+            learning_based_role_rv.layoutManager = LinearLayoutManager(
             activity?.applicationContext,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        learning_based_role_rv.adapter = recyclerGenericAdapter
+        learning_based_role_rv.adapter = gigDetailAdapter
+
+        }
+
+//        val displayMetrics = DisplayMetrics()
+//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//        width = displayMetrics.widthPixels
+//        val itemWidth = ((width / 3) * 2).toInt()
+//        // model will change when integrated with DB
+//
+//        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
+//            RecyclerGenericAdapter<Course>(
+//                activity?.applicationContext,
+//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
+//                    val course = item as Course
+//
+//                    navigate(
+//                        R.id.learningCourseDetails,
+//                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
+//                    )
+//                },
+//                RecyclerGenericAdapter.ItemInterface<Course?> { obj, viewHolder, position ->
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    var title = getTextView(viewHolder, R.id.title_)
+//                    title.text = obj?.name
+//
+//                    var subtitle = getTextView(viewHolder, R.id.title)
+//                    subtitle.text = obj?.level
+//
+//                    var comImg = getImageView(viewHolder, R.id.completed_iv)
+//                    comImg.isVisible = obj?.completed ?: false
+//
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    if (!obj!!.coverPicture.isNullOrBlank()) {
+//                        if (obj.coverPicture!!.startsWith("http", true)) {
+//
+//                            GlideApp.with(requireContext())
+//                                .load(obj.coverPicture!!)
+//                                .placeholder(getCircularProgressDrawable())
+//                                .error(R.drawable.ic_learning_default_back)
+//                                .into(img)
+//                        } else {
+//                            FirebaseStorage.getInstance()
+//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+//                                .child(obj.coverPicture!!)
+//                                .downloadUrl
+//                                .addOnSuccessListener { fileUri ->
+//
+//                                    GlideApp.with(requireContext())
+//                                        .load(fileUri)
+//                                        .placeholder(getCircularProgressDrawable())
+//                                        .error(R.drawable.ic_learning_default_back)
+//                                        .into(img)
+//                                }
+//                        }
+//                    } else {
+//                        GlideApp.with(requireContext())
+//                            .load(R.drawable.ic_learning_default_back)
+//                            .into(img)
+//                    }
+//                })
+//        recyclerGenericAdapter.list = content
+//        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
+//        learning_based_role_rv.layoutManager = LinearLayoutManager(
+//            activity?.applicationContext,
+//            LinearLayoutManager.HORIZONTAL,
+//            false
+//        )
+//        learning_based_role_rv.adapter = recyclerGenericAdapter
+
+
     }
 
 

@@ -83,6 +83,10 @@ fun Date?.toFirebaseTimeStamp(): Timestamp? {
         Timestamp(this)
 }
 
+fun Date.toLocalDateTime(): LocalDateTime {
+    return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+}
+
 fun Timestamp.toLocalDateTime(): LocalDateTime {
 
     return this.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()

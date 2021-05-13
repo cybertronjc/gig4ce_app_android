@@ -16,7 +16,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
@@ -29,7 +28,7 @@ import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.GlideApp
 //import com.gigforce.core.utils.Lce

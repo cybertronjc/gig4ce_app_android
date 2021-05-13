@@ -44,7 +44,7 @@ import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment

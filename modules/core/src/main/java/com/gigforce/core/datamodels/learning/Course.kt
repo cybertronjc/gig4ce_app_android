@@ -1,4 +1,4 @@
-package com.gigforce.learning.learning.models
+package com.gigforce.core.datamodels.learning
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName

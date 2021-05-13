@@ -7,7 +7,6 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -32,7 +31,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.learning.learning.models.Module
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage

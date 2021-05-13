@@ -2,7 +2,6 @@ package com.gigforce.app.modules.gigPage2.models
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.datamodels.gigpage.GigContactDetails
 import com.gigforce.core.datamodels.gigpage.GigRegularisationRequest

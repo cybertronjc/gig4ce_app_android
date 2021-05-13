@@ -17,19 +17,21 @@ import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_rate_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_rate_gig_dialog_main.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class RateGigDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
@@ -44,7 +46,8 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
             frag.show(fragmentManager, TAG)
         }
     }
-
+    @Inject
+    private lateinit var navigation : INavigation
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
 
@@ -167,14 +170,15 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
     private fun initView() {
 
         addAttachmentTV.setOnClickListener {
-
-            val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-            photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_VERIFICATION)
-            photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+//            val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+            val photoCropIntent = Intent()
+            photoCropIntent.putExtra("purpose", "verification")
+            photoCropIntent.putExtra("fbDir", "/verification/")
             photoCropIntent.putExtra("folder", "verification")
-            photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-            photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "image.jpg")
-            startActivityForResult(photoCropIntent, REQUEST_CODE_CAPTURE_FEEDBACK_IMAGES)
+            photoCropIntent.putExtra("detectFace", 0)
+            photoCropIntent.putExtra("file", "image.jpg")
+            navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_CAPTURE_FEEDBACK_IMAGES,requireContext(),this)
+//            startActivityForResult(photoCropIntent, REQUEST_CODE_CAPTURE_FEEDBACK_IMAGES)
         }
 
         submitBtn.setOnClickListener {
@@ -203,7 +207,7 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
 
             if (resultCode == Activity.RESULT_OK) {
                 val file: Uri =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                                 ?: return
 
                 attachmentsList.add(file)

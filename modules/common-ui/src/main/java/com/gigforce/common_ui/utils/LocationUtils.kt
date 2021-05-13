@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.utils
 
 import android.content.Context
 import android.location.Geocoder

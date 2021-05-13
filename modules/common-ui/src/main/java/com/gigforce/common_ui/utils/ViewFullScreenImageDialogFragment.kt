@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.utils
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
-import com.gigforce.app.R
+import com.gigforce.common_ui.R
 import com.jsibbold.zoomage.ZoomageView
 import java.io.File
 
@@ -22,24 +22,30 @@ class ViewFullScreenImageDialogFragment : DialogFragment() {
 
         @JvmStatic
         fun showImage(fragmentManager: FragmentManager, file: File) {
-            val fragment = ViewFullScreenImageDialogFragment()
+            val fragment =
+                ViewFullScreenImageDialogFragment()
 
             val args = Bundle()
             args.putString(INTENT_EXTRA_IMAGE_PATH, file.absolutePath)
             fragment.arguments = args
 
-            fragment.show(fragmentManager, TAG)
+            fragment.show(fragmentManager,
+                TAG
+            )
         }
 
         @JvmStatic
         fun showImage(fragmentManager: FragmentManager, uri: Uri) {
-            val fragment = ViewFullScreenImageDialogFragment()
+            val fragment =
+                ViewFullScreenImageDialogFragment()
 
             val args = Bundle()
             args.putString(INTENT_EXTRA_IMAGE_URI, uri.toString())
             fragment.arguments = args
 
-            fragment.show(fragmentManager, TAG)
+            fragment.show(fragmentManager,
+                TAG
+            )
         }
     }
 

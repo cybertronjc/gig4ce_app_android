@@ -17,7 +17,7 @@ import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.Lce
-import com.gigforce.app.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition

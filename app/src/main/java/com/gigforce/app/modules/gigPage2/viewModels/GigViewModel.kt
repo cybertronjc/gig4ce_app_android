@@ -6,17 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.core.toDate
-import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
-//import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.AttendanceType
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-//import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.app.modules.gigPage2.repositories.GigerProfileFirebaseRepository
+import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.getDownloadUrlOrThrow
+import com.gigforce.core.extensions.toDate
+import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.updateOrThrow
 import com.gigforce.core.utils.Lce
@@ -30,7 +28,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -43,11 +40,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class GigViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
-) : ViewModel() {
+    private val gigsRepository: GigsRepository = GigsRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
+) : ViewModel() {
+    private val profileFirebaseRepository = GigerProfileFirebaseRepository()
     private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
     private var mWatchSingleGigRegistration: ListenerRegistration? = null
     private var mWatchTodaysGigRegistration: ListenerRegistration? = null
@@ -514,14 +511,16 @@ class GigViewModel constructor(
             val gig = getGigNow(gigId)
 
             gigsRepository
-                    .getCollectionReference()
-                    .document(gig.gigId)
-                    .updateOrThrow(mapOf(
-                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                            "declinedBy" to gig.gigerId,
-                            "declineReason" to reason,
-                            "declinedOn" to Timestamp.now()
-                    ))
+                .getCollectionReference()
+                .document(gig.gigId)
+                .updateOrThrow(
+                    mapOf(
+                        "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                        "declinedBy" to gig.gigerId,
+                        "declineReason" to reason,
+                        "declinedOn" to Timestamp.now()
+                    )
+                )
             _declineGig.value = Lse.success()
         } catch (e: Exception) {
             _declineGig.value = Lse.error(e.message!!)
@@ -540,14 +539,16 @@ class GigViewModel constructor(
 
                 val gig = getGigNow(it)
                 gigsRepository
-                        .getCollectionReference()
-                        .document(gig.gigId)
-                        .updateOrThrow(mapOf(
-                                "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                                "declinedBy" to gig.gigerId,
-                                "declineReason" to reason,
-                                "declinedOn" to Timestamp.now()
-                        ))
+                    .getCollectionReference()
+                    .document(gig.gigId)
+                    .updateOrThrow(
+                        mapOf(
+                            "gigStatus" to GigStatus.DECLINED.getStatusString(),
+                            "declinedBy" to gig.gigerId,
+                            "declineReason" to reason,
+                            "declinedOn" to Timestamp.now()
+                        )
+                    )
             }
 
             _declineGig.value = Lse.success()
@@ -577,20 +578,20 @@ class GigViewModel constructor(
 
                 val tomorrow = date.plusDays(1)
 
-                    if (querySnapshot != null) {
-                        val todaysGigs = extractGigs(querySnapshot).filter {
-                            it.endDateTime.toLocalDate().isBefore(tomorrow)
-                        }
-                        val upcomingAndPendingGigs = todaysGigs.filter {
-                            val gigStatus = GigStatus.fromGig(it)
-                            gigStatus == GigStatus.PENDING || gigStatus == GigStatus.UPCOMING
-                        }
-
-                        _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
-                    } else {
-                        _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                if (querySnapshot != null) {
+                    val todaysGigs = extractGigs(querySnapshot).filter {
+                        it.endDateTime.toLocalDate().isBefore(tomorrow)
                     }
+                    val upcomingAndPendingGigs = todaysGigs.filter {
+                        val gigStatus = GigStatus.fromGig(it)
+                        gigStatus == GigStatus.PENDING || gigStatus == GigStatus.UPCOMING
+                    }
+
+                    _todaysGigs.value = Lce.content(upcomingAndPendingGigs)
+                } else {
+                    _todaysGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
                 }
+            }
     }
 
     fun getTodaysUpcomingGig(date: LocalDate) = viewModelScope.launch {
@@ -607,7 +608,7 @@ class GigViewModel constructor(
 
             val tomorrow = date.plusDays(1)
             val todaysGigs = extractGigs(querySnapshot).filter {
-                 it.endDateTime.toLocalDate().isBefore(tomorrow)
+                it.endDateTime.toLocalDate().isBefore(tomorrow)
             }
             val upcomingAndPendingGigs = todaysGigs.filter {
                 val gigStatus = GigStatus.fromGig(it)
