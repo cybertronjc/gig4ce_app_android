@@ -1,18 +1,20 @@
 package com.gigforce.app.core.base.shareddata
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.gigforce.app.core.CoreConstants
 import com.gigforce.app.utils.AppConstants
+import com.gigforce.core.utils.SharedDataInterface
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class SharedDataImp : SharedDataInterface {
-    lateinit var SP: SharedPreferences
+class SharedDataImp  : SharedDataInterface {
+    var SP: SharedPreferences
     var editor: SharedPreferences.Editor? = null
 
-    constructor(activity: Activity) {
-        SP = activity?.getSharedPreferences(
+    @Inject constructor(@ActivityContext context: Context) {
+        SP = context?.getSharedPreferences(
             CoreConstants.SHARED_PREFERENCE_DB,
             Context.MODE_PRIVATE
         )!!

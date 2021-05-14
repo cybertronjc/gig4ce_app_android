@@ -17,8 +17,9 @@ import java.util.*
 class OnboardingFragmentNewViewModel : ViewModel() {
 
     var profileFirebaseRepository = ProfileFirebaseRepository()
-
+    var username = ""
     fun saveUserName(username: String) {
+        this.username = username
         profileFirebaseRepository.setDataAsKeyValue("name", username)
     }
 
@@ -84,7 +85,7 @@ class OnboardingFragmentNewViewModel : ViewModel() {
             ambassadorLatitude: Double,
             ambassadorLongitude: Double,
             roleID: String,
-            jobProfileId: String, username: String
+            jobProfileId: String
     ) {
         if (!invite.isNullOrEmpty()) {
             var listener: ListenerRegistration? = null
