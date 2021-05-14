@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black_85">#d9000000</color>
+    <color name="upcoming_gig_title">#25265e</color>
+    <color name="upcoming_gig_time">#787993</color>
+    <color name="darkish_pink_two">#e94b81</color>
+    <color name="warm_grey_20">#33888888</color>
+    <color name="grey_c7">#c7c7c7</color>
+    <color name="colorText">#313131</color>
+    <color name="lipstick">#d72467</color>
+    <color name="shadow_color">#c8c7cc</color>
+    <color name="black">#000000</color>
+    <color name="light_grey">#dddddd</color>
+
+</resources>

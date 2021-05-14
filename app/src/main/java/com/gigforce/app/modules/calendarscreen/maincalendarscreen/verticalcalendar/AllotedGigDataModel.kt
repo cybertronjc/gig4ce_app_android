@@ -1,8 +1,7 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.models.Gig
 import java.util.*
 import kotlin.collections.ArrayList
 

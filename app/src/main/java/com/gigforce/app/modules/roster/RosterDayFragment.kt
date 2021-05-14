@@ -18,9 +18,9 @@ import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet
+import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 //import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.core.extensions.toDate
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.day_view_top_bar.*

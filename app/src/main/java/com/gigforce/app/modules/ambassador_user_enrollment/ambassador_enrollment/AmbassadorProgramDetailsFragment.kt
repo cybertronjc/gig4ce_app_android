@@ -24,7 +24,7 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.LearningViewModel
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment

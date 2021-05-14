@@ -18,9 +18,9 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.gigPage2.GigNavigation
-import com.gigforce.app.modules.gigPage2.GigPage2Fragment
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.GigNavigation
+import com.gigforce.giger_gigs.GigPage2Fragment
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.core.extensions.toDate
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.roster_day_hour_view.*
@@ -262,7 +262,7 @@ class HourViewFragment : RosterBaseFragment() {
                     upcomingCard.tag = gig.tag
 
                     upcomingCard.setOnClickListener {
-                        GigNavigation.openGigMainPage(
+                        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(
                             findNavController(),
                             gig.openNewGig(),
                             gig.gigId
@@ -296,7 +296,7 @@ class HourViewFragment : RosterBaseFragment() {
                     completedCard.tag = gig.tag
                     // TODO ask if navigation is correct
                     completedCard.setOnClickListener {
-                        GigNavigation.openGigMainPage(
+                        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(
                             findNavController(),
                             gig.openNewGig(),
                             gig.gigId
@@ -325,8 +325,8 @@ class HourViewFragment : RosterBaseFragment() {
                     currentCard.tag = gig.tag
 
                     currentCard.setOnClickListener {
-                        GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
-                            this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
+                        com.gigforce.giger_gigs.GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
+                            this.putString(com.gigforce.giger_gigs.GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }
 

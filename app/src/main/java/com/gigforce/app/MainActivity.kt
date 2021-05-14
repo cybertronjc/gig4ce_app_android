@@ -18,10 +18,9 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.popAllBackStates
 import com.gigforce.app.core.printDebugLog
-import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.giger_gigs.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
@@ -40,7 +39,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
-import com.mixpanel.android.mpmetrics.MixpanelAPI
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import javax.inject.Inject
@@ -220,12 +218,12 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController,false, intent.extras)
+                com.gigforce.giger_gigs.GigNavigation.openGigAttendancePage(navController,false, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
                 Log.d("MainActivity", "redirecting to attendance page 2")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController,true, intent.extras)
+                com.gigforce.giger_gigs.GigNavigation.openGigAttendancePage(navController,true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")

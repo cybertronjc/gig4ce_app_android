@@ -37,8 +37,8 @@ import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalend
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
-import com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet
+import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment

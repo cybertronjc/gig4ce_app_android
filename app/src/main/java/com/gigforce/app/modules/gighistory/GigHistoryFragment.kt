@@ -8,14 +8,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.gigPage2.GigNavigation
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
 import com.gigforce.common_ui.listeners.PaginationScrollListener
@@ -191,7 +189,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun openGigDetails(gig: Gig) {
-        GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
+        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
     }
 
 

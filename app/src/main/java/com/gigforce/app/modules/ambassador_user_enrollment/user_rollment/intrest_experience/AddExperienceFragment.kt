@@ -20,16 +20,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.core.datamodels.profile.Experience
 import com.gigforce.core.utils.Lce
-import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.skip_btn
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.submitBtn
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
-import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit

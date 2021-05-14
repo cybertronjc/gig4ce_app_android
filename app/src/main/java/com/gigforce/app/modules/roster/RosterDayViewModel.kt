@@ -21,9 +21,9 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.PreferencesRepository
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigStatus
-import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
+import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.giger_gigs.repositories.GigsRepository
 import com.gigforce.core.extensions.toDate
 import com.gigforce.core.extensions.toLocalDate
 import com.google.firebase.auth.FirebaseAuth

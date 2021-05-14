@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.navigation.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.giger_gigs.GigNavigation
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.completed_gig_card.view.*
@@ -98,7 +98,7 @@ class CompletedGigCard(
         cardHeight = 70.px
 
         this.setOnClickListener {
-            GigNavigation.openGigMainPage(findNavController(), isNewgigPage, gigId)
+            com.gigforce.giger_gigs.GigNavigation.openGigMainPage(findNavController(), isNewgigPage, gigId)
         }
     }
 }

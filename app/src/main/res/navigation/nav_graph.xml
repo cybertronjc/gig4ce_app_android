@@ -553,12 +553,12 @@
 
     <fragment
         android:id="@+id/gigPageNavigationFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigPageNavigationFragment"
+        android:name="com.gigforce.giger_gigs.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
     <fragment
         android:id="@+id/rateGigDialogFragment"
-        android:name="com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment"
+        android:name="com.gigforce.giger_gigs.dialogFragments.RateGigDialogFragment"
         android:label="fragment_rate_gig_dialog"
         tools:layout="@layout/fragment_rate_gig_dialog" />
     <fragment
@@ -667,27 +667,27 @@
     </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
     <fragment
         android:id="@+id/gigPage2Fragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:name="com.gigforce.giger_gigs.GigPage2Fragment"
         android:label="GigPage2Fragment" />
     <fragment
         android:id="@+id/gigDetailsFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:name="com.gigforce.giger_gigs.GigDetailsFragment"
         android:label="GigDetailsFragment" />
     <fragment
         android:id="@+id/gigMonthlyAttendanceFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigMonthlyAttendanceFragment"
+        android:name="com.gigforce.giger_gigs.GigMonthlyAttendanceFragment"
         android:label="GigMonthlyAttendanceFragment" />
     <fragment
         android:id="@+id/gigRegulariseAttendanceFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment"
+        android:name="com.gigforce.giger_gigs.GigRegulariseAttendanceFragment"
         android:label="GigRegulariseAttendanceFragment" />
     <dialog
         android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
         android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
@@ -860,7 +860,7 @@
         android:label="fragment_add_skills_profile_v2" />
     <dialog
         android:id="@+id/gigContactPersonBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
     <fragment

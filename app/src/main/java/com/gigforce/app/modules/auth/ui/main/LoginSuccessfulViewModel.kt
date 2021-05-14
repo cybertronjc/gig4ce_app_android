@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
-import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
-import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.giger_gigs.repositories.GigsRepository
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.google.firebase.Timestamp

@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.utils.*
+import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
