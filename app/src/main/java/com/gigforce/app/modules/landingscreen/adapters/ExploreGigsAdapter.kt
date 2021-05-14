@@ -11,14 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-import com.gigforce.app.modules.landingscreen.models.SeeMore
-import com.gigforce.client_activation.client_activation.explore.ClientActiExploreList
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.core.utils.GlideApp
 
 class ExploreGigsAdapter(
-    private val context: Context,  private val landingScreenFragment: LandingScreenFragment
+    private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     companion object {
@@ -27,6 +25,16 @@ class ExploreGigsAdapter(
     }
 
     private var originalJobList: List<Any> = emptyList()
+    private var onCardSelectedListener : OnCardSelectedListener? = null
+    private var onSeeMoreSelectedListener: OnSeeMoreSelectedListener? = null
+//
+    fun setOnCardSelectedListener(onCardSelectedListener: OnCardSelectedListener){
+        this.onCardSelectedListener = onCardSelectedListener
+    }
+
+    fun setOnSeeMoreSelectedListener(onSeeMoreSelectedListener: OnSeeMoreSelectedListener){
+        this.onSeeMoreSelectedListener = onSeeMoreSelectedListener
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -97,26 +105,46 @@ class ExploreGigsAdapter(
         override fun onClick(v: View?) {
             val newPosition = adapterPosition
             val jobProfile = originalJobList[newPosition]
+
             //onJobSelectedListener?.onJobSelected(jobProfile)
-            landingScreenFragment.navigateToGig((jobProfile as JobProfile).id)
+            onCardSelectedListener?.onCardSelected(jobProfile)
+            //landingScreenFragment.navigateToGig((jobProfile as JobProfile).id)
         }
 
     }
 
     inner class SeeMoreViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView),  View.OnClickListener {
 
         private var seeMoreImage: ImageView = itemView.findViewById(R.id.see_more_button)
 
         fun bindValues(jobProfile: Any, position: Int) {
 
             seeMoreImage.setOnClickListener {
-                landingScreenFragment.navigateToExploreGigs()
+                onSeeMoreSelectedListener?.onSeeMoreSelected(jobProfile)
             }
         }
 
+        override fun onClick(p0: View?) {
+            //onSeeMoreSelectedListener?.onSeeMoreSelected(job)
+        }
 
+
+    }
+
+    interface OnCardSelectedListener {
+
+        fun onCardSelected(
+                any: Any
+        )
+    }
+
+    interface OnSeeMoreSelectedListener {
+
+        fun onSeeMoreSelected(
+                any: Any
+        )
     }
 
 }
