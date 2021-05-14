@@ -1,6 +1,7 @@
 package com.gigforce.client_activation.client_activation
 
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -57,16 +58,15 @@ class AdapterApplicationClientActivation :
                     dependency.drawable
                 }
             )
-            tv_status_application.text = dependency.title
+
             if (dependency.type.equals("aadhar_card") || dependency.type.equals("pan_card")){
                 dependency.isOptional = true
-                Log.d("optional", "true")
-               //tv_optional_application.visibility = View.VISIBLE
+                tv_status_application.text = dependency.title
             }
             else{
                 dependency.isOptional = false
-                Log.d("optional", "false")
-                //tv_optional_application.visibility = View.GONE
+                var txt = dependency.title + "<font color=\"red\"> *</font>"
+                tv_status_application.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE)
             }
 //        holder.itemView.divider_bottom.visibility =
 //                if (position == items.size - 1) View.GONE else View.VISIBLE

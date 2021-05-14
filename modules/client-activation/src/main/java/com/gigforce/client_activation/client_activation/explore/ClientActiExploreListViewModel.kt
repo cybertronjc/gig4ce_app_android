@@ -62,24 +62,32 @@ class ClientActiExploreListViewModel constructor(
 
     }
 
-    suspend fun getJPApplication(jobProfileId: String): JpApplication {
-        try {
-            val items =
-                clientActiExploreRepository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
-                    .whereEqualTo("gigerId", clientActiExploreRepository.getUID()).get()
-                    .await()
+     fun getJPApplication(jobProfileId: String): JpApplication {
+         var jpApplication = JpApplication()
+         viewModelScope.launch {
+             try {
+                 val items =
+                         clientActiExploreRepository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
+                                 .whereEqualTo("gigerId", clientActiExploreRepository.getUID()).get()
+                                 .await()
 
-            if (items.documents.isNullOrEmpty()) {
-                return JpApplication(JPId = jobProfileId, gigerId = clientActiExploreRepository.getUID())
-            }
-            val toObject = items.toObjects(JpApplication::class.java).get(0)
-            toObject.id = items.documents[0].id
-            return toObject
-        } catch (e: Exception) {
-            _observableError.value = e.message
-        }
-        return JpApplication()
+                 if (items.documents.isNullOrEmpty()) {
+                     Log.d("status", "null")
+                     jpApplication = JpApplication(JPId = jobProfileId, gigerId = clientActiExploreRepository.getUID())
+                 } else {
+                     val toObject = items.toObjects(JpApplication::class.java).get(0)
+                     toObject.id = items.documents[0].id
+                     Log.d("status", toObject.toString())
+                     jpApplication = toObject
+                 }
 
-    }
+             } catch (e: Exception) {
+                 _observableError.value = e.message
+             }
+
+
+         }
+         return jpApplication
+     }
 
 }

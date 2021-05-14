@@ -271,9 +271,10 @@ class ApplicationClientActivationFragment : Fragment(),
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
 
-        Observable.fromIterable(adapter.items.dropWhile { !it.isOptional }).all { item -> item.isDone }.subscribe({ success ->
+        Observable.fromIterable(adapter.items.filter { it -> !(it.type.equals("aadhar_card") || it.type.equals("pan_card")) }).all { item -> item.isDone }.subscribe({ success ->
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
+
         Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
                 .subscribe({ success ->
                     run {
