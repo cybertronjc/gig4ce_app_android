@@ -86,7 +86,7 @@ import javax.inject.Inject
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 
 @AndroidEntryPoint
-class LandingScreenFragment : BaseFragment() {
+class LandingScreenFragment : BaseFragment(), ExploreGigsAdapter.OnSeeMoreSelectedListener, ExploreGigsAdapter.OnCardSelectedListener {
 
     companion object {
         fun newInstance() = LandingScreenFragment()
@@ -111,6 +111,12 @@ class LandingScreenFragment : BaseFragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+    private val exploreGigsAdapter: ExploreGigsAdapter by lazy {
+        ExploreGigsAdapter(requireContext()).apply {
+            setOnCardSelectedListener(this@LandingScreenFragment)
+            setOnSeeMoreSelectedListener(this@LandingScreenFragment)
+        }
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -1076,8 +1082,6 @@ class LandingScreenFragment : BaseFragment() {
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
-            val exploreGigsAdapter = context?.let { ExploreGigsAdapter(it, this) }
-
             var arrayAny: ArrayList<Any> = jobProfiles as ArrayList<Any>
             arrayAny.add("See More")
 //
@@ -1119,16 +1123,17 @@ class LandingScreenFragment : BaseFragment() {
         }
     }
 
-    fun navigateToExploreGigs(){
+    override fun onCardSelected(any: Any) {
+        var id = (any as JobProfile).id
         navigate(
-            R.id.clientActiExploreList,
-            )
+                R.id.fragment_client_activation,
+                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+        )
     }
 
-    fun navigateToGig(id: String?){
+    override fun onSeeMoreSelected(any: Any) {
         navigate(
-            R.id.fragment_client_activation,
-            bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+                R.id.clientActiExploreList,
         )
     }
 }
