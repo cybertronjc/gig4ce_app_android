@@ -1,5 +1,7 @@
 package com.gigforce.app.di
 
+import com.gigforce.app.core.base.shareddata.SharedDataImp
+import com.gigforce.core.utils.SharedDataInterface
 import com.gigforce.app.di.implementations.EventTrackerImp
 import com.gigforce.app.di.implementations.MyViewHolderFactory
 import com.gigforce.app.nav.NavManagerImpl
@@ -16,7 +18,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
-import javax.inject.Singleton
 
 @InstallIn(ActivityComponent::class)
 @Module
@@ -48,6 +49,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideEventTracker(imp:EventTrackerImp) : IEventTracker
+
+    @Binds
+    fun provideSharedPreference(imp : SharedDataImp) : SharedDataInterface
 }
 
 @InstallIn(ViewModelComponent::class)

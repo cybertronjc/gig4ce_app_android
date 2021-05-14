@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.core.utils
 
 import android.os.Bundle
 
