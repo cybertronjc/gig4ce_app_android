@@ -5,22 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_screen.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 @ExperimentalStdlibApi
-class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
+class AmbassadorEnrollmentRequirementFragment : Fragment(),
         AmbassadorEnrolledSuccessfullyDialogFragmentListeners {
 
     private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -30,15 +37,17 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
     private var gigerVerificationStatus: GigerVerificationStatus? = null
     private var redirectToNextStep = false
 
-
+    @Inject lateinit var navigation : INavigation
+    var navFragmentsData : NavFragmentsData? = null
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_embassador_program_requirement_screen, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_embassador_program_requirement_screen, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navFragmentsData = activity as NavFragmentsData
         checkForBackPress()
         initUi()
         initViewModel()
@@ -67,26 +76,36 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(R.id.addBankDetailsInfoFragment, bundleOf(
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            navigation.navigateTo("verification/addBankDetailsInfoFragment",bundleOf(
+                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
+//            navigate(R.id.addBankDetailsInfoFragment, bundleOf(
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//            ))
         }
 
         current_address_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(R.id.addCurrentAddressFragment, bundleOf(
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            navigation.navigateTo("userinfo/addCurrentAddressFragment",bundleOf(
+                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
+//            navigate(R.id.addCurrentAddressFragment, bundleOf(
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//            ))
         }
 
         profile_photo_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(
-                    R.id.addProfilePictureFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
-            )
-            )
+            navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            ))
+//            navigate(
+//                    R.id.addProfilePictureFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//            )
+//            )
         }
     }
 
@@ -149,7 +168,8 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
     }
 
     override fun onStartingOnBoardingGigersClicked() {
-        navigate(R.id.ambassadorEnrolledUsersListFragment)
+        navigation.navigateTo("ambassador/users_enrolled")
+//        navigate(R.id.ambassadorEnrolledUsersListFragment)
     }
 
     override fun onViewGigDetailsClicked() {
@@ -162,22 +182,32 @@ class AmbassadorEnrollmentRequirementFragment : BaseFragment(),
             if (map[i] == false) {
                 when (i) {
                     "profile" -> {
-                        navigate(
-                                R.id.addProfilePictureFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
-                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                        navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
+                            EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
                         ))
+//                        navigate(
+//                                R.id.addProfilePictureFragment, bundleOf(
+//                                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+//                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                        ))
                     }
                     "address" -> {
-                        navigate(R.id.addCurrentAddressFragment, bundleOf(
-                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                        navigation.navigateTo("userinfo/addCurrentAddressFragment", bundleOf(
+                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
                         ))
+//                        navigate(R.id.addCurrentAddressFragment, bundleOf(
+//                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                        ))
                     }
                     "bank_details" ->
-                        navigate(R.id.addBankDetailsInfoFragment, bundleOf(
-                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
-                        )
-                        )
+                        navigation.navigateTo("verification/addBankDetailsInfoFragment",bundleOf(
+                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                        ))
+//                        navigate(R.id.addBankDetailsInfoFragment, bundleOf(
+//                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                        )
+//                        )
 
                 }
                 break
