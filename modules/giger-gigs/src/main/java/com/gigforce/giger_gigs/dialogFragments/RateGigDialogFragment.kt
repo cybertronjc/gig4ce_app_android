@@ -46,8 +46,7 @@ class RateGigDialogFragment : BottomSheetDialogFragment() {
             frag.show(fragmentManager, TAG)
         }
     }
-    @Inject
-    private lateinit var navigation : INavigation
+    @Inject lateinit var navigation : INavigation
     private val viewModel: GigViewModel by viewModels()
     private lateinit var gigId: String
 

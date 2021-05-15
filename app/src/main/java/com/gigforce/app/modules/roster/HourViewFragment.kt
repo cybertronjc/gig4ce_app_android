@@ -18,8 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.giger_gigs.GigNavigation
-import com.gigforce.giger_gigs.GigPage2Fragment
+import com.gigforce.app.utils.GigNavigation
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.core.extensions.toDate
 import com.google.android.material.card.MaterialCardView
@@ -262,7 +261,7 @@ class HourViewFragment : RosterBaseFragment() {
                     upcomingCard.tag = gig.tag
 
                     upcomingCard.setOnClickListener {
-                        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(
+                        GigNavigation.openGigMainPage(
                             findNavController(),
                             gig.openNewGig(),
                             gig.gigId
@@ -296,7 +295,7 @@ class HourViewFragment : RosterBaseFragment() {
                     completedCard.tag = gig.tag
                     // TODO ask if navigation is correct
                     completedCard.setOnClickListener {
-                        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(
+                        GigNavigation.openGigMainPage(
                             findNavController(),
                             gig.openNewGig(),
                             gig.gigId
@@ -325,7 +324,7 @@ class HourViewFragment : RosterBaseFragment() {
                     currentCard.tag = gig.tag
 
                     currentCard.setOnClickListener {
-                        com.gigforce.giger_gigs.GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
+                        GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), Bundle().apply {
                             this.putString(com.gigforce.giger_gigs.GigPage2Fragment.INTENT_EXTRA_GIG_ID, gig.gigId)
                         })
                     }

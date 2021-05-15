@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.gigforce.app.R
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.giger_gigs.models.Gig

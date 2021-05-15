@@ -2,8 +2,8 @@ package com.gigforce.giger_gigs.models
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import com.gigforce.app.R
 import com.gigforce.core.extensions.toLocalDateTime
+import com.gigforce.giger_gigs.R
 import java.time.LocalDateTime
 
 enum class GigStatus constructor(

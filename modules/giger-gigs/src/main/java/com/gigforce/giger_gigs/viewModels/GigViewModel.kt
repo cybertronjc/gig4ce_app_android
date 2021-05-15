@@ -12,8 +12,7 @@ import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.repositories.GigerProfileFirebaseRepository
 import com.gigforce.giger_gigs.repositories.GigsRepository
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.extensions.getDownloadUrlOrThrow
-import com.gigforce.core.extensions.toDate
+import com.gigforce.core.extensions.*
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.google.firebase.Timestamp
@@ -26,6 +25,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime

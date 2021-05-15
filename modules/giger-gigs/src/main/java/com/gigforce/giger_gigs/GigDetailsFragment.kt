@@ -17,12 +17,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.gigforce.app.R
 import com.gigforce.giger_gigs.adapters.GigDetailAdapter
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.giger_gigs.viewModels.GigViewModel
-import com.gigforce.app.modules.roster.inflate
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
@@ -34,6 +32,8 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.datamodels.learning.Course
+import com.gigforce.core.extensions.inflate
+import com.gigforce.core.extensions.toLocalDateTime
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth

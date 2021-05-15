@@ -17,12 +17,12 @@ import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.gigforce.app.R
 import com.gigforce.giger_gigs.adapters.GigPeopleToExpectAdapter
 import com.gigforce.giger_gigs.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.giger_gigs.adapters.OtherOptionClickListener
@@ -45,6 +45,7 @@ import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
+import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper

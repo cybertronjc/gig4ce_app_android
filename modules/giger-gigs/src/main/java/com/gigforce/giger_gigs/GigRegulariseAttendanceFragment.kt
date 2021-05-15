@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.gigforce.app.R
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.common_ui.ext.showToast

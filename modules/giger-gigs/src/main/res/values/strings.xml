@@ -33,5 +33,8 @@
     <string name="others_camel_case">Others</string>
     <string name="reason">Reason</string>
     <string name="submit_all_caps">SUBMIT</string>
+    <string name="gig_location">Gig Location</string>
+    <string name="learning_assign_to_you">Learning assigned to you</string>
+    <string name="plus_see_less">+ see less</string>
 
 </resources>

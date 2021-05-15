@@ -16,6 +16,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.core.utils.GlideApp
@@ -189,7 +190,7 @@ class GigHistoryFragment : BaseFragment(), AdapterGigHistory.AdapterGigHistoryCa
     }
 
     override fun openGigDetails(gig: Gig) {
-        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
+        GigNavigation.openGigMainPage(findNavController(),gig.openNewGig(), gig.gigId)
     }
 
 

@@ -40,7 +40,7 @@ import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 //import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.giger_gigs.GigNavigation
+import com.gigforce.app.utils.GigNavigation
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 //import com.gigforce.core.datamodels.gigpage.Gig
@@ -417,7 +417,7 @@ class BSCalendarScreenFragment : BaseFragment() {
                     activity?.applicationContext,
                     PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                         val gig = item as Gig
-                        com.gigforce.giger_gigs.GigNavigation.openGigMainPage(
+                        GigNavigation.openGigMainPage(
                             findNavController(),
                             gig.openNewGig(),
                             gig.gigId
@@ -665,7 +665,7 @@ class BSCalendarScreenFragment : BaseFragment() {
         View.OnClickListener {
         override fun onClick(v: View?) {
             val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            com.gigforce.giger_gigs.GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), gig.gigId)
+            GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), gig.gigId)
         }
     }
 

@@ -8,11 +8,10 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateUtils
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -24,6 +23,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
+    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+}
 
 val Int.dp: Int
     get() {

@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.gigforce.app.R
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible
+import com.gigforce.giger_gigs.R
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp
 import com.google.firebase.crashlytics.FirebaseCrashlytics

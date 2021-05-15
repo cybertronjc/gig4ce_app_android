@@ -7,16 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.giger_gigs.models.Gig
 import com.gigforce.giger_gigs.viewModels.GigViewModel
-import com.gigforce.app.modules.roster.inflate
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment
+import com.gigforce.core.extensions.inflate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
@@ -27,7 +27,7 @@ import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 
 
-class GigPageNavigationFragment : BaseFragment() {
+class GigPageNavigationFragment : Fragment() {
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"
@@ -40,7 +40,7 @@ class GigPageNavigationFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_gig_navigation, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_gig_navigation, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

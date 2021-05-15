@@ -1,9 +1,9 @@
-package com.gigforce.giger_gigs
+package com.gigforce.app.utils
 
 import android.os.Bundle
 import androidx.navigation.NavController
+import com.gigforce.giger_gigs.GigPage2Fragment
 import com.gigforce.app.R
-
 object GigNavigation {
 
     fun openGigAttendancePage(navController: NavController,
@@ -13,7 +13,10 @@ object GigNavigation {
             navController,
             openNewGigPage,
             Bundle().apply {
-                this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gigId)
+                this.putString(
+                    GigPage2Fragment.INTENT_EXTRA_GIG_ID,
+                    gigId
+                )
             })
     }
 
@@ -34,7 +37,10 @@ object GigNavigation {
             navController,
             openNewGigPage,
             Bundle().apply {
-                this.putString(GigPage2Fragment.INTENT_EXTRA_GIG_ID, gigId)
+                this.putString(
+                    GigPage2Fragment.INTENT_EXTRA_GIG_ID,
+                    gigId
+                )
             })
 
     }
