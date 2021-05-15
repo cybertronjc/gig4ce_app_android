@@ -40,7 +40,7 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.core.repository.ProfileFirebaseRepository
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.core.datamodels.profile.Experience
@@ -20,7 +20,8 @@ import javax.inject.Inject
 class InterestAndExperienceViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val profileFirebaseRepository: ProfileFirebaseRepository =
+        ProfileFirebaseRepository()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val userEnrollmentRepository: UserEnrollmentRepository =
         UserEnrollmentRepository(buildConfig = buildConfig)

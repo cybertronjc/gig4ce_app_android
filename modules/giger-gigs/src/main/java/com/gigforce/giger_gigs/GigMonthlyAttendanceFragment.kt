@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable

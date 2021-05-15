@@ -2,7 +2,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 //import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData

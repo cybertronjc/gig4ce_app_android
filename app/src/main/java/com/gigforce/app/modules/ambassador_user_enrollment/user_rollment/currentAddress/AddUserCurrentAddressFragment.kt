@@ -9,32 +9,36 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectItemWithText
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.core.datamodels.City
-import com.gigforce.core.datamodels.ambassador.PostalOffice
-import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.datamodels.City
+import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.ambassador.PostalOffice
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectItemWithText
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
-import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_user_current_address.*
 import kotlinx.android.synthetic.main.fragment_user_current_address_main.*
 import java.util.*
+import javax.inject.Inject
 
-class AddUserCurrentAddressFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
     private val viewModel: UserDetailsViewModel by activityViewModels()
     private lateinit var userId: String
@@ -44,10 +48,12 @@ class AddUserCurrentAddressFragment : BaseFragment() {
     private var mode: Int = EnrollmentConstants.MODE_ADD
     private var profileData: ProfileData? = null
 
+    @Inject lateinit var navigation : INavigation
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_user_current_address, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_user_current_address, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -107,9 +113,9 @@ class AddUserCurrentAddressFragment : BaseFragment() {
 
         toolbar_layout.showTitle("User Local Address")
         toolbar_layout.hideActionMenu()
-        toolbar_layout.setBackButtonListener {
+        toolbar_layout.setBackButtonListener(View.OnClickListener {
             showGoBackConfirmationDialog()
-        }
+        })
 
         state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
@@ -190,13 +196,16 @@ class AddUserCurrentAddressFragment : BaseFragment() {
         }
 
         skip_btn.setOnClickListener {
-
-            navigate(
-                R.id.addUserBankDetailsInfoFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
-            )
+            navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            ))
+//            navigate(
+//                R.id.addUserBankDetailsInfoFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                )
+//            )
         }
     }
 
@@ -375,12 +384,16 @@ class AddUserCurrentAddressFragment : BaseFragment() {
                             activity?.onBackPressed()
                         } else {
                             showToast("User Current Address Details submitted")
-                            navigate(
-                                R.id.addUserBankDetailsInfoFragment, bundleOf(
-                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                                )
-                            )
+                            navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                            ))
+//                            navigate(
+//                                R.id.addUserBankDetailsInfoFragment, bundleOf(
+//                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                                )
+//                            )
                         }
                     }
                     is Lse.Error -> {

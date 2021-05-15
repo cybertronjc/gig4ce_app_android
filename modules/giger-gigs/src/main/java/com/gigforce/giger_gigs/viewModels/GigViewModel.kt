@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.giger_gigs.models.AttendanceType
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.repositories.GigerProfileFirebaseRepository
 import com.gigforce.giger_gigs.repositories.GigsRepository

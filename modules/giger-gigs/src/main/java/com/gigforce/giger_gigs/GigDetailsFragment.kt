@@ -21,7 +21,7 @@ import com.gigforce.giger_gigs.adapters.GigDetailAdapter
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.giger_gigs.viewModels.GigViewModel
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.showToast

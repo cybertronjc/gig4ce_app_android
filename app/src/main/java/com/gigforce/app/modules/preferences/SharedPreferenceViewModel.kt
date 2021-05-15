@@ -8,7 +8,7 @@ import com.gigforce.app.modules.preferences.location.CitiesRepository
 import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.core.repository.ProfileFirebaseRepository
 
 import com.gigforce.core.datamodels.profile.AddressFirestoreModel
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -28,7 +28,8 @@ class SharedPreferenceViewModel : ViewModel {
         var configDataModel: ConfigDataModel? = null
     }
 
-    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var profileFirebaseRepository =
+        ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     var preferencesRepository: PreferencesRepository = PreferencesRepository()
     //    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()

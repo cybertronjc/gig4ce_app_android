@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.giger_gigs.adapters.GigsListForDeclineAdapter
@@ -26,7 +25,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior

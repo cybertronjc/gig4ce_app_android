@@ -24,7 +24,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.datamodels.profile.RoleInterests
 import com.gigforce.common_ui.decors.HorizontaltemDecoration

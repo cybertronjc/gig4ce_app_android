@@ -12,47 +12,48 @@ import android.widget.ArrayAdapter
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectItemWithText
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.VerificationValidations
-import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+
+//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+//import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
-import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectItemWithText
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
-import kotlinx.android.synthetic.main.fragment_ambsd_add_bank_details_info.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.progressBar
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
+import javax.inject.Inject
 
 
 enum class DrivingLicenseSides {
     FRONT_SIDE,
     BACK_SIDE
 }
-
-class AddUserDrivingLicenseInfoFragment : BaseFragment(),
-    UserDetailsFilledDialogFragmentResultListener {
+@AndroidEntryPoint
+class AddUserDrivingLicenseInfoFragment : Fragment(),
+    UserDetailsFilledDialogFragmentResultListener, IOnBackPressedOverride{
 
     companion object {
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -74,11 +75,13 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private var gigerVerificationStatus: GigerVerificationStatus? = null
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
+    @Inject lateinit var navigation : INavigation
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_add_driving_license_info, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_add_driving_license_info, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -135,9 +138,9 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         toolbar_layout.apply {
             showTitle(getString(R.string.upload_driving_license_details))
             hideActionMenu()
-            setBackButtonListener{
+            setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
-            }
+            })
         }
 
 
@@ -393,34 +396,38 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     private fun openCameraAndGalleryOptionForFrontSideImage() {
         currentlyClickingImageOfSide = DrivingLicenseSides.FRONT_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_front.jpg")
-        startActivityForResult(
-            photoCropIntent,
-            REQUEST_CODE_UPLOAD_DL
-        )
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_DL,requireContext(),this)
+//        startActivityForResult(
+//            photoCropIntent,
+//            REQUEST_CODE_UPLOAD_DL
+//        )
 
     }
 
     private fun openCameraAndGalleryOptionForBackSideImage() {
         currentlyClickingImageOfSide = DrivingLicenseSides.BACK_SIDE
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
         photoCropIntent.putExtra(
-            PhotoCrop.INTENT_EXTRA_PURPOSE,
-            PhotoCrop.PURPOSE_VERIFICATION
+            "purpose",
+            "verification"
         )
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "aadhar_card_back.jpg")
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
         startActivityForResult(
             photoCropIntent,
             REQUEST_CODE_UPLOAD_DL
@@ -429,17 +436,17 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddPanCardInfoFragment.REQUEST_CODE_UPLOAD_PAN_IMAGE) {
+        if (requestCode == AppConstants.REQUEST_CODE_UPLOAD_PAN_IMAGE) {
 
             if (resultCode == Activity.RESULT_OK) {
 
                 if (DrivingLicenseSides.FRONT_SIDE == currentlyClickingImageOfSide) {
                     dlFrontImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showFrontDrivingLicense(dlFrontImagePath!!)
                 } else if (DrivingLicenseSides.BACK_SIDE == currentlyClickingImageOfSide) {
                     dlBackImagePath =
-                        data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                        data?.getParcelableExtra("uri")
                     showBackDrivingLicense(dlBackImagePath!!)
                 }
 
@@ -474,15 +481,15 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
         dlSubmitSliderBtn.isEnabled = true
 
         dlSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
-                        ResourcesCompat.getColor(resources, R.color.lipstick, null)
-                )
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+        )
     }
 
     private fun disableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = false
 
         dlSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         )
     }
 
@@ -549,9 +556,9 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 val imageRef = firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(dlData.frontImage!!)
+                    .reference
+                    .child("verification")
+                    .child(dlData.frontImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showFrontDrivingLicense(it)
@@ -568,9 +575,9 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 val imageRef = firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(dlData.backImage!!)
+                    .reference
+                    .child("verification")
+                    .child(dlData.backImage!!)
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     showBackDrivingLicense(it)
@@ -607,16 +614,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(dlDetails.frontImage!!)
-                        .downloadUrl.addOnSuccessListener {
-                            Glide.with(requireContext()).load(it)
-                                    .placeholder(getCircularProgressDrawable())
-                                    .into(dlFrontImageIV)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
+                    .reference
+                    .child("verification")
+                    .child(dlDetails.frontImage!!)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(dlFrontImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
         dlFrontErrorMessage.gone()
@@ -630,16 +637,16 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
             } else {
 
                 firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(dlDetails.backImage!!)
-                        .downloadUrl.addOnSuccessListener {
-                            Glide.with(requireContext()).load(it)
-                                    .placeholder(getCircularProgressDrawable())
-                                    .into(dlBackImageIV)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
+                    .reference
+                    .child("verification")
+                    .child(dlDetails.backImage!!)
+                    .downloadUrl.addOnSuccessListener {
+                        Glide.with(requireContext()).load(it)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(dlBackImageIV)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
         dlBackErrorMessage.gone()
@@ -652,11 +659,15 @@ class AddUserDrivingLicenseInfoFragment : BaseFragment(),
     }
 
     override fun onReUploadDocumentsClicked() {
-        navigate(
-            R.id.addUserBankDetailsInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
-        )
+        navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
+            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+        ))
+//        navigate(
+//            R.id.addUserBankDetailsInfoFragment, bundleOf(
+//                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//            )
+//        )
     }
 }

@@ -43,6 +43,8 @@ import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.gigpage.ContactPerson
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.extensions.toLocalDateTime

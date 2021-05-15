@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.core.repository.ProfileFirebaseRepository
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
@@ -21,7 +21,8 @@ class AmbassadorEnrollViewModel @Inject constructor(
 ) : ViewModel() {
     private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository =
         AmbassadorEnrollmentRepository()
-    private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val profileFirebaseRepository: ProfileFirebaseRepository =
+        ProfileFirebaseRepository()
     private val userEnrollmentRepository: UserEnrollmentRepository =
         UserEnrollmentRepository(buildConfig = buildConfig)
     private val _enrolledUsers = MutableLiveData<List<EnrolledUser>>()

@@ -6,7 +6,7 @@ import com.gigforce.core.datamodels.gigpage.JobProfileFull
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.updateOrThrow
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot

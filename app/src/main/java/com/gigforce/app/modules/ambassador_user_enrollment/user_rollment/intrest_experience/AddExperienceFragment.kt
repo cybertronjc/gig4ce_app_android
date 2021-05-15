@@ -176,9 +176,10 @@ class AddUserExperienceFragment : BaseFragment() {
         toolbar_layout.apply {
             showTitle(getString(R.string.add_experience))
             hideActionMenu()
-            setBackButtonListener {
-                showGoBackConfirmationDialog()
-            }
+            setBackButtonListener(View.OnClickListener { showGoBackConfirmationDialog() })
+//            setBackButtonListener {
+//                showGoBackConfirmationDialog()
+//            }
         }
 
         skip_btn.setOnClickListener {

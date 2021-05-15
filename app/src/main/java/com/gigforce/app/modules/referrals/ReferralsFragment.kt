@@ -26,12 +26,11 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.utils.getViewWidth
-import com.gigforce.core.AppConstants
 import com.gigforce.core.PermissionUtils
 import com.gigforce.core.utils.GlideApp
 //import com.gigforce.core.utils.PermissionUtils

@@ -32,4 +32,11 @@ object AppConstants {
 
 
     const val LEARNING_IMAGES_FIREBASE_FOLDER = "learning_images"
+
+
+    const val INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT = "user_came_from_amb_screen"
+
+    const val INTENT_EXTRA_COURSE_ID = "course_id"
+
+    const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
 }

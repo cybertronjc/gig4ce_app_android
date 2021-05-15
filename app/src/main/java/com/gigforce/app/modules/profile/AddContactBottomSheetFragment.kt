@@ -18,6 +18,7 @@ import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.utils.isValidMail
 import com.gigforce.core.utils.isValidMobile
+import com.gigforce.core.viewmodels.ProfileViewModel
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.*
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.view.*
 

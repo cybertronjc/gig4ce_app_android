@@ -11,7 +11,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
@@ -23,6 +22,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import kotlinx.android.synthetic.main.recycler_item_gig_attendance.view.*
 import java.text.SimpleDateFormat

@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.gigforce.giger_gigs.models.GigStatus
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.core.extensions.visible

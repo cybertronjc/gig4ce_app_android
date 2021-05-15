@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.gigerid
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
 import com.gigforce.app.modules.preferences.PreferencesFragment
 import kotlinx.coroutines.tasks.await

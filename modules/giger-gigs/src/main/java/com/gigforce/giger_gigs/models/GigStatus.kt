@@ -2,6 +2,7 @@ package com.gigforce.giger_gigs.models
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.giger_gigs.R
 import java.time.LocalDateTime

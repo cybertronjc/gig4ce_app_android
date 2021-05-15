@@ -22,7 +22,7 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

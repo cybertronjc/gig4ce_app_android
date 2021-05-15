@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.gigforce.app.R
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*

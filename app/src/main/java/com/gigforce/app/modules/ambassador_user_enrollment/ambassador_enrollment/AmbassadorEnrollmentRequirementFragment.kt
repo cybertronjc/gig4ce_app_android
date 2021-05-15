@@ -9,16 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
+//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.core.AppConstants
 import com.gigforce.core.NavFragmentsData
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +76,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
             navigation.navigateTo("verification/addBankDetailsInfoFragment",bundleOf(
-                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
 //            navigate(R.id.addBankDetailsInfoFragment, bundleOf(
 //                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -87,7 +86,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
         current_address_layout.setOnClickListener {
             redirectToNextStep = true
             navigation.navigateTo("userinfo/addCurrentAddressFragment",bundleOf(
-                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
 //            navigate(R.id.addCurrentAddressFragment, bundleOf(
 //                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -98,7 +97,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
             redirectToNextStep = true
             navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
-                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
 //            navigate(
 //                    R.id.addProfilePictureFragment, bundleOf(
@@ -184,7 +183,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
                     "profile" -> {
                         navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
                             EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
-                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                            AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
                         ))
 //                        navigate(
 //                                R.id.addProfilePictureFragment, bundleOf(
@@ -194,7 +193,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
                     }
                     "address" -> {
                         navigation.navigateTo("userinfo/addCurrentAddressFragment", bundleOf(
-                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                            AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
                         ))
 //                        navigate(R.id.addCurrentAddressFragment, bundleOf(
 //                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -202,7 +201,7 @@ class AmbassadorEnrollmentRequirementFragment : Fragment(),
                     }
                     "bank_details" ->
                         navigation.navigateTo("verification/addBankDetailsInfoFragment",bundleOf(
-                            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+                            AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
                         ))
 //                        navigate(R.id.addBankDetailsInfoFragment, bundleOf(
 //                                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true

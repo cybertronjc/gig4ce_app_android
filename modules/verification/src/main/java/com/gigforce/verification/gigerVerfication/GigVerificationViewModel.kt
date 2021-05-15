@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.*
 import com.gigforce.core.di.interfaces.IBuildConfigVM
@@ -22,39 +23,6 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-
-data class GigerVerificationStatus(
-    val selfieVideoUploaded: Boolean = false,
-    val selfieVideoDataModel: SelfieVideoDataModel? = null,
-    val panCardDetailsUploaded: Boolean = false,
-    val panCardDetails: PanCardDataModel? = null,
-    val aadharCardDetailsUploaded: Boolean = false,
-    val aadharCardDataModel: AadharCardDataModel? = null,
-    val dlCardDetailsUploaded: Boolean = false,
-    val drivingLicenseDataModel: DrivingLicenseDataModel? = null,
-    val bankDetailsUploaded: Boolean = false,
-    val bankUploadDetailsDataModel: BankDetailsDataModel? = null,
-    val everyDocumentUploaded: Boolean = false
-
-
-) {
-    fun getColorCodeForStatus(statusCode: Int): Int {
-        return when (statusCode) {
-            STATUS_DOCUMENT_RECEIVED_BY_3RD_PARTY, STATUS_DOCUMENT_UPLOADED, STATUS_DOCUMENT_PROCESSING -> R.color.yellow
-            STATUS_VERIFIED -> R.color.green
-            STATUS_VERIFICATION_FAILED -> R.color.app_red
-            else -> R.color.yellow
-        }
-    }
-
-    companion object {
-        const val STATUS_VERIFIED = 2
-        const val STATUS_VERIFICATION_FAILED = 3
-        const val STATUS_DOCUMENT_RECEIVED_BY_3RD_PARTY = 0
-        const val STATUS_DOCUMENT_PROCESSING = 1
-        const val STATUS_DOCUMENT_UPLOADED = -1
-    }
-}
 
 @HiltViewModel
 class GigVerificationViewModel @Inject constructor(

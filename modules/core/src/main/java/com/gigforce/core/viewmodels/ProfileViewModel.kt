@@ -1,10 +1,11 @@
-package com.gigforce.app.modules.profile
+package com.gigforce.core.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.core.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.utils.Lce
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +21,8 @@ class ProfileViewModel : ViewModel() {
     var profileAppBarExpanded = false
     var listener: ListenerRegistration? = null
     var profileID: String = ""
-    var profileFirebaseRepository = ProfileFirebaseRepository()
+    var profileFirebaseRepository =
+        ProfileFirebaseRepository()
     var userProfileData: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     private val _ambassadorProfilePicUpdate: MutableLiveData<String> = MutableLiveData<String>()
     val ambassadorProfilePicUpdate = _ambassadorProfilePicUpdate;

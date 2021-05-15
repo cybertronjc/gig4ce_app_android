@@ -23,7 +23,7 @@ import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.ClickOrSelectImageBottomSheet
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

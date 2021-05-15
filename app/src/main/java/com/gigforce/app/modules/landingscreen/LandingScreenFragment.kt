@@ -49,7 +49,7 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.configrepository.ConfigRepository

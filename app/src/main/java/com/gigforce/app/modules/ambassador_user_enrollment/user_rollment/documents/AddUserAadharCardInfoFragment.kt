@@ -11,38 +11,43 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
-import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.datamodels.verification.AadharCardDataModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
+
+//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
+//import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.*
-//import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info.ic_back_iv
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.*
-//import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_info_main.aadharDataCorrectCB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import javax.inject.Inject
 
 enum class AadharCardSides {
     FRONT_SIDE,
     BACK_SIDE
 }
 
-class AddUserAadharCardInfoFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddUserAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
@@ -60,11 +65,13 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
 
+    @Inject lateinit var navigation : INavigation
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_add_aadhar_card_info, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_add_aadhar_card_info, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -112,22 +119,24 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         disableSubmitButton()
 
         ambsd_aadhar_aahdar_skip_btn.setOnClickListener {
-
-            navigate(
-                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
-            )
+            navigation.navigateTo("userinfo/addUserDrivingLicenseInfoFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            ))
+//            navigate(
+//                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                )
+//            )
 
         }
 
         toolbar_layout.showTitle(getString(R.string.upload_aadhar_details))
         toolbar_layout.hideActionMenu()
-        toolbar_layout.setBackButtonListener{
-
+        toolbar_layout.setBackButtonListener (View.OnClickListener {
             showGoBackConfirmationDialog()
-        }
+        })
 
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisBottomSheet()
@@ -172,13 +181,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         }
 
         ambsd_aadhar_skip_btn.setOnClickListener {
-
-            navigate(
-                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
-            )
+            navigation.navigateTo("userinfo/addUserDrivingLicenseInfoFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            ))
+//            navigate(
+//                R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                )
+//            )
         }
 
         editLayout.setOnClickListener {
@@ -247,7 +259,6 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         }
 
 
-
     }
 
     private fun showWhyWeNeedThisBottomSheet() {
@@ -313,13 +324,16 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
 
         if (aadharYesRB.isChecked)
             showToast(getString(R.string.aadhar_card_details_uploaded))
-
-        navigate(
-            R.id.addUserDrivingLicenseInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
-        )
+        navigation.navigateTo("userinfo/addUserDrivingLicenseInfoFragment",bundleOf(
+            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+        ))
+//        navigate(
+//            R.id.addUserDrivingLicenseInfoFragment, bundleOf(
+//                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//            )
+//        )
     }
 
     private fun showLoadingState() {
@@ -426,7 +440,7 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
         aadharSubmitSliderBtn.isEnabled = true
 
         aadharSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
         )
     }
 
@@ -483,8 +497,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             )
         )
 
-        aadharDetails.frontImage?.let {
-            if (it.startsWith("http", true)) {
+        aadharDetails.frontImage.let {
+            if (it!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.frontImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewFrontImageIV)
             } else {
@@ -500,8 +514,8 @@ class AddUserAadharCardInfoFragment : BaseFragment() {
             }
         }
         aadharViewFrontErrorMessage.gone()
-        aadharDetails.backImage?.let {
-            if (it.startsWith("http", true)) {
+        aadharDetails.backImage.let {
+            if (it!!.startsWith("http", true)) {
                 Glide.with(requireContext()).load(aadharDetails.backImage)
                     .placeholder(getCircularProgressDrawable()).into(aadharViewBackImageIV)
             } else {

@@ -10,31 +10,37 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectItemWithText
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.core.datamodels.City
-import com.gigforce.core.datamodels.ambassador.PostalOffice
-import com.gigforce.core.datamodels.State
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.AppConstants
+import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.datamodels.City
+import com.gigforce.core.datamodels.State
+import com.gigforce.core.datamodels.ambassador.PostalOffice
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectItemWithText
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
-import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
 import java.util.*
+import javax.inject.Inject
 
-class AddCurrentAddressFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddCurrentAddressFragment : Fragment() {
 
     private val viewModel: UserDetailsViewModel by activityViewModels()
     private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -42,14 +48,16 @@ class AddCurrentAddressFragment : BaseFragment() {
     private var userName: String? = null
     private var cameFromEnrollment = false
 
+    @Inject lateinit var navigation : INavigation
+    private var navFragmentsData : NavFragmentsData?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_user_current_address, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_user_current_address, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        navFragmentsData = activity as NavFragmentsData
         getDataFromIntents(arguments, savedInstanceState)
         setUpUiForAmbOrUser()
         initListeners()
@@ -82,7 +90,7 @@ class AddCurrentAddressFragment : BaseFragment() {
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
             cameFromEnrollment = it.getBoolean(
-                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
                 false
             )
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
@@ -94,7 +102,7 @@ class AddCurrentAddressFragment : BaseFragment() {
 
         savedInstanceState?.let {
             cameFromEnrollment = it.getBoolean(
-                AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
                 false
             )
             userId = it.getString(EnrollmentConstants.INTENT_EXTRA_USER_ID) ?: return@let
@@ -107,7 +115,7 @@ class AddCurrentAddressFragment : BaseFragment() {
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_ID, userId)
         outState.putString(EnrollmentConstants.INTENT_EXTRA_USER_NAME, userName)
         outState.putBoolean(
-            AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
+            AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT,
             cameFromEnrollment
         )
 
@@ -119,18 +127,29 @@ class AddCurrentAddressFragment : BaseFragment() {
 
             showTitle(getString(R.string.user_local_address))
             hideActionMenu()
-            setBackButtonListener {
-
+            setBackButtonListener(View.OnClickListener {
                 if (userId == null) {
                     if (cameFromEnrollment) {
                         onBackPressed()
-                        return@setBackButtonListener
+                        return@OnClickListener
                     }
                     activity?.onBackPressed()
                 } else {
                     showGoBackConfirmationDialog()
                 }
-            }
+            })
+//            setBackButtonListener {
+//
+//                if (userId == null) {
+//                    if (cameFromEnrollment) {
+//                        onBackPressed()
+//                        return@setBackButtonListener
+//                    }
+//                    activity?.onBackPressed()
+//                } else {
+//                    showGoBackConfirmationDialog()
+//                }
+//            }
         }
         pin_code_et.textChanged {
             pin_code_okay_iv.isVisible = it.length == 6 && it.toString().toInt() > 10_00_00
@@ -146,9 +165,9 @@ class AddCurrentAddressFragment : BaseFragment() {
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value =
-                    (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax()
+                    (progress * (seekBar.width - 2 * seekBar.thumbOffset)) / seekBar.max
                 seekbardependent.text = progress.toString() + " " + getString(R.string.km)
-                seekbardependent.setX(seekBar.getX() + value + seekBar.getThumbOffset() / 2)
+                seekbardependent.x = seekBar.x + value + seekBar.thumbOffset / 2
                 //textView.setY(100); just added a value set this properly using screen with height aspect ratio , if you do not set it by default it will be there below seek bar
             }
 
@@ -285,15 +304,19 @@ class AddCurrentAddressFragment : BaseFragment() {
 
                         if (userId == null) {
                             showToast(getString(R.string.current_address_details_sub))
-                            popBackState()
+                            navigation.popBackStack()
                         } else {
                             showToast(getString(R.string.user_current_address_details_sub))
-                            navigate(
-                                R.id.addUserBankDetailsInfoFragment, bundleOf(
-                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                                )
-                            )
+                            navigation.navigateTo("userinfo/addUserBankDetailsInfoFragment",bundleOf(
+                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+                            ))
+//                            navigate(
+//                                R.id.addUserBankDetailsInfoFragment, bundleOf(
+//                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                                )
+//                            )
                         }
                     }
                     is Lse.Error -> {
@@ -399,7 +422,7 @@ class AddCurrentAddressFragment : BaseFragment() {
     override fun onBackPressed(): Boolean {
         if (cameFromEnrollment) {
             navFragmentsData?.setData(bundleOf(StringConstants.BACK_PRESSED.value to true))
-            popBackState()
+            navigation.popBackStack()
             return true
         }
 

@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.modules.ambassador_user_enrollment.viewmodel.AmbassadorProfileViewModel
 import com.gigforce.core.datamodels.profile.ErrorWhileSettingUserAsAmbassador
 import com.gigforce.core.datamodels.profile.SettingUserAsAmbassador
 import com.gigforce.core.datamodels.profile.UserSetAsAmbassadorSuccessfully
@@ -23,6 +22,7 @@ import com.gigforce.core.extensions.capitalizeWords
 import com.gigforce.core.extensions.inflate
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_apply_for_ambassador.*
 import kotlinx.android.synthetic.main.fragment_apply_for_ambassador_main.*
@@ -53,7 +53,7 @@ class AmbassadorEnrolledDialogFragment : DialogFragment() {
     }
 
     private lateinit var ambassadorEnrolledSuccessfullyDialogFragmentListener: AmbassadorEnrolledSuccessfullyDialogFragmentListeners
-    private val profileViewModel: AmbassadorProfileViewModel by activityViewModels()
+    private val profileViewModel: ProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

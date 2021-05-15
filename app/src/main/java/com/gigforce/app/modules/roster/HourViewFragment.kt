@@ -19,7 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.utils.GigNavigation
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.toDate
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.roster_day_hour_view.*

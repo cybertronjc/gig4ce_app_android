@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.common_ui.utils.ViewModelProviderFactory

@@ -17,7 +17,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,23 +29,20 @@ import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.viewmodels.ProfileViewModel
 import com.gigforce.app.modules.referrals.ReferralsFragment
 //import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.common_ui.views.GigforceToolbar
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.PermissionUtils
 import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -62,7 +58,6 @@ import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.cu
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.profile_photo_layout
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.profile_pic_check_iv
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.toolbar_layout
-import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_screen.*
 
 class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 

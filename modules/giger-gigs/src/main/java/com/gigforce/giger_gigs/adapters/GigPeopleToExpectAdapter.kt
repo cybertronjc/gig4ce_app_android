@@ -9,7 +9,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.models.ContactPerson
+import com.gigforce.core.datamodels.gigpage.ContactPerson
 import kotlinx.android.synthetic.main.recycler_item_gig_people_to_expect.view.*
 
 interface GigPeopleToExpectAdapterClickListener {

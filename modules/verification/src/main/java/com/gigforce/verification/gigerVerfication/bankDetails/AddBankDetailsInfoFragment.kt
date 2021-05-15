@@ -14,14 +14,13 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.verification.gigerVerfication.VerificationValidations
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.NavFragmentsData
@@ -101,15 +100,25 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         toolbar.apply {
             hideActionMenu()
             showTitle(getString(R.string.giger_verification))
-            setBackButtonListener{
-
-                if (didUserCameFromAmbassadorScreen) {
-                    onBackPressed()
-                } else {
-                    navigation.popBackStack("verification/main",inclusive = false)
+            setBackButtonListener(object : View.OnClickListener{
+                override fun onClick(p0: View?) {
+                    if (didUserCameFromAmbassadorScreen) {
+                        onBackPressed()
+                    } else {
+                        navigation.popBackStack("verification/main",inclusive = false)
 //                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+                    }
                 }
-            }
+            })
+//            setBackButtonListener{
+//
+//                if (didUserCameFromAmbassadorScreen) {
+//                    onBackPressed()
+//                } else {
+//                    navigation.popBackStack("verification/main",inclusive = false)
+////                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+//                }
+//            }
         }
 
         helpIconViewIV.setOnClickListener {
@@ -321,8 +330,8 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
-                    if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                        if (it.bankUploadDetailsDataModel.userHasPassBook!!) {
+                    if (it.bankUploadDetailsDataModel!!.userHasPassBook != null) {
+                        if (it.bankUploadDetailsDataModel!!.userHasPassBook!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

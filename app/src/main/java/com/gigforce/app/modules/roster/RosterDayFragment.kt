@@ -20,7 +20,7 @@ import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewMode
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 //import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.toDate
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.day_view_top_bar.*

@@ -16,8 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.giger_gigs.GigPage2Fragment
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.ViewModelProviderFactory

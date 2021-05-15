@@ -5,7 +5,7 @@ package com.gigforce.app.modules.gighistory
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.gigforce.giger_gigs.models.DocChange
-import com.gigforce.giger_gigs.models.Gig
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.app.modules.gighistory.models.GigsResponse
 import com.gigforce.core.SingleLiveEvent

@@ -197,4 +197,10 @@ private class BatchingSequence<T>(val source: Sequence<T>, val batchSize: Int) :
             else done()
         }
     }
+
+fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
+    return map {
+        if (block(it)) newValue else it
+    }
+}
 }

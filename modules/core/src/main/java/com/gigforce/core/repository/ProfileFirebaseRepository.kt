@@ -1,10 +1,10 @@
-package com.gigforce.app.modules.profile
+package com.gigforce.core.repository
 
 import android.util.Log
-import com.gigforce.app.core.replace
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
+import com.gigforce.core.extensions.replace
 import com.gigforce.core.extensions.toFirebaseTimeStamp
 import com.gigforce.core.utils.EventLogs.getOrThrow
 import com.gigforce.core.utils.EventLogs.setOrThrow

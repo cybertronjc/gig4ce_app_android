@@ -12,7 +12,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -21,20 +20,17 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.verification.gigerVerfication.*
-import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.utils.Lse
+import com.gigforce.verification.gigerVerfication.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
-//import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-//import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.panDataCorrectCB
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 
 class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
@@ -99,9 +95,9 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
             showTitle(getString(R.string.upload_pan_details))
             hideActionMenu()
-            setBackButtonListener{
+            setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
-            }
+            })
         }
 
         helpIconIV.setOnClickListener {
@@ -235,24 +231,24 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
                 if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
-                        if (it.panCardDetails!!.userHasPanCard != null) {
-                            if (it.panCardDetails!!.userHasPanCard!!) {
-                                setDataOnViewLayout(it)
-                            } else {
-                                setDataOnEditLayout(null)
-                                panCardAvailaibilityOptionRG.check(R.id.panNoRB)
-                            }
+                    if (it.panCardDetails!!.userHasPanCard != null) {
+                        if (it.panCardDetails!!.userHasPanCard!!) {
+                            setDataOnViewLayout(it)
                         } else {
-                            //Uncheck both and hide capture layout
                             setDataOnEditLayout(null)
-                            panCardAvailaibilityOptionRG.clearCheck()
-                            hidePanImageAndInfoLayout()
+                            panCardAvailaibilityOptionRG.check(R.id.panNoRB)
                         }
                     } else {
+                        //Uncheck both and hide capture layout
                         setDataOnEditLayout(null)
                         panCardAvailaibilityOptionRG.clearCheck()
                         hidePanImageAndInfoLayout()
                     }
+                } else {
+                    setDataOnEditLayout(null)
+                    panCardAvailaibilityOptionRG.clearCheck()
+                    hidePanImageAndInfoLayout()
+                }
 
             })
 
@@ -376,7 +372,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         panSubmitSliderBtn.isEnabled = true
 
         panSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
+            ResourcesCompat.getColor(resources, R.color.lipstick, null)
         )
     }
 
@@ -384,7 +380,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
         panSubmitSliderBtn.isEnabled = false
 
         panSubmitSliderBtn.strokeColor = ColorStateList.valueOf(
-                ResourcesCompat.getColor(resources, R.color.light_grey, null)
+            ResourcesCompat.getColor(resources, R.color.light_grey, null)
         )
 
     }
@@ -474,14 +470,14 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
                 showPanInfoCard(Uri.parse(panData.panCardImagePath))
             } else {
                 firebaseStorage
-                        .reference
-                        .child("verification")
-                        .child(panData.panCardImagePath!!)
-                        .downloadUrl.addOnSuccessListener {
-                            showPanInfoCard(it)
-                        }.addOnFailureListener {
-                            print("ee")
-                        }
+                    .reference
+                    .child("verification")
+                    .child(panData.panCardImagePath!!)
+                    .downloadUrl.addOnSuccessListener {
+                        showPanInfoCard(it)
+                    }.addOnFailureListener {
+                        print("ee")
+                    }
             }
         }
     }
