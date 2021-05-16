@@ -1,11 +1,11 @@
-package com.gigforce.core.viewmodels
+package com.gigforce.common_ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.*
 import com.gigforce.core.utils.Lce
 import com.google.firebase.auth.FirebaseAuth

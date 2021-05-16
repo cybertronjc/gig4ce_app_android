@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.core.NavFragmentsData
@@ -31,6 +32,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.PermissionUtils
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
@@ -319,12 +321,12 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                 }
                 val userHasPan = it.panCardDetails?.userHasPanCard ?: false
                 if (it.panCardDetails?.userHasPanCard != null && userHasPan) {
-                    panLayout.descTitleTV.text = it.panCardDetails.verifiedString
+                    panLayout.descTitleTV.text = it.panCardDetails!!.verifiedString
 
                     panLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.panCardDetails.state),
+                            it.getColorCodeForStatus(it.panCardDetails!!.state),
                             null
                         )
                     )
@@ -343,12 +345,12 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                 val userhasPassBook = it.bankUploadDetailsDataModel?.userHasPassBook ?: false
                 if (it.bankUploadDetailsDataModel?.userHasPassBook != null && userhasPassBook) {
                     bankDetailsLayout.descTitleTV.text =
-                        it.bankUploadDetailsDataModel.verifiedString
+                        it.bankUploadDetailsDataModel!!.verifiedString
                     bankDetailsLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
                             it.getColorCodeForStatus(
-                                it.bankUploadDetailsDataModel.state
+                                it.bankUploadDetailsDataModel!!.state
                             ),
                             null
                         )
@@ -367,11 +369,11 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
                 val userHasAadharCard = it.aadharCardDataModel?.userHasAadharCard ?: false
                 if (it.aadharCardDataModel?.userHasAadharCard != null && userHasAadharCard) {
-                    aadharLayout.descTitleTV.text = it.aadharCardDataModel.verifiedString
+                    aadharLayout.descTitleTV.text = it.aadharCardDataModel!!.verifiedString
                     aadharLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.aadharCardDataModel.state),
+                            it.getColorCodeForStatus(it.aadharCardDataModel!!.state),
                             null
                         )
                     )
@@ -389,11 +391,11 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
                 val userHasDL = it.drivingLicenseDataModel?.userHasDL ?: false
                 if (it.drivingLicenseDataModel?.userHasDL != null && userHasDL) {
-                    drivingLayout.descTitleTV.text = it.drivingLicenseDataModel.verifiedString
+                    drivingLayout.descTitleTV.text = it.drivingLicenseDataModel!!.verifiedString
                     drivingLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
                             resources,
-                            it.getColorCodeForStatus(it.drivingLicenseDataModel.state),
+                            it.getColorCodeForStatus(it.drivingLicenseDataModel!!.state),
                             null
                         )
                     )

@@ -20,10 +20,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.client_activation.client_activation.models.Role
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.HorizontaltemDecoration

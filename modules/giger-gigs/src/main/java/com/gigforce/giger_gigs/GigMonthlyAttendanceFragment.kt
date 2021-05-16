@@ -17,7 +17,7 @@ import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
@@ -134,7 +134,7 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
 
                 Glide.with(requireContext())
                     .load(companyLogo)
-                    .placeholder(getCircularProgressDrawable(requireContext()))
+                    .placeholder(getCircularProgressDrawable())
                     .into(company_logo_iv)
             } else {
                 val imageRef = FirebaseStorage.getInstance()
@@ -143,7 +143,7 @@ class GigMonthlyAttendanceFragment : Fragment(), GigAttendanceAdapterClickListen
 
                 Glide.with(requireContext())
                     .load(imageRef)
-                    .placeholder(getCircularProgressDrawable(requireContext()))
+                    .placeholder(getCircularProgressDrawable())
                     .into(company_logo_iv)
             }
         } else {

@@ -30,8 +30,8 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

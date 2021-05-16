@@ -11,29 +11,32 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.*
-import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.core.extensions.*
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.skip_btn
-import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.submitBtn
-import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.toolbar_layout
 import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
+import javax.inject.Inject
 
 
-class AddUserExperienceFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddUserExperienceFragment : Fragment(), IOnBackPressedOverride {
 
     private val interestAndExperienceViewModel: InterestAndExperienceViewModel by viewModels()
     private lateinit var userId: String
@@ -46,10 +49,11 @@ class AddUserExperienceFragment : BaseFragment() {
     private var vechiclesOwn: Array<String> = emptyArray()
     private val dateFormatter = SimpleDateFormat("MM/yyyy", Locale.getDefault())
 
+    @Inject lateinit var navigation : INavigation
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_add_experience, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_add_experience, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -360,14 +364,20 @@ class AddUserExperienceFragment : BaseFragment() {
 
                             if (it.content == null) {
                                 //All Exps filled
-                                navigate(
-                                    R.id.addUserCurrentAddressFragment, bundleOf(
-                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                                    )
-                                )
+                                navigation.navigateTo("userinfo/addUserCurrentAddressFragment",bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                                ))
+//                                navigate(
+//                                    R.id.addUserCurrentAddressFragment, bundleOf(
+//                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+//                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+//                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode
+//                                    )
+//                                )
                             } else {
 
                                 val driverQuestionOwnVehicle: List<String> =
@@ -401,17 +411,24 @@ class AddUserExperienceFragment : BaseFragment() {
 //                                        } else {
 //                                            emptyList()
 //                                        }
-
-                                navigate(
-                                    R.id.addUserExperienceFragment, bundleOf(
-                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                                        INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
-                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode,
-                                        INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
-                                    )
-                                )
+                                navigation.navigateTo("userinfo/addUserExperienceFragment",bundleOf(
+                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                                    INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
+                                    EnrollmentConstants.INTENT_EXTRA_MODE to mode,
+                                    INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
+                                ))
+//                                navigate(
+//                                    R.id.addUserExperienceFragment, bundleOf(
+//                                        EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                        EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+//                                        EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+//                                        INTENT_EXTRA_CURRENT_INTEREST_NAME to it.content,
+//                                        EnrollmentConstants.INTENT_EXTRA_MODE to mode,
+//                                        INTENT_EXTRA_VEHICLES_CAN_DRIVE to driverQuestionOwnVehicle.toTypedArray()
+//                                    )
+//                                )
                             }
                         }
                         is Lce.Error -> {

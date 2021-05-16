@@ -1,19 +1,17 @@
 package com.gigforce.app.di.implementations
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainApplication
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

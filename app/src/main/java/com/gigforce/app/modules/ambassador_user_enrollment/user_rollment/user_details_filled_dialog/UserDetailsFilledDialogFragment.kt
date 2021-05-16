@@ -14,12 +14,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.common.SendSmsViewModel
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lse
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 import kotlinx.android.synthetic.main.fragment_user_enrolled_dialog.*
 
 interface UserDetailsFilledDialogFragmentResultListener {

@@ -39,4 +39,10 @@ object AppConstants {
     const val INTENT_EXTRA_COURSE_ID = "course_id"
 
     const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
+
+    const val INTENT_EXTRA_TITLE = "title"
+    const val INTENT_EXTRA_CONTENT = "content"
+
+    const val INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT = "referral_link_with_text"
+    const val INTENT_EXTRA_REFERRAL_LINK = "referral_link"
 }

@@ -1,4 +1,4 @@
-package com.gigforce.core.repository
+package com.gigforce.common_ui.repository
 
 import android.util.Log
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository

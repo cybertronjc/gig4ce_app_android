@@ -31,14 +31,12 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.toBundle
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toBundle
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
 import com.gigforce.client_activation.client_activation.models.JobProfile
-//import com.gigforce.app.modules.chatmodule.viewModels.ChatHeadersViewModel
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus.Companion.STATUS_VERIFIED
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.app.modules.help.HelpViewModel
 import com.gigforce.app.modules.landingscreen.models.Tip
@@ -49,9 +47,8 @@ import com.gigforce.app.modules.preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.datamodels.profile.ProfileData
-//import com.gigforce.app.utils.*
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.common_ui.StringConstants
@@ -77,6 +74,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
 import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus.Companion.STATUS_VERIFIED
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.Lce
 import javax.inject.Inject

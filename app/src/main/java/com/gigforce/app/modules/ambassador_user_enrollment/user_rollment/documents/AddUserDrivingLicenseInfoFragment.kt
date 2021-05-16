@@ -21,14 +21,11 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details_filled_dialog.UserDetailsFilledDialogFragmentResultListener
-
-//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-//import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
-
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.extensions.gone
@@ -296,11 +293,15 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
     }
 
     private fun showWhyWeNeedThisDialog() {
-        WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_dl)
-        )
+        navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
+            AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
+            AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_dl)
+        ))
+//        WhyWeNeedThisBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            title = getString(R.string.why_do_we_need_this),
+//            content = getString(R.string.why_we_need_this_dl)
+//        )
     }
 
     private fun showGoBackConfirmationDialog() {

@@ -1174,6 +1174,7 @@ color accent_material_light
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
 color app_orange
+color app_red
 color attendance_chip_bck_colors
 color attendance_chip_stroke_colors
 color attendance_chip_text_colors

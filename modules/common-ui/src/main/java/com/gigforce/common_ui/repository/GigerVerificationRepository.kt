@@ -1,11 +1,12 @@
-package com.gigforce.verification.gigerVerfication
+package com.gigforce.common_ui.repository
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.google.firebase.firestore.DocumentReference
 
 class GigerVerificationRepository : BaseFirestoreDBRepository() {
 
-    override fun getCollectionName(): String = COLLECTION_NAME
+    override fun getCollectionName(): String =
+        COLLECTION_NAME
 
     companion object {
         private const val COLLECTION_NAME = "Verification"

@@ -15,8 +15,8 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.PermissionUtils
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.common_ui.utils.showViews

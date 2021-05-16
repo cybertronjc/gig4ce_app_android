@@ -19,6 +19,7 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
 import com.gigforce.core.AppConstants
@@ -32,7 +33,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_user_current_address.*
@@ -40,7 +41,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AddCurrentAddressFragment : Fragment() {
+class AddCurrentAddressFragment : Fragment(),IOnBackPressedOverride {
 
     private val viewModel: UserDetailsViewModel by activityViewModels()
     private val profileViewModel: ProfileViewModel by activityViewModels()

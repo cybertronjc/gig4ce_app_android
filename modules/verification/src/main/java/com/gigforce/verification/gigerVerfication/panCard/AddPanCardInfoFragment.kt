@@ -24,6 +24,10 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.utils.ImageSource
+import com.gigforce.core.utils.SelectImageSourceBottomSheetActionListener
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
@@ -218,8 +222,8 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
 
                 if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
-                    if (it.panCardDetails.userHasPanCard != null) {
-                        if (it.panCardDetails.userHasPanCard!!) {
+                    if (it.panCardDetails!!.userHasPanCard != null) {
+                        if (it.panCardDetails!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

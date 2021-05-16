@@ -13,12 +13,11 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
@@ -257,8 +256,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
-                    if (it.aadharCardDataModel.userHasAadharCard != null) {
-                        if (it.aadharCardDataModel.userHasAadharCard!!) {
+                    if (it.aadharCardDataModel!!.userHasAadharCard != null) {
+                        if (it.aadharCardDataModel!!.userHasAadharCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

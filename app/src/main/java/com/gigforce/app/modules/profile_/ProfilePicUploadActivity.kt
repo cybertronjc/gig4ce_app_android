@@ -19,11 +19,11 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.common_ui.widgets.ImagePicker
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.ClickOrSelectImageBottomSheet
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

@@ -11,14 +11,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.invisible
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrollViewModel
 import com.gigforce.app.modules.ambassador_user_enrollment.SendOtpResponseData
 import com.gigforce.core.datamodels.ambassador.EnrolledUser
+import com.gigforce.core.extensions.invisible
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
-//import com.gigforce.app.modules.ambassador_user_enrollment.models.EnrolledUser
-//import com.gigforce.app.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_sending_otp_for_ambassador_edit.*
 
@@ -40,7 +38,7 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
         ) {
             val frag = EditProfileConsentAndSendOtpDialogFragment()
             frag.arguments = bundleOf(
-                    INTENT_EXTRA_ENROLLED_USER to enrolledUser
+                INTENT_EXTRA_ENROLLED_USER to enrolledUser
             )
             frag.mOkayResultListener = okayClickListener
             frag.show(fragmentManager, TAG)
@@ -54,9 +52,9 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
     private lateinit var mOkayResultListener: UserDetailsFilledDialogFragmentResultListener
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_sending_otp_for_ambassador_edit, container, false)
     }
@@ -90,8 +88,8 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
             setBackgroundDrawableResource(R.drawable.dialog_round_bg)
 
             setLayout(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -111,33 +109,33 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
 
     private fun initViewModel() {
         viewModel
-                .sendOtpToPhoneNumber
-                .observe(viewLifecycleOwner, Observer {
-                    it ?: return@Observer
+            .sendOtpToPhoneNumber
+            .observe(viewLifecycleOwner, Observer {
+                it ?: return@Observer
 
-                    when (it) {
-                        Lce.Loading -> {
-                            send_otp_layout.invisible()
-                            loading_progresbar.visible()
-                        }
-                        is Lce.Content -> {
-
-                            Toast.makeText(requireContext(), "Otp Sent", Toast.LENGTH_SHORT).show()
-                            mOkayResultListener.onOtpSent(it.content)
-                            dismiss()
-                        }
-                        is Lce.Error -> {
-                            loading_progresbar.invisible()
-                            send_otp_layout.visible()
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setTitle("Error")
-                                    .setMessage(it.error)
-                                    .setPositiveButton("Okay") { _, _ -> }
-                                    .show()
-                        }
+                when (it) {
+                    Lce.Loading -> {
+                        send_otp_layout.invisible()
+                        loading_progresbar.visible()
                     }
-                })
+                    is Lce.Content -> {
+
+                        Toast.makeText(requireContext(), "Otp Sent", Toast.LENGTH_SHORT).show()
+                        mOkayResultListener.onOtpSent(it.content)
+                        dismiss()
+                    }
+                    is Lce.Error -> {
+                        loading_progresbar.invisible()
+                        send_otp_layout.visible()
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage(it.error)
+                            .setPositiveButton("Okay") { _, _ -> }
+                            .show()
+                    }
+                }
+            })
     }
 
 

@@ -8,7 +8,7 @@ import com.gigforce.app.modules.preferences.location.CitiesRepository
 import com.gigforce.app.modules.preferences.location.models.LocationPreferenceModel
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.core.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 
 import com.gigforce.core.datamodels.profile.AddressFirestoreModel
 import com.gigforce.core.datamodels.profile.ProfileData

@@ -23,10 +23,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.ViewModelProviderFactory

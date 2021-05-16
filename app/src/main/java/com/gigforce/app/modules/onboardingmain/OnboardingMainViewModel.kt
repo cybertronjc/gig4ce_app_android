@@ -3,7 +3,7 @@ package com.gigforce.app.modules.onboardingmain
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.core.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.EnrollmentInfo
 import com.gigforce.core.datamodels.profile.Invites
 import com.gigforce.core.datamodels.profile.ProfileData

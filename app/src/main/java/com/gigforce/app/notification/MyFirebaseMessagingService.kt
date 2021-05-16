@@ -1,6 +1,5 @@
 package com.gigforce.app.notification
 
-import android.R.id.message
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService

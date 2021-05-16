@@ -6,16 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectChipWithText
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectChipWithText
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.google.android.material.chip.Chip
@@ -23,12 +27,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.michaldrabik.classicmaterialtimepicker.CmtpDateDialogFragment
 import com.michaldrabik.classicmaterialtimepicker.OnDatePickedListener
 import com.michaldrabik.classicmaterialtimepicker.model.CmtpDate
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_details_main.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
+@AndroidEntryPoint
+class AddUserDetailsFragment : Fragment(), OnDatePickedListener, IOnBackPressedOverride {
 
     private val viewModel: UserDetailsViewModel by viewModels()
 
@@ -38,6 +45,8 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
     private var mode: Int = EnrollmentConstants.MODE_ADD
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+    @Inject lateinit var navigation : INavigation
 
 //    private val dateOfBirthPicker: DatePickerDialog by lazy {
 //
@@ -83,7 +92,7 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_user_details, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_user_details, container,false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -148,19 +157,24 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
         toolbar_layout.apply {
             showTitle(getString(R.string.user_details))
             hideActionMenu()
-            setBackButtonListener {
+            setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
-            }
+            })
         }
 
         skip_btn.setOnClickListener {
-            navigate(
-                R.id.addProfilePictureFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
-                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                )
-            )
+            navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                EnrollmentConstants.INTENT_EXTRA_MODE to mode
+            ))
+//            navigate(
+//                R.id.addProfilePictureFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+//                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+//                )
+//            )
         }
 
         gender_chip_group.setOnCheckedChangeListener { group, checkedId ->
@@ -271,13 +285,18 @@ class AddUserDetailsFragment : BaseFragment(), OnDatePickedListener {
 //                            submitBtn.hideProgress()
 
                         showToast(getString(R.string.user_details_submitted))
-                        navigate(
-                            R.id.addProfilePictureFragment, bundleOf(
-                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
-                                EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                            )
-                        )
+                        navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
+                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                            EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+                            EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                        ))
+//                        navigate(
+//                            R.id.addProfilePictureFragment, bundleOf(
+//                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to user_name_et.text.toString(),
+//                                EnrollmentConstants.INTENT_EXTRA_MODE to mode
+//                            )
+//                        )
                     }
                     is Lse.Error -> {
 //                            submitBtn.hideProgress()

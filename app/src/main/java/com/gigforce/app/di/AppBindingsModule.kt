@@ -4,7 +4,7 @@ import com.gigforce.app.di.implementations.EventTrackerImp
 import com.gigforce.app.di.implementations.BuildConfigImp
 import com.gigforce.app.di.implementations.BuildConfigVMImp
 import com.gigforce.app.di.implementations.MyViewHolderFactory
-import com.gigforce.core.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository

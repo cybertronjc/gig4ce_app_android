@@ -3,8 +3,10 @@ package com.gigforce.app.nav
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
@@ -15,6 +17,7 @@ import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
@@ -123,5 +126,11 @@ class NavManagerImpl @Inject constructor(
         fragment.startActivityForResult(photoCropIntent, requestCodeUploadPanImage)
     }
 
+
+    override fun navigateToWhyNeedThisBSFragment(childFragmentManager: FragmentManager,bundle : Bundle){
+        val fragment = WhyWeNeedThisBottomSheet()
+        fragment.arguments = bundle
+        fragment.show(childFragmentManager, WhyWeNeedThisBottomSheet.TAG)
+    }
 
 }

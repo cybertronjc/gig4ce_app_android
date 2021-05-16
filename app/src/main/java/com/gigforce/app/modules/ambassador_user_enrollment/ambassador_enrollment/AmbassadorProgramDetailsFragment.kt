@@ -40,7 +40,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 
-//import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.learning.learning.LearningViewModel
 
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint

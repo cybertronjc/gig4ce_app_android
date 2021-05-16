@@ -37,8 +37,8 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 //import com.gigforce.app.modules.client_activation.models.JobProfile
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -52,7 +52,7 @@ import com.gigforce.learning.learning.LearningViewModel
 import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.client_activation.client_activation.models.JobProfile
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants

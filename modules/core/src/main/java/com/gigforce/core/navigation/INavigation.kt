@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavOptions
 
 interface INavigation {
@@ -21,4 +22,5 @@ interface INavigation {
     fun navigateToPhotoCrop(photoCropIntent: Intent, requestCodeUploadPanImage: Int, requireContext: Context, fragment: Fragment)
     fun navigateToAttendanceImageCaptureActivity(photoCropIntent: Intent,requestCodeUploadPanImage: Int,requireContext: Context, fragment: Fragment)
     fun navigateUp()
+    fun navigateToWhyNeedThisBSFragment(childFragmentManager: FragmentManager, bundle : Bundle)
 }

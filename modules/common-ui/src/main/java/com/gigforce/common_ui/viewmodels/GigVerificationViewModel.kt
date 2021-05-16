@@ -1,4 +1,4 @@
-package com.gigforce.verification.gigerVerfication
+package com.gigforce.common_ui.viewmodels
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -10,9 +10,9 @@ import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.*
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
-import com.gigforce.core.utils.EventLogs.setOrThrow
+import com.gigforce.common_ui.repository.GigerVerificationRepository
+import com.gigforce.core.extensions.setOrThrow
 import com.gigforce.core.utils.Lse
-import com.gigforce.verification.R
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel

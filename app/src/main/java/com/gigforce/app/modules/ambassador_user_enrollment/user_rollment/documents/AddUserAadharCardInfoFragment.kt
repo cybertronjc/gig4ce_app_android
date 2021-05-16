@@ -23,13 +23,15 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
+import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 
-//import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
 //import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -262,11 +264,15 @@ class AddUserAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showWhyWeNeedThisBottomSheet() {
-        WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_we_need_this_aadhar)
-        )
+        navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
+                AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
+        AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_we_need_this_aadhar)
+        ))
+//        WhyWeNeedThisBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            title = getString(R.string.why_do_we_need_this),
+//            content = getString(R.string.why_we_need_this_aadhar)
+//        )
     }
 
     private fun initViewModel() {

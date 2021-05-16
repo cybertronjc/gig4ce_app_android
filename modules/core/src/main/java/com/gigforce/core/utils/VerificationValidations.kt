@@ -1,4 +1,4 @@
-package com.gigforce.verification.gigerVerfication
+package com.gigforce.core.utils
 
 import java.util.regex.Pattern
 

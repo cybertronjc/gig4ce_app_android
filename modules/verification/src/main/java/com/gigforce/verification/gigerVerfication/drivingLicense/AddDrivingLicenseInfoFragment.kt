@@ -14,14 +14,12 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
@@ -302,8 +300,8 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 progressBar.gone()
 
                 if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                    if (it.drivingLicenseDataModel.userHasDL != null) {
-                        if (it.drivingLicenseDataModel.userHasDL!!) {
+                    if (it.drivingLicenseDataModel!!.userHasDL != null) {
+                        if (it.drivingLicenseDataModel!!.userHasDL!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

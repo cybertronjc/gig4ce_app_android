@@ -12,8 +12,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.common_ui.core.InputFilterMinMax
 import com.gigforce.core.utils.PermissionUtils
 import com.google.android.material.chip.Chip

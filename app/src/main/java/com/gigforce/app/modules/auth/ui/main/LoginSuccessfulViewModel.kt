@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
 import com.gigforce.giger_gigs.repositories.GigsRepository
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot

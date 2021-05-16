@@ -18,7 +18,7 @@ import com.gigforce.client_activation.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp

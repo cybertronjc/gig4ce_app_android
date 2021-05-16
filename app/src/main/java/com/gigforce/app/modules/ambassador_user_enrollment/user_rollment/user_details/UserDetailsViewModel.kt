@@ -8,10 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.repository.ProfileFirebaseRepository
-import com.gigforce.core.utils.Lce
-import com.gigforce.core.utils.Lse
 import com.gigforce.common_ui.configrepository.AppConfigurationRepository
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.City
 import com.gigforce.core.datamodels.State
 import com.gigforce.core.datamodels.ambassador.PincodeResponse
@@ -21,6 +19,8 @@ import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.gigforce.core.utils.EventLogs.putBytesOrThrow
 import com.gigforce.core.utils.EventLogs.putFileOrThrow
 import com.gigforce.core.utils.ImageUtils
+import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.Lse
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
@@ -91,28 +91,28 @@ class UserDetailsViewModel @Inject constructor(
 
 
     fun updateUserCurrentAddressDetails(
-            uid: String?,
-            pinCode: String,
-            addressLine1: String,
-            addressLine2: String,
-            state: String,
-            city: String,
-            homeCity: String = "",
-            homeState: String = ""
+        uid: String?,
+        pinCode: String,
+        addressLine1: String,
+        addressLine2: String,
+        state: String,
+        city: String,
+        homeCity: String = "",
+        homeState: String = ""
     ) = viewModelScope.launch {
 
         _submitUserDetailsState.postValue(Lse.loading())
         try {
 
             profileFirebaseRepository.updateCurrentAddressDetails(
-                    uid = uid,
-                    pinCode = pinCode,
-                    addressLine1 = addressLine1,
-                    addressLine2 = addressLine2,
-                    state = state,
-                    city = city,
-                    homeCity = homeCity,
-                    homeState = homeState
+                uid = uid,
+                pinCode = pinCode,
+                addressLine1 = addressLine1,
+                addressLine2 = addressLine2,
+                state = state,
+                city = city,
+                homeCity = homeCity,
+                homeState = homeState
             )
 
             if (uid != null)

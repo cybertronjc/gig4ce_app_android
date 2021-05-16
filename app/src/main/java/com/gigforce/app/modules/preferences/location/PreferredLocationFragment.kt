@@ -18,7 +18,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.preferences.SharedPreferenceViewModel
-import com.gigforce.app.core.setDarkStatusBarTheme
+import com.gigforce.core.extensions.setDarkStatusBarTheme
 import kotlinx.android.synthetic.main.preferred_location_fragment.*
 
 

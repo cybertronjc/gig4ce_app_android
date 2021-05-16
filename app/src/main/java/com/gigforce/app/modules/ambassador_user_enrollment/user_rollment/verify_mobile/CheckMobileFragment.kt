@@ -4,27 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.UtilMethods
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
 
-class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentActionListener {
+@AndroidEntryPoint
+class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionListener {
 
     private val viewModel: VerifyUserMobileViewModel by activityViewModels()
+    private lateinit var navigation : INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_check_mobile, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_check_mobile, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,9 +41,9 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
         }
 
         toolbar_layout.hideActionMenu()
-        toolbar_layout.setBackButtonListener{
+        toolbar_layout.setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()
-        }
+        })
     }
 
     private fun validateDataAndsubmit() {
@@ -85,12 +87,17 @@ class CheckMobileFragment : BaseFragment(), UserAlreadyExistDialogFragmentAction
                             //show user already registered dialog
                             showMobileAlreadyRegisterdDialog()
                         } else {
-                            navigate(
-                                R.id.confirmOtpFragment, bundleOf(
-                                    ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
-                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
-                                )
-                            )
+                            navigation.navigateTo("")
+                            navigation.navigateTo("userinfo/confirmOtpFragment",bundleOf(
+                                ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
+                                ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
+                            ))
+//                            navigate(
+//                                R.id.confirmOtpFragment, bundleOf(
+//                                    ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
+//                                    ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken
+//                                )
+//                            )
                         }
                     }
                     is Lce.Error -> {

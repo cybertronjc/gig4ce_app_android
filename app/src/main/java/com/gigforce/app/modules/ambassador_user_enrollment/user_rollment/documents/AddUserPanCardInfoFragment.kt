@@ -11,29 +11,39 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.verification.PanCardDataModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.ImageSource
 import com.gigforce.core.utils.Lse
-import com.gigforce.verification.gigerVerfication.*
+import com.gigforce.core.utils.SelectImageSourceBottomSheetActionListener
+import com.gigforce.core.utils.VerificationValidations
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
+import javax.inject.Inject
 
-class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetActionListener {
+@AndroidEntryPoint
+class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionListener, IOnBackPressedOverride {
 
     companion object {
         const val REQUEST_CODE_UPLOAD_PAN_IMAGE = 2333
@@ -50,10 +60,12 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     private var gigerVerificationStatus: GigerVerificationStatus? = null
     private var panCardDataModel: PanCardDataModel? = null
 
+    @Inject lateinit var navigation : INavigation
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_add_pan_card_info, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_ambsd_add_pan_card_info, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -138,23 +150,29 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
 
         ambsd_pan_skip_btn.setOnClickListener {
-
-            navigate(
-                R.id.addUserAadharCardInfoFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
-            )
+            navigation.navigateTo("userinfo/addUserAadharCardInfoFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            ))
+//            navigate(
+//                R.id.addUserAadharCardInfoFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                )
+//            )
         }
 
         ambsd_pan_edit_skip_btn.setOnClickListener {
-
-            navigate(
-                R.id.addUserAadharCardInfoFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-                )
-            )
+            navigation.navigateTo("userinfo/addUserAadharCardInfoFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+            ))
+//            navigate(
+//                R.id.addUserAadharCardInfoFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//                )
+//            )
         }
 
         editLayout.setOnClickListener {
@@ -213,11 +231,17 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
     }
 
     private fun showWhyWeNeedThisDialog() {
-        WhyWeNeedThisBottomSheet.launch(
-            childFragmentManager = childFragmentManager,
-            title = getString(R.string.why_do_we_need_this),
-            content = getString(R.string.why_do_we_need_this_pan)
-        )
+
+        navigation.navigateToWhyNeedThisBSFragment(childFragmentManager,bundleOf(
+            AppConstants.INTENT_EXTRA_TITLE to getString(R.string.why_do_we_need_this),
+            AppConstants.INTENT_EXTRA_CONTENT to getString(R.string.why_do_we_need_this_pan)
+        ))
+
+//        WhyWeNeedThisBottomSheet.launch(
+//            childFragmentManager = childFragmentManager,
+//            title = getString(R.string.why_do_we_need_this),
+//            content = getString(R.string.why_do_we_need_this_pan)
+//        )
     }
 
 
@@ -279,13 +303,16 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
         if (panYesRB.isChecked)
             showToast(getString(R.string.pan_details_uploaded))
-
-        navigate(
-            R.id.addUserAadharCardInfoFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
-            )
-        )
+        navigation.navigateTo("userinfo/addUserAadharCardInfoFragment",bundleOf(
+            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+        ))
+//        navigate(
+//            R.id.addUserAadharCardInfoFragment, bundleOf(
+//                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName
+//            )
+//        )
     }
 
     private fun showGoBackConfirmationDialog() {
@@ -320,13 +347,15 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 //            selectImageSourceBottomSheetActionListener = this
 //        )
 
-        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_PURPOSE, PhotoCrop.PURPOSE_VERIFICATION)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FOLDER_NAME, "/verification/")
+//        val photoCropIntent = Intent(requireContext(), PhotoCrop::class.java)
+        val photoCropIntent = Intent()
+        photoCropIntent.putExtra("purpose", "verification")
+        photoCropIntent.putExtra("fbDir", "/verification/")
         photoCropIntent.putExtra("folder", "verification")
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_DETECT_FACE, 0)
-        photoCropIntent.putExtra(PhotoCrop.INTENT_EXTRA_FIREBASE_FILE_NAME, "pan_card.jpg")
-        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
+        photoCropIntent.putExtra("detectFace", 0)
+        photoCropIntent.putExtra("file", "pan_card.jpg")
+        navigation.navigateToPhotoCrop(photoCropIntent,REQUEST_CODE_UPLOAD_PAN_IMAGE,requireContext(),this)
+//        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_PAN_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -335,7 +364,7 @@ class AddUserPanCardInfoFragment : BaseFragment(), SelectImageSourceBottomSheetA
 
             if (resultCode == Activity.RESULT_OK) {
                 clickedImagePath =
-                    data?.getParcelableExtra(PhotoCrop.INTENT_EXTRA_RESULTING_FILE_URI)
+                    data?.getParcelableExtra("uri")
                 showPanInfoCard(clickedImagePath!!)
 
                 enableSubmitButton()

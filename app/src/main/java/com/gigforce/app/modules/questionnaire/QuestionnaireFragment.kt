@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.client_activation.client_activation.DrivingCertSuccessDialog
 import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.client_activation.client_activation.models.Cities

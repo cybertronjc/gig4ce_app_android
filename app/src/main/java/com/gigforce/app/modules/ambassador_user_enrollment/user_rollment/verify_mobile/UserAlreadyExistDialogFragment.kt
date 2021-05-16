@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.gigforce.app.R
-import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import kotlinx.android.synthetic.main.fragment_user_already_exist_dialog.*
 
 interface UserAlreadyExistDialogFragmentActionListener {

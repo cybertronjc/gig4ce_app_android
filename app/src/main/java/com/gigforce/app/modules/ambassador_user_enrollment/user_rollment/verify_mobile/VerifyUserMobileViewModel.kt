@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
-import com.gigforce.core.repository.ProfileFirebaseRepository
-import com.gigforce.core.utils.Lce
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.ambassador.CreateUserResponse
 import com.gigforce.core.datamodels.ambassador.RegisterMobileNoResponse
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
+import com.gigforce.core.utils.Lce
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,7 +35,8 @@ class VerifyUserMobileViewModel @Inject constructor(
 
         _checkMobileNo.postValue(Lce.loading())
         try {
-            val repsonse = userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
+            val repsonse =
+                userEnrollmentRepository.checkMobileForExistingRegistrationElseSendOtp(mobileNo)
             _checkMobileNo.value = Lce.content(repsonse)
 //            _checkMobileNo.value = null
         } catch (e: Exception) {
@@ -66,11 +67,13 @@ class VerifyUserMobileViewModel @Inject constructor(
             val verifyOtpResponse = userEnrollmentRepository.verifyOtp(token, otp)
             if (mode == EnrollmentConstants.MODE_EDIT) {
                 if (verifyOtpResponse.isVerified) {
-                    _createProfile.value = Lce.content(CreateUserResponse(
-                        phoneNumber = mobile,
-                        uid = null,
-                        error = null
-                    ))
+                    _createProfile.value = Lce.content(
+                        CreateUserResponse(
+                            phoneNumber = mobile,
+                            uid = null,
+                            error = null
+                        )
+                    )
 
                     if (userId != null) {
                         userEnrollmentRepository.addEditLocationInLocationLogs(
@@ -86,7 +89,8 @@ class VerifyUserMobileViewModel @Inject constructor(
             } else {
                 if (verifyOtpResponse.isVerified) {
                     val profile = profileFirebaseRepository.getProfileData()
-                    val response = userEnrollmentRepository.createUser(createUserUrl = buildConfig.getCreateUserUrl(),
+                    val response = userEnrollmentRepository.createUser(
+                        createUserUrl = buildConfig.getCreateUserUrl(),
                         mobile = mobile,
                         enrolledByName = profile.name,
                         latitude = latitude,

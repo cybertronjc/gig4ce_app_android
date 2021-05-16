@@ -16,33 +16,33 @@ import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
-import com.gigforce.core.viewmodels.ProfileViewModel
-import com.gigforce.app.modules.referrals.ReferralsFragment
-//import com.gigforce.app.modules.chatmodule.ui.ChatFragment
-import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.decors.VerticalItemDecorator
+import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.views.GigforceToolbar
+import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.ambassador.EnrolledUser
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.di.interfaces.IBuildConfig
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.PermissionUtils
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -50,17 +50,13 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.*
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.bank_details_check_iv
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.bank_details_layout
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.current_address_check_iv
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.current_address_layout
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.profile_photo_layout
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.profile_pic_check_iv
-import kotlinx.android.synthetic.main.fragment_embassador_enrolled_users_list.toolbar_layout
+import javax.inject.Inject
 
-class AmbassadorEnrolledUsersListFragment : BaseFragment(),
-
+@AndroidEntryPoint
+class AmbassadorEnrolledUsersListFragment : Fragment(),
+    IOnBackPressedOverride,
     EnrolledUsersRecyclerAdapter.EnrolledUsersRecyclerAdapterClickListener,
     LocationUpdates.LocationUpdateCallbacks, UserDetailsFilledDialogFragmentResultListener {
     private val locationUpdates: LocationUpdates by lazy {
@@ -78,6 +74,8 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     private var profileData: ProfileData? = null
     private var gigerVerificationStatus: GigerVerificationStatus? = null
 
+    @Inject lateinit var navigation : INavigation
+    @Inject lateinit var buildConfig:IBuildConfig
     private val enrolledUserAdapter: EnrolledUsersRecyclerAdapter by lazy {
         EnrolledUsersRecyclerAdapter(requireContext()).apply {
             this.setListener(this@AmbassadorEnrolledUsersListFragment)
@@ -86,13 +84,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
     private val onBackPressCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            Log.d("TAg","Back preseed")
+            Log.d("TAg", "Back preseed")
 
             if (toolbar_layout.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
                 toolbar_layout.hideSearchOption()
                 enrolledUserAdapter.filter.filter("")
-            }  else {
+            } else {
                 isEnabled = false
                 activity?.onBackPressed()
             }
@@ -103,7 +101,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_embassador_enrolled_users_list, inflater, container)
+    ) = inflater.inflate(R.layout.fragment_embassador_enrolled_users_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -114,35 +112,48 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     private fun initUi() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,onBackPressCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressCallback
+        )
         onBackPressCallback.isEnabled = true
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(
-                R.id.addBankDetailsInfoFragment, bundleOf(
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
-                )
-            )
+            navigation.navigateTo("userinfo/addBankDetailsInfoFragment",bundleOf(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            ))
+//            navigate(
+//                R.id.addBankDetailsInfoFragment, bundleOf(
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                )
+//            )
         }
 
         current_address_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(
-                R.id.addCurrentAddressFragment, bundleOf(
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
-                )
-            )
+            navigation.navigateTo("userinfo/addCurrentAddressFragment",bundleOf(
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            ))
+//            navigate(
+//                R.id.addCurrentAddressFragment, bundleOf(
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                )
+//            )
         }
 
         profile_photo_layout.setOnClickListener {
             redirectToNextStep = true
-            navigate(
-                R.id.addProfilePictureFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
-                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
-                )
-            )
+            navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+                AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+            ))
+//            navigate(
+//                R.id.addProfilePictureFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
+//                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
+//                )
+//            )
         }
 
         toolbar_layout.apply {
@@ -157,15 +168,14 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                 }
             })
 
-            setBackButtonListener {
-
+            setBackButtonListener(View.OnClickListener {
                 if (toolbar_layout.isSearchCurrentlyShown) {
                     hideSoftKeyboard()
                     enrolledUserAdapter.filter.filter("")
-                }  else {
+                } else {
                     activity?.onBackPressed()
                 }
-            }
+            })
         }
 
         enrolled_user_chipgroup.setOnCheckedChangeListener { group, checkedId ->
@@ -201,11 +211,13 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
 
         create_profile_btn.setOnClickListener {
-            navigate(R.id.checkMobileFragment)
+            navigation.navigateTo("userinfo/checkMobileFragment")
+//            navigate(R.id.checkMobileFragment)
         }
 
         createProfileBtn.setOnClickListener {
-            navigate(R.id.checkMobileFragment)
+            navigation.navigateTo("userinfo/checkMobileFragment")
+//            navigate(R.id.checkMobileFragment)
         }
 
         enrolled_users_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
@@ -342,11 +354,10 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
 
-
     fun buildDeepLink(deepLink: Uri): Uri {
         val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
             .setLink(Uri.parse(deepLink.toString()))
-            .setDomainUriPrefix(BuildConfig.REFERRAL_BASE_URL)
+            .setDomainUriPrefix(buildConfig.getReferralBaseUrl())
             // Open links with this app on Android
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
             // Open links with com.example.ios on iOS
@@ -363,15 +374,19 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     private fun shareToAnyApp(url: String) {
-        if(!isAdded) return
+        if (!isAdded) return
 
         val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
-        navigate(
-            R.id.referrals_fragment, bundleOf(
-                ReferralsFragment.INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT to shareMessage,
-                ReferralsFragment.INTENT_EXTRA_REFERRAL_LINK to url
-            )
-        )
+        navigation.navigateTo("referrals",bundleOf(
+            AppConstants.INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT to shareMessage,
+            AppConstants.INTENT_EXTRA_REFERRAL_LINK to url
+        ))
+//        navigate(
+//            R.id.referrals_fragment, bundleOf(
+//                AppConstants.INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT to shareMessage,
+//                AppConstants.INTENT_EXTRA_REFERRAL_LINK to url
+//            )
+//        )
     }
 
     override fun onUserEditButtonclicked(enrolledUser: EnrolledUser) {
@@ -383,43 +398,50 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     }
 
     override fun onOtpSent(sendOtpResponseData: SendOtpResponseData) {
-        navigate(
-            R.id.confirmOtpFragment, bundleOf(
-                EnrollmentConstants.INTENT_EXTRA_USER_ID to sendOtpResponseData.enrolledUser.uid,
-                EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to sendOtpResponseData.enrolledUser.mobileNumber,
-                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_EDIT,
-                ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to sendOtpResponseData.enrolledUser.mobileNumber,
-                ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to sendOtpResponseData.checkMobileResponse.verificationToken
-            )
-        )
+        navigation.navigateTo("userinfo/confirmOtpFragment",bundleOf(
+            EnrollmentConstants.INTENT_EXTRA_USER_ID to sendOtpResponseData.enrolledUser.uid,
+            EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to sendOtpResponseData.enrolledUser.mobileNumber,
+            EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_EDIT,
+            ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to sendOtpResponseData.enrolledUser.mobileNumber,
+            ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to sendOtpResponseData.checkMobileResponse.verificationToken
+        ))
+//        navigate(
+//            R.id.confirmOtpFragment, bundleOf(
+//                EnrollmentConstants.INTENT_EXTRA_USER_ID to sendOtpResponseData.enrolledUser.uid,
+//                EnrollmentConstants.INTENT_EXTRA_PHONE_NUMBER to sendOtpResponseData.enrolledUser.mobileNumber,
+//                EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_EDIT,
+//                ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to sendOtpResponseData.enrolledUser.mobileNumber,
+//                ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to sendOtpResponseData.checkMobileResponse.verificationToken
+//            )
+//        )
     }
 
     override fun openChat(enrollUser: EnrolledUser) {
         val bundle = Bundle()
 
-        bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE, ChatConstants.CHAT_TYPE_USER)
+        bundle.putString(AppConstants.INTENT_EXTRA_CHAT_TYPE, AppConstants.CHAT_TYPE_USER)
         bundle.putString(
-            ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
+            AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE,
             enrollUser.profileAvatarThumbnail
         )
-        bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
+        bundle.putString(AppConstants.INTENT_EXTRA_OTHER_USER_NAME, enrollUser.name)
 
-        bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID, "")
-        bundle.putString(ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID, enrollUser.id)
+        bundle.putString(AppConstants.INTENT_EXTRA_CHAT_HEADER_ID, "")
+        bundle.putString(AppConstants.INTENT_EXTRA_OTHER_USER_ID, enrollUser.id)
 
         bundle.putString(StringConstants.MOBILE_NUMBER.value, enrollUser.mobileNumber)
         bundle.putBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, true)
-        navigate(R.id.chatPageFragment, bundle)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
+        navigation.navigateTo("chats/chatPage",bundle)
+//        navigate(R.id.chatPageFragment, bundle)
     }
 
     override fun onResume() {
         super.onResume()
 //        StatusBarUtil.setDarkMode(requireActivity())
-        StatusBarUtil.setColorNoTranslucent(requireActivity(),ResourcesCompat.getColor(resources,R.color.lipstick_two,null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.lipstick_two, null)
+        )
         locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
         locationUpdates.setLocationUpdateCallbacks(this)
     }
@@ -427,7 +449,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun onPause() {
         super.onPause()
         try {
-            locationUpdates.stopLocationUpdates()
+            locationUpdates.stopLocationUpdates(activity)
         } catch (e: Exception) {
             e.printStackTrace()
         }

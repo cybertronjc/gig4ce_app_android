@@ -5,27 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.selectChipsWithText
-import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.selectChipsWithText
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
-import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.skip_btn
-import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.submitBtn
+import javax.inject.Inject
 
-class AddUserInterestFragment : BaseFragment() {
+@AndroidEntryPoint
+class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
 
     private val interestAndExperienceViewModel: InterestAndExperienceViewModel by viewModels()
     private val viewModel: UserDetailsViewModel by viewModels()
@@ -34,10 +37,12 @@ class AddUserInterestFragment : BaseFragment() {
     private var pincode = ""
     private var mode: Int = EnrollmentConstants.MODE_ADD
 
+    @Inject lateinit var navigation : INavigation
+
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ) = inflateView(R.layout.fragment_ambsd_user_interest, inflater, container)
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = inflater.inflate(R.layout.fragment_ambsd_user_interest, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,7 +55,7 @@ class AddUserInterestFragment : BaseFragment() {
 
     private fun getUserInterest() {
 
-        if(mode == EnrollmentConstants.MODE_EDIT) {
+        if (mode == EnrollmentConstants.MODE_EDIT) {
             viewModel.getProfileForUser(userId)
         } else {
             showMainLayout(shouldShowEditAction = false)
@@ -100,10 +105,10 @@ class AddUserInterestFragment : BaseFragment() {
             if (interest_chipgroup.checkedChipIds.size > 3) {
 
                 MaterialAlertDialogBuilder(requireContext())
-                        .setMessage("You can select only max 3 Chips")
-                        .setPositiveButton(
-                                getString(R.string.okay).capitalize()
-                        ) { _, _ -> }.show()
+                    .setMessage("You can select only max 3 Chips")
+                    .setPositiveButton(
+                        getString(R.string.okay).capitalize()
+                    ) { _, _ -> }.show()
 
                 return@setOnClickListener
             }
@@ -113,21 +118,28 @@ class AddUserInterestFragment : BaseFragment() {
         }
 
         skip_btn.setOnClickListener {
-
-            navigate(R.id.addUserExperienceFragment, bundleOf(
-                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+            navigation.navigateTo("userinfo/addUserExperienceFragment",bundleOf(
+                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                EnrollmentConstants.INTENT_EXTRA_MODE to mode
             ))
+//            navigate(
+//                R.id.addUserExperienceFragment, bundleOf(
+//                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+//                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+//                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
+//                )
+//            )
         }
 
         toolbar_layout.apply {
             showTitle(getString(R.string.add_interest))
             hideActionMenu()
-            setBackButtonListener{
+            setBackButtonListener(View.OnClickListener {
                 showGoBackConfirmationDialog()
-            }
+            })
         }
     }
 
@@ -145,65 +157,73 @@ class AddUserInterestFragment : BaseFragment() {
     private fun initViewModel() {
 
         viewModel.profile
-                .observe(viewLifecycleOwner, Observer {
-                    when (it) {
-                        Lce.Loading -> {
-                            user_interest_main_layout.gone()
-                            user_interest_error.gone()
-                            user_interest_progressbar.visible()
-                        }
-                        is Lce.Content -> {
-                            showMainLayout(
-                                    shouldShowEditAction = true
-                            )
-
-                            setDataOnView(it.content)
-                        }
-                        is Lce.Error -> {
-                            user_interest_progressbar.gone()
-                            user_interest_main_layout.gone()
-                            user_interest_error.visible()
-
-                            user_interest_error.text = "Unable to fetch interest detail, ${it.error}"
-                        }
+            .observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    Lce.Loading -> {
+                        user_interest_main_layout.gone()
+                        user_interest_error.gone()
+                        user_interest_progressbar.visible()
                     }
-                })
+                    is Lce.Content -> {
+                        showMainLayout(
+                            shouldShowEditAction = true
+                        )
+
+                        setDataOnView(it.content)
+                    }
+                    is Lce.Error -> {
+                        user_interest_progressbar.gone()
+                        user_interest_main_layout.gone()
+                        user_interest_error.visible()
+
+                        user_interest_error.text = "Unable to fetch interest detail, ${it.error}"
+                    }
+                }
+            })
 
 
         interestAndExperienceViewModel
-                .submitInterestState
-                .observe(viewLifecycleOwner, Observer {
+            .submitInterestState
+            .observe(viewLifecycleOwner, Observer {
 
-                    when (it) {
-                        Lse.Loading -> {
+                when (it) {
+                    Lse.Loading -> {
 
-                        }
-                        Lse.Success -> {
-                            navigate(R.id.addUserExperienceFragment, bundleOf(
-                                    EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
-                                    EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
-                                    EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
-                                    EnrollmentConstants.INTENT_EXTRA_MODE to mode
-                                    ))
-                        }
-                        is Lse.Error -> {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                    .setMessage(getString(R.string.unable_to_submit_interest))
-                                    .setMessage(it.error)
-                                    .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
-                                    .show()
-                        }
                     }
-                })
+                    Lse.Success -> {
+                        navigation.navigateTo("userinfo/addUserExperienceFragment",bundleOf(
+                            EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+                            EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+                            EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+                            EnrollmentConstants.INTENT_EXTRA_MODE to mode
+                        ))
+//                        navigate(
+//                            R.id.addUserExperienceFragment, bundleOf(
+//                                EnrollmentConstants.INTENT_EXTRA_USER_ID to userId,
+//                                EnrollmentConstants.INTENT_EXTRA_USER_NAME to userName,
+//                                EnrollmentConstants.INTENT_EXTRA_PIN_CODE to pincode,
+//                                EnrollmentConstants.INTENT_EXTRA_MODE to mode
+//                            )
+//                        )
+                    }
+                    is Lse.Error -> {
+
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage(getString(R.string.unable_to_submit_interest))
+                            .setMessage(it.error)
+                            .setPositiveButton(getString(R.string.okay).capitalize()) { _, _ -> }
+                            .show()
+                    }
+                }
+            })
     }
 
-    private fun showMainLayout(shouldShowEditAction : Boolean) {
+    private fun showMainLayout(shouldShowEditAction: Boolean) {
         user_interest_progressbar.gone()
         user_interest_error.gone()
         user_interest_main_layout.visible()
 
-        if(shouldShowEditAction){
+        if (shouldShowEditAction) {
             skip_btn.visible()
         } else {
             skip_btn.gone()
@@ -214,13 +234,13 @@ class AddUserInterestFragment : BaseFragment() {
 
         if (it.isNotEmpty()) {
             interest_chipgroup.selectChipsWithText(
-                    it.map { interest ->
-                        interest.id
-                    })
+                it.map { interest ->
+                    interest.id
+                })
 
             submitBtn.text = "Update"
             skip_btn.visible()
-        } else{
+        } else {
             submitBtn.text = "Submit"
             skip_btn.gone()
         }

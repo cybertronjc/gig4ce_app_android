@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.activityViewModels
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.chip.Chip
 
 abstract class ProfileBaseFragment: BaseFragment() {

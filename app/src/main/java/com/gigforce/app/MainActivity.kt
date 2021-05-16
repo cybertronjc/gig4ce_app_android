@@ -18,8 +18,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
-import com.gigforce.app.core.popAllBackStates
-import com.gigforce.app.core.printDebugLog
+import com.gigforce.core.extensions.popAllBackStates
+import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections

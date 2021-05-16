@@ -30,8 +30,8 @@ import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
@@ -40,7 +40,7 @@ import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.core.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce

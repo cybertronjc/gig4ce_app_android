@@ -1,6 +1,6 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
-import com.gigforce.app.core.toLocalDate
+import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
 import java.time.LocalDate
