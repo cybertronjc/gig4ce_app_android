@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -16,6 +17,7 @@ import com.bumptech.glide.RequestManager
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
@@ -29,6 +31,9 @@ import com.gigforce.profile.onboarding.SpaceItemDecoration
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,10 +117,18 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     }
 
     private fun initListeners() {
-        search_cities_et.doOnTextChanged { text, start, before, count ->
+        lifecycleScope.launch {
 
-            cityAdapter.filter.filter(text)
-            majorCitiesAdapter.filter.filter(text)
+        search_cities_et.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { searchString ->
+                    Log.d("Search ","Searhcingg...$searchString")
+
+                    cityAdapter.filter.filter(searchString)
+                    majorCitiesAdapter.filter.filter(searchString)
+                }
         }
     }
 
