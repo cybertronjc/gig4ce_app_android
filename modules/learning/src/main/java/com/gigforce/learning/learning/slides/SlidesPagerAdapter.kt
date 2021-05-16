@@ -4,7 +4,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.gigforce.learning.learning.models.SlideContent
+import com.gigforce.common_ui.viewdatamodels.models.SlideContent
 import com.gigforce.learning.learning.slides.types.*
 
 class SlidesPagerAdapter constructor(

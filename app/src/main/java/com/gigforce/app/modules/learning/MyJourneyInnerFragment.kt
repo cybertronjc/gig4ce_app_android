@@ -14,7 +14,7 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.MainLearningFragment
-import com.gigforce.learning.learning.models.Module
+import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.learning.learning.myLearning.journey.JourneyViewModel

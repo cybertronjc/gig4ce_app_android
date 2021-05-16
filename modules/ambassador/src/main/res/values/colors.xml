@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_grey">#dddddd</color>
+    <color name="activated_color">#4E9405</color>
+    <color name="text_orange">#f7b500</color>
+    <color name="lipstick_two">#e42c64</color>
+
+</resources>

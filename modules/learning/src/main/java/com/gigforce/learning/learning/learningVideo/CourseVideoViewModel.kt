@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.learning.learning.LearningRepository
+import com.gigforce.common_ui.repository.LearningRepository
 import com.gigforce.core.datamodels.learning.CourseContent
 //import com.gigforce.app.utils.Lce
 //import com.gigforce.app.utils.Lse

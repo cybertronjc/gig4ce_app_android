@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.utils.Lce
 //import com.gigforce.core.utils.Lce
-import com.gigforce.learning.learning.LearningRepository
+import com.gigforce.common_ui.repository.LearningRepository
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
-import com.gigforce.learning.learning.models.Module
-import com.gigforce.learning.learning.models.progress.ModuleProgress
+import com.gigforce.common_ui.viewdatamodels.models.Module
+import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 //import com.gigforce.app.utils.Lce
 import kotlinx.coroutines.launch
 

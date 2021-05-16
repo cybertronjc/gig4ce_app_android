@@ -17,8 +17,8 @@ import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
-import com.gigforce.learning.repo.ILearningDataRepository
-import com.gigforce.learning.repo.LearningDataRepository
+import com.gigforce.common_ui.repository.repo.ILearningDataRepository
+import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

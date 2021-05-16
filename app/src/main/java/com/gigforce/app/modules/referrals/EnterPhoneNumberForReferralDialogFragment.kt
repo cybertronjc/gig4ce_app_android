@@ -14,7 +14,7 @@ import androidx.lifecycle.observe
 import com.gigforce.app.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.app.modules.common.SendSmsViewModel
+import com.gigforce.common_ui.viewmodels.common.SendSmsViewModel
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.utils.Lse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

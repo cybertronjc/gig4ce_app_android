@@ -48,7 +48,7 @@ import com.gigforce.giger_gigs.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent

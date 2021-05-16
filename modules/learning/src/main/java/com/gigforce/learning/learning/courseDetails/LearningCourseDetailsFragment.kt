@@ -32,7 +32,7 @@ import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.core.datamodels.learning.Course
-import com.gigforce.learning.learning.models.Module
+import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint

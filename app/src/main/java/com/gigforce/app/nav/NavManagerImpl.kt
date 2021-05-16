@@ -42,6 +42,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
         this.registerRoute("gigContactPersonBottomSheet",R.id.gigContactPersonBottomSheet)
+        this.registerRoute("landinghomefragment",R.id.landinghomefragment)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
