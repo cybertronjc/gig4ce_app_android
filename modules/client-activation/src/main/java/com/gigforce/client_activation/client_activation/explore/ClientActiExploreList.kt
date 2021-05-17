@@ -151,6 +151,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
             else{
                 search_item.visible()
                 explore_text.gone()
+                showKeyboard()
                 iv_search_explore.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_close_24))
             }
         }
@@ -298,16 +299,30 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
 
 
     fun hideKeyboard() {
-        val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        //Find the currently focused view, so we can grab the correct window token from it.
-        var view = activity?.currentFocus
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        view ?: run {
-            view = View(activity)
+        search_item?.let {
+            it.isFocusableInTouchMode = false
+            it.clearFocus()
+            val inputMethodManager =
+                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                it.applicationWindowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS, 0
+            )
         }
-        view?.let {
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
+    }
+
+    fun showKeyboard() {
+        search_item?.let {
+            it.isFocusableInTouchMode = true
+            it.requestFocus()
+            val inputMethodManager =
+                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            inputMethodManager!!.toggleSoftInputFromWindow(
+                it.applicationWindowToken,
+                InputMethodManager.SHOW_FORCED, 0
+            )
         }
+
     }
 
 }

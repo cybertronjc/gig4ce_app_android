@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="148dp"
-    android:layout_marginLeft="18dp"
+    android:layout_marginStart="18dp"
     android:layout_marginBottom="2dp"
     app:cardCornerRadius="4dp"
     app:cardBackgroundColor="@color/white">
@@ -19,7 +19,7 @@
         <com.gigforce.common_ui.widgets.RoundCornerImageView
             android:id="@+id/learning_img"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_100"
+            android:layout_height="124dp"
             android:scaleType="centerCrop"
             app:sriv_right_top_corner_radius="@dimen/size_4"
             app:sriv_left_top_corner_radius="@dimen/size_4"

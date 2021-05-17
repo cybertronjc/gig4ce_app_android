@@ -271,9 +271,17 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 ll_role_desc.addView(viewRoleDesc)
 
             }
-
-            adapterBulletPoints.addData(it.info!!)
-
+            if (it.info!!.isEmpty()){
+                divider_one.gone()
+                divider_four.gone()
+                rv_bullet_points.gone()
+            }
+            else{
+                divider_one.visible()
+                rv_bullet_points.visible()
+                adapterBulletPoints.addData(it.info!!)
+                divider_four.visible()
+            }
 
             learning_cl.visible()
             textView120.text = it.requiredMedia?.title
@@ -411,10 +419,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     private fun showErrorWhileLoadingCourse(error: String) {
 
-        learning_cl.visible()
+        learning_cl.gone()
         learning_progress_bar.gone()
         learning_rv.gone()
-        learning_learning_error.visible()
+        learning_learning_error.gone()
 
         learning_learning_error.text = error
     }

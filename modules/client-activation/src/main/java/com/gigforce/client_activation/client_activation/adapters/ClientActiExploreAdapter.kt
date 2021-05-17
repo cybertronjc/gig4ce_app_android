@@ -128,21 +128,20 @@ class ClientActiExploreAdapter(
         }
 
         fun bindValues(jobProfile: JpExplore, position: Int) {
-            jobTitleTv.text = jobProfile.profileName
+            jobTitleTv.text = jobProfile.title
             Glide.with(context).load(jobProfile.image).into(jobImage)
 
             if (jobProfile.status == "")
                 jobStatusTv.gone()
-            else
-                jobStatusTv.visible()
-            jobStatusTv.text =
-                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess") "Pending" else jobProfile.status
-            jobStatusTv.setCompoundDrawablesWithIntrinsicBounds(
-                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.drawable.ic_status_pending else if (jobProfile.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-                0,
-                0,
-                0
-            )
+            else{
+                jobStatusTv.visible()}
+            jobStatusTv.text = if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess") "Pending" else jobProfile.status
+//            jobStatusTv.setCompoundDrawablesWithIntrinsicBounds(
+//                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.drawable.ic_status_pending else if (jobProfile.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
+//                0,
+//                0,
+//                0
+//            )
             context?.applicationContext?.let {
                 jobStatusTv.setTextColor(
                     ContextCompat.getColor(
