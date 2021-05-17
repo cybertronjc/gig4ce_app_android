@@ -68,8 +68,16 @@ class VerifyOTP : BaseFragment() {
         }
 
         //Log.d("app signature", appSignature.appSignatures.get(0))
+        savedInstanceState?.let {
+            verificationId = it.getString("verificationId")!!
+            mobile_number = it.getString("mobile_number")!!
+        }
+    }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("verificationId",verificationId)
+        outState.putString("mobile_number",mobile_number)
     }
 
     override fun onCreateView(
