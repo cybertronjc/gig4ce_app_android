@@ -291,10 +291,10 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun checkForGpsStatus() {
 
-
         locationHelper.checkForGpsSettings(object : GpsSettingsCheckCallback {
 
             override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
+                if(!isAdded) return
 
                 startIntentSenderForResult(
                         status.resolution.intentSender,
@@ -312,7 +312,8 @@ class GigPage2Fragment : BaseFragment(),
             }
 
             override fun gpsSettingsNotAvailable() {
-                //showRedirectToGpsPageDialog()
+                if(!isAdded) return
+                showRedirectToGpsPageDialog()
             }
         })
     }
