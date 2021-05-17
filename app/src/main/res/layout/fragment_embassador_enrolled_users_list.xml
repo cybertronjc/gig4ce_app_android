@@ -137,7 +137,7 @@
                 android:paddingBottom="6dp"
                 android:textColor="#333333"
                 android:textSize="16sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/total_incomplete_profile_tv"
@@ -151,7 +151,7 @@
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <FrameLayout
                 android:layout_width="match_parent"
