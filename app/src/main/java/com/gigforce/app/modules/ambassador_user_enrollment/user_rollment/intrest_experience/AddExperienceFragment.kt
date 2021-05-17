@@ -21,6 +21,7 @@ import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.profile.models.Experience
 import com.gigforce.app.utils.Lce
 import com.gigforce.core.extensions.selectChipWithText
+import com.gigforce.core.extensions.visible
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info.*
@@ -213,7 +214,10 @@ class AddUserExperienceFragment : BaseFragment() {
         val doHaveAndExp = exp_chipgroup.checkedChipId == R.id.exp_yes
 
         if (doHaveAndExp) {
-            if (role_chipgroup.isVisible && role_chipgroup.checkedChipIds.isEmpty()) {
+            if (role_chipgroup.isVisible &&
+                role_chipgroup.childCount != 0 &&
+                role_chipgroup.checkedChipIds.isEmpty()
+            ) {
 
                 role_error.visible()
                 role_error.text = getString(R.string.please_select_role)
@@ -337,7 +341,11 @@ class AddUserExperienceFragment : BaseFragment() {
                     }
                     is Lce.Content -> {
                         val content = result.content ?: return@Observer
-                        showExpDetailsOnScreen(content.interestName, content.experience)
+                        showExpDetailsOnScreen(
+                            content.interestName,
+                            content.experience,
+                            content.roles
+                            )
                     }
                     is Lce.Error -> {
 
@@ -424,26 +432,38 @@ class AddUserExperienceFragment : BaseFragment() {
 
     }
 
-    private fun populateRoleSpinner(items: MutableList<String>) {
-        role_chipgroup.removeAllViews()
-        items.forEach {
+    private fun populateRoleSpinner(items: List<String>) {
+        if(items.isEmpty()){
+            role_chipgroup.gone()
+            what_was_your_role_label.gone()
+        } else {
+            role_chipgroup.visible()
+            what_was_your_role_label.visible()
 
-            var chip: Chip
-            chip = layoutInflater.inflate(
-                R.layout.fragment_ambassador_role_chip,
-                gig_chip_group,
-                false
-            ) as Chip
-            chip.text = it
-            chip.id = ViewCompat.generateViewId()
-            role_chipgroup.addView(chip)
+            role_chipgroup.removeAllViews()
+            items.forEach {
+
+                var chip: Chip
+                chip = layoutInflater.inflate(
+                    R.layout.fragment_ambassador_role_chip,
+                    gig_chip_group,
+                    false
+                ) as Chip
+                chip.text = it
+                chip.id = ViewCompat.generateViewId()
+                role_chipgroup.addView(chip)
+            }
+
+            role_chipgroup.isSingleSelection = true
         }
-
-        role_chipgroup.isSingleSelection = true
     }
 
 
-    private fun showExpDetailsOnScreen(content: String?, experienceData: Experience?) {
+    private fun showExpDetailsOnScreen(
+        content: String?,
+        experienceData: Experience?,
+        roles : List<String>
+    ) {
         currentInterestName = content
         do_you_have_exp_label.text = buildSpannedString {
             append(getString(R.string.do_u_have_experience_in))
@@ -517,13 +537,7 @@ class AddUserExperienceFragment : BaseFragment() {
             role_chipgroup.visible()
             what_was_your_role_label.visible()
 
-
-
-            populateRoleSpinner(
-                mutableListOf(
-                    "Car Driver", "Electric Vehicle", "2 wheeler", "Commercial Vehicle"
-                )
-            )
+            populateRoleSpinner(roles)
 
             experienceData?.let {
                 if (it.title == "Driving") {
@@ -550,14 +564,7 @@ class AddUserExperienceFragment : BaseFragment() {
             role_chipgroup.visible()
             what_was_your_role_label.visible()
 
-
-
-            populateRoleSpinner(
-                mutableListOf(
-                    "Food Delivery", "Grocery Delivery", "Ecommerce delivery"
-                )
-            )
-
+            populateRoleSpinner(roles)
             experienceData?.let {
 
                 if (it.title == "Delivery Executive") {
@@ -579,11 +586,7 @@ class AddUserExperienceFragment : BaseFragment() {
             role_chipgroup.visible()
             what_was_your_role_label.visible()
 
-            populateRoleSpinner(
-                mutableListOf(
-                    "Warehouse Helper", "Cleaner"
-                )
-            )
+            populateRoleSpinner(roles)
 
             experienceData?.let {
 
@@ -600,11 +603,7 @@ class AddUserExperienceFragment : BaseFragment() {
             role_chipgroup.visible()
             what_was_your_role_label.visible()
 
-            populateRoleSpinner(
-                mutableListOf(
-                    "Retails", "Fintech", "SaaS"
-                )
-            )
+            populateRoleSpinner(roles)
 
             experienceData?.let {
 
