@@ -19,8 +19,6 @@ class OnboardingCityAdapter(
 ) : RecyclerView.Adapter<OnboardingCityAdapter.OnboardingCityViewHolder>(),
         Filterable {
 
-    private var isUserGroupManager: Boolean = false
-
     private var originalCityList: List<City> = emptyList()
     private var filteredCityList: List<City> = emptyList()
 
@@ -61,7 +59,9 @@ class OnboardingCityAdapter(
     }
 
     override fun onBindViewHolder(holder: OnboardingCityViewHolder, position: Int) {
-        if(position != RecyclerView.NO_POSITION) {
+        if(position != RecyclerView.NO_POSITION
+                &&  position < filteredCityList.size
+        ) {
             holder.bindValues(filteredCityList.get(position), position)
         }
     }
