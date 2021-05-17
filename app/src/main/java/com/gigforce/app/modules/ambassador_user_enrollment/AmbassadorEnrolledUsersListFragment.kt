@@ -16,6 +16,7 @@ import androidx.core.os.bundleOf
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -89,6 +90,8 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
     }
 
+    var isEditingDetails = false
+
     private val onBackPressCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             Log.d("TAg","Back preseed")
@@ -124,6 +127,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigate(
                 R.id.addBankDetailsInfoFragment, bundleOf(
                     AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -133,6 +137,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
         current_address_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigate(
                 R.id.addCurrentAddressFragment, bundleOf(
                     AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -142,6 +147,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
         profile_photo_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigate(
                 R.id.addProfilePictureFragment, bundleOf(
                     EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
@@ -206,10 +212,12 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         }
 
         create_profile_btn.setOnClickListener {
+            isEditingDetails = false
             navigate(R.id.checkMobileFragment)
         }
 
         createProfileBtn.setOnClickListener {
+            isEditingDetails = false
             navigate(R.id.checkMobileFragment)
         }
 
@@ -222,9 +230,11 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
         enrolled_users_rv.adapter = enrolledUserAdapter
 
         share_link.setOnClickListener {
+            isEditingDetails = false
             shareLink()
         }
         share_link_cl.setOnClickListener {
+            isEditingDetails = false
             shareLink()
         }
     }
@@ -236,17 +246,23 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
 
                 if (it.isEmpty()) {
                     enrolledUserAdapter.setData(emptyList())
-                    no_users_enrolled_layout.visible()
-                    createProfileBtn.gone()
-                    share_link.gone()
-                    total_complete_profile_tv.gone()
-                    total_incomplete_profile_tv.gone()
+                    if (!isEditingDetails){
+                        no_users_enrolled_layout.visible()
+                        createProfileBtn.gone()
+                        share_link.gone()
+                        total_complete_profile_tv.gone()
+                        total_incomplete_profile_tv.gone()
+                    }
                 } else {
-                    no_users_enrolled_layout.gone()
-                    createProfileBtn.visible()
-                    share_link.visible()
                     enrolledUserAdapter.setData(it)
-                    total_complete_profile_tv.visible()
+                    if (!isEditingDetails){
+                        no_users_enrolled_layout.gone()
+                        createProfileBtn.visible()
+                        share_link.visible()
+                        total_complete_profile_tv.visible()
+                        total_incomplete_profile_tv.visible()
+                    }
+
 
                     val totalCompleteProfiles =
                         it.count { it.enrollmentStepsCompleted.allStepsCompleted() }
@@ -268,7 +284,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
                         }
                     }
 
-                    total_incomplete_profile_tv.visible()
+
                     total_incomplete_profile_tv.text = buildSpannedString {
                         append("Total Incomplete Profile : ")
                         bold {
@@ -471,6 +487,7 @@ class AmbassadorEnrolledUsersListFragment : BaseFragment(),
     override fun lastLocationReceiver(location: Location?) {
         this.location = location
     }
+
 
 
 }
