@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.shareddata
+package com.gigforce.core.utils
 
 interface SharedDataInterface {
     fun getLastStoredDeviceLanguage(): String?
