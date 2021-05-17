@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -34,7 +33,7 @@ import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
 import com.gigforce.app.core.base.shareddata.SharedDataImp
-import com.gigforce.app.core.base.shareddata.SharedDataInterface
+import com.gigforce.core.utils.SharedDataInterface
 import com.gigforce.app.core.base.utilfeatures.UtilAndValidationImp
 import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
@@ -42,7 +41,7 @@ import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.gone
 import com.gigforce.app.core.visible
-import com.gigforce.app.utils.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.app.utils.configrepository.ConfigDataModel
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
@@ -54,7 +53,7 @@ import com.gigforce.app.utils.ui_models.ShimmerModel
  * create an instance of this fragment.
  */
 open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-        SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
+    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface

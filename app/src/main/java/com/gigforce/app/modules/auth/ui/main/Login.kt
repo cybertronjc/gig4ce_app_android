@@ -392,18 +392,20 @@ class Login : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
 
-            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
-            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
-            if (credential.id != null){
-                invisible_edit_mobile.setText(credential.id.substring(3))
-                populateMobileInEditTexts(credential.id.substring(3))
-                Log.d("phone detected", credential.id.substring(3))
-            }
-            else {
-                Log.d("phone detected", "Couldn't detect Phone number")
-            }
+            try {/*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+                var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+                if (credential.id != null){
 
-
+                    invisible_edit_mobile.setText(credential.id.substring(3))
+                    populateMobileInEditTexts(credential.id.substring(3))
+                    Log.d("phone detected", credential.id.substring(3))
+                }
+                else {
+                    Log.d("phone detected", "Couldn't detect Phone number")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

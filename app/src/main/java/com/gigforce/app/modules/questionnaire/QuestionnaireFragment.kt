@@ -172,7 +172,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                     return@OnClickListener
                 }
-                if (selectedPosition > -1 && adapter.items[selectedPosition].selectedAnswer != -1) {
+                if (selectedPosition > -1 && adapter.itemCount > selectedPosition && adapter.items[selectedPosition].selectedAnswer != -1) {
                     selectedPosition += 1
                     ratioLayoutManager.setScrollEnabled(true)
                     smoothScroller.targetPosition = selectedPosition
