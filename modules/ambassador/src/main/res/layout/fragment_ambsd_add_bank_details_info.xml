@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment">
+    android:orientation="vertical">
 
     <com.gigforce.common_ui.views.GigforceToolbar
         android:id="@+id/toolbar_layout"

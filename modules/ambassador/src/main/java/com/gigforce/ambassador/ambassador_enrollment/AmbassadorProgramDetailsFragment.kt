@@ -45,8 +45,7 @@ import kotlinx.android.synthetic.main.learning_bs_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AmbassadorProgramDetailsFragment : Fragment(),
-    Toolbar.OnMenuItemClickListener, LocationUpdates.LocationUpdateCallbacks {
+class AmbassadorProgramDetailsFragment : Fragment(), LocationUpdates.LocationUpdateCallbacks {
 
     private val learningViewModel: LearningViewModel by activityViewModels()
     @Inject
@@ -391,25 +390,25 @@ class AmbassadorProgramDetailsFragment : Fragment(),
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        item ?: return false
-
-        return when (item.itemId) {
-            R.id.action_help -> {
-                navigation.navigateTo("chats/chatList")
-//                navigate(R.id.chatListFragment)
-                true
-            }
-            R.id.action_share -> {
-                showToast("This feature is under development")
-                true
-            }
-            R.id.action_decline_gig -> {
-                true
-            }
-            else -> false
-        }
-    }
+//    override fun onMenuItemClick(item: MenuItem?): Boolean {
+//        item ?: return false
+//
+//        return when (item.itemId) {
+//            R.id.action_help -> {
+//                navigation.navigateTo("chats/chatList")
+////                navigate(R.id.chatListFragment)
+//                true
+//            }
+//            R.id.action_share -> {
+//                showToast("This feature is under development")
+//                true
+//            }
+//            R.id.action_decline_gig -> {
+//                true
+//            }
+//            else -> false
+//        }
+//    }
 
     companion object {
         const val INTENT_EXTRA_GIG_ID = "gig_id"

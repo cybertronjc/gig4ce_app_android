@@ -5,9 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
-    app:layout_constraintBottom_toTopOf="@id/startNavigationSliderBtn"
-    tools:context=".modules.gigPage.GigPageFragment">
+    android:layout_weight="1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_parent"

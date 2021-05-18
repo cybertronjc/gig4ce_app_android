@@ -5,8 +5,7 @@
     android:layout_width="320dp"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="3dp"
-    tools:context="com.gigforce.giger_gigs.dialogFragments.RateGigDialogFragment">
+    app:cardCornerRadius="3dp">
 
 
     <LinearLayout

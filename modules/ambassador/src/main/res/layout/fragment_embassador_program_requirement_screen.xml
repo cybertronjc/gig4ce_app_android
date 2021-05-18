@@ -2,12 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/cv_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    tools:context="com.gigforce.learning.assessment.AssessmentFragment">
+    android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/toolbar_layout"
@@ -26,7 +24,7 @@
             android:layout_marginStart="16dp"
             android:scaleX="0.6"
             android:scaleY="0.6"
-              app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
+            app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
 
         <TextView
             android:id="@+id/tv_tb_title_amb_appl"

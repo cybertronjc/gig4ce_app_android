@@ -4,5 +4,12 @@
     <color name="activated_color">#4E9405</color>
     <color name="text_orange">#f7b500</color>
     <color name="lipstick_two">#e42c64</color>
+    <color name="black_85">#d9000000</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="white_two">#f4f4f4</color>
+    <color name="black_three">#333333</color>
+    <color name="grey_c7">#c7c7c7</color>
+    <color name="dust_grey">#979797</color>
+
 
 </resources>
