@@ -1,12 +1,10 @@
 package com.gigforce.app.modules.preferences.daytime.weekday
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.Switch
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -55,12 +53,14 @@ class WeekDayFragment : BaseFragment() {
             initializeViews()
         })
     }
+
     override fun isConfigRequired(): Boolean {
         return true
     }
+
     private fun initializeViews() {
         viewDataModel = viewModel.getPreferenceDataModel()
-        switch3.setChecked(viewDataModel.isweekdaysenabled)
+        switch3.isChecked = viewDataModel.isweekdaysenabled
         textView62.text = getArrayToString(viewDataModel.selecteddays)
 //        textView66.text = getArrayToString(viewDataModel.selectedslots)
         var selectedStrForSubtitle = getArrayToString(
@@ -116,7 +116,7 @@ class WeekDayFragment : BaseFragment() {
         if (getArrayToString(viewDataModel.selectedslots).equals("None")) {
             return true
         }
-            return false
+        return false
     }
 
     private fun ifWeekdaysNotSelected(): Boolean {
@@ -240,19 +240,19 @@ class WeekDayFragment : BaseFragment() {
         val selectedList = ArrayList<Int>()
         for (i in 0..items.size - 1) {
             var isfound = false
-            if(i==0 && items.size==(viewDataModel.selectedslots.size+1)){
-                isfound=true
+            if (i == 0 && items.size == (viewDataModel.selectedslots.size + 1)) {
+                isfound = true
                 isSectionSelected[i] = true
                 selectedList.add(0)
             } else
-            for (day in viewDataModel.selectedslots) {
-                if (indexItem[i].toString().equals(day)) {
-                    isSectionSelected[i] = true
-                    isfound = true
-                    selectedList.add(i)
-                    break
+                for (day in viewDataModel.selectedslots) {
+                    if (indexItem[i].toString().equals(day)) {
+                        isSectionSelected[i] = true
+                        isfound = true
+                        selectedList.add(i)
+                        break
+                    }
                 }
-            }
             if (!isfound) {
                 isSectionSelected[i] = false
             }

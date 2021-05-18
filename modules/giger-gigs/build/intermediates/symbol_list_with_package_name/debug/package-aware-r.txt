@@ -2291,6 +2291,7 @@ drawable ic_credit_card_gradient
 drawable ic_credit_card_outlined
 drawable ic_cross_grey
 drawable ic_cross_red
+drawable ic_done
 drawable ic_ellipses
 drawable ic_emoji
 drawable ic_error_loading_image
@@ -2329,6 +2330,7 @@ drawable ic_mtrl_chip_close_circle
 drawable ic_no_gigs
 drawable ic_no_more_gigs
 drawable ic_oval_top_landingscreen
+drawable ic_pending_yellow_round
 drawable ic_play_round_pink_bck
 drawable ic_referal
 drawable ic_search

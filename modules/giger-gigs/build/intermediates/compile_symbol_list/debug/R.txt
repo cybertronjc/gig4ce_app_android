@@ -2290,6 +2290,7 @@ int drawable ic_credit_card_gradient 0x0
 int drawable ic_credit_card_outlined 0x0
 int drawable ic_cross_grey 0x0
 int drawable ic_cross_red 0x0
+int drawable ic_done 0x0
 int drawable ic_ellipses 0x0
 int drawable ic_emoji 0x0
 int drawable ic_error_loading_image 0x0
@@ -2328,6 +2329,7 @@ int drawable ic_mtrl_chip_close_circle 0x0
 int drawable ic_no_gigs 0x0
 int drawable ic_no_more_gigs 0x0
 int drawable ic_oval_top_landingscreen 0x0
+int drawable ic_pending_yellow_round 0x0
 int drawable ic_play_round_pink_bck 0x0
 int drawable ic_referal 0x0
 int drawable ic_search 0x0
