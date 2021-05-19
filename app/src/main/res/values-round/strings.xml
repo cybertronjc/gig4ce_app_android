@@ -1,5 +1,4 @@
 <resources>
-    <string name="hello_world">Hello Round World!</string>
     <string name="submit_documents">Submit documents</string>
     <string name="giger_verification_desc">We need to verify your information. Please submit the documents below to process giger verification</string>
     <string name="selfie_video">Selfie Video *</string>

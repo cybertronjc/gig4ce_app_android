@@ -1,6 +1,5 @@
 package com.gigforce.app.notification
 
-import android.R.id.message
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +10,7 @@ import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
 import com.gigforce.app.core.toBundle
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -23,9 +23,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val TAG: String = "Firebase/FCM"
     var fcmToken: String? = null
 
-    private val chatNotificationHandler: ChatNotificationHandler by lazy {
-        ChatNotificationHandler(applicationContext)
-    }
+    private val currentUser: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -40,8 +41,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         registerFirebaseTokenIfLoggedIn()
         FirebaseAuth.getInstance().currentUser ?: let {
             Log.v(
-                    TAG,
-                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                TAG,
+                "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
             )
             FirebaseAuth.getInstance().addAuthStateListener {
                 Log.v(TAG, "Firebase Auth State Changed")
@@ -55,11 +56,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val uid = it.uid
             FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
                 .set(
-                        hashMapOf(
-                                "uid" to uid,
-                                "type" to "fcm",
-                                "timestamp" to Date().time
-                        )
+                    hashMapOf(
+                        "uid" to uid,
+                        "type" to "fcm",
+                        "timestamp" to Date().time
+                    )
                 ).addOnSuccessListener {
                     Log.v(TAG, "Token Updated on Firestore Successfully")
                 }.addOnFailureListener {
@@ -90,7 +91,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
 
-
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -101,12 +101,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
 
+            /**
+             * Receiver id is uid of user for whom message was sent,
+             * if message was received with delay and logged in user was changed, message is not shown
+             */
+            val isForCurrentUserId = remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
+            if (!isForCurrentUserId) {
+                Log.d(TAG, "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}")
+                return
+            }
+
             val isChatMessage = remoteMessage.data.getOrDefault(IS_CHAT_MESSAGE, "false") == "true"
             if (isChatMessage) {
 
-                val intent = Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
-                    putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
-                }
+                val intent =
+                    Intent(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION).apply {
+                        putExtra(INTENT_EXTRA_REMOTE_MESSAGE, remoteMessage)
+                    }
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 //handleChatNotifications(remoteMessage)
             } else {
@@ -120,20 +131,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     null
 
                 NotificationHelper(applicationContext)
-                        .createUrgentPriorityNotification(
-                                title = it.title ?: "Gigforce",
-                                message = it.body ?: "message",
-                                pendingIntent = pendingIntent
-                        )
-
+                    .createUrgentPriorityNotification(
+                        title = it.title ?: "Gigforce",
+                        message = it.body ?: "message",
+                        pendingIntent = pendingIntent
+                    )
             }
         }
     }
 
 
     private fun createPendingIntentFromData(
-            clickAction: String,
-            data: Map<String, String>
+        clickAction: String,
+        data: Map<String, String>
     ): PendingIntent? {
 
         val dataBundle = data.toBundle()
@@ -141,12 +151,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         return TaskStackBuilder.create(applicationContext).run {
             addNextIntentWithParentStack(
-                    Intent(
-                            applicationContext,
-                            MainActivity::class.java
-                    ).apply {
-                        putExtras(data.toBundle())
-                    })
+                Intent(
+                    applicationContext,
+                    MainActivity::class.java
+                ).apply {
+                    putExtras(data.toBundle())
+                })
             val reqCode = Random.nextInt(0, 100)
             getPendingIntent(reqCode, PendingIntent.FLAG_ONE_SHOT)
         }
@@ -156,8 +166,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
 
         const val IS_CHAT_MESSAGE = "is_chat_message"
+        const val RECEIVER_ID = "receiver_id"
         const val CHANNEL_ID_CHAt = "chat_messages"
 
         const val INTENT_EXTRA_REMOTE_MESSAGE = "remote_message"
+
     }
 }

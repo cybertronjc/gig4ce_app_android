@@ -14,12 +14,17 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -173,4 +178,32 @@ private class BatchingSequence<T>(val source: Sequence<T>, val batchSize: Int) :
             else done()
         }
     }
+}
+
+fun SearchView.getQueryTextChangeStateFlow(): StateFlow<String> {
+
+    val query = MutableStateFlow("")
+    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String): Boolean {
+            query.value = newText
+            return true
+        }
+    })
+
+    return query
+}
+
+fun EditText.getTextChangeAsStateFlow(): StateFlow<String> {
+    val query = MutableStateFlow("")
+
+    addTextChangedListener {
+        onTextChanged {
+            query.value = it
+        }
+    }
+    return query
 }
