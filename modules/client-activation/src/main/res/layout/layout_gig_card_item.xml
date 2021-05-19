@@ -2,7 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:shimmer="http://schemas.android.com/tools"
     app:cardElevation="4dp"
+    android:minWidth="260dp"
     android:id="@+id/explore_gig_item_view"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
@@ -17,18 +19,19 @@
         <ImageView
             android:id="@+id/card_image"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="180dp"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
 
         <TextView
             android:id="@+id/gig_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="Drive - 21North"
+            android:layout_marginTop="8dp"
+            android:text="Driver - 21North"
             android:textSize="16sp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/title_color"
@@ -47,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/divider_one"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
@@ -69,7 +72,7 @@
             android:textColor="@color/lipstick"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view"
+            app:layout_constraintTop_toBottomOf="@id/divider_one"
             app:layout_constraintStart_toStartOf="@id/gig_title"/>
 
 

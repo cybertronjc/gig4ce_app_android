@@ -16,7 +16,7 @@ import kotlinx.coroutines.tasks.await
 
 
 class ClientActiExploreListViewModel constructor(
-    private val clientActiExploreRepository: ClientActiExploreRepository = ClientActiExploreRepository()
+        private val clientActiExploreRepository: ClientActiExploreRepository = ClientActiExploreRepository()
 ) : ViewModel() {
 
     private val _observableJobProfile: SingleLiveEvent<ArrayList<JpExplore>> by lazy {
@@ -30,58 +30,62 @@ class ClientActiExploreListViewModel constructor(
     val observableError: SingleLiveEvent<String> get() = _observableError
 
 
-     fun getJobProfiles(){
-         viewModelScope.launch {
-             try {
-                 val allClientActivations = ArrayList<JpExplore>()
-                 val items = clientActiExploreRepository.db.collection("Job_Profiles")
-                     .whereEqualTo("isActive", true).get()
-                     .await()
-                 if (items.documents.isNullOrEmpty()){
-                     _observableJobProfile.value = allClientActivations
-                 }
-                 val toObjects = items.toObjects(JobProfile::class.java)
-                 for (i in 0..items.size() - 1 ){
-                     val obj = toObjects[i]
-                     obj.id = items.documents[i].id
-                     if (obj.id != null){
-                             Log.d("id", obj.id!!)
-                         Log.d("uid", clientActiExploreRepository.getUID())
+    fun getJobProfiles(){
+        viewModelScope.launch {
+            try {
+                val allClientActivations = ArrayList<JpExplore>()
+                val items = clientActiExploreRepository.db.collection("Job_Profiles")
+                        .whereEqualTo("isActive", true).get()
+                        .await()
 
-                             val jpObject = getJPApplication(obj.id!!)
-                             val jpExplore = JpExplore(obj.id!!,jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status)
-                             allClientActivations.add(jpExplore)
-                                     }
+                if (items.documents.isNullOrEmpty()){
+                    _observableJobProfile.value = allClientActivations
+                }
+                val toObjects = items.toObjects(JobProfile::class.java)
+                for (i in 0..toObjects.size - 1 ){
+                    val obj = toObjects[i]
+                    var jobProfileId = items.documents.get(i).id
+                    obj.id = toObjects[i].profileId
+                    if (obj.id != null){
+                        Log.d("profileId", obj.id!!)
+                        val jpObject = getJPApplication(obj.id!!)
+                        Log.d("object", jpObject.toString())
+                        val jpExplore = JpExplore(jobProfileId,jpId = jpObject.id, profileId = obj.profileId, obj.profileName,  obj.cardTitle, obj.cardImage, jpObject.status)
+                        allClientActivations.add(jpExplore)
+                    }
+                }
+                _observableJobProfile.value = allClientActivations
 
-                     }
-                 _observableJobProfile.value = allClientActivations
-             }catch (e: Exception){
-                 _observableError.value = e.message
-             }
-         }
+            }catch (e: Exception){
+                _observableError.value = e.message
+            }
+
+        }
+
     }
+
     suspend fun getJPApplication(jobProfileId: String): JpApplication {
+        var jpApplication = JpApplication()
         try {
             val items =
-                    clientActiExploreRepository.db.collection("JP_Applications")
-                        .whereEqualTo("gigerId", clientActiExploreRepository.getUID())
-                        .whereEqualTo("jpid", jobProfileId)
-                        .get().await()
-            Log.d("uid", clientActiExploreRepository.getUID())
+                    clientActiExploreRepository.db.collection("JP_Applications").whereEqualTo("jpid", jobProfileId)
+                            .whereEqualTo("gigerId", clientActiExploreRepository.getUID()).get()
+                            .await()
 
             if (items.documents.isNullOrEmpty()) {
-                return JpApplication(JPId = jobProfileId, gigerId = clientActiExploreRepository.getUID())
+                jpApplication = JpApplication(JPId = jobProfileId, gigerId = clientActiExploreRepository.getUID())
+            } else {
+                val toObject = items.toObjects(JpApplication::class.java).get(0)
+                toObject.id = items.documents[0].id
+                Log.d("status", toObject.toString())
+                jpApplication = toObject
             }
-            val toObject = items.toObjects(JpApplication::class.java).get(0)
-            toObject.id = items.documents[0].id
-            Log.d("value", toObject?.toString())
-            return toObject
+
         } catch (e: Exception) {
-            Log.d("error", e.toString())
             _observableError.value = e.message
         }
-        return JpApplication()
 
-
+        return jpApplication
     }
+
 }

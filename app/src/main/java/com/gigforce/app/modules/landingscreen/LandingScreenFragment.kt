@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -1111,6 +1112,7 @@ class LandingScreenFragment : BaseFragment(), ExploreGigsAdapter.OnSeeMoreSelect
 //
 //                                //img.setImageResource(obj?.imgIcon!!)
 //                            })!!
+            Log.d("jobprofileLanding", jobProfiles.toString())
             exploreGigsAdapter?.setData(jobProfiles)
             client_activation_rv.layoutManager = LinearLayoutManager(
                     activity?.applicationContext,
@@ -1125,6 +1127,7 @@ class LandingScreenFragment : BaseFragment(), ExploreGigsAdapter.OnSeeMoreSelect
 
     override fun onCardSelected(any: Any) {
         var id = (any as JobProfile).id
+        Log.d("cardId", id)
         navigate(
                 R.id.fragment_client_activation,
                 bundleOf(StringConstants.JOB_PROFILE_ID.value to id)

@@ -10,9 +10,17 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.app.R
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
+import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
 
 class ExploreGigsAdapter(
@@ -87,10 +95,9 @@ class ExploreGigsAdapter(
     ) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        private var jobTitleTv: TextView = itemView.findViewById(com.gigforce.client_activation.R.id.tv_client_activation)
-        private var jobSubTitleTv: TextView = itemView.findViewById(com.gigforce.client_activation.R.id.tv_sub_client_activation)
-        private var jobImage: ImageView = itemView.findViewById(com.gigforce.client_activation.R.id.iv_client_activation)
-
+        private var jobTitleTv: TextView = itemView.findViewById(R.id.tv_client_activation)
+        private var jobSubTitleTv: TextView = itemView.findViewById(R.id.tv_sub_client_activation)
+        private var jobImage: ImageView = itemView.findViewById(R.id.iv_client_activation)
         init {
             itemView.setOnClickListener(this)
         }
@@ -98,8 +105,7 @@ class ExploreGigsAdapter(
         fun bindValues(jobProfile: JobProfile, position: Int) {
             jobTitleTv.text = jobProfile.cardTitle
             jobSubTitleTv.text = jobProfile.title
-            GlideApp.with(context).load(jobProfile.cardImage).into(jobImage)
-
+            GlideApp.with(context).load(jobProfile.cardImage).placeholder(ShimmerHelper.getShimmerDrawable()).into(jobImage)
         }
 
         override fun onClick(v: View?) {
@@ -146,5 +152,20 @@ class ExploreGigsAdapter(
                 any: Any
         )
     }
+
+}
+
+private val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+    .setDuration(1800) // how long the shimmering animation takes to do one full sweep
+    .setBaseAlpha(0.9f) //the alpha of the underlying children
+    .setHighlightAlpha(0.8f) // the shimmer alpha amount
+    .setAutoStart(false)
+    .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+    .build()
+
+// This is the placeholder for the imageView
+val shimmerDrawable = ShimmerDrawable().apply {
+    setShimmer(shimmer)
+    startShimmer()
 
 }

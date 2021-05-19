@@ -58,13 +58,12 @@ class AdapterApplicationClientActivation :
                     dependency.drawable
                 }
             )
+            Log.d("dependency", dependency.toString())
 
-            if (dependency.type.equals("aadhar_card") || dependency.type.equals("pan_card")){
-//                dependency.isOptional = true
+            if (dependency.optional){
                 tv_status_application.text = dependency.title
             }
             else{
-//                dependency.isOptional = false
                 var txt = dependency.title + "<font color=\"red\"> *</font>"
                 tv_status_application.setText(Html.fromHtml(txt), TextView.BufferType.SPANNABLE)
             }

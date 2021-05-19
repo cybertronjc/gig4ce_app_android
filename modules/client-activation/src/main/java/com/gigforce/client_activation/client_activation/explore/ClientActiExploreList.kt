@@ -274,7 +274,7 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
                 ))
             //Submitted applicaiton
             "View Application" -> navigation.navigateTo(
-                "client_activation", bundleOf(
+                "client_activation/applicationClientActivation", bundleOf(
                     StringConstants.JOB_PROFILE_ID.value to id
 
                 ))

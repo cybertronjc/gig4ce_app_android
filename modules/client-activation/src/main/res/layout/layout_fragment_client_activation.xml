@@ -55,7 +55,7 @@
                 android:textColor="@color/lipstick"
                 android:textSize="@dimen/font_24"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/tv_applied_client_activation"
+                app:layout_constraintEnd_toStartOf="@id/status_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_header_client_activation"
                 tools:text="North 21 - Driver" />
@@ -78,20 +78,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_businessname_client_activation"
                 tools:text="DRIVER - North 21 " />
 
+            <ImageView
+                android:id="@+id/status_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_status_pending"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintTop_toTopOf="@+id/tv_applied_client_activation"
+                app:layout_constraintBottom_toBottomOf="@id/tv_applied_client_activation"
+                app:layout_constraintEnd_toStartOf="@id/tv_applied_client_activation"
+                />
+
             <TextView
                 android:id="@+id/tv_applied_client_activation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/size_8"
-                android:drawablePadding="@dimen/size_4"
+                android:layout_marginEnd="@dimen/size_16"
                 android:fontFamily="@font/lato"
                 android:text="Pending"
                 android:textColor="@color/yellow"
                 android:textSize="@dimen/font_12"
                 android:textStyle="normal"
                 android:visibility="visible"
-                app:drawableStartCompat="@drawable/ic_status_pending"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_businessname_client_activation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_businessname_client_activation" />

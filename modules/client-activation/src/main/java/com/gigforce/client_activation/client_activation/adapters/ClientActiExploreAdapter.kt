@@ -2,6 +2,7 @@ package com.gigforce.client_activation.client_activation.adapters
 
 import android.content.Context
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,23 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.explore.ClientActiExploreList
 import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
+import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
+import javax.sql.DataSource
 
 
 class ClientActiExploreAdapter(
@@ -122,6 +132,7 @@ class ClientActiExploreAdapter(
         private var jobStatusTv: TextView = itemView.findViewById(R.id.gig_status)
         private var jobImage: ImageView = itemView.findViewById(R.id.card_image)
         private var jobActionTv: TextView = itemView.findViewById(R.id.apply_now)
+        private var divider_one: View = itemView.findViewById(R.id.divider_one)
 
         init {
             itemView.setOnClickListener(this)
@@ -129,35 +140,31 @@ class ClientActiExploreAdapter(
 
         fun bindValues(jobProfile: JpExplore, position: Int) {
             jobTitleTv.text = jobProfile.title
-            Glide.with(context).load(jobProfile.image).into(jobImage)
+            Glide.with(context).load(jobProfile.image).placeholder(ShimmerHelper.getShimmerDrawable()).into(jobImage)
 
             if (jobProfile.status == "")
                 jobStatusTv.gone()
             else{
                 jobStatusTv.visible()}
             jobStatusTv.text = if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess") "Pending" else jobProfile.status
-//            jobStatusTv.setCompoundDrawablesWithIntrinsicBounds(
-//                if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.drawable.ic_status_pending else if (jobProfile.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-//                0,
-//                0,
-//                0
-//            )
             context?.applicationContext?.let {
                 jobStatusTv.setTextColor(
                     ContextCompat.getColor(
                         it,
-                        if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess" || jobProfile.status == "Submitted") R.color.pending_color else if (jobProfile.status == "Activated") R.color.activated_color else R.color.rejected_color
+                        if (jobProfile.status == "Interested" || jobProfile.status == "Inprocess") R.color.pending_color else if (jobProfile.status == "Activated" || jobProfile.status == "Submitted") R.color.activated_color else R.color.rejected_color
                     )
                 )
             }
 
             var actionButtonText =
                 if (jobProfile.status == "Interested") "Complete Application" else if (jobProfile.status == "Inprocess") "Complete Application"
-                else if (jobProfile.status == "") "Apply Now" else ""
-            if (actionButtonText == "")
-                jobActionTv.gone()
-            else
-                jobActionTv.text = actionButtonText
+                else if (jobProfile.status == "") "Apply Now"  else ""
+            if (actionButtonText == ""){
+                divider_one.invisible()
+                jobActionTv.gone()}
+            else{
+                divider_one.visible()
+                jobActionTv.text = actionButtonText}
 
 //            when (jobProfile.status){
 //
@@ -189,5 +196,18 @@ class ClientActiExploreAdapter(
         }
 
     }
+
+//    private val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+//        .setDuration(1800) // how long the shimmering animation takes to do one full sweep
+//        .setBaseAlpha(0.3f) //the alpha of the underlying children
+//        .setHighlightAlpha(0.5f) // the shimmer alpha amount
+//        .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+//        .setAutoStart(true)
+//        .build()
+//
+//    // This is the placeholder for the imageView
+//    val shimmerDrawable = ShimmerDrawable().apply {
+//        setShimmer(shimmer)
+//    }
 
 }

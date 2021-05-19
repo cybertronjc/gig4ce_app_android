@@ -342,17 +342,14 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         tv_applied_client_activation.visible()
                     tv_applied_client_activation.text =
                         if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
-                    tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-                        0,
-                        0,
-                        0
+                    status_icon.setImageDrawable(
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) resources.getDrawable(R.drawable.ic_status_pending) else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") resources.getDrawable(R.drawable.ic_applied) else resources.getDrawable(R.drawable.ic_application_rejected)
                     )
                     activity?.applicationContext?.let {
                         tv_applied_client_activation.setTextColor(
                             ContextCompat.getColor(
                                 it,
-                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
+                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) R.color.pending_color else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") R.color.activated_color else R.color.rejected_color
                             )
                         )
                     }
@@ -546,7 +543,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
             val myAdapter = object : GenericRecyclerAdapterTemp<LessonModel>(content) {
                 override fun getLayoutId(position: Int, obj: LessonModel): Int {
-                    return R.layout.learning_bs_item
+                    return R.layout.learning_video_item
                 }
 
                 override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
