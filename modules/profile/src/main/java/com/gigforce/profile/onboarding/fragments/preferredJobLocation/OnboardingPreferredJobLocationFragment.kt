@@ -10,6 +10,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -216,20 +217,15 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
-
-                val delhiSubLocations = arrayListOf<String>(
-                        "Faridabad",
-                        "Ghaziabad",
-                        "Gurugram",
-                        "Gautam Buddh Nagar",
-                        "New Delhi",
-                        "North Delhi",
-                        "West Delhi",
-                        "East Delhi",
-                        "South Delhi"
-                )
-
-                subCityAdapter.setData(delhiSubLocations, confirmSubCityList)
+                sub_cities_label.setText(selectedCity!!.name)
+                confirmSubCityList.clear()
+                //get sub cities here and set data to adapter
+                viewModel.getSubCities(selectedCity!!.stateCode, selectedCity!!.cityCode)
+                viewModel.subCities.observe(viewLifecycleOwner, Observer {
+                    if (it != null){
+                        subCityAdapter.setData(it, confirmSubCityList)
+                    }
+                })
                 currentStep = 1
                 return true
             } else {
