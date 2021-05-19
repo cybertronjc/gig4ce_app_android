@@ -34,6 +34,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
 import com.gigforce.core.NavFragmentsData
@@ -239,9 +240,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
-                com.gigforce.common_ui.utils.getCircularProgressDrawable(
-                    requireContext()
-                )
+               ShimmerHelper.getShimmerDrawable()
             ).into(iv_main_client_activation)
             tv_businessname_client_activation.text = it.title + " - "+ it.subTitle
             tv_role_client_activation.text = it.subTitle
