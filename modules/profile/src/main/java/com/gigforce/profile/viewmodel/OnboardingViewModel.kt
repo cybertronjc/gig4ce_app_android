@@ -192,12 +192,12 @@ class OnboardingViewModel constructor(
     private val _subCities = MutableLiveData<ArrayList<String>>()
     val subCities: LiveData<ArrayList<String>> = _subCities
 
-    fun getSubCities(cityCode: String)  = viewModelScope.launch{
+    fun getSubCities(stateCode: String, cityCode: String)  = viewModelScope.launch{
 
         try {
             val subCityData =  ArrayList<String>()
             firebaseFirestore
-                .collection("MST_Sublocations").whereEqualTo("cityCode", cityCode)
+                .collection("MST_Sublocations").whereEqualTo("state_code", stateCode).whereEqualTo("cityCode", cityCode)
                 .addSnapshotListener { value, error ->
                     error?.printStackTrace()
 
