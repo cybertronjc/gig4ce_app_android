@@ -46,11 +46,11 @@
         android:name="com.gigforce.app.modules.markattendance.MarkAttendanceFragment" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
+        android:name="com.gigforce.user_preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow" />
     <fragment
         android:id="@+id/dayTimeFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.DayTimeFragment"
+        android:name="com.gigforce.user_preferences.daytime.DayTimeFragment"
         tools:layout="@layout/date_time_fragment" />
 
     <fragment
@@ -76,12 +76,12 @@
 
     <fragment
         android:id="@+id/weekEndFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.weekend.WeekEndFragment"
+        android:name="com.gigforce.user_preferences.daytime.weekend.WeekEndFragment"
         tools:layout="@layout/week_end_fragment" />
 
     <fragment
         android:id="@+id/weekDayFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.weekday.WeekDayFragment"
+        android:name="com.gigforce.user_preferences.daytime.weekday.WeekDayFragment"
         tools:layout="@layout/week_day_fragment" />
 
     <fragment
@@ -400,41 +400,41 @@
         android:label="OnOTPSuccess"></fragment>
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
+        android:name="com.gigforce.user_preferences.location.LocationFragment"
         android:label="LocationFragment" />
 
     <fragment
         android:id="@+id/earningFragment"
-        android:name="com.gigforce.app.modules.preferences.earnings.EarningFragment"
+        android:name="com.gigforce.user_preferences.earnings.EarningFragment"
         android:label="EarningFragment" />
 
     <fragment
         android:id="@+id/languagePreferenceFragment"
-        android:name="com.gigforce.app.modules.preferences.language.LanguagePreferencesFragment"
+        android:name="com.gigforce.user_preferences.language.LanguagePreferencesFragment"
         android:label="LanguagePreferenceFragment" />
     <fragment
         android:id="@+id/preferredLocationFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PreferredLocationFragment"
+        android:name="com.gigforce.user_preferences.location.PreferredLocationFragment"
         android:label="PreferredLocationFragment" />
     <fragment
         android:id="@+id/currentAddressEditFragment"
-        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressEditFragment"
+        android:name="com.gigforce.user_preferences.location.CurrentAddressEditFragment"
         android:label="CurrentAddressEditFragment" />
     <fragment
         android:id="@+id/permanentAddressEditFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressEditFragment"
+        android:name="com.gigforce.user_preferences.location.PermanentAddressEditFragment"
         android:label="PermanentAddressEditFragment" />
     <fragment
         android:id="@+id/currentAddressViewFragment"
-        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressViewFragment"
+        android:name="com.gigforce.user_preferences.location.CurrentAddressViewFragment"
         android:label="CurrentAddressViewFragment" />
     <fragment
         android:id="@+id/permanentAddressViewFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressViewFragment"
+        android:name="com.gigforce.user_preferences.location.PermanentAddressViewFragment"
         android:label="PermanentAddressViewFragment" />
     <fragment
         android:id="@+id/arrountCurrentAddress"
-        android:name="com.gigforce.app.modules.preferences.location.AroundCurrentAddressFragment"
+        android:name="com.gigforce.user_preferences.location.AroundCurrentAddressFragment"
         android:label="ArroundCurrentAddressFragment" />
     <fragment
         android:id="@+id/walletBalancePage"

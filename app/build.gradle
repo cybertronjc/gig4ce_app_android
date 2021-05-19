@@ -166,6 +166,7 @@ dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:ambassador')
+    implementation project(path: ':modules:user_preferences')
     implementation project(path: ':modules:feature-chat')
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')

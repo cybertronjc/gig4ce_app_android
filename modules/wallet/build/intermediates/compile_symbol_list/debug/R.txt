@@ -2236,6 +2236,7 @@ int drawable ic_keyboard_back 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_landinghome_search 0x0
 int drawable ic_learning_default_back 0x0
+int drawable ic_location_pin_black 0x0
 int drawable ic_location_tracking_image 0x0
 int drawable ic_monthly_earning 0x0
 int drawable ic_mtrl_checked_circle 0x0

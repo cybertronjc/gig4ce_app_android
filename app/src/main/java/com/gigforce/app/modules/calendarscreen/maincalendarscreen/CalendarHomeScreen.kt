@@ -27,7 +27,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
@@ -39,7 +39,7 @@ import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
-import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.user_preferences.PreferencesFragment
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 import com.gigforce.core.utils.GlideApp
@@ -114,7 +114,8 @@ class CalendarHomeScreen : BaseFragment(),
                         getString(R.string.new_version_available_detail),
                         getString(R.string.update_now),
                         getString(R.string.cancel_update),
-                        object : ConfirmationDialogOnClickListener {
+                        object :
+                            ConfirmationDialogOnClickListener {
                             override fun clickedOnYes(dialog: Dialog?) {
                                 redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
                             }

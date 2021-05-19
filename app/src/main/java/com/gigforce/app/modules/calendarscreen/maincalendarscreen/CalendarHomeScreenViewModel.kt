@@ -4,15 +4,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.GigsDetail
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.app.modules.preferences.PreferencesRepository
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.user_preferences.PreferencesRepository
+import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.riningan.widget.ExtendedBottomSheetBehavior
@@ -29,7 +27,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
         MutableLiveData<MainHomeCompleteGigModel>()
     var arrMainHomeDataModel: ArrayList<AllotedGigDataModel>? = ArrayList<AllotedGigDataModel>()
     var currentDateCalendar: Calendar = Calendar.getInstance()
-    var preferencesRepository: PreferencesRepository = PreferencesRepository()
+    var preferencesRepository: PreferencesRepository =
+        PreferencesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> =
         MutableLiveData<PreferencesDataModel>()
 
@@ -227,85 +226,4 @@ class CalendarHomeScreenViewModel : ViewModel() {
         return false
     }
 
-
-    //Below code will be removed later
-    class GigRepository : BaseFirestoreDBRepository() {
-        var custguid: String = ""
-        override fun getCollectionName(): String {
-            return "Gigs"
-        }
-
-        override fun getCustomUid(): String? {
-            return custguid
-        }
-
-        fun setGigData(arrGigs: ArrayList<Gig>) {
-            arrGigs.forEachIndexed { index, gig ->
-                custguid = (index * 54321).toString()
-                getCustomDBCollection().set(gig)
-            }
-        }
-
-    }
-
-    private fun getStartDateTime(
-        date: Int,
-        month: Int,
-        year: Int,
-        hour: Int,
-        minute: Int,
-        am_pm: Int
-    ): Date {
-        var calendar = Calendar.getInstance()
-        calendar.set(Calendar.DATE, date)
-        calendar.set(Calendar.MONTH, month)
-        calendar.set(Calendar.YEAR, year)
-        calendar.set(Calendar.HOUR, hour)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.AM_PM, am_pm)
-        return calendar.time
-    }
-
-    private fun getGigData(
-        date: Int,
-        month: Int,
-        year: Int,
-        title: String,
-        gigDetails: ArrayList<GigsDetail>,
-        available: Boolean
-    ): AllotedGigDataModel {
-        var data = AllotedGigDataModel()
-        data.date = date
-        data.month = month
-        data.year = year
-        data.title = title
-        data.gigDetails = gigDetails
-        data.available = available
-        return data
-    }
-
-    private fun getGigDetailData(title: String, isCompleted: Boolean): ArrayList<GigsDetail> {
-        var arrayListGigDetail = ArrayList<GigsDetail>()
-        var data = GigsDetail()
-        data.subTitle = title
-        data.gigCompleted = isCompleted
-        arrayListGigDetail.add(data)
-        return arrayListGigDetail
-    }
-
-
-    //            .addSnapshotListener(EventListener<DocumentSnapshot> { value, e ->
-//                if (e != null) {
-//                    return@EventListener
-//                }
-//                var data: MainHomeCompleteGigModel? = value!!.toObject(
-//                    MainHomeCompleteGigModel::class.java
-//                )
-//
-////                arrMainHomeDataModel = data?.all_gigs
-//                arrMainHomeDataModel = getAllGigData()
-//                mainHomeLiveDataModel.postValue(
-//                    data
-//                )
-//            })
 }

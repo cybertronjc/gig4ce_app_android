@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
 import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
@@ -360,7 +360,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         showConfirmationDialogType7(
                 getString(R.string.this_is_my_whatsapp_number),
-                object : ConfirmationDialogOnClickListener {
+                object :
+                    ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         viewModel.setWhatsAppNumberStatus(
                                 profileViewModel.userProfileData.value?.id!!,
@@ -410,7 +411,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
             if (delete) {
                 showConfirmationDialogType3("Are You Sure!!!",
                         "You want to delete $number from your contacts!!!",
-                        "Yes", "No", object : ConfirmationDialogOnClickListener {
+                        "Yes", "No", object :
+                        ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         contactEdit(
                                 number,
@@ -441,7 +443,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         if (delete) {
             showConfirmationDialogType3("Are You Sure!!!",
                     "You want to delete $email from your emails!!!",
-                    "Yes", "No", object : ConfirmationDialogOnClickListener {
+                    "Yes", "No", object :
+                    ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
                     emailEdit(
                             email,

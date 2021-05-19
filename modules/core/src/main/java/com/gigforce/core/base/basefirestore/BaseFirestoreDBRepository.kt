@@ -120,7 +120,7 @@ abstract class BaseFirestoreDBRepository {
 
     // for get collection data ----------------
 
-    public open fun getCustomUid(): String? {
+    open fun getCustomUid(): String? {
         return ""
     }
 

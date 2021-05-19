@@ -1,24 +1,25 @@
 package com.gigforce.app.di
 
-import com.gigforce.app.di.implementations.EventTrackerImp
-import com.gigforce.app.di.implementations.BuildConfigImp
-import com.gigforce.app.di.implementations.BuildConfigVMImp
-import com.gigforce.app.di.implementations.MyViewHolderFactory
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.app.di.implementations.*
 import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
+import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.common_ui.LoginInfoRepo
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.repo.ILearningDataRepository
+import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import com.gigforce.core.ICoreViewHolderFactory
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilDataImp
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.di.interfaces.IBuildConfigVM
+import com.gigforce.core.di.interfaces.INavHost
 import com.gigforce.core.di.repo.IProfileFirestoreRepository
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.repo.*
-import com.gigforce.common_ui.repository.repo.ILearningDataRepository
-import com.gigforce.common_ui.repository.repo.LearningDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -54,10 +55,19 @@ interface AppBindingsModule {
     fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
 
     @Binds
-    fun provideBuildConfig(imp:BuildConfigImp): IBuildConfig
+    fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
 
     @Binds
-    fun provideEventTracker(imp:EventTrackerImp) : IEventTracker
+    fun provideEventTracker(imp: EventTrackerImp): IEventTracker
+
+    @Binds
+    fun provideCommonDialogs(imp: AppDialogsImp): AppDialogsInterface
+
+    @Binds
+    fun provideCommonUtil(imp: SharedPreAndCommonUtilDataImp): SharedPreAndCommonUtilInterface
+
+    @Binds
+    fun provideNavHost(imp: NavHostImp): INavHost
 }
 
 @InstallIn(ViewModelComponent::class)
@@ -74,8 +84,8 @@ interface ViewModelBindings {
     fun privideProfileRepo(imp: ProfileFirebaseRepository): IProfileFirestoreRepository
 
     @Binds
-    fun provideBuildVMConfig(imp:BuildConfigVMImp): IBuildConfigVM
+    fun provideBuildVMConfig(imp: BuildConfigVMImp): IBuildConfigVM
 
     @Binds
-    fun provideViewModelEventTracker(imp:EventTrackerImp) : IEventTracker
+    fun provideViewModelEventTracker(imp: EventTrackerImp): IEventTracker
 }

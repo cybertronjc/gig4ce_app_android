@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.client_activation.analytics.ClientActivationEvents
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
@@ -43,7 +43,7 @@ import com.gigforce.app.modules.landingscreen.models.Tip
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.core.datamodels.learning.Course
-import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.user_preferences.PreferencesFragment
 import com.gigforce.app.modules.profile.AboutExpandedFragment
 import com.gigforce.app.modules.profile.EducationExpandedFragment
 import com.gigforce.app.modules.profile.ExperienceExpandedFragment
@@ -215,7 +215,8 @@ class LandingScreenFragment : BaseFragment() {
                             getString(R.string.new_version_available_detail),
                             getString(R.string.update_now),
                             getString(R.string.cancel_update),
-                            object : ConfirmationDialogOnClickListener {
+                            object :
+                                ConfirmationDialogOnClickListener {
                                 override fun clickedOnYes(dialog: Dialog?) {
                                     redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
                                 }

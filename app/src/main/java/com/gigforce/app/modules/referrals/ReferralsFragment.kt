@@ -25,7 +25,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.user_preferences.PreferencesFragment
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PushDownAnim

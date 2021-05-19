@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.core.base.shareddata.SharedDataImp
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilDataImp
 import com.gigforce.common_ui.StringConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -44,7 +44,7 @@ class SplashScreen : AppCompatActivity() {
                     val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
                     val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
                     val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
-                    val sp = SharedDataImp(this)
+                    val sp = SharedPreAndCommonUtilDataImp(this)
                     sp.saveData(
                         StringConstants.INVITE_USER_ID.value,
                         inviteID

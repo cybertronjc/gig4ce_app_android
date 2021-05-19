@@ -21,7 +21,7 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.client_activation.analytics.AuthEvents
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials

@@ -12,7 +12,7 @@ import com.gigforce.app.core.base.BaseFragment
 //import com.gigforce.app.utils.configrepository.ConfigViewModel
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
-import com.gigforce.client_activation.analytics.LanguageEvents
+import com.gigforce.core.analytics.LanguageEvents
 import com.gigforce.common_ui.configrepository.ConfigViewModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs

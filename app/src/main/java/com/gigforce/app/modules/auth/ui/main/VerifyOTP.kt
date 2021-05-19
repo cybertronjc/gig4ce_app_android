@@ -17,7 +17,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.client_activation.analytics.AuthEvents
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible

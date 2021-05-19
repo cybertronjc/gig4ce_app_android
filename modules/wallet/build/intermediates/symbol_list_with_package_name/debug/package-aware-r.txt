@@ -2237,6 +2237,7 @@ drawable ic_keyboard_back
 drawable ic_keyboard_black_24dp
 drawable ic_landinghome_search
 drawable ic_learning_default_back
+drawable ic_location_pin_black
 drawable ic_location_tracking_image
 drawable ic_monthly_earning
 drawable ic_mtrl_checked_circle

@@ -3,7 +3,7 @@ package com.gigforce.app.modules.gigerid
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
-import com.gigforce.app.modules.preferences.PreferencesFragment
+import com.gigforce.user_preferences.PreferencesFragment
 import kotlinx.coroutines.tasks.await
 
 class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {

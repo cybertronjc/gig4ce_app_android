@@ -2,7 +2,7 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalen
 
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.app.modules.preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
 import java.time.LocalDate
 import java.util.*
 
