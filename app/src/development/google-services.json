@@ -15,11 +15,125 @@
       },
       "oauth_client": [
         {
+          "client_id": "301022315042-bm0tbtt2m7jknhp2pu0tdo9u62j5u7bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "633bdeb5d1c6f3be6a601cfd1369ff952112f733"
+          }
+        },
+        {
+          "client_id": "301022315042-cgcvcrqaiv0vbaumpd7l0r390m7h0hev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "e023758ab1209f24518a36c0e350eda76309163c"
+          }
+        },
+        {
+          "client_id": "301022315042-esgmol6hhvad6ivptstv4iofcni5mfsf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "a3f0b20d2684cc592b88941f3e93e0473e613059"
+          }
+        },
+        {
+          "client_id": "301022315042-hflatk3rkoj3g7nm4a0iqfd2bs6pq57c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "59f19d30fa19388a2fc5873766e8e73d99a63d84"
+          }
+        },
+        {
+          "client_id": "301022315042-k7pdsqape7gfn4svo5nu5k273s689aad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app",
+            "certificate_hash": "aef3ad24ca7708b652ea50d97fc58baa7031485a"
+          }
+        },
+        {
           "client_id": "301022315042-rb644reoec8o1h1h4qgr9o10mppnlg39.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gigforce.app",
             "certificate_hash": "8fd03fd90b45ed05f0f499107573e5a775d0b12e"
+          }
+        },
+        {
+          "client_id": "301022315042-fdcobf3olj2878p4n5hrtd8oc8cqtjmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvMe9ycyFNpPNPbNx7-v-mZZovRwGf8yI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301022315042-fdcobf3olj2878p4n5hrtd8oc8cqtjmq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301022315042:android:bf1ed514642c6d781bc07b",
+        "android_client_info": {
+          "package_name": "com.gigforce.app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301022315042-gq83lprn10snmsh5oi5jia293kbudas9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.app.dev",
+            "certificate_hash": "a3f0b20d2684cc592b88941f3e93e0473e613059"
+          }
+        },
+        {
+          "client_id": "301022315042-fdcobf3olj2878p4n5hrtd8oc8cqtjmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvMe9ycyFNpPNPbNx7-v-mZZovRwGf8yI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301022315042-fdcobf3olj2878p4n5hrtd8oc8cqtjmq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301022315042:android:11f63b441cbe8b1b1bc07b",
+        "android_client_info": {
+          "package_name": "com.gigforce.fcmpoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301022315042-e5mjc4rh92o7hg1m9av513hr7mtnbg07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gigforce.fcmpoc",
+            "certificate_hash": "59f19d30fa19388a2fc5873766e8e73d99a63d84"
           }
         },
         {

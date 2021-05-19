@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,14 +17,18 @@ import com.gigforce.app.core.visible
 import com.gigforce.app.modules.ambassador_user_enrollment.EnrollmentConstants
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.profile.models.Skill2
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_ambsd_add_experience.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.*
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.skip_btn
 import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.submitBtn
+import kotlinx.android.synthetic.main.fragment_ambsd_user_interest_main.toolbar_layout
+import kotlinx.android.synthetic.main.fragment_gig_page_2_details.*
 
 class AddUserInterestFragment : BaseFragment() {
 
@@ -51,9 +56,9 @@ class AddUserInterestFragment : BaseFragment() {
     private fun getUserInterest() {
 
         if(mode == EnrollmentConstants.MODE_EDIT) {
-            viewModel.getProfileForUser(userId)
+            interestAndExperienceViewModel.getInterestForUser(userId,shouldFetchProfileDataToo = true)
         } else {
-            showMainLayout(shouldShowEditAction = false)
+            interestAndExperienceViewModel.getInterestForUser(userId,shouldFetchProfileDataToo = false)
         }
     }
 
@@ -144,7 +149,7 @@ class AddUserInterestFragment : BaseFragment() {
 
     private fun initViewModel() {
 
-        viewModel.profile
+        interestAndExperienceViewModel.fetchUserInterestDataState
                 .observe(viewLifecycleOwner, Observer {
                     when (it) {
                         Lce.Loading -> {
@@ -154,10 +159,12 @@ class AddUserInterestFragment : BaseFragment() {
                         }
                         is Lce.Content -> {
                             showMainLayout(
-                                    shouldShowEditAction = true
+                                    shouldShowEditAction = it.content.profileData != null,
+                                    interest = it.content.interest
                             )
 
-                            setDataOnView(it.content)
+                            if(it.content.profileData != null)
+                             setDataOnView(it.content.profileData)
                         }
                         is Lce.Error -> {
                             user_interest_progressbar.gone()
@@ -198,11 +205,17 @@ class AddUserInterestFragment : BaseFragment() {
                 })
     }
 
-    private fun showMainLayout(shouldShowEditAction : Boolean) {
+    private fun showMainLayout(
+            shouldShowEditAction : Boolean,
+            interest : List<Skill2>,
+    ) {
         user_interest_progressbar.gone()
         user_interest_error.gone()
         user_interest_main_layout.visible()
 
+        populateSkillsSpinner(
+                interest.map { it.skill }
+        )
         if(shouldShowEditAction){
             skip_btn.visible()
         } else {
@@ -210,7 +223,28 @@ class AddUserInterestFragment : BaseFragment() {
         }
     }
 
-    private fun setDataOnView(content: ProfileData) = content.skills?.let {
+    private fun populateSkillsSpinner(
+            skills: List<String>
+    ) {
+        interest_chipgroup.removeAllViews()
+        skills.forEach {
+
+            val chip: Chip = layoutInflater.inflate(
+                    R.layout.fragment_ambassador_role_chip,
+                    interest_chipgroup,
+                    false
+            ) as Chip
+            chip.text = it
+            chip.id = ViewCompat.generateViewId()
+            interest_chipgroup.addView(chip)
+        }
+
+        interest_chipgroup.isSingleSelection = false
+    }
+
+    private fun setDataOnView(
+            content: ProfileData
+    ) = content.skills?.let {
 
         if (it.isNotEmpty()) {
             interest_chipgroup.selectChipsWithText(

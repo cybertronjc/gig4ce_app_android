@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.core.toDate
-import com.gigforce.app.core.toLocalDate
+import com.gigforce.app.core.*
 import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.AttendanceType
@@ -29,6 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -95,6 +95,15 @@ class GigViewModel constructor(
                     remarks = remarks
             )
         } else if (!gig.isCheckOutMarked()) {
+
+            val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
+            val currentTime = LocalDateTime.now()
+            val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+
+            if (minutes < 15L) {
+                Log.d("GigViewModel","Ignoring checkout call as difference between checkin-time and current time is less than 15 mins")
+                return@launch
+            }
 
             markCheckOut(
                     gigId = gig.gigId,

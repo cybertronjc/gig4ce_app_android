@@ -5,13 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.InterestData
+import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.models.*
 import com.gigforce.app.utils.Lce
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel constructor(
+        private val appConfigurationRepository: AppConfigurationRepository = AppConfigurationRepository()
+): ViewModel() {
 
     companion object {
         fun newInstance() = ProfileViewModel()
@@ -249,5 +253,36 @@ class ProfileViewModel : ViewModel() {
         }
 
     }
+
+
+    private val _fetchUserInterestDataState = MutableLiveData<Lce<InterestData>?>()
+    val fetchUserInterestDataState: LiveData<Lce<InterestData>?> = _fetchUserInterestDataState
+
+    fun getInterestForUser(
+            userId: String?,
+            shouldFetchProfileDataToo : Boolean
+    ) = viewModelScope.launch {
+        try {
+            _fetchUserInterestDataState.value = Lce.loading()
+
+            var profileData : ProfileData? = null
+
+            if(shouldFetchProfileDataToo && userId != null) {
+                profileData = profileFirebaseRepository.getProfileData(
+                        userId = userId
+                )
+            }
+
+            _fetchUserInterestDataState.value = Lce.content(
+                    InterestData(
+                            interest = appConfigurationRepository.getAllSkills(),
+                            profileData = profileData
+                    )
+            )
+        } catch (e: Exception) {
+            _fetchUserInterestDataState.value = Lce.error(e.message!!)
+        }
+    }
+
 
 }

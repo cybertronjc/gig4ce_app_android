@@ -5,22 +5,31 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.UserEnrollmentRepository
+import com.gigforce.app.modules.preferences.AppConfigurationRepository
 import com.gigforce.app.modules.profile.ProfileFirebaseRepository
 import com.gigforce.app.modules.profile.models.Experience
+import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.app.modules.profile.models.Skill2
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.Lse
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 
+data class InterestData(
+        val interest : List<Skill2>,
+        val profileData : ProfileData?
+)
+
 class InterestAndExperienceViewModel constructor(
     private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository()
+    private val userEnrollmentRepository: UserEnrollmentRepository = UserEnrollmentRepository(),
+    private val appConfigurationRepository: AppConfigurationRepository = AppConfigurationRepository()
 ) : ViewModel() {
 
-    private val _submitInterestState = MutableLiveData<Lse>()
-    val submitInterestState: LiveData<Lse> = _submitInterestState
+    private val _submitInterestState = MutableLiveData<Lse?>()
+    val submitInterestState: LiveData<Lse?> = _submitInterestState
 
     fun submitInterests(
         uid: String,
@@ -45,8 +54,8 @@ class InterestAndExperienceViewModel constructor(
         }
     }
 
-    private val _saveExpAndReturnNextOne = MutableLiveData<Lce<String?>>()
-    val saveExpAndReturnNextOne: LiveData<Lce<String?>> = _saveExpAndReturnNextOne
+    private val _saveExpAndReturnNextOne = MutableLiveData<Lce<String?>?>()
+    val saveExpAndReturnNextOne: LiveData<Lce<String?>?> = _saveExpAndReturnNextOne
 
     fun saveExpAndReturnNewOne(userId: String, experience: Experience) = viewModelScope.launch {
 
@@ -215,7 +224,8 @@ class InterestAndExperienceViewModel constructor(
                 _experience.value = Lce.content(
                     InterestAndExperienceData(
                         interestName = pendingInts.first().id,
-                        experience = null
+                        experience = null,
+                        roles = getRolesForInterest(pendingInts.first().id)
                     )
                 )
             }
@@ -242,14 +252,16 @@ class InterestAndExperienceViewModel constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 }
@@ -261,14 +273,16 @@ class InterestAndExperienceViewModel constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 }
@@ -279,9 +293,45 @@ class InterestAndExperienceViewModel constructor(
         }
     }
 
+    private val _fetchUserInterestDataState = MutableLiveData<Lce<InterestData>?>()
+    val fetchUserInterestDataState: LiveData<Lce<InterestData>?> = _fetchUserInterestDataState
+
+    fun getInterestForUser(
+            userId: String?,
+            shouldFetchProfileDataToo : Boolean
+    ) = viewModelScope.launch {
+        try {
+            _fetchUserInterestDataState.value = Lce.loading()
+
+            var profileData : ProfileData? = null
+
+            if(shouldFetchProfileDataToo && userId != null) {
+                profileData = profileFirebaseRepository.getProfileData(
+                        userId = userId
+                )
+            }
+
+            _fetchUserInterestDataState.value = Lce.content(
+                    InterestData(
+                            interest = appConfigurationRepository.getAllSkills(),
+                            profileData = profileData
+                    )
+            )
+        } catch (e: Exception) {
+            _fetchUserInterestDataState.value = Lce.error(e.message!!)
+        }
+    }
+
+    private suspend fun getRolesForInterest(
+            interestName :String
+    ):List<String> =  appConfigurationRepository.getRolesForSkill(interestName)
+
 }
+
+
 
 data class InterestAndExperienceData(
     val interestName: String,
-    val experience: Experience?
+    val experience: Experience?,
+    val roles : List<String>
 )
