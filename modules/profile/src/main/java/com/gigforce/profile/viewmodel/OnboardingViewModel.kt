@@ -189,6 +189,45 @@ class OnboardingViewModel constructor(
         }
     }
 
+    private val _subCities = MutableLiveData<ArrayList<String>>()
+    val subCities: LiveData<ArrayList<String>> = _subCities
+
+    fun getSubCities(cityCode: String)  = viewModelScope.launch{
+
+        try {
+            val subCityData =  ArrayList<String>()
+            firebaseFirestore
+                .collection("MST_Sublocations").whereEqualTo("cityCode", cityCode)
+                .addSnapshotListener { value, error ->
+                    error?.printStackTrace()
+
+                    value.let {
+                        it?.documents?.forEach {
+                            Log.d("documentsnap", it.toString())
+                            if (it != null){
+                                var name = it.getString("name")
+                                if (name != null) {
+                                    Log.d("subcity", name)
+                                    subCityData.add(name)
+                                }
+                            }
+                        }
+//                                subCity.toObject(CityWithImage::class.java).let {
+//                                it?.id = subCity.id
+//                                if (it != null) {
+//                                    subCityData.add(it)
+//                                }
+
+                        }
+
+                    _subCities.value = subCityData
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
     fun savePreferredJobLocation(
             cityId: String,
             cityName: String,
