@@ -77,85 +77,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        app:chipSpacingHorizontal="14dp">
+        app:chipSpacingHorizontal="14dp"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_driving"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Driving"
-            app:chipStrokeWidth="1dp" />
-
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_delivery_executive"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delivery Executive"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_tele_calling"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tele calling"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_warehouse_helper"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Warehouse Helper"
-            app:chipStrokeWidth="1dp" />
-
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_technician"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Technician"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_sales"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sales"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_supervisor"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Supervisor/Manager"
-            app:chipStrokeWidth="1dp" />
-
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_security"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Security"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_interest_delivery_cleaning"
-            style="@style/AppSingleChoiceChip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cleaner"
-            app:chipStrokeWidth="1dp" />
-
-
-    </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitBtn"
