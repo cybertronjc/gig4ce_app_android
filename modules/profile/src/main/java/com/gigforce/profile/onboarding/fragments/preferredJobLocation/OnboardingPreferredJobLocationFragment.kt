@@ -205,7 +205,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
                 sub_cities_label.setText(selectedCity!!.name)
-
+                confirmSubCityList.clear()
                 //get sub cities here and set data to adapter
                 viewModel.getSubCities(selectedCity!!.stateCode, selectedCity!!.cityCode)
                 viewModel.subCities.observe(viewLifecycleOwner, Observer {
