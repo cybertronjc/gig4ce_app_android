@@ -389,7 +389,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
 //    }
 
     private fun showLoadingState() {
-        panViewLayout1.gone()
+        panViewLayout1.visible()
         progressBar1.visible()
     }
 

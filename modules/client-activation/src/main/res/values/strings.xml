@@ -35,7 +35,7 @@
     <string name="no_worries">No Worries!!</string>
     <string name="resend_message"><![CDATA[If you didn’t receive the OTP, <font color=\'#d72467\'>RESEND</font>]]></string>
     <string name="explore_gigs">Explore Gigs</string>
-    <string name="search_jobs">Search Gig</string>
+    <string name="search_jobs">Search Business/Job profile</string>
     <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhar Card</string>
     <string name="yes_i_have_aadhar_card">Yes, I have Aadhar Card</string>
     <string name="do_you_have_aadhar_card">Do you have Aadhar Card ?</string>

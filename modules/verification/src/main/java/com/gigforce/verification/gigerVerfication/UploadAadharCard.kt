@@ -318,6 +318,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
     }
 
     private fun documentUploaded() {
+        Log.d("showing", "Document uploaded")
         showToast(getString(R.string.aadhar_card_details_uploaded))
         navigation.popBackStack()
     }
@@ -443,6 +444,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
         aadharViewLayout1.gone()
         aadharMainLayout.visibility = View.VISIBLE
         aadharSubmitSliderBtn.resetSlider()
+        Log.d("showing", "error with layout")
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -468,7 +470,8 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showLoadingState() {
-        aadharMainLayout.visibility = View.GONE
+        Log.d("showing", "loading with layout")
+        aadharMainLayout.visibility = View.VISIBLE
         progressBar1.visibility = View.VISIBLE
     }
 
