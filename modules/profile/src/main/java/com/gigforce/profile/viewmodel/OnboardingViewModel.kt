@@ -18,6 +18,7 @@ import com.gigforce.profile.R
 import com.gigforce.profile.models.City
 import com.gigforce.profile.models.CityWithImage
 import com.gigforce.profile.models.OnboardingProfileData
+import com.gigforce.profile.models.SubCity
 import com.gigforce.profile.onboarding.fragments.interest.InterestDM
 import com.gigforce.profile.repository.OnboardingProfileFirebaseRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -189,38 +190,31 @@ class OnboardingViewModel constructor(
         }
     }
 
-    private val _subCities = MutableLiveData<ArrayList<String>>()
-    val subCities: LiveData<ArrayList<String>> = _subCities
+    private val _subCities = MutableLiveData<ArrayList<SubCity>>()
+    val subCities: LiveData<ArrayList<SubCity>> = _subCities
 
     fun getSubCities(stateCode: String, cityCode: String)  = viewModelScope.launch{
 
         try {
-            val subCityData =  ArrayList<String>()
+            val subCityData =  ArrayList<SubCity>()
             firebaseFirestore
                 .collection("MST_Sublocations").whereEqualTo("state_code", stateCode).whereEqualTo("cityCode", cityCode)
                 .addSnapshotListener { value, error ->
                     error?.printStackTrace()
 
                     value.let {
-                        it?.documents?.forEach {
-                            Log.d("documentsnap", it.toString())
-                            if (it != null){
-                                var name = it.getString("name")
-                                if (name != null) {
-                                    Log.d("subcity", name)
-                                    subCityData.add(name)
+                        value.let {
+                            it?.documents?.forEach { subCity ->
+                                subCity.toObject(SubCity::class.java).let {
+                                    if (it != null) {
+                                        subCityData.add(it)
+                                    }
                                 }
                             }
                         }
-//                                subCity.toObject(CityWithImage::class.java).let {
-//                                it?.id = subCity.id
-//                                if (it != null) {
-//                                    subCityData.add(it)
-//                                }
-
-                        }
-
-                    _subCities.value = subCityData
+                        subCityData.sortBy { it -> it.index }
+                        _subCities.value = subCityData
+                    }
                 }
         } catch (e: Exception) {
             e.printStackTrace()

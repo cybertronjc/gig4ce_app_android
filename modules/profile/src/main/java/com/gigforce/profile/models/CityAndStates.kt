@@ -67,3 +67,16 @@ data class CityWithImage(
         return name
     }
 }
+
+data class SubCity(
+
+    var name: String = "",
+    var state_code: String = "",
+    var cityCode: String ="",
+    var index: Int = -1,
+){
+
+    override fun toString(): String {
+        return name
+    }
+}
