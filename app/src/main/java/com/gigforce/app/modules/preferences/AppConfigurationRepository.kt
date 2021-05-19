@@ -60,10 +60,9 @@ class AppConfigurationRepository constructor(
         }
     }
 
-    suspend fun getSkillsForAmbassadorEnrollment(): List<Skill2> {
+    suspend fun getAllSkills(): List<Skill2> {
         val ambassadorSkillsQuery = firebaseFireStore
             .collection("Mst_Skills")
-            .whereEqualTo("shouldShowInAmbassasdorSkillsScreen", true)
             .getOrThrow()
 
         return ambassadorSkillsQuery.documents.map {

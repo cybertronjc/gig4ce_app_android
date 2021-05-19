@@ -148,6 +148,8 @@ class EducationExpandedFragment : ProfileBaseFragment() {
             skill_card.cardContent = skillString
             skill_card.cardBottom = getString(R.string.add_skill)
 
+            skill_card.card_bottom.isEnabled = profile.skills?.size ?: 0 < 3
+
             var achievementString: String = ""
             profile.achievements?.let {
                 val achievements = it.sortedByDescending { achievement -> achievement.year }

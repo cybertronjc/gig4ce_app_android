@@ -313,7 +313,7 @@ class InterestAndExperienceViewModel constructor(
 
             _fetchUserInterestDataState.value = Lce.content(
                     InterestData(
-                            interest = appConfigurationRepository.getSkillsForAmbassadorEnrollment(),
+                            interest = appConfigurationRepository.getAllSkills(),
                             profileData = profileData
                     )
             )
