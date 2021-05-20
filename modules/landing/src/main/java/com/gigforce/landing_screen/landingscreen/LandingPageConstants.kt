@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen
+package com.gigforce.landing_screen.landingscreen
 
 object LandingPageConstants {
 

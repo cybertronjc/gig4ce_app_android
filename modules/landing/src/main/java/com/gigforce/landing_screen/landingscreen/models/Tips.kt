@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.models
+package com.gigforce.landing_screen.landingscreen.models
 
 data class Tip(
     val key: String = "",

@@ -1,17 +1,17 @@
-package com.gigforce.app.modules.landingscreen
+package com.gigforce.landing_screen.landingscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.client_activation.client_activation.models.Role
-import com.gigforce.app.modules.landingscreen.models.Tip
+import com.gigforce.landing_screen.landingscreen.models.Tip
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.client_activation.client_activation.models.Role
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.SingleLiveEvent
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.user_preferences.PreferencesRepository
 import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
@@ -27,12 +27,12 @@ class LandingScreenViewModel constructor(
     private var callbacks: LandingScreenCallbacks? = null
 
     private val _observerRole: SingleLiveEvent<List<Role>> by lazy {
-        SingleLiveEvent<List<Role>>();
+        SingleLiveEvent<List<Role>>()
     }
     val observerRole: SingleLiveEvent<List<Role>> get() = _observerRole
 
     private val _observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> by lazy {
-        SingleLiveEvent<ArrayList<JobProfile>>();
+        SingleLiveEvent<ArrayList<JobProfile>>()
     }
     val observableJobProfile: SingleLiveEvent<ArrayList<JobProfile>> get() = _observableJobProfile
 
@@ -246,13 +246,12 @@ class LandingScreenViewModel constructor(
                 _observableJobProfile.value = allClientActivations
 
 
-
             }
 
         }
     }
 
     fun setTips(tipsList: List<Tip>) {
-        this.allTips = tipsList;
+        this.allTips = tipsList
     }
 }

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.adapters
+package com.gigforce.landing_screen.landingscreen.adapters
 
 
 import android.content.Context
@@ -9,17 +9,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.models.Tip
+import com.gigforce.landing_screen.landingscreen.models.Tip
 
 class TipsViewAdapter(
     private val context: Context
 ) : RecyclerView.Adapter<TipsViewAdapter.TipsViewHolder>(){
 
     private var originalList: List<Tip> = emptyList()
-    private var onCardSelectedListener : OnCardSelectedListener? = null
+    private var onTipListener : OnTipListener? = null
 
-    fun setOnCardSelectedListener(onCardSelectedListener: OnCardSelectedListener){
-        this.onCardSelectedListener = onCardSelectedListener
+    fun setOnTipListener(onTipListener: OnTipListener){
+        this.onTipListener = onTipListener
+    }
+    private var onSkipListener : OnSkipListener? = null
+
+    fun setOnSkipListener(onSkipListener: OnSkipListener){
+        this.onSkipListener = onSkipListener
     }
 
 
@@ -60,36 +65,43 @@ class TipsViewAdapter(
 
     inner class TipsViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    ) : RecyclerView.ViewHolder(itemView){
 
         private var title: TextView = itemView.findViewById(R.id.gigtip_title)
         private var subtitle: TextView = itemView.findViewById(R.id.gigtip_subtitle)
         private var text102: ImageView = itemView.findViewById(R.id.textView102)
         private var skip: TextView = itemView.findViewById(R.id.skip)
 
-        init {
-            itemView.setOnClickListener(this)
-        }
 
         fun bindValues(model: Tip, position: Int) {
             title.text = model.title
             subtitle.text = model.subTitle
-        }
 
-        override fun onClick(v: View?) {
-            val newPosition = adapterPosition
-            val jobProfile = originalList[newPosition]
-            onCardSelectedListener?.onCardSelected(jobProfile)
+            text102.setOnClickListener {
+                onTipListener?.onTipClicked(model = model)
+            }
+
+            skip.setOnClickListener {
+                onSkipListener?.onSkipClicked(model = model, pos = position)
+            }
+
         }
 
     }
 
 
-    interface OnCardSelectedListener {
+    interface OnTipListener {
 
-        fun onCardSelected(
+        fun onTipClicked(
             model: Tip
+        )
+    }
+
+    interface OnSkipListener {
+
+        fun onSkipClicked(
+            model: Tip,
+            pos: Int
         )
     }
 

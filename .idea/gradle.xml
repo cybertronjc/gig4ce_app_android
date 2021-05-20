@@ -20,6 +20,8 @@
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/feature-chat" />
             <option value="$PROJECT_DIR$/modules/giger-gigs" />
+            <option value="$PROJECT_DIR$/modules/landing" />
+            <option value="$PROJECT_DIR$/modules/landing-screen" />
             <option value="$PROJECT_DIR$/modules/learning" />
             <option value="$PROJECT_DIR$/modules/profile" />
             <option value="$PROJECT_DIR$/modules/user_preferences" />

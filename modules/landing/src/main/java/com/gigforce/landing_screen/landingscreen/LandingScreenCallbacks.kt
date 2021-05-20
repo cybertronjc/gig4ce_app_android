@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen
+package com.gigforce.landing_screen.landingscreen
 
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot

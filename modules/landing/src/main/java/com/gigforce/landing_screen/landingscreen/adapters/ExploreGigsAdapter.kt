@@ -1,27 +1,20 @@
-package com.gigforce.app.modules.landingscreen.adapters
+package com.gigforce.landing_screen.landingscreen.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
-import com.facebook.shimmer.ShimmerFrameLayout
-import com.gigforce.app.R
-import com.gigforce.client_activation.client_activation.models.JobProfile
-import com.gigforce.client_activation.client_activation.models.JpExplore
+//import com.gigforce.app.R
+//import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.shimmer.ShimmerHelper
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.invisible
-import com.gigforce.core.extensions.visible
+//import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.landing_screen.R
 
 class ExploreGigsAdapter(
     private val context: Context

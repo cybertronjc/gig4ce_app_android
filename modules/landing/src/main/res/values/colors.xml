@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d72467</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="calendar_disabled_bg">#efefef</color>
+    <color name="colorAccent">#930077</color>
+    <color name="colorStatusBar">#e53369</color>
+    <color name="colorStatus">#e53369</color>
+    <color name="colorLightAccent">#e42c64</color>
+    <color name="topBarDark">#d72467</color>
+    <color name="bg">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="black_42">#6B000000</color>
+    <color name="black_20">#20000000</color>
+    <color name="white">#ffffff</color>
+    <color name="different_month_calendar_color">#979797</color>
+    <color name="colorText">#313131</color>
+    <color name="colorError">#d4e02020</color>
+    <color name="colorHint">#6d7278</color>
+    <color name="colorLigthSeparater">#e4e4e4</color>
+    <color name="colorImportantText">#Df2966</color>
+    <color name="red">#FF0000</color>
+    <color name="app_red">#E02020</color>
+    <color name="app_orange">#fa6400</color>
+    <color name="schedule_doc_sub_bg">#f7f7f7</color>
+    <color name="setting_bg">#f7f7f7</color>
+    <color name="gray_color">#6d7278</color>
+    <color name="preferences_item_seprator">#c8c7cc</color>
+    <color name="shadow_color">#c8c7cc</color>
+    <color name="gray_color1">#cdcdcd</color>
+    <color name="lightGrey">#c7c7cc</color>
+</resources>

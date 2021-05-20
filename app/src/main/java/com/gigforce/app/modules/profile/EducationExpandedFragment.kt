@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
-import com.gigforce.app.modules.landingscreen.LandingPageConstants
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import com.gigforce.landing_screen.landingscreen.LandingPageConstants
+import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.core.datamodels.profile.ProfileData
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*

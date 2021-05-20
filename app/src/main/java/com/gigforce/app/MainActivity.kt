@@ -21,7 +21,7 @@ import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.app.utils.GigNavigation
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
+import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler

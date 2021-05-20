@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.explorebyrole.jdscreens
+package com.gigforce.landing_screen.landingscreen.explorebyrole.jdscreens
 
 import androidx.lifecycle.ViewModel
 

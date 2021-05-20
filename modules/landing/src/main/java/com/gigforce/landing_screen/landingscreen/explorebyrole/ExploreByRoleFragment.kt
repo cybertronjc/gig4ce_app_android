@@ -1,8 +1,7 @@
-package com.gigforce.app.modules.landingscreen.explorebyrole
+package com.gigforce.landing_screen.landingscreen.explorebyrole
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

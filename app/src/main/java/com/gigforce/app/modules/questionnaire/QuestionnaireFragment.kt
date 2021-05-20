@@ -21,7 +21,7 @@ import com.gigforce.client_activation.client_activation.DrivingCertSuccessDialog
 import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.client_activation.client_activation.models.Cities
 import com.gigforce.client_activation.client_activation.models.States
-import com.gigforce.app.modules.landingscreen.models.Dependency
+import com.gigforce.landing_screen.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.RVPagerSnapFancyDecorator

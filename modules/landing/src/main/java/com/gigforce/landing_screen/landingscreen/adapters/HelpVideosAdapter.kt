@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.adapters
+package com.gigforce.landing_screen.landingscreen.adapters
 
 
 import android.content.Context
@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
 import com.gigforce.app.modules.help.HelpVideo
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 
 class HelpVideosAdapter(
@@ -19,10 +19,10 @@ class HelpVideosAdapter(
 ) : RecyclerView.Adapter<HelpVideosAdapter.HelpVideosViewHolder>(){
 
     private var originalList: List<HelpVideo> = emptyList()
-    private var onCardSelectedListener : OnCardSelectedListener? = null
 
-    fun setOnCardSelectedListener(onCardSelectedListener: OnCardSelectedListener){
-        this.onCardSelectedListener = onCardSelectedListener
+    var clickListener : AdapterClickListener<HelpVideo>? = null
+    fun setOnclickListener(listener : AdapterClickListener<HelpVideo>){
+        this.clickListener = listener
     }
 
 
@@ -91,19 +91,11 @@ class HelpVideosAdapter(
 
         override fun onClick(v: View?) {
             val newPosition = adapterPosition
-            val jobProfile = originalList[newPosition]
-            onCardSelectedListener?.onCardSelected(jobProfile)
+            clickListener?.let { setOnclickListener(it) }
         }
 
     }
 
-
-    interface OnCardSelectedListener {
-
-        fun onCardSelected(
-            model: HelpVideo
-        )
-    }
 
 
 }

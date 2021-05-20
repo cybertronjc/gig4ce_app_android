@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.landingscreen.models
+package com.gigforce.landing_screen.landingscreen.models
 
 import android.graphics.drawable.Drawable
 import android.os.Parcel
