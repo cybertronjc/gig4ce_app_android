@@ -20,6 +20,7 @@ import com.gigforce.common_ui.viewmodels.common.SendSmsViewModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lse
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_user_enrolled_dialog.*
 
 interface UserDetailsFilledDialogFragmentResultListener {
@@ -29,6 +30,7 @@ interface UserDetailsFilledDialogFragmentResultListener {
     fun onReUploadDocumentsClicked()
 }
 
+@AndroidEntryPoint
 class UserDetailsFilledDialogFragment : DialogFragment() {
 
     companion object {
