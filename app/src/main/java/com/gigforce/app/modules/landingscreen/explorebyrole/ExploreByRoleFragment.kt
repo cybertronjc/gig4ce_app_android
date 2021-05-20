@@ -8,14 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.explore_by_role_fragment.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExploreByRoleFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = ExploreByRoleFragment()
     }
 
+    @Inject lateinit var navigation: INavigation
     private lateinit var viewModel: ExploreByRoleViewModel
 
     override fun onCreateView(
@@ -33,7 +38,8 @@ class ExploreByRoleFragment : BaseFragment() {
 
     private fun listener() {
         activate_status2.setOnClickListener{
-            navigate(R.id.jdScreenFragment)
+            //navigate(R.id.jdScreenFragment)
+            navigation.navigateTo("jdscreen")
         }
         backpress_icon.setOnClickListener{
             activity?.onBackPressed()
