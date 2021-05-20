@@ -2535,6 +2535,7 @@ int id aadharFrontImageHolder 0x0
 int id aadharInfoLayout 0x0
 int id aadharLabel 0x0
 int id aadharLayout 0x0
+int id aadharMainLayout 0x0
 int id aadharNoEditErrorMessage 0x0
 int id aadharNoLabel 0x0
 int id aadharNoRB 0x0
@@ -2548,6 +2549,7 @@ int id aadharViewFrontErrorMessage 0x0
 int id aadharViewFrontImageIV 0x0
 int id aadharViewFrontLabel 0x0
 int id aadharViewLayout 0x0
+int id aadharViewLayout1 0x0
 int id aadharYesRB 0x0
 int id accLabel 0x0
 int id accNoLabel 0x0
@@ -2743,6 +2745,9 @@ int id cifLabel 0x0
 int id cifNumberET 0x0
 int id circle_center 0x0
 int id circular 0x0
+int id city_image_iv 0x0
+int id city_name_tv 0x0
+int id city_root_layout 0x0
 int id clear_text 0x0
 int id clickedImageIV 0x0
 int id clockwise 0x0
@@ -2997,6 +3002,7 @@ int id iv_back_add_driving_license 0x0
 int id iv_back_add_pan_card_info 0x0
 int id iv_back_add_selfie 0x0
 int id iv_back_application_client_activation 0x0
+int id iv_back_upload_aadhar_card_client_activation 0x0
 int id iv_back_verification_page 0x0
 int id iv_download_giger_verification 0x0
 int id iv_options_verification_page 0x0
@@ -3141,6 +3147,7 @@ int id panImageHolder 0x0
 int id panInfoLayout 0x0
 int id panLabel 0x0
 int id panLayout 0x0
+int id panMainLayout1 0x0
 int id panNoEditErrorMessage 0x0
 int id panNoLabel 0x0
 int id panNoRB 0x0
@@ -3148,6 +3155,7 @@ int id panSubmitSliderBtn 0x0
 int id panViewImageErrorMessage 0x0
 int id panViewImageIV 0x0
 int id panViewLayout 0x0
+int id panViewLayout1 0x0
 int id panViewNoErrorMessage 0x0
 int id panViewNoTV 0x0
 int id panYesRB 0x0
@@ -3194,6 +3202,7 @@ int id primary_button 0x0
 int id profile_image 0x0
 int id profile_name 0x0
 int id progressBar 0x0
+int id progressBar1 0x0
 int id progress_circular 0x0
 int id progress_horizontal 0x0
 int id radial 0x0
@@ -3405,6 +3414,7 @@ int id tvVeriDone 0x0
 int id tv_action_giger_verification 0x0
 int id tv_action_upld_dl_cert 0x0
 int id tv_action_upld_dl_cl_act 0x0
+int id tv_action_upload_pan 0x0
 int id tv_allow_access 0x0
 int id tv_cities 0x0
 int id tv_client_activation 0x0
@@ -3413,7 +3423,6 @@ int id tv_contract_status_label 0x0
 int id tv_desc 0x0
 int id tv_no_driving_cert 0x0
 int id tv_pop_menu_normal 0x0
-int id tv_rv_preferred_location 0x0
 int id tv_schedule_test 0x0
 int id tv_title 0x0
 int id tv_title_add_aadhar_card_info 0x0
@@ -3748,7 +3757,9 @@ int layout ucrop_fragment_photobox 0x0
 int layout ucrop_layout_rotate_wheel 0x0
 int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
+int layout upload_aadhar_card_fragment 0x0
 int layout upload_car_client_activation 0x0
+int layout upload_pan_card_fragment 0x0
 int layout verified_button 0x0
 int menu ucrop_menu_activity 0x0
 int plurals fui_error_weak_password 0x0

@@ -379,6 +379,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <FrameLayout
                     android:id="@+id/client_activation_frame"
                     android:layout_width="match_parent"
@@ -388,17 +389,18 @@
                     android:layout_marginBottom="@dimen/size_16"
                     android:minHeight="170dp">
 
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/client_activation_rv"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="8dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
-                        android:paddingLeft="@dimen/size_16"
-                        android:paddingRight="20dp"
+                        android:paddingStart="@dimen/size_16"
                         android:paddingBottom="@dimen/size_4"
-                        android:visibility="gone" />
+                        android:visibility="gone" >
+                    </androidx.recyclerview.widget.RecyclerView>
 
                     <include
                         android:id="@+id/loader_explore_gigs"
@@ -416,6 +418,7 @@
                         tools:text="Unable to load your stuff" />
 
                 </FrameLayout>
+
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

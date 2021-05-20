@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,9 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-//import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.client_activation.analytics.ClientActivationEvents
+import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
@@ -68,8 +71,23 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
+import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
+import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
+import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
+import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
+import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
+import kotlin.collections.ArrayList
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.core.AppConstants
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.Lce
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
@@ -103,6 +121,12 @@ class LandingScreenFragment : Fragment() {
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+    private val exploreGigsAdapter: ExploreGigsAdapter by lazy {
+        ExploreGigsAdapter(requireContext()).apply {
+            setOnCardSelectedListener(this@LandingScreenFragment)
+            setOnSeeMoreSelectedListener(this@LandingScreenFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -1063,6 +1087,7 @@ class LandingScreenFragment : Fragment() {
 
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
 
+
         stopShimmer(loader_explore_gigs as LinearLayout)
         client_activation_rv.visible()
 
@@ -1075,54 +1100,60 @@ class LandingScreenFragment : Fragment() {
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
-                RecyclerGenericAdapter<JobProfile>(
-                    activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
-
-                        val id = item?.id ?: ""
-                        val title = item?.cardTitle ?: ""
-
-                        eventTracker.pushEvent(
-                            TrackingEventArgs(
-                                eventName = ClientActivationEvents.EVENT_USER_CLICKED,
-                                props = mapOf(
-                                    "id" to id,
-                                    "title" to title
-                                )
-                            )
-                        )
-                        navigate(
-                            R.id.fragment_client_activation,
-                            bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
-                        )
-                    },
-                    RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
-
-                        var view = getView(viewHolder, R.id.top_to_cardview)
-                        val lp = view.layoutParams
-                        lp.height = lp.height
-                        lp.width = itemWidth
-                        view.layoutParams = lp
-
-                        showGlideImage(
-                            obj?.cardImage ?: "",
-                            getImageView(viewHolder, R.id.iv_client_activation)
-                        )
-                        getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
-                        getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
-
-                        //img.setImageResource(obj?.imgIcon!!)
-                    })
-            recyclerGenericAdapter.list = jobProfiles
-            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+            var arrayAny: ArrayList<Any> = jobProfiles as ArrayList<Any>
+            arrayAny.add("See More")
+//
+//            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
+//                    RecyclerGenericAdapter<JobProfile>(
+//                            activity?.applicationContext,
+//                            PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
+//                                navigate(
+//                                        R.id.fragment_client_activation,
+//                                        bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
+//                                )
+//                            },
+//                            RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
+//
+//                                var view = getView(viewHolder, R.id.top_to_cardview)
+//                                val lp = view.layoutParams
+//                                lp.height = lp.height
+//                                lp.width = itemWidth
+//                                view.layoutParams = lp
+//
+//                                showGlideImage(
+//                                        obj?.cardImage ?: "",
+//                                        getImageView(viewHolder, R.id.iv_client_activation)
+//                                )
+//                                getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
+//                                getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
+//
+//                                //img.setImageResource(obj?.imgIcon!!)
+//                            })!!
+            Log.d("jobprofileLanding", jobProfiles.toString())
+            exploreGigsAdapter?.setData(jobProfiles)
             client_activation_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            client_activation_rv.adapter = recyclerGenericAdapter
+
+            client_activation_rv.adapter = exploreGigsAdapter
 
         }
+    }
+
+    override fun onCardSelected(any: Any) {
+        var id = (any as JobProfile).id
+        Log.d("cardId", id)
+        navigate(
+                R.id.fragment_client_activation,
+                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+        )
+    }
+
+    override fun onSeeMoreSelected(any: Any) {
+        navigate(
+                R.id.clientActiExploreList,
+        )
     }
 }

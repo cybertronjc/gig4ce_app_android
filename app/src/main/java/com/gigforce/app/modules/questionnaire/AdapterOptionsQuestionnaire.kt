@@ -85,7 +85,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         val option = item.options[position]
         when (getItemViewType(position)) {
             TYPE_TEXT -> {
-                holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
+                holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4  else R.drawable.border_27979797_rad_4)
                 holder.itemView.tv_answer_questionnaire.text = option.answer
 
                 if (item.selectedAnswer == position) {

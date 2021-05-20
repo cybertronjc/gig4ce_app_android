@@ -30,7 +30,7 @@ class LandingScreenRepository : BaseFirestoreDBRepository(), LandingScreenCallba
     }
 
     override fun getJobProfile(responseCallbacks: LandingScreenCallbacks.ResponseCallbacks) {
-        db.collection("Job_Profiles").whereEqualTo("isActive", true)
+        db.collection("Job_Profiles").whereEqualTo("isActive", true).limit(4)
             .addSnapshotListener { success, error ->
                 responseCallbacks.getJobProfileResponse(success, error)
             }

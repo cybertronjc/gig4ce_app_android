@@ -37,27 +37,29 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
+import com.gigforce.app.core.gone
+import com.gigforce.app.core.visible
 //import com.gigforce.app.modules.client_activation.models.JobProfile
-import com.gigforce.app.utils.GigNavigation
-import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.GigNavigation
+import com.gigforce.app.modules.gigPage2.models.Gig
+import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 //import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
+import com.gigforce.app.modules.landingscreen.adapters.ExploreGigsAdapter
 import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.common_ui.viewmodels.LearningViewModel
+import com.gigforce.learning.learning.LearningViewModel
 import com.gigforce.learning.learning.MainLearningViewModel
-import com.gigforce.core.datamodels.learning.Course
+import com.gigforce.learning.learning.models.Course
 import com.gigforce.core.datamodels.learning.CourseContent
-import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.core.datamodels.profile.ProfileData
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -69,7 +71,7 @@ import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BSCalendarScreenFragment : BaseFragment() {
+class BSCalendarScreenFragment : BaseFragment(), ExploreGigsAdapter.OnCardSelectedListener, ExploreGigsAdapter.OnSeeMoreSelectedListener {
 
     companion object {
         fun newInstance() = BSCalendarScreenFragment()
@@ -81,6 +83,12 @@ class BSCalendarScreenFragment : BaseFragment() {
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val exploreGigsAdapter: ExploreGigsAdapter by lazy {
+        ExploreGigsAdapter(requireContext()).apply {
+            setOnCardSelectedListener(this@BSCalendarScreenFragment)
+            setOnSeeMoreSelectedListener(this@BSCalendarScreenFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -1102,41 +1110,31 @@ class BSCalendarScreenFragment : BaseFragment() {
             val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
 
-            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
-                RecyclerGenericAdapter<JobProfile>(
-                    activity?.applicationContext,
-                    PFRecyclerViewAdapter.OnViewHolderClick<JobProfile?> { view, position, item ->
-                        navigate(
-                            R.id.fragment_client_activation,
-                            bundleOf(StringConstants.JOB_PROFILE_ID.value to item?.id)
-                        )
-                    },
-                    RecyclerGenericAdapter.ItemInterface<JobProfile?> { obj, viewHolder, position ->
+            var arrayAny: ArrayList<Any> = jobProfiles as ArrayList<Any>
+            arrayAny.add("See More")
 
-                        var view = getView(viewHolder, R.id.top_to_cardview)
-                        val lp = view.layoutParams
-                        lp.height = lp.height
-                        lp.width = itemWidth
-                        view.layoutParams = lp
-
-                        showGlideImage(
-                            obj?.cardImage ?: "",
-                            getImageView(viewHolder, R.id.iv_client_activation)
-                        )
-                        getTextView(viewHolder, R.id.tv_client_activation).text = obj?.cardTitle
-                        getTextView(viewHolder, R.id.tv_sub_client_activation).text = obj?.title
-
-                        //img.setImageResource(obj?.imgIcon!!)
-                    })!!
-            recyclerGenericAdapter.setList(jobProfiles)
-            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+            exploreGigsAdapter.setData(jobProfiles)
             client_activation_rv_bs.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            client_activation_rv_bs.adapter = recyclerGenericAdapter
+            client_activation_rv_bs.adapter = exploreGigsAdapter
 
         }
+    }
+
+    override fun onCardSelected(any: Any) {
+        var id = (any as JobProfile).id
+        navigate(
+                R.id.fragment_client_activation,
+                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+        )
+    }
+
+    override fun onSeeMoreSelected(any: Any) {
+        navigate(
+                R.id.clientActiExploreList,
+        )
     }
 }

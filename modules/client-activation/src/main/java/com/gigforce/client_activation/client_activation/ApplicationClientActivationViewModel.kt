@@ -89,14 +89,16 @@ class ApplicationClientActivationViewModel : ViewModel() {
 
 
             val model = getJPApplication(mJobProfileId)
+            Log.d("model", model.toString())
 
-
+            Log.d("list", dependency.toString())
             if (model.application.isNullOrEmpty()) {
                 model.application = dependency.toMutableList()
 
             }
             model.application.forEach {
                 if (!it.isDone || it.refresh) {
+                    Log.d("type", it.toString())
                     when (it.type) {
                         "profile_pic" -> {
                             val profileModel = getProfile()
@@ -129,6 +131,18 @@ class ApplicationClientActivationViewModel : ViewModel() {
                             if (it.isDone) {
                                 model.applicationLearningCompletionDate = Date()
                             }
+                        }
+                        "aadhar_card" -> {
+                            val verification = getVerification()
+                            it.isDone =
+                                verification?.aadhar_card != null && (verification.aadhar_card?.state
+                                    ?: -2) >= -1 && verification.aadhar_card?.backImage != "" && verification.aadhar_card?.frontImage != ""
+                        }
+                        "pan_card" -> {
+                            val verification = getVerification()
+                            it.isDone =
+                                verification?.pan_card != null && (verification.pan_card?.state
+                                    ?: -2) >= -1 && verification.pan_card?.panCardNo != "" && verification.pan_card?.panCardImagePath != ""
                         }
 
 
