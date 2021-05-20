@@ -1,9 +1,10 @@
-package com.gigforce.app.modules.gigerid
+package com.gigforce.giger_gigs.gigerid
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
-import com.gigforce.user_preferences.PreferencesFragment
+//import com.gigforce.user_preferences.PreferencesFragment
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
@@ -20,10 +21,10 @@ class GigerIdRepository : BaseFirestoreDBRepository(), GigerIDCallbacks {
             avatarName: String,
             responseCallbacks: GigerIDCallbacks.ResponseCallbacks
     ) {
-        PreferencesFragment.storage.reference.child("profile_pics").child(avatarName)
+        FirebaseStorage.getInstance().reference.child("profile_pics").child(avatarName)
 
         responseCallbacks.getProfilePic(
-                PreferencesFragment.storage.reference.child("profile_pics").child(avatarName)
+            FirebaseStorage.getInstance().reference.child("profile_pics").child(avatarName)
         )
 
     }

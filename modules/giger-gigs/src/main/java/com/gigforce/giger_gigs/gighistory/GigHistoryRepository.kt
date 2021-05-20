@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gighistory
+package com.gigforce.giger_gigs.gighistory
 
 import android.util.Log
 import com.gigforce.core.fb.BaseFirestoreDBRepository

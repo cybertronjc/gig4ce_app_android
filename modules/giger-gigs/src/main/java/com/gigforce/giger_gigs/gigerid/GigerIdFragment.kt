@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigerid
+package com.gigforce.giger_gigs.gigerid
 
 import android.Manifest
 import android.content.Intent
@@ -11,20 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.request.RequestOptions
-import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.core.datamodels.gigpage.Gig
+//import com.gigforce.app.R
+//import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.utils.getScreenShot
-import com.gigforce.core.utils.*
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigOrder
-import com.gigforce.core.utils.GlideApp
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.*
+import com.gigforce.giger_gigs.R
 import com.google.firebase.storage.FirebaseStorage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
@@ -32,15 +35,16 @@ import com.itextpdf.text.Document
 import com.itextpdf.text.Image
 import com.itextpdf.text.pdf.PdfWriter
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_giger_id_fragment.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import kotlin.jvm.Throws
+import javax.inject.Inject
 
-
-class GigerIdFragment : BaseFragment() {
+@AndroidEntryPoint
+class GigerIdFragment : Fragment() {
     private val viewModelFactory by lazy {
         ViewModelProviderFactory(
             ViewModelGigerIDFragment(GigerIdRepository())
@@ -50,19 +54,29 @@ class GigerIdFragment : BaseFragment() {
         ViewModelProvider(this, viewModelFactory).get(ViewModelGigerIDFragment::class.java)
     }
 
+    @Inject
+    lateinit var navigation: INavigation
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.layout_giger_id_fragment, inflater, container)
+        return inflater.inflate(R.layout.layout_giger_id_fragment, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, com.gigforce.modules.feature_chat.R.color.lipstick_2,null))
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(),
+            ResourcesCompat.getColor(
+                resources,
+                R.color.lipstick_2,
+                null
+            )
+        )
         initClicks()
         initObservers()
         viewModelGigerID.getProfileData()
@@ -71,13 +85,13 @@ class GigerIdFragment : BaseFragment() {
     fun iniFileSharing(it: String?) = runBlocking<Unit> {
         val bm = getScreenShot(cl_parent_giger_id)
         shareFile(
-                imageToPDF(
-                        storeImage(
-                                bm,
-                                StringConstants.GIGER_ID.value,
-                                context?.filesDir?.absolutePath!!
-                        ), it
-                ), requireContext(), "*/*"
+            imageToPDF(
+                storeImage(
+                    bm,
+                    StringConstants.GIGER_ID.value,
+                    context?.filesDir?.absolutePath!!
+                ), it
+            ), requireContext(), "*/*"
         )
     }
 
@@ -86,15 +100,15 @@ class GigerIdFragment : BaseFragment() {
             iniFileSharing(it)
         })
         viewModelGigerID.observablePermResultsNotGranted.observe(
-                viewLifecycleOwner,
-                Observer {
-                    checkForRequiredPermissions()
-                })
+            viewLifecycleOwner,
+            Observer {
+                checkForRequiredPermissions()
+            })
         viewModelGigerID.observableProgress.observe(
-                viewLifecycleOwner,
-                Observer {
-                    pb_giger_id.visibility = it!!
-                })
+            viewLifecycleOwner,
+            Observer {
+                pb_giger_id.visibility = it!!
+            })
         viewModelGigerID.observableError.observe(viewLifecycleOwner, Observer {
             showToast(it!!)
         })
@@ -107,7 +121,7 @@ class GigerIdFragment : BaseFragment() {
             val gigerPhoneNumber = if (!it?.contact.isNullOrEmpty()) {
                 it!!.contact?.get(0)?.phone
             } else if (it?.loginMobile != null) {
-                it.loginMobile!!
+                it.loginMobile
             } else
                 "--"
             tv_contact_giger_id.text = gigerPhoneNumber
@@ -115,49 +129,50 @@ class GigerIdFragment : BaseFragment() {
         })
         viewModelGigerID.observableProfilePic.observe(viewLifecycleOwner, Observer {
             GlideApp.with(this.requireContext())
-                    .load(it)
-                    .apply(RequestOptions().circleCrop()).placeholder(R.drawable.ic_avatar_male)
-                    .into(cv_profile_pic)
+                .load(it)
+                .apply(RequestOptions().circleCrop()).placeholder(R.drawable.ic_avatar_male)
+                .into(cv_profile_pic)
         })
         viewModelGigerID.observableGigDetails.observe(viewLifecycleOwner, Observer {
             initUi(it!!.gig, it.gigOrder)
         })
         viewModelGigerID.observableURLS.observe(viewLifecycleOwner, Observer {
             genQrCode(
-                    "https://gigforce.in/users/" + viewModelGigerID.observableUserProfileDataSuccess.value?.id
+                "https://gigforce.in/users/" + viewModelGigerID.observableUserProfileDataSuccess.value?.id
             )
         })
     }
 
     private fun initUi(gig: Gig, gigOrder: GigOrder) {
         tv_designation_giger_id.text = gig.getGigTitle()
-        tv_giger_location_giger_id.text = "${gigOrder.getGigOrderCity()}, ${gigOrder.getGigOrderState()}"
+        tv_giger_location_giger_id.text =
+            "${gigOrder.getGigOrderCity()}, ${gigOrder.getGigOrderState()}"
         tv_gig_since_giger_id.text =
-                "${resources.getString(R.string.giger_since)} ${
-                    parseTime(
-                            "MMM yyyy",
-                            gig?.startDateTime?.toDate()
-                    )
-                }"
+            "${resources.getString(R.string.giger_since)} ${
+                parseTime(
+                    "MMM yyyy",
+                    gig.startDateTime.toDate()
+                )
+            }"
         if (!gig.getFullCompanyLogo().isNullOrBlank()) {
             if (gig.getFullCompanyLogo()!!.startsWith("http", true)) {
 
                 GlideApp.with(requireContext())
-                        .load(gig.getFullCompanyLogo())
-                        .placeholder(getCircularProgressDrawable())
-                        .into(iv_brand_logo_giger_id)
+                    .load(gig.getFullCompanyLogo())
+                    .placeholder(getCircularProgressDrawable())
+                    .into(iv_brand_logo_giger_id)
             } else {
                 FirebaseStorage.getInstance()
-                        .reference
-                        .child(gig.getFullCompanyLogo()!!)
-                        .downloadUrl
-                        .addOnSuccessListener { fileUri ->
+                    .reference
+                    .child(gig.getFullCompanyLogo()!!)
+                    .downloadUrl
+                    .addOnSuccessListener { fileUri ->
 
-                            GlideApp.with(requireContext())
-                                    .load(fileUri)
-                                    .placeholder(getCircularProgressDrawable())
-                                    .into(iv_brand_logo_giger_id)
-                        }
+                        GlideApp.with(requireContext())
+                            .load(fileUri)
+                            .placeholder(getCircularProgressDrawable())
+                            .into(iv_brand_logo_giger_id)
+                    }
             }
         } else {
             val companyInitials = if (gig.getFullCompanyName().isNullOrBlank())
@@ -165,8 +180,8 @@ class GigerIdFragment : BaseFragment() {
             else
                 gig.getFullCompanyName()!![0].toString().toUpperCase()
             val drawable = TextDrawable.builder().buildRound(
-                    companyInitials,
-                    ResourcesCompat.getColor(resources, R.color.lipstick, null)
+                companyInitials,
+                ResourcesCompat.getColor(resources, R.color.lipstick, null)
             )
 
             iv_brand_logo_giger_id.setImageDrawable(drawable)
@@ -189,7 +204,8 @@ class GigerIdFragment : BaseFragment() {
     private fun initClicks() {
 
         ic_close_giger_id.setOnClickListener {
-            popBackState()
+            //popBackStack()
+            navigation.popBackStack()
         }
     }
 
@@ -197,10 +213,10 @@ class GigerIdFragment : BaseFragment() {
     fun genQrCode(url: String?) {
         val writer = QRCodeWriter()
         val bitMatrix = writer.encode(
-                url,
-                BarcodeFormat.QR_CODE,
-                512,
-                512
+            url,
+            BarcodeFormat.QR_CODE,
+            512,
+            512
         )
         val width = bitMatrix.width
         val height = bitMatrix.height
@@ -219,13 +235,13 @@ class GigerIdFragment : BaseFragment() {
         try {
             val document = Document()
             val dirPath = context?.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                    .toString() + "/${fileName ?: ""}.pdf"
+                .toString() + "/${fileName ?: ""}.pdf"
             PdfWriter.getInstance(document, FileOutputStream(dirPath)) //  Change pdf's name.
             document.open()
             val documentWidth: Float =
-                    document.pageSize.width - document.leftMargin() - document.rightMargin()
+                document.pageSize.width - document.leftMargin() - document.rightMargin()
             val documentHeight: Float =
-                    document.pageSize.height - document.topMargin() - document.bottomMargin()
+                document.pageSize.height - document.topMargin() - document.bottomMargin()
             val img: Image = Image.getInstance(imagePath)
             img.scaleToFit(documentWidth, documentHeight)
             img.alignment = Image.ALIGN_CENTER or Image.ALIGN_TOP
@@ -233,8 +249,8 @@ class GigerIdFragment : BaseFragment() {
             document.close()
             viewModelGigerID.showProgress(false)
             Toast.makeText(requireContext(), "File Downloaded At Path $dirPath", Toast.LENGTH_LONG)
-                    .show()
-            return File(dirPath);
+                .show()
+            return File(dirPath)
         } catch (ignored: Exception) {
             return null
         }
@@ -242,10 +258,10 @@ class GigerIdFragment : BaseFragment() {
 
     private fun checkForRequiredPermissions(): Boolean {
         return PermissionUtils.checkForPermissionFragment(
-                this,
-                PermissionUtils.reqCodePerm,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            this,
+            PermissionUtils.reqCodePerm,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
 
@@ -255,9 +271,9 @@ class GigerIdFragment : BaseFragment() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         viewModelGigerID.checkIfPermGranted(requestCode, grantResults)

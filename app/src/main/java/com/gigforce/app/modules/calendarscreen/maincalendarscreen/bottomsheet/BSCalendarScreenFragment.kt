@@ -44,7 +44,7 @@ import com.gigforce.app.utils.GigNavigation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 //import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.learning.learning.LearningConstants

@@ -16,7 +16,7 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.GigRegulariseAttendanceFragment
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint

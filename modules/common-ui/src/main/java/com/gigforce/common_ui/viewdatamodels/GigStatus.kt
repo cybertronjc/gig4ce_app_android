@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.models
+package com.gigforce.common_ui.viewdatamodels
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -30,28 +30,28 @@ enum class GigStatus constructor(
     @DrawableRes
     fun getIconForStatus(): Int {
         return when (this) {
-            GigStatus.UPCOMING -> R.drawable.ic_gig_upoming
-            GigStatus.DECLINED -> R.drawable.ic_gig_declined_cancelled
-            GigStatus.CANCELLED -> R.drawable.ic_gig_declined_cancelled
-            GigStatus.ONGOING -> R.drawable.ic_gig_ongoing
-            GigStatus.PENDING -> R.drawable.ic_gig_upoming
-            GigStatus.NO_SHOW -> R.drawable.ic_gig_declined_cancelled
-            GigStatus.COMPLETED -> R.drawable.ic_gig_ongoing
-            GigStatus.MISSED -> R.drawable.ic_gig_missed
+            UPCOMING -> R.drawable.ic_gig_upoming
+            DECLINED -> R.drawable.ic_gig_declined_cancelled
+            CANCELLED -> R.drawable.ic_gig_declined_cancelled
+            ONGOING -> R.drawable.ic_gig_ongoing
+            PENDING -> R.drawable.ic_gig_upoming
+            NO_SHOW -> R.drawable.ic_gig_declined_cancelled
+            COMPLETED -> R.drawable.ic_gig_ongoing
+            MISSED -> R.drawable.ic_gig_missed
         }
     }
 
     @ColorRes
     fun getColorForStatus(): Int {
         return when (this) {
-            GigStatus.UPCOMING -> R.color.gig_timer_upcoming_pink
-            GigStatus.DECLINED -> R.color.gig_timer_declined_red
-            GigStatus.CANCELLED -> R.color.gig_timer_declined_red
-            GigStatus.ONGOING -> R.color.gig_timer_ongoing_green
-            GigStatus.PENDING -> R.color.gig_timer_upcoming_pink
-            GigStatus.NO_SHOW -> R.color.gig_timer_declined_red
-            GigStatus.COMPLETED -> R.color.gig_timer_ongoing_green
-            GigStatus.MISSED -> R.color.gig_timer_declined_red
+            UPCOMING -> R.color.gig_timer_upcoming_pink
+            DECLINED -> R.color.gig_timer_declined_red
+            CANCELLED -> R.color.gig_timer_declined_red
+            ONGOING -> R.color.gig_timer_ongoing_green
+            PENDING -> R.color.gig_timer_upcoming_pink
+            NO_SHOW -> R.color.gig_timer_declined_red
+            COMPLETED -> R.color.gig_timer_ongoing_green
+            MISSED -> R.color.gig_timer_declined_red
         }
     }
 

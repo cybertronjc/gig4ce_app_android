@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gighistory
+package com.gigforce.giger_gigs.gighistory
 
 import android.app.Activity
 import android.view.LayoutInflater

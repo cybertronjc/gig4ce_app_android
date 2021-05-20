@@ -36,5 +36,9 @@
     <string name="gig_location">Gig Location</string>
     <string name="learning_assign_to_you">Learning assigned to you</string>
     <string name="plus_see_less">+ see less</string>
+    <string name="explore_by_role">Explore By Role</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="valid_upto">Valid Upto :</string>
+    <string name="issued_on">Issued On</string>
 
 </resources>

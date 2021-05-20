@@ -577,11 +577,11 @@
 
     <fragment
         android:id="@+id/gig_history_fragment"
-        android:name="com.gigforce.app.modules.gighistory.GigHistoryFragment"
+        android:name="com.gigforce.giger_gigs.gighistory.GigHistoryFragment"
         android:label="GigHistoryFragment" />
     <fragment
         android:id="@+id/giger_id_fragment"
-        android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
+        android:name="com.gigforce.giger_gigs.gigerid.GigerIdFragment"
         android:label="GigerIdFragment" />
 
     <fragment

@@ -339,11 +339,11 @@ dependencies {
 
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
-    //Qr Code Library
-    implementation 'com.google.zxing:core:3.4.0'
+//    //Qr Code Library
+//    implementation 'com.google.zxing:core:3.4.0'
 
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
-    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+//    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+//    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
 
 
     implementation 'com.clevertap.android:clevertap-android-sdk:3.8.1'

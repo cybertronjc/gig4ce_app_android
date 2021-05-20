@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigerid
+package com.gigforce.giger_gigs.gigerid
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException

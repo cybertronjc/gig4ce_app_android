@@ -1,13 +1,13 @@
-package com.gigforce.app.modules.gighistory
+package com.gigforce.giger_gigs.gighistory
 
 //import com.gigforce.app.modules.earn.gighistory.models.GigsResponse
 //import com.gigforce.core.datamodels.gigpage.DocChange
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.giger_gigs.models.DocChange
+import com.gigforce.common_ui.viewdatamodels.DocChange
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
-import com.gigforce.app.modules.gighistory.models.GigsResponse
+import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.giger_gigs.gighistory.models.GigsResponse
 import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot

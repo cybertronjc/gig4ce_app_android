@@ -1,11 +1,11 @@
-package com.gigforce.app.modules.gigerid
+package com.gigforce.giger_gigs.gigerid
 
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.gigpage.Gig
 
-import com.gigforce.app.modules.gigerid.models.URLQrCode
+import com.gigforce.common_ui.viewdatamodels.models.URLQrCode
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.PermissionUtils
 import com.gigforce.core.SingleLiveEvent

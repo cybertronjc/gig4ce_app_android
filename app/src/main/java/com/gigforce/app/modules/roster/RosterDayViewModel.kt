@@ -22,7 +22,7 @@ import com.gigforce.user_preferences.PreferencesRepository
 import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.giger_gigs.repositories.GigsRepository
 import com.gigforce.core.extensions.toDate
 import com.gigforce.core.extensions.toLocalDate

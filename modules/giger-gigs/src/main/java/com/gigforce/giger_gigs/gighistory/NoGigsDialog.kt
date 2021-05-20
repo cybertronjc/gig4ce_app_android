@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gighistory
+package com.gigforce.giger_gigs.gighistory
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.gigforce.app.R
+//import com.gigforce.app.R
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.giger_gigs.R
 import kotlinx.android.synthetic.main.layout_dialog_no_gigs.*
 
 class NoGigsDialog : DialogFragment() {
@@ -38,9 +39,9 @@ class NoGigsDialog : DialogFragment() {
             ?.setLayout(
                 (getScreenWidth(requireActivity()).width - resources.getDimension(R.dimen.size_32)).toInt(),
                 ViewGroup.LayoutParams.WRAP_CONTENT
-            );
+            )
         dialog?.window
-            ?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+            ?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     fun setCallbacks(noGigsDialogCallbacks: NoGigsDialogCallbacks) {

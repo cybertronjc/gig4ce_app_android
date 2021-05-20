@@ -7,7 +7,7 @@ import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await

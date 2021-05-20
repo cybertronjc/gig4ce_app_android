@@ -1,4 +1,4 @@
-package com.gigforce.giger_gigs.models
+package com.gigforce.common_ui.viewdatamodels
 
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.google.firebase.firestore.DocumentChange

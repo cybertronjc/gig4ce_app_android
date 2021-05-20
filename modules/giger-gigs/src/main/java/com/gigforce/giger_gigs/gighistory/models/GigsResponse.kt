@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gighistory.models
+package com.gigforce.giger_gigs.gighistory.models
 
 //import com.gigforce.app.core.base.models.BaseResponse
 import com.gigforce.core.datamodels.gigpage.Gig
