@@ -53,6 +53,7 @@ class NavManagerImpl @Inject constructor(
         NavForVerificationModule(this)
         NavForCommonModule(this)
         NavForWalletModule(this)
+        NavUserDetailsInfo(this)
     }
 
     private fun registerForWalletAndPayouts() {

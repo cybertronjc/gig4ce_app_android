@@ -1,6 +1,7 @@
 package com.gigforce.ambassador.user_rollment.verify_mobile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +17,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_ambsd_check_mobile.*
 import java.util.regex.Pattern
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionListener {
 
     private val viewModel: VerifyUserMobileViewModel by activityViewModels()
-    private lateinit var navigation : INavigation
+
+    @Inject lateinit var navigation : INavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +90,7 @@ class CheckMobileFragment : Fragment(), UserAlreadyExistDialogFragmentActionList
                             //show user already registered dialog
                             showMobileAlreadyRegisterdDialog()
                         } else {
-                            navigation.navigateTo("")
+                            //navigation.navigateTo("")
                             navigation.navigateTo("userinfo/confirmOtpFragment",bundleOf(
                                 ConfirmOtpFragment.INTENT_EXTRA_MOBILE_NO to "${mobile_no_et.text}",
                                 ConfirmOtpFragment.INTENT_EXTRA_OTP_TOKEN to it.content.verificationToken

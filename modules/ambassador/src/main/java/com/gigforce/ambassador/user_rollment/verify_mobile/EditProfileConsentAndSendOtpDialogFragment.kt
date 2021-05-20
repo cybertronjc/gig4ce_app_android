@@ -18,13 +18,11 @@ import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_sending_otp_for_ambassador_edit.*
 
-interface UserDetailsFilledDialogFragmentResultListener {
 
-    fun onOtpSent(sendOtpResponseData: SendOtpResponseData)
-}
-
+@AndroidEntryPoint
 class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
 
     companion object {
@@ -139,4 +137,8 @@ class EditProfileConsentAndSendOtpDialogFragment : DialogFragment() {
     }
 
 
+}
+interface UserDetailsFilledDialogFragmentResultListener {
+
+    fun onOtpSent(sendOtpResponseData: SendOtpResponseData)
 }
