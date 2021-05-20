@@ -17,6 +17,7 @@ import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.user_preferences.PreferencesFragment
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.utils.GigNavigation
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.listeners.PaginationScrollListener
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.core.utils.GlideApp

@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 //import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.IEventTracker

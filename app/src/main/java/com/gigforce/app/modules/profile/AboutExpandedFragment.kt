@@ -22,6 +22,7 @@ import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*

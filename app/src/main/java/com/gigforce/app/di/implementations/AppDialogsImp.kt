@@ -2,6 +2,7 @@ package com.gigforce.app.di.implementations
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
@@ -18,7 +19,7 @@ import com.gigforce.common_ui.OptionSelected
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-open class AppDialogsImp @Inject constructor(@ActivityContext val activity: Activity) :
+class AppDialogsImp @Inject constructor(@ActivityContext val activity: Context) :
     AppDialogsInterface {
 
     //Confirmation dialog start
@@ -76,7 +77,7 @@ open class AppDialogsImp @Inject constructor(@ActivityContext val activity: Acti
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type3)
         val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        (activity as Activity)?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         var width = displayMetrics.widthPixels
         var parentLayout = customialog?.findViewById<ConstraintLayout>(R.id.parent_cl)
         var lp = parentLayout?.layoutParams
@@ -112,7 +113,7 @@ open class AppDialogsImp @Inject constructor(@ActivityContext val activity: Acti
         customialog?.setCancelable(false)
         customialog?.setContentView(R.layout.confirmation_custom_alert_type5)
         val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
+        (activity as Activity)?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
         var width = displayMetrics.widthPixels
         var parentLayout = customialog?.findViewById<ConstraintLayout>(R.id.parent_cl)
         var lp = parentLayout?.layoutParams

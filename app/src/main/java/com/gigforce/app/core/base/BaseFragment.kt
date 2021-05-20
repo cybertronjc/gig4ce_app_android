@@ -32,7 +32,7 @@ import com.gigforce.app.core.base.language.LanguageUtilImp
 import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilDataImp
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.base.utilfeatures.CommonUtilImp
 import com.gigforce.core.base.utilfeatures.CommonUtilInterface
@@ -103,7 +103,10 @@ open class BaseFragment : Fragment(),
         // there will be no any requirement further after using DI
         viewsFromViewsInterface = ViewsFromViewsImpl(requireActivity())
         navigationInterface = NavigationImpl(requireActivity())
-        sharedDataInterface = SharedPreAndCommonUtilDataImp(requireActivity())
+        sharedDataInterface =
+            SharedPreAndCommonUtilDataImp(
+                requireActivity()
+            )
         appDialogsInterface =
             AppDialogsImp(requireActivity())
         languageUtilInterface = LanguageUtilImp(this)

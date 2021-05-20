@@ -22,6 +22,7 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip

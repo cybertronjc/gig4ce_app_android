@@ -17,6 +17,7 @@ import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.datamodels.profile.Education
 import com.gigforce.common_ui.decors.ItemDecorationAddContact
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.layout_add_education_fragment.*
 

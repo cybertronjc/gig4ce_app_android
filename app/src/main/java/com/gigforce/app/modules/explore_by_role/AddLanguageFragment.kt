@@ -14,6 +14,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.datamodels.profile.Language
 import com.gigforce.common_ui.decors.AddLangugeRvItemDecorator
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import kotlinx.android.synthetic.main.layout_fragment_add_language.*
 
 class AddLanguageFragment : BaseFragment(), AdapterAddLanguage.AdapterAddLanguageCallbacks {

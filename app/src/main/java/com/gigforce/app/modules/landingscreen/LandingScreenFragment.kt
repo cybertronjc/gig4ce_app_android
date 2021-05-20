@@ -75,6 +75,7 @@ import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
 import kotlin.collections.ArrayList
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus.Companion.STATUS_VERIFIED
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.Lce
 import javax.inject.Inject

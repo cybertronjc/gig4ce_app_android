@@ -30,6 +30,7 @@ import com.gigforce.core.datamodels.profile.RoleInterests
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.adapter.AdapterPreferredLocation
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.getScreenWidth
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.google.firebase.auth.FirebaseAuth

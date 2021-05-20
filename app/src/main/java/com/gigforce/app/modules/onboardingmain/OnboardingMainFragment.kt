@@ -28,6 +28,7 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 

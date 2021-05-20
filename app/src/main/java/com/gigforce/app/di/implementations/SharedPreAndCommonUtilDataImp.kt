@@ -1,4 +1,4 @@
-package com.gigforce.core.base.shareddata
+package com.gigforce.app.di.implementations
 
 import android.app.Activity
 import android.content.Context
@@ -9,11 +9,13 @@ import android.content.res.Configuration
 import android.util.Log
 import com.gigforce.core.CoreConstants
 import com.gigforce.core.AppConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import dagger.hilt.android.qualifiers.ActivityContext
 import java.util.*
 import javax.inject.Inject
 
-class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val activity: Activity) : SharedPreAndCommonUtilInterface {
+class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val activity: Context) :
+    SharedPreAndCommonUtilInterface {
     var SP: SharedPreferences
     var editor: SharedPreferences.Editor? = null
 

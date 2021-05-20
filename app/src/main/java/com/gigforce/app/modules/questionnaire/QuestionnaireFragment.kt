@@ -25,6 +25,7 @@ import com.gigforce.app.modules.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.RVPagerSnapFancyDecorator
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.RatioLayoutManager
 import com.gigforce.common_ui.utils.getScreenWidth

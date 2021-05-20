@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.common_ui.ext.showToast
 import kotlinx.android.synthetic.main.calendar_dialog.*
 import java.text.SimpleDateFormat
 import java.util.*

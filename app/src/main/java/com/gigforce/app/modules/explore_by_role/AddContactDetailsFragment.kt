@@ -14,6 +14,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.explore_by_role.models.ContactModel
 import com.gigforce.common_ui.decors.ItemDecorationAddContact
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.utils.isValidMail
 import com.gigforce.core.utils.isValidMobile
 import kotlinx.android.synthetic.main.layout_fragment_add_contact_details.*

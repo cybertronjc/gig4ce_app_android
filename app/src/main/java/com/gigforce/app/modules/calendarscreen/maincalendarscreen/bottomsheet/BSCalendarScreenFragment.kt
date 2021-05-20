@@ -57,6 +57,7 @@ import com.gigforce.client_activation.client_activation.models.JobProfile
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants

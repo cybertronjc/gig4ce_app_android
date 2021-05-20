@@ -19,6 +19,7 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
 import com.gigforce.common_ui.utils.getScreenShot
 import com.gigforce.core.utils.*
