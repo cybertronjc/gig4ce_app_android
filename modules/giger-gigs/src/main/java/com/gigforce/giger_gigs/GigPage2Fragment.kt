@@ -33,7 +33,7 @@ import com.gigforce.giger_gigs.bottomsheets.PermissionRequiredBottomSheet
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.giger_gigs.dialogFragments.RateGigDialogFragment
-import com.gigforce.giger_gigs.models.*
+import com.gigforce.core.datamodels.gigpage.models.*
 import com.gigforce.giger_gigs.viewModels.GigViewModel
 import com.gigforce.common_ui.utils.LocationUtils
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity

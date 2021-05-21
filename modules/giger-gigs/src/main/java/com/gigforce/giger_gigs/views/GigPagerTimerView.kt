@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime

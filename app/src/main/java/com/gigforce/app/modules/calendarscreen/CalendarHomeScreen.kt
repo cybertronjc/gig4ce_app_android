@@ -30,12 +30,13 @@ import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
+//import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
+//import com.gigforce.giger_app.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
 
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
-import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
-import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
 
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
@@ -47,6 +48,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
 
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 import com.gigforce.giger_gigs.viewModels.GigViewModel
@@ -916,7 +918,7 @@ class CalendarHomeScreen : BaseFragment(),
         var layout = snackbar.view as Snackbar.SnackbarLayout
         // Hide the text
         var textView =
-            layout.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            layout.findViewById<TextView>(R.id.snackbar_text)
         textView.visibility = View.INVISIBLE
 
         // Inflate our custom view

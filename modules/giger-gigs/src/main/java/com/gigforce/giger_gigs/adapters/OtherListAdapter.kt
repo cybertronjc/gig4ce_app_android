@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.models.OtherOption
+import com.gigforce.core.datamodels.gigpage.models.OtherOption
 import kotlinx.android.synthetic.main.recycler_item_other_option.view.*
 
 interface OtherOptionClickListener {

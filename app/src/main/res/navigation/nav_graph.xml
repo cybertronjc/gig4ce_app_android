@@ -253,7 +253,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="com.gigforce.app.modules.calendarscreen.HomeScreenFragment"
+        android:name="com.gigforce.giger_app.calendarscreen.HomeScreenFragment"
         android:label="HomeScreenFragment">
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
@@ -655,7 +655,7 @@
 
     <fragment
         android:id="@+id/fragment_home_bottom_sheet"
-        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+        android:name="com.gigforce.app.modules.calendarscreen.BSCalendarScreenFragment"
         android:label="fragment_home_bottom_sheet"
 
         tools:layout="@layout/home_screen_bottom_sheet_fragment" >

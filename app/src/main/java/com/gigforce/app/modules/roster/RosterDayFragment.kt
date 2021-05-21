@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.components.CalendarView
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
-import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
-import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
 //import com.gigforce.app.modules.gigPage.GigsListForDeclineBottomSheet
 import com.gigforce.core.datamodels.gigpage.Gig

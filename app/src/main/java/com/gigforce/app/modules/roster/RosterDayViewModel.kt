@@ -15,14 +15,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
-import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 //import com.gigforce.app.modules.gigPage.GigsRepository
 import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.giger_gigs.repositories.GigsRepository
 import com.gigforce.core.extensions.toDate
 import com.gigforce.core.extensions.toLocalDate

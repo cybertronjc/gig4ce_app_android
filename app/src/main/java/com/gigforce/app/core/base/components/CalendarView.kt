@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import kotlinx.android.synthetic.main.calendar_view_layout.view.*
 import java.util.*
 import kotlin.collections.ArrayList

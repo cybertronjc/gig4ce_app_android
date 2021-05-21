@@ -16,8 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
-import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
+import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.toDate

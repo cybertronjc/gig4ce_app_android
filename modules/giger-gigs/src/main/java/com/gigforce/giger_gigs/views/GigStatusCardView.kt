@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.google.android.material.card.MaterialCardView
 
 class GigStatusCardView(

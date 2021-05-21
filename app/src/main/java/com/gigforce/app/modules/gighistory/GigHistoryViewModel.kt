@@ -4,9 +4,9 @@ package com.gigforce.app.modules.gighistory
 //import com.gigforce.core.datamodels.gigpage.DocChange
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.gigforce.giger_gigs.models.DocChange
+import com.gigforce.core.datamodels.gigpage.models.DocChange
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.models.GigStatus
+import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.app.modules.gighistory.models.GigsResponse
 import com.gigforce.core.SingleLiveEvent
 import com.google.firebase.firestore.DocumentChange

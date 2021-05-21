@@ -1,18 +1,15 @@
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-android-extensions'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 //
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -41,6 +38,7 @@ dependencies {
     implementation project(path: ':modules:common-ui')
     implementation project(path: ':modules:learning')
     implementation project(path: ':modules:client-activation')
+    implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:profile')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
@@ -90,8 +88,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
-}
 
-kapt {
-    correctErrorTypes true
+    implementation 'com.riningan.widget:extendedbottomsheetbehavior:1.2'
+
 }
