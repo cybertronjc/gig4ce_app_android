@@ -1,8 +1,8 @@
 package com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar
 
 import com.gigforce.core.extensions.toLocalDate
-import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import java.time.LocalDate
 import java.util.*
 

@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
-import com.gigforce.user_preferences.PreferencesRepository
+import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 
 class LanguageUtilImp : LanguageUtilInterface {
     var baseFragment: BaseFragment

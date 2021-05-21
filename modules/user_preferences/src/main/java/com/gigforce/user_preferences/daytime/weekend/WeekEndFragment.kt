@@ -16,7 +16,7 @@ import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
 import com.gigforce.user_preferences.daytime.OnSlotClickListener
 import com.gigforce.user_preferences.daytime.SlotsRecyclerAdapter
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings_slots.view.*
 import kotlinx.android.synthetic.main.week_day_fragment.*

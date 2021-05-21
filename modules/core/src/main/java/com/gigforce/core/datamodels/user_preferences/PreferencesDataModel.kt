@@ -1,7 +1,6 @@
-package com.gigforce.user_preferences.prefdatamodel
+package com.gigforce.core.datamodels.user_preferences
 
 
-import com.gigforce.user_preferences.earnings.EarningDataModel
 import com.google.firebase.firestore.DocumentReference
 
 class PreferencesDataModel{

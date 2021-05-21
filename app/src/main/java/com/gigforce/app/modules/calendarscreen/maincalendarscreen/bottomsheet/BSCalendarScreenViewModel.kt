@@ -2,11 +2,10 @@ package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
-//import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.AppConstants
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.profile.ProfileData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,17 +33,20 @@ class BSCalendarScreenViewModel : ViewModel() {
             mobileNumber = "+91$mobileNumber"
 
         }
-        bsCalendarScreenRepository.getCollectionReference().whereEqualTo("loginMobile", mobileNumber).addSnapshotListener { success, err ->
+        bsCalendarScreenRepository.getCollectionReference()
+            .whereEqualTo("loginMobile", mobileNumber).addSnapshotListener { success, err ->
             run {
                 if (!success?.documents.isNullOrEmpty()) {
                     val toObject = success?.documents?.get(0)?.toObject(ProfileData::class.java)
                     gig.chatInfo = mapOf(
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to (toObject?.profileAvatarName ?: ""),
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to (toObject?.name ?: ""),
-                            ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to "",
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to (success?.documents?.get(0)?.id ?: ""),
-                            StringConstants.MOBILE_NUMBER.value to (toObject?.loginMobile ?: ""),
-                            StringConstants.FROM_CLIENT_ACTIVATON.value to true
+                        AppConstants.INTENT_EXTRA_OTHER_USER_IMAGE to (toObject?.profileAvatarName
+                            ?: ""),
+                        AppConstants.INTENT_EXTRA_OTHER_USER_NAME to (toObject?.name ?: ""),
+                        AppConstants.INTENT_EXTRA_CHAT_HEADER_ID to "",
+                        AppConstants.INTENT_EXTRA_OTHER_USER_ID to (success?.documents?.get(0)?.id
+                            ?: ""),
+                        StringConstants.MOBILE_NUMBER.value to (toObject?.loginMobile ?: ""),
+                        StringConstants.FROM_CLIENT_ACTIVATON.value to true
 
                     )
 
@@ -62,14 +64,16 @@ class BSCalendarScreenViewModel : ViewModel() {
         val observable: Observable<List<Gig>>? = Observable.just(upcomingGigs)
         disposable?.add(observable?.flatMap {
             Observable.fromIterable(it)
-        }?.flatMap { checkForChatProfile(it) }?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ success ->
+        }?.flatMap { checkForChatProfile(it) }?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ success ->
             _observableChatInfo.value = success
 
         }, { err ->
 
 
         })
-        !!)
+        !!
+        )
 
 
     }

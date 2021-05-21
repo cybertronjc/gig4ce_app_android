@@ -34,7 +34,7 @@ import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.extensions.visible
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
+import com.gigforce.app.modules.calendarscreen.CalendarHomeScreen
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.app.modules.help.HelpVideo

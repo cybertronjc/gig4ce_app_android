@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.date_time_fragment.*
 import javax.inject.Inject

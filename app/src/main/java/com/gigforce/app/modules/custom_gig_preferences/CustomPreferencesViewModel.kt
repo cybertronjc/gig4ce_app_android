@@ -1,6 +1,8 @@
 package com.gigforce.app.modules.custom_gig_preferences
 
 import androidx.lifecycle.*
+import com.gigforce.core.datamodels.custom_gig_preferences.CustomPreferencesDataModel
+import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 
 class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
     var customPreferencesRepository = CustomPreferencesRepository()
@@ -24,7 +26,8 @@ class CustomPreferencesViewModel(var owner: LifecycleOwner) : ViewModel() {
                         value!!.toObject(CustomPreferencesDataModel::class.java)
                     )
                 } else {
-                    var customPreferencesDataModel1 = CustomPreferencesDataModel()
+                    var customPreferencesDataModel1 =
+                        CustomPreferencesDataModel()
                     customPreferencesDataModel1.unavailable = ArrayList<UnavailableDataModel>()
                     customPreferencesRepository.setDefaultData(customPreferencesDataModel1)
                 }

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.custom_gig_preferences
+package com.gigforce.core.datamodels.custom_gig_preferences
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 import java.util.*
@@ -19,7 +19,12 @@ class UnavailableDataModel : BaseFirestoreDataModel{
     }
     constructor(sDateTime: Date, eDateTime:Date):super("unavailable")  {
         this.date = sDateTime
-        this.timeSlots.add(TimeSlotsDataModel(sDateTime, eDateTime))
+        this.timeSlots.add(
+            TimeSlotsDataModel(
+                sDateTime,
+                eDateTime
+            )
+        )
     }
     fun findDateDataModel(
         arrUnavailable: ArrayList<UnavailableDataModel>
@@ -50,8 +55,11 @@ class UnavailableDataModel : BaseFirestoreDataModel{
         return null
     }
 
-    fun copyObject():UnavailableDataModel{
-        var obj = UnavailableDataModel(date)
+    fun copyObject(): UnavailableDataModel {
+        var obj =
+            UnavailableDataModel(
+                date
+            )
         obj.timeSlots = ArrayList<TimeSlotsDataModel>()
         obj.timeSlots.addAll(timeSlots)
         return obj
@@ -74,7 +82,12 @@ class UnavailableDataModel : BaseFirestoreDataModel{
     }
 
     fun setUnavailaleSlots(unavailableDataModel: UnavailableDataModel) {
-        timeSlots.add(TimeSlotsDataModel(unavailableDataModel.timeSlots.get(0).startTime,unavailableDataModel.timeSlots.get(0).endTime))
+        timeSlots.add(
+            TimeSlotsDataModel(
+                unavailableDataModel.timeSlots.get(0).startTime,
+                unavailableDataModel.timeSlots.get(0).endTime
+            )
+        )
     }
 
 

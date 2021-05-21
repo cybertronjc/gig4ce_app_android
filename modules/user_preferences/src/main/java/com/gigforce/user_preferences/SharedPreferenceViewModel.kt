@@ -3,13 +3,14 @@ package com.gigforce.user_preferences
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.user_preferences.earnings.EarningDataModel
+import com.gigforce.core.datamodels.user_preferences.EarningDataModel
 import com.gigforce.user_preferences.location.CitiesRepository
 import com.gigforce.user_preferences.location.models.LocationPreferenceModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 import com.gigforce.core.datamodels.profile.AddressFirestoreModel
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -22,7 +23,8 @@ import kotlin.collections.ArrayList
 
 class SharedPreferenceViewModel : ViewModel {
     companion object {
-        var preferencesDataModelObj: PreferencesDataModel = PreferencesDataModel()
+        var preferencesDataModelObj: PreferencesDataModel =
+            PreferencesDataModel()
         var profileDataModelObj: ProfileData = ProfileData()
         var addressModelObj: AddressModel = AddressModel()
         var configDataModel: ConfigDataModel? = null
@@ -74,7 +76,8 @@ class SharedPreferenceViewModel : ViewModel {
                 }
                 if (value?.data == null) {
                     if (configDataModel != null) {
-                        var defaultData = PreferencesDataModel()
+                        var defaultData =
+                            PreferencesDataModel()
                         var slots = getAllSlots()
                         defaultData.isweekdaysenabled = true
                         defaultData.selecteddays.addAll(getAllDays())

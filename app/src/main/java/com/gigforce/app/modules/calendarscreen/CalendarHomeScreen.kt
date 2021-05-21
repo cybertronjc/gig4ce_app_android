@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.calendarscreen.maincalendarscreen
+package com.gigforce.app.modules.calendarscreen
 
 import android.app.Dialog
 import android.content.Intent
@@ -24,29 +24,36 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
+
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.core.base.components.CalendarView
-import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
+
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.ParamCustPreferViewModel
-import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
-import com.gigforce.giger_gigs.viewModels.GigViewModel
-import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
-import com.gigforce.user_preferences.PreferencesFragment
-import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.modules.roster.RosterDayFragment
+
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.configrepository.ConfigRepository
+
+import com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet
+import com.gigforce.giger_gigs.viewModels.GigViewModel
+
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.user_preferences.PreferencesFragment
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -54,16 +61,13 @@ import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import kotlinx.android.synthetic.main.calendar_home_screen.*
-import kotlinx.android.synthetic.main.calendar_home_screen.cardView
-import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
-import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 
 
 class CalendarHomeScreen : BaseFragment(),
-    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
+    CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     companion object {
         fun newInstance() =
@@ -77,8 +81,8 @@ class CalendarHomeScreen : BaseFragment(),
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
-    private val gigViewModel : GigViewModel by viewModels()
-    private val chatHeadersViewModel : ChatHeadersViewModel by viewModels()
+    private val gigViewModel: GigViewModel by viewModels()
+    private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
     lateinit var arrCalendarDependent: Array<View>
     private var mExtendedBottomSheetBehavior: ExtendedBottomSheetBehavior<*>? = null
@@ -121,7 +125,7 @@ class CalendarHomeScreen : BaseFragment(),
                             }
 
                             override fun clickedOnNo(dialog: Dialog?) {
-                                if (latestAPPUpdateModel?.force_update_required)
+                                if (latestAPPUpdateModel.force_update_required)
                                     activity?.finish()
                                 dialog?.dismiss()
                             }
@@ -131,7 +135,7 @@ class CalendarHomeScreen : BaseFragment(),
         })
         arrCalendarDependent =
 //            arrayOf(calendar_dependent, margin_40, below_oval, calendar_cv, bottom_sheet_top_shadow)
-        arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
+            arrayOf(calendar_dependent, calendar_cv, bottom_sheet_top_shadow)
 
         selectedMonthModel = CalendarView.MonthModel(Calendar.getInstance().get(Calendar.MONTH))
         initializeViews()
@@ -142,31 +146,34 @@ class CalendarHomeScreen : BaseFragment(),
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(
-                requireActivity(),
-                ResourcesCompat.getColor(resources,R.color.white,null)
+            requireActivity(),
+            ResourcesCompat.getColor(resources, R.color.white, null)
         )
     }
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
             var currentAppVersion = getAppVersion()
-            if(currentAppVersion.contains("Dev")){
-                currentAppVersion = currentAppVersion?.split("-")[0]
+            if (currentAppVersion.contains("Dev")) {
+                currentAppVersion = currentAppVersion.split("-")[0]
             }
-            val appVersion = currentAppVersion?.split(".")?.toTypedArray()
+            val appVersion = currentAppVersion.split(".").toTypedArray()
             val serverAPPVersion =
-                latestAPPUpdateModel?.force_update_current_version?.split(".")?.toTypedArray()
-            if (appVersion?.size == 0 || serverAPPVersion?.size == 0) {
-                FirebaseCrashlytics.getInstance().log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
+                latestAPPUpdateModel.force_update_current_version.split(".").toTypedArray()
+            if (appVersion.size == 0 || serverAPPVersion.size == 0) {
+                FirebaseCrashlytics.getInstance()
+                    .log("isNotLatestVersion method : appVersion or serverAPPVersion has zero size!!")
                 return false
             } else {
                 if (appVersion.get(0).toInt() < serverAPPVersion.get(0).toInt()) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()) {
+                } else if (appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                        .toInt() && appVersion.get(1).toInt() < serverAPPVersion.get(1).toInt()
+                ) {
                     return true
-                } else if (appVersion.get(0).toInt()== serverAPPVersion.get(0).toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1).toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()) {
-                    return true
-                } else return false
+                } else return appVersion.get(0).toInt() == serverAPPVersion.get(0)
+                    .toInt() && appVersion.get(1).toInt() == serverAPPVersion.get(1)
+                    .toInt() && appVersion.get(2).toInt() < serverAPPVersion.get(2).toInt()
 
             }
         } catch (e: Exception) {
@@ -177,22 +184,22 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
     fun getAppVersion(): String {
-        var result = "";
+        var result = ""
 
         try {
-            result = context?.getPackageManager()
-                ?.getPackageInfo(context?.getPackageName(), 0)
-                ?.versionName ?: "";
+            result = context?.packageManager
+                ?.getPackageInfo(context?.packageName, 0)
+                ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 
         }
 
-        return result;
+        return result
     }
 
     fun redirectToStore(playStoreUrl: String) {
         var intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
 
@@ -206,10 +213,10 @@ class CalendarHomeScreen : BaseFragment(),
     private fun initializeExtendedBottomSheet() {
         mExtendedBottomSheetBehavior = ExtendedBottomSheetBehavior.from(nsv)
 
-        Log.d("BottomSheetState " ,"init  : ${viewModel.currentBottomSheetState}")
+        Log.d("BottomSheetState ", "init  : ${viewModel.currentBottomSheetState}")
         mExtendedBottomSheetBehavior?.setBottomSheetCallback(BottomSheetExpansionListener())
         mExtendedBottomSheetBehavior?.state = viewModel.currentBottomSheetState
-        mExtendedBottomSheetBehavior?.isAllowUserDragging = true;
+        mExtendedBottomSheetBehavior?.isAllowUserDragging = true
     }
 
     private fun listener() {
@@ -265,11 +272,14 @@ class CalendarHomeScreen : BaseFragment(),
 
     private fun changeVisibilityCalendarView() {
         var extendedBottomSheetBehavior: ExtendedBottomSheetBehavior<NestedScrollView> =
-            ExtendedBottomSheetBehavior.from(nsv);
+            ExtendedBottomSheetBehavior.from(nsv)
 
         if (extendedBottomSheetBehavior.isAllowUserDragging) {
             hideDependentViews(false)
-            Log.d("BottomSheetState " ,"changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}")
+            Log.d(
+                "BottomSheetState ",
+                "changeVisibilityCalendarView  : ${viewModel.currentBottomSheetState}"
+            )
             extendedBottomSheetBehavior.state = viewModel.currentBottomSheetState
             extendedBottomSheetBehavior.isAllowUserDragging = false
         } else {
@@ -288,7 +298,7 @@ class CalendarHomeScreen : BaseFragment(),
         if (layoutManager == null) {
             layoutManager = rv_.layoutManager as LinearLayoutManager
         }
-        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
         var dayModel = selectedMonthModel.days.get(0)
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < dayModel.year || (recyclerGenericAdapter.list.get(
                 firstVisibleItem
@@ -305,7 +315,7 @@ class CalendarHomeScreen : BaseFragment(),
                         index
                     ).date == dayModel.date
                 ) {
-                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                    (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         index,
                         0
                     )
@@ -318,7 +328,7 @@ class CalendarHomeScreen : BaseFragment(),
                         index
                     ).month == dayModel.month && recyclerGenericAdapter.list.get(index).date == dayModel.date
                 ) {
-                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                    (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         index,
                         0
                     )
@@ -393,19 +403,20 @@ class CalendarHomeScreen : BaseFragment(),
         })
 
         gigViewModel.todaysGigs.observe(viewLifecycleOwner, Observer {
-            it?: return@Observer
+            it ?: return@Observer
 
             when (it) {
-                Lce.Loading -> {}
+                Lce.Loading -> {
+                }
                 is Lce.Content -> {
                     showTodaysGigDialog(it.content.size)
                 }
                 is Lce.Error -> {
                     MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Alert")
-                            .setMessage("Unable to fetch todays gig list, ${it.error}")
-                            .setPositiveButton("Okay"){_,_ ->}
-                            .show()
+                        .setTitle("Alert")
+                        .setMessage("Unable to fetch todays gig list, ${it.error}")
+                        .setPositiveButton("Okay") { _, _ -> }
+                        .show()
                 }
             }
         })
@@ -471,16 +482,16 @@ class CalendarHomeScreen : BaseFragment(),
                         getView(viewHolder, R.id.coloredsideline).visibility = View.GONE
                         getView(viewHolder, R.id.graysideline).visibility = View.VISIBLE
                         showMonthLayout(false, viewHolder)
-                        getTextView(viewHolder, R.id.title).text = obj?.title
-                        if (obj?.subTitle != null && !obj?.subTitle.equals("")) {
+                        getTextView(viewHolder, R.id.title).text = obj.title
+                        if (obj.subTitle != null && !obj.subTitle.equals("")) {
                             getTextView(viewHolder, R.id.subtitle).visibility = View.VISIBLE
-                            getTextView(viewHolder, R.id.subtitle).text = obj?.subTitle
+                            getTextView(viewHolder, R.id.subtitle).text = obj.subTitle
                         } else {
                             getTextView(viewHolder, R.id.subtitle).visibility = View.GONE
                         }
-                        getTextView(viewHolder, R.id.day).text = obj?.day
-                        getTextView(viewHolder, R.id.date).text = obj?.date.toString()
-                        if (obj!!.isToday) {
+                        getTextView(viewHolder, R.id.day).text = obj.day
+                        getTextView(viewHolder, R.id.date).text = obj.date.toString()
+                        if (obj.isToday) {
                             getView(viewHolder, R.id.coloredsideline).visibility = View.VISIBLE
                             getView(viewHolder, R.id.graysideline).visibility = View.GONE
 
@@ -509,7 +520,7 @@ class CalendarHomeScreen : BaseFragment(),
 //                            setTextViewSize(getTextView(viewHolder, R.id.subtitle), 12F)
                             setTextViewSize(getTextView(viewHolder, R.id.day), 12F)
                             setTextViewSize(getTextView(viewHolder, R.id.date), 14F)
-                        } else if (obj!!.isPreviousDate) {
+                        } else if (obj.isPreviousDate) {
                             setTextViewColor(
                                 getTextView(viewHolder, R.id.title),
                                 R.color.gray_color_calendar
@@ -532,14 +543,14 @@ class CalendarHomeScreen : BaseFragment(),
                             )
 
 
-                            if (obj!!.isGigAssign) {
+                            if (obj.isGigAssign) {
                                 getView(viewHolder, R.id.daydatecard).alpha = 1.0F
                             } else {
                                 getView(viewHolder, R.id.daydatecard).alpha = 1.0F
                                 getView(viewHolder, R.id.daydatecard).alpha = 0.5F
                             }
                         } else {
-                            if (obj!!.isUnavailable) {
+                            if (obj.isUnavailable) {
                                 getTextView(viewHolder, R.id.title).text =
                                     getString(R.string.not_working)
                                 getTextView(viewHolder, R.id.subtitle).gone()
@@ -561,7 +572,7 @@ class CalendarHomeScreen : BaseFragment(),
                                 )
                                 getView(viewHolder, R.id.daydatecard).alpha = 1.0F
                                 setBackgroundStateAvailable(viewHolder)
-                            } else if (obj!!.isGigAssign) {
+                            } else if (obj.isGigAssign) {
                                 setTextViewColor(
                                     getTextView(viewHolder, R.id.title),
                                     R.color.black_color_future_date
@@ -606,7 +617,7 @@ class CalendarHomeScreen : BaseFragment(),
                             }
                         }
                     }
-                })!!
+                })
 
         recyclerGenericAdapter.list = viewModel.getAllCalendarData()
         recyclerGenericAdapter.setLayout(R.layout.vertical_calendar_item)
@@ -639,12 +650,12 @@ class CalendarHomeScreen : BaseFragment(),
 //                calendar.set(Calendar.YEAR, recyclerGenericAdapter.list.get(firstVisibleItem).year)
 //                initializeMonthTV(calendar)
                 if (!isLoading) {
-                    val totalItemCount = recyclerView!!.layoutManager?.itemCount
+                    val totalItemCount = recyclerView.layoutManager?.itemCount
 
 
-                    val lastVisibleItem = layoutManager!!.findLastVisibleItemPosition()
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
                     if (totalItemCount!! <= (lastVisibleItem + visibleThreshold)) {
-                        isLoading = true;
+                        isLoading = true
                         recyclerGenericAdapter.list.addAll(
                             viewModel.getVerticalCalendarData(
                                 recyclerGenericAdapter.list.get(recyclerGenericAdapter.list.size - 1),
@@ -676,7 +687,7 @@ class CalendarHomeScreen : BaseFragment(),
                     layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 }
                 val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
-                if (firstVisibleItem == 0) return;
+                if (firstVisibleItem == 0) return
                 var calendar = Calendar.getInstance()
 
                 calendar.set(
@@ -700,9 +711,9 @@ class CalendarHomeScreen : BaseFragment(),
         if (layoutManager == null) {
             layoutManager = rv_.layoutManager as LinearLayoutManager
         }
-        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
-        if(firstVisibleItem == -1)
+        if (firstVisibleItem == -1)
             return
 
         if (recyclerGenericAdapter.list.get(firstVisibleItem).year < selectedMonthModel.year || (recyclerGenericAdapter.list.get(
@@ -714,7 +725,7 @@ class CalendarHomeScreen : BaseFragment(),
                         index
                     ).month == selectedMonthModel.currentMonth
                 ) {
-                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                    (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         index + 1,
                         0
                     )
@@ -727,7 +738,7 @@ class CalendarHomeScreen : BaseFragment(),
                         index
                     ).month == selectedMonthModel.currentMonth
                 ) {
-                    (rv_.layoutManager as LinearLayoutManager)?.scrollToPositionWithOffset(
+                    (rv_.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         index + 1,
                         0
                     )
@@ -766,7 +777,10 @@ class CalendarHomeScreen : BaseFragment(),
             if (temporaryData.isUnavailable) {
                 temporaryData.isUnavailable = false
                 swipedToupdateGig = true
-                var data = UnavailableDataModel(temporaryData.getDateObj())
+                var data =
+                    UnavailableDataModel(
+                        temporaryData.getDateObj()
+                    )
                 data.dayUnavailable = false
                 viewModelCustomPreference.updateCustomPreference(
                     data
@@ -862,7 +876,10 @@ class CalendarHomeScreen : BaseFragment(),
 
     fun makeChangesToCalendarItem(position: Int, status: Boolean) {
         temporaryData.isUnavailable = status
-        var data = UnavailableDataModel(temporaryData.getDateObj())
+        var data =
+            UnavailableDataModel(
+                temporaryData.getDateObj()
+            )
         data.dayUnavailable = status
         swipedToupdateGig = true
         viewModelCustomPreference.updateCustomPreference(
@@ -879,7 +896,10 @@ class CalendarHomeScreen : BaseFragment(),
     ) : View.OnClickListener {
         override fun onClick(v: View?) {
             temporaryData.isUnavailable = false
-            var data = UnavailableDataModel(temporaryData.getDateObj())
+            var data =
+                UnavailableDataModel(
+                    temporaryData.getDateObj()
+                )
             data.dayUnavailable = false
             viewModelCustomPreference.updateCustomPreference(
                 data
@@ -891,16 +911,16 @@ class CalendarHomeScreen : BaseFragment(),
 
     private fun showSnackbar(position: Int) {
         nsv.visibility = View.GONE
-        val snackbar = Snackbar.make(coodinate_layout, "", Snackbar.LENGTH_LONG);
+        val snackbar = Snackbar.make(coodinate_layout, "", Snackbar.LENGTH_LONG)
         // Get the Snackbar's layout view
-        var layout = snackbar.getView() as Snackbar.SnackbarLayout;
+        var layout = snackbar.view as Snackbar.SnackbarLayout
         // Hide the text
         var textView =
-            layout.findViewById<TextView>(com.google.android.material.R.id.snackbar_text);
-        textView.setVisibility(View.INVISIBLE);
+            layout.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.visibility = View.INVISIBLE
 
         // Inflate our custom view
-        var snackView = layoutInflater.inflate(R.layout.snackbar_layout, null);
+        var snackView = layoutInflater.inflate(R.layout.snackbar_layout, null)
         snackView.setOnClickListener(
             OnSnackBarUndoClickListener(
                 position,
@@ -910,11 +930,11 @@ class CalendarHomeScreen : BaseFragment(),
             )
         )
         //If the view is not covering the whole snackbar layout, add this line
-        layout.setPadding(0, 0, 0, 0);
+        layout.setPadding(0, 0, 0, 0)
         // Add the view to the Snackbar's layout
-        layout.addView(snackView, 0);
+        layout.addView(snackView, 0)
         // Show the Snackbar
-        snackbar.show();
+        snackbar.show()
         Handler().postDelayed({
             if (nsv != null)
                 nsv.visibility = View.VISIBLE
@@ -933,17 +953,16 @@ class CalendarHomeScreen : BaseFragment(),
         }
     }
 
-    inner class BottomSheetExpansionListener : ExtendedBottomSheetBehavior.BottomSheetCallback(){
+    inner class BottomSheetExpansionListener : ExtendedBottomSheetBehavior.BottomSheetCallback() {
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             viewModel.currentBottomSheetState = newState
-            Log.d("BottomSheetState " ,"Change State : $newState")
+            Log.d("BottomSheetState ", "Change State : $newState")
         }
 
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
         }
     }
-
 
 
 }

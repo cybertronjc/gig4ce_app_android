@@ -16,10 +16,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
-import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 //import com.gigforce.app.modules.gigPage.GigsRepository
-import com.gigforce.user_preferences.PreferencesRepository
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.giger_gigs.models.GigStatus
@@ -275,7 +275,10 @@ class RosterDayViewModel constructor(
         Log.d("SwitchDayAvailability", "Cancellation is confirmed")
         isDayAvailable.postValue(false)
 
-        val unavailable = UnavailableDataModel(activeDateTime.toDate)
+        val unavailable =
+            UnavailableDataModel(
+                activeDateTime.toDate
+            )
         unavailable.dayUnavailable = true
 
         viewModelCustomPreference.updateCustomPreference(unavailable)
@@ -323,7 +326,10 @@ class RosterDayViewModel constructor(
                 Log.d("SwitchDayAvailability", "Cancellation is confirmed")
                 isDayAvailable.postValue(false)
 
-                val unavailable = UnavailableDataModel(activeDateTime.toDate)
+                val unavailable =
+                    UnavailableDataModel(
+                        activeDateTime.toDate
+                    )
                 unavailable.dayUnavailable = true
 
                 viewModelCustomPreference.updateCustomPreference(unavailable)
@@ -334,7 +340,10 @@ class RosterDayViewModel constructor(
             Log.d("SwitchDayAvailability", "Marking day available ")
             isDayAvailable.value = true
 
-            val available = UnavailableDataModel(activeDateTime.toDate)
+            val available =
+                UnavailableDataModel(
+                    activeDateTime.toDate
+                )
             available.dayUnavailable = false
 
             viewModelCustomPreference.updateCustomPreference(available)
@@ -347,7 +356,10 @@ class RosterDayViewModel constructor(
         viewModelCustomPreference: CustomPreferencesViewModel
     ) {
         viewModelCustomPreference.markUnavaialbleTimeSlots(
-            UnavailableDataModel(startDateTime.toDate, endDateTime.toDate)
+            UnavailableDataModel(
+                startDateTime.toDate,
+                endDateTime.toDate
+            )
         )
     }
 

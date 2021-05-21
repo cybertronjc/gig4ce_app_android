@@ -1,7 +1,5 @@
 package com.gigforce.app.modules.calendarscreen
 
-//import com.gigforce.app.modules.onboarding.CustomAdapter
-//import com.gigforce.app.modules.onboarding.models.MessageModel
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +14,7 @@ import com.gigforce.core.utils.GlideApp
 import kotlinx.android.synthetic.main.bottom_home.*
 import kotlinx.android.synthetic.main.fragment_roaster.*
 
-//import kotlinx.android.synthetic.main.fragment_roaster.buttonCP
-
-class HomeScreenFragment() : Fragment() {
+class HomeScreenFragment : Fragment() {
 
     private lateinit var layout: View
 
@@ -26,19 +22,15 @@ class HomeScreenFragment() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        layout =  inflater.inflate(R.layout.layout_home_screen, container, false)
+        layout = inflater.inflate(R.layout.layout_home_screen, container, false)
         return layout
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.gridview_actions.adapter = GridActionItemsAdapter(context!!)
+        this.gridview_actions.adapter = GridActionItemsAdapter(requireContext())
 
-        button_tmp.setOnClickListener{
+        button_tmp.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
 
@@ -54,27 +46,27 @@ class HomeScreenFragment() : Fragment() {
 //        this.gridview_actions.adapter.getView(1,this.view, this.view?.parent as ViewGroup?).setOnClickListener {
 //            findNavController().navigate(R.id.profileFragment)
 //        }
-            //.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        //.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
 
 
         // Populate dummy messages in List, you can implement your code here
         // Populate dummy messages in List, you can implement your code here
-  /*      val messagesList: ArrayList<MessageModel> = ArrayList()
-        for (i in 0..9) {
-            messagesList.add(
-                MessageModel(
-                    "Hi",
-                    if (i % 2 == 0) CustomAdapter.MESSAGE_TYPE_IN else CustomAdapter.MESSAGE_TYPE_OUT
-                )
-            )
-        }
+        /*      val messagesList: ArrayList<MessageModel> = ArrayList()
+              for (i in 0..9) {
+                  messagesList.add(
+                      MessageModel(
+                          "Hi",
+                          if (i % 2 == 0) CustomAdapter.MESSAGE_TYPE_IN else CustomAdapter.MESSAGE_TYPE_OUT
+                      )
+                  )
+              }
 
-        val adapter = CustomAdapter(this, messagesList)
+              val adapter = CustomAdapter(this, messagesList)
 
-        recyclerView = findViewById(android.R.id.recycler_view)
-        recyclerView!!.layoutManager = LinearLayoutManager(this)
-        recyclerView!!.adapter = adapter
-        */
+              recyclerView = findViewById(android.R.id.recycler_view)
+              recyclerView!!.layoutManager = LinearLayoutManager(this)
+              recyclerView!!.adapter = adapter
+              */
 
 
 //
@@ -104,7 +96,7 @@ class HomeScreenFragment() : Fragment() {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var view = convertView;
+            var view = convertView
             view ?: let {
                 view = LayoutInflater.from(context)
                     .inflate(R.layout.item_grid_action, parent, false)
@@ -115,7 +107,7 @@ class HomeScreenFragment() : Fragment() {
                 .placeholder(R.drawable.placeholder_user)
                 .into(view!!.findViewById<ImageView>(R.id.img_icon))
 
-            return view!!;
+            return view!!
         }
 
         override fun getItem(p0: Int): Any {

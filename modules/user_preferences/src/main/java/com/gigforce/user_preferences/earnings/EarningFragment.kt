@@ -19,6 +19,7 @@ import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.datamodels.user_preferences.EarningDataModel
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
@@ -34,7 +35,8 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private lateinit var viewModel: SharedPreferenceViewModel
-    private var earningDataModel: EarningDataModel = EarningDataModel()
+    private var earningDataModel: EarningDataModel =
+        EarningDataModel()
     @Inject lateinit var navigation : INavigation
     @Inject lateinit var appDialogInterface : AppDialogsInterface
     override fun onCreateView(

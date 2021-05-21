@@ -1,4 +1,4 @@
-package com.gigforce.user_preferences
+package com.gigforce.common_ui.repository.prefrepo
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 

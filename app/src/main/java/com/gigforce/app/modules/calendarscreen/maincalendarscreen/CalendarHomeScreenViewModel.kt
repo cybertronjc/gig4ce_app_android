@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.MainHomeCompleteGigModel
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
-import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesDataModel
-import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
+import com.gigforce.core.datamodels.custom_gig_preferences.CustomPreferencesDataModel
+import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.user_preferences.PreferencesRepository
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
+import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.riningan.widget.ExtendedBottomSheetBehavior
@@ -46,7 +46,8 @@ class CalendarHomeScreenViewModel : ViewModel() {
                         querySnapshot.documents.forEach { t ->
 
                             Log.d("gig id : data", t.id.toString())
-                            t.toObject(Gig::class.java)?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
+                            t.toObject(Gig::class.java)
+                                ?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
                         }
                         mainHomeLiveDataModel.postValue(
                             MainHomeCompleteGigModel()

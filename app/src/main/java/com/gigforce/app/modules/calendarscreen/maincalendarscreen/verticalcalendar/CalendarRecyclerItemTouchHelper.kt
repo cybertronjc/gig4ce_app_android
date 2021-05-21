@@ -9,18 +9,30 @@ import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 
 
-class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:RecyclerItemTouchHelperListener):ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
-    private val listener:RecyclerItemTouchHelperListener
-    init{
+class CalendarRecyclerItemTouchHelper(
+    dragDirs: Int,
+    swipeDirs: Int,
+    listener: RecyclerItemTouchHelperListener
+) : ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
+    private val listener: RecyclerItemTouchHelperListener
+
+    init {
         this.listener = listener
     }
-    override fun onMove(recyclerView:RecyclerView, viewHolder:RecyclerView.ViewHolder, target:RecyclerView.ViewHolder):Boolean {
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         return true
     }
 
-    fun getTopView(viewHolder:RecyclerView.ViewHolder):View{
-        var view = (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
-            R.id.calendar_detail_item_cl)
+    fun getTopView(viewHolder: RecyclerView.ViewHolder): View {
+        var view =
+            (viewHolder as PFRecyclerViewAdapter<VerticalCalendarDataItemModel>.ViewHolder).getView(
+                R.id.calendar_detail_item_cl
+            )
 //        view.findViewById<View>(R.id.daydatecard).visibility = View.GONE
         return view
     }
@@ -29,42 +41,58 @@ class CalendarRecyclerItemTouchHelper(dragDirs:Int, swipeDirs:Int, listener:Recy
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        var position = viewHolder.getAdapterPosition();
-        var item = (recyclerView.adapter as RecyclerGenericAdapter<VerticalCalendarDataItemModel>).items.get(position)
-        return if (item.isPreviousDate || item.isMonth ) 0 else super.getSwipeDirs(recyclerView, viewHolder)
+        var position = viewHolder.adapterPosition
+        var item =
+            (recyclerView.adapter as RecyclerGenericAdapter<VerticalCalendarDataItemModel>).items.get(
+                position
+            )
+        return if (item.isPreviousDate || item.isMonth) 0 else super.getSwipeDirs(
+            recyclerView,
+            viewHolder
+        )
     }
-//    fun onSelectedChanged(viewHolder:RecyclerView.ViewHolder, actionState:Int) {
+
+    //    fun onSelectedChanged(viewHolder:RecyclerView.ViewHolder, actionState:Int) {
 //        if (viewHolder != null)
 //        {
 //            val foregroundView = getTopView(viewHolder)
 //            getDefaultUIUtil().onSelected(foregroundView)
 //        }
 //    }
-    override fun onChildDrawOver(c:Canvas, recyclerView:RecyclerView,
-                        viewHolder:RecyclerView.ViewHolder, dX:Float, dY:Float,
-                        actionState:Int, isCurrentlyActive:Boolean) {
+    override fun onChildDrawOver(
+        c: Canvas, recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float,
+        actionState: Int, isCurrentlyActive: Boolean
+    ) {
         val foregroundView = getTopView(viewHolder)
-        getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
-            actionState, isCurrentlyActive)
+        getDefaultUIUtil().onDrawOver(
+            c, recyclerView, foregroundView, dX, dY,
+            actionState, isCurrentlyActive
+        )
     }
-    override fun clearView(recyclerView:RecyclerView, viewHolder:RecyclerView.ViewHolder) {
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         val foregroundView = getTopView(viewHolder)
         getDefaultUIUtil().clearView(foregroundView)
     }
-    override fun onChildDraw(c:Canvas, recyclerView:RecyclerView,
-                    viewHolder:RecyclerView.ViewHolder, dX:Float, dY:Float,
-                    actionState:Int, isCurrentlyActive:Boolean) {
+
+    override fun onChildDraw(
+        c: Canvas, recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float,
+        actionState: Int, isCurrentlyActive: Boolean
+    ) {
         val foregroundView = getTopView(viewHolder)
-        getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
-            actionState, isCurrentlyActive)
+        getDefaultUIUtil().onDraw(
+            c, recyclerView, foregroundView, dX, dY,
+            actionState, isCurrentlyActive
+        )
     }
-    override fun onSwiped(viewHolder:RecyclerView.ViewHolder, direction:Int) {
-        listener.onSwiped(viewHolder, direction, viewHolder.getAdapterPosition())
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        listener.onSwiped(viewHolder, direction, viewHolder.adapterPosition)
     }
-    override fun convertToAbsoluteDirection(flags:Int, layoutDirection:Int):Int {
-        return super.convertToAbsoluteDirection(flags, layoutDirection)
-    }
+
     interface RecyclerItemTouchHelperListener {
-        fun onSwiped(viewHolder:RecyclerView.ViewHolder, direction:Int, position:Int)
+        fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int)
     }
 }

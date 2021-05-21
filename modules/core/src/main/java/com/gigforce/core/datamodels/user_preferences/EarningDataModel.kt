@@ -1,4 +1,4 @@
-package com.gigforce.user_preferences.earnings
+package com.gigforce.core.datamodels.user_preferences
 
 import com.gigforce.core.base.basefirestore.BaseFirestoreDataModel
 

@@ -14,7 +14,7 @@ import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import kotlinx.android.synthetic.main.current_address_edit_fragment.*
 import kotlinx.android.synthetic.main.current_address_edit_fragment.area
 import kotlinx.android.synthetic.main.current_address_edit_fragment.button2
