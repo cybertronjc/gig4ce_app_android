@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.genericadapter;
+package com.gigforce.core.base.genericadapter;
 
 /**
  * Created by Akshay on 5/15/2018.

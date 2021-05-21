@@ -47,6 +47,7 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("fragment_explore_by_role",R.id.fragment_explore_by_role)
         this.registerRoute("fragment_role_details",R.id.fragment_role_details)
         this.registerRoute("payslipMonthlyFragment",R.id.payslipMonthlyFragment)
+        this.registerRoute("gigsListForDeclineBottomSheet",R.id.gigsListForDeclineBottomSheet)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)

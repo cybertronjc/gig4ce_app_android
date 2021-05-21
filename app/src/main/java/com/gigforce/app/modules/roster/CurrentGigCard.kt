@@ -6,6 +6,7 @@ import android.view.View
 import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.utils.GigNavigation
+import com.gigforce.core.extensions.px
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.upcoming_gig_card.view.*

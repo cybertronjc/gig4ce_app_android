@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.components
+package com.gigforce.giger_app.components
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.gigforce.app.R
 import com.gigforce.core.extensions.visible
+import com.gigforce.giger_app.R
 import java.util.*
 import kotlin.collections.ArrayList
 

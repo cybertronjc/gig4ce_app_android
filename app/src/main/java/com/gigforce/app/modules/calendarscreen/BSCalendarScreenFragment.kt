@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.FeatureItemAdapter
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.utils.GigNavigation

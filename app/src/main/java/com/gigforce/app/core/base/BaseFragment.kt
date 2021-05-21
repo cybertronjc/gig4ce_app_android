@@ -38,7 +38,7 @@ import com.gigforce.core.base.utilfeatures.CommonUtilImp
 import com.gigforce.core.base.utilfeatures.CommonUtilInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
-import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.NavFragmentsData

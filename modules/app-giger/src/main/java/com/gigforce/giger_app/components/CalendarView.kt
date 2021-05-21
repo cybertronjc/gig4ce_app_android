@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.components
+package com.gigforce.giger_app.components
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.gigforce.app.R
-import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.giger_app.R
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import kotlinx.android.synthetic.main.calendar_view_layout.view.*
 import java.util.*
@@ -22,11 +22,12 @@ class CalendarView : LinearLayout {
     var visibleOnce = false
     val TOTAL_YEAR = 3
     private var currentVisibleDate = Date()
+
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
-        initControl(context);
+        initControl(context)
     }
 
     companion object {
@@ -41,7 +42,7 @@ class CalendarView : LinearLayout {
 
     private fun initControl(context: Context?) {
         val inflater =
-            context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.calendar_view_layout, this)
         calendarData = Calendar.getInstance()
         calendarData.set(Calendar.DATE, 1)
@@ -60,23 +61,23 @@ class CalendarView : LinearLayout {
 
     private fun initializeGridView() {
         recyclerGenericAdapter =
-            RecyclerGenericAdapter<MonthModel>(
-                context,
-                PFRecyclerViewAdapter.OnViewHolderClick<MonthModel?> { view, position, item -> },
-                RecyclerGenericAdapter.ItemInterface<MonthModel?> { obj, viewHolder, position ->
-                    var calendarDataAdapter = CalendarBaseAdapter(context)
-                    calendarDataAdapter.list = obj?.days!!
-                    (viewHolder.getView(R.id.calendar_grid_view) as GridView).adapter =
-                        calendarDataAdapter
-                    if (this::dateClickListener.isInitialized)
-                        calendarDataAdapter.setDateClickedListener(dateClickListener)
-                })!!
+                RecyclerGenericAdapter<MonthModel>(
+                        context,
+                        PFRecyclerViewAdapter.OnViewHolderClick<MonthModel?> { view, position, item -> },
+                        RecyclerGenericAdapter.ItemInterface<MonthModel?> { obj, viewHolder, position ->
+                            var calendarDataAdapter = CalendarBaseAdapter(context)
+                            calendarDataAdapter.list = obj?.days!!
+                            (viewHolder.getView(R.id.calendar_grid_view) as GridView).adapter =
+                                    calendarDataAdapter
+                            if (this::dateClickListener.isInitialized)
+                                calendarDataAdapter.setDateClickedListener(dateClickListener)
+                        })
 //        recyclerGenericAdapter.list = getDefaultItems()
         recyclerGenericAdapter.setLayout(R.layout.calendar_moth_data_item)
         calendar_rv.layoutManager = LinearLayoutManager(
-            context,
-            LinearLayoutManager.HORIZONTAL,
-            false
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
         )
         calendar_rv.adapter = recyclerGenericAdapter
         var linearSnapHelper: SnapHelper = PagerSnapHelper()
@@ -105,7 +106,8 @@ class CalendarView : LinearLayout {
                                         currentVisiblePosition
                                 )
                         )
-                }catch (e:Exception){}
+                } catch (e: Exception) {
+                }
 
             }
         }
@@ -117,7 +119,7 @@ class CalendarView : LinearLayout {
         var currentMonth: Int = -1
         var days = ArrayList<DayModel>()
 
-        constructor() {}
+        constructor()
         constructor(currentMonth: Int) {
             this.currentMonth = currentMonth
         }
@@ -126,7 +128,7 @@ class CalendarView : LinearLayout {
             var daySelected = ""
             if (days.size > 0) {
                 daySelected =
-                    "  " + days.get(0).date + " " + days.get(0).month + " " + days.get(0).year
+                        "  " + days.get(0).date + " " + days.get(0).month + " " + days.get(0).year
             }
             return "" + year + currentMonth + daySelected
         }
@@ -141,9 +143,9 @@ class CalendarView : LinearLayout {
 
         constructor()
         constructor(
-            date: Int,
-            month: Int,
-            year: Int
+                date: Int,
+                month: Int,
+                year: Int
         ) {
             this.date = date
             this.month = month
@@ -180,7 +182,7 @@ class CalendarView : LinearLayout {
         var startingDayOfWeek = getStartingDayOfWeek(dayOfWeek)
         var lastMonth = getLastMonth()
         for (x in lastMonth.getActualMaximum(Calendar.DATE) downTo lastMonth.getActualMaximum(
-            Calendar.DATE
+                Calendar.DATE
         ) - startingDayOfWeek + 1) {
             var dayModel = DayModel()
             dayModel.date = x
@@ -223,13 +225,13 @@ class CalendarView : LinearLayout {
     }
 
     private fun getNextMonth(): Calendar {
-        var calendar1: Calendar = Calendar.getInstance();
+        var calendar1: Calendar = Calendar.getInstance()
         calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) + 1)
         return calendar1
     }
 
     private fun getLastMonth(): Calendar {
-        var calendar1: Calendar = Calendar.getInstance();
+        var calendar1: Calendar = Calendar.getInstance()
         calendar1.set(Calendar.MONTH, calendarData.get(Calendar.MONTH) - 1)
         return calendar1
     }
@@ -252,34 +254,34 @@ class CalendarView : LinearLayout {
         if (layoutManager == null) {
             layoutManager = calendar_rv.layoutManager as LinearLayoutManager
         }
-        val firstVisibleItem = layoutManager!!.findFirstVisibleItemPosition()
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
         if (firstVisibleItem != -1 && arrlist.size > 0) {
             if (calendar.get(Calendar.YEAR) > arrlist.get(firstVisibleItem).year || (calendar.get(
-                    Calendar.YEAR
-                ) == arrlist.get(firstVisibleItem).year && calendar.get(Calendar.MONTH) > arrlist.get(
-                    firstVisibleItem
-                ).currentMonth)
+                            Calendar.YEAR
+                    ) == arrlist.get(firstVisibleItem).year && calendar.get(Calendar.MONTH) > arrlist.get(
+                            firstVisibleItem
+                    ).currentMonth)
             ) {
                 for (index in firstVisibleItem..arrlist.size - 1) {
                     if (arrlist.get(index).currentMonth == calendar.get(Calendar.MONTH) && arrlist.get(
-                            index
-                        ).year == calendar.get(Calendar.YEAR)
+                                    index
+                            ).year == calendar.get(Calendar.YEAR)
                     ) {
                         layoutManager.scrollToPositionWithOffset(
-                            index,
-                            0
+                                index,
+                                0
                         )
                     }
                 }
             } else {
                 for (index in 0..firstVisibleItem) {
                     if (arrlist.get(index).currentMonth == calendar.get(Calendar.MONTH) && arrlist.get(
-                            index
-                        ).year == calendar.get(Calendar.YEAR)
+                                    index
+                            ).year == calendar.get(Calendar.YEAR)
                     ) {
                         layoutManager.scrollToPositionWithOffset(
-                            index,
-                            0
+                                index,
+                                0
                         )
                     }
                 }

@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.genericadapter;
+package com.gigforce.core.base.genericadapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

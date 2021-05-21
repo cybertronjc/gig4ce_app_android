@@ -1,4 +1,4 @@
-package com.gigforce.app.core.base.components
+package com.gigforce.giger_app.components
 
 class CalendarData(val date:String,var status:String) {
 }

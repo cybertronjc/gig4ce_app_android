@@ -5,7 +5,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 
 //import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
 

@@ -4,12 +4,13 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.core.extensions.px
 import java.time.LocalDateTime
 
 
-abstract class RosterBaseFragment: BaseFragment() {
+abstract class RosterBaseFragment: Fragment() {
 
     val rosterViewModel: RosterDayViewModel by activityViewModels<RosterDayViewModel>()
 

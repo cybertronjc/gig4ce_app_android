@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import com.gigforce.app.R
+import com.gigforce.core.extensions.px
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.hour_selected_outline.view.*
 
