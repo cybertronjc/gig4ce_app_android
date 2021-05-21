@@ -141,7 +141,6 @@ class GigPage2Fragment : BaseFragment(),
     }
 
 
-
     private fun checkIfFragmentIsVisible() {
         val fragment = childFragmentManager.findFragmentByTag(EarlyOrLateCheckInBottomSheet.TAG)
         if (fragment != null && fragment is EarlyOrLateCheckInBottomSheet) {
@@ -336,6 +335,37 @@ class GigPage2Fragment : BaseFragment(),
             return
         }
 
+        if (location != null) {
+
+            val currentGig = viewModel.currentGig ?: return
+            if (currentGig.latitude != null && currentGig.latitude != 0.0) {
+                //Gig has location
+                val userLocation = Location("user-location").apply {
+                    this.latitude = location!!.latitude
+                    this.longitude = location!!.longitude
+                }
+
+                val gigLocation = Location("gig-location").apply {
+                    this.latitude = currentGig.latitude!!
+                    this.longitude = currentGig.longitude!!
+                }
+
+
+                val distanceBetweenGigAndUser = userLocation.distanceTo(gigLocation)
+                if (distanceBetweenGigAndUser <= MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS) {
+                    //okay nothing
+                    markAttendance(checkInTimeAccToUser)
+                } else {
+                    //Show
+                    return
+                }
+            }
+        } else {
+            markAttendance(checkInTimeAccToUser)
+        }
+    }
+
+    private fun markAttendance(checkInTimeAccToUser: Timestamp?) {
         val locationPhysicalAddress = if (location != null) {
             LocationUtils.getPhysicalAddressFromLocation(
                     context = requireContext(),
@@ -956,6 +986,7 @@ class GigPage2Fragment : BaseFragment(),
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
+        private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200
 
         private val IDENTITY_CARD = OtherOption(
                 id = ID_IDENTITY_CARD,
