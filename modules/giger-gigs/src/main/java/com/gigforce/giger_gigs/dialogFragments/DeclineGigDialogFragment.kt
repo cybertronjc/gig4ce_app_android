@@ -16,7 +16,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.R
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog.*
 import kotlinx.android.synthetic.main.fragment_decline_gig_dialog_main.*

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.app.BuildConfig
-import com.gigforce.giger_gigs.repositories.GigsRepository
+import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -30,8 +30,8 @@ data class UserVersionInfo(
 )
 
 class LoginSuccessfulViewModel constructor(
-        private val gigsRepository: GigsRepository = GigsRepository(),
-        private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
+    private val gigsRepository: GigsRepository = GigsRepository(),
+    private val firebaseFunctions: FirebaseFunctions = FirebaseFunctions.getInstance()
 ) : ViewModel() {
     var profileFirebaseRepository =
         ProfileFirebaseRepository()

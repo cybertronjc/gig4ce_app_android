@@ -23,7 +23,7 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ChatHeader
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton

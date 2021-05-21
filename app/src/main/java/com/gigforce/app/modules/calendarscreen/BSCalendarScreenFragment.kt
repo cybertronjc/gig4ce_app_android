@@ -31,16 +31,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.FeatureItemAdapter
 import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.LearningViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -53,8 +54,6 @@ import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.*
-import com.gigforce.giger_gigs.viewModels.GigViewModel
-import com.gigforce.modules.feature_chat.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
@@ -74,8 +73,10 @@ class BSCalendarScreenFragment : Fragment() {
     private val gigViewModel: GigViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
+
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     override fun onCreateView(

@@ -32,7 +32,7 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.gms.tasks.OnCompleteListener

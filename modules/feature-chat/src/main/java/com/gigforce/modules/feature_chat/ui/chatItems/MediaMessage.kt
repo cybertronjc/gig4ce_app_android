@@ -9,7 +9,7 @@ import com.gigforce.core.extensions.getDownloadUrlOrThrow
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.retrofit.RetrofitFactory
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.gigforce.modules.feature_chat.models.IMediaMessage
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService

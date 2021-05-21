@@ -33,7 +33,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ContactModel
 import com.gigforce.modules.feature_chat.screens.adapters.ContactsRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.OnContactClickListener

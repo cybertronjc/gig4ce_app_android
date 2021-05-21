@@ -8,6 +8,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.addOrThrow
 import com.gigforce.core.extensions.commitOrThrow
@@ -16,7 +17,7 @@ import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
 import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference

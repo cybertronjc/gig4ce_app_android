@@ -22,7 +22,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.user_preferences.EarningDataModel
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.earning_fragment.*
 import javax.inject.Inject

@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import kotlinx.android.synthetic.main.permanent_address_edit_fragment.*
 

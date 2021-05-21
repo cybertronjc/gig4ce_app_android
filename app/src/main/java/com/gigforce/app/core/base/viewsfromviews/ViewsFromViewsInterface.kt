@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 
-//import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-
 interface ViewsFromViewsInterface {
     //from holder
     fun getTextView(view: PFRecyclerViewAdapter<Any?>.ViewHolder, id: Int): TextView

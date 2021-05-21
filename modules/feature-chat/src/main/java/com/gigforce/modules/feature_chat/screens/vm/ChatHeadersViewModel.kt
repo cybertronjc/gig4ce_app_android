@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatHeader
+import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.modules.feature_chat.repositories.ChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

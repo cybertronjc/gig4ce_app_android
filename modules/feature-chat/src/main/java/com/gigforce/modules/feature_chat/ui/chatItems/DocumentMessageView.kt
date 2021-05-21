@@ -21,7 +21,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

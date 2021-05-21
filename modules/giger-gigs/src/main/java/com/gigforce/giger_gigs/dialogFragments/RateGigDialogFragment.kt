@@ -23,7 +23,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

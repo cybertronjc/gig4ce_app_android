@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import com.gigforce.user_preferences.daytime.OnSlotClickListener
 import com.gigforce.user_preferences.daytime.SlotsRecyclerAdapter
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel

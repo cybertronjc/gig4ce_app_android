@@ -1,8 +1,7 @@
 package com.gigforce.modules.feature_chat
 
-import android.content.Context
 import android.os.Environment
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import java.io.File
 
 class ChatLocalDirectoryReferenceManager {

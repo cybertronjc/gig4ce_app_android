@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDateTime

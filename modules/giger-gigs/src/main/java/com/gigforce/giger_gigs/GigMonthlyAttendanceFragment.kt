@@ -15,7 +15,7 @@ import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.models.GigStatus
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.core.extensions.gone

@@ -3,7 +3,7 @@ package com.gigforce.modules.feature_chat.repositories
 import android.content.Context
 import android.net.Uri
 import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.google.firebase.storage.FirebaseStorage
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener

@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.gigforce.common_ui.configrepository.ConfigViewModel
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_language_preferences.*
 import javax.inject.Inject

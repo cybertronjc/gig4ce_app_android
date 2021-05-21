@@ -13,6 +13,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.getFileOrThrow
 import com.gigforce.core.fb.FirebaseUtils
@@ -20,7 +22,7 @@ import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.gigforce.modules.feature_chat.repositories.ChatGroupRepository
@@ -311,7 +313,11 @@ class GroupChatViewModel constructor(
                 else {
                     "profile_pics/${profile.profileAvatarName}"
                 }
-        return UserInfo(id = currentUser.uid, name = profile.name, profilePic = profilePic)
+        return UserInfo(
+            id = currentUser.uid,
+            name = profile.name,
+            profilePic = profilePic
+        )
     }
 
     //---------------------------
@@ -484,7 +490,7 @@ class GroupChatViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = groupId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid
+                        id = currentUser.uid
                     ),
                     receiverInfo = null,
                     type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION,

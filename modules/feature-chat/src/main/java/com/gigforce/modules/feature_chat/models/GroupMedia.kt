@@ -1,7 +1,7 @@
 package com.gigforce.modules.feature_chat.models
 
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 
 class GroupMedia(

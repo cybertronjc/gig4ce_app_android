@@ -17,7 +17,7 @@ import com.gigforce.core.extensions.setDarkStatusBarTheme
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.user_preferences.PreferredLocationAdapter
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preferred_location_fragment.*
 import javax.inject.Inject

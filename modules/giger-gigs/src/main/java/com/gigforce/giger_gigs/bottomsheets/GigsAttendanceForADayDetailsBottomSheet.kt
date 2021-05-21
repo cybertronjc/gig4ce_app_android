@@ -17,7 +17,7 @@ import com.gigforce.giger_gigs.GigRegulariseAttendanceFragment
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.models.GigStatus
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gig_single_day_attendance_details.*

@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.giger_gigs.repositories.GigerProfileFirebaseRepository
+import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.Lce
 import kotlinx.coroutines.launch
 
 class GigerProfileViewModel : ViewModel(){
 
-    var profileFirebaseRepository = GigerProfileFirebaseRepository()
+    var profileFirebaseRepository =
+        GigerProfileFirebaseRepository()
     private val _profile = MutableLiveData<Lce<ProfileData?>>()
     val profile: LiveData<Lce<ProfileData?>> = _profile
 

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.request.RequestOptions
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs

@@ -51,7 +51,7 @@ import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.VideoInfo
 import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel

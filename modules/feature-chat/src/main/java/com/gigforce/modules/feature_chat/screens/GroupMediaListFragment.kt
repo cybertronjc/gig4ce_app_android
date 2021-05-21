@@ -22,7 +22,7 @@ import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatGroup
 import com.gigforce.modules.feature_chat.models.GroupMedia
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter

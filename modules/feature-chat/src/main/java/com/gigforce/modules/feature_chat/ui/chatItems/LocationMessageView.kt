@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.models.ChatMessage
 import com.google.firebase.storage.FirebaseStorage
 

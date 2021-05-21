@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide
 import com.gigforce.giger_gigs.adapters.GigDetailAdapter
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.utils.openPopupMenu
 import com.gigforce.common_ui.datamodels.ShimmerDataModel

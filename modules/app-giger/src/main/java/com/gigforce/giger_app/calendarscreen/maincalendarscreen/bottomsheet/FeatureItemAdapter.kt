@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet
+package com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet
 
 import android.content.Context
 import android.view.LayoutInflater

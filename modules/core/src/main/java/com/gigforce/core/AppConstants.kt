@@ -45,4 +45,8 @@ object AppConstants {
 
     const val INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT = "referral_link_with_text"
     const val INTENT_EXTRA_REFERRAL_LINK = "referral_link"
+
+    const val INTENT_EXTRA_GIG_ID = "gig_id"
+
+    const val INTEN_EXTRA_DATE = "date"
 }

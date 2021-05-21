@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.core.datamodels.profile.Skill
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.*
 import kotlinx.android.synthetic.main.edit_skill_bottom_sheet.cancel

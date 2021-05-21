@@ -1,8 +1,9 @@
 package com.gigforce.modules.feature_chat.models
 
 import android.graphics.Bitmap
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.SimpleDVM
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.modules.feature_chat.core.ViewTypes
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

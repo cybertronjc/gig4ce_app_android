@@ -12,7 +12,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.user_preferences.R
-import com.gigforce.user_preferences.SharedPreferenceViewModel
+import com.gigforce.common_ui.viewmodels.userpreferences.SharedPreferenceViewModel
 import kotlinx.android.synthetic.main.around_current_address_fragment.*
 
 class AroundCurrentAddressFragment : Fragment(), IOnBackPressedOverride {

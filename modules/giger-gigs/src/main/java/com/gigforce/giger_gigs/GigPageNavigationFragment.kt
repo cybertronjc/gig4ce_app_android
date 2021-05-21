@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.giger_gigs.viewModels.GigViewModel
+import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment
 import com.gigforce.core.extensions.inflate

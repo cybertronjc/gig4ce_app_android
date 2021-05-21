@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.core.datamodels.profile.Skill
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 
 class AddSkillBottomSheetFragment : ProfileBaseBottomSheetFragment() {
