@@ -45,4 +45,17 @@ object AppConstants {
 
     const val INTENT_EXTRA_REFERRAL_LINK_WITH_TEXT = "referral_link_with_text"
     const val INTENT_EXTRA_REFERRAL_LINK = "referral_link"
+
+    const val ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET = 11
+    const val ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET = 12
+    const val ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET = 13
+
+    const val ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET = 21
+
+    const val ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET = 31
+    const val ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET = 32
+
+
+    const val INTENT_EXTRA_CAME_FROM_LANDING_SCREEN = "came_from_landing"
+    const val INTENT_EXTRA_ACTION = "action_to_do"
 }

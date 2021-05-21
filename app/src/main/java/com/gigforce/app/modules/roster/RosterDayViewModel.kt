@@ -18,8 +18,8 @@ import com.gigforce.app.R
 import com.gigforce.app.modules.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.app.modules.custom_gig_preferences.UnavailableDataModel
 //import com.gigforce.app.modules.gigPage.GigsRepository
-import com.gigforce.user_preferences.PreferencesRepository
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.common_ui.preferences.PreferencesRepository
+import com.gigforce.common_ui.preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.viewdatamodels.GigStatus

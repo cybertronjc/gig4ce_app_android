@@ -46,7 +46,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.configrepository.ConfigRepository
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics

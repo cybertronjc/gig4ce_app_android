@@ -1,14 +1,12 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 //import com.gigforce.app.R
@@ -22,8 +20,8 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.GroupMedia
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.GroupMedia
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.util.concurrent.TimeUnit

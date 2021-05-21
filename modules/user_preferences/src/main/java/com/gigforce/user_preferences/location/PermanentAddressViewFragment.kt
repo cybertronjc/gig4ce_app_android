@@ -12,7 +12,7 @@ import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.common_ui.preferences.PreferencesDataModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.permanent_address_view_fragment.*
 import javax.inject.Inject

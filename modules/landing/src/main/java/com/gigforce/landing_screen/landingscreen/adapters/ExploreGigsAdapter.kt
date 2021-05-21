@@ -12,6 +12,8 @@ import com.facebook.shimmer.ShimmerDrawable
 //import com.gigforce.app.R
 //import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
+//import com.gigforce.core.datamodels.gigpage.JobProfile
 //import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.landing_screen.R
@@ -148,17 +150,3 @@ class ExploreGigsAdapter(
 
 }
 
-private val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
-    .setDuration(1800) // how long the shimmering animation takes to do one full sweep
-    .setBaseAlpha(0.9f) //the alpha of the underlying children
-    .setHighlightAlpha(0.8f) // the shimmer alpha amount
-    .setAutoStart(false)
-    .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-    .build()
-
-// This is the placeholder for the imageView
-val shimmerDrawable = ShimmerDrawable().apply {
-    setShimmer(shimmer)
-    startShimmer()
-
-}

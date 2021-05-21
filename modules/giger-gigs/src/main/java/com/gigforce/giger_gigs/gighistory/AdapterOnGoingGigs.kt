@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.R
+//import com.gigforce.app.R
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.utils.getScreenWidth
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.giger_gigs.R
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat

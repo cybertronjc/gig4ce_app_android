@@ -17,14 +17,19 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.core.NavFragmentsData
 import com.gigforce.core.datamodels.verification.PanCardDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.ImageSource
 import com.gigforce.core.utils.Lse
+import com.gigforce.core.utils.SelectImageSourceBottomSheetActionListener
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -240,8 +245,8 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
 
                 if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
-                    if (it.panCardDetails.userHasPanCard != null) {
-                        if (it.panCardDetails.userHasPanCard!!) {
+                    if (it.panCardDetails!!.userHasPanCard != null) {
+                        if (it.panCardDetails!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

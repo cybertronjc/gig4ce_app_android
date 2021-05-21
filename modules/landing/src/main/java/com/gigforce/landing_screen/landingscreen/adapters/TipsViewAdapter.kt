@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.R
+import com.gigforce.landing_screen.R
+//import com.gigforce.app.R
 import com.gigforce.landing_screen.landingscreen.models.Tip
 
 class TipsViewAdapter(

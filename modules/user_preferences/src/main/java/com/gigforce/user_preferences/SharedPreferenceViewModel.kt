@@ -3,12 +3,13 @@ package com.gigforce.user_preferences
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.user_preferences.earnings.EarningDataModel
+import com.gigforce.common_ui.preferences.EarningDataModel
 import com.gigforce.user_preferences.location.CitiesRepository
 import com.gigforce.user_preferences.location.models.LocationPreferenceModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.common_ui.preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.preferences.PreferencesRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.profile.AddressFirestoreModel
 import com.gigforce.core.datamodels.profile.AddressModel

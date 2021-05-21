@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.R
-import com.gigforce.app.modules.help.HelpVideo
+//import com.gigforce.app.R
+//import com.gigforce.app.modules.help.HelpVideo
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
+import com.gigforce.landing_screen.R
+import com.gigforce.landing_screen.landingscreen.help.HelpVideo
 
 class HelpVideosAdapter(
     private val context: Context

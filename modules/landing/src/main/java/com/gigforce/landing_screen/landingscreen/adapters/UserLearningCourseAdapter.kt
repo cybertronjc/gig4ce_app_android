@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.R
+//import com.gigforce.app.R
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.learning.learning.LearningConstants
+import com.gigforce.landing_screen.R
+//import com.gigforce.learning.learning.LearningConstants
 import com.google.firebase.storage.FirebaseStorage
 
 class UserLearningCourseAdapter(
@@ -85,7 +87,7 @@ class UserLearningCourseAdapter(
                         .into(learningImg)
                 } else {
                     val imageRef = FirebaseStorage.getInstance()
-                        .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+                        .getReference(AppConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
                         .child(model!!.coverPicture!!)
 
                     GlideApp.with(context)

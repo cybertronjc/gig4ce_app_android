@@ -15,7 +15,7 @@ import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.user_preferences.R
 import com.gigforce.user_preferences.SharedPreferenceViewModel
-import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
+import com.gigforce.common_ui.preferences.PreferencesDataModel
 import kotlinx.android.synthetic.main.permanent_address_edit_fragment.*
 
 class PermanentAddressEditFragment : Fragment() {

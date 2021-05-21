@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import androidx.fragment.app.Fragment
+//import com.gigforce.app.R
+//import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.landing_screen.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.explore_by_role_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExploreByRoleFragment : BaseFragment() {
+class ExploreByRoleFragment : Fragment() {
 
     companion object {
         fun newInstance() = ExploreByRoleFragment()
@@ -26,7 +28,7 @@ class ExploreByRoleFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.explore_by_role_fragment,  inflater,container)
+        return inflater.inflate(R.layout.explore_by_role_fragment,container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

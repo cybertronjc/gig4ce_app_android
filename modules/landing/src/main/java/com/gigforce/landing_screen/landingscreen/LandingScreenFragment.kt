@@ -32,8 +32,8 @@ import com.bumptech.glide.request.RequestOptions
 //import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
 //import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
 //import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-//import com.gigforce.app.modules.help.HelpVideo
-//import com.gigforce.app.modules.help.HelpViewModel
+//import com.gigforce.landing_screen.landingscreen.help.HelpVideo
+//import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import com.gigforce.landing_screen.landingscreen.adapters.*
 import com.gigforce.landing_screen.landingscreen.models.Tip
 //import com.gigforce.app.modules.profile.AboutExpandedFragment
@@ -43,6 +43,7 @@ import com.gigforce.landing_screen.landingscreen.models.Tip
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 //import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus.Companion.STATUS_VERIFIED
@@ -59,8 +60,8 @@ import com.gigforce.core.extensions.visible
 //import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 //import com.gigforce.core.utils.Lce
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
-import com.gigforce.user_preferences.PreferencesFragment
+//import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+//import com.gigforce.user_preferences.PreferencesFragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -82,12 +83,17 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.core.AppConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+//import com.gigforce.core.datamodels.gigpage.JobProfile
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.Lce
 import com.gigforce.landing_screen.R
+import com.gigforce.landing_screen.landingscreen.help.HelpVideo
+import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -288,8 +294,7 @@ class LandingScreenFragment : Fragment() {
         var result = ""
 
         try {
-            result = context?.packageManager
-                ?.getPackageInfo(context?.packageName, 0)
+            result = context?.packageManager?.getPackageInfo(context!!.packageName, 0)
                 ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 
@@ -470,67 +475,74 @@ class LandingScreenFragment : Fragment() {
                 key = "ADD_EDUCATION_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_one),
-                whereToRedirect = R.id.educationExpandedFragment,
+//                whereToRedirect = R.id.educationExpandedFragment,
+                    navPath = "education_expended",
                 tip_id = 1097,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
                 )
             ), Tip(
                 key = "ADD_WORK_EXP_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_two),
-                whereToRedirect = R.id.experienceExpandedFragment,
+                //                whereToRedirect = R.id.educationExpandedFragment,
+                navPath = "education_expended",
                 tip_id = 1098,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to ExperienceExpandedFragment.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
                 )
             ), Tip(
                 key = "ADD_SKILLS_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_three),
-                whereToRedirect = R.id.educationExpandedFragment,
+                //                whereToRedirect = R.id.educationExpandedFragment,
+                navPath = "education_expended",
                 tip_id = 1099,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
                 )
             ), Tip(
                 key = "ADD_ACHIEVEMENTS_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_four),
-                whereToRedirect = R.id.educationExpandedFragment,
+                //                whereToRedirect = R.id.educationExpandedFragment,
+                navPath = "education_expended",
                 tip_id = 1100,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to EducationExpandedFragment.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
                 )
             ), Tip(
                 key = "ADD_PROFILE_PHOTO_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_five),
                 tip_id = 1101,
-                whereToRedirect = R.id.profileFragment
+//                whereToRedirect = R.id.profileFragment
+                navPath = "profile"
             ), Tip(
                 key = "ADD_LANGUAGE_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_six),
-                whereToRedirect = R.id.aboutExpandedFragment,
+//                whereToRedirect = R.id.aboutExpandedFragment,
+                navPath = "about_expended",
                 tip_id = 1102,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
                 )
             ), Tip(
                 key = "ADD_ABOUT_ME_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_seven),
-                whereToRedirect = R.id.aboutExpandedFragment,
+                //                whereToRedirect = R.id.aboutExpandedFragment,
+                navPath = "about_expended",
                 tip_id = 1103,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                    LandingPageConstants.INTENT_EXTRA_ACTION to AboutExpandedFragment.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
                 )
             ),
             Tip(
@@ -538,37 +550,43 @@ class LandingScreenFragment : Fragment() {
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_eight),
                 tip_id = 1104,
-                whereToRedirect = R.id.permanentAddressViewFragment
+//                whereToRedirect = R.id.permanentAddressViewFragment
+                navPath = "permanent_address"
             ), Tip(
                 key = "ADD_PREFERRED_DISTANCE_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_nine),
                 tip_id = 1105,
-                whereToRedirect = R.id.arrountCurrentAddress
+//                whereToRedirect = R.id.arrountCurrentAddress
+                navPath = "current_address"
             ), Tip(
                 key = "ADD_DAILY_EARNING_EXPECTATION_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_ten),
                 tip_id = 1106,
-                whereToRedirect = R.id.earningFragment
+                navPath = "earning"
+//                whereToRedirect = R.id.earningFragment
             ), Tip(
                 key = "ADD_WEEKDAY_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_eleven),
                 tip_id = 1107,
-                whereToRedirect = R.id.weekDayFragment
+                navPath = "week_day"
+//                whereToRedirect = R.id.weekDayFragment
             ), Tip(
                 key = "ADD_WEEKEND_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_twelve),
                 tip_id = 1108,
-                whereToRedirect = R.id.weekEndFragment
+                navPath = "week_end"
+//                whereToRedirect = R.id.weekEndFragment
             ), Tip(
                 key = "ADD_WFH_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_thirteen),
                 tip_id = 1109,
-                whereToRedirect = R.id.locationFragment
+                navPath = "location"
+//                whereToRedirect = R.id.locationFragment
             )
         )
         viewModel.setTips(tipsList)
@@ -640,6 +658,7 @@ class LandingScreenFragment : Fragment() {
 //                            resId = tip.whereToRedirect,
 //                            args = tip.intentExtraMap.toBundle()
 //                    )
+                    navigation.navigateTo(model.navPath, model.intentExtraMap.toBundle())
                 }
 
             })
@@ -776,7 +795,7 @@ class LandingScreenFragment : Fragment() {
     private fun displayImage(profileImg: String) {
         if (profileImg != "avatar.jpg" && profileImg != "") {
             val profilePicRef: StorageReference =
-                PreferencesFragment.storage.reference.child("profile_pics").child(profileImg)
+                FirebaseStorage.getInstance().reference.child("profile_pics").child(profileImg)
             if (profile_image != null)
                 GlideApp.with(this.requireContext())
                     .load(profilePicRef)
@@ -804,7 +823,7 @@ class LandingScreenFragment : Fragment() {
         }
         mygigs_cl.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_GIG
-            CalendarHomeScreen.fistvisibleItemOnclick = -1
+//            CalendarHomeScreen.fistvisibleItemOnclick = -1
 //            navigate(R.id.mainHomeScreen)
             navigation.navigateTo("main_home_screen")
         }
@@ -906,12 +925,12 @@ class LandingScreenFragment : Fragment() {
                 marginRight = R.dimen.size_1,
                 marginTop = R.dimen.size_1,
                 orientation = LinearLayout.HORIZONTAL
-            )
+            ), R.id.shimmer_controller
         )
     }
 
     private fun showErrorWhileLoadingCourse(error: String) {
-        stopShimmer(loader_learning_home as LinearLayout)
+        stopShimmer(loader_learning_home as LinearLayout, R.id.shimmer_controller)
         learning_cl.visible()
         learning_rv.gone()
         learning_learning_error.visible()
@@ -919,7 +938,7 @@ class LandingScreenFragment : Fragment() {
     }
 
     private fun showUserLearningCourses(content: List<Course>) {
-        stopShimmer(loader_learning_home as LinearLayout)
+        stopShimmer(loader_learning_home as LinearLayout, R.id.shimmer_controller)
         learning_learning_error.gone()
         learning_rv.visible()
 
@@ -1094,11 +1113,11 @@ class LandingScreenFragment : Fragment() {
                     }
                     cv_role.setOnClickListener {
 
-                        findNavController().navigate(
-                            LandingScreenFragmentDirections.openRoleDetailsHome(
-                                gig?.id!!
-                            )
-                        )
+//                        findNavController().navigate(
+//                            LandingScreenFragmentDirections.openRoleDetailsHome(
+//                                gig?.id!!
+//                            )
+//                        )
 
                     }
                 }
@@ -1133,7 +1152,7 @@ class LandingScreenFragment : Fragment() {
             ShimmerDataModel(
                 marginRight = R.dimen.size_1,
                 orientation = LinearLayout.HORIZONTAL
-            )
+            ), R.id.shimmer_controller
         )
         landingScreenViewModel.getJobProfile()
     }
@@ -1141,7 +1160,7 @@ class LandingScreenFragment : Fragment() {
     private fun showClientActivations(jobProfiles: ArrayList<JobProfile>) {
 
 
-        stopShimmer(loader_explore_gigs as LinearLayout)
+        stopShimmer(loader_explore_gigs as LinearLayout, R.id.shimmer_controller)
         client_activation_rv.visible()
 
         if (jobProfiles.isNullOrEmpty()) {
@@ -1202,7 +1221,7 @@ class LandingScreenFragment : Fragment() {
             exploreGigsAdapter?.setOnCardSelectedListener(object : ExploreGigsAdapter.OnCardSelectedListener{
                 override fun onCardSelected(any: Any) {
                     var id = (any as JobProfile).id
-                    Log.d("cardId", id)
+//                    Log.d("cardId", id)
 //        navigate(
 //                R.id.fragment_client_activation,
 //                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)

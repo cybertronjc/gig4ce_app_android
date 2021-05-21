@@ -3,14 +3,11 @@ package com.gigforce.client_activation.client_activation.explore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.client_activation.repository.ClientActiExploreRepository
 import com.gigforce.core.SingleLiveEvent
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.core.di.repo.IProfileFirestoreRepository
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 

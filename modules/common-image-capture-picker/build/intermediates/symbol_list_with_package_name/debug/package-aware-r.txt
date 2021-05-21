@@ -1223,6 +1223,13 @@ color fui_bgTwitter
 color fui_buttonShadow
 color fui_linkColor
 color fui_transparent
+color gig_timer_completed_grey
+color gig_timer_declined_red
+color gig_timer_no_show_red
+color gig_timer_ongoing_green
+color gig_timer_silver_dark
+color gig_timer_silver_light
+color gig_timer_upcoming_pink
 color green
 color grey
 color greyDark
@@ -2007,6 +2014,13 @@ drawable ic_cross_grey
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
 drawable ic_gallery_round
+drawable ic_gig_decline
+drawable ic_gig_declined_cancelled
+drawable ic_gig_missed
+drawable ic_gig_ongoing
+drawable ic_gig_success_icon
+drawable ic_gig_type_square
+drawable ic_gig_upoming
 drawable ic_homescreen_chat
 drawable ic_learning_default_back
 drawable ic_location_tracking_image
@@ -2239,6 +2253,9 @@ id chip3
 id chip_group
 id chronometer
 id circular
+id city_image_iv
+id city_name_tv
+id city_root_layout
 id cl_photo_crop
 id clear_text
 id collapseActionView
@@ -2654,7 +2671,6 @@ id trouble_signing_in_possible_fixes
 id tv_allow_access
 id tv_desc
 id tv_pop_menu_normal
-id tv_rv_preferred_location
 id tv_title
 id txt_message
 id ucrop

@@ -1379,6 +1379,13 @@ color fui_bgTwitter
 color fui_buttonShadow
 color fui_linkColor
 color fui_transparent
+color gig_timer_completed_grey
+color gig_timer_declined_red
+color gig_timer_no_show_red
+color gig_timer_ongoing_green
+color gig_timer_silver_dark
+color gig_timer_silver_light
+color gig_timer_upcoming_pink
 color green
 color green_dc3ab105
 color grey
@@ -2382,6 +2389,13 @@ drawable ic_download_24
 drawable ic_edit
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
+drawable ic_gig_decline
+drawable ic_gig_declined_cancelled
+drawable ic_gig_missed
+drawable ic_gig_ongoing
+drawable ic_gig_success_icon
+drawable ic_gig_type_square
+drawable ic_gig_upoming
 drawable ic_homescreen_chat
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back

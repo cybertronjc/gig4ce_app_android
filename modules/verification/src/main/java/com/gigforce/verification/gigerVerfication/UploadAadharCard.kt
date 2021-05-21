@@ -18,8 +18,10 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.core.NavFragmentsData
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.extensions.gone
@@ -279,8 +281,8 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
 
                 if (it.aadharCardDetailsUploaded && it.aadharCardDataModel != null) {
 
-                    if (it.aadharCardDataModel.userHasAadharCard != null) {
-                        if (it.aadharCardDataModel.userHasAadharCard!!) {
+                    if (it.aadharCardDataModel!!.userHasAadharCard != null) {
+                        if (it.aadharCardDataModel!!.userHasAadharCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

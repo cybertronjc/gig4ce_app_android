@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import androidx.fragment.app.Fragment
+import com.gigforce.landing_screen.R
 import kotlinx.android.synthetic.main.j_d_screen_fragment.*
 
-class JDScreenFragment : BaseFragment() {
+class JDScreenFragment : Fragment() {
 
     companion object {
         fun newInstance() = JDScreenFragment()
@@ -21,7 +21,7 @@ class JDScreenFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.j_d_screen_fragment,inflater,container)
+        return inflater.inflate(R.layout.j_d_screen_fragment,container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

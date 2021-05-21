@@ -177,6 +177,7 @@ dependencies {
     implementation project(path: ':modules:verification')
     implementation project(path: ':modules:common-image-capture-picker')
     implementation project(path: ':modules:giger-gigs')
+    implementation project(path: ':modules:landing')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 

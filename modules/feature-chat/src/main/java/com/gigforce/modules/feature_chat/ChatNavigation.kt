@@ -6,7 +6,7 @@ import androidx.core.os.bundleOf
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.modules.feature_chat.screens.GroupDetailsFragment
 import com.gigforce.modules.feature_chat.screens.GroupMediaListFragment2

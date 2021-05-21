@@ -571,7 +571,7 @@
         android:label="AssessmentResultFragment" />
     <fragment
         android:id="@+id/helpVideosFragment"
-        android:name="com.gigforce.app.modules.help.HelpVideosFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.help.HelpVideosFragment"
         android:label="fragment_help_video"
         tools:layout="@layout/fragment_help_video" />
 

@@ -1,8 +1,6 @@
 package com.gigforce.client_activation.client_activation.adapters
 
 import android.content.Context
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,26 +9,16 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.facebook.shimmer.Shimmer
-import com.facebook.shimmer.ShimmerDrawable
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.explore.ClientActiExploreList
 import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
-import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
-import kotlinx.android.synthetic.main.layout_fragment_client_activation.*
-import javax.sql.DataSource
 
 
 class ClientActiExploreAdapter(

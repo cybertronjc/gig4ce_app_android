@@ -54,13 +54,13 @@ import com.gigforce.learning.learning.MainLearningViewModel
 import com.gigforce.learning.learning.models.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.client_activation.client_activation.models.JobProfile
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 //import com.gigforce.app.utils.*
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.utils.DateHelper
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
@@ -482,7 +482,8 @@ class BSCalendarScreenFragment : BaseFragment(), ExploreGigsAdapter.OnCardSelect
                                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
                                         (AppConstants.CONTACT_NAME as String)
                                     )
-                                    bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,ChatConstants.CHAT_TYPE_USER)
+                                    bundle.putString(ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                                        ChatConstants.CHAT_TYPE_USER)
 
                                     bundle.putString(
                                         ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,

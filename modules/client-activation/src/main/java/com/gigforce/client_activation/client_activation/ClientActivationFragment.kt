@@ -26,10 +26,9 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
 import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.client_activation.client_activation.models.Media
+import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.adapter.AdapterPreferredLocation
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -44,10 +43,6 @@ import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
 import com.gigforce.core.utils.Lce
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
