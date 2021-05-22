@@ -28,6 +28,7 @@ import com.gigforce.app.utils.Lse
 import com.gigforce.app.utils.StringConstants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
@@ -89,6 +90,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
         passbookImageHolder.documentUploadSubLabelTV.text =
                 getString(R.string.upload_bank_passbook_sublabel)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
         toolbar.apply {
             hideActionMenu()
             showTitle(getString(R.string.giger_verification))
@@ -168,9 +170,7 @@ class AddBankDetailsInfoFragment : BaseFragment() {
 
                 if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookNoRB)
                     enableSubmitButton()
-                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB &&
-                        (passbookSubmitSliderBtn.text == getString(R.string.update) || clickedImagePath != null)
-                )
+                else if (passbookAvailaibilityOptionRG.checkedRadioButtonId == R.id.passbookYesRB)
                     enableSubmitButton()
                 else
                     disableSubmitButton()
@@ -238,16 +238,16 @@ class AddBankDetailsInfoFragment : BaseFragment() {
                                 return
                             }
 
-                            if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
-
-                                MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle(getString(R.string.alert))
-                                        .setMessage(getString(R.string.click_or_select_bank_passbook))
-                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                        .show()
-                                passbookSubmitSliderBtn.resetSlider()
-                                return
-                            }
+//                            if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+//
+//                                MaterialAlertDialogBuilder(requireContext())
+//                                        .setTitle(getString(R.string.alert))
+//                                        .setMessage(getString(R.string.click_or_select_bank_passbook))
+//                                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                        .show()
+//                                passbookSubmitSliderBtn.resetSlider()
+//                                return
+//                            }
 
                             val accNo = accountNoEditText.text.toString()
                             val bankName =
