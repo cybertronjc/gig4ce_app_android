@@ -46,6 +46,8 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.app.utils.Lce
 import com.gigforce.app.utils.TextDrawable
 import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -53,6 +55,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
 import kotlinx.android.synthetic.main.calendar_home_screen.cardView
 import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
@@ -60,8 +63,9 @@ import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class CalendarHomeScreen : BaseFragment(),
     CalendarRecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
 
@@ -74,6 +78,9 @@ class CalendarHomeScreen : BaseFragment(),
     }
 
     var swipedToupdateGig = false
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
@@ -365,8 +372,15 @@ class CalendarHomeScreen : BaseFragment(),
         // load user data
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals(""))
+            if (profile.name != null && !profile.name.equals("")) {
                 tv1HS1.text = profile.name
+
+                //setting user's name to mixpanel
+                var props = HashMap<String, Any>()
+                props.put("name", profile.name)
+                eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                Log.d("name", profile.name)
+            }
         })
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
             viewLifecycleOwner,
