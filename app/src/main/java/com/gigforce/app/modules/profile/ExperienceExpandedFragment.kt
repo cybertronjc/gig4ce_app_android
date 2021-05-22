@@ -78,23 +78,13 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
-            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
-
-            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.panCardImagePath != null
-                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-            if (requiredDocsVerified) {
+            if (it.requiredDocsVerified) {
                 experience_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.verified_text)
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
                         ResourcesCompat.getColor(resources, R.color.green, null))
                 experience_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
                 experience_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor = ResourcesCompat.getColor(resources, R.color.green, null)
-            } else if (requiredDocsUploaded) {
+            } else if (it.requiredDocsUploaded) {
                 experience_top_profile.about_me_verification_layout.verification_status_tv.text = getString(R.string.under_verification)
                 experience_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
                         ResourcesCompat.getColor(resources, R.color.app_orange, null))
