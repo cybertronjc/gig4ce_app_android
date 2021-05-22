@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,7 @@ import com.gigforce.app.utils.*
 import com.gigforce.app.utils.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
@@ -65,6 +67,7 @@ import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
+//import kotlinx.android.synthetic.main.name_gender_item.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -374,8 +377,15 @@ class LandingScreenFragment : BaseFragment() {
             val profile: ProfileData = profileObs
 
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals(""))
+            if (profile.name != null && !profile.name.equals("")) {
                 profile_name.text = profile.name
+
+                //setting user's name to mixpanel
+                var props = HashMap<String, Any>()
+                props.put("name", profile.name)
+                eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                Log.d("name", profile.name)
+            }
         })
 
         verificationViewModel

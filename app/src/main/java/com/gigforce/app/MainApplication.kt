@@ -79,7 +79,13 @@ class MainApplication : Application() {
     }
 
     private fun setupMixpanel() {
-        mixpanel = MixpanelAPI.getInstance(applicationContext, BuildConfig.MIX_PANEL_KEY);
+        mixpanel = MixpanelAPI.getInstance(applicationContext, BuildConfig.MIX_PANEL_KEY)
+        mixpanel?.distinctId?.let {
+            Branch.getInstance().setRequestMetadata(
+                "\$mixpanel_distinct_id",
+                it
+            )
+        }
     }
 
     private fun setupCleverTap() {
