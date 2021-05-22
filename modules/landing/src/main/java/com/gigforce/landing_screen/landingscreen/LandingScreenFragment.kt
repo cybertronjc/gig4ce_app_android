@@ -20,88 +20,53 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
-//import com.gigforce.app.R
-//import com.gigforce.client_activation.analytics.ClientActivationEvents
-//import com.gigforce.app.core.base.BaseFragment
-//import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-//import com.gigforce.app.core.base.genericadapter.PFRecyclerViewAdapter
-//import com.gigforce.app.core.base.genericadapter.RecyclerGenericAdapter
-//import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen
-//import com.gigforce.landing_screen.landingscreen.help.HelpVideo
-//import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
-import com.gigforce.landing_screen.landingscreen.adapters.*
-import com.gigforce.landing_screen.landingscreen.models.Tip
-//import com.gigforce.app.modules.profile.AboutExpandedFragment
-//import com.gigforce.app.modules.profile.EducationExpandedFragment
-//import com.gigforce.app.modules.profile.ExperienceExpandedFragment
-//import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
-//import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus.Companion.STATUS_VERIFIED
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
-//import com.gigforce.core.AppConstants
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.extensions.visible
-//import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
-//import com.gigforce.core.utils.Lce
-//import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
-//import com.gigforce.user_preferences.PreferencesFragment
+import com.gigforce.core.utils.Lce
+import com.gigforce.landing_screen.R
+import com.gigforce.landing_screen.landingscreen.adapters.*
+import com.gigforce.landing_screen.landingscreen.help.HelpVideo
+import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
+import com.gigforce.landing_screen.landingscreen.models.Tip
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
-import kotlinx.android.synthetic.main.landingscreen_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.landingscreen_fragment.cv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.exploreByIndustryLayout
-import kotlinx.android.synthetic.main.landingscreen_fragment.explore_by_industry
-import kotlinx.android.synthetic.main.landingscreen_fragment.iv_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.landingscreen_fragment.learning_rv
-import kotlinx.android.synthetic.main.landingscreen_fragment.ll_search_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.tv_title_role
-import kotlin.collections.ArrayList
-import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.datamodels.ShimmerDataModel
-import com.gigforce.common_ui.ext.getCircularProgressDrawable
-import com.gigforce.common_ui.ext.startShimmer
-import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
-import com.gigforce.core.AppConstants
-import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-//import com.gigforce.core.datamodels.gigpage.JobProfile
-import com.gigforce.core.extensions.toBundle
-import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.AdapterClickListener
-import com.gigforce.core.utils.Lce
-import com.gigforce.landing_screen.R
-import com.gigforce.landing_screen.landingscreen.help.HelpVideo
-import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import javax.inject.Inject
 
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
-
 @AndroidEntryPoint
-class LandingScreenFragment : Fragment() {
-
+class LandingScreenFragment : Fragment(){
     companion object {
         fun newInstance() = LandingScreenFragment()
         private const val INTENT_EXTRA_SCREEN = "scrren"
@@ -118,9 +83,11 @@ class LandingScreenFragment : Fragment() {
     @Inject
     lateinit var navigation: INavigation
 
-    @Inject lateinit var appDialogsInterface: AppDialogsInterface
+    @Inject
+    lateinit var appDialogsInterface: AppDialogsInterface
 
-    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+    @Inject
+    lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
 
     private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
@@ -235,7 +202,7 @@ class LandingScreenFragment : Fragment() {
             ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
-                    //doubt
+                //doubt
                     appDialogsInterface.showConfirmationDialogType3(
                         getString(R.string.new_version_available),
                         getString(R.string.new_version_available_detail),
@@ -476,7 +443,7 @@ class LandingScreenFragment : Fragment() {
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_one),
 //                whereToRedirect = R.id.educationExpandedFragment,
-                    navPath = "education_expended",
+                navPath = "education_expended",
                 tip_id = 1097,
                 intentExtraMap = mapOf(
                     LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
@@ -651,7 +618,7 @@ class LandingScreenFragment : Fragment() {
                 false
             )
             gigforce_tip.adapter = tipsAdapter
-            tipsAdapter?.setOnTipListener(object : TipsViewAdapter.OnTipListener{
+            tipsAdapter?.setOnTipListener(object : TipsViewAdapter.OnTipListener {
                 override fun onTipClicked(model: Tip) {
 //                    val tip = tips.get(viewHolder.adapterPosition)
 //                    navigate(
@@ -666,9 +633,9 @@ class LandingScreenFragment : Fragment() {
             tipsAdapter?.setOnSkipListener(object : TipsViewAdapter.OnSkipListener {
                 override fun onSkipClicked(model: Tip, pos: Int) {
                     if (pos == -1) return
-                    sharedPreAndCommonUtilInterface.saveDataBoolean(model?.tip_id.toString(), true)
+                    sharedPreAndCommonUtilInterface.saveDataBoolean(model.tip_id.toString(), true)
                     tips.removeAt(pos)
-                    tipsAdapter?.notifyItemRemoved(pos)
+                    tipsAdapter.notifyItemRemoved(pos)
                     if (tips.isEmpty()) {
                         gigforce_tip.gone()
                     }
@@ -763,7 +730,7 @@ class LandingScreenFragment : Fragment() {
         if (helpVideos != null) {
             helpVideosAdapter?.setData(helpVideos)
         }
-        helpVideosAdapter?.setOnclickListener(object : AdapterClickListener<HelpVideo>{
+        helpVideosAdapter?.setOnclickListener(object : AdapterClickListener<HelpVideo> {
             override fun onItemClick(view: View, obj: HelpVideo, position: Int) {
                 val id = (obj).videoYoutubeId
                 playVideo(id)
@@ -828,7 +795,10 @@ class LandingScreenFragment : Fragment() {
             navigation.navigateTo("main_home_screen")
         }
         skip_about_intro.setOnClickListener {
-            sharedPreAndCommonUtilInterface.saveDataBoolean(StringConstants.SKIPPED_ABOUT_INTRO.value, true)
+            sharedPreAndCommonUtilInterface.saveDataBoolean(
+                StringConstants.SKIPPED_ABOUT_INTRO.value,
+                true
+            )
             about_us_cl.visibility = View.GONE
         }
         chat_icon_iv.setOnClickListener {
@@ -1006,7 +976,7 @@ class LandingScreenFragment : Fragment() {
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             val learningCourseAdapter = context?.let { UserLearningCourseAdapter(it) }
             learningCourseAdapter?.setData(content)
-            learningCourseAdapter?.setOnclickListener(object : AdapterClickListener<Course>{
+            learningCourseAdapter?.setOnclickListener(object : AdapterClickListener<Course> {
                 override fun onItemClick(view: View, obj: Course, position: Int) {
                     navigation.navigateTo("learning/main")
                 }
@@ -1084,7 +1054,8 @@ class LandingScreenFragment : Fragment() {
 //        recyclerGenericAdapter.setLayout(R.layout.explore_by_industry_item)
         val exploreIndustryAdapter = context?.let { ExploreByIndustryAdapter(it) }
         exploreIndustryAdapter?.setData(datalist)
-        exploreIndustryAdapter?.setOnclickListener(object : AdapterClickListener<TitleSubtitleModel> {
+        exploreIndustryAdapter?.setOnclickListener(object :
+            AdapterClickListener<TitleSubtitleModel> {
             override fun onItemClick(view: View, obj: TitleSubtitleModel, position: Int) {
                 //nothing here
             }
@@ -1212,13 +1183,15 @@ class LandingScreenFragment : Fragment() {
 
             client_activation_rv.adapter = exploreGigsAdapter
 
-            exploreGigsAdapter?.setOnSeeMoreSelectedListener(object : ExploreGigsAdapter.OnSeeMoreSelectedListener{
+            exploreGigsAdapter?.setOnSeeMoreSelectedListener(object :
+                ExploreGigsAdapter.OnSeeMoreSelectedListener {
                 override fun onSeeMoreSelected(any: Any) {
                     navigation.navigateTo("client_activation/gig_detail")
                 }
 
             })
-            exploreGigsAdapter?.setOnCardSelectedListener(object : ExploreGigsAdapter.OnCardSelectedListener{
+            exploreGigsAdapter?.setOnCardSelectedListener(object :
+                ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
                     var id = (any as JobProfile).id
 //                    Log.d("cardId", id)
@@ -1226,7 +1199,10 @@ class LandingScreenFragment : Fragment() {
 //                R.id.fragment_client_activation,
 //                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
 //        )
-                    navigation.navigateTo("client_activation",bundleOf(StringConstants.JOB_PROFILE_ID.value to id) )
+                    navigation.navigateTo(
+                        "client_activation",
+                        bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+                    )
                 }
 
             })

@@ -7,16 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.preferences.PreferencesDataModel
 import com.gigforce.common_ui.preferences.PreferencesRepository
 import com.gigforce.landing_screen.landingscreen.models.Tip
-//import com.gigforce.client_activation.client_activation.models.JobProfile
-//import com.gigforce.client_activation.client_activation.models.Role
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewdatamodels.client_activation.Role
 import com.gigforce.core.SingleLiveEvent
-//import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.core.datamodels.profile.ProfileData
-//import com.gigforce.user_preferences.PreferencesRepository
-//import com.gigforce.user_preferences.prefdatamodel.PreferencesDataModel
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot

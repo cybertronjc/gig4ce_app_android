@@ -826,7 +826,7 @@ class CalendarHomeScreen : Fragment(),
         }
     }
 
-    private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
+    private fun setBackgroundStateAvailable(viewHolder: PFRecyclerViewAdapter<*>.ViewHolder) {
 
         activity?.let {
             viewHolder.getView(R.id.action_layout).setBackgroundColor(ContextCompat.getColor(it.applicationContext, R.color.action_layout_available))
@@ -1037,7 +1037,7 @@ class CalendarHomeScreen : Fragment(),
     }
 
     private val SNACKBAR_TIMEOUT: Long = 2000 // 1 sec
-    private fun showMonthLayout(show: Boolean, viewHolder: PFRecyclerViewAdapter<Any?>.ViewHolder) {
+    private fun showMonthLayout(show: Boolean, viewHolder: PFRecyclerViewAdapter<*>.ViewHolder) {
         if (show) {
             viewHolder.getView(R.id.calendar_month_cl).visibility = View.VISIBLE
             viewHolder.getView(R.id.calendar_detail_item_cl).visibility = View.GONE

@@ -176,7 +176,7 @@ dependencies {
     implementation project(path: ':modules:wallet')
     implementation project(path: ':modules:verification')
     implementation project(path: ':modules:giger-gigs')
-//    implementation project(path: ':modules:landing')
+    implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
 
 

@@ -53,6 +53,7 @@ import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.*
+import com.gigforce.landing_screen.landingscreen.LandingScreenViewModel
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*

@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,44 +79,44 @@ class MyJourneyInnerFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                 },
                 RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    getTextView(viewHolder, R.id.title_).text = obj.title
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj!!.coverPicture!!)
-                                .placeholder(getCircularProgressDrawable())
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj!!.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
-
-                                    GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
-                                        .into(img)
-                                }
-                        }
-                    }else {
-                        img.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                requireContext().resources,
-                                R.color.warm_grey,
-                                null
-                            )
-                        )
-                    }
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    getTextView(viewHolder, R.id.title_).text = obj.title
+//
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    if (!obj!!.coverPicture.isNullOrBlank()) {
+//                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+//
+//                            GlideApp.with(requireContext())
+//                                .load(obj!!.coverPicture!!)
+//                                .placeholder(getCircularProgressDrawable())
+//                                .into(img)
+//                        } else {
+//                            FirebaseStorage.getInstance()
+//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+//                                .child(obj!!.coverPicture!!)
+//                                .downloadUrl
+//                                .addOnSuccessListener { fileUri ->
+//
+//                                    GlideApp.with(requireContext())
+//                                        .load(fileUri)
+//                                        .placeholder(getCircularProgressDrawable())
+//                                        .into(img)
+//                                }
+//                        }
+//                    }else {
+//                        img.setBackgroundColor(
+//                            ResourcesCompat.getColor(
+//                                requireContext().resources,
+//                                R.color.warm_grey,
+//                                null
+//                            )
+//                        )
+//                    }
 
 
                 })
@@ -144,44 +145,44 @@ class MyJourneyInnerFragment : BaseFragment() {
                 PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
                 },
                 RecyclerGenericAdapter.ItemInterface<Module> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
-                    val lp = view.layoutParams
-                    lp.height = lp.height
-                    lp.width = itemWidth
-                    view.layoutParams = lp
-
-                    getTextView(viewHolder, R.id.title_).text = obj.title
-
-                    var img = getImageView(viewHolder, R.id.learning_img)
-                    if (!obj!!.coverPicture.isNullOrBlank()) {
-                        if (obj!!.coverPicture!!.startsWith("http", true)) {
-
-                            GlideApp.with(requireContext())
-                                .load(obj!!.coverPicture!!)
-                                .placeholder(getCircularProgressDrawable())
-                                .into(img)
-                        } else {
-                            FirebaseStorage.getInstance()
-                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                                .child(obj!!.coverPicture!!)
-                                .downloadUrl
-                                .addOnSuccessListener { fileUri ->
-
-                                    GlideApp.with(requireContext())
-                                        .load(fileUri)
-                                        .placeholder(getCircularProgressDrawable())
-                                        .into(img)
-                                }
-                        }
-                    }else {
-                        img.setBackgroundColor(
-                            ResourcesCompat.getColor(
-                                requireContext().resources,
-                                R.color.warm_grey,
-                                null
-                            )
-                        )
-                    }
+//                    var view = getView(viewHolder, R.id.card_view)
+//                    val lp = view.layoutParams
+//                    lp.height = lp.height
+//                    lp.width = itemWidth
+//                    view.layoutParams = lp
+//
+//                    getTextView(viewHolder, R.id.title_).text = obj.title
+//
+//                    var img = getImageView(viewHolder, R.id.learning_img)
+//                    if (!obj!!.coverPicture.isNullOrBlank()) {
+//                        if (obj!!.coverPicture!!.startsWith("http", true)) {
+//
+//                            GlideApp.with(requireContext())
+//                                .load(obj!!.coverPicture!!)
+//                                .placeholder(getCircularProgressDrawable())
+//                                .into(img)
+//                        } else {
+//                            FirebaseStorage.getInstance()
+//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
+//                                .child(obj!!.coverPicture!!)
+//                                .downloadUrl
+//                                .addOnSuccessListener { fileUri ->
+//
+//                                    GlideApp.with(requireContext())
+//                                        .load(fileUri)
+//                                        .placeholder(getCircularProgressDrawable())
+//                                        .into(img)
+//                                }
+//                        }
+//                    }else {
+//                        img.setBackgroundColor(
+//                            ResourcesCompat.getColor(
+//                                requireContext().resources,
+//                                R.color.warm_grey,
+//                                null
+//                            )
+//                        )
+//                    }
 
                 })
         recyclerGenericAdapter.list = content
@@ -219,16 +220,17 @@ class MyJourneyInnerFragment : BaseFragment() {
                    // navigate(R.id.learningVideoFragment)
                 },
                 RecyclerGenericAdapter.ItemInterface<MainLearningFragment.TitleSubtitleModel?> { obj, viewHolder, position ->
-                    var view = getView(viewHolder, R.id.card_view)
+//                    var view = getView(viewHolder, R.id.card_view)
+                    var view = viewHolder.getView(R.id.card_view)
                     val lp = view.layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
                     view.layoutParams = lp
-
-                    var title = getTextView(viewHolder, R.id.title_)
+                    var title = viewHolder.getView(R.id.title_) as TextView
+//                    var title = getTextView(viewHolder, R.id.title_)
                     title.text = obj?.title
-
-                    var subtitle = getTextView(viewHolder, R.id.title)
+                    var subtitle = viewHolder.getView(R.id.title) as TextView
+//                    var subtitle = getTextView(viewHolder, R.id.title)
                     subtitle.text = obj?.subtitle
 
 //                    var img = getImageView(viewHolder, R.id.learning_img)
