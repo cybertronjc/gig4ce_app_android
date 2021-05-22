@@ -102,4 +102,6 @@ dependencies {
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
+    // swipe button
+    implementation "com.ncorti:slidetoact:0.8.0"
 }

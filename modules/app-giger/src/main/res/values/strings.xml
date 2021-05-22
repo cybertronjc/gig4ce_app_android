@@ -24,4 +24,6 @@
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
+    <string name="available">Available</string>
+
 </resources>
