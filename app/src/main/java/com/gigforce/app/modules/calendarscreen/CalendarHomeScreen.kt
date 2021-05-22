@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
+import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen.Companion.fistvisibleItemOnclick
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
@@ -40,6 +41,8 @@ import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreference
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.ParamCustPreferViewModel
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
@@ -62,6 +65,9 @@ import com.jaeger.library.StatusBarUtil
 import com.riningan.widget.ExtendedBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.calendar_home_screen.*
+import kotlinx.android.synthetic.main.calendar_home_screen.cardView
+import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
+import kotlinx.android.synthetic.main.calendar_home_screen.profile_image
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -80,6 +86,9 @@ class CalendarHomeScreen : Fragment(),
     }
 
     var swipedToupdateGig = false
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     lateinit var selectedMonthModel: CalendarView.MonthModel
 
@@ -382,8 +391,15 @@ class CalendarHomeScreen : Fragment(),
         // load user data
         viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals(""))
+            if (profile.name != null && !profile.name.equals("")){
                 tv1HS1.text = profile.name
+
+                //setting user's name to mixpanel
+                var props = HashMap<String, Any>()
+                props.put("name", profile.name)
+                eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                Log.d("name", profile.name)
+            }
         })
         viewModelCustomPreference.customPreferencesLiveDataModel.observe(
                 viewLifecycleOwner,

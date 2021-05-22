@@ -16,6 +16,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class InterestData(
+        val interest : List<Skill2>,
+        val profileData : ProfileData?
+)
 @HiltViewModel
 class InterestAndExperienceViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
@@ -25,7 +29,7 @@ class InterestAndExperienceViewModel @Inject constructor(
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val userEnrollmentRepository: UserEnrollmentRepository =
         UserEnrollmentRepository(buildConfig = buildConfig)
-
+    private val appConfigurationRepository: AppConfigurationRepository = AppConfigurationRepository()
     private val _submitInterestState = MutableLiveData<Lse>()
     val submitInterestState: LiveData<Lse> = _submitInterestState
 
@@ -52,8 +56,8 @@ class InterestAndExperienceViewModel @Inject constructor(
         }
     }
 
-    private val _saveExpAndReturnNextOne = MutableLiveData<Lce<String?>>()
-    val saveExpAndReturnNextOne: LiveData<Lce<String?>> = _saveExpAndReturnNextOne
+    private val _saveExpAndReturnNextOne = MutableLiveData<Lce<String?>?>()
+    val saveExpAndReturnNextOne: LiveData<Lce<String?>?> = _saveExpAndReturnNextOne
 
     fun saveExpAndReturnNewOne(userId: String, experience: Experience) = viewModelScope.launch {
 
@@ -223,7 +227,8 @@ class InterestAndExperienceViewModel @Inject constructor(
                 _experience.value = Lce.content(
                     InterestAndExperienceData(
                         interestName = pendingInts.first().id,
-                        experience = null
+                        experience = null,
+                        roles = getRolesForInterest(pendingInts.first().id)
                     )
                 )
             }
@@ -250,14 +255,16 @@ class InterestAndExperienceViewModel @Inject constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interest.id,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interest.id)
                         )
                     )
                 }
@@ -269,14 +276,16 @@ class InterestAndExperienceViewModel @Inject constructor(
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = null
+                            experience = null,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 } else {
                     _experience.value = Lce.content(
                         InterestAndExperienceData(
                             interestName = interestName!!,
-                            experience = expMatch
+                            experience = expMatch,
+                            roles = getRolesForInterest(interestName)
                         )
                     )
                 }
@@ -287,9 +296,43 @@ class InterestAndExperienceViewModel @Inject constructor(
         }
     }
 
+    private val _fetchUserInterestDataState = MutableLiveData<Lce<InterestData>?>()
+    val fetchUserInterestDataState: LiveData<Lce<InterestData>?> = _fetchUserInterestDataState
+
+    fun getInterestForUser(
+            userId: String?,
+            shouldFetchProfileDataToo : Boolean
+    ) = viewModelScope.launch {
+        try {
+            _fetchUserInterestDataState.value = Lce.loading()
+
+            var profileData : ProfileData? = null
+
+            if(shouldFetchProfileDataToo && userId != null) {
+                profileData = profileFirebaseRepository.getProfileData(
+                        userId = userId
+                )
+            }
+
+            _fetchUserInterestDataState.value = Lce.content(
+                    InterestData(
+                            interest = appConfigurationRepository.getAllSkills(),
+                            profileData = profileData
+                    )
+            )
+        } catch (e: Exception) {
+            _fetchUserInterestDataState.value = Lce.error(e.message!!)
+        }
+    }
+
+    private suspend fun getRolesForInterest(
+            interestName :String
+    ):List<String> =  appConfigurationRepository.getRolesForSkill(interestName)
+
 }
 
 data class InterestAndExperienceData(
     val interestName: String,
-    val experience: Experience?
+    val experience: Experience?,
+    val roles : List<String>
 )

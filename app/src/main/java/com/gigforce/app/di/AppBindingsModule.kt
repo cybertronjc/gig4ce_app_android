@@ -69,8 +69,6 @@ interface AppBindingsModule {
     @Binds
     fun provideNavHost(imp: NavHostImp): INavHost
 
-    @Binds
-    fun provideSharedPreference(imp : SharedDataImp) : SharedDataInterface
 }
 
 @InstallIn(ViewModelComponent::class)
