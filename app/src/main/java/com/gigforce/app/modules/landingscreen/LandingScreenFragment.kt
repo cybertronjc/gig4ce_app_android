@@ -392,20 +392,11 @@ class LandingScreenFragment : BaseFragment() {
                 .gigerVerificationStatus
                 .observe(viewLifecycleOwner, Observer {
 
-                    val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                            && it.panCardDetails?.state == STATUS_VERIFIED
-                            && it.bankUploadDetailsDataModel?.state == STATUS_VERIFIED
-                            && (it.aadharCardDataModel?.state == STATUS_VERIFIED || it.drivingLicenseDataModel?.state == STATUS_VERIFIED)
 
-                    val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                            && it.panCardDetails?.panCardImagePath != null
-                            && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                            && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-                    if (requiredDocsVerified) {
+                    if (it.requiredDocsVerified) {
                         verificationTitleTV.text = getString(R.string.verification)
                         complete_now.text = getString(R.string.completed)
-                    } else if (requiredDocsUploaded) {
+                    } else if (it.requiredDocsUploaded) {
                         verificationTitleTV.text = getString(R.string.verification)
                         complete_now.text = getString(R.string.under_verification)
                     } else {

@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
@@ -29,7 +30,10 @@ import com.gigforce.app.utils.DocViewerActivity
 import com.gigforce.app.utils.PermissionUtils
 import com.gigforce.app.utils.PushDownAnim
 import com.gigforce.app.utils.StringConstants
+import com.jaeger.library.StatusBarUtil
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
+import kotlinx.android.synthetic.main.fragment_giger_verification.toolbar
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
@@ -186,9 +190,15 @@ class GigerVerificationFragment : BaseFragment() {
     }
 
     private fun initView() {
-        iv_back_verification_page.setOnClickListener {
-            activity?.onBackPressed()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener{
+                activity?.onBackPressed()
+            }
         }
+
 
         Glide.with(requireContext())
                 .load(R.drawable.ic_video_round)
