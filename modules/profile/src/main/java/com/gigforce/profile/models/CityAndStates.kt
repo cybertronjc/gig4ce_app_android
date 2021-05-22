@@ -32,6 +32,10 @@ data class City(
     @set:PropertyName("state_code")
     var stateCode: String = "",
 
+    @get:PropertyName("cityCode")
+    @set:PropertyName("cityCode")
+    var cityCode: String = "",
+
     @get:PropertyName("sub_location")
     @set:PropertyName("sub_location")
     var subLocation: List<String> = emptyList(),
@@ -52,10 +56,24 @@ data class CityWithImage(
     var id: String = "",
     var name: String = "",
     var state_code: String = "",
+    var cityCode: String ="",
     var image: Int = -1,
     var index: Int = -1,
     var icon: String = "",
     var subLocationFound: Boolean = false,
+){
+
+    override fun toString(): String {
+        return name
+    }
+}
+
+data class SubCity(
+
+    var name: String = "",
+    var state_code: String = "",
+    var cityCode: String ="",
+    var index: Int = -1,
 ){
 
     override fun toString(): String {

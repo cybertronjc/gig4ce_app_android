@@ -1,6 +1,7 @@
 package com.gigforce.profile.onboarding
 
 import android.app.Activity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
@@ -40,6 +41,9 @@ import javax.inject.Inject
 import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
+import com.gigforce.core.StringConstants
+import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.core.utils.SharedDataInterface
 
 @AndroidEntryPoint
 class OnboardingFragmentNew : Fragment(){
@@ -48,6 +52,10 @@ class OnboardingFragmentNew : Fragment(){
     lateinit var navigation: INavigation
     @Inject
     lateinit var eventTracker: IEventTracker
+
+    @Inject lateinit var sharedPreference : SharedDataInterface
+
+    var navFragmentsData: NavFragmentsData? = null
 
     companion object {
         fun newInstance() = OnboardingFragmentNew()
@@ -68,7 +76,7 @@ class OnboardingFragmentNew : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        navFragmentsData = activity as NavFragmentsData
         // setUpViewForOnboarding()
         changeStatusBarColor(R.color.fui_transparent)
 
@@ -83,6 +91,7 @@ class OnboardingFragmentNew : Fragment(){
         }
         setUpReferrer()
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_ONBOARDING_STARTED, null))
+        checkForDeepLink()
     }
 
 
@@ -241,13 +250,13 @@ class OnboardingFragmentNew : Fragment(){
             5 -> setInterest()
             6 -> setJobPreference()
             7 -> setAssetsData()
-            8 -> completeOnboarding()
+            8 -> setOnboardingCompleteAndNavigate() //completeOnboarding()
         }
     }
 
     private fun completeOnboarding() {
-        viewModel.onboardingCompleted()
-        navigateToLoaderScreen()
+//        viewModel.onboardingCompleted()
+//        navigateToLoaderScreen()
     }
 
     private fun navigateToLoaderScreen() {
@@ -493,5 +502,46 @@ class OnboardingFragmentNew : Fragment(){
                 }
             }
         }
+    }
+
+    private fun checkForDeepLink() {
+        if (navFragmentsData?.getData()
+                ?.getBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)!!
+        ) {
+            navFragmentsData?.getData()?.putBoolean(StringConstants.INVITE_BY_AMBASSADOR.value, false)
+        }
+    }
+    private fun setOnboardingCompleteAndNavigate() {
+        val inviteId = sharedPreference.getData(StringConstants.INVITE_USER_ID.value)
+        var ambassadorLatitude = 0.0
+        var ambassadorLongitude = 0.0
+        try{
+            sharedPreference.getData(StringConstants.AMBASSADOR_LATITUDE.value)?.let {
+                if(it.isNotBlank())ambassadorLatitude = it.toDouble()
+            }
+            sharedPreference.getData(StringConstants.AMBASSADOR_LONGITUDE.value)?.let {
+                if(it.isNotBlank())
+                    ambassadorLongitude = it.toDouble()
+            }}
+        catch (e:Exception){
+
+        }
+        viewModel.setOnboardingCompleted(
+            inviteId,
+            sharedPreference.getData(StringConstants.INVITE_BY_AMBASSADOR.value)?:"",
+            ambassadorLatitude,
+            ambassadorLongitude,
+            navFragmentsData?.getData()?.getString(StringConstants.ROLE_ID.value) ?: "",
+            navFragmentsData?.getData()?.getString(StringConstants.JOB_PROFILE_ID.value) ?: ""
+        )
+        sharedPreference.remove(StringConstants.INVITE_USER_ID.value)
+        sharedPreference.remove(StringConstants.INVITE_BY_AMBASSADOR.value)
+        sharedPreference.remove(StringConstants.AMBASSADOR_LATITUDE.value)
+        sharedPreference.remove(StringConstants.AMBASSADOR_LONGITUDE.value)
+        saveOnBoardingCompleted()
+        navigateToLoaderScreen()
+    }
+    fun saveOnBoardingCompleted() {
+        sharedPreference.saveOnBoardingCompleted()
     }
 }

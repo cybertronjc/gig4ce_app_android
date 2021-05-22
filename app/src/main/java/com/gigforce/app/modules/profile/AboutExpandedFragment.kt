@@ -125,17 +125,8 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
-            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
 
-            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.panCardImagePath != null
-                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-            if (requiredDocsVerified) {
+            if (it.requiredDocsVerified) {
                 about_top_profile.about_me_verification_layout.verification_status_tv.text =
                         getString(R.string.verified_text)
                 about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
@@ -144,7 +135,7 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
                 about_top_profile.about_me_verification_layout.status_iv.setImageResource(R.drawable.ic_check)
                 about_top_profile.about_me_verification_layout.verification_status_cardview.strokeColor =
                         ResourcesCompat.getColor(resources, R.color.green, null)
-            } else if (requiredDocsUploaded) {
+            } else if (it.requiredDocsUploaded) {
                 about_top_profile.about_me_verification_layout.verification_status_tv.text =
                         getString(R.string.under_verification)
                 about_top_profile.about_me_verification_layout.verification_status_tv.setTextColor(
