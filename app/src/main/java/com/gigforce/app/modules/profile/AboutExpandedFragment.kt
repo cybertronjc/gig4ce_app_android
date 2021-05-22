@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_ACTION
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -24,6 +24,8 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
+import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.contact_edit_warning_dialog.*
 import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*

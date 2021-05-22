@@ -1366,6 +1366,13 @@ int color fui_bgTwitter 0x0
 int color fui_buttonShadow 0x0
 int color fui_linkColor 0x0
 int color fui_transparent 0x0
+int color gig_timer_completed_grey 0x0
+int color gig_timer_declined_red 0x0
+int color gig_timer_no_show_red 0x0
+int color gig_timer_ongoing_green 0x0
+int color gig_timer_silver_dark 0x0
+int color gig_timer_silver_light 0x0
+int color gig_timer_upcoming_pink 0x0
 int color gray_color 0x0
 int color green 0x0
 int color grey 0x0
@@ -2228,6 +2235,13 @@ int drawable ic_error_loading_image_red 0x0
 int drawable ic_filled_circle 0x0
 int drawable ic_forward 0x0
 int drawable ic_fullscreen_white_18dp 0x0
+int drawable ic_gig_decline 0x0
+int drawable ic_gig_declined_cancelled 0x0
+int drawable ic_gig_missed 0x0
+int drawable ic_gig_ongoing 0x0
+int drawable ic_gig_success_icon 0x0
+int drawable ic_gig_type_square 0x0
+int drawable ic_gig_upoming 0x0
 int drawable ic_help 0x0
 int drawable ic_homescreen_chat 0x0
 int drawable ic_hsbc 0x0
@@ -2489,6 +2503,9 @@ int id chip_group 0x0
 int id chronometer 0x0
 int id circle_center 0x0
 int id circular 0x0
+int id city_image_iv 0x0
+int id city_name_tv 0x0
+int id city_root_layout 0x0
 int id clear_text 0x0
 int id clockwise 0x0
 int id close_click_layout 0x0
@@ -2675,6 +2692,7 @@ int id invoice_ic_forward 0x0
 int id invoices_container 0x0
 int id inward 0x0
 int id italic 0x0
+int id item 0x0
 int id item_power_menu_icon 0x0
 int id item_power_menu_layout 0x0
 int id item_power_menu_title 0x0
@@ -3058,7 +3076,6 @@ int id tv_allow_access 0x0
 int id tv_desc 0x0
 int id tv_pop_menu_normal 0x0
 int id tv_progress 0x0
-int id tv_rv_preferred_location 0x0
 int id tv_title 0x0
 int id txt_message 0x0
 int id ucrop 0x0
@@ -3206,6 +3223,7 @@ int layout design_navigation_menu_item 0x0
 int layout design_text_input_end_icon 0x0
 int layout design_text_input_password_icon 0x0
 int layout design_text_input_start_icon 0x0
+int layout dropdown_spinner 0x0
 int layout exo_list_divider 0x0
 int layout exo_playback_control_view 0x0
 int layout exo_player_control_view 0x0

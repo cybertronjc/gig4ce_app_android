@@ -13,5 +13,10 @@
     <color name="time_up_color">#6d7278</color>
     <color name="timer_color">#e82e66</color>
     <color name="lipstick">#d72467</color>
-
+    <color name="filter_text">#343434</color>
+    <color name="title_color">#d9000000</color>
+    <color name="barrier_color">#BFBEBE</color>
+    <color name="status_bar_pink">#e53369</color>
+    <color name="learning_text_color">#051369</color>
+    <color name="application_back">#f0f6fb</color>
 </resources>

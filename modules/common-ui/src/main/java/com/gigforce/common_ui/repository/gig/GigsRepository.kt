@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.repository.gig
 
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.gigforce.core.datamodels.gigpage.JobProfileFull
@@ -7,7 +8,6 @@ import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_app.R

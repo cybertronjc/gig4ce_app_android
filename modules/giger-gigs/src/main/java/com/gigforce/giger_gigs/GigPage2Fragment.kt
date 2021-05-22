@@ -42,6 +42,7 @@ import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig

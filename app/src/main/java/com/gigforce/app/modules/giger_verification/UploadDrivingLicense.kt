@@ -606,6 +606,7 @@ class UploadDrivingLicense : Fragment(),
     }
 
     override fun onClickRefer() {
+        navigation.popBackStack()
         navigation.navigateTo("referrals")
 //        navigate(R.id.referrals_fragment)
     }

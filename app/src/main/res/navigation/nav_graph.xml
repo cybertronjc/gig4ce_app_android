@@ -71,7 +71,7 @@
 
     <fragment
         android:id="@+id/jdScreenFragment"
-        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
         tools:layout="@layout/j_d_screen_fragment" />
 
     <fragment
@@ -142,7 +142,7 @@
 
     <fragment
         android:id="@+id/landinghomefragment"
-        android:name="com.gigforce.app.modules.landingscreen.LandingScreenFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"
         android:label="landing_home_fragment"
         tools:layout="@layout/landingscreen_fragment">
         <action
@@ -160,7 +160,7 @@
 
     <fragment
         android:id="@+id/explore_by_role"
-        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.ExploreByRoleFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.explorebyrole.ExploreByRoleFragment"
         android:label="explore_by_role_fragment"
         tools:layout="@layout/explore_by_role_fragment" />
 
@@ -571,17 +571,17 @@
         android:label="AssessmentResultFragment" />
     <fragment
         android:id="@+id/helpVideosFragment"
-        android:name="com.gigforce.app.modules.help.HelpVideosFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.help.HelpVideosFragment"
         android:label="fragment_help_video"
         tools:layout="@layout/fragment_help_video" />
 
     <fragment
         android:id="@+id/gig_history_fragment"
-        android:name="com.gigforce.app.modules.gighistory.GigHistoryFragment"
+        android:name="com.gigforce.giger_gigs.gighistory.GigHistoryFragment"
         android:label="GigHistoryFragment" />
     <fragment
         android:id="@+id/giger_id_fragment"
-        android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
+        android:name="com.gigforce.giger_gigs.gigerid.GigerIdFragment"
         android:label="GigerIdFragment" />
 
     <fragment
@@ -863,6 +863,11 @@
         android:name="com.gigforce.giger_gigs.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
+<!--    <include app:graph="@navigation/nav_graph_chat" />-->
+    <fragment
+        android:id="@+id/clientActiExploreList"
+        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
+        android:label="ClientActiExploreList" />
     <fragment
         android:id="@+id/chatListFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
@@ -900,6 +905,14 @@
         android:id="@+id/onboardingPreferredJobLocationFragment"
         android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
         android:label="OnboardingPreferredJobLocationFragment" />
+    <fragment
+        android:id="@+id/uploadAadharCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadAadharCard"
+        android:label="UploadAadharCard" />
+    <fragment
+        android:id="@+id/uploadPanCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
+        android:label="UploadPanCard" />
 
 
 </navigation>

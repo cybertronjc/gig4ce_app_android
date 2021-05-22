@@ -25,10 +25,10 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
-import com.gigforce.common_ui.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.*
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
-import com.gigforce.modules.feature_chat.repositories.ChatRepository
+import com.gigforce.common_ui.chat.ChatRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -520,7 +520,7 @@ class ChatPageViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
+            //val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
             val message = ChatMessage(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,

@@ -13,15 +13,15 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.core.TextDrawable
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.DateHelper
 import com.gigforce.giger_app.R
-//import com.gigforce.core.datamodels.gigpage.models.GigStatus
+//import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 

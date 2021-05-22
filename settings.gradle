@@ -1,3 +1,5 @@
+include ':modules:landing'
+include ':modules:landing-screen'
 include ':modules:user_preferences'
 include ':modules:ambassador'
 include ':modules:verification'

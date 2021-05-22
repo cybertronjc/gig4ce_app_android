@@ -1367,6 +1367,13 @@ color fui_bgTwitter
 color fui_buttonShadow
 color fui_linkColor
 color fui_transparent
+color gig_timer_completed_grey
+color gig_timer_declined_red
+color gig_timer_no_show_red
+color gig_timer_ongoing_green
+color gig_timer_silver_dark
+color gig_timer_silver_light
+color gig_timer_upcoming_pink
 color gray_color
 color green
 color grey
@@ -2229,6 +2236,13 @@ drawable ic_error_loading_image_red
 drawable ic_filled_circle
 drawable ic_forward
 drawable ic_fullscreen_white_18dp
+drawable ic_gig_decline
+drawable ic_gig_declined_cancelled
+drawable ic_gig_missed
+drawable ic_gig_ongoing
+drawable ic_gig_success_icon
+drawable ic_gig_type_square
+drawable ic_gig_upoming
 drawable ic_help
 drawable ic_homescreen_chat
 drawable ic_hsbc
@@ -2490,6 +2504,9 @@ id chip_group
 id chronometer
 id circle_center
 id circular
+id city_image_iv
+id city_name_tv
+id city_root_layout
 id clear_text
 id clockwise
 id close_click_layout
@@ -2676,6 +2693,7 @@ id invoice_ic_forward
 id invoices_container
 id inward
 id italic
+id item
 id item_power_menu_icon
 id item_power_menu_layout
 id item_power_menu_title
@@ -3059,7 +3077,6 @@ id tv_allow_access
 id tv_desc
 id tv_pop_menu_normal
 id tv_progress
-id tv_rv_preferred_location
 id tv_title
 id txt_message
 id ucrop
@@ -3207,6 +3224,7 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_password_icon
 layout design_text_input_start_icon
+layout dropdown_spinner
 layout exo_list_divider
 layout exo_playback_control_view
 layout exo_player_control_view

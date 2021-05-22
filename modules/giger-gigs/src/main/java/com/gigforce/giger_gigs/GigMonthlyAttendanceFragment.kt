@@ -14,10 +14,10 @@ import com.bumptech.glide.Glide
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
 import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible

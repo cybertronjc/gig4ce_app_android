@@ -14,7 +14,7 @@ import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.google.firebase.auth.FirebaseAuth
 
 class GroupMembersRecyclerAdapter(

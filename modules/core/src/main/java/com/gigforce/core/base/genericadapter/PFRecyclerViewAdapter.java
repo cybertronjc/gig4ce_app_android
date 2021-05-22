@@ -96,6 +96,7 @@ public abstract class PFRecyclerViewAdapter<T> extends RecyclerView.Adapter<PFRe
         bindView(getItem(position), holder,position);
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();

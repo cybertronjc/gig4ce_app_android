@@ -22,10 +22,11 @@ import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.common_ui.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.*
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
-import com.gigforce.modules.feature_chat.repositories.ChatGroupRepository
+import com.gigforce.common_ui.chat.ChatGroupRepository
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -55,11 +56,11 @@ interface GroupChatViewModelInputs {
 
 
 class GroupChatViewModel constructor(
-        private val chatContactsRepository: ChatContactsRepository,
-        private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
-        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
+    private val chatContactsRepository: ChatContactsRepository,
+    private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
+    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
 ) : ViewModel(),
         GroupChatViewModelInputs,
         GroupChatViewModelOutputs {
@@ -438,7 +439,7 @@ class GroupChatViewModel constructor(
 
         try {
             val thumbnailForUi =
-                    videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
+                    videoInfo.thumbnail?.copy(videoInfo.thumbnail!!.config, videoInfo.thumbnail!!.isMutable)
 
             val message = ChatMessage(
                     id = UUID.randomUUID().toString(),

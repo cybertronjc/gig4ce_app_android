@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.core.TextDrawable
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
@@ -52,9 +53,6 @@ import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.giger_app.components.CalendarView
 import com.gigforce.giger_app.roster.RosterDayFragment
-
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics

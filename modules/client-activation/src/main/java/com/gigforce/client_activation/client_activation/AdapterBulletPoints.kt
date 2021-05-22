@@ -15,8 +15,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.models.BulletPoints
+//import com.gigforce.client_activation.client_activation.models.BulletPoints
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.viewdatamodels.client_activation.BulletPoints
 import kotlinx.android.synthetic.main.layout_rv_bullet_points.view.*
 
 class AdapterBulletPoints constructor(

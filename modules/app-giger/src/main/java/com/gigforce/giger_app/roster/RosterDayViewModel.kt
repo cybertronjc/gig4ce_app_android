@@ -17,10 +17,10 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.common_ui.viewmodels.custom_gig_preferences.CustomPreferencesViewModel
 import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.core.extensions.px
 import com.gigforce.core.extensions.toDate

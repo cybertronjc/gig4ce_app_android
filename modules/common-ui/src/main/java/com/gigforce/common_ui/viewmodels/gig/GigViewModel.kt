@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
 import com.gigforce.core.utils.Lce

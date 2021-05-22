@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.toLocalDateTime
@@ -16,7 +17,6 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.giger_gigs.GigRegulariseAttendanceFragment
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint

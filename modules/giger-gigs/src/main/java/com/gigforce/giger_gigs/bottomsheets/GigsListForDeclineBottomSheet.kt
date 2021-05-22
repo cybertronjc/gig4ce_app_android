@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.giger_gigs.adapters.GigsListForDeclineAdapter
 import com.gigforce.giger_gigs.adapters.GigsListForDeclineAdapterListener
 import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -26,7 +27,6 @@ import com.gigforce.giger_gigs.R
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragmentResultListener
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

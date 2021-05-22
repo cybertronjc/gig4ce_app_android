@@ -48,6 +48,16 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("fragment_role_details",R.id.fragment_role_details)
         this.registerRoute("payslipMonthlyFragment",R.id.payslipMonthlyFragment)
         this.registerRoute("gigsListForDeclineBottomSheet",R.id.gigsListForDeclineBottomSheet)
+        this.registerRoute("explorebyrole", R.id.explore_by_role)
+        this.registerRoute("jdscreen", R.id.jdScreenFragment)
+        this.registerRoute("education_expended", R.id.educationExpandedFragment)
+        this.registerRoute("about_expended", R.id.aboutExpandedFragment)
+        this.registerRoute("permanent_address", R.id.permanentAddressViewFragment)
+        this.registerRoute("current_address", R.id.arrountCurrentAddress)
+        this.registerRoute("earning", R.id.earningFragment)
+        this.registerRoute("week_day", R.id.weekDayFragment)
+        this.registerRoute("week_end", R.id.weekEndFragment)
+        this.registerRoute("location", R.id.locationFragment)
         this.registerForWalletAndPayouts()
         NavForSettingsModule(this)
         NavForAmbassadorModule(this)
@@ -59,6 +69,7 @@ class NavManagerImpl @Inject constructor(
         NavForCommonModule(this)
         NavForWalletModule(this)
         NavForPreferencesModule(this)
+        NavUserDetailsInfo(this)
     }
 
     private fun registerForWalletAndPayouts() {

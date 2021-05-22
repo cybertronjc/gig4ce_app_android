@@ -25,7 +25,7 @@ class AdapterPreferredLocation : RecyclerView.Adapter<AdapterPreferredLocation.V
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.tv_rv_preferred_location.text = items?.get(position) ?: ""
+        holder.itemView.city_name_tv.text = items?.get(position) ?: ""
 
     }
 

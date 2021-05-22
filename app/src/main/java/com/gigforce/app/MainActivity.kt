@@ -18,11 +18,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
+import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.app.utils.GigNavigation
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
@@ -32,9 +31,9 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId

@@ -31,13 +31,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.LandingScreenViewModel
 import com.gigforce.app.utils.GigNavigation
-import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants

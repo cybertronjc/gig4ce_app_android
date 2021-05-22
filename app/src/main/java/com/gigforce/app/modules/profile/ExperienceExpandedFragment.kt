@@ -9,10 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.modules.landingscreen.LandingPageConstants
-import com.gigforce.app.modules.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants
+//import com.gigforce.landing_screen.landingscreen.LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
+import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
@@ -49,7 +51,7 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
 
         arguments?.let {
             cameFromLandingPage = it.getBoolean(INTENT_EXTRA_CAME_FROM_LANDING_SCREEN)
-            action = it.getInt(LandingPageConstants.INTENT_EXTRA_ACTION)
+            action = it.getInt(INTENT_EXTRA_ACTION)
         }
 
         savedInstanceState?.let {

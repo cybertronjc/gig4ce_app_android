@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.extensions.toLocalDateTime
 import com.gigforce.giger_gigs.R
 import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.core.datamodels.gigpage.models.GigStatus
 import kotlinx.android.synthetic.main.recycler_item_gig_attendance.view.*
 import java.text.SimpleDateFormat
 import java.time.format.TextStyle
