@@ -369,6 +369,8 @@ class GigPage2Fragment : BaseFragment(),
                     showLocationNotInRangeDialog(distanceBetweenGigAndUser)
                     return
                 }
+            } else{
+                markAttendance(checkInTimeAccToUser)
             }
         } else {
             markAttendance(checkInTimeAccToUser)

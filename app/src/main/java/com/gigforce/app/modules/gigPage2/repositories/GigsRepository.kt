@@ -184,8 +184,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return Location(
                 "Office Location"
         ).apply {
-            this.latitude = bussinessLocation.latitude ?: 0.0
-            this.longitude = bussinessLocation.longitude ?: 0.0
+            this.latitude = bussinessLocation.geoPoint?.latitude ?: 0.0
+            this.longitude = bussinessLocation.geoPoint?.longitude ?: 0.0
         }
     }
 

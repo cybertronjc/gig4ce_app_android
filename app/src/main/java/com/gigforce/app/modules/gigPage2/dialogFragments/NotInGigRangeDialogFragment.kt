@@ -5,14 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.gigforce.app.R
 import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
+import com.gigforce.core.extensions.roundTo
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_user_not_in_gig_range_dialog.*
 
-class NotInGigRangeDialogFragment : BottomSheetDialogFragment() {
+class NotInGigRangeDialogFragment : DialogFragment() {
 
     companion object {
         const val INTENT_EXTRA_DISTANCE_FROM_GIG = "distance_from_gig"
@@ -87,9 +89,9 @@ class NotInGigRangeDialogFragment : BottomSheetDialogFragment() {
         }
 
         val distanceFromgig = if (distanceFromGig > 1000L) {
-            "$distanceFromGig Km(s)"
+            "You are ${(distanceFromGig / 1000).roundTo(2)} Km(s) away from gig location"
         } else {
-            "$distanceFromGig Mtr(s)"
+            "You are ${distanceFromGig.roundTo(2)} Mtr(s) away from gig location"
         }
         location_from_gig_tv.text = distanceFromgig
     }
