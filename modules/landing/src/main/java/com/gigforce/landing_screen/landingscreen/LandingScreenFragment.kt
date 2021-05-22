@@ -294,7 +294,7 @@ class LandingScreenFragment : Fragment() {
         var result = ""
 
         try {
-            result = context?.packageManager?.getPackageInfo(context!!.packageName, 0)
+            result = context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
                 ?.versionName ?: ""
         } catch (e: PackageManager.NameNotFoundException) {
 
