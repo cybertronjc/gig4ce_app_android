@@ -41,6 +41,10 @@ data class GigOrder(
 
 data class WorkOrderOffice(
 
+        @get:PropertyName("id")
+        @set:PropertyName("id")
+        var id: String? = null,
+
         @get:PropertyName("city")
         @set:PropertyName("city")
         var city: City? = null,
@@ -48,5 +52,4 @@ data class WorkOrderOffice(
         @get:PropertyName("state")
         @set:PropertyName("state")
         var state: State? = null
-
 )

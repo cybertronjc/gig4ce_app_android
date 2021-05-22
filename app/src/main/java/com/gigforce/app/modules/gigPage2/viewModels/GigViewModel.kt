@@ -333,6 +333,15 @@ class GigViewModel constructor(
                 }
             }
 
+            if(shouldGetContactdetails){
+                val location = gigsRepository.getGigLocationFromGigOrder(gig.gigOrderId)
+                location?.let {
+
+                    gig.latitude = it.latitude
+                    gig.longitude = it.longitude
+                }
+            }
+
             gig.gigUserFeedbackAttachments = gigAttachmentWithLinks
             gig
         }.onSuccess {

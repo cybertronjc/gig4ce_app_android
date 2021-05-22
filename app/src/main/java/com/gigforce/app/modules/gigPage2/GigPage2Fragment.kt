@@ -14,11 +14,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,9 +34,12 @@ import com.gigforce.app.modules.gigPage2.adapters.OtherOptionsAdapter
 import com.gigforce.app.modules.gigPage2.bottomsheets.EarlyOrLateCheckInBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet
 import com.gigforce.app.modules.gigPage2.bottomsheets.PermissionRequiredBottomSheet
+import com.gigforce.app.modules.gigPage2.dialogFragments.NotInGigRangeDialogFragment
 import com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment
 import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
+import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
+import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewState
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
 import com.gigforce.app.utils.*
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
@@ -53,6 +56,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import kotlinx.android.synthetic.main.fragment_gig_page_2.*
@@ -79,7 +83,9 @@ class GigPage2Fragment : BaseFragment(),
         LocationUpdates.LocationUpdateCallbacks,
         EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener {
 
+    private val gigSharedViewModel : SharedGigViewModel by activityViewModels()
     private val viewModel: GigViewModel by viewModels()
+
     private lateinit var gigId: String
     private var location: Location? = null
     private var imageClickedPath: String? = null
@@ -350,19 +356,29 @@ class GigPage2Fragment : BaseFragment(),
                     this.longitude = currentGig.longitude!!
                 }
 
-
                 val distanceBetweenGigAndUser = userLocation.distanceTo(gigLocation)
-                if (distanceBetweenGigAndUser <= MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS) {
-                    //okay nothing
+                val maxAllowedDistanceFromGigString = firebaseRemoteConfig.getString("max_checkin_distance_from_gig")
+                val maxAllowedDistanceFromGig : Long = if(maxAllowedDistanceFromGigString.isEmpty())
+                    MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS
+                else
+                    maxAllowedDistanceFromGigString.toLong()
+
+                if (distanceBetweenGigAndUser <= maxAllowedDistanceFromGig) {
                     markAttendance(checkInTimeAccToUser)
                 } else {
-                    //Show
+                    showLocationNotInRangeDialog(distanceBetweenGigAndUser)
                     return
                 }
             }
         } else {
             markAttendance(checkInTimeAccToUser)
         }
+    }
+
+    private fun showLocationNotInRangeDialog(
+            distanceFromGig: Float
+    ) {
+        NotInGigRangeDialogFragment.launch(distanceFromGig,childFragmentManager)
     }
 
     private fun markAttendance(checkInTimeAccToUser: Timestamp?) {
@@ -395,6 +411,15 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun initViewModel() {
+        gigSharedViewModel.gigSharedViewModelState
+                .observe(viewLifecycleOwner, Observer {
+                    when (it) {
+                        SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(null)
+                        else -> {
+                        }
+                    }
+                })
+
         viewModel.gigDetails
                 .observe(viewLifecycleOwner, Observer {
                     when (it) {
@@ -986,7 +1011,7 @@ class GigPage2Fragment : BaseFragment(),
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
-        private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200
+        private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         private val IDENTITY_CARD = OtherOption(
                 id = ID_IDENTITY_CARD,

@@ -1,11 +1,9 @@
 package com.gigforce.app.modules.gigPage2.repositories
 
+import android.location.Location
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigAttendance
-import com.gigforce.app.modules.gigPage2.models.JobProfileFull
-import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
@@ -149,7 +147,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return extractGigs(querySnap)
                 .filter {
                     it.startDateTime > Timestamp.now()
-                            &&  it.endDateTime.toLocalDate().isBefore(tomorrow)
+                            && it.endDateTime.toLocalDate().isBefore(tomorrow)
                 }
 
     }
@@ -165,13 +163,52 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return userGigs
     }
 
-     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+    suspend fun getJobDetails(jobId: String): JobProfileFull {
         val getJobProfileQuery = db.collection("Job_Profiles")
                 .document(jobId)
                 .get()
                 .await()
 
-       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+        return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+    }
+
+    suspend fun getGigLocationFromGigOrder(
+            gigOrderId: String
+    ) : Location? {
+
+        val gigOrder = getGigOrder(gigOrderId) ?: return null
+        val officeLocation = gigOrder.workOrderOffice ?: return null
+        val officeLocationId = officeLocation.id ?: return null
+        val bussinessLocation =   getBussinessLocation(officeLocationId) ?: return null
+
+        return Location(
+                "Office Location"
+        ).apply {
+            this.latitude = bussinessLocation.latitude ?: 0.0
+            this.longitude = bussinessLocation.longitude ?: 0.0
+        }
+    }
+
+    private suspend fun getGigOrder(gigOrderId: String): GigOrder? {
+        val getGigOrderQuery = db.collection("Gig_Order")
+                .document(gigOrderId)
+                .get().await()
+
+        if (!getGigOrderQuery.exists())
+            return null
+
+       return getGigOrderQuery.toObject(GigOrder::class.java)!!
+    }
+
+    private suspend fun getBussinessLocation(bussinessLocationId: String): BussinessLocation? {
+        val getBussinessLocationQuery = db.collection("Business_Locations")
+                .document(bussinessLocationId)
+                .get().await()
+
+        if (!getBussinessLocationQuery.exists())
+            return null
+
+       return getBussinessLocationQuery.toObject(BussinessLocation::class.java)!!
     }
 
     companion object {
