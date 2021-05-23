@@ -18,6 +18,16 @@ data class GigerVerificationStatus(
 
 
 ) {
+
+    val requiredDocsVerified : Boolean get() {
+        return bankUploadDetailsDataModel?.state == STATUS_VERIFIED &&
+                aadharCardDataModel?.state == STATUS_VERIFIED
+    }
+    val requiredDocsUploaded : Boolean get() {
+        return bankUploadDetailsDataModel?.accountNo.isNullOrBlank().not() &&
+                aadharCardDataModel?.frontImage != null
+    }
+
     fun getColorCodeForStatus(statusCode: Int): Int {
         return when (statusCode) {
             STATUS_DOCUMENT_RECEIVED_BY_3RD_PARTY, STATUS_DOCUMENT_UPLOADED, STATUS_DOCUMENT_PROCESSING -> R.color.yellow
