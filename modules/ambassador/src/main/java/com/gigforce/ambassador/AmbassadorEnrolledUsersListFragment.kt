@@ -257,6 +257,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                 if (it.isEmpty()) {
                     enrolledUserAdapter.setData(emptyList())
                     if (!isEditingDetails){
+                        Log.d("here", "prpfile selected")
                         no_users_enrolled_layout.visible()
                         createProfileBtn.gone()
                         share_link.gone()
@@ -266,12 +267,14 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                 } else {
                     enrolledUserAdapter.setData(it)
                     if (!isEditingDetails){
+                        Log.d("here", "prpfile selected and data is there")
                         no_users_enrolled_layout.gone()
                         createProfileBtn.visible()
                         share_link.visible()
-                        total_complete_profile_tv.visible()
-                        total_incomplete_profile_tv.visible()
+
                     }
+                    total_complete_profile_tv.visible()
+                    total_incomplete_profile_tv.visible()
 
 
                     val totalCompleteProfiles =
