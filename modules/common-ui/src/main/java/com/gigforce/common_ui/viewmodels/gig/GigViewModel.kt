@@ -24,9 +24,11 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -94,6 +96,15 @@ class GigViewModel constructor(
                 remarks = remarks
             )
         } else if (!gig.isCheckOutMarked()) {
+
+            val checkInTime = gig.attendance!!.checkInTime?.toLocalDateTime()
+            val currentTime = LocalDateTime.now()
+            val minutes = Duration.between(checkInTime, currentTime).toMinutes()
+
+            if (minutes < 15L) {
+                Log.d("GigViewModel","Ignoring checkout call as difference between checkin-time and current time is less than 15 mins")
+                return@launch
+            }
 
             markCheckOut(
                 gigId = gig.gigId,

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.core.datamodels.profile.Skill
 import com.gigforce.common_ui.adapter.DropdownAdapter
-import com.gigforce.app.utils.Lce
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 

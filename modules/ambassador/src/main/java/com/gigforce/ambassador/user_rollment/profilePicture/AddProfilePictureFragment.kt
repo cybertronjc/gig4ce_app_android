@@ -30,7 +30,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.common_ui.widgets.ImagePicker
 import com.gigforce.core.AppConstants
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation

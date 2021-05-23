@@ -20,7 +20,7 @@ import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation

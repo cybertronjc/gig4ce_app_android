@@ -31,9 +31,13 @@ import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -73,10 +77,15 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
-        iv_back_add_pan_card_info.setOnClickListener {
-            navigation.popBackStack("verification/main",inclusive = false)
-//            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener(View.OnClickListener {
+                navigation.navigateTo("verification/main")
+//                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            })
         }
 
 

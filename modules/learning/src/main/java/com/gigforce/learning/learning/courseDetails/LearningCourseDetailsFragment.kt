@@ -19,7 +19,7 @@ import com.example.learning.R
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.extensions.gone

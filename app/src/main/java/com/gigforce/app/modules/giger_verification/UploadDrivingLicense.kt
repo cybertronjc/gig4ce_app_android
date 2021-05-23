@@ -29,7 +29,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.selectItemWithText

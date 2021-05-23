@@ -31,9 +31,12 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -103,9 +106,13 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
             getString(R.string.upload_your_driving_license)
         dlSubmitSliderBtn.isEnabled = false
 
-        iv_back_add_driving_license.setOnClickListener {
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
             navigation.popBackStack("verification/main",inclusive = false)
-//            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            setBackButtonListener(View.OnClickListener {
+            })
         }
 
         helpIconViewIV.setOnClickListener {

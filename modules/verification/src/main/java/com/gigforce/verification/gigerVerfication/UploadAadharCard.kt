@@ -22,7 +22,7 @@ import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.verification.AadharCardDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible

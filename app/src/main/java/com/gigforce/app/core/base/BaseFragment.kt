@@ -41,7 +41,7 @@ import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
 import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel

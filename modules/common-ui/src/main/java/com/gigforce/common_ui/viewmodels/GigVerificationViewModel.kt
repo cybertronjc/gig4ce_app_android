@@ -72,7 +72,7 @@ class GigVerificationViewModel @Inject constructor(
 
                     val everyDocumentUploaded = it.aadhar_card?.userHasAadharCard != null
                             && it.pan_card?.userHasPanCard != null
-                            && it.bank_details?.userHasPassBook != null
+                            && it.bank_details?.accountNo.isNullOrBlank().not()
                             && it.driving_license?.userHasDL != null
                             && it.selfie_video?.videoPath != null
 

@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.profile.models
+package com.gigforce.core.datamodels.profile
 
 import com.google.firebase.firestore.PropertyName
 

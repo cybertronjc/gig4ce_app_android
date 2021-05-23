@@ -36,7 +36,7 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*

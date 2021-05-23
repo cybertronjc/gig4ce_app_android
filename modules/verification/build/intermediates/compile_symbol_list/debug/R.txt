@@ -1087,6 +1087,7 @@ int attr textAppearanceSmallPopupMenu 0x0
 int attr textAppearanceSubtitle1 0x0
 int attr textAppearanceSubtitle2 0x0
 int attr textColorAlertDialogListItem 0x0
+int attr textColorError 0x0
 int attr textColorSearchUrl 0x0
 int attr textEndPadding 0x0
 int attr textInputLayoutFocusedRectEnabled 0x0
@@ -2254,7 +2255,13 @@ int drawable abc_vector_test 0x0
 int drawable app_gradient_button 0x0
 int drawable app_gradient_button_disabled 0x0
 int drawable avd_hide_password 0x0
+int drawable avd_hide_password_1 0x0
+int drawable avd_hide_password_2 0x0
+int drawable avd_hide_password_3 0x0
 int drawable avd_show_password 0x0
+int drawable avd_show_password_1 0x0
+int drawable avd_show_password_2 0x0
+int drawable avd_show_password_3 0x0
 int drawable bg_capsule_53ba25 0x0
 int drawable bg_capsule_border_fa6400 0x0
 int drawable bg_white_top_rad_8 0x0
@@ -2645,6 +2652,7 @@ int id adjust_height 0x0
 int id adjust_width 0x0
 int id alertTitle 0x0
 int id aligned 0x0
+int id all 0x0
 int id always 0x0
 int id animateToEnd 0x0
 int id animateToStart 0x0
@@ -2744,6 +2752,8 @@ int id card_content_root 0x0
 int id card_root 0x0
 int id card_view 0x0
 int id center 0x0
+int id center_horizontal 0x0
+int id center_vertical 0x0
 int id chain 0x0
 int id chat_fragment 0x0
 int id checkInTV 0x0
@@ -2764,6 +2774,8 @@ int id city_name_tv 0x0
 int id city_root_layout 0x0
 int id clear_text 0x0
 int id clickedImageIV 0x0
+int id clip_horizontal 0x0
+int id clip_vertical 0x0
 int id clockwise 0x0
 int id close 0x0
 int id cloudy 0x0
@@ -2893,6 +2905,9 @@ int id email_tos_and_pp_text 0x0
 int id end 0x0
 int id endToStart 0x0
 int id end_padder 0x0
+int id enterAlways 0x0
+int id enterAlwaysCollapsed 0x0
+int id exitUntilCollapsed 0x0
 int id exo_ad_overlay 0x0
 int id exo_artwork 0x0
 int id exo_buffering 0x0
@@ -2927,6 +2942,8 @@ int id feature_icon 0x0
 int id feature_title 0x0
 int id featured_rv 0x0
 int id fill 0x0
+int id fill_horizontal 0x0
+int id fill_vertical 0x0
 int id filled 0x0
 int id filterControl1 0x0
 int id filterControl2 0x0
@@ -3012,15 +3029,10 @@ int id ivAadhaar1 0x0
 int id ivDL1 0x0
 int id ivPan1 0x0
 int id ivVeriDD1 0x0
-int id iv_back_add_aadhar_card_info 0x0
-int id iv_back_add_driving_license 0x0
-int id iv_back_add_pan_card_info 0x0
 int id iv_back_add_selfie 0x0
 int id iv_back_application_client_activation 0x0
 int id iv_back_upload_aadhar_card_client_activation 0x0
-int id iv_back_verification_page 0x0
 int id iv_download_giger_verification 0x0
-int id iv_options_verification_page 0x0
 int id jpeg 0x0
 int id jumpToEnd 0x0
 int id jumpToStart 0x0
@@ -3250,6 +3262,7 @@ int id sawtooth 0x0
 int id scale 0x0
 int id scale_scroll_wheel 0x0
 int id screen 0x0
+int id scroll 0x0
 int id scrollIndicatorDown 0x0
 int id scrollIndicatorUp 0x0
 int id scrollView 0x0
@@ -3297,6 +3310,7 @@ int id slide 0x0
 int id smallLabel 0x0
 int id snackbar_action 0x0
 int id snackbar_text 0x0
+int id snap 0x0
 int id spacer 0x0
 int id spherical_gl_surface_view 0x0
 int id spinnerVeri 0x0
@@ -3325,6 +3339,8 @@ int id staticPostLayout 0x0
 int id statusTV 0x0
 int id status_bar_latest_event_content 0x0
 int id status_iv 0x0
+int id statusbarutil_fake_status_bar_view 0x0
+int id statusbarutil_translucent_view 0x0
 int id stereo 0x0
 int id stop 0x0
 int id stretch 0x0
@@ -3440,11 +3456,7 @@ int id tv_no_driving_cert 0x0
 int id tv_pop_menu_normal 0x0
 int id tv_schedule_test 0x0
 int id tv_title 0x0
-int id tv_title_add_aadhar_card_info 0x0
-int id tv_title_add_driving_license 0x0
-int id tv_title_add_pan_card_info 0x0
 int id tv_title_add_selfie 0x0
-int id tv_title_verification_page 0x0
 int id txt_message 0x0
 int id ucrop 0x0
 int id ucrop_frame 0x0
@@ -4466,6 +4478,7 @@ int style Base_V14_Theme_MaterialComponents_Light_Bridge 0x0
 int style Base_V14_Theme_MaterialComponents_Light_DarkActionBar_Bridge 0x0
 int style Base_V14_Theme_MaterialComponents_Light_Dialog 0x0
 int style Base_V14_Theme_MaterialComponents_Light_Dialog_Bridge 0x0
+int style Base_V14_Widget_Design_AppBarLayout 0x0
 int style Base_V21_ThemeOverlay_AppCompat_Dialog 0x0
 int style Base_V21_Theme_AppCompat 0x0
 int style Base_V21_Theme_AppCompat_Dialog 0x0
@@ -4475,6 +4488,7 @@ int style Base_V21_Theme_MaterialComponents 0x0
 int style Base_V21_Theme_MaterialComponents_Dialog 0x0
 int style Base_V21_Theme_MaterialComponents_Light 0x0
 int style Base_V21_Theme_MaterialComponents_Light_Dialog 0x0
+int style Base_V21_Widget_Design_AppBarLayout 0x0
 int style Base_V22_Theme_AppCompat 0x0
 int style Base_V22_Theme_AppCompat_Light 0x0
 int style Base_V23_Theme_AppCompat 0x0
@@ -4482,6 +4496,7 @@ int style Base_V23_Theme_AppCompat_Light 0x0
 int style Base_V26_Theme_AppCompat 0x0
 int style Base_V26_Theme_AppCompat_Light 0x0
 int style Base_V26_Widget_AppCompat_Toolbar 0x0
+int style Base_V26_Widget_Design_AppBarLayout 0x0
 int style Base_V28_Theme_AppCompat 0x0
 int style Base_V28_Theme_AppCompat_Light 0x0
 int style Base_V7_ThemeOverlay_AppCompat_Dialog 0x0
@@ -4550,6 +4565,7 @@ int style Base_Widget_AppCompat_TextView 0x0
 int style Base_Widget_AppCompat_TextView_SpinnerItem 0x0
 int style Base_Widget_AppCompat_Toolbar 0x0
 int style Base_Widget_AppCompat_Toolbar_Button_Navigation 0x0
+int style Base_Widget_Design_AppBarLayout 0x0
 int style Base_Widget_Design_TabLayout 0x0
 int style Base_Widget_MaterialComponents_AutoCompleteTextView 0x0
 int style Base_Widget_MaterialComponents_CheckedTextView 0x0
@@ -5070,6 +5086,7 @@ int style Widget_Design_AppBarLayout 0x0
 int style Widget_Design_BottomNavigationView 0x0
 int style Widget_Design_BottomSheet_Modal 0x0
 int style Widget_Design_CollapsingToolbar 0x0
+int style Widget_Design_CoordinatorLayout 0x0
 int style Widget_Design_FloatingActionButton 0x0
 int style Widget_Design_NavigationView 0x0
 int style Widget_Design_ScrimInsetsFrameLayout 0x0
@@ -6059,9 +6076,10 @@ int styleable DefaultTimeBar_scrubber_drawable 9
 int styleable DefaultTimeBar_scrubber_enabled_size 10
 int styleable DefaultTimeBar_touch_target_height 11
 int styleable DefaultTimeBar_unplayed_color 12
-int[] styleable DesignTheme { 0x0, 0x0 }
+int[] styleable DesignTheme { 0x0, 0x0, 0x0 }
 int styleable DesignTheme_bottomSheetDialogTheme 0
 int styleable DesignTheme_bottomSheetStyle 1
+int styleable DesignTheme_textColorError 2
 int[] styleable DialogFragmentNavigator { 0x1010003 }
 int styleable DialogFragmentNavigator_android_name 0
 int[] styleable DrawerArrowToggle { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }

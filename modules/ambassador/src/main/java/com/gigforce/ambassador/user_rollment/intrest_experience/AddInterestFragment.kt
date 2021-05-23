@@ -15,6 +15,7 @@ import com.gigforce.ambassador.R
 import com.gigforce.ambassador.user_rollment.user_details.UserDetailsViewModel
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.datamodels.profile.Skill2
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.selectChipsWithText
 import com.gigforce.core.extensions.visible
@@ -176,7 +177,9 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
                             )
 
                             if(it.content.profileData != null)
-                                setDataOnView(it.content.profileData)
+                                it.content.profileData?.let {
+                                    setDataOnView(it)
+                                }
                         }
                         is Lce.Error -> {
                             user_interest_progressbar.gone()
@@ -226,8 +229,8 @@ class AddUserInterestFragment : Fragment(),IOnBackPressedOverride {
     }
 
     private fun showMainLayout(
-            shouldShowEditAction : Boolean,
-            interest : List<Skill2>,
+        shouldShowEditAction : Boolean,
+        interest : List<Skill2>,
     ) {
         user_interest_progressbar.gone()
         user_interest_error.gone()

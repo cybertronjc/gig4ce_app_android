@@ -376,15 +376,10 @@ id ivAadhaar1
 id ivDL1
 id ivPan1
 id ivVeriDD1
-id iv_back_add_aadhar_card_info
-id iv_back_add_driving_license
-id iv_back_add_pan_card_info
 id iv_back_add_selfie
 id iv_back_application_client_activation
 id iv_back_upload_aadhar_card_client_activation
-id iv_back_verification_page
 id iv_download_giger_verification
-id iv_options_verification_page
 id licenseNoET
 id licenseNoLabel
 id licenseValidityET
@@ -498,11 +493,7 @@ id tv_contract_status
 id tv_contract_status_label
 id tv_no_driving_cert
 id tv_schedule_test
-id tv_title_add_aadhar_card_info
-id tv_title_add_driving_license
-id tv_title_add_pan_card_info
 id tv_title_add_selfie
-id tv_title_verification_page
 id uploadDocumentCardView
 id uploadDocumentLabel
 id uploadImageLayout

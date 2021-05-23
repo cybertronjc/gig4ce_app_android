@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.configrepository.AppConfigurationRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
+import com.gigforce.core.datamodels.ambassador.InterestData
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.core.datamodels.profile.Experience
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.di.repo.UserEnrollmentRepository
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -16,10 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class InterestData(
-        val interest : List<Skill2>,
-        val profileData : ProfileData?
-)
+
 @HiltViewModel
 class InterestAndExperienceViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM

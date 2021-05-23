@@ -17,7 +17,7 @@ import com.gigforce.client_activation.client_activation.ClientActivationReposito
 import com.gigforce.client_activation.client_activation.adapters.AdapterViewApplication
 import com.gigforce.client_activation.client_activation.models.RequiredFeatures
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible

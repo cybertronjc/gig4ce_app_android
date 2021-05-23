@@ -23,7 +23,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -257,16 +257,16 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                             return
                         }
 
-                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.click_or_select_bank_passbook))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
-                        }
+//                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+//
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert))
+//                                .setMessage(getString(R.string.click_or_select_bank_passbook))
+//                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                .show()
+//                            passbookSubmitSliderBtn.resetSlider()
+//                            return
+//                        }
 
                         val accNo = accountNoEditText.text.toString()
                         val bankName =

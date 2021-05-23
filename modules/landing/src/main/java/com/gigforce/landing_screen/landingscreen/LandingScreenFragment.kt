@@ -42,6 +42,7 @@ import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -371,8 +372,15 @@ class LandingScreenFragment : Fragment(){
             val profile: ProfileData = profileObs
 
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals(""))
+            if (profile.name != null && !profile.name.equals("")){
                 profile_name.text = profile.name
+
+                //setting user's name to mixpanel
+                var props = HashMap<String, Any>()
+                props.put("name", profile.name)
+                eventTracker.setProfileProperty(ProfilePropArgs("\$name", profile.name))
+                Log.d("name", profile.name)
+            }
         })
 
         verificationViewModel

@@ -25,7 +25,7 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.INavigationProvider

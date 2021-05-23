@@ -27,15 +27,18 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.PushDownAnim
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.PermissionUtils
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.R
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
+import kotlinx.android.synthetic.main.fragment_giger_verification.toolbar
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
@@ -195,8 +198,14 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initView() {
-        iv_back_verification_page.setOnClickListener {
-            activity?.onBackPressed()
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener(View.OnClickListener {
+                activity?.onBackPressed()
+            })
+
         }
 
         Glide.with(requireContext())
@@ -320,7 +329,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
                     )
                 }
                 val userHasPan = it.panCardDetails?.userHasPanCard ?: false
-                if (it.panCardDetails?.userHasPanCard != null && userHasPan) {
+                if (userHasPan) {
                     panLayout.descTitleTV.text = it.panCardDetails!!.verifiedString
 
                     panLayout.descTitleTV.setTextColor(
@@ -343,7 +352,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
 
                 val userhasPassBook = it.bankUploadDetailsDataModel?.userHasPassBook ?: false
-                if (it.bankUploadDetailsDataModel?.userHasPassBook != null && userhasPassBook) {
+                if (userhasPassBook) {
                     bankDetailsLayout.descTitleTV.text =
                         it.bankUploadDetailsDataModel!!.verifiedString
                     bankDetailsLayout.descTitleTV.setTextColor(
@@ -368,7 +377,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
 
                 val userHasAadharCard = it.aadharCardDataModel?.userHasAadharCard ?: false
-                if (it.aadharCardDataModel?.userHasAadharCard != null && userHasAadharCard) {
+                if (userHasAadharCard) {
                     aadharLayout.descTitleTV.text = it.aadharCardDataModel!!.verifiedString
                     aadharLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(
@@ -390,7 +399,7 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
 
                 val userHasDL = it.drivingLicenseDataModel?.userHasDL ?: false
-                if (it.drivingLicenseDataModel?.userHasDL != null && userHasDL) {
+                if (userHasDL) {
                     drivingLayout.descTitleTV.text = it.drivingLicenseDataModel!!.verifiedString
                     drivingLayout.descTitleTV.setTextColor(
                         ResourcesCompat.getColor(

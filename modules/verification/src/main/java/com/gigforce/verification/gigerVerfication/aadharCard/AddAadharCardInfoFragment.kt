@@ -26,13 +26,17 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.gigforce.verification.R
+import com.jaeger.library.StatusBarUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import javax.inject.Inject
 
@@ -84,9 +88,16 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
         aadharSubmitSliderBtn.isEnabled = false
 
-        iv_back_add_aadhar_card_info.setOnClickListener {
-            navigation.popBackStack("verification/main",inclusive = false)
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
 //            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+
+            })
+
         }
 
         whyWeNeedThisViewTV.setOnClickListener {

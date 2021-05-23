@@ -16,7 +16,7 @@ import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.core.AppConstants
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_embassador_program_requirement_screen.*
