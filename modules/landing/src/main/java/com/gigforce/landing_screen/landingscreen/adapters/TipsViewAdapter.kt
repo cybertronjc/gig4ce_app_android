@@ -5,26 +5,25 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.landing_screen.R
-//import com.gigforce.app.R
 import com.gigforce.landing_screen.landingscreen.models.Tip
 
 class TipsViewAdapter(
     private val context: Context
-) : RecyclerView.Adapter<TipsViewAdapter.TipsViewHolder>(){
+) : RecyclerView.Adapter<TipsViewAdapter.TipsViewHolder>() {
 
     private var originalList: List<Tip> = emptyList()
-    private var onTipListener : OnTipListener? = null
+    private var onTipListener: OnTipListener? = null
 
-    fun setOnTipListener(onTipListener: OnTipListener){
+    fun setOnTipListener(onTipListener: OnTipListener) {
         this.onTipListener = onTipListener
     }
-    private var onSkipListener : OnSkipListener? = null
 
-    fun setOnSkipListener(onSkipListener: OnSkipListener){
+    private var onSkipListener: OnSkipListener? = null
+
+    fun setOnSkipListener(onSkipListener: OnSkipListener) {
         this.onSkipListener = onSkipListener
     }
 
@@ -45,10 +44,9 @@ class TipsViewAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == originalList.size - 1 ){
+        if (position == originalList.size - 1) {
             return 2
-        }
-        else {
+        } else {
             return 1
 
         }
@@ -66,11 +64,11 @@ class TipsViewAdapter(
 
     inner class TipsViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         private var title: TextView = itemView.findViewById(R.id.gigtip_title)
         private var subtitle: TextView = itemView.findViewById(R.id.gigtip_subtitle)
-        private var text102: ImageView = itemView.findViewById(R.id.textView102)
+        private var text102: TextView = itemView.findViewById(R.id.textView102)
         private var skip: TextView = itemView.findViewById(R.id.skip)
 
 

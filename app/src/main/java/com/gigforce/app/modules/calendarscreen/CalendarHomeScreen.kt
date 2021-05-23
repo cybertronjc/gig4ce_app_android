@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.R
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen.Companion.fistvisibleItemOnclick
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.chat.ChatHeadersViewModel

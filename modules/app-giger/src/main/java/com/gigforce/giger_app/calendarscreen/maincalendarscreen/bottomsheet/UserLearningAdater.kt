@@ -25,19 +25,19 @@ class UserLearningAdater(val context: Context) :
         val title_ = itemView.findViewById<TextView>(R.id.title_)
         val title = itemView.findViewById<TextView>(R.id.title)
         val comImg = itemView.findViewById<ImageView>(R.id.completed_iv)
-        val learningImg = itemView.findViewById<ImageView>(R.id.learning_img)
+        val img = cardView.findViewById<ImageView>(R.id.learning_img)
 
 
         fun bindView(course: Course) {
             val lp = cardView.layoutParams
-            lp.height = lp.height
+//            lp.height = lp.height
 //            lp.width = itemWidth    //need to implement later
-            cardView.layoutParams = lp
+//            cardView.layoutParams = lp
             title_.text = course.name
             title.text = course.level
             comImg.isVisible = course.completed
 
-            var img = cardView.findViewById<ImageView>(R.id.learning_img)
+
 
             if (!course.coverPicture.isNullOrBlank()) {
                 if (course.coverPicture!!.startsWith("http", true)) {

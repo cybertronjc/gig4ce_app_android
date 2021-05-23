@@ -63,7 +63,6 @@ class UserLearningCourseAdapter(
 
         private var subtitle: TextView = itemView.findViewById(R.id.title)
         private var title: TextView = itemView.findViewById(R.id.title_)
-        private var image: ImageView = itemView.findViewById(R.id.img_view)
         private var comImg: ImageView = itemView.findViewById(R.id.completed_iv)
         private var learningImg: ImageView = itemView.findViewById(R.id.learning_img)
 
