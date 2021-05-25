@@ -25,6 +25,8 @@ import com.gigforce.app.modules.gigPage2.GigNavigation
 import com.gigforce.app.modules.landingscreen.LandingScreenFragment
 //import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
+import com.gigforce.app.modules.userLocationCapture.TrackingConstants
+import com.gigforce.app.modules.userLocationCapture.service.TrackingService
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
@@ -114,6 +116,7 @@ class MainActivity : AppCompatActivity(),
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+       // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationIntentRecevier, intentFilters)
 

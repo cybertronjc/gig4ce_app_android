@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -38,8 +37,10 @@ import com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment
 import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.modules.gigPage2.viewModels.GigViewModel
 import com.gigforce.app.modules.markattendance.ImageCaptureActivity
+import com.gigforce.app.modules.userLocationCapture.schedular.TrackingScheduler
 import com.gigforce.app.utils.*
 import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper
 import com.gigforce.modules.feature_chat.core.ChatConstants
@@ -90,6 +91,10 @@ class GigPage2Fragment : BaseFragment(),
 //        LocationUpdates()
 //    }
 
+    private val trackingScheduler: TrackingScheduler by lazy {
+        TrackingScheduler(requireContext())
+    }
+
     private val locationHelper: LocationHelper by lazy {
         LocationHelper(requireContext())
                 .apply {
@@ -102,7 +107,7 @@ class GigPage2Fragment : BaseFragment(),
     private val locationCallback = object : LocationCallback() {
 
         override fun onLocationResult(locationResult: LocationResult?) {
-            if (locationResult == null )
+            if (locationResult == null)
                 return
 
             location = Location("User Location").apply {
@@ -134,12 +139,11 @@ class GigPage2Fragment : BaseFragment(),
         initUi()
         initViewModel()
 
-        if(isNecessaryPermissionGranted())
+        if (isNecessaryPermissionGranted())
             checkForGpsStatus()
         else
             showPermissionRequiredAndTheirReasonsDialog()
     }
-
 
 
     private fun checkIfFragmentIsVisible() {
@@ -281,7 +285,7 @@ class GigPage2Fragment : BaseFragment(),
         if (location == null) {
             startLocationUpdates()
         } else {
-            Log.d(TAG,"onResume() : Location already found")
+            Log.d(TAG, "onResume() : Location already found")
         }
     }
 
@@ -294,7 +298,7 @@ class GigPage2Fragment : BaseFragment(),
         locationHelper.checkForGpsSettings(object : GpsSettingsCheckCallback {
 
             override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
-                if(!isAdded) return
+                if (!isAdded) return
 
                 startIntentSenderForResult(
                         status.resolution.intentSender,
@@ -312,7 +316,7 @@ class GigPage2Fragment : BaseFragment(),
             }
 
             override fun gpsSettingsNotAvailable() {
-                if(!isAdded) return
+                if (!isAdded) return
                 showRedirectToGpsPageDialog()
             }
         })
@@ -347,8 +351,7 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         viewModel.markAttendance(
-                latitude = location?.latitude ?: 0.0,
-                longitude = location?.longitude ?: 0.0,
+                location = location!!,
                 locationPhysicalAddress = locationPhysicalAddress,
                 image = imageClickedPath!!,
                 checkInTimeAccToUser = checkInTimeAccToUser,
@@ -390,6 +393,7 @@ class GigPage2Fragment : BaseFragment(),
                                 showFeedbackBottomSheet()
                             } else {
                                 showToast("Check-in marked")
+                                plantLocationTrackers()
                             }
                         }
                         is Lce.Error -> {
@@ -402,6 +406,26 @@ class GigPage2Fragment : BaseFragment(),
                 })
 
         viewModel.watchGig(gigId, true)
+    }
+
+    private fun plantLocationTrackers() {
+        try {
+            val gig = viewModel.currentGig ?: return
+            trackingScheduler.scheduleTrackerForGig(gig)
+        } catch (e: Exception) {
+
+            MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("Unable to plant trackers")
+                    .setPositiveButton("Okay"){_,_ ->}
+                    .show()
+
+            e.printStackTrace()
+            CrashlyticsLogger.e(
+                    TAG,
+                    "While planting trackers",
+                    e
+            )
+        }
     }
 
 
@@ -730,8 +754,8 @@ class GigPage2Fragment : BaseFragment(),
     private fun startCameraForCapturingSelfie() {
         val shouldUserOldCamString = firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
-        val shouldUserOldCam = if(shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
-        if(shouldUserOldCam) {
+        val shouldUserOldCam = if (shouldUserOldCamString.isEmpty()) false else shouldUserOldCamString.toBoolean()
+        if (shouldUserOldCam) {
             val intent = Intent(context, ImageCaptureActivity::class.java)
             startActivityForResult(
                     intent,
@@ -783,7 +807,7 @@ class GigPage2Fragment : BaseFragment(),
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Gps not turned on")
                 .setMessage("Please turn on location service and set Gps Accuracy to High")
-                .setPositiveButton("Okay"){_,_ ->
+                .setPositiveButton("Okay") { _, _ ->
 
                     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivityForResult(

@@ -1,17 +1,25 @@
 package com.gigforce.app.modules.gigPage2.repositories
 
+import android.location.Location
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
+import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigAttendance
-import com.gigforce.app.modules.gigPage2.models.JobProfileFull
 import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.models.JobProfileFull
+import com.gigforce.app.modules.userLocationCapture.models.UserLocation
+import com.gigforce.app.utils.addOrThrow
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.coroutines.resume
@@ -24,14 +32,18 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
 
-    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
-        getCollectionReference().document(gigId).update(markAttendance.tableName, markAttendance)
+    private val userLocationCollectionRef: CollectionReference by lazy {
+        db.collection("UserLocations")
     }
+
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
 
     suspend fun markCheckIn(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location: Location,
             locationPhysicalAddress: String,
             image: String,
             checkInTime: Timestamp,
@@ -43,8 +55,10 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location.latitude,
+                    "attendance.checkInLong" to location.longitude,
+                    "attendance.checkInLocationFake" to location.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude,location.longitude),
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
@@ -53,8 +67,10 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location.latitude,
+                    "attendance.checkInLong" to location.longitude,
+                    "attendance.checkInLocationFake" to location.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude,location.longitude),
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
@@ -70,12 +86,20 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         getCollectionReference()
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
+
+        submitUserLocationInTrackingCollection(
+                geoPoint = GeoPoint(location.latitude, location.longitude),
+                couldBeAFakeLocation = location.isFromMockProvider,
+                locationAccuracy = location.accuracy,
+                userName = null,
+                gigId = gigId,
+                fullAddressFromGps = locationPhysicalAddress
+        )
     }
 
     suspend fun markCheckOut(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location : Location,
             locationPhysicalAddress: String,
             image: String,
             checkOutTime: Timestamp,
@@ -87,8 +111,10 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location.latitude,
+                    "attendance.checkOutLong" to location.longitude,
+                    "attendance.checkOutLocationFake" to location.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude,location.longitude),
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
@@ -97,8 +123,10 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location.latitude,
+                    "attendance.checkOutLong" to location.longitude,
+                    "attendance.checkOutLocationFake" to location.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude,location.longitude),
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
@@ -114,6 +142,41 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
 
+        submitUserLocationInTrackingCollection(
+                geoPoint = GeoPoint(location.latitude, location.longitude),
+                couldBeAFakeLocation = location.isFromMockProvider,
+                locationAccuracy = location.accuracy,
+                userName = null,
+                gigId = gigId,
+                fullAddressFromGps = locationPhysicalAddress
+        )
+    }
+
+    private suspend fun submitUserLocationInTrackingCollection(
+            geoPoint: GeoPoint,
+            couldBeAFakeLocation: Boolean,
+            locationAccuracy: Float,
+            fullAddressFromGps : String,
+            userName: String?,
+            gigId: String?
+    ) {
+
+        try {
+            userLocationCollectionRef
+                    .addOrThrow(UserLocation(
+                            location = geoPoint,
+                            fakeLocation = couldBeAFakeLocation,
+                            locationAccuracy = locationAccuracy,
+                            locationCapturedTime = Timestamp.now(),
+                            uid = getUID(),
+                            userName = userName,
+                            userPhoneNumber = user?.phoneNumber,
+                            gigId = gigId,
+                            fullAddressFromGps = fullAddressFromGps
+                    ))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     suspend fun getGig(gigId: String) = suspendCoroutine<Gig> { cont ->
@@ -149,9 +212,31 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return extractGigs(querySnap)
                 .filter {
                     it.startDateTime > Timestamp.now()
-                            &&  it.endDateTime.toLocalDate().isBefore(tomorrow)
+                            && it.endDateTime.toLocalDate().isBefore(tomorrow)
                 }
 
+    }
+
+    suspend fun getOngoingAndUpcomingGigsFor(
+            date: LocalDate
+    ): List<Gig> {
+
+        val dateStart = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val nextDay = date.plusDays(1)
+        val dateEnd = Date.from(nextDay.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val querySnap =
+                getCurrentUserGigs()
+                        .whereGreaterThan("startDateTime", dateStart)
+                        .whereLessThan("startDateTime", dateEnd)
+                        .getOrThrow()
+
+        val currentTime = LocalDateTime.now()
+        return extractGigs(querySnap)
+                .filter {
+                    it.endDateTime.toLocalDateTime().isAfter(currentTime)
+                }
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
@@ -165,13 +250,13 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return userGigs
     }
 
-     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+    suspend fun getJobDetails(jobId: String): JobProfileFull {
         val getJobProfileQuery = db.collection("Job_Profiles")
                 .document(jobId)
                 .get()
                 .await()
 
-       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+        return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
     }
 
     companion object {
