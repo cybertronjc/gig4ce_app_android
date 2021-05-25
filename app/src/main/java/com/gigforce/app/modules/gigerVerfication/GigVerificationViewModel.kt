@@ -57,12 +57,14 @@ data class GigerVerificationStatus(
     }
 
     val requiredDocsVerified : Boolean get() {
-       return bankUploadDetailsDataModel?.state == STATUS_VERIFIED &&
-                aadharCardDataModel?.state == STATUS_VERIFIED
+       return panCardDetails?.state == STATUS_VERIFIED
+               || aadharCardDataModel?.state == STATUS_VERIFIED
+               || drivingLicenseDataModel?.state == STATUS_VERIFIED
     }
     val requiredDocsUploaded : Boolean get() {
-       return bankUploadDetailsDataModel?.accountNo.isNullOrBlank().not() &&
-                aadharCardDataModel?.frontImage != null
+       return bankUploadDetailsDataModel?.accountNo.isNullOrBlank().not()
+               || aadharCardDataModel?.frontImage != null
+               || drivingLicenseDataModel?.dlNo.isNullOrBlank().not()
     }
 
 }
