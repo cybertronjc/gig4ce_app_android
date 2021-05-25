@@ -7,9 +7,11 @@ import com.gigforce.app.core.toLocalDateTime
 import com.gigforce.app.modules.gigPage2.models.Gig
 import com.gigforce.app.modules.gigPage2.models.GigStatus
 import com.gigforce.app.modules.gigPage2.models.JobProfileFull
+import com.gigforce.app.modules.profile.ProfileFirebaseRepository
+import com.gigforce.app.modules.userLocationCapture.models.UserGigLocationTrack
 import com.gigforce.app.modules.userLocationCapture.models.UserLocation
-import com.gigforce.app.utils.addOrThrow
 import com.gigforce.app.utils.getOrThrow
+import com.gigforce.app.utils.setOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +38,10 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         db.collection("UserLocations")
     }
 
+    private val profileRepository: ProfileFirebaseRepository by lazy {
+        ProfileFirebaseRepository()
+    }
+
     private val user: FirebaseUser?
         get() {
             return FirebaseAuth.getInstance().currentUser
@@ -58,7 +64,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkInLat" to location.latitude,
                     "attendance.checkInLong" to location.longitude,
                     "attendance.checkInLocationFake" to location.isFromMockProvider,
-                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude,location.longitude),
+                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude, location.longitude),
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
@@ -70,7 +76,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkInLat" to location.latitude,
                     "attendance.checkInLong" to location.longitude,
                     "attendance.checkInLocationFake" to location.isFromMockProvider,
-                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude,location.longitude),
+                    "attendance.checkInGeoPoint" to GeoPoint(location.latitude, location.longitude),
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
@@ -87,11 +93,12 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
 
+        profileRepository
+
         submitUserLocationInTrackingCollection(
                 geoPoint = GeoPoint(location.latitude, location.longitude),
                 couldBeAFakeLocation = location.isFromMockProvider,
                 locationAccuracy = location.accuracy,
-                userName = null,
                 gigId = gigId,
                 fullAddressFromGps = locationPhysicalAddress
         )
@@ -99,7 +106,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCheckOut(
             gigId: String,
-            location : Location,
+            location: Location,
             locationPhysicalAddress: String,
             image: String,
             checkOutTime: Timestamp,
@@ -114,7 +121,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkOutLat" to location.latitude,
                     "attendance.checkOutLong" to location.longitude,
                     "attendance.checkOutLocationFake" to location.isFromMockProvider,
-                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude,location.longitude),
+                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude, location.longitude),
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
@@ -126,7 +133,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkOutLat" to location.latitude,
                     "attendance.checkOutLong" to location.longitude,
                     "attendance.checkOutLocationFake" to location.isFromMockProvider,
-                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude,location.longitude),
+                    "attendance.checkOutGeoPoint" to GeoPoint(location.latitude, location.longitude),
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
@@ -142,37 +149,46 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
 
+
         submitUserLocationInTrackingCollection(
                 geoPoint = GeoPoint(location.latitude, location.longitude),
                 couldBeAFakeLocation = location.isFromMockProvider,
                 locationAccuracy = location.accuracy,
-                userName = null,
                 gigId = gigId,
                 fullAddressFromGps = locationPhysicalAddress
         )
     }
 
     private suspend fun submitUserLocationInTrackingCollection(
+            gigId: String,
             geoPoint: GeoPoint,
             couldBeAFakeLocation: Boolean,
             locationAccuracy: Float,
-            fullAddressFromGps : String,
-            userName: String?,
-            gigId: String?
+            fullAddressFromGps: String,
     ) {
+
+        val profile = try {
+            profileRepository.getProfileDataIfExist()
+        } catch (e: Exception) {
+            null
+        }
 
         try {
             userLocationCollectionRef
-                    .addOrThrow(UserLocation(
-                            location = geoPoint,
-                            fakeLocation = couldBeAFakeLocation,
-                            locationAccuracy = locationAccuracy,
-                            locationCapturedTime = Timestamp.now(),
+                    .document(gigId)
+                    .setOrThrow(UserGigLocationTrack(
                             uid = getUID(),
-                            userName = userName,
+                            userName = profile?.name,
                             userPhoneNumber = user?.phoneNumber,
-                            gigId = gigId,
-                            fullAddressFromGps = fullAddressFromGps
+                            locations = listOf(
+                                    UserLocation(
+                                            location = geoPoint,
+                                            fakeLocation = couldBeAFakeLocation,
+                                            locationAccuracy = locationAccuracy,
+                                            locationCapturedTime = Timestamp.now(),
+                                            fullAddressFromGps = fullAddressFromGps
+                                    )
+                            )
                     ))
         } catch (e: Exception) {
             e.printStackTrace()

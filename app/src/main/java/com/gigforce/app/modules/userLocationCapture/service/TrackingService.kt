@@ -51,7 +51,7 @@ class TrackingService : LifecycleService() {
     }
 
     //Data from UI
-    private var gigId: String? = null
+    private lateinit var gigId: String
     private var userName: String? = null
 
     override fun onCreate() {
@@ -65,7 +65,7 @@ class TrackingService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            gigId = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)
+            gigId = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)!!
             userName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
 
             when (it.action) {
@@ -175,7 +175,6 @@ class TrackingService : LifecycleService() {
                 location = LatLng(location.latitude, location.longitude),
                 accuracy = location.accuracy,
                 gigId = gigId,
-                userName = userName,
                 couldBeAFakeLocation = location.isFromMockProvider,
                 fullAddressFromGps = fullAddressFromGps
         )
