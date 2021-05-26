@@ -1,14 +1,13 @@
 package com.gigforce.app.modules.gigPage2.repositories
 
+import android.location.Location
 import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
 import com.gigforce.app.core.toLocalDate
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.models.GigAttendance
-import com.gigforce.app.modules.gigPage2.models.JobProfileFull
-import com.gigforce.app.modules.gigPage2.models.GigStatus
+import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
@@ -30,8 +29,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCheckIn(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location : Location?,
+            distanceBetweenGigAndUser : Float,
             locationPhysicalAddress: String,
             image: String,
             checkInTime: Timestamp,
@@ -43,20 +42,28 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location?.latitude,
+                    "attendance.checkInLong" to location?.longitude,
+                    "attendance.checkInLocationAccuracy" to location?.accuracy,
+                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
+                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         } else {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location?.latitude,
+                    "attendance.checkInLong" to location?.longitude,
+                    "attendance.checkInLocationAccuracy" to location?.accuracy,
+                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
+                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
@@ -74,8 +81,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCheckOut(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location : Location?,
+            distanceBetweenGigAndUser : Float,
             locationPhysicalAddress: String,
             image: String,
             checkOutTime: Timestamp,
@@ -87,20 +94,28 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location?.latitude,
+                    "attendance.checkOutLong" to location?.longitude,
+                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
+                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         } else {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location?.latitude,
+                    "attendance.checkOutLong" to location?.longitude,
+                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
+                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
@@ -149,7 +164,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return extractGigs(querySnap)
                 .filter {
                     it.startDateTime > Timestamp.now()
-                            &&  it.endDateTime.toLocalDate().isBefore(tomorrow)
+                            && it.endDateTime.toLocalDate().isBefore(tomorrow)
                 }
 
     }
@@ -165,13 +180,52 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return userGigs
     }
 
-     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+    suspend fun getJobDetails(jobId: String): JobProfileFull {
         val getJobProfileQuery = db.collection("Job_Profiles")
                 .document(jobId)
                 .get()
                 .await()
 
-       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+        return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+    }
+
+    suspend fun getGigLocationFromGigOrder(
+            gigOrderId: String
+    ) : Location? {
+
+        val gigOrder = getGigOrder(gigOrderId) ?: return null
+        val officeLocation = gigOrder.workOrderOffice ?: return null
+        val officeLocationId = officeLocation.id ?: return null
+        val bussinessLocation =   getBussinessLocation(officeLocationId) ?: return null
+
+        return Location(
+                "Office Location"
+        ).apply {
+            this.latitude = bussinessLocation.geoPoint?.latitude ?: 0.0
+            this.longitude = bussinessLocation.geoPoint?.longitude ?: 0.0
+        }
+    }
+
+    private suspend fun getGigOrder(gigOrderId: String): GigOrder? {
+        val getGigOrderQuery = db.collection("Gig_Order")
+                .document(gigOrderId)
+                .get().await()
+
+        if (!getGigOrderQuery.exists())
+            return null
+
+       return getGigOrderQuery.toObject(GigOrder::class.java)!!
+    }
+
+    private suspend fun getBussinessLocation(bussinessLocationId: String): BussinessLocation? {
+        val getBussinessLocationQuery = db.collection("Business_Locations")
+                .document(bussinessLocationId)
+                .get().await()
+
+        if (!getBussinessLocationQuery.exists())
+            return null
+
+       return getBussinessLocationQuery.toObject(BussinessLocation::class.java)!!
     }
 
     companion object {
