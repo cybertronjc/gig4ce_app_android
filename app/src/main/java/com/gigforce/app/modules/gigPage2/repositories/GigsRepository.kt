@@ -7,6 +7,7 @@ import com.gigforce.app.modules.gigPage2.models.*
 import com.gigforce.app.utils.getOrThrow
 import com.gigforce.app.utils.updateOrThrow
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
@@ -28,8 +29,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCheckIn(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location : Location?,
+            distanceBetweenGigAndUser : Float,
             locationPhysicalAddress: String,
             image: String,
             checkInTime: Timestamp,
@@ -41,20 +42,28 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location?.latitude,
+                    "attendance.checkInLong" to location?.longitude,
+                    "attendance.checkInLocationAccuracy" to location?.accuracy,
+                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
+                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         } else {
             mapOf(
                     "attendance.checkInAddress" to locationPhysicalAddress,
                     "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to latitude,
-                    "attendance.checkInLong" to longitude,
+                    "attendance.checkInLat" to location?.latitude,
+                    "attendance.checkInLong" to location?.longitude,
+                    "attendance.checkInLocationAccuracy" to location?.accuracy,
+                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
+                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
@@ -72,8 +81,8 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun markCheckOut(
             gigId: String,
-            latitude: Double,
-            longitude: Double,
+            location : Location?,
+            distanceBetweenGigAndUser : Float,
             locationPhysicalAddress: String,
             image: String,
             checkOutTime: Timestamp,
@@ -85,20 +94,28 @@ open class GigsRepository : BaseFirestoreDBRepository() {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location?.latitude,
+                    "attendance.checkOutLong" to location?.longitude,
+                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
+                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         } else {
             mapOf(
                     "attendance.checkOutAddress" to locationPhysicalAddress,
                     "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to latitude,
-                    "attendance.checkOutLong" to longitude,
+                    "attendance.checkOutLat" to location?.latitude,
+                    "attendance.checkOutLong" to location?.longitude,
+                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
+                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
                     "regularisationRequest.requestedOn" to Timestamp.now(),
                     "regularisationRequest.regularisationSettled" to false,
                     "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,

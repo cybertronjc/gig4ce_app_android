@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -68,6 +69,8 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
@@ -81,7 +84,8 @@ class GigPage2Fragment : BaseFragment(),
         GigPeopleToExpectAdapterClickListener,
         PermissionRequiredBottomSheet.PermissionBottomSheetActionListener,
         LocationUpdates.LocationUpdateCallbacks,
-        EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener {
+        EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener,
+        EasyPermissions.PermissionCallbacks{
 
     private val gigSharedViewModel : SharedGigViewModel by activityViewModels()
     private val viewModel: GigViewModel by viewModels()
@@ -111,10 +115,7 @@ class GigPage2Fragment : BaseFragment(),
             if (locationResult == null )
                 return
 
-            location = Location("User Location").apply {
-                latitude = locationResult.lastLocation.latitude
-                longitude = locationResult.lastLocation.longitude
-            }
+            location = locationResult.lastLocation
         }
     }
 
@@ -341,6 +342,7 @@ class GigPage2Fragment : BaseFragment(),
             return
         }
 
+        var distanceBetweenGigAndUser: Float = -1.0f
         if (location != null) {
 
             val currentGig = viewModel.currentGig ?: return
@@ -356,7 +358,7 @@ class GigPage2Fragment : BaseFragment(),
                     this.longitude = currentGig.longitude!!
                 }
 
-                val distanceBetweenGigAndUser = userLocation.distanceTo(gigLocation)
+                distanceBetweenGigAndUser = userLocation.distanceTo(gigLocation)
                 val maxAllowedDistanceFromGigString = firebaseRemoteConfig.getString("max_checkin_distance_from_gig")
                 val maxAllowedDistanceFromGig : Long = if(maxAllowedDistanceFromGigString.isEmpty())
                     MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS
@@ -364,16 +366,16 @@ class GigPage2Fragment : BaseFragment(),
                     maxAllowedDistanceFromGigString.toLong()
 
                 if (distanceBetweenGigAndUser <= maxAllowedDistanceFromGig) {
-                    markAttendance(checkInTimeAccToUser)
+                    markAttendance(checkInTimeAccToUser,distanceBetweenGigAndUser)
                 } else {
                     showLocationNotInRangeDialog(distanceBetweenGigAndUser)
                     return
                 }
             } else{
-                markAttendance(checkInTimeAccToUser)
+                markAttendance(checkInTimeAccToUser,distanceBetweenGigAndUser)
             }
         } else {
-            markAttendance(checkInTimeAccToUser)
+            markAttendance(checkInTimeAccToUser, -1.0f)
         }
     }
 
@@ -383,7 +385,10 @@ class GigPage2Fragment : BaseFragment(),
         NotInGigRangeDialogFragment.launch(distanceFromGig,childFragmentManager)
     }
 
-    private fun markAttendance(checkInTimeAccToUser: Timestamp?) {
+    private fun markAttendance(
+            checkInTimeAccToUser: Timestamp?,
+            distanceBetweenGigAndUser : Float
+    ) {
         val locationPhysicalAddress = if (location != null) {
             LocationUtils.getPhysicalAddressFromLocation(
                     context = requireContext(),
@@ -395,12 +400,12 @@ class GigPage2Fragment : BaseFragment(),
         }
 
         viewModel.markAttendance(
-                latitude = location?.latitude ?: 0.0,
-                longitude = location?.longitude ?: 0.0,
+                location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
                 image = imageClickedPath!!,
                 checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = "test"
+                remarks = "test",
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
         )
     }
 
@@ -415,8 +420,13 @@ class GigPage2Fragment : BaseFragment(),
     private fun initViewModel() {
         gigSharedViewModel.gigSharedViewModelState
                 .observe(viewLifecycleOwner, Observer {
+                    it ?: return@Observer
+
                     when (it) {
-                        SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(null)
+                        is SharedGigViewState.UserOkayWithNotBeingInLocationRange -> markAttendance(
+                                null,
+                                it.distanceBetweenGigAndUser
+                        )
                         else -> {
                         }
                     }
@@ -752,38 +762,6 @@ class GigPage2Fragment : BaseFragment(),
         showToast("Gig Declined")
     }
 
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-//            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (
-//                    PermissionUtils.permissionsGrantedCheck(grantResults)
-//            ) {
-//                locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
-//            }
-            REQUEST_PERMISSIONS -> {
-
-                var allPermsGranted = true
-                for (i in grantResults.indices) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                        allPermsGranted = false
-                        break
-                    }
-                }
-
-                if (allPermsGranted) {
-                    checkForGpsStatus()
-//                    startCameraForCapturingSelfie()
-                } else {
-                    showToast("Please grant all permissions")
-                }
-            }
-        }
-    }
-
     private fun startCameraForCapturingSelfie() {
         val shouldUserOldCamString = firebaseRemoteConfig.getString(REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA)
 
@@ -881,15 +859,30 @@ class GigPage2Fragment : BaseFragment(),
     }
 
     private fun askForRequiredPermissions() {
-        requestPermissions(
-                arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), REQUEST_PERMISSIONS
-        )
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            EasyPermissions.requestPermissions(
+                    this,
+                    "You need to accept location permissions to use this app.",
+                    REQUEST_PERMISSIONS,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        } else {
+            EasyPermissions.requestPermissions(
+                    this,
+                    "You need to accept location permissions to use this app.",
+                    REQUEST_PERMISSIONS,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
     }
 
     private fun showPermissionRequiredAndTheirReasonsDialog() {
@@ -966,36 +959,61 @@ class GigPage2Fragment : BaseFragment(),
 
     private fun stopLocationUpdates() {
         this.isRequestingLocation = false
-//        locationUpdates.stopLocationUpdates()
         locationHelper.stopLocationUpdates()
     }
 
     override fun lastLocationReceiver(location: Location?) {}
 
+
+    /**
+     * ----------------------
+     * Permission related code
+     * -----------------------
+     */
+
     private fun isNecessaryPermissionGranted(): Boolean {
 
-        return ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
+       return if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            EasyPermissions.hasPermissions(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        } else {
+            EasyPermissions.hasPermissions(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
     }
 
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        checkForGpsStatus()
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        } else {
+            showPermissionRequiredAndTheirReasonsDialog()
+        }
+    }
 
     companion object {
         const val TAG = "Gig_page_2"

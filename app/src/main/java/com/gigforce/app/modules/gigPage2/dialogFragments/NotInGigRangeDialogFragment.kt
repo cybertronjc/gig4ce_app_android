@@ -84,7 +84,7 @@ class NotInGigRangeDialogFragment : DialogFragment() {
         try_later_btn.setOnClickListener { dismiss() }
 
         submitBtn.setOnClickListener {
-            gigSharedViewModel.userOkayWithNotBeingInLocation()
+            gigSharedViewModel.userOkayWithNotBeingInLocation(distanceFromGig)
             dismiss()
         }
 

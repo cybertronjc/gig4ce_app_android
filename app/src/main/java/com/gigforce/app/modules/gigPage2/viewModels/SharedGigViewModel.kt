@@ -8,17 +8,20 @@ import java.io.File
 
 sealed class SharedGigViewState {
 
-    object UserOkayWithNotBeingInLocationRange : SharedGigViewState()
+    data class UserOkayWithNotBeingInLocationRange(val distanceBetweenGigAndUser : Float) : SharedGigViewState()
 }
 
 class SharedGigViewModel : ViewModel() {
 
-    private val _gigSharedViewModelState: MutableLiveData<SharedGigViewState> =
+    private val _gigSharedViewModelState: MutableLiveData<SharedGigViewState?> =
             MutableLiveData()
-    val gigSharedViewModelState: LiveData<SharedGigViewState> =
+    val gigSharedViewModelState: LiveData<SharedGigViewState?> =
             _gigSharedViewModelState
 
-    fun userOkayWithNotBeingInLocation(){
-        _gigSharedViewModelState.postValue(SharedGigViewState.UserOkayWithNotBeingInLocationRange)
+    fun userOkayWithNotBeingInLocation(
+            distanceBetweenGigAndUser : Float
+    ){
+        _gigSharedViewModelState.value = SharedGigViewState.UserOkayWithNotBeingInLocationRange(distanceBetweenGigAndUser)
+        _gigSharedViewModelState.value = null
     }
 }
