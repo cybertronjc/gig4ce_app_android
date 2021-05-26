@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,7 @@ class ApplicationClientActivationFragment : BaseFragment(),
         AdapterApplicationClientActivation()
     }
     private lateinit var mJobProfileId: String
+    private lateinit var mJobProfileTitle: String
 
 
     override fun onCreateView(
@@ -96,11 +98,18 @@ class ApplicationClientActivationFragment : BaseFragment(),
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
             eventTracker.pushEvent(TrackingEventArgs(
-                    eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
+                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_SUBMITTED_APPLICATION,
                     props = mapOf(
                             "id" to mJobProfileId,
                             "title" to bussinessTitle
                     )
+            ))
+            eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
+                props = mapOf(
+                    "id" to mJobProfileId,
+                    "title" to bussinessTitle
+                )
             ))
 
             onClickSubmit()
@@ -139,7 +148,6 @@ class ApplicationClientActivationFragment : BaseFragment(),
         viewModel.observableInitApplication.observe(viewLifecycleOwner, Observer {
             pb_application_client_activation.gone()
             if (it == true) {
-
                 initApplication(viewModel.observableJpApplication.value!!)
             }
         })
@@ -277,12 +285,12 @@ class ApplicationClientActivationFragment : BaseFragment(),
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
 
         arguments?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
     }
 
