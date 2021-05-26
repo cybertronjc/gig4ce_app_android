@@ -1056,13 +1056,21 @@ class LandingScreenFragment : BaseFragment() {
 
                                 val id = item?.id ?: ""
                                 val title = item?.cardTitle ?: ""
+                                Log.d("title", item.title)
 
                                 eventTracker.pushEvent(TrackingEventArgs(
-                                        eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                                        eventName = item.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
                                         props = mapOf(
                                                 "id" to id,
                                                 "title" to title
                                         )
+                                ))
+                                eventTracker.pushEvent(TrackingEventArgs(
+                                    eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                                    props = mapOf(
+                                        "id" to id,
+                                        "title" to title
+                                    )
                                 ))
                                 navigate(
                                         R.id.fragment_client_activation,

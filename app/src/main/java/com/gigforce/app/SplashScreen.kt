@@ -3,6 +3,7 @@ package com.gigforce.app
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.core.base.shareddata.SharedDataImp
 import com.gigforce.app.utils.StringConstants
@@ -46,6 +47,10 @@ class SplashScreen : AppCompatActivity() {
                     val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
                     val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
                     val sp = SharedDataImp(this)
+
+                    Log.d("GigforceSplash","Invite Id = $inviteID")
+                    Log.d("GigforceSplash","Role Id = $roleID")
+
                     sp.saveData(
                         StringConstants.INVITE_USER_ID.value,
                         inviteID

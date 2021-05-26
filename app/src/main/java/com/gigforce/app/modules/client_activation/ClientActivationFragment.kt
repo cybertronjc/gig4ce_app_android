@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +71,7 @@ class ClientActivationFragment : BaseFragment(),
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
+    private lateinit var mJobProfileTitle: String
     private var mRedirectToApplication: Boolean? = null
     private lateinit var viewModel: ClientActivationViewmodel
     private var adapterPreferredLocation: AdapterPreferredLocation? = null
@@ -216,6 +218,7 @@ class ClientActivationFragment : BaseFragment(),
 
             val id = it.id ?: ""
             val eventName = it.title ?: ""
+            mJobProfileTitle = it.title ?: ""
 
             eventTracker.pushEvent(TrackingEventArgs(
                     eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
@@ -654,8 +657,12 @@ class ClientActivationFragment : BaseFragment(),
         if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
 
             eventTracker.pushEvent(TrackingEventArgs(
-                    eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
                     props = null
+            ))
+            eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                props = null
             ))
 
             if (mClientViaDeeplink == true) {
@@ -675,7 +682,8 @@ class ClientActivationFragment : BaseFragment(),
             } else {
                 navigate(
                         R.id.fragment_application_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
+                        StringConstants.JOB_PROFILE_TITLE.value to viewModel.observableJobProfile.value?.title
                 )
                 )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
