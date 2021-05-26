@@ -21,11 +21,11 @@ import com.google.firebase.storage.FirebaseStorage
 
 class UserLearningCourseAdapter(
     private val context: Context
-) : RecyclerView.Adapter<UserLearningCourseAdapter.UserLearningViewHolder>(){
+) : RecyclerView.Adapter<UserLearningCourseAdapter.UserLearningViewHolder>() {
 
     private var originalList: List<Course> = emptyList()
-    var clickListener : AdapterClickListener<Course>? = null
-    fun setOnclickListener(listener : AdapterClickListener<Course>){
+    var clickListener: AdapterClickListener<Course>? = null
+    fun setOnclickListener(listener: AdapterClickListener<Course>) {
         this.clickListener = listener
     }
 
@@ -76,18 +76,18 @@ class UserLearningCourseAdapter(
             subtitle.text = model.level
             if (model.completed) comImg.visible() else comImg.gone()
 
-            if (!model!!.coverPicture.isNullOrBlank()) {
-                if (model!!.coverPicture!!.startsWith("http", true)) {
+            if (!model.coverPicture.isNullOrBlank()) {
+                if (model.coverPicture!!.startsWith("http", true)) {
 
                     GlideApp.with(context)
-                        .load(model!!.coverPicture!!)
+                        .load(model.coverPicture!!)
                         .placeholder(getCircularProgressDrawable(context))
                         .error(R.drawable.ic_learning_default_back)
                         .into(learningImg)
                 } else {
                     val imageRef = FirebaseStorage.getInstance()
                         .getReference(AppConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-                        .child(model!!.coverPicture!!)
+                        .child(model.coverPicture!!)
 
                     GlideApp.with(context)
                         .load(imageRef)
@@ -105,7 +105,12 @@ class UserLearningCourseAdapter(
 
         override fun onClick(v: View?) {
             val newPosition = adapterPosition
-            clickListener?.let { setOnclickListener(it) }
+            clickListener?.let {
+                v?.let { it1 ->
+                    it.onItemClick(it1, originalList.get(newPosition), newPosition)
+
+                }
+            }
         }
     }
 }
