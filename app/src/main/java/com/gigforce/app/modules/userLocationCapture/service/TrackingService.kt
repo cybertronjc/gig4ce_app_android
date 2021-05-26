@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -50,6 +51,8 @@ class TrackingService : LifecycleService() {
         isTracking.postValue(false)
     }
 
+    private val handler = Handler()
+
     //Data from UI
     private lateinit var gigId: String
     private var userName: String? = null
@@ -73,6 +76,7 @@ class TrackingService : LifecycleService() {
                 TrackingConstants.ACTION_START_OR_RESUME_SERVICE -> {
                     if (isFirstRun) {
                         startForegroundService()
+                        setTimerOfMax30SecsToCloseService()
                         isFirstRun = false
                     } else {
                         Log.d(TAG, "Resuming service...")
@@ -90,6 +94,10 @@ class TrackingService : LifecycleService() {
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun setTimerOfMax30SecsToCloseService() {
+        handler.postDelayed(serviceMaxTimerRunnable, MAX_TIME_FOR_WHICH_SERVICE_CAN_RUN)
     }
 
     @SuppressLint("MissingPermission")
@@ -126,6 +134,12 @@ class TrackingService : LifecycleService() {
         }
     }
 
+    private val serviceMaxTimerRunnable = Runnable {
+        Log.d(TAG, "Stopping Service from timer....")
+        stopForeground(true)
+        stopSelf()
+    }
+
     private fun addPathPoint(location: Location?) = location?.let {
         compareLocationsAndSubmit(it)
     }
@@ -148,19 +162,19 @@ class TrackingService : LifecycleService() {
         )
         if (currentBestLocation == null) {
             currentBestLocation = location
-            submitLocationToDB(location, fullAddressFromGps)
         } else {
 
             if (LocationUtils.isBetterLocation(location, currentBestLocation!!)) {
                 Log.d(TAG, "Received a Better location, total location updates received so far $locationUpdatesReceivedSoFar")
                 currentBestLocation = location
-                submitLocationToDB(location, fullAddressFromGps)
             }
         }
 
         if (locationUpdatesReceivedSoFar == MAX_LOCATION_UPDATES_IN_ONE_SESSION) {
-            //Stopping the Service
+            submitLocationToDB(currentBestLocation!!, fullAddressFromGps)
+
             Log.d(TAG, "Stopping Service....")
+            handler.removeCallbacks(serviceMaxTimerRunnable)
             stopForeground(true)
             stopSelf()
         }
@@ -224,5 +238,6 @@ class TrackingService : LifecycleService() {
 
         const val TAG = "TrackingService"
         const val MAX_LOCATION_UPDATES_IN_ONE_SESSION = 5
+        const val MAX_TIME_FOR_WHICH_SERVICE_CAN_RUN = 30L * 1000
     }
 }
