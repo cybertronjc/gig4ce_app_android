@@ -53,11 +53,13 @@ class UpcomingGigBSAdapter(val context: Context) :
 
         fun bindView(obj: Gig) {
 
-            val lp = cardView.layoutParams
-            lp.height = lp.height
+//            val lp = cardView.layoutParams
+//            lp.height = lp.height
 //            lp.width = itemWidth
 //            var ivContact = getImageView(viewHolder, R.id.iv_call)
-
+            cardView.setOnClickListener{
+                clickListener?.onItemClick(it, obj,adapterPosition)
+            }
             ivContact.setImageResource(R.drawable.ic_phone_white_24dp)
             ivContact.setColorFilter(
                 ContextCompat.getColor(
@@ -141,8 +143,8 @@ class UpcomingGigBSAdapter(val context: Context) :
                 messageCardView.gone()
             }
 
-            cardView.layoutParams = lp
-            cardView.layoutParams = lp
+//            cardView.layoutParams = lp
+//            cardView.layoutParams = lp
             textView41.text = obj.getGigTitle()
             contactPersonTV.text = if (obj.openNewGig())
                 obj.agencyContact?.name

@@ -659,6 +659,12 @@ class BSCalendarScreenFragment : Fragment() {
                     requireContext()
                 )
             upcomingGigBSAdapter.data = upcomingGigs
+            upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig>{
+                override fun onItemClick(view: View, obj: Gig, position: Int) {
+                    navigation.navigateTo("gig/attendance", bundleOf("gig_id" to obj.gigId))
+                }
+
+            })
             upcomingGigBSAdapter.setAgencyOnclickListener(object :
                 AdapterClickListener<ContactPerson> {
                 override fun onItemClick(view: View, obj: ContactPerson, position: Int) {
