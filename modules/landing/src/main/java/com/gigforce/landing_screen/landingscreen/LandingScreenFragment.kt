@@ -794,7 +794,7 @@ class LandingScreenFragment : Fragment(){
         complete_now.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_VERIFICATION
 //            navigate(R.id.gigerVerificationFragment)
-            navigation.navigateTo("")
+            navigation.navigateTo("verification/main")
         }
         mygigs_cl.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_GIG
