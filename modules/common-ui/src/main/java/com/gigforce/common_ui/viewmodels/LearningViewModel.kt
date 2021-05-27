@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,6 +35,8 @@ class LearningViewModel constructor(
         _roleBasedCourses.postValue(Lce.loading())
 
         try {
+            Log.d(TAG, "Started fetching learning..")
+
             val courses = learningRepository.getRoleBasedCourses()
             mCachedRoleBasedCourses = courses
 
@@ -168,6 +171,10 @@ class LearningViewModel constructor(
         } catch (e: Exception) {
             _lessonDetails.postValue(Lce.error(e.toString()))
         }
+    }
+
+    companion object{
+        const val TAG = "LearningViewModel"
     }
 
 }

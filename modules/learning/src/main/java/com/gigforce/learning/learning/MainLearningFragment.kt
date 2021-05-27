@@ -230,6 +230,10 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showRoleBasedLearningProgress() {
+        learning_based_role_rv.gone()
+        role_based_learning_error.gone()
+
+        learning_based_horizontal_progress.visible()
         startShimmer(
             learning_based_horizontal_progress as LinearLayout,
             ShimmerDataModel(
@@ -240,9 +244,6 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
             ),
             R.id.shimmer_controller
         )
-        learning_based_role_rv.gone()
-        role_based_learning_error.gone()
-
     }
 
     private fun showRoleBasedLearnings(content: List<Course>) {

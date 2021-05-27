@@ -50,7 +50,6 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
     @Inject
     lateinit var navigation: INavigation
-
     private val viewModel: CourseDetailsViewModel by viewModels()
 
     private val mAdapter: LearningDetailsLessonsAdapter by lazy {
