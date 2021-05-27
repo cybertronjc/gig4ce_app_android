@@ -9,6 +9,7 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.app.utils.AppConstants
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.ProfilePropArgs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +77,9 @@ class AuthFlowFragment : BaseFragment() {
             popAllBackStates()
             saveData(AppConstants.LANGUAGE_SELECTED, "true")
             eventTracker.setUserId(currentUser?.phoneNumber.toString());
+            eventTracker.setProfileProperty(ProfilePropArgs("Mobile Number", currentUser?.phoneNumber.toString()))
+            eventTracker.setUserProperty(mapOf("mobile_number" to currentUser?.phoneNumber.toString(), "firebase_uid" to currentUser?.uid.toString()))
+            eventTracker.setProfileProperty(ProfilePropArgs("Firebase UID", currentUser?.uid.toString()))
             Log.d("navigate", "navigate to onboarding loader")
 
             navigateWithAllPopupStack(
