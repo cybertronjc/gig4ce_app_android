@@ -159,67 +159,6 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     }
 
 
-//    private fun showAssessments(content: List<CourseContent>) {
-//
-//        main_learning_assessment_error.gone()
-//        main_learning_assessments_rv.visible()
-//        stopShimmer(assessment_loader as LinearLayout, R.id.shimmer_controller)
-//
-//        if (content.isEmpty()) {
-//            main_learning_assessments_rv.gone()
-//            main_learning_assessment_error.visible()
-//
-//            main_learning_assessment_error.text = "No Assessment Found"
-//        } else {
-//
-//            val displayMetrics = DisplayMetrics()
-//            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-//            val width = displayMetrics.widthPixels
-//            val itemWidth = ((width / 5) * 4).toInt()
-//
-//
-//            val recyclerGenericAdapter: RecyclerGenericAdapter<CourseContent> =
-//                RecyclerGenericAdapter<CourseContent>(
-//                    activity?.applicationContext,
-//                    PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                        val assessment = item as CourseContent
-//
-//                        showToast("Disabled ,will be enabled soon")
-//
-////                        navigate(R.id.assessment_fragment,  bundleOf(
-////                            AssessmentFragment.INTENT_LESSON_ID to assessment.id
-////                        ))
-//                    },
-//                    RecyclerGenericAdapter.ItemInterface<CourseContent> { obj, viewHolder, position ->
-//                        val lp = getView(viewHolder, R.id.assessment_cl).layoutParams
-//                        lp.height = lp.height
-//                        lp.width = itemWidth
-//                        getView(viewHolder, R.id.assessment_cl).layoutParams = lp
-//                        getTextView(viewHolder, R.id.title).text = obj?.title
-//                        getTextView(viewHolder, R.id.time).text = "02:00"
-//
-//                        getTextView(viewHolder, R.id.status).text = "PENDING"
-//                        getTextView(
-//                            viewHolder,
-//                            R.id.status
-//                        ).setBackgroundResource(R.drawable.rect_assessment_status_pending)
-//                        (getView(
-//                            viewHolder,
-//                            R.id.side_bar_status
-//                        ) as ImageView).setImageResource(R.drawable.assessment_line_pending)
-//                    })
-//            recyclerGenericAdapter.list = content
-//            recyclerGenericAdapter.setLayout(R.layout.assessment_bs_item)
-//            main_learning_assessments_rv.layoutManager = LinearLayoutManager(
-//                activity?.applicationContext,
-//                LinearLayoutManager.HORIZONTAL,
-//                false
-//            )
-//            main_learning_assessments_rv.adapter = recyclerGenericAdapter
-//        }
-//
-//    }
-
     private fun showRoleBasedLearningError(error: String) {
 
         learning_based_role_rv.gone()
@@ -233,7 +172,6 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
         learning_based_role_rv.gone()
         role_based_learning_error.gone()
 
-        learning_based_horizontal_progress.visible()
         startShimmer(
             learning_based_horizontal_progress as LinearLayout,
             ShimmerDataModel(
@@ -247,85 +185,13 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showRoleBasedLearnings(content: List<Course>) {
-        learning_based_horizontal_progress.gone()
+
+        stopShimmer(learning_based_horizontal_progress as LinearLayout,R.id.shimmer_controller)
         role_based_learning_error.gone()
         learning_based_role_rv.visible()
-        stopShimmer(learning_based_horizontal_progress as LinearLayout,R.id.shimmer_controller)
 
         val roleBasedLearning = getLearningData(content)
         learning_based_role_rv.collection = roleBasedLearning
-
-//        val displayMetrics = DisplayMetrics()
-//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-//        width = displayMetrics.widthPixels
-//        val itemWidth = ((width / 3) * 2).toInt()
-//        // model will change when integrated with DB
-//
-//        val recyclerGenericAdapter: RecyclerGenericAdapter<Course> =
-//            RecyclerGenericAdapter<Course>(
-//                activity?.applicationContext,
-//                PFRecyclerViewAdapter.OnViewHolderClick<Any?> { view, position, item ->
-//                    val course = item as Course
-//
-//                    navigate(
-//                        R.id.learningCourseDetails,
-//                        bundleOf(LearningCourseDetailsFragment.INTENT_EXTRA_COURSE_ID to course.id)
-//                    )
-//                },
-//                RecyclerGenericAdapter.ItemInterface<Course> { obj, viewHolder, position ->
-//                    var view = getView(viewHolder, R.id.card_view)
-//                    val lp = view.layoutParams
-//                    lp.height = lp.height
-//                    lp.width = itemWidth
-//                    view.layoutParams = lp
-//
-//                    var title = getTextView(viewHolder, R.id.title_)
-//                    title.text = obj?.name
-//
-//                    var subtitle = getTextView(viewHolder, R.id.title)
-//                    subtitle.text = obj?.level
-//
-//                    var comImg = getImageView(viewHolder, R.id.completed_iv)
-//                    comImg.isVisible = obj?.completed ?: false
-//
-//                    var img = getImageView(viewHolder, R.id.learning_img)
-//
-//                    if (!obj!!.coverPicture.isNullOrBlank()) {
-//                        if (obj.coverPicture!!.startsWith("http", true)) {
-//
-//                            GlideApp.with(requireContext())
-//                                .load(obj.coverPicture!!)
-//                                .placeholder(getCircularProgressDrawable())
-//                                .error(R.drawable.ic_learning_default_back)
-//                                .into(img)
-//                        } else {
-//                            FirebaseStorage.getInstance()
-//                                .getReference(LearningConstants.LEARNING_IMAGES_FIREBASE_FOLDER)
-//                                .child(obj.coverPicture!!)
-//                                .downloadUrl
-//                                .addOnSuccessListener { fileUri ->
-//
-//                                    GlideApp.with(requireContext())
-//                                        .load(fileUri)
-//                                        .placeholder(getCircularProgressDrawable())
-//                                        .error(R.drawable.ic_learning_default_back)
-//                                        .into(img)
-//                                }
-//                        }
-//                    } else {
-//                        GlideApp.with(requireContext())
-//                            .load(R.drawable.ic_learning_default_back)
-//                            .into(img)
-//                    }
-//                })
-//        recyclerGenericAdapter.list = content
-//        recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-//        learning_based_role_rv.layoutManager = LinearLayoutManager(
-//            activity?.applicationContext,
-//            LinearLayoutManager.HORIZONTAL,
-//            false
-//        )
-//        learning_based_role_rv.adapter = recyclerGenericAdapter
     }
 
     private fun getLearningData(content: List<Course>): ArrayList<FeatureItemCardDVM> {
