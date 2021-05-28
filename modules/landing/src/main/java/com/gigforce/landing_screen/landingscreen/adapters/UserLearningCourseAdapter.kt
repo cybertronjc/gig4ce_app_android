@@ -35,7 +35,7 @@ class UserLearningCourseAdapter(
         viewType: Int
     ): UserLearningViewHolder {
         val view = LayoutInflater.from(
-            parent.context
+            context
         ).inflate(R.layout.learning_bs_item, parent, false)
         return UserLearningViewHolder(view)
     }

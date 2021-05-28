@@ -7,14 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.shimmer.Shimmer
-import com.facebook.shimmer.ShimmerDrawable
-//import com.gigforce.app.R
-//import com.gigforce.client_activation.client_activation.models.JobProfile
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
-//import com.gigforce.core.datamodels.gigpage.JobProfile
-//import com.gigforce.core.datamodels.gigpage.JobProfile
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.landing_screen.R
 
@@ -30,7 +24,7 @@ class ExploreGigsAdapter(
     private var originalJobList: List<Any> = emptyList()
     private var onCardSelectedListener : OnCardSelectedListener? = null
     private var onSeeMoreSelectedListener: OnSeeMoreSelectedListener? = null
-//
+
     fun setOnCardSelectedListener(onCardSelectedListener: OnCardSelectedListener){
         this.onCardSelectedListener = onCardSelectedListener
     }
@@ -106,10 +100,7 @@ class ExploreGigsAdapter(
         override fun onClick(v: View?) {
             val newPosition = adapterPosition
             val jobProfile = originalJobList[newPosition]
-
-            //onJobSelectedListener?.onJobSelected(jobProfile)
             onCardSelectedListener?.onCardSelected(jobProfile)
-            //landingScreenFragment.navigateToGig((jobProfile as JobProfile).id)
         }
 
     }
@@ -131,18 +122,15 @@ class ExploreGigsAdapter(
             //onSeeMoreSelectedListener?.onSeeMoreSelected(job)
         }
 
-
     }
 
     interface OnCardSelectedListener {
-
         fun onCardSelected(
                 any: Any
         )
     }
 
     interface OnSeeMoreSelectedListener {
-
         fun onSeeMoreSelected(
                 any: Any
         )

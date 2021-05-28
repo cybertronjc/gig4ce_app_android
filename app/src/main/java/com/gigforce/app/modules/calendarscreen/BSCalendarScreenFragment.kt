@@ -659,7 +659,7 @@ class BSCalendarScreenFragment : Fragment() {
                     requireContext()
                 )
             upcomingGigBSAdapter.data = upcomingGigs
-            upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig>{
+            upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig> {
                 override fun onItemClick(view: View, obj: Gig, position: Int) {
                     navigation.navigateTo("gig/attendance", bundleOf("gig_id" to obj.gigId))
                 }
@@ -932,22 +932,25 @@ class BSCalendarScreenFragment : Fragment() {
 //
 //                })
 //        recyclerGenericAdapter.list = datalist
-
-        var featureItemAdapter = FeatureItemAdapter(requireContext())
-        featureItemAdapter.data = datalist
-        featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
-            override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
-                if (obj.navigationPath.equals("")) {
-                    navigation.navigateTo(obj.navigationPath)
+        activity?.let {
+            var featureItemAdapter = FeatureItemAdapter(it,itemWidth)
+            featureItemAdapter.data = datalist
+            featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
+                override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
+                    if (!obj.navigationPath.equals("")) {
+                        navigation.navigateTo(obj.navigationPath)
+                    }
                 }
-            }
-        })
+            })
 //        recyclerGenericAdapter.setLayout(R.layout.feature_item)
-        feature_rv.layoutManager = GridLayoutManager(
-            activity, 2,
-            GridLayoutManager.HORIZONTAL, false
-        )
-        feature_rv.adapter = featureItemAdapter
+            feature_rv.layoutManager = GridLayoutManager(
+                activity, 2,
+                GridLayoutManager.HORIZONTAL, false
+            )
+            feature_rv.adapter = featureItemAdapter
+        }
+
+
     }
 
 //    private fun navigateToFeature(position: Int) {
