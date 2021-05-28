@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.giger_app.R
@@ -21,14 +22,15 @@ class FeatureItemAdapter(val context: Context,val itemWidth : Int) :
         val feature_title = itemView.findViewById<TextView>(R.id.feature_title)
 
 
+
         fun bindView(featureItem: FeatureModel) {
 //            val displayMetrics = DisplayMetrics()
 //            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
 //            val width = displayMetrics.widthPixels
-            val lp = cardView.layoutParams
-            lp.height = lp.height
-            lp.width = itemWidth
-            cardView.layoutParams = lp
+//            val lp = cardView.layoutParams
+//            lp.height = lp.height
+//            lp.width = itemWidth
+//            cardView.layoutParams = lp
             feature_icon.setImageResource(featureItem.icon)
             feature_title.text = featureItem.title
             cardView.setOnClickListener(this)
@@ -63,6 +65,13 @@ class FeatureItemAdapter(val context: Context,val itemWidth : Int) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         data?.let {
             holder.bindView(it.get(position))
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: CustomViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.itemView.updateLayoutParams {
+            width = itemWidth
         }
     }
 }

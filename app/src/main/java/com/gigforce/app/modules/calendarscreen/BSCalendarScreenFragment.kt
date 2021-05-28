@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
@@ -40,6 +41,7 @@ import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.gigforce.core.AppConstants
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.gigpage.ContactPerson
@@ -54,9 +56,20 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.*
 import com.gigforce.landing_screen.landingscreen.LandingScreenViewModel
+import com.gigforce.landing_screen.landingscreen.adapters.ExploreGigsAdapter
+import com.gigforce.landing_screen.landingscreen.adapters.UserLearningCourseAdapter
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.amb_join_open_btn
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
+import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
+import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -257,12 +270,13 @@ class BSCalendarScreenFragment : Fragment() {
 //                    })
 //            recyclerGenericAdapter.setList(content)
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-            var userLearningAdater =
-                UserLearningAdater(
-                    requireContext(),itemWidth
-                )
-            userLearningAdater.data = content
-            userLearningAdater.setOnclickListener(object : AdapterClickListener<Course> {
+//            var userLearningAdater =
+//                UserLearningAdater(
+//                    requireContext(),itemWidth
+//                )
+            val userLearningAdater = context?.let { UserLearningCourseAdapter(it,itemWidth) }
+            userLearningAdater?.setData(content)
+            userLearningAdater?.setOnclickListener(object : AdapterClickListener<Course> {
                 override fun onItemClick(view: View, obj: Course, position: Int) {
                     navigation.navigateTo("learning/main")
 ////                        navigate(R.id.mainLearningFragment)
@@ -932,26 +946,62 @@ class BSCalendarScreenFragment : Fragment() {
 //
 //                })
 //        recyclerGenericAdapter.list = datalist
-        activity?.let {
-            var featureItemAdapter = FeatureItemAdapter(it,itemWidth)
-            featureItemAdapter.data = datalist
-            featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
-                override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
-                    if (!obj.navigationPath.equals("")) {
-                        navigation.navigateTo(obj.navigationPath)
+        val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
+            RecyclerGenericAdapter<FeatureModel>(
+                activity?.applicationContext,
+                PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
+                    if (!item.navigationPath.equals("")) {
+                        navigation.navigateTo(item.navigationPath)
                     }
-                }
-            })
-//        recyclerGenericAdapter.setLayout(R.layout.feature_item)
+                },
+                RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
+                    val cardView = viewHolder.itemView.findViewById<View>(R.id.card_view)
+                    val feature_icon = viewHolder.itemView.findViewById<ImageView>(R.id.feature_icon)
+                    val feature_title = viewHolder.itemView.findViewById<TextView>(R.id.feature_title)
+
+                    val lp = cardView.layoutParams
+                    lp.height = lp.height
+                    lp.width = itemWidth
+                    cardView.layoutParams = lp
+
+                    feature_icon.setImageResource(obj.icon)
+                    feature_title.text = obj.title
+//                    cardView.setOnClickListener(this)
+
+//                    getView(viewHolder, R.id.card_view).layoutParams = lp
+//                    getImageView(viewHolder, R.id.feature_icon).setImageResource(obj?.icon!!)
+//                    getTextView(viewHolder, R.id.feature_title).text = obj.title
+
+                })
+        recyclerGenericAdapter.list = datalist
+        recyclerGenericAdapter.setLayout(R.layout.feature_item)
             feature_rv.layoutManager = GridLayoutManager(
                 activity, 2,
                 GridLayoutManager.HORIZONTAL, false
             )
-            feature_rv.adapter = featureItemAdapter
+            feature_rv.adapter = recyclerGenericAdapter
         }
 
+//        activity?.let {
+//            var featureItemAdapter = FeatureItemAdapter(it,itemWidth)
+//            featureItemAdapter.data = datalist
+//            featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
+//                override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
+//                    if (!obj.navigationPath.equals("")) {
+//                        navigation.navigateTo(obj.navigationPath)
+//                    }
+//                }
+//            })
+////        recyclerGenericAdapter.setLayout(R.layout.feature_item)
+//            feature_rv.layoutManager = GridLayoutManager(
+//                activity, 2,
+//                GridLayoutManager.HORIZONTAL, false
+//            )
+//            feature_rv.adapter = featureItemAdapter
+//        }
 
-    }
+
+//    }
 
 //    private fun navigateToFeature(position: Int) {
 //        when (position) {
@@ -1229,8 +1279,11 @@ class BSCalendarScreenFragment : Fragment() {
         } else {
             rl_cient_activation_bs.visible()
 
-            val itemWidth = ((width / 3) * 2).toInt()
+//            val itemWidth = ((width / 3) * 2).toInt()
             // model will change when integrated with DB
+
+            var arrayAny: ArrayList<Any> = jobProfiles as ArrayList<Any>
+            arrayAny.add("See More")
 
 //            val recyclerGenericAdapter: RecyclerGenericAdapter<JobProfile> =
 //                RecyclerGenericAdapter<JobProfile>(
@@ -1262,19 +1315,54 @@ class BSCalendarScreenFragment : Fragment() {
 //
 //                        //img.setImageResource(obj?.imgIcon!!)
 //                    })
-            var clientActivationAdapter =
-                ClientActivationAdapter(
-                    requireContext(), itemWidth
-                )
-            clientActivationAdapter.data = jobProfiles
-//            recyclerGenericAdapter.list = jobProfiles
-//            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+//            var clientActivationAdapter =
+//                ClientActivationAdapter(
+//                    requireContext(), itemWidth
+//                )
+//            var exploreGigsAdapter = ExploreGigsAdapter(this)
+//            clientActivationAdapter.data = jobProfiles
+////            recyclerGenericAdapter.list = jobProfiles
+////            recyclerGenericAdapter.setLayout(R.layout.client_activation_item)
+//            client_activation_rv_bs.layoutManager = LinearLayoutManager(
+//                activity?.applicationContext,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//            )
+//            client_activation_rv_bs.adapter = clientActivationAdapter
+            val exploreGigsAdapter = context?.let { ExploreGigsAdapter(it) }
+            exploreGigsAdapter?.setData(jobProfiles)
             client_activation_rv_bs.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            client_activation_rv_bs.adapter = clientActivationAdapter
+
+            client_activation_rv_bs.adapter = exploreGigsAdapter
+
+            exploreGigsAdapter?.setOnSeeMoreSelectedListener(object :
+                ExploreGigsAdapter.OnSeeMoreSelectedListener {
+                override fun onSeeMoreSelected(any: Any) {
+                    navigation.navigateTo("client_activation/gig_detail")
+                }
+
+            })
+            exploreGigsAdapter?.setOnCardSelectedListener(object :
+                ExploreGigsAdapter.OnCardSelectedListener {
+                override fun onCardSelected(any: Any) {
+                    var id = (any as JobProfile).id
+//                    Log.d("cardId", id)
+//        navigate(
+//                R.id.fragment_client_activation,
+//                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+//        )
+                    navigation.navigateTo(
+                        "client_activation",
+                        bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+                    )
+                }
+
+            })
+
 
         }
     }
