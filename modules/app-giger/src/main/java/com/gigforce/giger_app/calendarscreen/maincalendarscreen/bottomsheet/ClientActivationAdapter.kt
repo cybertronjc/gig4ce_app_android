@@ -13,7 +13,7 @@ import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.giger_app.R
 
-class ClientActivationAdapter (val context: Context) :
+class ClientActivationAdapter (val context: Context, val itemWidth : Int) :
     RecyclerView.Adapter<ClientActivationAdapter.CustomViewHolder>() {
 
     inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,7 +28,7 @@ class ClientActivationAdapter (val context: Context) :
 
             val lp = view.layoutParams
             lp.height = lp.height
-//            lp.width = itemWidth
+            lp.width = itemWidth
             view.layoutParams = lp
 
             GlideApp.with(context)

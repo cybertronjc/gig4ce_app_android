@@ -259,7 +259,7 @@ class BSCalendarScreenFragment : Fragment() {
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             var userLearningAdater =
                 UserLearningAdater(
-                    requireContext()
+                    requireContext(),itemWidth
                 )
             userLearningAdater.data = content
             userLearningAdater.setOnclickListener(object : AdapterClickListener<Course> {
@@ -656,9 +656,15 @@ class BSCalendarScreenFragment : Fragment() {
 
             var upcomingGigBSAdapter =
                 UpcomingGigBSAdapter(
-                    requireContext()
+                    requireContext(),itemWidth
                 )
             upcomingGigBSAdapter.data = upcomingGigs
+            upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig> {
+                override fun onItemClick(view: View, obj: Gig, position: Int) {
+                    navigation.navigateTo("gig/attendance", bundleOf("gig_id" to obj.gigId))
+                }
+
+            })
             upcomingGigBSAdapter.setAgencyOnclickListener(object :
                 AdapterClickListener<ContactPerson> {
                 override fun onItemClick(view: View, obj: ContactPerson, position: Int) {
@@ -926,22 +932,25 @@ class BSCalendarScreenFragment : Fragment() {
 //
 //                })
 //        recyclerGenericAdapter.list = datalist
-
-        var featureItemAdapter = FeatureItemAdapter(requireContext())
-        featureItemAdapter.data = datalist
-        featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
-            override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
-                if (obj.navigationPath.equals("")) {
-                    navigation.navigateTo(obj.navigationPath)
+        activity?.let {
+            var featureItemAdapter = FeatureItemAdapter(it,itemWidth)
+            featureItemAdapter.data = datalist
+            featureItemAdapter.setOnclickListener(object : AdapterClickListener<FeatureModel> {
+                override fun onItemClick(view: View, obj: FeatureModel, position: Int) {
+                    if (!obj.navigationPath.equals("")) {
+                        navigation.navigateTo(obj.navigationPath)
+                    }
                 }
-            }
-        })
+            })
 //        recyclerGenericAdapter.setLayout(R.layout.feature_item)
-        feature_rv.layoutManager = GridLayoutManager(
-            activity, 2,
-            GridLayoutManager.HORIZONTAL, false
-        )
-        feature_rv.adapter = featureItemAdapter
+            feature_rv.layoutManager = GridLayoutManager(
+                activity, 2,
+                GridLayoutManager.HORIZONTAL, false
+            )
+            feature_rv.adapter = featureItemAdapter
+        }
+
+
     }
 
 //    private fun navigateToFeature(position: Int) {
@@ -1255,7 +1264,7 @@ class BSCalendarScreenFragment : Fragment() {
 //                    })
             var clientActivationAdapter =
                 ClientActivationAdapter(
-                    requireContext()
+                    requireContext(), itemWidth
                 )
             clientActivationAdapter.data = jobProfiles
 //            recyclerGenericAdapter.list = jobProfiles

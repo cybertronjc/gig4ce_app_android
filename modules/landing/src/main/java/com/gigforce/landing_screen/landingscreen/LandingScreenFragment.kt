@@ -794,7 +794,7 @@ class LandingScreenFragment : Fragment(){
         complete_now.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_VERIFICATION
 //            navigate(R.id.gigerVerificationFragment)
-            navigation.navigateTo("")
+            navigation.navigateTo("verification/main")
         }
         mygigs_cl.setOnClickListener {
             comingFromOrGoingToScreen = SCREEN_GIG
@@ -982,7 +982,7 @@ class LandingScreenFragment : Fragment(){
 //                            })!!
 //            recyclerGenericAdapter.setList(content)
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-            val learningCourseAdapter = context?.let { UserLearningCourseAdapter(it) }
+            val learningCourseAdapter = context?.let { UserLearningCourseAdapter(it,itemWidth) }
             learningCourseAdapter?.setData(content)
             learningCourseAdapter?.setOnclickListener(object : AdapterClickListener<Course> {
                 override fun onItemClick(view: View, obj: Course, position: Int) {

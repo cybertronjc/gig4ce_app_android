@@ -16,7 +16,7 @@ import com.gigforce.giger_app.R
 import com.gigforce.learning.learning.LearningConstants
 import com.google.firebase.storage.FirebaseStorage
 
-class UserLearningAdater(val context: Context) :
+class UserLearningAdater(val context: Context, val itemWidth : Int) :
     RecyclerView.Adapter<UserLearningAdater.CustomViewHolder>() {
 
     inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,9 +30,9 @@ class UserLearningAdater(val context: Context) :
 
         fun bindView(course: Course) {
             val lp = cardView.layoutParams
-//            lp.height = lp.height
-//            lp.width = itemWidth    //need to implement later
-//            cardView.layoutParams = lp
+            lp.height = lp.height
+            lp.width = itemWidth    //need to implement later
+            cardView.layoutParams = lp
             title_.text = course.name
             title.text = course.level
             comImg.isVisible = course.completed

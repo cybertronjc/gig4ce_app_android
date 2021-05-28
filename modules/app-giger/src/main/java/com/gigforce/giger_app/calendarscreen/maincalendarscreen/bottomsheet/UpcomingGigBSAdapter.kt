@@ -25,7 +25,7 @@ import com.gigforce.giger_app.R
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 
-class UpcomingGigBSAdapter(val context: Context) :
+class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
     RecyclerView.Adapter<UpcomingGigBSAdapter.CustomViewHolder>() {
 
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
@@ -55,9 +55,11 @@ class UpcomingGigBSAdapter(val context: Context) :
 
             val lp = cardView.layoutParams
             lp.height = lp.height
-//            lp.width = itemWidth
+            lp.width = itemWidth
 //            var ivContact = getImageView(viewHolder, R.id.iv_call)
-
+            cardView.setOnClickListener{
+                clickListener?.onItemClick(it, obj,adapterPosition)
+            }
             ivContact.setImageResource(R.drawable.ic_phone_white_24dp)
             ivContact.setColorFilter(
                 ContextCompat.getColor(
@@ -141,8 +143,8 @@ class UpcomingGigBSAdapter(val context: Context) :
                 messageCardView.gone()
             }
 
-            cardView.layoutParams = lp
-            cardView.layoutParams = lp
+//            cardView.layoutParams = lp
+//            cardView.layoutParams = lp
             textView41.text = obj.getGigTitle()
             contactPersonTV.text = if (obj.openNewGig())
                 obj.agencyContact?.name
