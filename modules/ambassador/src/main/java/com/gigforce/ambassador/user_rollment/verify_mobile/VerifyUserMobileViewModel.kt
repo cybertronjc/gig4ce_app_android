@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VerifyUserMobileViewModel @Inject constructor(
 
-    private var buildConfig: IBuildConfigVM
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
     private val profileFirebaseRepository: ProfileFirebaseRepository =
         ProfileFirebaseRepository()

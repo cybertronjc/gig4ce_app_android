@@ -1,6 +1,7 @@
 package com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,25 +10,36 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.giger_app.R
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.FeatureModel
 
-class FeatureItemAdapter(val context: Context) :
+class FeatureItemAdapter(val context: Context,val itemWidth : Int) :
     RecyclerView.Adapter<FeatureItemAdapter.CustomViewHolder>() {
 
-    inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val cardView = itemView.findViewById<View>(R.id.card_view)
         val feature_icon = itemView.findViewById<ImageView>(R.id.feature_icon)
         val feature_title = itemView.findViewById<TextView>(R.id.feature_title)
 
 
         fun bindView(featureItem: FeatureModel) {
+//            val displayMetrics = DisplayMetrics()
+//            activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//            val width = displayMetrics.widthPixels
             val lp = cardView.layoutParams
             lp.height = lp.height
-//            lp.width = itemWidth
+            lp.width = itemWidth
             cardView.layoutParams = lp
             feature_icon.setImageResource(featureItem.icon)
             feature_title.text = featureItem.title
+            cardView.setOnClickListener(this)
+        }
 
+        override fun onClick(view: View?) {
+            view?.let {
+                data?.get(adapterPosition)?.let { it1 ->
+                    clickListener?.onItemClick(it, it1, adapterPosition)
+                }
+            }
         }
     }
 
@@ -50,7 +62,7 @@ class FeatureItemAdapter(val context: Context) :
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         data?.let {
-//            holder.bindView(it.get(position))
+            holder.bindView(it.get(position))
         }
     }
 }
