@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.core.TextDrawable
@@ -53,9 +54,9 @@ class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
 
         fun bindView(obj: Gig) {
 
-            val lp = cardView.layoutParams
-            lp.height = lp.height
-            lp.width = itemWidth
+//            val lp = cardView.layoutParams
+//            lp.height = lp.height
+//            lp.width = itemWidth
 //            var ivContact = getImageView(viewHolder, R.id.iv_call)
             cardView.setOnClickListener{
                 clickListener?.onItemClick(it, obj,adapterPosition)
@@ -330,6 +331,13 @@ class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         data?.let {
             holder.bindView(it.get(position))
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: UpcomingGigBSAdapter.CustomViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.itemView.updateLayoutParams {
+            width = itemWidth
         }
     }
 }

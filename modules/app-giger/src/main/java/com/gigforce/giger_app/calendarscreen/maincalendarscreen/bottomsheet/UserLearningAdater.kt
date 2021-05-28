@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.datamodels.learning.Course
@@ -29,10 +30,10 @@ class UserLearningAdater(val context: Context, val itemWidth : Int) :
 
 
         fun bindView(course: Course) {
-            val lp = cardView.layoutParams
-            lp.height = lp.height
-            lp.width = itemWidth    //need to implement later
-            cardView.layoutParams = lp
+//            val lp = cardView.layoutParams
+//            lp.height = lp.height
+//            lp.width = itemWidth    //need to implement later
+//            cardView.layoutParams = lp
             title_.text = course.name
             title.text = course.level
             comImg.isVisible = course.completed
@@ -91,6 +92,13 @@ class UserLearningAdater(val context: Context, val itemWidth : Int) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         data?.let {
             holder.bindView(it.get(position))
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: UserLearningAdater.CustomViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.itemView.updateLayoutParams {
+            width = itemWidth
         }
     }
 }

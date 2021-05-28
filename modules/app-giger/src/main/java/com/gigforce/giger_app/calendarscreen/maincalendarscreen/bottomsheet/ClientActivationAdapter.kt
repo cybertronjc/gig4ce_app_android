@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
@@ -26,10 +27,10 @@ class ClientActivationAdapter (val context: Context, val itemWidth : Int) :
 
         fun bindView(featureItem: JobProfile) {
 
-            val lp = view.layoutParams
-            lp.height = lp.height
-            lp.width = itemWidth
-            view.layoutParams = lp
+//            val lp = view.layoutParams
+//            lp.height = lp.height
+//            lp.width = itemWidth
+//            view.layoutParams = lp
 
             GlideApp.with(context)
                 .load(featureItem.cardImage)
@@ -64,7 +65,14 @@ class ClientActivationAdapter (val context: Context, val itemWidth : Int) :
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         data?.let {
-//            holder.bindView(it.get(position))
+            holder.bindView(it.get(position))
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: ClientActivationAdapter.CustomViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.itemView.updateLayoutParams {
+            width = itemWidth
         }
     }
 }
