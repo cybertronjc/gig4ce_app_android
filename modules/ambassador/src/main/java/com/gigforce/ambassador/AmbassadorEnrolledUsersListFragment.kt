@@ -80,6 +80,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         }
     }
 
+    var isEditingDetails = false
+
     private val onBackPressCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             Log.d("TAg", "Back preseed")
@@ -118,6 +120,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigation.navigateTo("userinfo/addBankDetailsInfoFragment",bundleOf(
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
@@ -126,10 +129,12 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 //                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
 //                )
 //            )
+
         }
 
         current_address_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigation.navigateTo("userinfo/addCurrentAddressFragment",bundleOf(
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
             ))
@@ -138,10 +143,13 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 //                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
 //                )
 //            )
+
+
         }
 
         profile_photo_layout.setOnClickListener {
             redirectToNextStep = true
+            isEditingDetails = true
             navigation.navigateTo("userinfo/addProfilePictureFragment",bundleOf(
                 EnrollmentConstants.INTENT_EXTRA_MODE to EnrollmentConstants.MODE_ENROLLMENT_REQUIREMENT,
                 AppConstants.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
@@ -152,6 +160,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 //                    AddBankDetailsInfoFragment.INTENT_EXTRA_USER_CAME_FROM_AMBASSADOR_ENROLLMENT to true
 //                )
 //            )
+
         }
 
         toolbar_layout.apply {
@@ -211,11 +220,15 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         create_profile_btn.setOnClickListener {
             navigation.navigateTo("userinfo/checkMobileFragment")
 //            navigate(R.id.checkMobileFragment)
+            isEditingDetails = false
+            //navigate(R.id.checkMobileFragment)
         }
 
         createProfileBtn.setOnClickListener {
             navigation.navigateTo("userinfo/checkMobileFragment")
 //            navigate(R.id.checkMobileFragment)
+            isEditingDetails = false
+            //navigate(R.id.checkMobileFragment)
         }
 
         enrolled_users_rv.layoutManager = LinearLayoutManager(activity?.applicationContext)
@@ -227,9 +240,11 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         enrolled_users_rv.adapter = enrolledUserAdapter
 
         share_link.setOnClickListener {
+            isEditingDetails = false
             shareLink()
         }
         share_link_cl.setOnClickListener {
+            isEditingDetails = false
             shareLink()
         }
     }
@@ -241,17 +256,26 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
                 if (it.isEmpty()) {
                     enrolledUserAdapter.setData(emptyList())
-                    no_users_enrolled_layout.visible()
-                    createProfileBtn.gone()
-                    share_link.gone()
-                    total_complete_profile_tv.gone()
-                    total_incomplete_profile_tv.gone()
+                    if (!isEditingDetails){
+                        Log.d("here", "prpfile selected")
+                        no_users_enrolled_layout.visible()
+                        createProfileBtn.gone()
+                        share_link.gone()
+                        total_complete_profile_tv.gone()
+                        total_incomplete_profile_tv.gone()
+                    }
                 } else {
-                    no_users_enrolled_layout.gone()
-                    createProfileBtn.visible()
-                    share_link.visible()
                     enrolledUserAdapter.setData(it)
+                    if (!isEditingDetails){
+                        Log.d("here", "prpfile selected and data is there")
+                        no_users_enrolled_layout.gone()
+                        createProfileBtn.visible()
+                        share_link.visible()
+
+                    }
                     total_complete_profile_tv.visible()
+                    total_incomplete_profile_tv.visible()
+
 
                     val totalCompleteProfiles =
                         it.count { it.enrollmentStepsCompleted.allStepsCompleted() }
@@ -273,7 +297,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                         }
                     }
 
-                    total_incomplete_profile_tv.visible()
+
                     total_incomplete_profile_tv.text = buildSpannedString {
                         append("Total Incomplete Profile : ")
                         bold {
@@ -489,6 +513,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     override fun lastLocationReceiver(location: Location?) {
         this.location = location
     }
+
 
 
 }
