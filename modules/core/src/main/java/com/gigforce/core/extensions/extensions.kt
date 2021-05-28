@@ -286,3 +286,7 @@ fun EditText.getTextChangeAsStateFlow(): StateFlow<String> {
     }
     return query
 }
+
+fun Number.roundTo(
+        numFractionDigits: Int
+) = "%.${numFractionDigits}f".format(this, Locale.ENGLISH).toDouble()

@@ -3,6 +3,7 @@ package com.gigforce.app
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.common_ui.StringConstants

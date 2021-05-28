@@ -28,6 +28,7 @@ import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.common_ui.chat.ChatConstants
@@ -69,6 +70,8 @@ class MainActivity : AppCompatActivity(),
     @Inject
     lateinit var navigation:INavigation
 
+    @Inject lateinit var eventTracker: IEventTracker
+
     override fun getINavigation(): INavigation {
         return navigation
     }
@@ -106,6 +109,9 @@ class MainActivity : AppCompatActivity(),
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
+
+        eventTracker.setUpAnalyticsTools()
+
 
         intent?.extras?.let {
             it.printDebugLog("printDebugLog")
