@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-//import com.gigforce.app.R
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.learning.Course
@@ -16,11 +15,10 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.landing_screen.R
-//import com.gigforce.learning.learning.LearningConstants
 import com.google.firebase.storage.FirebaseStorage
 
 class UserLearningCourseAdapter(
-    private val context: Context
+    private val context: Context, val itemWidth : Int
 ) : RecyclerView.Adapter<UserLearningCourseAdapter.UserLearningViewHolder>() {
 
     private var originalList: List<Course> = emptyList()
@@ -60,7 +58,7 @@ class UserLearningCourseAdapter(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-
+        val cardView = itemView.findViewById<View>(R.id.card_view)
         private var subtitle: TextView = itemView.findViewById(R.id.title)
         private var title: TextView = itemView.findViewById(R.id.title_)
         private var comImg: ImageView = itemView.findViewById(R.id.completed_iv)
@@ -72,6 +70,12 @@ class UserLearningCourseAdapter(
         }
 
         fun bindValues(model: Course, position: Int) {
+
+            val lp = cardView.layoutParams
+            lp.height = lp.height
+            lp.width = itemWidth
+            cardView.layoutParams = lp
+
             title.text = model.name
             subtitle.text = model.level
             if (model.completed) comImg.visible() else comImg.gone()

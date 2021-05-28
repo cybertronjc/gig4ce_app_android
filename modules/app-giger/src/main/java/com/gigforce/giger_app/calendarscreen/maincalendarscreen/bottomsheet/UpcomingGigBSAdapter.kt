@@ -25,7 +25,7 @@ import com.gigforce.giger_app.R
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 
-class UpcomingGigBSAdapter(val context: Context) :
+class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
     RecyclerView.Adapter<UpcomingGigBSAdapter.CustomViewHolder>() {
 
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
@@ -53,9 +53,9 @@ class UpcomingGigBSAdapter(val context: Context) :
 
         fun bindView(obj: Gig) {
 
-//            val lp = cardView.layoutParams
-//            lp.height = lp.height
-//            lp.width = itemWidth
+            val lp = cardView.layoutParams
+            lp.height = lp.height
+            lp.width = itemWidth
 //            var ivContact = getImageView(viewHolder, R.id.iv_call)
             cardView.setOnClickListener{
                 clickListener?.onItemClick(it, obj,adapterPosition)

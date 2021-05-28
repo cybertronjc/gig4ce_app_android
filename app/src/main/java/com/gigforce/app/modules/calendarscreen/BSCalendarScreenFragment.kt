@@ -259,7 +259,7 @@ class BSCalendarScreenFragment : Fragment() {
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
             var userLearningAdater =
                 UserLearningAdater(
-                    requireContext()
+                    requireContext(),itemWidth
                 )
             userLearningAdater.data = content
             userLearningAdater.setOnclickListener(object : AdapterClickListener<Course> {
@@ -656,7 +656,7 @@ class BSCalendarScreenFragment : Fragment() {
 
             var upcomingGigBSAdapter =
                 UpcomingGigBSAdapter(
-                    requireContext()
+                    requireContext(),itemWidth
                 )
             upcomingGigBSAdapter.data = upcomingGigs
             upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig> {
@@ -1264,7 +1264,7 @@ class BSCalendarScreenFragment : Fragment() {
 //                    })
             var clientActivationAdapter =
                 ClientActivationAdapter(
-                    requireContext()
+                    requireContext(), itemWidth
                 )
             clientActivationAdapter.data = jobProfiles
 //            recyclerGenericAdapter.list = jobProfiles
