@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.gigPage2.dialogFragments
+package com.gigforce.giger_gigs.dialogFragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import com.gigforce.app.R
-import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
 import com.gigforce.core.extensions.roundTo
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.gigforce.giger_gigs.R
 import kotlinx.android.synthetic.main.fragment_user_not_in_gig_range_dialog.*
 
 class NotInGigRangeDialogFragment : DialogFragment() {

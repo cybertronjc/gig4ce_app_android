@@ -1190,6 +1190,7 @@ int color black_42 0x0
 int color black_666 0x0
 int color black_85 0x0
 int color black_color_future_date 0x0
+int color black_three 0x0
 int color black_two 0x0
 int color blue 0x0
 int color blueDark 0x0
@@ -2987,6 +2988,7 @@ int id ll_parent_location 0x0
 int id load_more 0x0
 int id locationImageContainer 0x0
 int id locationImageScrollView 0x0
+int id location_from_gig_tv 0x0
 int id location_iv 0x0
 int id logo 0x0
 int id main_img 0x0
@@ -3052,6 +3054,7 @@ int id never 0x0
 int id no_gigs_layout 0x0
 int id none 0x0
 int id normal 0x0
+int id not_at_location_tv 0x0
 int id noteTV 0x0
 int id notification_background 0x0
 int id notification_main_column 0x0
@@ -3382,6 +3385,7 @@ int id trimModeLength 0x0
 int id trimModeLine 0x0
 int id trouble_signing_in 0x0
 int id trouble_signing_in_possible_fixes 0x0
+int id try_later_btn 0x0
 int id tv_allow_access 0x0
 int id tv_brand_name_giger_id 0x0
 int id tv_completed_gig_hist 0x0
@@ -3642,6 +3646,7 @@ int layout fragment_play_video_controls 0x0
 int layout fragment_play_video_full_screen 0x0
 int layout fragment_rate_gig_dialog 0x0
 int layout fragment_rate_gig_dialog_main 0x0
+int layout fragment_user_not_in_gig_range_dialog 0x0
 int layout fragment_view_image_full_screen 0x0
 int layout fragment_view_image_fullscreen 0x0
 int layout fui_activity_invisible 0x0

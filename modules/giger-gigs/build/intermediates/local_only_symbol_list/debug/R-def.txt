@@ -7,6 +7,7 @@ color black
 color black_2222
 color black_85
 color black_color_future_date
+color black_three
 color colorText
 color darkish_pink_two
 color gig_timer_completed_grey
@@ -498,6 +499,7 @@ id ll_decline_layout
 id ll_gig_time_details_giger_id
 id locationImageContainer
 id locationImageScrollView
+id location_from_gig_tv
 id location_iv
 id mapCardView
 id mapView
@@ -505,6 +507,7 @@ id messageCardView
 id message_card_view
 id message_tv
 id no_gigs_layout
+id not_at_location_tv
 id noteTV
 id okay_btn
 id other_options_recycler_view
@@ -641,6 +644,7 @@ id total_days_label
 id total_days_tv
 id total_working_days_label
 id total_working_days_tv
+id try_later_btn
 id tv_brand_name_giger_id
 id tv_completed_gig_hist
 id tv_contact_giger_id
@@ -746,6 +750,7 @@ layout fragment_main_learning_role_based_learnings
 layout fragment_permission_required
 layout fragment_rate_gig_dialog
 layout fragment_rate_gig_dialog_main
+layout fragment_user_not_in_gig_range_dialog
 layout gig_details_item
 layout gig_page_expanded
 layout gig_requirement_item

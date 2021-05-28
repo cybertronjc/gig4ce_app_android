@@ -62,4 +62,5 @@ object AppConstants {
     const val INTENT_EXTRA_GIG_ID = "gig_id"
 
     const val INTEN_EXTRA_DATE = "date"
+
 }

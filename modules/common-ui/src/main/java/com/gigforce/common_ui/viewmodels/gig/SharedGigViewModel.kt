@@ -1,10 +1,9 @@
-package com.gigforce.app.modules.gigPage2.viewModels
+package com.gigforce.common_ui.viewmodels.gig
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.common_image_picker.image_capture_camerax.CaptureImageSharedViewState
-import java.io.File
+
 
 sealed class SharedGigViewState {
 

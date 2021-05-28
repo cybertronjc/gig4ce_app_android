@@ -29,6 +29,7 @@ import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.adapter.AdapterPreferredLocation
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -37,13 +38,20 @@ import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
+import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -243,16 +251,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             val eventName = it.title ?: ""
             mJobProfileTitle = it.title ?: ""
 
-            eventTracker.pushEvent(TrackingEventArgs(
+            eventTracker.pushEvent(
+                TrackingEventArgs(
                     eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
                     props = mapOf(
                             "id" to id,
                             "title" to eventName
                     )
-            ))
+            )
+            )
 
             Glide.with(this).load(it.coverImg).placeholder(
-                    getCircularProgressDrawable(requireContext())
+                    getCircularProgressDrawable()
             ).into(iv_main_client_activation)
             tv_businessname_client_activation.text = (it?.title ?: "")
             tv_role_client_activation.text = (it?.subTitle ?: "")
@@ -347,10 +357,15 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                             0,
                             0
                     )
-                    setTextViewColor(
-                            tv_applied_client_activation,
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.color.activated_color else R.color.rejected_color
-                    )
+                    activity?.applicationContext?.let {
+
+                        tv_applied_client_activation.setTextColor(
+                            ContextCompat.getColor(
+                                it,
+                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.color.activated_color else R.color.rejected_color
+                            )
+                        )
+                    }
                     var actionButtonText =
                             if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
                                     R.string.complete_activation
@@ -651,7 +666,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     var location: Location? = null
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates?.stopLocationUpdates()
+        locationUpdates?.stopLocationUpdates(activity)
     }
 
     override fun onResume() {
@@ -676,7 +691,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 ?.let {
                     navigation.popAllBackStates()
                     it.performClick()
-                    locationUpdates?.stopLocationUpdates()
+                    locationUpdates?.stopLocationUpdates(context = activity)
                 }
 
 
@@ -736,7 +751,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         if (customPowerMenu != null && customPowerMenu?.isShowing() == true) {
             customPowerMenu?.dismiss()
         }
-        return super.onBackPressed()
+        return false
     }
 
 

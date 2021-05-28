@@ -1191,6 +1191,7 @@ color black_42
 color black_666
 color black_85
 color black_color_future_date
+color black_three
 color black_two
 color blue
 color blueDark
@@ -2988,6 +2989,7 @@ id ll_parent_location
 id load_more
 id locationImageContainer
 id locationImageScrollView
+id location_from_gig_tv
 id location_iv
 id logo
 id main_img
@@ -3053,6 +3055,7 @@ id never
 id no_gigs_layout
 id none
 id normal
+id not_at_location_tv
 id noteTV
 id notification_background
 id notification_main_column
@@ -3383,6 +3386,7 @@ id trimModeLength
 id trimModeLine
 id trouble_signing_in
 id trouble_signing_in_possible_fixes
+id try_later_btn
 id tv_allow_access
 id tv_brand_name_giger_id
 id tv_completed_gig_hist
@@ -3643,6 +3647,7 @@ layout fragment_play_video_controls
 layout fragment_play_video_full_screen
 layout fragment_rate_gig_dialog
 layout fragment_rate_gig_dialog_main
+layout fragment_user_not_in_gig_range_dialog
 layout fragment_view_image_full_screen
 layout fragment_view_image_fullscreen
 layout fui_activity_invisible

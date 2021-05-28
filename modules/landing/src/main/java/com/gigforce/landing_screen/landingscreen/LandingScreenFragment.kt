@@ -982,7 +982,10 @@ class LandingScreenFragment : Fragment(){
 //                            })!!
 //            recyclerGenericAdapter.setList(content)
 //            recyclerGenericAdapter.setLayout(R.layout.learning_bs_item)
-            val learningCourseAdapter = context?.let { UserLearningCourseAdapter(it,itemWidth) }
+            val learningCourseAdapter = context?.let {
+                UserLearningCourseAdapter(it, itemWidth)
+            }
+
             learningCourseAdapter?.setData(content)
             learningCourseAdapter?.setOnclickListener(object : AdapterClickListener<Course> {
                 override fun onItemClick(view: View, obj: Course, position: Int) {

@@ -1,11 +1,8 @@
-package com.gigforce.app.modules.gigPage2.models
+package com.gigforce.core.datamodels.gigpage
 
-import androidx.annotation.Keep
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDataModel
+
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
-import java.io.Serializable
-import java.util.*
 
 data class BussinessLocation (
 

@@ -59,6 +59,10 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-config-ktx:20.0.3'
 
+    //Kotlin Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
+
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
@@ -95,6 +99,8 @@ dependencies {
     // timeline view
     implementation 'com.github.vipulasri:timelineview:1.1.5'
 
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
     //Exo Player
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
@@ -103,6 +109,8 @@ dependencies {
 
     // swipe button
     implementation "com.ncorti:slidetoact:0.8.0"
+
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'

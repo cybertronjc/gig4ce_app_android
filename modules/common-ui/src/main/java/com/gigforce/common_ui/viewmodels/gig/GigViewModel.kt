@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewmodels.gig
 
+import android.location.Location
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -75,8 +76,8 @@ class GigViewModel constructor(
     val markingAttendanceState: LiveData<Lce<AttendanceType>> get() = _markingAttendanceState
 
     fun markAttendance(
-        latitude: Double,
-        longitude: Double,
+        location: Location?,
+        distanceBetweenGigAndUser : Float,
         locationPhysicalAddress: String,
         image: String,
         checkInTimeAccToUser: Timestamp?,
@@ -88,12 +89,12 @@ class GigViewModel constructor(
 
             markCheckIn(
                 gigId = gig.gigId,
-                latitude = latitude,
-                longitude = longitude,
+                location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
                 image = image,
                 checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = remarks
+                remarks = remarks,
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
         } else if (!gig.isCheckOutMarked()) {
 
@@ -108,12 +109,12 @@ class GigViewModel constructor(
 
             markCheckOut(
                 gigId = gig.gigId,
-                latitude = latitude,
-                longitude = longitude,
+                location = location,
                 locationPhysicalAddress = locationPhysicalAddress,
                 image = image,
                 checkOutTimeAccToUser = checkInTimeAccToUser,
-                remarks = remarks
+                remarks = remarks,
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
         } else {
             FirebaseCrashlytics.getInstance().apply {
@@ -125,8 +126,8 @@ class GigViewModel constructor(
 
     private suspend fun markCheckIn(
         gigId: String,
-        latitude: Double,
-        longitude: Double,
+        location: Location?,
+        distanceBetweenGigAndUser : Float,
         locationPhysicalAddress: String,
         image: String,
         checkInTimeAccToUser: Timestamp?,
@@ -136,14 +137,14 @@ class GigViewModel constructor(
 
         try {
             gigsRepository.markCheckIn(
-                    gigId = gigId,
-                    location = location,
-                    locationPhysicalAddress = locationPhysicalAddress,
-                    image = image,
-                    checkInTime = Timestamp.now(),
-                    checkInTimeAccToUser = checkInTimeAccToUser,
-                    remarks = remarks,
-                    distanceBetweenGigAndUser = distanceBetweenGigAndUser
+                gigId = gigId,
+                location = location,
+                locationPhysicalAddress = locationPhysicalAddress,
+                image = image,
+                checkInTime = Timestamp.now(),
+                checkInTimeAccToUser = checkInTimeAccToUser,
+                remarks = remarks,
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
 //            _markingAttendanceState.postValue(null)

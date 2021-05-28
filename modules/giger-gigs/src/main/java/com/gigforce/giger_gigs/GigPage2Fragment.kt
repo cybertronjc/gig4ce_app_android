@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -19,10 +20,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewModel
+//import com.gigforce.app.modules.gigPage2.viewModels.SharedGigViewState
 import com.gigforce.giger_gigs.adapters.GigPeopleToExpectAdapter
 import com.gigforce.giger_gigs.adapters.GigPeopleToExpectAdapterClickListener
 import com.gigforce.giger_gigs.adapters.OtherOptionClickListener
@@ -43,6 +47,8 @@ import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewModel
+import com.gigforce.common_ui.viewmodels.gig.SharedGigViewState
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -54,6 +60,7 @@ import com.gigforce.core.location.GpsSettingsCheckCallback
 import com.gigforce.core.location.LocationHelper
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_gigs.dialogFragments.NotInGigRangeDialogFragment
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -75,6 +82,8 @@ import kotlinx.android.synthetic.main.fragment_gig_page_2_main.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_other_options.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_people_to_expect.*
 import kotlinx.android.synthetic.main.fragment_gig_page_2_toolbar.*
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
@@ -90,7 +99,8 @@ class GigPage2Fragment : Fragment(),
     GigPeopleToExpectAdapterClickListener,
     PermissionRequiredBottomSheet.PermissionBottomSheetActionListener,
     LocationUpdates.LocationUpdateCallbacks,
-    EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener {
+    EarlyOrLateCheckInBottomSheet.OnEarlyOrLateCheckInBottomSheetClickListener,
+    EasyPermissions.PermissionCallbacks{
 
     private val gigSharedViewModel : SharedGigViewModel by activityViewModels()
     private val viewModel: GigViewModel by viewModels()
@@ -797,37 +807,6 @@ class GigPage2Fragment : Fragment(),
         showToast("Gig Declined")
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-//            LocationUpdates.REQUEST_PERMISSIONS_REQUEST_CODE -> if (
-//                    PermissionUtils.permissionsGrantedCheck(grantResults)
-//            ) {
-//                locationUpdates.startUpdates(requireActivity() as AppCompatActivity)
-//            }
-            REQUEST_PERMISSIONS -> {
-
-                var allPermsGranted = true
-                for (i in grantResults.indices) {
-                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                        allPermsGranted = false
-                        break
-                    }
-                }
-
-                if (allPermsGranted) {
-                    checkForGpsStatus()
-//                    startCameraForCapturingSelfie()
-                } else {
-                    showToast("Please grant all permissions")
-                }
-            }
-        }
-    }
 
     private fun startCameraForCapturingSelfie() {
         val shouldUserOldCamString =
@@ -1107,6 +1086,7 @@ class GigPage2Fragment : Fragment(),
         private const val ID_IDENTITY_CARD = "apodZsdEbx"
         private const val ID_ATTENDANCE_HISTORY = "TnovE9tzXl"
         private const val ID_DECLINE_GIG = "knnp4f4ZUi"
+        private const val MAX_ALLOWED_LOCATION_FROM_GIG_IN_METERS = 200L
 
         const val REMOTE_CONFIG_SHOULD_USE_OLD_CAMERA = "should_use_old_camera"
 
