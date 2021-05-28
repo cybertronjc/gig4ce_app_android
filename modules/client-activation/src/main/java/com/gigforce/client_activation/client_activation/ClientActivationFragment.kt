@@ -26,7 +26,6 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
 import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.adapter.AdapterPreferredLocation
@@ -37,17 +36,14 @@ import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.TrackingEventArgs
-import com.gigforce.core.analytics.ClientActivationEvents
-import com.gigforce.core.utils.NavFragmentsData
+import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -77,15 +73,11 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private var mInviteUserID: String? = null
     private var mClientViaDeeplink: Boolean? = null
     private lateinit var mJobProfileId: String
-    private lateinit var mJobProfileTitle: String
     private var mRedirectToApplication: Boolean? = null
     private lateinit var viewModel: ClientActivationViewmodel
-    private var adapterPreferredLocation: AdapterPreferredLocation? = null
+    private var adapterPreferredLocation: ActiveLocationsAdapter? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
     private lateinit var window: Window
-
-    @Inject
-    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var navigation: INavigation
@@ -247,29 +239,19 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             if (it == null) return@Observer
             if (it.info == null) return@Observer
 
-            val id = it.id ?: ""
-            val eventName = it.title ?: ""
-            mJobProfileTitle = it.title ?: ""
-
-            eventTracker.pushEvent(
-                TrackingEventArgs(
-                    eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
-                    props = mapOf(
-                            "id" to id,
-                            "title" to eventName
-                    )
-            )
-            )
-
             Glide.with(this).load(it.coverImg).placeholder(
-                    getCircularProgressDrawable()
+                ShimmerHelper.getShimmerDrawable()
             ).into(iv_main_client_activation)
-            tv_businessname_client_activation.text = (it?.title ?: "")
-            tv_role_client_activation.text = (it?.subTitle ?: "")
-            it?.locationList?.map { item -> item.location }?.let { locations ->
-                adapterPreferredLocation?.addData(locations)
+            tv_businessname_client_activation.text = it.title + " - "+ it.subTitle
+            tv_role_client_activation.text = it.subTitle
+            it.locationList?.map { item -> item.location }?.let { locations ->
+                var cityList = ArrayList<City>()
+                for (i in 0..locations.size - 1){
+                    cityList.add(City(locations.get(i), getCityIcon(locations.get(i))))
+                }
+                adapterPreferredLocation?.setData(cityList)
             }
-            tv_earning_client_activation.text = Html.fromHtml(it?.payoutNote)
+            tv_earning_client_activation.text = Html.fromHtml(it.payoutNote)
             ll_role_desc.removeAllViews()
             it.queries?.forEach { element ->
                 val viewRoleDesc = layoutInflater.inflate(R.layout.layout_role_description, null)
@@ -288,25 +270,33 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 ll_role_desc.addView(viewRoleDesc)
 
             }
-
-            adapterBulletPoints.addData(it?.info!!)
-
+            if (it.info!!.isEmpty()){
+                divider_one.gone()
+                divider_four.gone()
+                rv_bullet_points.gone()
+            }
+            else{
+                divider_one.visible()
+                rv_bullet_points.visible()
+                adapterBulletPoints.addData(it.info!!)
+                divider_four.visible()
+            }
 
             learning_cl.visible()
-            textView120.text = it?.requiredMedia?.title
-            if (!it?.requiredMedia?.icon.isNullOrEmpty()) {
-                GlideApp.with(requireContext())
-                        .load(it?.requiredMedia?.icon)
-                        .placeholder(getCircularProgressDrawable())
-                        .into(imageView36)
+            textView120.text = it.requiredMedia?.title
+            if (!it.requiredMedia?.icon.isNullOrEmpty()) {
+                Glide.with(requireContext())
+                    .load(it.requiredMedia?.icon)
+                    .placeholder(getCircularProgressDrawable())
+                    .into(imageView36)
 
             } else {
                 imageView36.setImageResource(R.drawable.ic_play_gradient)
             }
-            initializeLearningModule(it?.requiredMedia?.media ?: listOf())
+            initializeLearningModule(it.requiredMedia?.media ?: listOf())
 
 
-            viewModel.getApplication(it?.profileId ?: "")
+            viewModel.getApplication(it.profileId)
 
         })
         viewModel.observableAddInterest.observe(viewLifecycleOwner, Observer {
@@ -350,26 +340,22 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     else
                         tv_applied_client_activation.visible()
                     tv_applied_client_activation.text =
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
-                    tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                            if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-                            0,
-                            0,
-                            0
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
+                    status_icon.setImageDrawable(
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) resources.getDrawable(R.drawable.ic_status_pending) else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") resources.getDrawable(R.drawable.ic_applied) else resources.getDrawable(R.drawable.ic_application_rejected)
                     )
                     activity?.applicationContext?.let {
-
                         tv_applied_client_activation.setTextColor(
                             ContextCompat.getColor(
                                 it,
-                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Pre-Approved" || jpApplication.status == "Approved") R.color.activated_color else R.color.rejected_color
+                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) R.color.pending_color else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") R.color.activated_color else R.color.rejected_color
                             )
                         )
                     }
                     var actionButtonText =
-                            if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
-                                    R.string.complete_activation
-                            ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
+                        if (jpApplication.status == "Interested") getString(R.string.complete_application) else if (jpApplication.status == "Inprocess") getString(
+                            R.string.complete_activation
+                        ) else if (jpApplication.status == "") getString(R.string.apply_now) else ""
                     if (actionButtonText == "")
                         tv_mark_as_interest_role_details.gone()
                     else
@@ -390,19 +376,17 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private fun setupPreferredLocationRv() {
 
 
-        adapterPreferredLocation = AdapterPreferredLocation()
+        adapterPreferredLocation = context?.let { ActiveLocationsAdapter(it) }
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
 
-        val layoutManager = FlexboxLayoutManager(requireContext())
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.FLEX_START
-        layoutManager.alignItems = AlignItems.FLEX_START
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rv_preferred_locations_client_activation.layoutManager = layoutManager
         rv_preferred_locations_client_activation.addItemDecoration(
-                HorizontaltemDecoration(
-                        requireContext(),
-                        R.dimen.size_11
-                )
+            HorizontaltemDecoration(
+                requireContext(),
+                R.dimen.size_11
+            )
         )
 
     }
@@ -431,10 +415,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     private fun showErrorWhileLoadingCourse(error: String) {
 
-        learning_cl.visible()
+        learning_cl.gone()
         learning_progress_bar.gone()
         learning_rv.gone()
-        learning_learning_error.visible()
+        learning_learning_error.gone()
 
         learning_learning_error.text = error
     }
@@ -563,10 +547,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
                 override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
                     return LessonViewHolder(
-                            view,
-                            activity,
-                            this@ClientActivationFragment,
-                            viewModel
+                        view,
+                        activity,
+                        this@ClientActivationFragment,
+                        viewModel
                     )
                 }
 //            val layoutManager = LinearLayoutManager(context)
@@ -584,60 +568,54 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         }
     }
 
-        override fun onSaveInstanceState(outState: Bundle) {
-            super.onSaveInstanceState(outState)
-            outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
-            outState.putBoolean(
-                    StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
-                    mClientViaDeeplink ?: false
-            )
-            outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
-            outState.putBoolean(
-                    StringConstants.AUTO_REDIRECT_TO_APPL.value,
-                    mRedirectToApplication ?: false
-            )
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
+        outState.putBoolean(
+            StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value,
+            mClientViaDeeplink ?: false
+        )
+        outState.putString(StringConstants.INVITE_USER_ID.value, mInviteUserID)
+        outState.putBoolean(
+            StringConstants.AUTO_REDIRECT_TO_APPL.value,
+            mRedirectToApplication ?: false
+        )
 
 
-        }
+    }
 
 
-        fun buildDeepLink(deepLink: Uri): Uri {
-            val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                    .setLink(Uri.parse(deepLink.toString()))
-                    .setDomainUriPrefix(buildConfig.getReferralBaseUrl())//BuildConfig.REFERRAL_BASE_URL
-                    // Open links with this app on Android
-                    .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-                    // Open links with com.example.ios on iOS
-                    .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
-                    .setSocialMetaTagParameters(
-                            DynamicLink.SocialMetaTagParameters.Builder()
-                                    .setTitle("Gigforce")
-                                    .setDescription("Flexible work and learning platform")
-                                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
-                                    .build()
-                    ).buildDynamicLink()
+    fun buildDeepLink(deepLink: Uri): Uri {
+        val dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(deepLink.toString()))
+            .setDomainUriPrefix(buildConfig.getReferralBaseUrl())//BuildConfig.REFERRAL_BASE_URL
+            // Open links with this app on Android
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            // Open links with com.example.ios on iOS
+            .setIosParameters(DynamicLink.IosParameters.Builder("com.gigforce.ios").build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle("Gigforce")
+                    .setDescription("Flexible work and learning platform")
+                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/gig4ce-app.appspot.com/o/app_assets%2Fgigforce.jpg?alt=media&token=f7d4463b-47e4-4b8e-9b55-207594656161"))
+                    .build()
+            ).buildDynamicLink()
 
-            return dynamicLink.uri
-        }
+        return dynamicLink.uri
+    }
 
     fun shareToAnyApp(url: String) {
-
-        eventTracker.pushEvent(TrackingEventArgs(
-                eventName = ClientActivationEvents.USER_TAPPED_ON_SHARE,
-                props = null
-        ))
-
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
             shareIntent.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    getString(R.string.app_name)
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.app_name)
             )
             val shareMessage = getString(R.string.looking_for_dynamic_working_hours) + " " + url
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             val bitmap =
-                    BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
+                BitmapFactory.decodeResource(requireContext().resources, R.drawable.bg_gig_type)
 
             //save bitmap to app cache folder
 
@@ -649,11 +627,11 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             outPutStream.close()
             outputFile.setReadable(true, false)
             shareIntent.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().packageName + ".provider",
                     outputFile
-            )
+                )
             )
             startActivity(Intent.createChooser(shareIntent, "choose one"))
         } catch (e: Exception) {
@@ -662,11 +640,13 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         pb_client_activation.gone()
     }
 
+
     var locationUpdates: LocationUpdates? = LocationUpdates()
     var location: Location? = null
+
     override fun onDestroy() {
         super.onDestroy()
-        locationUpdates?.stopLocationUpdates(activity)
+        locationUpdates?.stopLocationUpdates(requireActivity())
     }
 
     override fun onResume() {
@@ -691,7 +671,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 ?.let {
                     navigation.popAllBackStates()
                     it.performClick()
-                    locationUpdates?.stopLocationUpdates(context = activity)
+                    locationUpdates?.stopLocationUpdates(requireActivity())
                 }
 
 
@@ -703,16 +683,6 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     fun markAsInterestClick(jpApplication: JpApplication?) {
         if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
-
-            eventTracker.pushEvent(TrackingEventArgs(
-                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
-                    props = null
-            ))
-            eventTracker.pushEvent(TrackingEventArgs(
-                eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
-                props = null
-            ))
-
             if (mClientViaDeeplink == true) {
                 if (location == null) {
                     showToast(getString(R.string.set_location_to_high_accuracy))
@@ -730,8 +700,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             } else {
                 navigation.navigateTo(
                     "client_activation/applicationClientActivation", bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
-                        StringConstants.JOB_PROFILE_TITLE.value to viewModel.observableJobProfile.value?.title
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
                     )
                 )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
