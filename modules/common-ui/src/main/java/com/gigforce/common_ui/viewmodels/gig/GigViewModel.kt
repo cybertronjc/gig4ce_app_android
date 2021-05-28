@@ -136,14 +136,14 @@ class GigViewModel constructor(
 
         try {
             gigsRepository.markCheckIn(
-                gigId = gigId,
-                latitude = latitude,
-                longitude = longitude,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkInTime = Timestamp.now(),
-                checkInTimeAccToUser = checkInTimeAccToUser,
-                remarks = remarks
+                    gigId = gigId,
+                    location = location,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkInTime = Timestamp.now(),
+                    checkInTimeAccToUser = checkInTimeAccToUser,
+                    remarks = remarks,
+                    distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.postValue(Lce.content(AttendanceType.CHECK_IN))
 //            _markingAttendanceState.postValue(null)
@@ -154,26 +154,26 @@ class GigViewModel constructor(
     }
 
     private suspend fun markCheckOut(
-        gigId: String,
-        latitude: Double,
-        longitude: Double,
-        locationPhysicalAddress: String,
-        image: String,
-        checkOutTimeAccToUser: Timestamp?,
-        remarks: String?
+            gigId: String,
+            location: Location?,
+            distanceBetweenGigAndUser : Float,
+            locationPhysicalAddress: String,
+            image: String,
+            checkOutTimeAccToUser: Timestamp?,
+            remarks: String?
     ) {
         _markingAttendanceState.postValue(Lce.loading())
 
         try {
             gigsRepository.markCheckOut(
-                gigId = gigId,
-                latitude = latitude,
-                longitude = longitude,
-                locationPhysicalAddress = locationPhysicalAddress,
-                image = image,
-                checkOutTime = Timestamp.now(),
-                checkOutTimeAccToUser = checkOutTimeAccToUser,
-                remarks = remarks
+                    gigId = gigId,
+                    location = location,
+                    locationPhysicalAddress = locationPhysicalAddress,
+                    image = image,
+                    checkOutTime = Timestamp.now(),
+                    checkOutTimeAccToUser = checkOutTimeAccToUser,
+                    remarks = remarks,
+                    distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
 //            _markingAttendanceState.value = null
@@ -339,6 +339,15 @@ class GigViewModel constructor(
                         } else {
                             ""
                         }
+                }
+            }
+
+            if(shouldGetContactdetails){
+                val location = gigsRepository.getGigLocationFromGigOrder(gig.gigOrderId)
+                location?.let {
+
+                    gig.latitude = it.latitude
+                    gig.longitude = it.longitude
                 }
             }
 

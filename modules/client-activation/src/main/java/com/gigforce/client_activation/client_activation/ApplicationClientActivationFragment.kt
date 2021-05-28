@@ -45,6 +45,7 @@ class ApplicationClientActivationFragment : Fragment(),
     }
     private lateinit var mJobProfileId: String
     private var win: Window? = null
+    private lateinit var mJobProfileTitle: String
 
 
     override fun onCreateView(
@@ -97,6 +98,13 @@ class ApplicationClientActivationFragment : Fragment(),
         tv_action_application_client_activation.setOnClickListener {
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_SUBMITTED_APPLICATION,
+                    props = mapOf(
+                            "id" to mJobProfileId,
+                            "title" to bussinessTitle
+                    )
+            ))
             eventTracker.pushEvent(
                 TrackingEventArgs(
                     eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
@@ -301,12 +309,12 @@ class ApplicationClientActivationFragment : Fragment(),
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
 
         arguments?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
     }
 
