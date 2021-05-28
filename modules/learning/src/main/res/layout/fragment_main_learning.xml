@@ -57,13 +57,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/learning_recommendation_layout"
-            layout="@layout/fragment_main_learning_recommended_learnings"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+<!--        <include-->
+<!--            android:id="@+id/learning_recommendation_layout"-->
+<!--            layout="@layout/fragment_main_learning_recommended_learnings"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content" />-->
 
         <include
             android:id="@+id/explore_learnings_layout"

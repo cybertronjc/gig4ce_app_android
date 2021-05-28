@@ -35,11 +35,6 @@
             layout="@layout/horizontal_place_holders"
             android:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:visibility="gone" />
 
         <com.gigforce.core.recyclerView.CoreRecyclerView
             android:id="@+id/explore_learnings_rv"

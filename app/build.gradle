@@ -18,7 +18,7 @@ android {
         }
 
         production {
-            storeFile file('/Users/apple/Documents/gigforce-upload.jks')
+            storeFile file('../keystore/gigforce-upload.jks')
             storePassword 'gig4ce'
             keyAlias 'PlayStoreUploadKey'
             keyPassword 'gig4ce'

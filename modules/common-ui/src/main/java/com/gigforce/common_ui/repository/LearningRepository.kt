@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.repository
 
 //import com.gigforce.common_ui.viewdatamodels.models.*
+import android.util.Log
 import com.gigforce.common_ui.datamodels.CourseProgress
 import com.gigforce.common_ui.datamodels.datamodels.UserInterestsAndRolesDM
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
@@ -11,6 +12,7 @@ import com.gigforce.common_ui.viewdatamodels.models.SlideContentRemote
 import com.gigforce.common_ui.viewdatamodels.models.progress.CourseMapping
 import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
+import com.gigforce.common_ui.viewmodels.LearningViewModel
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ModuleProgress
 //import com.gigforce.common_ui.viewdatamodels.models.progress.ProgressConstants
 import com.gigforce.core.datamodels.learning.LessonProgress
@@ -99,8 +101,9 @@ class LearningRepository : BaseFirestoreDBRepository() {
             if (companies.isEmpty())
                 cont.resume(emptyList())
             else {
+                val courseCompanyMappingsCollection = db.collection("Course_company_mapping")
 
-                db.collection("Course_company_mapping")
+
                     .whereIn("companyId", companies)
                     .whereEqualTo("courseId", courseId)
                     .get()
@@ -202,12 +205,18 @@ class LearningRepository : BaseFirestoreDBRepository() {
 
 
     private suspend fun doesCourseFullFillsCondition(it: Course): Boolean {
+        Log.d(TAG, "doesCourseFullFillsCondition() : checking course ${it.id} with userMappings..")
+
         if (it.isOpened) {
+
+            Log.d(TAG, "doesCourseFullFillsCondition() : course ${it.id} is opened for all returning true ")
             return true
         } else {
 
+            Log.d(TAG, "doesCourseFullFillsCondition() : course ${it.id} getting course-company mappings ...")
             val courseAndMappings = getCourseCompanyMappings(it.id)
 
+            Log.d(TAG, "doesCourseFullFillsCondition() : course ${it.id} got ${courseAndMappings.size} mappings...")
             if (courseAndMappings.isEmpty()) {
                 return false
             }
@@ -215,21 +224,29 @@ class LearningRepository : BaseFirestoreDBRepository() {
             courseAndMappings.forEach {
 
                 if (it.isopened) {
+
+                    Log.d(TAG, "doesCourseFullFillsCondition() : course ${it.courseId} company mapping is opened for all returning true ")
                     return true
                 }
 
                 if (it.userIdsRequired) {
+                    Log.d(TAG, "doesCourseFullFillsCondition() : checking user id... ")
+
                     val userMatched = it.userUids.contains(getUID())
+                    Log.d(TAG, "doesCourseFullFillsCondition() : user matched $userMatched")
+
                     if (userMatched) return true
                 }
 
 
                 if (it.rolesRequired) {
+                    Log.d(TAG, "doesCourseFullFillsCondition() : checking user roles... ")
 
                     if (mProfile?.role_interests != null) {
                         for (role in mProfile!!.role_interests!!) {
                             for (courseRoles in it.roles) {
                                 if (courseRoles == role.interestID) {
+                                    Log.d(TAG, "doesCourseFullFillsCondition() : roles matched true")
                                     return true
                                 }
                             }
@@ -238,6 +255,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 }
             }
 
+            Log.d(TAG, "doesCourseFullFillsCondition() : no cond in course company matched")
             return false
         }
     }
@@ -551,18 +569,24 @@ class LearningRepository : BaseFirestoreDBRepository() {
     suspend fun getRoleBasedCourses(): List<Course> {
 
         if (mProfile == null) {
+            Log.d(TAG, "getRoleBasedCourses() : profile was empty fetching it")
             mProfile = profileFirebaseRepository.getProfileData()
+
+            Log.d(TAG, "getRoleBasedCourses() : profile fetched")
         }
 
         return getRoleBasedCoursesC().filter {
             it.isActive && doesCourseFullFillsCondition(it)
         }.sortedBy {
             it.priority
+        }.also {
+            Log.d(TAG, "getRoleBasedCourses() : total courses visible to user ${it.size}")
         }
     }
 
 
     private suspend fun getRoleBasedCoursesC(): List<Course> = suspendCoroutine { cont ->
+        Log.d(TAG, "getRoleBasedCoursesC() : strated fetching all courses ...")
         getCollectionReference()
             .whereEqualTo(
                 TYPE,
@@ -570,6 +594,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
             )
             .get()
             .addOnSuccessListener { querySnap ->
+                Log.d(TAG, "getRoleBasedCoursesC() : fetched ${querySnap.size()} courses")
 
                 val courses = querySnap.documents
                     .map {
@@ -581,6 +606,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
                 cont.resume(courses)
             }
             .addOnFailureListener {
+                Log.d(TAG, "getRoleBasedCoursesC() : error fetching courses",it)
                 cont.resumeWithException(it)
             }
     }
@@ -647,7 +673,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getModuleLessonsC(courseId, moduleId).filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive /*&& doesLessonFullFillsCondition(it)*/
         }
     }
 
@@ -660,7 +686,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getModuleLessonsC(moduleId).filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive /*&& doesLessonFullFillsCondition(it)*/
         }.sortedBy { it.priority }
     }
 
@@ -768,7 +794,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getModuleAssessmentsC(courseId, moduleId).filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive /*&& doesLessonFullFillsCondition(it)*/
         }
     }
 
@@ -946,7 +972,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getAssessmentsFromAllCoursesC().filter {
-            it.isActive && doesLessonFullFillsCondition(it)
+            it.isActive /*&& doesLessonFullFillsCondition(it)*/
         }
     }
 
@@ -984,7 +1010,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getModulesFromAllCoursesC().filter {
-            it.isActive && doesModuleFullFillsCondition(it)
+            it.isActive /*&& doesModuleFullFillsCondition(it)*/
         }
     }
 
@@ -1059,7 +1085,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
         }
 
         return getModulesC(courseId).filter {
-            it.isActive && doesModuleFullFillsCondition(it)
+            it.isActive /*&& doesModuleFullFillsCondition(it)*/
         }.sortedBy { it.priority }
     }
 
@@ -1380,6 +1406,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
     }
 
     companion object {
+        private const val TAG = "LearningRepository"
         private const val COLLECTION_NAME = "Course_blocks"
         private const val COURSE_PROGRESS_NAME = "Course_Progress"
         private const val COLLECTION_LESSON_FEEDBACK = "Course_lesson_feedback"
