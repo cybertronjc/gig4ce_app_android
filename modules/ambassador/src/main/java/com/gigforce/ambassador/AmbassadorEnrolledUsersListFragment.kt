@@ -92,7 +92,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                 enrolledUserAdapter.filter.filter("")
             } else {
                 isEnabled = false
-                activity?.onBackPressed()
+//                activity?.onBackPressed()
+                navigation.popBackStack()
             }
         }
     }
@@ -180,7 +181,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                     hideSoftKeyboard()
                     enrolledUserAdapter.filter.filter("")
                 } else {
-                    activity?.onBackPressed()
+                    //activity?.onBackPressed()
+                    navigation.popBackStack()
                 }
             })
         }

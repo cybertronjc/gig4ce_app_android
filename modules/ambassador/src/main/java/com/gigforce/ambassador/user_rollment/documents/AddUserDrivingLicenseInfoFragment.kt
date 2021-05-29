@@ -429,10 +429,11 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         photoCropIntent.putExtra("folder", "verification")
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
-        startActivityForResult(
-            photoCropIntent,
-            REQUEST_CODE_UPLOAD_DL
-        )
+        navigation.navigateToPhotoCrop(photoCropIntent, REQUEST_CODE_UPLOAD_DL,requireContext(),this)
+//        startActivityForResult(
+//            photoCropIntent,
+//            REQUEST_CODE_UPLOAD_DL
+//        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

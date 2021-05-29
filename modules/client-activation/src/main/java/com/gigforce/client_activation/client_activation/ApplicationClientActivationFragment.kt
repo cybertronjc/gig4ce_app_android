@@ -229,7 +229,7 @@ class ApplicationClientActivationFragment : Fragment(),
                     }
                     "about_me" -> {
                         navigation.navigateTo(
-                                "learning/addBio", bundleOf(
+                                "profile/addBio", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                         )
