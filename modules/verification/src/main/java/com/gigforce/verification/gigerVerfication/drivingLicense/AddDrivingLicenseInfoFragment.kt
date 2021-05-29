@@ -110,8 +110,9 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         toolbar.apply {
             hideActionMenu()
             showTitle(getString(R.string.giger_verification))
-            navigation.popBackStack("verification/main",inclusive = false)
+
             setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
             })
         }
 
@@ -254,7 +255,7 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
-                    dlSubmitSliderBtn.isEnabled = true
+                    dlSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()

@@ -305,7 +305,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
                     setDataOnEditLayout(bankDetailsDataModel)
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
-                    passbookSubmitSliderBtn.isEnabled = true
+                    passbookSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()

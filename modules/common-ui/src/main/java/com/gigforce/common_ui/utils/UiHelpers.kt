@@ -12,9 +12,10 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 
-fun getScreenWidth(ctx: Activity): Size {
+fun getScreenWidth(ctx: FragmentActivity): Size {
     val displayMetrics = DisplayMetrics()
     ctx.windowManager.defaultDisplay.getMetrics(displayMetrics)
     return Size(displayMetrics.widthPixels, displayMetrics.heightPixels)

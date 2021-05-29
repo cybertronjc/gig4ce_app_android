@@ -18,12 +18,16 @@ import com.gigforce.core.AppConstants
 import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
 import com.gigforce.core.datamodels.profile.ProfileData
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.*
+import kotlinx.android.synthetic.main.fragment_profile_education_expanded.nav_bar
 import kotlinx.android.synthetic.main.fragment_profile_education_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
+
 
 class EducationExpandedFragment : ProfileBaseFragment() {
 
@@ -195,6 +199,11 @@ class EducationExpandedFragment : ProfileBaseFragment() {
         education_top_profile.about_me_verification_layout.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
         }
+
+        education_top_profile.back_button.setOnClickListener {
+            activity?.onBackPressed()
+        }
+
     }
 
 

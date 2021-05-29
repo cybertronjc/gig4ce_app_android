@@ -15,13 +15,17 @@ import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.core.AppConstants.INTENT_EXTRA_ACTION
 import com.gigforce.core.AppConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_profile_about_expanded.*
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.*
+import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.nav_bar
 import kotlinx.android.synthetic.main.fragment_profile_experience_expanded.view.*
 import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ExperienceExpandedFragment : ProfileBaseFragment() {
 
@@ -149,6 +153,10 @@ class ExperienceExpandedFragment : ProfileBaseFragment() {
 
         experience_top_profile.about_me_verification_layout.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
+        }
+
+        experience_top_profile.back_button.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 }

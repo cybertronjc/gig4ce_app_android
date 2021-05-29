@@ -1,5 +1,6 @@
 package com.gigforce.giger_gigs.gighistory
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
-class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterGigHistory(
+        private val activity: Context
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var adapter: AdapterOnGoingGigs? = null
     private var callbacks: AdapterGigHistoryCallbacks? = null
     private var onGoingGigs: MutableList<Gig>? = ArrayList<Gig>()
@@ -90,7 +93,7 @@ class AdapterGigHistory : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     viewHolderOnGoings.itemView.tv_on_going_gigs_gig_hist.visibility =
                         if (it) View.GONE else View.VISIBLE
                 }
-                adapter = AdapterOnGoingGigs()
+                adapter = AdapterOnGoingGigs(activity)
 
                 viewHolderOnGoings.itemView.rv_on_going_gigs_gig_hist.adapter = adapter
                 if (horizontalItemDecoration == null) {

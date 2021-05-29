@@ -893,7 +893,7 @@ class BSCalendarScreenFragment : Fragment() {
 
     private fun initializeFeaturesBottomSheet() {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
-        datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "mygig"))
+        datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "gig/mygig"))
         datalist.add(
             FeatureModel(
                 "Wallet",

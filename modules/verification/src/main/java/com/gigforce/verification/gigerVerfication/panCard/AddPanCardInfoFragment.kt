@@ -168,7 +168,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
 
                     setDataOnEditLayout(panCardDataModel)
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
-                    panSubmitSliderBtn.isEnabled = true
+                    panSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
