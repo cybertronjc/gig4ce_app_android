@@ -48,6 +48,14 @@ class EventTrackerImp @Inject constructor(
                 "user_id" to userId
         ))
         appsFlyerLib.setCustomerIdAndTrack(userId, context.applicationContext)
+
+        //branch to mixpanel
+        mixpanel?.distinctId?.let {
+            Branch.getInstance().setRequestMetadata(
+                "\$mixpanel_distinct_id",
+                it
+            )
+        }
     }
 
     override fun setUserProperty(props: Map<String, Any>) {
@@ -105,6 +113,8 @@ class EventTrackerImp @Inject constructor(
 
         // Branch object initialization
         Branch.getAutoInstance(context);
+
+
     }
 
     private fun setUpAppsFlyer() {
