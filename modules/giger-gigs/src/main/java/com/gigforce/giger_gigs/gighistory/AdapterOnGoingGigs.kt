@@ -1,10 +1,12 @@
 package com.gigforce.giger_gigs.gighistory
 
 import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 //import com.gigforce.app.R
 import com.gigforce.core.datamodels.gigpage.Gig
@@ -18,7 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.layout_rv_gig_details_gig_history.view.*
 import java.text.SimpleDateFormat
 
-class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>() {
+class AdapterOnGoingGigs(
+        private val activity: Context
+) : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>() {
     private var callbacks: AdapterOnGoingGigCallbacks? = null
     private var onGoingGigs: MutableList<Gig>? = ArrayList<Gig>()
     private val timeFormatter = SimpleDateFormat("hh.mm aa")
@@ -53,7 +57,7 @@ class AdapterOnGoingGigs : RecyclerView.Adapter<AdapterOnGoingGigs.ViewHolder>()
         params.leftMargin = 0
         params.rightMargin = 0
         params.bottomMargin = holder.size16
-        params.width = getScreenWidth(holder.itemView.context as Activity).width - holder.size24
+        params.width = getScreenWidth(activity as FragmentActivity).width - holder.size24
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         holder.itemView.cl_ongoing_gigs.layoutParams = params
 

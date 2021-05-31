@@ -241,7 +241,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
                     setDataOnEditLayout(aadharCardDataModel)
                     aadharAvailaibilityOptionRG.check(R.id.aadharYesRB)
-                    aadharSubmitSliderBtn.isEnabled = true
+                    aadharSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()

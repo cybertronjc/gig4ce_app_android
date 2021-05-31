@@ -55,7 +55,7 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
         ViewModelProvider(this, viewModelFactory).get(GigHistoryViewModel::class.java)
     }
     private val adapter by lazy {
-        AdapterGigHistory()
+        activity?.let { AdapterGigHistory(it) }
     }
 
 
@@ -115,7 +115,7 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
     private fun setupRecycler() {
         rv_gigs_gig_history.adapter = adapter
 
-        adapter.setCallbacks(this)
+        adapter?.setCallbacks(this)
         val layoutManager = LinearLayoutManager(activity)
         rv_gigs_gig_history.layoutManager = layoutManager
 //        rv_gigs_gig_history.addItemDecoration(
@@ -153,14 +153,14 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
         })
         viewModel.observableOnGoingGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addOnGoingGigs(
+            adapter?.addOnGoingGigs(
                 it?.data,
                 viewModel.observableScheduledGigs.value != null && viewModel.observableScheduledGigs.value!!.data != null && viewModel.observableScheduledGigs.value?.data?.isNotEmpty()!!
             )
         })
         viewModel.observableScheduledGigs.observe(viewLifecycleOwner, Observer {
             viewModel.showProgress(false)
-            adapter.addScheduledGigs(it?.data)
+            adapter?.addScheduledGigs(it?.data)
             viewModel.isLoading = false
         })
         viewModel.observableShowExplore.observe(viewLifecycleOwner, Observer {
@@ -172,7 +172,7 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
             showToast(it!!)
         })
         viewModel.observableDocChange.observe(viewLifecycleOwner, Observer {
-            adapter.handleDocChange(it)
+            adapter?.handleDocChange(it)
         })
 
         var viewModelProfile = ViewModelProvider(this).get(ProfileViewModel::class.java)
@@ -191,7 +191,7 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
     override fun showNoGigExists(int: Int) {
         no_gigs_layout.visibility = int
 
-        if (adapter.getOngoingGigsCount() != 0) {
+        if (adapter?.getOngoingGigsCount() != 0) {
 
         } else {
 
@@ -199,12 +199,12 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
     }
 
     override fun getPastGigs() {
-        adapter.clearData()
+        adapter?.clearData()
         viewModel.getGigs(pastGigs = true, resetPageCount = true)
     }
 
     override fun getUpcomingGigs() {
-        adapter.clearData()
+        adapter?.clearData()
         viewModel.getGigs(pastGigs = false, resetPageCount = true)
 
     }

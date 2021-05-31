@@ -37,7 +37,6 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("referrals", R.id.referrals_fragment)
         this.registerRoute("login", R.id.Login)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
-        this.registerRoute("profile", R.id.profileFragment)
         this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
@@ -70,6 +69,7 @@ class NavManagerImpl @Inject constructor(
         NavForWalletModule(this)
         NavForPreferencesModule(this)
         NavUserDetailsInfo(this)
+        NavForProfileModule(this)
     }
 
     private fun registerForWalletAndPayouts() {

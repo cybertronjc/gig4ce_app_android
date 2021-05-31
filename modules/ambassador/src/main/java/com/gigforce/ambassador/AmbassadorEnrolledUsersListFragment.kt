@@ -82,20 +82,21 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
     var isEditingDetails = false
 
-    private val onBackPressCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            Log.d("TAg", "Back preseed")
-
-            if (toolbar_layout.isSearchCurrentlyShown) {
-                hideSoftKeyboard()
-                toolbar_layout.hideSearchOption()
-                enrolledUserAdapter.filter.filter("")
-            } else {
-                isEnabled = false
-                activity?.onBackPressed()
-            }
-        }
-    }
+//    private val onBackPressCallback = object : OnBackPressedCallback(true) {
+//        override fun handleOnBackPressed() {
+//            Log.d("TAg", "Back preseed")
+//
+//            if (toolbar_layout.isSearchCurrentlyShown) {
+//                hideSoftKeyboard()
+//                toolbar_layout.hideSearchOption()
+//                enrolledUserAdapter.filter.filter("")
+//            } else {
+//                isEnabled = false
+////                activity?.onBackPressed()
+//                navigation.popBackStack()
+//            }
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,11 +113,11 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     }
 
     private fun initUi() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            onBackPressCallback
-        )
-        onBackPressCallback.isEnabled = true
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            viewLifecycleOwner,
+////            onBackPressCallback
+//        )
+//        onBackPressCallback.isEnabled = true
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
@@ -176,12 +177,14 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             })
 
             setBackButtonListener(View.OnClickListener {
-                if (toolbar_layout.isSearchCurrentlyShown) {
-                    hideSoftKeyboard()
-                    enrolledUserAdapter.filter.filter("")
-                } else {
-                    activity?.onBackPressed()
-                }
+//                if (toolbar_layout.isSearchCurrentlyShown) {
+//                    hideSoftKeyboard()
+//                    enrolledUserAdapter.filter.filter("")
+//                } else {
+//                    //activity?.onBackPressed()
+//                    navigation.popBackStack()
+//                }
+                activity?.onBackPressed()
             })
         }
 
@@ -346,17 +349,26 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     }
 
     override fun onBackPressed(): Boolean {
+        if (toolbar_layout.isSearchCurrentlyShown) {
+            hideSoftKeyboard()
+            toolbar_layout.hideSearchOption()
+            enrolledUserAdapter.filter.filter("")
+            return true
+        } else {
+//            try {
+//                navigation.getBackStackEntry("main_home_screen")
+//                navigation.popBackStack("mainHomeScreen",false)
+////            findNavController().getBackStackEntry(R.id.mainHomeScreen)
+////            findNavController().popBackStack(R.id.mainHomeScreen, false)
+//            } catch (e: Exception) {
+//                navigation.popBackStack("landinghomefragment",false)
+////            findNavController().popBackStack(R.id.landinghomefragment, false)
+//            }
 
-        try {
-            navigation.getBackStackEntry("main_home_screen")
-            navigation.popBackStack("mainHomeScreen",false)
-//            findNavController().getBackStackEntry(R.id.mainHomeScreen)
-//            findNavController().popBackStack(R.id.mainHomeScreen, false)
-        } catch (e: Exception) {
-            navigation.popBackStack("landinghomefragment",false)
-//            findNavController().popBackStack(R.id.landinghomefragment, false)
+            return false
+
         }
-        return true
+
     }
 
     override fun onUserClicked(enrolledUser: EnrolledUser) {

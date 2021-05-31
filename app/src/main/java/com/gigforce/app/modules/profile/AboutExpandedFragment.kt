@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.profile_card_background.view.*
 import kotlinx.android.synthetic.main.top_profile_bar.view.*
 import kotlinx.android.synthetic.main.verified_button.view.*
 
-@AndroidEntryPoint
+
 class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
         AddContactBottomSheetFragment.AddContactBottomSheetCallbacks {
     companion object {
@@ -312,6 +312,10 @@ class AboutExpandedFragment : ProfileBaseFragment(), ProfileCardBgCallbacks,
 
         about_top_profile.about_me_verification_layout.setOnClickListener {
             navigate(R.id.gigerVerificationFragment)
+        }
+
+        about_top_profile.back_button.setOnClickListener {
+            activity?.onBackPressed()
         }
 
     }
