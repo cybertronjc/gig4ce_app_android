@@ -37,6 +37,7 @@ import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
 import com.gigforce.common_ui.viewdatamodels.client_activation.Media
+import com.gigforce.core.IEventTracker
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
@@ -78,6 +79,9 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private var adapterPreferredLocation: ActiveLocationsAdapter? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
     private lateinit var window: Window
+    private lateinit var mJobProfileTitle: String
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     @Inject
     lateinit var navigation: INavigation
@@ -238,6 +242,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer { it ->
             if (it == null) return@Observer
             if (it.info == null) return@Observer
+
+            val id = it.id ?: ""
+            val eventName = it.title ?: ""
+            mJobProfileTitle = it.title ?: ""
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
+                props = mapOf(
+                    "id" to id,
+                    "title" to eventName
+                )
+            ))
 
             Glide.with(this).load(it.coverImg).placeholder(
                 ShimmerHelper.getShimmerDrawable()
@@ -605,6 +621,12 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     }
 
     fun shareToAnyApp(url: String) {
+
+        eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.USER_TAPPED_ON_SHARE,
+                props = null
+        ))
+
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "image/png"
@@ -683,6 +705,16 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     fun markAsInterestClick(jpApplication: JpApplication?) {
         if (jpApplication == null || jpApplication.status == "" || jpApplication.status == "Interested") {
+
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                    props = null
+            ))
+            eventTracker.pushEvent(TrackingEventArgs(
+                eventName = ClientActivationEvents.USER_TAPPED_ON_INTRESTED,
+                props = null
+            ))
+
             if (mClientViaDeeplink == true) {
                 if (location == null) {
                     showToast(getString(R.string.set_location_to_high_accuracy))
