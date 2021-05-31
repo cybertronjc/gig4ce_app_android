@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="170dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toEndOf="@id/roleBasedLearningIV"
         app:layout_constraintTop_toBottomOf="@id/roleBasedLearningTV">
 
@@ -42,20 +43,11 @@
             layout="@layout/horizontal_place_holders"
             android:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
-            android:visibility="gone"
-
-            />
 
         <com.gigforce.core.recyclerView.CoreRecyclerView
             android:id="@+id/learning_based_role_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:visibility="gone"/>
 
@@ -67,6 +59,7 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
+            android:visibility="gone"
             android:text="Unable to load your stuff" />
 
     </FrameLayout>
