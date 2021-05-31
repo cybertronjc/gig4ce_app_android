@@ -26,20 +26,24 @@ fun Fragment.startShimmer(
     ll_shimmer.visible()
     ll_shimmer.orientation = shimmerModel.orientation
     for (i in 0 until shimmerModel.itemsToBeDrawn) {
-        val view = LayoutInflater.from(requireContext()).inflate(shimmerModel.cardRes, null)
-        ll_shimmer.addView(view)
-        val layoutParams: LinearLayout.LayoutParams =
-            view.layoutParams as LinearLayout.LayoutParams
-        layoutParams.height = shimmerModel.minHeight.dp2Px
-        layoutParams.width = shimmerModel.minWidth.dp2Px
-        layoutParams.setMargins(
-            shimmerModel.marginLeft.dp2Px,
-            shimmerModel.marginTop.dp2Px, shimmerModel.marginRight.dp2Px,
-            shimmerModel.marginBottom.dp2Px
+        val view = LayoutInflater.from(requireContext()).inflate(
+                shimmerModel.cardRes,
+                null
         )
+
+        ll_shimmer.addView(view)
+        val layoutParams: LinearLayout.LayoutParams = view.layoutParams as LinearLayout.LayoutParams
+        layoutParams.height = resources.getDimensionPixelSize(shimmerModel.minHeight)
+        layoutParams.width = resources.getDimensionPixelSize(shimmerModel.minWidth)
+        layoutParams.setMargins(resources.getDimensionPixelSize(shimmerModel.marginLeft),
+                resources.getDimensionPixelSize(shimmerModel.marginTop),
+                resources.getDimensionPixelSize(shimmerModel.marginRight),
+                resources.getDimensionPixelSize(shimmerModel.marginBottom)
+        )
+
         view.layoutParams = layoutParams
         val shimmerLayout = view.findViewById<ShimmerFrameLayout>(shimmerId)
-        shimmerLayout?.startShimmer()//startShimmerAnimation()
+        shimmerLayout?.startShimmer()
     }
 }
 

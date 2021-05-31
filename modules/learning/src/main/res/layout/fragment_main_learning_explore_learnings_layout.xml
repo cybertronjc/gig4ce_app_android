@@ -50,6 +50,7 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
+            android:visibility="gone"
             tools:text="Unable to load your stuff" />
 
     </FrameLayout>
