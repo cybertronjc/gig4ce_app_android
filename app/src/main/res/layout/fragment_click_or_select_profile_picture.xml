@@ -23,7 +23,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Upload Profile Photo " />
+        android:text="Upload Photo" />
 
     <LinearLayout
         android:id="@+id/remove_profile_pic"
@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="vertical"
         android:paddingEnd="@dimen/size_24"
         app:layout_constraintStart_toStartOf="parent"

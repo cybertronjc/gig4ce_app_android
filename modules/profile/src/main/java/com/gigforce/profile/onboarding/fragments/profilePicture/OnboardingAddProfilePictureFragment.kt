@@ -181,6 +181,7 @@ class OnboardingAddProfilePictureFragment() : Fragment(), ImageCropCallback, Onb
                                 skip_edit_textview.text = "Change"
                             } else {
                                 skip_edit_textview.text = "Skip"
+
                             }
 
                             formCompletionListener?.checkForButtonText()

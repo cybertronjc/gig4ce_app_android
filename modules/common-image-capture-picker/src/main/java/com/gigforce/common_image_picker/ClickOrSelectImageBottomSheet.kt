@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.gigforce.common_ui.StringConstants
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_click_or_select_profile_picture.*
 
 
 class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
@@ -37,6 +38,8 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
             listener?.onPickImageThroughCameraClicked()
             dismiss()
         }
+
+
     }
 
     companion object {
