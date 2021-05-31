@@ -13,6 +13,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.chat.ChatRepository
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.VideoInfo
+import com.gigforce.common_ui.core.ChatConstants
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
@@ -23,10 +30,7 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
-import com.gigforce.modules.feature_chat.repositories.ChatRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -545,10 +549,10 @@ class ChatPageViewModel constructor(
 
     @Suppress("DEPRECATION")
     fun sendNewVideoMessage(
-        context: Context,
-        text: String = "",
-        videoInfo: VideoInfo,
-        uri: Uri
+            context: Context,
+            text: String = "",
+            videoInfo: VideoInfo,
+            uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -558,7 +562,7 @@ class ChatPageViewModel constructor(
             }
 
             val thumbnailForUi =
-                videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
+                videoInfo.thumbnail?.copy(videoInfo.thumbnail?.config, videoInfo.thumbnail?.isMutable ?: false)
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 headerId = headerId,
