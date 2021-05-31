@@ -24,7 +24,7 @@ import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.getScreenWidth
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation

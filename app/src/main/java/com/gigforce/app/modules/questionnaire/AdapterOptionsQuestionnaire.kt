@@ -11,8 +11,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.client_activation.client_activation.models.Cities
 import com.gigforce.client_activation.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.Questions
@@ -85,7 +85,7 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
         val option = item.options[position]
         when (getItemViewType(position)) {
             TYPE_TEXT -> {
-                holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4 else R.drawable.border_27979797_rad_4)
+                holder.itemView.tv_answer_questionnaire.setBackgroundResource(if (item.selectedAnswer == position) R.drawable.border_lipstick_rad_4  else R.drawable.border_27979797_rad_4)
                 holder.itemView.tv_answer_questionnaire.text = option.answer
 
                 if (item.selectedAnswer == position) {

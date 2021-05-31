@@ -13,5 +13,5 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getVerifyOTPURL(): String = BuildConfig.VERIFY_OTP_URL
     override fun getGeneratePayslipURL(): String = BuildConfig.GENERATE_PAYSLIP_URL
     override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
-
+    override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
 }

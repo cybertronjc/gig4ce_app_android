@@ -59,4 +59,14 @@
     <color name="warm_grey">#888888</color>
     <color name="black_two">#313131</color>
 
+    <color name="app_red">#E02020</color>
+
+    <color name="gig_timer_silver_light">#e2dfdf</color>
+    <color name="gig_timer_silver_dark">#888888</color>
+    <color name="gig_timer_declined_red">#e02020</color>
+    <color name="gig_timer_ongoing_green">#468800</color>
+    <color name="gig_timer_completed_grey">#e8e8e8</color>
+    <color name="gig_timer_no_show_red">#ff8b8b</color>
+    <color name="gig_timer_upcoming_pink">#f7d16a</color>
+
 </resources>

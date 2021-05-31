@@ -5,14 +5,8 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gigforce.learning.assessment.models.AssementQuestionsReponse
-import com.gigforce.learning.datamodels.UserInterestsAndRolesDM
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 data class observableDialogResultWrapper(
     var result: Boolean,

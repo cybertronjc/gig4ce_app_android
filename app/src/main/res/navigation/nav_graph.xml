@@ -46,11 +46,11 @@
         android:name="com.gigforce.app.modules.markattendance.MarkAttendanceFragment" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.gigforce.app.modules.preferences.PreferencesFragment"
+        android:name="com.gigforce.user_preferences.PreferencesFragment"
         tools:layout="@layout/fragment_auth_flow" />
     <fragment
         android:id="@+id/dayTimeFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.DayTimeFragment"
+        android:name="com.gigforce.user_preferences.daytime.DayTimeFragment"
         tools:layout="@layout/date_time_fragment" />
 
     <fragment
@@ -71,17 +71,17 @@
 
     <fragment
         android:id="@+id/jdScreenFragment"
-        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.explorebyrole.jdscreens.JDScreenFragment"
         tools:layout="@layout/j_d_screen_fragment" />
 
     <fragment
         android:id="@+id/weekEndFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.weekend.WeekEndFragment"
+        android:name="com.gigforce.user_preferences.daytime.weekend.WeekEndFragment"
         tools:layout="@layout/week_end_fragment" />
 
     <fragment
         android:id="@+id/weekDayFragment"
-        android:name="com.gigforce.app.modules.preferences.daytime.weekday.WeekDayFragment"
+        android:name="com.gigforce.user_preferences.daytime.weekday.WeekDayFragment"
         tools:layout="@layout/week_day_fragment" />
 
     <fragment
@@ -142,7 +142,7 @@
 
     <fragment
         android:id="@+id/landinghomefragment"
-        android:name="com.gigforce.app.modules.landingscreen.LandingScreenFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"
         android:label="landing_home_fragment"
         tools:layout="@layout/landingscreen_fragment">
         <action
@@ -160,7 +160,7 @@
 
     <fragment
         android:id="@+id/explore_by_role"
-        android:name="com.gigforce.app.modules.landingscreen.explorebyrole.ExploreByRoleFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.explorebyrole.ExploreByRoleFragment"
         android:label="explore_by_role_fragment"
         tools:layout="@layout/explore_by_role_fragment" />
 
@@ -253,7 +253,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="com.gigforce.app.modules.calendarscreen.HomeScreenFragment"
+        android:name="com.gigforce.giger_app.calendarscreen.HomeScreenFragment"
         android:label="HomeScreenFragment">
         <action
             android:id="@+id/action_homeScreenFragment_to_profileFragment"
@@ -264,7 +264,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainHomeScreen"
-        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen"
+        android:name="com.gigforce.app.modules.calendarscreen.CalendarHomeScreen"
         android:label="HomeScreenIcons">
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
@@ -375,7 +375,7 @@
         android:label="EditCoverBottomSheet" />
     <fragment
         android:id="@+id/homeScreenNew"
-        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.CalendarHomeScreen"
+        android:name="com.gigforce.app.modules.calendarscreen.CalendarHomeScreen"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
     <dialog
@@ -392,7 +392,7 @@
         android:label="AddAboutMeBottomSheet" />
     <fragment
         android:id="@+id/rosterDayFragment"
-        android:name="com.gigforce.app.modules.roster.RosterDayFragment"
+        android:name="com.gigforce.giger_app.roster.RosterDayFragment"
         android:label="RosterDayFragment" />
     <fragment
         android:id="@+id/loginSuccessfulFragment"
@@ -400,41 +400,41 @@
         android:label="OnOTPSuccess"></fragment>
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.gigforce.app.modules.preferences.location.LocationFragment"
+        android:name="com.gigforce.user_preferences.location.LocationFragment"
         android:label="LocationFragment" />
 
     <fragment
         android:id="@+id/earningFragment"
-        android:name="com.gigforce.app.modules.preferences.earnings.EarningFragment"
+        android:name="com.gigforce.user_preferences.earnings.EarningFragment"
         android:label="EarningFragment" />
 
     <fragment
         android:id="@+id/languagePreferenceFragment"
-        android:name="com.gigforce.app.modules.preferences.language.LanguagePreferencesFragment"
+        android:name="com.gigforce.user_preferences.language.LanguagePreferencesFragment"
         android:label="LanguagePreferenceFragment" />
     <fragment
         android:id="@+id/preferredLocationFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PreferredLocationFragment"
+        android:name="com.gigforce.user_preferences.location.PreferredLocationFragment"
         android:label="PreferredLocationFragment" />
     <fragment
         android:id="@+id/currentAddressEditFragment"
-        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressEditFragment"
+        android:name="com.gigforce.user_preferences.location.CurrentAddressEditFragment"
         android:label="CurrentAddressEditFragment" />
     <fragment
         android:id="@+id/permanentAddressEditFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressEditFragment"
+        android:name="com.gigforce.user_preferences.location.PermanentAddressEditFragment"
         android:label="PermanentAddressEditFragment" />
     <fragment
         android:id="@+id/currentAddressViewFragment"
-        android:name="com.gigforce.app.modules.preferences.location.CurrentAddressViewFragment"
+        android:name="com.gigforce.user_preferences.location.CurrentAddressViewFragment"
         android:label="CurrentAddressViewFragment" />
     <fragment
         android:id="@+id/permanentAddressViewFragment"
-        android:name="com.gigforce.app.modules.preferences.location.PermanentAddressViewFragment"
+        android:name="com.gigforce.user_preferences.location.PermanentAddressViewFragment"
         android:label="PermanentAddressViewFragment" />
     <fragment
         android:id="@+id/arrountCurrentAddress"
-        android:name="com.gigforce.app.modules.preferences.location.AroundCurrentAddressFragment"
+        android:name="com.gigforce.user_preferences.location.AroundCurrentAddressFragment"
         android:label="ArroundCurrentAddressFragment" />
     <fragment
         android:id="@+id/walletBalancePage"
@@ -528,7 +528,7 @@
 
     <fragment
         android:id="@+id/gigPageExpanded"
-        android:name="com.gigforce.app.modules.roster.GigPageExpanded"
+        android:name="com.gigforce.giger_app.roster.GigPageExpanded"
         android:label="GigPageExpanded" />
 
     <fragment
@@ -553,12 +553,12 @@
 
     <fragment
         android:id="@+id/gigPageNavigationFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigPageNavigationFragment"
+        android:name="com.gigforce.giger_gigs.GigPageNavigationFragment"
         android:label="fragment_gig_navigation"
         tools:layout="@layout/fragment_gig_navigation" />
     <fragment
         android:id="@+id/rateGigDialogFragment"
-        android:name="com.gigforce.app.modules.gigPage2.dialogFragments.RateGigDialogFragment"
+        android:name="com.gigforce.giger_gigs.dialogFragments.RateGigDialogFragment"
         android:label="fragment_rate_gig_dialog"
         tools:layout="@layout/fragment_rate_gig_dialog" />
     <fragment
@@ -571,17 +571,17 @@
         android:label="AssessmentResultFragment" />
     <fragment
         android:id="@+id/helpVideosFragment"
-        android:name="com.gigforce.app.modules.help.HelpVideosFragment"
+        android:name="com.gigforce.landing_screen.landingscreen.help.HelpVideosFragment"
         android:label="fragment_help_video"
         tools:layout="@layout/fragment_help_video" />
 
     <fragment
         android:id="@+id/gig_history_fragment"
-        android:name="com.gigforce.app.modules.gighistory.GigHistoryFragment"
+        android:name="com.gigforce.giger_gigs.gighistory.GigHistoryFragment"
         android:label="GigHistoryFragment" />
     <fragment
         android:id="@+id/giger_id_fragment"
-        android:name="com.gigforce.app.modules.gigerid.GigerIdFragment"
+        android:name="com.gigforce.giger_gigs.gigerid.GigerIdFragment"
         android:label="GigerIdFragment" />
 
     <fragment
@@ -655,7 +655,7 @@
 
     <fragment
         android:id="@+id/fragment_home_bottom_sheet"
-        android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+        android:name="com.gigforce.app.modules.calendarscreen.BSCalendarScreenFragment"
         android:label="fragment_home_bottom_sheet"
 
         tools:layout="@layout/home_screen_bottom_sheet_fragment" >
@@ -667,27 +667,27 @@
     </fragment>
     <dialog
         android:id="@+id/gigsListForDeclineBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsListForDeclineBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigsListForDeclineBottomSheet"
         android:label="GigsListForDeclineBottomSheet" />
     <fragment
         android:id="@+id/gigPage2Fragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigPage2Fragment"
+        android:name="com.gigforce.giger_gigs.GigPage2Fragment"
         android:label="GigPage2Fragment" />
     <fragment
         android:id="@+id/gigDetailsFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigDetailsFragment"
+        android:name="com.gigforce.giger_gigs.GigDetailsFragment"
         android:label="GigDetailsFragment" />
     <fragment
         android:id="@+id/gigMonthlyAttendanceFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigMonthlyAttendanceFragment"
+        android:name="com.gigforce.giger_gigs.GigMonthlyAttendanceFragment"
         android:label="GigMonthlyAttendanceFragment" />
     <fragment
         android:id="@+id/gigRegulariseAttendanceFragment"
-        android:name="com.gigforce.app.modules.gigPage2.GigRegulariseAttendanceFragment"
+        android:name="com.gigforce.giger_gigs.GigRegulariseAttendanceFragment"
         android:label="GigRegulariseAttendanceFragment" />
     <dialog
         android:id="@+id/gigsAttendanceForADayDetailsBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigsAttendanceForADayDetailsBottomSheet"
         android:label="GigsAttendanceForADayDetailsBottomSheet" />
 
     <fragment
@@ -776,63 +776,63 @@
         tools:layout="@layout/layout_fragment_schedule_driving_test" />
     <fragment
         android:id="@+id/ambassadorProgramDetailsFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorProgramDetailsFragment"
+        android:name="com.gigforce.ambassador.ambassador_enrollment.AmbassadorProgramDetailsFragment"
         android:label="AmbassadorProgramDetailsFragment" />
     <fragment
         android:id="@+id/ambassadorEnrollmentRequirementFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
+        android:name="com.gigforce.ambassador.ambassador_enrollment.AmbassadorEnrollmentRequirementFragment"
         android:label="AmbassadorEnrollmentRequirementFragment" />
     <fragment
         android:id="@+id/ambassadorEnrolledUsersListFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.AmbassadorEnrolledUsersListFragment"
+        android:name="com.gigforce.ambassador.AmbassadorEnrolledUsersListFragment"
         android:label="AmbassadorEnrolledUsersListFragment" />
     <fragment
         android:id="@+id/checkMobileFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.CheckMobileFragment"
+        android:name="com.gigforce.ambassador.user_rollment.verify_mobile.CheckMobileFragment"
         android:label="CheckMobileFragment" />
     <fragment
         android:id="@+id/confirmOtpFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.verify_mobile.ConfirmOtpFragment"
+        android:name="com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment"
         android:label="ConfirmOtpFragment" />
     <fragment
         android:id="@+id/addUserDetailsFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.user_details.AddUserDetailsFragment"
+        android:name="com.gigforce.ambassador.user_rollment.user_details.AddUserDetailsFragment"
         android:label="AddUserDetailsFragment" />
     <fragment
         android:id="@+id/addProfilePictureFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.profilePicture.AddProfilePictureFragment"
+        android:name="com.gigforce.ambassador.user_rollment.profilePicture.AddProfilePictureFragment"
         android:label="AddProfilePictureFragment" />
     <fragment
         android:id="@+id/addCurrentAddressFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddCurrentAddressFragment"
+        android:name="com.gigforce.ambassador.user_rollment.currentAddress.AddCurrentAddressFragment"
         android:label="AddCurrentAddressFragment" />
     <fragment
         android:id="@+id/addUserPanCardInfoFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserPanCardInfoFragment"
+        android:name="com.gigforce.ambassador.user_rollment.documents.AddUserPanCardInfoFragment"
         android:label="AddUserPanCardInfoFragment" />
     <fragment
         android:id="@+id/addUserBankDetailsInfoFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserBankDetailsInfoFragment"
+        android:name="com.gigforce.ambassador.user_rollment.documents.AddUserBankDetailsInfoFragment"
         android:label="AddUserBankDetailsInfoFragment" />
     <fragment
         android:id="@+id/addUserAadharCardInfoFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserAadharCardInfoFragment"
+        android:name="com.gigforce.ambassador.user_rollment.documents.AddUserAadharCardInfoFragment"
         android:label="AddUserAadharCardInfoFragment" />
     <fragment
         android:id="@+id/addUserDrivingLicenseInfoFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.documents.AddUserDrivingLicenseInfoFragment"
+        android:name="com.gigforce.ambassador.user_rollment.documents.AddUserDrivingLicenseInfoFragment"
         android:label="AddUserDrivingLicenseInfoFragment" />
     <fragment
         android:id="@+id/addUserInterestFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserInterestFragment"
+        android:name="com.gigforce.ambassador.user_rollment.intrest_experience.AddUserInterestFragment"
         android:label="AddUserInterestFragment" />
     <fragment
         android:id="@+id/addUserExperienceFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.intrest_experience.AddUserExperienceFragment"
+        android:name="com.gigforce.ambassador.user_rollment.intrest_experience.AddUserExperienceFragment"
         android:label="AddUserExperienceFragment" />
     <fragment
         android:id="@+id/addUserCurrentAddressFragment"
-        android:name="com.gigforce.app.modules.ambassador_user_enrollment.user_rollment.currentAddress.AddUserCurrentAddressFragment"
+        android:name="com.gigforce.ambassador.user_rollment.currentAddress.AddUserCurrentAddressFragment"
         android:label="AddUserCurrentAddressFragment" />
     <fragment
         android:id="@+id/fragment_profile_v2"
@@ -860,9 +860,14 @@
         android:label="fragment_add_skills_profile_v2" />
     <dialog
         android:id="@+id/gigContactPersonBottomSheet"
-        android:name="com.gigforce.app.modules.gigPage2.bottomsheets.GigContactPersonBottomSheet"
+        android:name="com.gigforce.giger_gigs.bottomsheets.GigContactPersonBottomSheet"
         android:label="GigContactPersonBottomSheet" />
 
+<!--    <include app:graph="@navigation/nav_graph_chat" />-->
+    <fragment
+        android:id="@+id/clientActiExploreList"
+        android:name="com.gigforce.client_activation.client_activation.explore.ClientActiExploreList"
+        android:label="ClientActiExploreList" />
     <fragment
         android:id="@+id/chatListFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatHeadersFragment"
@@ -882,7 +887,7 @@
 
     <dialog
         android:id="@+id/viewFullScreenImageDialogFragment"
-        android:name="com.gigforce.app.utils.ViewFullScreenImageDialogFragment"
+        android:name="com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment"
         android:label="ViewFullScreenImageDialogFragment" />
     <dialog
         android:id="@+id/viewFullScreenVideoDialogFragment"
@@ -900,6 +905,14 @@
         android:id="@+id/onboardingPreferredJobLocationFragment"
         android:name="com.gigforce.profile.onboarding.fragments.preferredJobLocation.OnboardingPreferredJobLocationFragment"
         android:label="OnboardingPreferredJobLocationFragment" />
+    <fragment
+        android:id="@+id/uploadAadharCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadAadharCard"
+        android:label="UploadAadharCard" />
+    <fragment
+        android:id="@+id/uploadPanCard"
+        android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
+        android:label="UploadPanCard" />
 
 
 </navigation>

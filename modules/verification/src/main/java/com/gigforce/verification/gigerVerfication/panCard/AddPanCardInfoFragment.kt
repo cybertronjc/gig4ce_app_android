@@ -13,10 +13,10 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gigforce.verification.gigerVerfication.*
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.PanCardDataModel
@@ -24,12 +24,20 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.utils.ImageSource
+import com.gigforce.core.utils.SelectImageSourceBottomSheetActionListener
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -69,10 +77,15 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
         panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
         panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
-        iv_back_add_pan_card_info.setOnClickListener {
-            navigation.popBackStack("verification/main",inclusive = false)
-//            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
 
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+            setBackButtonListener(View.OnClickListener {
+                navigation.navigateTo("verification/main")
+//                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+            })
         }
 
 
@@ -155,7 +168,7 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
 
                     setDataOnEditLayout(panCardDataModel)
                     panCardAvailaibilityOptionRG.check(R.id.panYesRB)
-                    panSubmitSliderBtn.isEnabled = true
+                    panSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -218,8 +231,8 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
 
                 if (it.panCardDetailsUploaded && it.panCardDetails != null) {
 
-                    if (it.panCardDetails.userHasPanCard != null) {
-                        if (it.panCardDetails.userHasPanCard!!) {
+                    if (it.panCardDetails!!.userHasPanCard != null) {
+                        if (it.panCardDetails!!.userHasPanCard!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

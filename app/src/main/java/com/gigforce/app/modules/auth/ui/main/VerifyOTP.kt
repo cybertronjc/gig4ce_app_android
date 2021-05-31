@@ -17,10 +17,10 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.client_activation.analytics.AuthEvents
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_FAILED
 import com.gigforce.app.modules.auth.ui.main.LoginViewModel.Companion.STATE_SIGNIN_SUCCESS
 import com.gigforce.core.IEventTracker
@@ -68,8 +68,16 @@ class VerifyOTP : BaseFragment() {
         }
 
         //Log.d("app signature", appSignature.appSignatures.get(0))
+        savedInstanceState?.let {
+            verificationId = it.getString("verificationId")!!
+            mobile_number = it.getString("mobile_number")!!
+        }
+    }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("verificationId",verificationId)
+        outState.putString("mobile_number",mobile_number)
     }
 
     override fun onCreateView(

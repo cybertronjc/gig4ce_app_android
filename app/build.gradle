@@ -77,9 +77,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 101
-            versionName "1.29.2"
-
+            versionCode 110
+            versionName "1.30.1"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -165,6 +164,8 @@ dependencies {
 
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
+    implementation project(path: ':modules:ambassador')
+    implementation project(path: ':modules:user_preferences')
     implementation project(path: ':modules:feature-chat')
     implementation project(path: ':modules:app-giger')
     implementation project(path: ':modules:learning')
@@ -173,6 +174,8 @@ dependencies {
     implementation project(path: ':modules:user_profile')
     implementation project(path: ':modules:wallet')
     implementation project(path: ':modules:verification')
+    implementation project(path: ':modules:giger-gigs')
+    implementation project(path: ':modules:landing')
     implementation project(path: ':modules:common-image-capture-picker')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
@@ -201,8 +204,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
-
-
 
     //Okhttp3
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
@@ -336,11 +337,11 @@ dependencies {
 
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
-    //Qr Code Library
-    implementation 'com.google.zxing:core:3.4.0'
+//    //Qr Code Library
+//    implementation 'com.google.zxing:core:3.4.0'
 
-    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
-    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+//    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+//    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
 
 
     implementation 'com.clevertap.android:clevertap-android-sdk:3.8.1'

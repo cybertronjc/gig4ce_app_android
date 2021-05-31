@@ -1,7 +1,7 @@
 package com.gigforce.client_activation.client_activation
 
 import android.location.Location
-import com.gigforce.client_activation.client_activation.models.Media
+import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -25,8 +25,8 @@ class ClientActivationNewUserRepo : ClientActivationNavCallbacks {
     }
 
     override fun getCoursesList(
-            lessons: List<Media>,
-            responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
+        lessons: List<Media>,
+        responseCallbacks: ClientActivationNavCallbacks.ClientActivationResponseCallbacks
     ) {
         firebaseDB.collection("Course_blocks").whereIn("id",lessons.map { it.lessonId })//.whereIn("course_id", lessons.map { it.courseId }).whereIn("lesson_id", lessons.map { it.lessonId })
                 .addSnapshotListener { success, error ->

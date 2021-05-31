@@ -41,7 +41,7 @@
         <include
             android:id="@+id/learning_based_horizontal_progress"
             layout="@layout/horizontal_place_holders"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
 
         <com.gigforce.core.recyclerView.CoreRecyclerView

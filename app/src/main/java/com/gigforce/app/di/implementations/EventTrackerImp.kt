@@ -1,27 +1,32 @@
 package com.gigforce.app.di.implementations
 
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
+import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.CleverTapAPI
+import com.gigforce.app.BuildConfig
 import com.gigforce.app.MainApplication
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.branch.referral.Branch
 import javax.inject.Inject
 
 class EventTrackerImp @Inject constructor(
         @ApplicationContext val context: Context
 ) : IEventTracker {
 
-    var mixpanel: MixpanelAPI? = (context as MainApplication).mixpanel
+    //var mixpanel: MixpanelAPI? = (context as MainApplication).mixpanel
+
+    var mixpanel: MixpanelAPI = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
 
     private var cleverTapApi: CleverTapAPI? = CleverTapAPI.getDefaultInstance(context)
 
@@ -43,6 +48,14 @@ class EventTrackerImp @Inject constructor(
                 "user_id" to userId
         ))
         appsFlyerLib.setCustomerIdAndTrack(userId, context.applicationContext)
+
+        //branch to mixpanel
+        mixpanel?.distinctId?.let {
+            Branch.getInstance().setRequestMetadata(
+                "\$mixpanel_distinct_id",
+                it
+            )
+        }
     }
 
     override fun setUserProperty(props: Map<String, Any>) {
@@ -63,6 +76,83 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnCleverTap(args)
         logEventOnAppsFlyer(args)
+    }
+
+    override fun setUpAnalyticsTools(){
+        setupCleverTap()
+        setupBranchWithMixpanel()
+        setUpAppsFlyer()
+    }
+
+    //setup clevertap
+    private fun setupCleverTap() {
+        CleverTapAPI.createNotificationChannel(
+            context,
+            "gigforce-general",
+            "Gigforce",
+            "Gigforce Push Notifications",
+            NotificationManager.IMPORTANCE_MAX,
+            true
+        )
+
+        cleverTapApi?.pushEvent("MAIN_APP_CREATED")
+    }
+
+    private fun setupBranchWithMixpanel() {
+        mixpanel?.distinctId?.let {
+            Branch.getInstance().setRequestMetadata(
+                "\$mixpanel_distinct_id",
+                it
+            )
+        }
+    }
+
+    private fun setUpBranchTool() {
+        // Branch logging for debugging
+        Branch.enableLogging();
+
+        // Branch object initialization
+        Branch.getAutoInstance(context);
+
+
+    }
+
+    private fun setUpAppsFlyer() {
+
+        appsFlyerLib.apply {
+
+            init(
+                BuildConfig.APPS_FLYER_KEY,
+                appsFlyerConversationListener,
+                context
+            )
+            startTracking(context)
+        }
+    }
+    private val appsFlyerConversationListener: AppsFlyerConversionListener = object :
+        AppsFlyerConversionListener {
+
+        override fun onConversionDataSuccess(data: MutableMap<String, Any>?) {
+            data?.let { cvData ->
+                cvData.map {
+                    Log.i(MainApplication.LOG_TAG, "conversion_attribute: ${it.key} = ${it.value}")
+                }
+            }
+        }
+
+        override fun onConversionDataFail(error: String?) {
+            Log.e(MainApplication.LOG_TAG, "error onAttributionFailure : $error")
+        }
+
+        override fun onAppOpenAttribution(data: MutableMap<String, String>?) {
+            data?.map {
+                Log.d(MainApplication.LOG_TAG, "onAppOpen_attribute: ${it.key} = ${it.value}")
+            }
+        }
+
+        override fun onAttributionFailure(error: String?) {
+            Log.e(MainApplication.LOG_TAG, "error onAttributionFailure : $error")
+        }
     }
 
     override fun setProfileProperty(args: ProfilePropArgs) {

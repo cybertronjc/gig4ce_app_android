@@ -9,12 +9,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.common.SendSmsViewModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.common_ui.viewmodels.common.SendSmsViewModel
 import com.gigforce.core.extensions.invisible
 import com.gigforce.core.utils.Lse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -46,7 +47,7 @@ class EnterPhoneNumberForReferralDialogFragment : BottomSheetDialogFragment() {
     private var inviteLink: String = ""
     private var inviteLinkSentListener: EnterPhoneNumberForReferralDialogFragmentEventListener? =
         null
-    private val sendSmsViewModel: SendSmsViewModel by viewModels()
+    private val sendSmsViewModel: SendSmsViewModel by activityViewModels()
 
     //View
     private lateinit var createGroupMainLayout: View

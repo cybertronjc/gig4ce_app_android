@@ -1,3 +1,6 @@
+include ':modules:landing'
+include ':modules:user_preferences'
+include ':modules:ambassador'
 include ':modules:verification'
 include ':modules:wallet'
 include ':modules:giger-gigs'

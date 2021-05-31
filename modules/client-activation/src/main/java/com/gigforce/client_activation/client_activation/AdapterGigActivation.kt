@@ -32,12 +32,12 @@ class AdapterGigActivation : RecyclerView.Adapter<AdapterGigActivation.ViewHolde
                 dependency.drawable
             }
         )
-        holder.itemView.tv_status.visibility =
-            if (!dependency.status.isNullOrEmpty()) View.VISIBLE else View.GONE
-        holder.itemView.tv_status.text = dependency.status
+//        holder.itemView.tv_status.visibility =
+//            if (!dependency.status.isNullOrEmpty()) View.VISIBLE else View.GONE
+//        holder.itemView.tv_status.text = dependency.status
         holder.itemView.tv_status_application.text = dependency.title
-        holder.itemView.divider_bottom.visibility =
-            if (position == items.size - 1) View.GONE else View.VISIBLE
+//        holder.itemView.divider_bottom.visibility =
+//            if (position == items.size - 1) View.GONE else View.VISIBLE
         holder.itemView.setOnClickListener {
             if (holder.adapterPosition == -1) return@setOnClickListener
             callbacks?.onItemClick(

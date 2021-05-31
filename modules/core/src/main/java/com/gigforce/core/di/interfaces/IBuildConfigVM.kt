@@ -8,4 +8,5 @@ interface IBuildConfigVM {
     fun getVerifyOTPURL():String
     fun getGeneratePayslipURL():String
     fun getApplicationID():String
+    fun getSendSMSURL():String
 }

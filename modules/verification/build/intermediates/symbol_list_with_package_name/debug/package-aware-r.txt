@@ -1088,6 +1088,7 @@ attr textAppearanceSmallPopupMenu
 attr textAppearanceSubtitle1
 attr textAppearanceSubtitle2
 attr textColorAlertDialogListItem
+attr textColorError
 attr textColorSearchUrl
 attr textEndPadding
 attr textInputLayoutFocusedRectEnabled
@@ -1379,6 +1380,13 @@ color fui_bgTwitter
 color fui_buttonShadow
 color fui_linkColor
 color fui_transparent
+color gig_timer_completed_grey
+color gig_timer_declined_red
+color gig_timer_no_show_red
+color gig_timer_ongoing_green
+color gig_timer_silver_dark
+color gig_timer_silver_light
+color gig_timer_upcoming_pink
 color green
 color green_dc3ab105
 color grey
@@ -2248,7 +2256,13 @@ drawable abc_vector_test
 drawable app_gradient_button
 drawable app_gradient_button_disabled
 drawable avd_hide_password
+drawable avd_hide_password_1
+drawable avd_hide_password_2
+drawable avd_hide_password_3
 drawable avd_show_password
+drawable avd_show_password_1
+drawable avd_show_password_2
+drawable avd_show_password_3
 drawable bg_capsule_53ba25
 drawable bg_capsule_border_fa6400
 drawable bg_white_top_rad_8
@@ -2382,6 +2396,13 @@ drawable ic_download_24
 drawable ic_edit
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
+drawable ic_gig_decline
+drawable ic_gig_declined_cancelled
+drawable ic_gig_missed
+drawable ic_gig_ongoing
+drawable ic_gig_success_icon
+drawable ic_gig_type_square
+drawable ic_gig_upoming
 drawable ic_homescreen_chat
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back
@@ -2536,6 +2557,7 @@ id aadharFrontImageHolder
 id aadharInfoLayout
 id aadharLabel
 id aadharLayout
+id aadharMainLayout
 id aadharNoEditErrorMessage
 id aadharNoLabel
 id aadharNoRB
@@ -2549,6 +2571,7 @@ id aadharViewFrontErrorMessage
 id aadharViewFrontImageIV
 id aadharViewFrontLabel
 id aadharViewLayout
+id aadharViewLayout1
 id aadharYesRB
 id accLabel
 id accNoLabel
@@ -2630,6 +2653,7 @@ id adjust_height
 id adjust_width
 id alertTitle
 id aligned
+id all
 id always
 id animateToEnd
 id animateToStart
@@ -2729,6 +2753,8 @@ id card_content_root
 id card_root
 id card_view
 id center
+id center_horizontal
+id center_vertical
 id chain
 id chat_fragment
 id checkInTV
@@ -2744,8 +2770,13 @@ id cifLabel
 id cifNumberET
 id circle_center
 id circular
+id city_image_iv
+id city_name_tv
+id city_root_layout
 id clear_text
 id clickedImageIV
+id clip_horizontal
+id clip_vertical
 id clockwise
 id close
 id cloudy
@@ -2875,6 +2906,9 @@ id email_tos_and_pp_text
 id end
 id endToStart
 id end_padder
+id enterAlways
+id enterAlwaysCollapsed
+id exitUntilCollapsed
 id exo_ad_overlay
 id exo_artwork
 id exo_buffering
@@ -2909,6 +2943,8 @@ id feature_icon
 id feature_title
 id featured_rv
 id fill
+id fill_horizontal
+id fill_vertical
 id filled
 id filterControl1
 id filterControl2
@@ -2984,6 +3020,7 @@ id invisible
 id invisible_frame
 id inward
 id italic
+id item
 id item_power_menu_icon
 id item_power_menu_layout
 id item_power_menu_title
@@ -2993,14 +3030,10 @@ id ivAadhaar1
 id ivDL1
 id ivPan1
 id ivVeriDD1
-id iv_back_add_aadhar_card_info
-id iv_back_add_driving_license
-id iv_back_add_pan_card_info
 id iv_back_add_selfie
 id iv_back_application_client_activation
-id iv_back_verification_page
+id iv_back_upload_aadhar_card_client_activation
 id iv_download_giger_verification
-id iv_options_verification_page
 id jpeg
 id jumpToEnd
 id jumpToStart
@@ -3142,6 +3175,7 @@ id panImageHolder
 id panInfoLayout
 id panLabel
 id panLayout
+id panMainLayout1
 id panNoEditErrorMessage
 id panNoLabel
 id panNoRB
@@ -3149,6 +3183,7 @@ id panSubmitSliderBtn
 id panViewImageErrorMessage
 id panViewImageIV
 id panViewLayout
+id panViewLayout1
 id panViewNoErrorMessage
 id panViewNoTV
 id panYesRB
@@ -3195,6 +3230,7 @@ id primary_button
 id profile_image
 id profile_name
 id progressBar
+id progressBar1
 id progress_circular
 id progress_horizontal
 id radial
@@ -3227,6 +3263,7 @@ id sawtooth
 id scale
 id scale_scroll_wheel
 id screen
+id scroll
 id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
@@ -3274,6 +3311,7 @@ id slide
 id smallLabel
 id snackbar_action
 id snackbar_text
+id snap
 id spacer
 id spherical_gl_surface_view
 id spinnerVeri
@@ -3302,6 +3340,8 @@ id staticPostLayout
 id statusTV
 id status_bar_latest_event_content
 id status_iv
+id statusbarutil_fake_status_bar_view
+id statusbarutil_translucent_view
 id stereo
 id stop
 id stretch
@@ -3406,6 +3446,7 @@ id tvVeriDone
 id tv_action_giger_verification
 id tv_action_upld_dl_cert
 id tv_action_upld_dl_cl_act
+id tv_action_upload_pan
 id tv_allow_access
 id tv_cities
 id tv_client_activation
@@ -3414,14 +3455,9 @@ id tv_contract_status_label
 id tv_desc
 id tv_no_driving_cert
 id tv_pop_menu_normal
-id tv_rv_preferred_location
 id tv_schedule_test
 id tv_title
-id tv_title_add_aadhar_card_info
-id tv_title_add_driving_license
-id tv_title_add_pan_card_info
 id tv_title_add_selfie
-id tv_title_verification_page
 id txt_message
 id ucrop
 id ucrop_frame
@@ -3568,6 +3604,7 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_password_icon
 layout design_text_input_start_icon
+layout dropdown_spinner
 layout exo_list_divider
 layout exo_playback_control_view
 layout exo_player_control_view
@@ -3749,7 +3786,9 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upload_aadhar_card_fragment
 layout upload_car_client_activation
+layout upload_pan_card_fragment
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password
@@ -4440,6 +4479,7 @@ style Base_V14_Theme_MaterialComponents_Light_Bridge
 style Base_V14_Theme_MaterialComponents_Light_DarkActionBar_Bridge
 style Base_V14_Theme_MaterialComponents_Light_Dialog
 style Base_V14_Theme_MaterialComponents_Light_Dialog_Bridge
+style Base_V14_Widget_Design_AppBarLayout
 style Base_V21_ThemeOverlay_AppCompat_Dialog
 style Base_V21_Theme_AppCompat
 style Base_V21_Theme_AppCompat_Dialog
@@ -4449,6 +4489,7 @@ style Base_V21_Theme_MaterialComponents
 style Base_V21_Theme_MaterialComponents_Dialog
 style Base_V21_Theme_MaterialComponents_Light
 style Base_V21_Theme_MaterialComponents_Light_Dialog
+style Base_V21_Widget_Design_AppBarLayout
 style Base_V22_Theme_AppCompat
 style Base_V22_Theme_AppCompat_Light
 style Base_V23_Theme_AppCompat
@@ -4456,6 +4497,7 @@ style Base_V23_Theme_AppCompat_Light
 style Base_V26_Theme_AppCompat
 style Base_V26_Theme_AppCompat_Light
 style Base_V26_Widget_AppCompat_Toolbar
+style Base_V26_Widget_Design_AppBarLayout
 style Base_V28_Theme_AppCompat
 style Base_V28_Theme_AppCompat_Light
 style Base_V7_ThemeOverlay_AppCompat_Dialog
@@ -4524,6 +4566,7 @@ style Base_Widget_AppCompat_TextView
 style Base_Widget_AppCompat_TextView_SpinnerItem
 style Base_Widget_AppCompat_Toolbar
 style Base_Widget_AppCompat_Toolbar_Button_Navigation
+style Base_Widget_Design_AppBarLayout
 style Base_Widget_Design_TabLayout
 style Base_Widget_MaterialComponents_AutoCompleteTextView
 style Base_Widget_MaterialComponents_CheckedTextView
@@ -5044,6 +5087,7 @@ style Widget_Design_AppBarLayout
 style Widget_Design_BottomNavigationView
 style Widget_Design_BottomSheet_Modal
 style Widget_Design_CollapsingToolbar
+style Widget_Design_CoordinatorLayout
 style Widget_Design_FloatingActionButton
 style Widget_Design_NavigationView
 style Widget_Design_ScrimInsetsFrameLayout
@@ -5229,7 +5273,7 @@ styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_a
 styleable CoreRecyclerView android_orientation rows
 styleable CustomAttribute attributeName customBoolean customColorDrawableValue customColorValue customDimension customFloatValue customIntegerValue customPixelDimension customStringValue
 styleable DefaultTimeBar ad_marker_color ad_marker_width bar_height buffered_color played_ad_marker_color played_color scrubber_color scrubber_disabled_size scrubber_dragged_size scrubber_drawable scrubber_enabled_size touch_target_height unplayed_color
-styleable DesignTheme bottomSheetDialogTheme bottomSheetStyle
+styleable DesignTheme bottomSheetDialogTheme bottomSheetStyle textColorError
 styleable DialogFragmentNavigator android_name
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
 styleable DrawerLayout elevation

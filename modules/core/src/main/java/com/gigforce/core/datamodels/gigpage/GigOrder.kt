@@ -10,23 +10,23 @@ import com.google.firebase.firestore.PropertyName
 
 data class GigOrder(
 
-    @get:PropertyName("endDate")
+        @get:PropertyName("endDate")
         @set:PropertyName("endDate")
         var endDate: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("city")
+        @get:PropertyName("city")
         @set:PropertyName("city")
         var city: City? = null,
 
-    @get:PropertyName("state")
+        @get:PropertyName("state")
         @set:PropertyName("state")
         var state: State? = null,
 
-    @get:PropertyName("locationType")
+        @get:PropertyName("locationType")
         @set:PropertyName("locationType")
         var locationType: String = "",
 
-    @get:PropertyName("office")
+        @get:PropertyName("office")
         @set:PropertyName("office")
         var workOrderOffice: WorkOrderOffice? = null
 ) {
@@ -42,6 +42,10 @@ data class GigOrder(
 }
 
 data class WorkOrderOffice(
+
+        @get:PropertyName("id")
+        @set:PropertyName("id")
+        var id: String? = null,
 
         @get:PropertyName("city")
         @set:PropertyName("city")

@@ -3,7 +3,7 @@ package com.gigforce.modules.feature_chat
 import android.content.Context
 import android.view.View
 import com.gigforce.core.*
-import com.gigforce.modules.feature_chat.core.ViewTypes
+import com.gigforce.common_ui.chat.models.ViewTypes
 import com.gigforce.modules.feature_chat.ui.ChatListItem
 import com.gigforce.modules.feature_chat.ui.chatItems.*
 

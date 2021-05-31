@@ -9,6 +9,8 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -16,6 +18,7 @@ import com.bumptech.glide.RequestManager
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.extensions.getTextChangeAsStateFlow
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.profile.R
@@ -29,6 +32,9 @@ import com.gigforce.profile.onboarding.SpaceItemDecoration
 import com.gigforce.profile.viewmodel.OnboardingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_preferred_job_location.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,10 +118,18 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     }
 
     private fun initListeners() {
-        search_cities_et.doOnTextChanged { text, start, before, count ->
+        lifecycleScope.launch {
 
-            cityAdapter.filter.filter(text)
-            majorCitiesAdapter.filter.filter(text)
+        search_cities_et.getTextChangeAsStateFlow()
+                .debounce(300)
+                .distinctUntilChanged()
+                .flowOn(Dispatchers.Default)
+                .collect { searchString ->
+                    Log.d("Search ","Searhcingg...$searchString")
+
+                    cityAdapter.filter.filter(searchString)
+                    majorCitiesAdapter.filter.filter(searchString)
+                }
         }
     }
 
@@ -203,20 +217,15 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             if (selectedCity?.subLocationFound == true) {
                 cities_layout.visibility = View.GONE
                 sub_cities_layout.visibility = View.VISIBLE
-
-                val delhiSubLocations = arrayListOf<String>(
-                        "Faridabad",
-                        "Ghaziabad",
-                        "Gurugram",
-                        "Gautam Buddh Nagar",
-                        "New Delhi",
-                        "North Delhi",
-                        "West Delhi",
-                        "East Delhi",
-                        "South Delhi"
-                )
-
-                subCityAdapter.setData(delhiSubLocations, confirmSubCityList)
+                sub_cities_label.setText(selectedCity!!.name)
+                confirmSubCityList.clear()
+                //get sub cities here and set data to adapter
+                viewModel.getSubCities(selectedCity!!.stateCode, selectedCity!!.cityCode)
+                viewModel.subCities.observe(viewLifecycleOwner, Observer {
+                    if (it != null){
+                        subCityAdapter.setData(it, confirmSubCityList)
+                    }
+                })
                 currentStep = 1
                 return true
             } else {

@@ -3,8 +3,7 @@ package com.gigforce.modules.feature_chat.screens.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.modules.feature_chat.models.ChatMessage
-import com.google.firebase.firestore.CollectionReference
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query

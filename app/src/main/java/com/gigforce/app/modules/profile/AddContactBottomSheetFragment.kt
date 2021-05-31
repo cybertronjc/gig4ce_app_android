@@ -10,14 +10,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.datamodels.profile.Contact
 import com.gigforce.core.datamodels.profile.ContactEmail
 import com.gigforce.core.datamodels.profile.ContactPhone
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.utils.isValidMail
 import com.gigforce.core.utils.isValidMobile
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.*
 import kotlinx.android.synthetic.main.add_contact_bottom_sheet.view.*
 

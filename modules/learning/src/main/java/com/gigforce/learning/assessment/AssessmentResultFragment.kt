@@ -36,9 +36,9 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
 import com.gigforce.core.utils.*
 import com.gigforce.learning.learning.LearningConstants
-import com.gigforce.learning.learning.LearningViewModel
+import com.gigforce.common_ui.viewmodels.LearningViewModel
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.Course
+import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage

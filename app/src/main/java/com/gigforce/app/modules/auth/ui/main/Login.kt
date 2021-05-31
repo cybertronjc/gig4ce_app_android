@@ -21,8 +21,9 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.client_activation.analytics.AuthEvents
+import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
@@ -388,18 +389,20 @@ class Login : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
 
-            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
-            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
-            if (credential.id != null){
-                invisible_edit_mobile.setText(credential.id.substring(3))
-                populateMobileInEditTexts(credential.id.substring(3))
-                Log.d("phone detected", credential.id.substring(3))
-            }
-            else {
-                Log.d("phone detected", "Couldn't detect Phone number")
-            }
+            try {/*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+                var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+                if (credential.id != null){
 
-
+                    invisible_edit_mobile.setText(credential.id.substring(3))
+                    populateMobileInEditTexts(credential.id.substring(3))
+                    Log.d("phone detected", credential.id.substring(3))
+                }
+                else {
+                    Log.d("phone detected", "Couldn't detect Phone number")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

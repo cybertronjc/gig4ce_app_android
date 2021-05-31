@@ -26,29 +26,26 @@ import com.gigforce.app.utils.GenericSpinnerAdapter
 import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.selectItemWithText
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlBackEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlEditOverallErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlFrontEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
-import kotlinx.android.synthetic.main.fragment_ambsd_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlBackImageHolder
@@ -609,6 +606,7 @@ class UploadDrivingLicense : Fragment(),
     }
 
     override fun onClickRefer() {
+        navigation.popBackStack()
         navigation.navigateTo("referrals")
 //        navigate(R.id.referrals_fragment)
     }

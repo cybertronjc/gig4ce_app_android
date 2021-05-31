@@ -9,8 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.base.components.CalendarView
-import com.gigforce.app.modules.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
+import com.gigforce.giger_app.components.CalendarView
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.common_ui.utils.getScreenWidth
 import kotlinx.android.synthetic.main.calendar_dialog.*
 import java.text.SimpleDateFormat

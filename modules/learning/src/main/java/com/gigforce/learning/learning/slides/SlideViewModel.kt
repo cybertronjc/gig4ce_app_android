@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
-import com.gigforce.learning.learning.LearningRepository
-import com.gigforce.learning.learning.models.SlideContent
-import com.gigforce.learning.learning.models.progress.SlideProgress
+import com.gigforce.common_ui.repository.LearningRepository
+import com.gigforce.common_ui.viewdatamodels.models.SlideContent
+import com.gigforce.common_ui.viewdatamodels.models.progress.SlideProgress
 //import com.gigforce.app.utils.Lce
 //import com.gigforce.app.utils.Lse
 import com.google.firebase.Timestamp

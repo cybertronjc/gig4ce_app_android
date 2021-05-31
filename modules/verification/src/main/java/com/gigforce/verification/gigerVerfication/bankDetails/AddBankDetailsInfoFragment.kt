@@ -14,17 +14,16 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
+import com.gigforce.core.utils.VerificationValidations
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.datamodels.verification.BankDetailsDataModel
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -101,15 +100,25 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         toolbar.apply {
             hideActionMenu()
             showTitle(getString(R.string.giger_verification))
-            setBackButtonListener{
-
-                if (didUserCameFromAmbassadorScreen) {
-                    onBackPressed()
-                } else {
-                    navigation.popBackStack("verification/main",inclusive = false)
+            setBackButtonListener(object : View.OnClickListener{
+                override fun onClick(p0: View?) {
+                    if (didUserCameFromAmbassadorScreen) {
+                        onBackPressed()
+                    } else {
+                        navigation.popBackStack("verification/main",inclusive = false)
 //                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+                    }
                 }
-            }
+            })
+//            setBackButtonListener{
+//
+//                if (didUserCameFromAmbassadorScreen) {
+//                    onBackPressed()
+//                } else {
+//                    navigation.popBackStack("verification/main",inclusive = false)
+////                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+//                }
+//            }
         }
 
         helpIconViewIV.setOnClickListener {
@@ -248,16 +257,16 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                             return
                         }
 
-                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.click_or_select_bank_passbook))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
-                        }
+//                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
+//
+//                            MaterialAlertDialogBuilder(requireContext())
+//                                .setTitle(getString(R.string.alert))
+//                                .setMessage(getString(R.string.click_or_select_bank_passbook))
+//                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+//                                .show()
+//                            passbookSubmitSliderBtn.resetSlider()
+//                            return
+//                        }
 
                         val accNo = accountNoEditText.text.toString()
                         val bankName =
@@ -296,7 +305,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
                     setDataOnEditLayout(bankDetailsDataModel)
                     passbookAvailaibilityOptionRG.check(R.id.passbookYesRB)
-                    passbookSubmitSliderBtn.isEnabled = true
+                    passbookSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -321,8 +330,8 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
                 if (it.bankDetailsUploaded && it.bankUploadDetailsDataModel != null) {
 
-                    if (it.bankUploadDetailsDataModel.userHasPassBook != null) {
-                        if (it.bankUploadDetailsDataModel.userHasPassBook!!) {
+                    if (it.bankUploadDetailsDataModel!!.userHasPassBook != null) {
+                        if (it.bankUploadDetailsDataModel!!.userHasPassBook!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

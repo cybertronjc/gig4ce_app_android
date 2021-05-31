@@ -9,9 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -25,8 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
+import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
+import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.core.datamodels.client_activation.JpApplication
-import com.gigforce.client_activation.client_activation.models.Media
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.adapter.AdapterPreferredLocation
@@ -34,16 +33,17 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
-import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.core.utils.NavFragmentsData
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -75,8 +75,9 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private lateinit var mJobProfileId: String
     private var mRedirectToApplication: Boolean? = null
     private lateinit var viewModel: ClientActivationViewmodel
-    private var adapterPreferredLocation: AdapterPreferredLocation? = null
+    private var adapterPreferredLocation: ActiveLocationsAdapter? = null
     private lateinit var adapterBulletPoints: AdapterBulletPoints
+    private lateinit var window: Window
 
     @Inject
     lateinit var navigation: INavigation
@@ -94,6 +95,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //make status bar transparent
+        makeStatusTransparent()
         viewModel =
             ViewModelProvider(
                 this,
@@ -107,6 +110,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         initClicks()
         initObservers()
 
+    }
+
+    private fun makeStatusTransparent() {
+        window = activity?.window!!
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+// finally change the color
+        window.setStatusBarColor(resources.getColor(R.color.fui_transparent))
     }
 
     private fun checkForApplicationRedirection() {
@@ -225,14 +240,16 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             if (it.info == null) return@Observer
 
             Glide.with(this).load(it.coverImg).placeholder(
-                com.gigforce.common_ui.utils.getCircularProgressDrawable(
-                    requireContext()
-                )
+                ShimmerHelper.getShimmerDrawable()
             ).into(iv_main_client_activation)
-            tv_businessname_client_activation.text = it.title
+            tv_businessname_client_activation.text = it.title + " - "+ it.subTitle
             tv_role_client_activation.text = it.subTitle
             it.locationList?.map { item -> item.location }?.let { locations ->
-                adapterPreferredLocation?.addData(locations)
+                var cityList = ArrayList<City>()
+                for (i in 0..locations.size - 1){
+                    cityList.add(City(locations.get(i), getCityIcon(locations.get(i))))
+                }
+                adapterPreferredLocation?.setData(cityList)
             }
             tv_earning_client_activation.text = Html.fromHtml(it.payoutNote)
             ll_role_desc.removeAllViews()
@@ -242,7 +259,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 viewRoleDesc.tv_what_value_client_activation.text = element.answer
 
                 if (!element.icon.isNullOrEmpty()) {
-                    GlideApp.with(requireContext())
+                    Glide.with(requireContext())
                         .load(element.icon)
                         .placeholder(getCircularProgressDrawable())
                         .into(viewRoleDesc.iv_what)
@@ -253,14 +270,22 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 ll_role_desc.addView(viewRoleDesc)
 
             }
-
-            adapterBulletPoints.addData(it.info!!)
-
+            if (it.info!!.isEmpty()){
+                divider_one.gone()
+                divider_four.gone()
+                rv_bullet_points.gone()
+            }
+            else{
+                divider_one.visible()
+                rv_bullet_points.visible()
+                adapterBulletPoints.addData(it.info!!)
+                divider_four.visible()
+            }
 
             learning_cl.visible()
             textView120.text = it.requiredMedia?.title
             if (!it.requiredMedia?.icon.isNullOrEmpty()) {
-                GlideApp.with(requireContext())
+                Glide.with(requireContext())
                     .load(it.requiredMedia?.icon)
                     .placeholder(getCircularProgressDrawable())
                     .into(imageView36)
@@ -316,17 +341,14 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         tv_applied_client_activation.visible()
                     tv_applied_client_activation.text =
                         if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess") "Pending" else jpApplication.status
-                    tv_applied_client_activation.setCompoundDrawablesWithIntrinsicBounds(
-                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.drawable.ic_status_pending else if (jpApplication.status == "Activated") R.drawable.ic_applied else R.drawable.ic_application_rejected,
-                        0,
-                        0,
-                        0
+                    status_icon.setImageDrawable(
+                        if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) resources.getDrawable(R.drawable.ic_status_pending) else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") resources.getDrawable(R.drawable.ic_applied) else resources.getDrawable(R.drawable.ic_application_rejected)
                     )
                     activity?.applicationContext?.let {
                         tv_applied_client_activation.setTextColor(
                             ContextCompat.getColor(
                                 it,
-                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" || jpApplication.status == "Submitted") R.color.pending_color else if (jpApplication.status == "Activated") R.color.activated_color else R.color.rejected_color
+                                if (jpApplication.status == "Interested" || jpApplication.status == "Inprocess" ) R.color.pending_color else if (jpApplication.status == "Activated" || jpApplication.status == "Submitted") R.color.activated_color else R.color.rejected_color
                             )
                         )
                     }
@@ -354,14 +376,11 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
     private fun setupPreferredLocationRv() {
 
 
-        adapterPreferredLocation =
-            AdapterPreferredLocation()
+        adapterPreferredLocation = context?.let { ActiveLocationsAdapter(it) }
         rv_preferred_locations_client_activation.adapter = adapterPreferredLocation
 
-        val layoutManager = FlexboxLayoutManager(requireContext())
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.FLEX_START
-        layoutManager.alignItems = AlignItems.FLEX_START
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rv_preferred_locations_client_activation.layoutManager = layoutManager
         rv_preferred_locations_client_activation.addItemDecoration(
             HorizontaltemDecoration(
@@ -396,10 +415,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
     private fun showErrorWhileLoadingCourse(error: String) {
 
-        learning_cl.visible()
+        learning_cl.gone()
         learning_progress_bar.gone()
         learning_rv.gone()
-        learning_learning_error.visible()
+        learning_learning_error.gone()
 
         learning_learning_error.text = error
     }
@@ -482,7 +501,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                        if (!obj!!.coverPicture.isNullOrBlank()) {
 //                            if (obj.coverPicture!!.startsWith("http", true)) {
 //
-//                                GlideApp.with(requireContext())
+//                                Glide.with(requireContext())
 //                                    .load(obj.coverPicture!!)
 //                                    .placeholder(getCircularProgressDrawable())
 //                                    .error(R.drawable.ic_learning_default_back)
@@ -494,7 +513,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                                    .downloadUrl
 //                                    .addOnSuccessListener { fileUri ->
 //
-//                                        GlideApp.with(requireContext())
+//                                        Glide.with(requireContext())
 //                                            .load(fileUri)
 //                                            .placeholder(getCircularProgressDrawable())
 //                                            .error(R.drawable.ic_learning_default_back)
@@ -503,7 +522,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 //                            }
 //                        } else {
 //
-//                            GlideApp.with(requireContext())
+//                            Glide.with(requireContext())
 //                                .load(R.drawable.ic_learning_default_back)
 //                                .into(img)
 //                        }
@@ -523,7 +542,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
             val myAdapter = object : GenericRecyclerAdapterTemp<LessonModel>(content) {
                 override fun getLayoutId(position: Int, obj: LessonModel): Int {
-                    return R.layout.learning_bs_item
+                    return R.layout.learning_video_item
                 }
 
                 override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
@@ -534,12 +553,18 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         viewModel
                     )
                 }
+//            val layoutManager = LinearLayoutManager(context)
+//            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+//            learning_rv.layoutManager = LinearLayoutManager(
+//                activity?.applicationContext,
+//                LinearLayoutManager.HORIZONTAL,
+//                false
+//            )
             }
-            learning_rv.layoutManager = LinearLayoutManager(context)
+
+            learning_rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             learning_rv.setHasFixedSize(true)
             learning_rv.adapter = myAdapter
-
-
         }
     }
 
@@ -615,8 +640,10 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         pb_client_activation.gone()
     }
 
+
     var locationUpdates: LocationUpdates? = LocationUpdates()
     var location: Location? = null
+
     override fun onDestroy() {
         super.onDestroy()
         locationUpdates?.stopLocationUpdates(requireActivity())
@@ -759,7 +786,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                 if (!obj.coverPicture.isNullOrBlank()) {
                     if (obj.coverPicture!!.startsWith("http", true)) {
 
-                        GlideApp.with(it)
+                        Glide.with(it)
                             .load(obj.coverPicture!!)
                             .placeholder(fragment?.getCircularProgressDrawable())
                             .error(R.drawable.ic_learning_default_back)
@@ -771,7 +798,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                             .downloadUrl
                             .addOnSuccessListener { fileUri ->
 
-                                GlideApp.with(it)
+                                Glide.with(it)
                                     .load(fileUri)
                                     .placeholder(fragment?.getCircularProgressDrawable())
                                     .error(R.drawable.ic_learning_default_back)
@@ -780,7 +807,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                     }
                 } else {
 
-                    GlideApp.with(it)
+                    Glide.with(it)
                         .load(R.drawable.ic_learning_default_back)
                         .into(img)
                 }
@@ -850,6 +877,16 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
 
             }
         }
+    }
+
+    fun getCityIcon(city: String?) : Int? {
+        var cityMap = mapOf<String, Int>("Banglore" to R.drawable.ic_banglore,"Chennai" to R.drawable.ic_chennai,"Chandigarh" to R.drawable.ic_chandigarh,"Delhi" to R.drawable.ic_delhi,"Guwahati" to R.drawable.ic_guwahati,"Hyderabad" to R.drawable.ic_hyderabad,"Jaipur" to R.drawable.ic_jaipur,"Kolkata" to R.drawable.ic_kolkata, "Lukhnow" to R.drawable.ic_lukhnow, "Mumbai" to R.drawable.ic_mumbai, "Pune" to R.drawable.ic_pune )
+
+        var icon: Int? = R.drawable.ic_delhi
+        if (city?.length != 0 && cityMap.containsKey(city)){
+            icon = cityMap.get(city)
+        }
+        return icon
     }
 
 }

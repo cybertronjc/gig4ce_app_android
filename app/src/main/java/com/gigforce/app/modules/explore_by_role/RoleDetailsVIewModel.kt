@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
-import com.gigforce.client_activation.client_activation.models.Role
+import com.gigforce.common_ui.viewdatamodels.client_activation.Role
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.Task

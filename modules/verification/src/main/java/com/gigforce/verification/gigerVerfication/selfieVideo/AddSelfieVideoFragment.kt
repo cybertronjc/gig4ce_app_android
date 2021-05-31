@@ -14,9 +14,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible

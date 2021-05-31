@@ -1,7 +1,7 @@
 package com.gigforce.app.core.base.language
 
 import android.app.Dialog
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 
 interface LanguageUtilInterface {
     fun confirmDialogForDeviceLanguageChanged(currentDeviceLanguageCode: String,buttonClickListener: ConfirmationDialogOnClickListener)

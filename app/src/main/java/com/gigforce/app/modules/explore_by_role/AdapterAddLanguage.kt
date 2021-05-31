@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.datamodels.profile.Language
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.app.utils.ThumbTextSeekBar

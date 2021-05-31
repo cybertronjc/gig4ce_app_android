@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:id="@+id/cross_iv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:clickable="true"
+        android:focusable="true"
+          app:srcCompat="@drawable/ic_cross_grey" />
+
+    <TextView
+        android:id="@+id/gig_message_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="@color/black"
+        tools:text="Alright, No new gig sdjed dede ded Gigdede fededded" />
+
+    <RelativeLayout
+        android:id="@+id/rl_gigs"
+        android:layout_width="match_parent"
+        android:layout_height="280dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gigs_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="22dp" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/gig_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="22dp"
+            android:drawableTop="@drawable/ic_cross_grey"
+            android:drawablePadding="10dp"
+            android:visibility="gone"
+            tools:text="Unable to load your stuff" />
+
+    </RelativeLayout>
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/decline_slider_btn"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        app:border_radius="8dp"
+        app:inner_color="@color/lipstick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noteTV"
+        app:outer_color="@color/light_pink"
+        app:slider_height="60dp"
+        app:slider_icon="@drawable/ic_arrow_forward_white"
+        app:slider_icon_color="@color/white"
+        app:text="DECLINE"
+        app:text_size="16sp"
+        app:text_style="bold" />
+
+    <LinearLayout
+        android:id="@+id/ll_decline_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/size_50"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_no_more_gigs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_85"
+            android:layout_marginTop="@dimen/size_67"
+            app:srcCompat="@drawable/ic_no_more_gigs"
+            android:layout_marginEnd="@dimen/size_85"
+            android:minHeight="@dimen/size_120" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_44"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="5sp"
+            android:text="@string/no_more_gig"
+            android:textColor="@color/lipstick"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/no_scheduled_gig_on_this_day"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_okay_no_gigs_present"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_44"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/bg_rad_4_e94b81"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:lineSpacingExtra="3sp"
+            android:minHeight="@dimen/size_36"
+            android:paddingTop="@dimen/size_10"
+            android:paddingBottom="@dimen/size_10"
+            android:text="@string/okay_text"
+            android:textColor="@color/darkish_pink_two"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>

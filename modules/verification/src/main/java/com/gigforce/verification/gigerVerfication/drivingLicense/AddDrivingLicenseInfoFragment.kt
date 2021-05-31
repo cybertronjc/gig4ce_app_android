@@ -14,14 +14,12 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
-import com.gigforce.verification.gigerVerfication.VerificationValidations
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.gigerVerfication.WhyWeNeedThisBottomSheet
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.datamodels.verification.DrivingLicenseDataModel
@@ -33,9 +31,12 @@ import com.gigforce.core.utils.Lse
 import com.gigforce.verification.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
+import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.progressBar
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -105,9 +106,14 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
             getString(R.string.upload_your_driving_license)
         dlSubmitSliderBtn.isEnabled = false
 
-        iv_back_add_driving_license.setOnClickListener {
-            navigation.popBackStack("verification/main",inclusive = false)
-//            findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
+        toolbar.apply {
+            hideActionMenu()
+            showTitle(getString(R.string.giger_verification))
+
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
+            })
         }
 
         helpIconViewIV.setOnClickListener {
@@ -249,7 +255,7 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                     dlMainLayout.visible()
 
                     setDataOnEditLayout(drivingLicenseDetail)
-                    dlSubmitSliderBtn.isEnabled = true
+                    dlSubmitSliderBtn.isEnabled = false
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 .show()
@@ -302,8 +308,8 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 progressBar.gone()
 
                 if (it.dlCardDetailsUploaded && it.drivingLicenseDataModel != null) {
-                    if (it.drivingLicenseDataModel.userHasDL != null) {
-                        if (it.drivingLicenseDataModel.userHasDL!!) {
+                    if (it.drivingLicenseDataModel!!.userHasDL != null) {
+                        if (it.drivingLicenseDataModel!!.userHasDL!!) {
                             setDataOnViewLayout(it)
                         } else {
                             setDataOnEditLayout(null)

@@ -15,10 +15,10 @@ import android.widget.DatePicker
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.datamodels.profile.Education
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*

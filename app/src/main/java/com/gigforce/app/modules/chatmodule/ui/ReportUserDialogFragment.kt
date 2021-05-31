@@ -5,20 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.invisible
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 //import com.gigforce.app.modules.chatmodule.viewModels.ChatMessagesViewModel
-import com.gigforce.core.utils.Lse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_report_user.*
 import kotlinx.android.synthetic.main.fragment_report_user_main.*
 
 

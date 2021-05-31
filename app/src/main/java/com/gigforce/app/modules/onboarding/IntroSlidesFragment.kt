@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.dp
+import com.gigforce.core.extensions.dp
 import com.gigforce.core.utils.GlideApp
 import kotlinx.android.synthetic.main.fragment_intro_slides.*
 

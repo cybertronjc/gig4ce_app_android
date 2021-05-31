@@ -28,10 +28,10 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatGroup
-import com.gigforce.modules.feature_chat.models.ContactModel
-import com.gigforce.modules.feature_chat.models.GroupMedia
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel

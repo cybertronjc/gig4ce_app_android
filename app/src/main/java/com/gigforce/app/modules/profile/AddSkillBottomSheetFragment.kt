@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.core.datamodels.profile.Skill
-import com.gigforce.app.utils.DropdownAdapter
+import com.gigforce.common_ui.adapter.DropdownAdapter
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.add_skill_bottom_sheet.*
 
 class AddSkillBottomSheetFragment : ProfileBaseBottomSheetFragment() {
@@ -15,36 +19,69 @@ class AddSkillBottomSheetFragment : ProfileBaseBottomSheetFragment() {
         fun newInstance() = AddSkillBottomSheetFragment()
     }
 
-    var skills: ArrayList<String> = ArrayList()
-    var selectedSkill: String = ""
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         Log.d("DEBUG", "ENTERED Profile Education Expanded VIEW")
         inflateView(R.layout.add_skill_bottom_sheet, inflater, container)
-
-        skills.addAll(listOf(
-            getString(R.string.driving), getString(R.string.cooking), getString(R.string.shopkeeping), getString(
-                            R.string.managing_catalog),
-            getString(R.string.cashier), getString(R.string.tele_calling), getString(R.string.waiter), getString(
-                            R.string.bartener), getString(R.string.barback),
-            getString(R.string.fleet_management), getString(R.string.assembly_dismatling), getString(
-                            R.string.e_commerce_delivery),
-            getString(R.string.admin_assistant), getString(R.string.store_manager), getString(R.string.in_store_promoter),
-            getString(R.string.record_keeper), getString(R.string.barista), getString(R.string.house_keeping), getString(
-                            R.string.reception), getString(R.string.artist)))
-
         return getFragmentView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setListeners()
+        initViewModel()
     }
 
-    private fun setListeners() {
+    private fun initViewModel() {
+        profileViewModel.getProfileData()
+                .observe(viewLifecycleOwner,{
+                    val skillsSize = it.skills?.size ?: 0
+
+                    if(skillsSize >= 3){
+                        //Disable buttons
+                        add_more_button.isEnabled = false
+                        add_skill_save_button.isEnabled = false
+                    } else {
+                        add_more_button.isEnabled = true
+                        add_skill_save_button.isEnabled = true
+                    }
+
+                })
+
+        profileViewModel.fetchUserInterestDataState
+                .observe(viewLifecycleOwner, {
+
+                    when (it) {
+                        Lce.Loading -> {
+                            add_intrest_layout.gone()
+                            loading_skills_pb.visible()
+                        }
+                        is Lce.Content -> {
+                            loading_skills_pb.gone()
+                            add_intrest_layout.visible()
+
+                            setListeners(it.content.interest.map {
+                                it.skill
+                            })
+                        }
+                        is Lce.Error -> {
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Unable to load Skills")
+                                    .setMessage(it.error)
+                                    .setPositiveButton("Okay") { _, _ -> profileViewModel.getInterestForUser(null, false) }
+                                    .show()
+                        }
+                        else -> {
+                        }
+                    }
+                })
+
+        profileViewModel.getInterestForUser(null,false)
+    }
+
+    private fun setListeners(skills: List<String>) {
         val skillAdapter = DropdownAdapter(this.requireContext(), skills)
         val skillSpinner = add_skill_skill_name
         skillSpinner.setAdapter(skillAdapter)
@@ -72,9 +109,9 @@ class AddSkillBottomSheetFragment : ProfileBaseBottomSheetFragment() {
     private fun addNewSkill() {
         hideError(form_error, add_skill_skill_name)
         profileViewModel.setProfileSkill(
-            Skill(
-                add_skill_skill_name.text.toString()
-            )
+                Skill(
+                        add_skill_skill_name.text.toString()
+                )
         )
     }
 

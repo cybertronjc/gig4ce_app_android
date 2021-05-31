@@ -1,6 +1,6 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 
 interface OnContactClickListener {
 

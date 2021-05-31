@@ -13,6 +13,9 @@ data class Dependency(
         var courseId: String = "",
         var moduleId: String = "",
         var lessonId: String = "",
+
+        @JvmField
+        var optional: Boolean = false,
         @JvmField
         var isSlotBooked: Boolean = false,
 
@@ -21,6 +24,10 @@ data class Dependency(
 
         @get:Exclude
         var drawable: Drawable? = null,
+
+//        @get:Exclude
+//        var isOptional: Boolean = false,
+
         @JvmField
         var refresh: Boolean = false
 
@@ -33,6 +40,7 @@ data class Dependency(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readString() ?: "",
+            parcel.readByte() != 0.toByte(),
             parcel.readByte() != 0.toByte(),
             parcel.readByte() != 0.toByte(),
             null,
@@ -52,6 +60,7 @@ data class Dependency(
         parcel.writeString(courseId)
         parcel.writeString(moduleId)
         parcel.writeString(lessonId)
+        parcel.writeByte(if (optional) 1 else 0)
         parcel.writeByte(if (isSlotBooked) 1 else 0)
         parcel.writeByte(if (isDone) 1 else 0)
         parcel.writeByte(if (refresh) 1 else 0)

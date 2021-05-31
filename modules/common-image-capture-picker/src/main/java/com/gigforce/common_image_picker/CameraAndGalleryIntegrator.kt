@@ -66,7 +66,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity.supportFragmentManager
         }
 
-        ClickOrSelectImageBottomSheet.launch(fragmentManager, this)
+        ClickOrSelectImageBottomSheet.launch(fragmentManager, false,this)
     }
 
     fun startCameraForCapturing() {
@@ -289,5 +289,9 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
     override fun onPickImageThroughCameraClicked() {
         startGalleryForPicking()
+    }
+
+    override fun removeProfilePic() {
+
     }
 }

@@ -15,19 +15,21 @@ import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.client_activation.client_activation.DrivingCertSuccessDialog
 import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.client_activation.client_activation.models.Cities
 import com.gigforce.client_activation.client_activation.models.States
-import com.gigforce.app.modules.landingscreen.models.Dependency
+//import com.gigforce.landing_screen.landingscreen.models.Dependency
 import com.gigforce.app.modules.questionnaire.models.Questions
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.decors.RVPagerSnapFancyDecorator
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.utils.PushDownAnim
 import com.gigforce.common_ui.utils.RatioLayoutManager
 import com.gigforce.common_ui.utils.getScreenWidth
+import com.gigforce.core.datamodels.client_activation.Dependency
 import kotlinx.android.synthetic.main.layout_questionnaire_fragment.*
 import java.util.*
 
@@ -176,7 +178,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                     return@OnClickListener
                 }
-                if (selectedPosition > -1 && adapter.items[selectedPosition].selectedAnswer != -1) {
+                if (selectedPosition > -1 && adapter.itemCount > selectedPosition && adapter.items[selectedPosition].selectedAnswer != -1) {
                     selectedPosition += 1
                     ratioLayoutManager.setScrollEnabled(true)
                     smoothScroller.targetPosition = selectedPosition

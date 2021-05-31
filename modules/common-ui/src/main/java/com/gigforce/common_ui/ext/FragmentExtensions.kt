@@ -1,6 +1,8 @@
 package com.gigforce.common_ui.ext
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -63,4 +65,13 @@ fun Fragment.getCircularProgressDrawable(): CircularProgressDrawable {
     circularProgressDrawable.centerRadius = 20f
     circularProgressDrawable.start()
     return circularProgressDrawable
+}
+
+fun Fragment.hideSoftKeyboard() {
+
+    val activity = activity ?: return
+
+    val inputMethodManager =
+        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
 }

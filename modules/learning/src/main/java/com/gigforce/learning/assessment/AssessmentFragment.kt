@@ -33,7 +33,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.learning.assessment.models.AssementQuestionsReponse
-import com.gigforce.learning.repo.ILearningDataRepository
+import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_assessment.*

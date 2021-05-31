@@ -1,6 +1,6 @@
 package com.gigforce.modules.feature_chat.repositories
 
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.ChatMessage
 
 interface IChatContactViewModelContract {
 

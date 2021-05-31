@@ -4,9 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,14 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.analytics.ClientActivationEvents
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.client_activation.client_activation.models.JpSettings
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.extensions.*
 import com.gigforce.core.navigation.INavigation
@@ -45,6 +44,8 @@ class ApplicationClientActivationFragment : Fragment(),
         AdapterApplicationClientActivation()
     }
     private lateinit var mJobProfileId: String
+    private var win: Window? = null
+    private lateinit var mJobProfileTitle: String
 
 
     override fun onCreateView(
@@ -65,6 +66,7 @@ class ApplicationClientActivationFragment : Fragment(),
                 this,
                 ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
         ).get(ApplicationClientActivationViewModel::class.java)
+        changeStatusBarColor()
         getDataFromIntents(savedInstanceState)
         checkForBackPress()
         setupRecycler()
@@ -96,6 +98,13 @@ class ApplicationClientActivationFragment : Fragment(),
         tv_action_application_client_activation.setOnClickListener {
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
+            eventTracker.pushEvent(TrackingEventArgs(
+                    eventName = mJobProfileTitle + "_" + ClientActivationEvents.USER_SUBMITTED_APPLICATION,
+                    props = mapOf(
+                            "id" to mJobProfileId,
+                            "title" to bussinessTitle
+                    )
+            ))
             eventTracker.pushEvent(
                 TrackingEventArgs(
                     eventName = ClientActivationEvents.USER_SUBMITTED_APPLICATION,
@@ -148,11 +157,12 @@ class ApplicationClientActivationFragment : Fragment(),
         })
         viewModel.observableJobProfile.observe(viewLifecycleOwner, Observer {
             jpSettings = it
-            Glide.with(this).load(it?.coverImg).placeholder(
-                com.gigforce.common_ui.utils.getCircularProgressDrawable(
-                    requireContext()
-                )
-            ).into(iv_application_client_activation)
+            Log.d("jpsettings", jpSettings.toString())
+//            Glide.with(this).load(it?.coverImg).placeholder(
+//                com.gigforce.common_ui.utils.getCircularProgressDrawable(
+//                    requireContext()
+//                )
+//            ).into(iv_application_client_activation)
 
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
             tv_completion_application.text = it?.subTitle ?: ""
@@ -206,6 +216,7 @@ class ApplicationClientActivationFragment : Fragment(),
         if (!viewModel.redirectToNextStep) return
         for (i in adapter.items.indices) {
             if (!adapter.items[i].isDone) {
+                Log.d("type", adapter.items[i].toString())
                 when (adapter.items[i].type) {
                     "profile_pic" -> {
                         navigation.navigateTo(
@@ -218,7 +229,7 @@ class ApplicationClientActivationFragment : Fragment(),
                     }
                     "about_me" -> {
                         navigation.navigateTo(
-                                "learning/addBio", bundleOf(
+                                "profile/addBio", bundleOf(
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                         )
@@ -242,6 +253,16 @@ class ApplicationClientActivationFragment : Fragment(),
                                     StringConstants.FROM_CLIENT_ACTIVATON.value to true
                             )
                     )
+
+                    "aadhar_card" -> navigation.navigateTo(
+                        "verification/AADHAR",
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    )
+
+                    "pan_card" -> navigation.navigateTo(
+                        "verification/PAN",
+                        bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+                    )
                 }
                 break
             }
@@ -258,9 +279,10 @@ class ApplicationClientActivationFragment : Fragment(),
     fun checkAndUpdateUI() {
         h_pb_application_frag.max = adapter.items.size
 
-        Observable.fromIterable(adapter.items).all { item -> item.isDone }.subscribe({ success ->
+        Observable.fromIterable(adapter.items.filter { it -> !it.optional }).all { item -> item.isDone }.subscribe({ success ->
             tv_action_application_client_activation.isEnabled = success
         }, { err -> })
+
         Observable.fromIterable(adapter.items).filter { item -> !item.isDone }.toList()
                 .subscribe({ success ->
                     run {
@@ -274,6 +296,7 @@ class ApplicationClientActivationFragment : Fragment(),
                     h_pb_application_frag.visible()
                 })
 
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -286,12 +309,12 @@ class ApplicationClientActivationFragment : Fragment(),
     private fun getDataFromIntents(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
 
         arguments?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
-
+            mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
         }
     }
 
@@ -303,6 +326,18 @@ class ApplicationClientActivationFragment : Fragment(),
 
 
     }
+
+    private fun changeStatusBarColor(){
+                win = activity?.window
+                // clear FLAG_TRANSLUCENT_STATUS flag:
+                win?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+                win?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+                win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
+            }
 
     override fun onItemClick(dependency: Dependency) {
         viewModel.redirectToNextStep = true
@@ -346,6 +381,16 @@ class ApplicationClientActivationFragment : Fragment(),
                                 StringConstants.FROM_CLIENT_ACTIVATON.value to true
                         )
                 )
+
+            "aadhar_card" -> navigation.navigateTo(
+                "verification/AADHAR",
+                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
+
+            "pan_card" -> navigation.navigateTo(
+                "verification/PAN",
+                bundleOf(StringConstants.FROM_CLIENT_ACTIVATON.value to true)
+            )
         }
     }
 
@@ -366,6 +411,8 @@ class ApplicationClientActivationFragment : Fragment(),
 
 
     }
+
+
 
 
 }

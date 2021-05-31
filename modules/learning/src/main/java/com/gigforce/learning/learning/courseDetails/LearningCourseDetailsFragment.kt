@@ -7,7 +7,6 @@ import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -20,7 +19,7 @@ import com.example.learning.R
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.core.NavFragmentsData
+import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.core.StringConstants
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.core.extensions.gone
@@ -32,8 +31,8 @@ import com.gigforce.core.utils.Lce
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
 import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
-import com.gigforce.learning.learning.models.Course
-import com.gigforce.learning.learning.models.Module
+import com.gigforce.core.datamodels.learning.Course
+import com.gigforce.common_ui.viewdatamodels.models.Module
 import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +50,6 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 
     @Inject
     lateinit var navigation: INavigation
-
     private val viewModel: CourseDetailsViewModel by viewModels()
 
     private val mAdapter: LearningDetailsLessonsAdapter by lazy {
@@ -72,7 +70,6 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
-
         }
 
         arguments?.let {
@@ -80,8 +77,6 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                 it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             mCourseId = it.getString(INTENT_EXTRA_COURSE_ID) ?: return@let
             mModuleId = it.getString(INTENT_EXTRA_MODULE_ID) ?: return@let
-
-
         }
 
         initView()
@@ -290,7 +285,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         }
 
         tv1HS1.text = course.name
-        //   levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
+        levelTV.text = "Module $mCurrentModuleNo of ${course.moduleCount}"
     }
 
     private fun prepareDescription(description: String): SpannableString {
@@ -367,8 +362,7 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     viewModel.currentModules!!.indexOf(viewModel.currentlySelectedModule!!) + 1
                 } else 0
 
-        levelTV.text =
-            "Module $moduleNo Of ${viewModel.currentModules?.size}"
+        levelTV.text = "Module $moduleNo Of ${viewModel.currentModules?.size}"
 
         var lessonsCompleted = 0
         var totalLessons = 0
@@ -376,9 +370,12 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         var assignmentsCompleted = 0
         var totalAssignments = 0
 
-        viewModel.mCurrentModulesProgressData?.forEach { moduleProg ->
+        if(viewModel.currentlySelectedModule != null) {
 
-            moduleProg.lessonsProgress.filter { it.isActive }.forEach { lessonProg ->
+            val currentModuleProgress = viewModel.mCurrentModulesProgressData?.find { it.moduleId == viewModel.currentlySelectedModule!!.id }
+                    ?: return
+
+            currentModuleProgress.lessonsProgress.filter { it.isActive }.forEach { lessonProg ->
 
                 if (lessonProg.lessonType == CourseContent.TYPE_VIDEO) {
                     totalLessons++
@@ -391,20 +388,20 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
                     if (lessonProg.completed)
                         assignmentsCompleted++
                 }
+
+                complitionStatusTv.text =
+                        "$lessonsCompleted/$totalLessons Lessons Completed"
+                assessmentCountTv.text =
+                        if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
+                            "0 Assessments"
+                        else if (assignmentsCompleted == 1)
+                            "$assignmentsCompleted/$totalAssignments Assessment Completed"
+                        else
+                            "$assignmentsCompleted/$totalAssignments Assessments Completed"
+
+                lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
             }
         }
-
-        complitionStatusTv.text =
-                "$lessonsCompleted/$totalLessons Lessons Completed"
-        assessmentCountTv.text =
-                if (viewModel.currentAssessments?.size == null || totalAssignments == 0)
-                    "0 Assessments"
-                else if (assignmentsCompleted == 1)
-                    "$assignmentsCompleted/$totalAssignments Assessment Completed"
-                else
-                    "$assignmentsCompleted/$totalAssignments Assessments Completed"
-
-        lessonsLabel.text = "Lesson (${viewModel.currentlySelectedModule?.title})"
     }
 
     private fun showErrorInLoadingLessons(error: String) {

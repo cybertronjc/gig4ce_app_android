@@ -10,6 +10,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import kotlinx.android.synthetic.main.layout_add_lang_profile_v2.*

@@ -11,18 +11,19 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.verification.gigerVerfication.GigVerificationViewModel
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.core.extensions.gone
+import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.app.modules.photocrop.PhotoCrop
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.chip.Chip
 import com.google.firebase.storage.FirebaseStorage
@@ -178,17 +179,7 @@ class ProfileFragment : BaseFragment() {
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
-            val requiredDocsVerified = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && it.bankUploadDetailsDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED
-                    && (it.aadharCardDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED || it.drivingLicenseDataModel?.state == GigerVerificationStatus.STATUS_VERIFIED)
-
-            val requiredDocsUploaded = it.selfieVideoDataModel?.videoPath != null
-                    && it.panCardDetails?.panCardImagePath != null
-                    && it.bankUploadDetailsDataModel?.passbookImagePath != null
-                    && (it.aadharCardDataModel?.frontImage != null || it.drivingLicenseDataModel?.backImage != null)
-
-            if (requiredDocsVerified) {
+            if (it.requiredDocsVerified) {
                 layout.main_expanded_is_verified.verification_status_tv.text =
                     getString(R.string.verified_text)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(
@@ -201,7 +192,7 @@ class ProfileFragment : BaseFragment() {
                 layout.main_expanded_is_verified.status_iv.setImageResource(R.drawable.ic_check)
                 layout.main_expanded_is_verified.verification_status_cardview.strokeColor =
                     ResourcesCompat.getColor(resources, R.color.green, null)
-            } else if (requiredDocsUploaded) {
+            } else if (it.requiredDocsUploaded) {
                 layout.main_expanded_is_verified.verification_status_tv.text =
                     getString(R.string.under_verification)
                 layout.main_expanded_is_verified.verification_status_tv.setTextColor(

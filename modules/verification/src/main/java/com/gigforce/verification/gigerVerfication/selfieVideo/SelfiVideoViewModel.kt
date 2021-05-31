@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.verification.gigerVerfication.GigerVerificationRepository
-import com.gigforce.verification.gigerVerfication.GigerVerificationStatus
+import com.gigforce.common_ui.datamodels.GigerVerificationStatus
+import com.gigforce.common_ui.repository.GigerVerificationRepository
 import com.gigforce.core.SingleLiveEvent2
 import com.gigforce.core.datamodels.verification.SelfieVideoDataModel
 import com.gigforce.core.datamodels.verification.VerificationBaseModel
