@@ -114,7 +114,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_earn_role_details" />
 
-            <com.gigforce.app.utils.ReadMoreTextView
+            <com.gigforce.common_ui.utils.ReadMoreTextView
                 android:id="@+id/tv_what_content_role_details"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

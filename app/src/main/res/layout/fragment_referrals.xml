@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ll_top">
 
 
-            <com.gigforce.app.utils.widgets.CircleImageView
+            <com.gigforce.common_ui.widgets.CircleImageView
                 android:id="@+id/iv_two_referrals_frag"
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
@@ -47,14 +47,14 @@
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 
-            <com.gigforce.app.utils.widgets.CircleImageView
+            <com.gigforce.common_ui.widgets.CircleImageView
                 android:id="@+id/iv_one_referrals_frag"
                 android:layout_width="@dimen/size_48"
                 android:layout_height="@dimen/size_48"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/size_1" />
 
-            <com.gigforce.app.utils.widgets.CircularTextView
+            <com.gigforce.common_ui.widgets.CircularTextView
                 android:id="@+id/tv_more_items_referrals_frag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

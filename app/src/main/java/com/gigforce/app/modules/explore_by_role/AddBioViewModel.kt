@@ -2,8 +2,8 @@ package com.gigforce.app.modules.explore_by_role
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.SingleLiveEvent
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.SingleLiveEvent
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.launch

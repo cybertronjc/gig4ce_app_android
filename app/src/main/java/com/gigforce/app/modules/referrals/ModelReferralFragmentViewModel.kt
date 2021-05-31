@@ -1,7 +1,7 @@
 package com.gigforce.app.modules.referrals
 
-import com.gigforce.app.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.getOrThrow
 import com.google.firebase.firestore.FieldPath
 

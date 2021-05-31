@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
-import com.gigforce.giger_app.repo.ILoginInfoRepo
+import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.giger_app.vm.LandingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*

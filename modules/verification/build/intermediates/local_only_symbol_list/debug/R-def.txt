@@ -210,6 +210,7 @@ id aadharFrontImageHolder
 id aadharInfoLayout
 id aadharLabel
 id aadharLayout
+id aadharMainLayout
 id aadharNoEditErrorMessage
 id aadharNoLabel
 id aadharNoRB
@@ -223,6 +224,7 @@ id aadharViewFrontErrorMessage
 id aadharViewFrontImageIV
 id aadharViewFrontLabel
 id aadharViewLayout
+id aadharViewLayout1
 id aadharYesRB
 id accLabel
 id accNoLabel
@@ -374,15 +376,10 @@ id ivAadhaar1
 id ivDL1
 id ivPan1
 id ivVeriDD1
-id iv_back_add_aadhar_card_info
-id iv_back_add_bank_details_info
-id iv_back_add_driving_license
-id iv_back_add_pan_card_info
 id iv_back_add_selfie
 id iv_back_application_client_activation
-id iv_back_verification_page
+id iv_back_upload_aadhar_card_client_activation
 id iv_download_giger_verification
-id iv_options_verification_page
 id licenseNoET
 id licenseNoLabel
 id licenseValidityET
@@ -411,6 +408,7 @@ id panImageHolder
 id panInfoLayout
 id panLabel
 id panLayout
+id panMainLayout1
 id panNoEditErrorMessage
 id panNoLabel
 id panNoRB
@@ -418,6 +416,7 @@ id panSubmitSliderBtn
 id panViewImageErrorMessage
 id panViewImageIV
 id panViewLayout
+id panViewLayout1
 id panViewNoErrorMessage
 id panViewNoTV
 id panYesRB
@@ -438,6 +437,7 @@ id pb_selfie_video
 id pinET
 id pinLabel
 id progressBar
+id progressBar1
 id recordVideoButton
 id recordingTimerLayout
 id retake_video
@@ -486,18 +486,14 @@ id tvVeriDone
 id tv_action_giger_verification
 id tv_action_upld_dl_cert
 id tv_action_upld_dl_cl_act
+id tv_action_upload_pan
 id tv_cities
 id tv_client_activation
 id tv_contract_status
 id tv_contract_status_label
 id tv_no_driving_cert
 id tv_schedule_test
-id tv_title_add_aadhar_card_info
-id tv_title_add_bank_details_info
-id tv_title_add_driving_license
-id tv_title_add_pan_card_info
 id tv_title_add_selfie
-id tv_title_verification_page
 id uploadDocumentCardView
 id uploadDocumentLabel
 id uploadImageLayout
@@ -555,7 +551,9 @@ layout layout_verification_dl
 layout layout_verification_done
 layout layout_verification_dropdown
 layout layout_verification_pancard
+layout upload_aadhar_card_fragment
 layout upload_car_client_activation
+layout upload_pan_card_fragment
 string aadhar_card
 string aadhar_card_back_image
 string aadhar_card_details_uploaded

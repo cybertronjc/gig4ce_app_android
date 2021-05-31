@@ -8,7 +8,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

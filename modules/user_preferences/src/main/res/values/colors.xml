@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="setting_bg">#f7f7f7</color>
+    <color name="battle_ship_grey">#6d7278</color>
+    <color name="cancelcolor">#979797</color>
+    <color name="black">#000000</color>
+    <color name="gray_color1">#cdcdcd</color>
+    <color name="gray_color">#6d7278</color>
+    <color name="shadow_color">#c8c7cc</color>
+
+</resources>

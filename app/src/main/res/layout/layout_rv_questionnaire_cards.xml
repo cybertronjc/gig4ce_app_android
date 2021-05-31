@@ -50,7 +50,7 @@
                 android:layout_marginTop="@dimen/size_16"
                 android:fontFamily="@font/lato"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 tools:text="Has Driving License for more than 1 year?" />
 

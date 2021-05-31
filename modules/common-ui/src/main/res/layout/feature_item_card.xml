@@ -8,10 +8,16 @@
     android:layout_marginBottom="@dimen/size4"
     android:layout_marginRight="@dimen/size16"
     app:cardCornerRadius="4dp">
-
+    <FrameLayout
+        android:id="@+id/borderFrameLayout"
+        android:background="@drawable/rect_button_outline"
+        android:layout_width="237dp"
+        android:layout_height="152dp"
+        android:visibility="gone"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="237dp"
-        android:layout_height="152dp">
+        android:layout_height="152dp"
+        android:padding="1dp">
 
         <ImageView
             android:id="@+id/imgage"
@@ -55,6 +61,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
+
+            <TextView
+                android:id="@+id/module_completed_perc_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="9dp"
+                android:visibility="gone"
+                android:text="0 %"
+                android:textSize="12sp"
+                android:fontFamily="@font/lato"
+                android:textColor="@color/app_orange"
+                tools:layout_editor_absoluteY="1dp"
+                />
+
+            <ImageView
+                android:id="@+id/module_completed_iv"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:srcCompat="@drawable/ic_clock_orange"
+                app:layout_constraintEnd_toStartOf="@id/module_completed_perc_tv"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/module_completed_perc_tv"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </com.google.android.material.card.MaterialCardView>

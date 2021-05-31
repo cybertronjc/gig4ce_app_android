@@ -9,6 +9,7 @@ class FeatureItemCardDVM(
     val id : String? = null,
     val image : Any?,
     val title:String,
+    var isSelectedView : Boolean = false,
     val subtitle:String? = null,
     val navPath:String? = null,
     val args:Bundle? = null

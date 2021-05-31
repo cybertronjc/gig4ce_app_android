@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HelpRow">
+        <attr name="icon_help" format="integer" />
+        <attr name="content_help" format="string" />
+    </declare-styleable>
+</resources>

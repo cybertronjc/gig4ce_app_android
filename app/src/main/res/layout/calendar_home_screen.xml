@@ -178,7 +178,7 @@
         app:peekHeight="200dp">
 
         <fragment
-            android:name="com.gigforce.app.modules.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+            android:name="com.gigforce.app.modules.calendarscreen.BSCalendarScreenFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -228,7 +228,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.gigforce.app.core.base.components.CalendarView
+            <com.gigforce.giger_app.components.CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

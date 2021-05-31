@@ -226,11 +226,16 @@
             app:layout_constraintTop_toBottomOf="@id/modulesLabel">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/learning_details_modules_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:visibility="gone" />
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/learning_details_modules_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone"/>
 
             <ProgressBar
                 android:id="@+id/learning_modules_progress_bar"
@@ -261,6 +266,7 @@
             android:textColor="#000000"
             android:textSize="16sp"
             android:letterSpacing="0"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/modules_container" />
 
@@ -332,6 +338,7 @@
             android:text="@string/assessment_"
             android:textColor="#000000"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dividerView2" />
 
@@ -342,6 +349,7 @@
             android:layout_height="wrap_content"
             android:minHeight="120dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/assessmentsLabel">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -380,6 +388,7 @@
             app:strokeColor="@color/colorPrimary"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="15dp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/assessments_container" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

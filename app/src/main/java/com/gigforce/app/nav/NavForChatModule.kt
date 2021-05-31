@@ -13,5 +13,9 @@ class NavForChatModule(
         baseImplementation.registerRoute("${moduleName}/groupDetails", R.id.groupDetailsFragment2)
         baseImplementation.registerRoute("${moduleName}/contacts", R.id.contactsFragment)
         baseImplementation.registerRoute("${moduleName}/groupMediaList", R.id.groupMediaListFragment2)
+//        baseImplementation.registerRoute("${moduleName}/main", R.id.contactScreenFragment)
+//        baseImplementation.registerRoute("${moduleName}/chatScreenFragment", R.id.chatScreenFragment)
+
+
     }
 }

@@ -27,7 +27,7 @@ import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.R.*
 import com.gigforce.app.modules.onboarding.utils.DepthPageTransformer
-import com.gigforce.app.core.dp
+import com.gigforce.core.extensions.dp
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata

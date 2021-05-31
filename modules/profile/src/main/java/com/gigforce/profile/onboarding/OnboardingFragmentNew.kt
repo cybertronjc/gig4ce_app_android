@@ -42,8 +42,8 @@ import com.android.installreferrer.api.ReferrerDetails
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.gigforce.core.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.utils.NavFragmentsData
-import com.gigforce.core.utils.SharedDataInterface
 
 @AndroidEntryPoint
 class OnboardingFragmentNew : Fragment(){
@@ -53,7 +53,7 @@ class OnboardingFragmentNew : Fragment(){
     @Inject
     lateinit var eventTracker: IEventTracker
 
-    @Inject lateinit var sharedPreference : SharedDataInterface
+    @Inject lateinit var sharedPreference : SharedPreAndCommonUtilInterface
 
     var navFragmentsData: NavFragmentsData? = null
 

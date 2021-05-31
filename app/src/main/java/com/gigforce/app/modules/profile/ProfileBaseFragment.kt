@@ -2,10 +2,9 @@ package com.gigforce.app.modules.profile
 
 import android.content.Context
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.chip.Chip
 
 abstract class ProfileBaseFragment: BaseFragment() {

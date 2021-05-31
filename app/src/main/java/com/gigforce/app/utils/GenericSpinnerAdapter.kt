@@ -1,7 +1,6 @@
 package com.gigforce.app.utils
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +36,7 @@ class GenericSpinnerAdapter<T>(context: Context, resource: Int, objects: List<T>
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val v = LayoutInflater.from(context)
-            .inflate(R.layout.layout_custom_spinner_drop_down, parent, false)
+            .inflate(android.R.layout.simple_spinner_dropdown_item, parent, false)
         val tv = v as TextView
         if (position == 0) {
             tv.height = 0

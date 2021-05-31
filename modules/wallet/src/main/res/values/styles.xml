@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="IconOnlyButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/transparent</item>
+        <item name="tint">@android:color/transparent</item>
+        <item name="tintMode">add</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
+    <style name="LatoRegular16Black">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:lineSpacingExtra">19.1sp</item>
+        <item name="android:textColor">#222222</item>
+    </style>
+    <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#d16f6f</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+    <style name="LatoRegular12Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="LatoWhite16" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#fefefe</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LatoWhite28" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#fefefe</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="LatoBold28" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#d9000000</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+
+    <style name="LatoBold16" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">#d9000000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LatoBold18" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#ca0071</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LatoRegular14Black" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="LatoRegular20Black">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#d9000000</item>
+    </style>
+
+    <style name="LatoRegularCardText12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textColor">#6f6f6f</item>
+    </style>
+    <style name="LatoBold14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:lineSpacingExtra">5.1sp</item>
+    </style>
+
+    <style name="LatoBold24">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="LatoWhiteHeading">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:lineSpacingExtra">20.9sp</item>
+    </style>
+    <style name="LatoWhiteRegular">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
+    <style name="LipstickCardBottom">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#d72467</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+</resources>

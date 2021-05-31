@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import com.gigforce.common_ui.cells.*
 import com.gigforce.common_ui.core.CommonViewTypes
-import com.gigforce.common_ui.molecules.FeatureItemCard2
+import com.gigforce.common_ui.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.molecules.FeatureItemCardComponent
 import com.gigforce.common_ui.molecules.GigInfoCardComponent
 import com.gigforce.common_ui.molecules.VideoItemCardComponent
@@ -24,7 +24,7 @@ class LandingViewTypeLoader : IViewTypeLoader {
                 context,
                 null
             )
-            CommonViewTypes.VIEW_FEATURE_ITEM_CARD2 -> FeatureItemCard2(context,null)
+            CommonViewTypes.VIEW_FEATURE_ITEM_CARD2 -> FeatureItemCard2Component(context,null)
             CommonViewTypes.VIEW_GIG_ITEM_CARD -> GigInfoCardComponent(context,null)
             else -> null
         }

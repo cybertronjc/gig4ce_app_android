@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_50">
+
+        <TextView
+            android:id="@+id/tv_name_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="5sp"
+            android:textColor="#333333"
+            android:textSize="24sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_about_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_profile_v2"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_4"
+            android:layout_toStartOf="@+id/iv_edit_profile_v2"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:id="@+id/iv_edit_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_12"
+            android:layout_alignBottom="@+id/tv_about_profile_v2"
+            android:layout_alignParentEnd="true"
+            android:minWidth="@dimen/size_12"
+            android:paddingStart="@dimen/size_16"
+            android:paddingEnd="@dimen/size_16"
+            android:src="@drawable/ic_edit" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/summary_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_about_profile_v2"
+            android:layout_margin="@dimen/size_16"
+
+            app:chipSpacingHorizontal="@dimen/size_12"
+            app:chipSpacingVertical="@dimen/size_8">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_verified"
+                style="@style/AppSingleChoiceChip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#f0ffec"
+                android:text="@string/verified"
+                android:textColor="#41b423"
+                app:chipIcon="@drawable/ic_applied"
+                app:chipIconEnabled="true"
+                app:chipStrokeColor="#41b423"
+                app:chipStrokeWidth="1dp" />
+
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_rating"
+                style="@style/AppProfileChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.5"
+                app:chipIcon="@drawable/star_rating_bar_full"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_interest_delivery_executive"
+                style="@style/AppProfileChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hyderabad"
+                app:chipIcon="@drawable/ic_location_chip_profile_v2"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_education"
+                style="@style/AppProfileChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Graduate"
+                app:chipIcon="@drawable/ic_graduation_profile_v2"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_driving"
+                style="@style/AppProfileChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Driving"
+                app:chipIcon="@drawable/ic_icon_awesome_car_alt"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_data_entry"
+                style="@style/AppProfileChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data Entry"
+                app:chipIcon="@drawable/ic_baseline_library_books_24"
+                app:chipIconEnabled="true"
+                app:chipStrokeWidth="1dp" />
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rl_likes_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/summary_chip_group"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_20"
+
+            android:layout_marginEnd="@dimen/size_16">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_oval_oval_oval_mask" />
+
+            <ImageView
+                android:id="@+id/ic_thumbs_up_profile_v2"
+                android:layout_width="@dimen/size_40"
+                android:layout_height="@dimen/size_40"
+                android:layout_marginStart="@dimen/size_29"
+                android:layout_marginTop="@dimen/size_16"
+
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_thumbs_up" />
+
+            <TextView
+                android:id="@+id/tv_likes_profile_v2"
+                android:layout_width="@dimen/size_57"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ic_thumbs_up_profile_v2"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginBottom="@dimen/size_13"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="1sp"
+                android:text="17 Likes "
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/ic_thumbs_up_profile_v2"
+                app:layout_constraintStart_toStartOf="@+id/ic_thumbs_up_profile_v2"
+                app:layout_constraintTop_toBottomOf="@+id/ic_thumbs_up_profile_v2" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/br_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="right"
+                app:constraint_referenced_ids="tv_likes_profile_v2,ic_thumbs_up_profile_v2" />
+
+            <TextView
+                android:id="@+id/tv_let_your_friends_profile_v2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/size_33"
+                android:layout_marginTop="@dimen/size_15"
+                android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Let your Friends know about this
+Profile "
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/tv_share_now_profile_v2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/br_1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_share_now_profile_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/share_now_underline"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_let_your_friends_profile_v2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_likes_profile_v2"
+                app:layout_constraintTop_toTopOf="@+id/tv_likes_profile_v2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/rl_likes_profile_v2"
+            android:layout_marginTop="@dimen/size_24"
+            android:background="#f5f7ff" />
+
+        <TextView
+            android:id="@+id/tv_about_me_label_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_1"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_19"
+            android:drawablePadding="@dimen/size_10"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/about_me"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_about_me_label" />
+
+        <ImageView
+            android:id="@+id/iv_edit_about_me_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_12"
+            android:layout_alignBottom="@+id/tv_about_me_label_profile_v2"
+            android:layout_alignParentEnd="true"
+            android:minWidth="@dimen/size_12"
+            android:paddingStart="@dimen/size_16"
+            android:paddingEnd="@dimen/size_16"
+            android:src="@drawable/ic_edit" />
+
+        <TextView
+            android:id="@+id/tv_tell_us_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_about_me_label_profile_v2"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tell us more about you "
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <View
+            android:id="@+id/view_2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_tell_us_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_address_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_2"
+            android:layout_marginTop="@dimen/size_16" />
+
+
+        <View
+            android:id="@+id/view_3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/add_address_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_video_intro_label_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_3"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:drawablePadding="@dimen/size_10"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/video_intro"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_play_black" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_record_video_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_video_intro_label_profile_v2"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_12"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/bg_f8cddb_rad_8"
+            android:minHeight="@dimen/size_196">
+
+            <TextView
+                android:id="@+id/tv_let_people_profile_v2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/let_people_know_more_about_you_record_your_introduction_video"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_record_now_profile_v2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:gravity="end"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/record_now"
+                android:textColor="@color/lipstick"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/tv_let_people_profile_v2"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_let_people_profile_v2" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/size_16"
+                android:src="@drawable/ic_undraw_taking_selfie_lbo_7"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_record_now_profile_v2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/cl_record_video_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#f5f7ff" />
+
+        <TextView
+            android:id="@+id/tv_whats_on_your_mind_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_4"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:drawablePadding="@dimen/size_10"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Whats on your mind?"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_fresh_idea_lightbulb_symbol_with_a_leaf" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_whats_on_your_mind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_whats_on_your_mind_profile_v2"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_16"
+            android:background="@drawable/gradient_button">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_whats_on_your_mind_profile_v2"
+                android:layout_width="@dimen/size_88"
+                android:layout_height="@dimen/size_88"
+                app:cardCornerRadius="@dimen/size_44"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="@dimen/size_65"
+                    android:layout_height="@dimen/size_44"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_undraw_designer_by_46" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="4sp"
+                android:text="Needs Work Urgently !"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cv_whats_on_your_mind_profile_v2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_16"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="Updated 2 hrs ago"
+                android:textColor="#cacaca"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_5"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/cl_whats_on_your_mind"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#f5f7ff" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_experience_profile_fragment_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_5"
+            android:layout_marginTop="@dimen/size_16" />
+
+        <View
+            android:id="@+id/view_6"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/add_experience_profile_fragment_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_skills_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_6"
+            android:layout_marginTop="@dimen/size_16" />
+
+        <View
+            android:id="@+id/view_7"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/add_skills_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#f5f7ff" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_documents_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_7"
+            android:layout_marginTop="@dimen/size_16" />
+
+        <View
+            android:id="@+id/view_8"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/add_documents_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_education_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_8"
+            android:layout_marginTop="@dimen/size_16" />
+
+        <View
+            android:id="@+id/view_9"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/add_education_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_contact_info_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_9"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:drawablePadding="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/contact_info"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_icon_metro_perm_phone_msg" />
+
+
+        <TextView
+            android:id="@+id/tv_call_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_contact_info_profile_v2"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_24"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="+91- 8932842034"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_call__1_" />
+
+        <View
+            android:id="@+id/view_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_call_profile_v2"
+            android:layout_marginStart="@dimen/size_48"
+            android:layout_marginTop="@dimen/size_12"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_whatsapp_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_10"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_14"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tap To Add"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_icon_ionic_logo_whatsapp" />
+
+        <View
+            android:id="@+id/view_11"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_whatsapp_profile_v2"
+            android:layout_marginStart="@dimen/size_48"
+            android:layout_marginTop="@dimen/size_12"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_mail_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_11"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_14"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tap To Add"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_email" />
+
+        <View
+            android:id="@+id/view_12"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_mail_profile_v2"
+            android:layout_marginTop="@dimen/size_24"
+            android:background="#66979797" />
+
+        <com.app.user_profile.components.AddContentCard
+            android:id="@+id/add_language_profile_v2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_12"
+            android:layout_marginTop="@dimen/size_27" />
+
+        <View
+            android:id="@+id/view_13"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/add_language_profile_v2"
+            android:layout_marginTop="@dimen/size_16"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_social_media_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_13"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_12"
+            android:drawablePadding="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/social_media"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_group_senior" />
+
+        <TextView
+            android:id="@+id/tv_linked_in_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_social_media_profile_v2"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_18"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tap To Add"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_linkedin_square" />
+
+        <View
+            android:id="@+id/view_14"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_linked_in_profile_v2"
+            android:layout_marginStart="@dimen/size_48"
+            android:layout_marginTop="@dimen/size_12"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_facebook_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_14"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_12"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tap To Add"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_facebook_square" />
+
+        <View
+            android:id="@+id/view_15"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_1"
+            android:layout_below="@+id/tv_facebook_profile_v2"
+            android:layout_marginStart="@dimen/size_48"
+            android:layout_marginTop="@dimen/size_12"
+            android:background="#66979797" />
+
+        <TextView
+            android:id="@+id/tv_instagram_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_15"
+            android:layout_marginStart="@dimen/size_19"
+            android:layout_marginTop="@dimen/size_12"
+            android:drawablePadding="@dimen/size_8"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Tap To Add"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_instagram" />
+
+
+        <View
+            android:id="@+id/view_16"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/tv_instagram_profile_v2"
+            android:layout_marginTop="@dimen/size_24"
+            android:background="#f5f7ff" />
+
+        <TextView
+            android:id="@+id/tv_preferences_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_16"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_26"
+            android:drawablePadding="@dimen/size_9"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Preferences"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/settings" />
+
+        <TextView
+            android:id="@+id/tv_privacy_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_preferences_profile_v2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/size_16"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:text="Public"
+            android:textColor="#707070"
+            android:textSize="12sp"
+            android:textStyle="normal" />
+
+        <View
+            android:id="@+id/view_17"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_12"
+            android:layout_below="@+id/tv_instagram_profile_v2"
+            android:layout_marginTop="@dimen/size_18"
+            android:background="#f5f7ff" />
+    </RelativeLayout>
+
+
+</androidx.core.widget.NestedScrollView>

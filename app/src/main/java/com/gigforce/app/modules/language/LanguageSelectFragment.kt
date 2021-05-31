@@ -2,26 +2,21 @@ package com.gigforce.app.modules.language
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.os.RemoteException
-import android.util.Log
 import android.view.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.android.installreferrer.api.InstallReferrerClient
-import com.android.installreferrer.api.InstallReferrerStateListener
 import com.franmontiel.localechanger.LocaleChanger
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.configrepository.ConfigViewModel
+//import com.gigforce.app.utils.configrepository.ConfigViewModel
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
-import com.android.installreferrer.api.ReferrerDetails
-import com.gigforce.app.analytics.LanguageEvents
+import com.gigforce.core.analytics.LanguageEvents
+import com.gigforce.common_ui.configrepository.ConfigViewModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONException
 import javax.inject.Inject
 import kotlin.collections.HashMap
 

@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.client_activation.models.Role
+import com.gigforce.common_ui.viewdatamodels.client_activation.Role
 import com.gigforce.core.utils.GlideApp
-import com.gigforce.app.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_explore_by_role.view.*
 
 class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolder>() {
@@ -43,7 +43,11 @@ class AdapterExploreByRole : RecyclerView.Adapter<AdapterExploreByRole.ViewHolde
         holder.itemView.cb_interested_rv_explore_role.isChecked = obj?.isMarkedAsInterest!!
         GlideApp.with(holder.itemView.context)
             .load(obj?.role_image)
-            .placeholder(getCircularProgressDrawable(holder.itemView.context))
+            .placeholder(
+                getCircularProgressDrawable(
+                    holder.itemView.context
+                )
+            )
             .into(holder.itemView.iv_rv_explore_by_role)
         holder.itemView.setOnClickListener {
             callbacks?.onItemClicked(items?.get(holder.adapterPosition)?.id)

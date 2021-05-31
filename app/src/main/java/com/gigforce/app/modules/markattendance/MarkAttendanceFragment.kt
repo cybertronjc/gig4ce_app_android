@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.common_ui.ext.showToast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.otaliastudios.cameraview.CameraLogger
@@ -19,7 +21,7 @@ import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.controls.Mode
 import kotlinx.android.synthetic.main.mark_attendance_fragment.*
 
-class MarkAttendanceFragment : BaseFragment() {
+class MarkAttendanceFragment : Fragment() {
     lateinit var fusedLocationProviderClient : FusedLocationProviderClient
     val PERMISSION_FINE_LOCATION = 100
 
@@ -27,12 +29,11 @@ class MarkAttendanceFragment : BaseFragment() {
         fun newInstance() = MarkAttendanceFragment()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflateView(R.layout.mark_attendance_fragment,inflater , container)
+        return inflater.inflate(R.layout.mark_attendance_fragment, container)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

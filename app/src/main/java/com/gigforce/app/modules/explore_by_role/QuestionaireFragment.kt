@@ -9,11 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.app.modules.explore_by_role.models.QuestionnaireResponse
-import com.gigforce.app.utils.StringConstants
-import kotlinx.android.synthetic.main.layout_fragment_add_contact_details.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_questionaire_fragment.*
 import kotlinx.android.synthetic.main.layout_questionnaire.view.*

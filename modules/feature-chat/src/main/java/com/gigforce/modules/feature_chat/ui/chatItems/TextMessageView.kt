@@ -16,8 +16,8 @@ import com.gigforce.common_ui.DisplayUtil
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
 
 
 abstract class TextMessageView(

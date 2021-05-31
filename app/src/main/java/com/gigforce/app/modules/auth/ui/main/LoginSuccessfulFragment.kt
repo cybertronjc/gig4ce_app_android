@@ -24,11 +24,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
-import com.gigforce.app.analytics.AuthEvents
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.modules.profile.models.ProfileData
+import com.gigforce.common_ui.ext.showToast
+//import com.gigforce.app.modules.gigPage.GigPageFragment
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.IEventTracker
-import com.gigforce.core.TrackingEventArgs
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics

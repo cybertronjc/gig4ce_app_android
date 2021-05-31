@@ -13,6 +13,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
+import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
@@ -23,10 +25,10 @@ import com.gigforce.modules.feature_chat.ChatAttachmentDownloadState
 import com.gigforce.modules.feature_chat.DownloadCompleted
 import com.gigforce.modules.feature_chat.DownloadStarted
 import com.gigforce.modules.feature_chat.ErrorWhileDownloadingAttachment
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.*
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
-import com.gigforce.modules.feature_chat.repositories.ChatRepository
+import com.gigforce.common_ui.chat.ChatRepository
 import com.gigforce.modules.feature_chat.repositories.DownloadChatAttachmentService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -257,11 +259,11 @@ class ChatPageViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid,
-                            mobileNo = currentUser.phoneNumber!!
+                        id = currentUser.uid,
+                        mobileNo = currentUser.phoneNumber!!
                     ),
                     receiverInfo = UserInfo(
-                            id = otherUserId
+                        id = otherUserId
                     ),
                     flowType = "out",
                     chatType = ChatConstants.CHAT_TYPE_USER,
@@ -379,18 +381,18 @@ class ChatPageViewModel constructor(
         }
 
         val chatHeader = ChatHeader(
-                forUserId = otherUserId,
-                otherUserId = uid,
-                lastMsgTimestamp = null,
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                unseenCount = 0,
-                otherUser = UserInfo(
-                        id = uid,
-                        name = userName ?: "",
-                        profilePic = fullPath,
-                        type = "user"
-                ),
-                lastMsgFlowType = ""
+            forUserId = otherUserId,
+            otherUserId = uid,
+            lastMsgTimestamp = null,
+            chatType = ChatConstants.CHAT_TYPE_USER,
+            unseenCount = 0,
+            otherUser = UserInfo(
+                id = uid,
+                name = userName ?: "",
+                profilePic = fullPath,
+                type = "user"
+            ),
+            lastMsgFlowType = ""
         )
 
         firebaseDB.collection("chats")
@@ -416,10 +418,10 @@ class ChatPageViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid
+                        id = currentUser.uid
                     ),
                     receiverInfo = UserInfo(
-                            id = otherUserId
+                        id = otherUserId
                     ),
                     flowType = "out",
                     chatType = ChatConstants.CHAT_TYPE_USER,
@@ -472,10 +474,10 @@ class ChatPageViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid
+                        id = currentUser.uid
                     ),
                     receiverInfo = UserInfo(
-                            id = otherUserId
+                        id = otherUserId
                     ),
                     flowType = "out",
                     chatType = ChatConstants.CHAT_TYPE_USER,
@@ -518,15 +520,15 @@ class ChatPageViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
+            //val thumbnailForUi = videoInfo.thumbnail?.copy(videoInfo.thumbnail.config, videoInfo.thumbnail.isMutable)
             val message = ChatMessage(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid
+                        id = currentUser.uid
                     ),
                     receiverInfo = UserInfo(
-                            id = otherUserId
+                        id = otherUserId
                     ),
                     flowType = "out",
                     chatType = ChatConstants.CHAT_TYPE_USER,
@@ -577,10 +579,10 @@ class ChatPageViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = headerId,
                     senderInfo = UserInfo(
-                            id = currentUser.uid
+                        id = currentUser.uid
                     ),
                     receiverInfo = UserInfo(
-                            id = otherUserId
+                        id = otherUserId
                     ),
                     flowType = "out",
                     chatType = ChatConstants.CHAT_TYPE_USER,
@@ -667,18 +669,18 @@ class ChatPageViewModel constructor(
     ): String {
 
         val chatHeader = ChatHeader(
-                forUserId = forUserId,
-                otherUserId = otherUserId,
-                lastMsgTimestamp = null,
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                unseenCount = 0,
-                otherUser = UserInfo(
-                        id = "",
-                        name = otherUserName ?: "",
-                        profilePic = otherUserProfilePicture ?: "",
-                        type = "user"
-                ),
-                lastMsgFlowType = ""
+            forUserId = forUserId,
+            otherUserId = otherUserId,
+            lastMsgTimestamp = null,
+            chatType = ChatConstants.CHAT_TYPE_USER,
+            unseenCount = 0,
+            otherUser = UserInfo(
+                id = "",
+                name = otherUserName ?: "",
+                profilePic = otherUserProfilePicture ?: "",
+                type = "user"
+            ),
+            lastMsgFlowType = ""
         )
 
         val docRef = firebaseDB

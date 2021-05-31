@@ -86,6 +86,9 @@ int animator mtrl_fab_hide_motion_spec 0x0
 int animator mtrl_fab_show_motion_spec 0x0
 int animator mtrl_fab_transformation_sheet_collapse_spec 0x0
 int animator mtrl_fab_transformation_sheet_expand_spec 0x0
+int array com_google_android_gms_fonts_certs 0x0
+int array com_google_android_gms_fonts_certs_dev 0x0
+int array com_google_android_gms_fonts_certs_prod 0x0
 int attr action 0x0
 int attr actionBarDivider 0x0
 int attr actionBarItemBackground 0x0
@@ -132,7 +135,6 @@ int attr allowStacking 0x0
 int attr alpha 0x0
 int attr alphabeticModifiers 0x0
 int attr altSrc 0x0
-int attr angle 0x0
 int attr animate_relativeTo 0x0
 int attr animationMode 0x0
 int attr appBarLayoutStyle 0x0
@@ -164,7 +166,6 @@ int attr autoSizeStepGranularity 0x0
 int attr autoSizeTextType 0x0
 int attr autoTransition 0x0
 int attr auto_show 0x0
-int attr auto_start 0x0
 int attr background 0x0
 int attr backgroundColor 0x0
 int attr backgroundInsetBottom 0x0
@@ -184,7 +185,6 @@ int attr bar_height 0x0
 int attr barrierAllowsGoneWidgets 0x0
 int attr barrierDirection 0x0
 int attr barrierMargin 0x0
-int attr base_alpha 0x0
 int attr behavior_autoHide 0x0
 int attr behavior_autoShrink 0x0
 int attr behavior_draggable 0x0
@@ -446,7 +446,6 @@ int attr drawerArrowStyle 0x0
 int attr drawerLayoutStyle 0x0
 int attr dropDownListViewStyle 0x0
 int attr dropdownListPreferredItemHeight 0x0
-int attr dropoff 0x0
 int attr duration 0x0
 int attr editTextBackground 0x0
 int attr editTextColor 0x0
@@ -500,8 +499,6 @@ int attr fastScrollVerticalThumbDrawable 0x0
 int attr fastScrollVerticalTrackDrawable 0x0
 int attr fastforward_increment 0x0
 int attr firstBaselineToTopHeight 0x0
-int attr fixed_height 0x0
-int attr fixed_width 0x0
 int attr floatingActionButtonStyle 0x0
 int attr flow_firstHorizontalBias 0x0
 int attr flow_firstHorizontalStyle 0x0
@@ -585,7 +582,6 @@ int attr indicatorInset 0x0
 int attr indicatorSize 0x0
 int attr initialActivityCount 0x0
 int attr insetForeground 0x0
-int attr intensity 0x0
 int attr isLightTheme 0x0
 int attr isMaterialTheme 0x0
 int attr itemBackground 0x0
@@ -905,11 +901,6 @@ int attr region_heightLessThan 0x0
 int attr region_heightMoreThan 0x0
 int attr region_widthLessThan 0x0
 int attr region_widthMoreThan 0x0
-int attr relative_height 0x0
-int attr relative_width 0x0
-int attr repeat_count 0x0
-int attr repeat_delay 0x0
-int attr repeat_mode 0x0
 int attr repeat_toggle_modes 0x0
 int attr resize_mode 0x0
 int attr reverseLayout 0x0
@@ -936,12 +927,31 @@ int attr selectableItemBackground 0x0
 int attr selectableItemBackgroundBorderless 0x0
 int attr selectionRequired 0x0
 int attr selectorSize 0x0
-int attr shape 0x0
 int attr shapeAppearance 0x0
 int attr shapeAppearanceLargeComponent 0x0
 int attr shapeAppearanceMediumComponent 0x0
 int attr shapeAppearanceOverlay 0x0
 int attr shapeAppearanceSmallComponent 0x0
+int attr shimmer_auto_start 0x0
+int attr shimmer_base_alpha 0x0
+int attr shimmer_base_color 0x0
+int attr shimmer_clip_to_children 0x0
+int attr shimmer_colored 0x0
+int attr shimmer_direction 0x0
+int attr shimmer_dropoff 0x0
+int attr shimmer_duration 0x0
+int attr shimmer_fixed_height 0x0
+int attr shimmer_fixed_width 0x0
+int attr shimmer_height_ratio 0x0
+int attr shimmer_highlight_alpha 0x0
+int attr shimmer_highlight_color 0x0
+int attr shimmer_intensity 0x0
+int attr shimmer_repeat_count 0x0
+int attr shimmer_repeat_delay 0x0
+int attr shimmer_repeat_mode 0x0
+int attr shimmer_shape 0x0
+int attr shimmer_tilt 0x0
+int attr shimmer_width_ratio 0x0
 int attr showAnimationBehavior 0x0
 int attr showAsAction 0x0
 int attr showDelay 0x0
@@ -1097,7 +1107,6 @@ int attr tickMark 0x0
 int attr tickMarkTint 0x0
 int attr tickMarkTintMode 0x0
 int attr tickVisible 0x0
-int attr tilt 0x0
 int attr time_bar_min_update_interval 0x0
 int attr tint 0x0
 int attr tintMode 0x0
@@ -1357,6 +1366,13 @@ int color fui_bgTwitter 0x0
 int color fui_buttonShadow 0x0
 int color fui_linkColor 0x0
 int color fui_transparent 0x0
+int color gig_timer_completed_grey 0x0
+int color gig_timer_declined_red 0x0
+int color gig_timer_no_show_red 0x0
+int color gig_timer_ongoing_green 0x0
+int color gig_timer_silver_dark 0x0
+int color gig_timer_silver_light 0x0
+int color gig_timer_upcoming_pink 0x0
 int color gray_color 0x0
 int color green 0x0
 int color grey 0x0
@@ -1369,6 +1385,7 @@ int color highlighted_text_material_light 0x0
 int color light_blue 0x0
 int color light_pink 0x0
 int color lipstick 0x0
+int color lipstick_2 0x0
 int color material_blue_grey_800 0x0
 int color material_blue_grey_900 0x0
 int color material_blue_grey_950 0x0
@@ -2100,6 +2117,7 @@ int drawable bg_monthly_goal 0x0
 int drawable bg_wallet_card 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_grey_square 0x0
+int drawable border_option_dark 0x0
 int drawable btn_checkbox_checked_mtrl 0x0
 int drawable btn_checkbox_checked_to_unchecked_mtrl_animation 0x0
 int drawable btn_checkbox_unchecked_mtrl 0x0
@@ -2194,7 +2212,10 @@ int drawable fui_idp_button_background_twitter 0x0
 int drawable googleg_disabled_color_18 0x0
 int drawable googleg_standard_color_18 0x0
 int drawable gradient_button 0x0
+int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_black 0x0
+int drawable ic_arrow_back_white 0x0
+int drawable ic_arrow_forward 0x0
 int drawable ic_backward 0x0
 int drawable ic_balance_expanded 0x0
 int drawable ic_baseline_autorenew_24 0x0
@@ -2209,9 +2230,18 @@ int drawable ic_clock_orange 0x0
 int drawable ic_cross_grey 0x0
 int drawable ic_cross_red 0x0
 int drawable ic_earning 0x0
+int drawable ic_error_loading_image 0x0
+int drawable ic_error_loading_image_red 0x0
 int drawable ic_filled_circle 0x0
 int drawable ic_forward 0x0
 int drawable ic_fullscreen_white_18dp 0x0
+int drawable ic_gig_decline 0x0
+int drawable ic_gig_declined_cancelled 0x0
+int drawable ic_gig_missed 0x0
+int drawable ic_gig_ongoing 0x0
+int drawable ic_gig_success_icon 0x0
+int drawable ic_gig_type_square 0x0
+int drawable ic_gig_upoming 0x0
 int drawable ic_help 0x0
 int drawable ic_homescreen_chat 0x0
 int drawable ic_hsbc 0x0
@@ -2220,6 +2250,7 @@ int drawable ic_keyboard_back 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_landinghome_search 0x0
 int drawable ic_learning_default_back 0x0
+int drawable ic_location_pin_black 0x0
 int drawable ic_location_tracking_image 0x0
 int drawable ic_monthly_earning 0x0
 int drawable ic_mtrl_checked_circle 0x0
@@ -2229,8 +2260,10 @@ int drawable ic_mtrl_chip_close_circle 0x0
 int drawable ic_ok 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_payment_dispute 0x0
+int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_small_square 0x0
+int drawable ic_three_dots 0x0
 int drawable ic_time_help_ 0x0
 int drawable ic_tip 0x0
 int drawable ic_wallet_happy 0x0
@@ -2276,9 +2309,12 @@ int drawable profile_avatar 0x0
 int drawable profile_mock 0x0
 int drawable radio_button_drawable 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
+int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
 int drawable shape_circle_lipstick 0x0
 int drawable test_custom_background 0x0
+int drawable toolbar_background 0x0
+int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
 int drawable ucrop_crop 0x0
@@ -2410,6 +2446,7 @@ int id autoComplete 0x0
 int id autoCompleteToEnd 0x0
 int id autoCompleteToStart 0x0
 int id avg_earning 0x0
+int id back_arrow 0x0
 int id back_button 0x0
 int id balance_card 0x0
 int id banner_body 0x0
@@ -2423,7 +2460,9 @@ int id beginning 0x0
 int id blocking 0x0
 int id body_scroll 0x0
 int id bonus_text 0x0
+int id borderFrameLayout 0x0
 int id bottom 0x0
+int id bottom_to_top 0x0
 int id bounce 0x0
 int id browser_actions_header_text 0x0
 int id browser_actions_menu_item_icon 0x0
@@ -2464,6 +2503,9 @@ int id chip_group 0x0
 int id chronometer 0x0
 int id circle_center 0x0
 int id circular 0x0
+int id city_image_iv 0x0
+int id city_name_tv 0x0
+int id city_root_layout 0x0
 int id clear_text 0x0
 int id clockwise 0x0
 int id close_click_layout 0x0
@@ -2492,10 +2534,6 @@ int id custom 0x0
 int id customPanel 0x0
 int id cut 0x0
 int id cv_top 0x0
-int id cw_0 0x0
-int id cw_180 0x0
-int id cw_270 0x0
-int id cw_90 0x0
 int id dark 0x0
 int id dash 0x0
 int id date_picker_actions 0x0
@@ -2654,6 +2692,7 @@ int id invoice_ic_forward 0x0
 int id invoices_container 0x0
 int id inward 0x0
 int id italic 0x0
+int id item 0x0
 int id item_power_menu_icon 0x0
 int id item_power_menu_layout 0x0
 int id item_power_menu_title 0x0
@@ -2678,6 +2717,7 @@ int id layout_title 0x0
 int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
+int id left_to_right 0x0
 int id light 0x0
 int id line1 0x0
 int id line3 0x0
@@ -2797,6 +2837,7 @@ int id notification_main_column_container 0x0
 int id notify_text 0x0
 int id off 0x0
 int id on 0x0
+int id option_menu_iv 0x0
 int id outline 0x0
 int id outside 0x0
 int id outward 0x0
@@ -2822,6 +2863,7 @@ int id payment_due 0x0
 int id payment_ic 0x0
 int id payment_ic_forward 0x0
 int id payment_summary 0x0
+int id payslip_label 0x0
 int id payslip_monthly_details_error 0x0
 int id payslip_monthly_main_layout 0x0
 int id payslip_monthly_progress_bar 0x0
@@ -2861,6 +2903,7 @@ int id right 0x0
 int id rightToLeft 0x0
 int id right_icon 0x0
 int id right_side 0x0
+int id right_to_left 0x0
 int id role_tv 0x0
 int id root 0x0
 int id rotate_scroll_wheel 0x0
@@ -2884,8 +2927,10 @@ int id search_bar 0x0
 int id search_button 0x0
 int id search_close_btn 0x0
 int id search_edit_frame 0x0
+int id search_et 0x0
 int id search_go_btn 0x0
 int id search_icon 0x0
+int id search_layout 0x0
 int id search_mag_icon 0x0
 int id search_plate 0x0
 int id search_src_text 0x0
@@ -2940,6 +2985,7 @@ int id status_iv 0x0
 int id status_text 0x0
 int id stop 0x0
 int id stretch 0x0
+int id subTitleTV 0x0
 int id submenuarrow 0x0
 int id submit_area 0x0
 int id submit_confirmation_code 0x0
@@ -2995,10 +3041,12 @@ int id timeline 0x0
 int id timelineview 0x0
 int id title 0x0
 int id titleDividerNoCustom 0x0
+int id titleTV 0x0
 int id title_template 0x0
 int id toggle_full_screen 0x0
 int id toggle_terminology 0x0
 int id toolbar 0x0
+int id toolbar_image_iv 0x0
 int id toolbar_title 0x0
 int id top 0x0
 int id topPanel 0x0
@@ -3007,6 +3055,7 @@ int id top_cl 0x0
 int id top_guide 0x0
 int id top_level_view 0x0
 int id top_progress_bar 0x0
+int id top_to_bottom 0x0
 int id total_amount 0x0
 int id total_balance_text 0x0
 int id touch_outside 0x0
@@ -3027,7 +3076,6 @@ int id tv_allow_access 0x0
 int id tv_desc 0x0
 int id tv_pop_menu_normal 0x0
 int id tv_progress 0x0
-int id tv_rv_preferred_location 0x0
 int id tv_title 0x0
 int id txt_message 0x0
 int id ucrop 0x0
@@ -3175,6 +3223,7 @@ int layout design_navigation_menu_item 0x0
 int layout design_text_input_end_icon 0x0
 int layout design_text_input_password_icon 0x0
 int layout design_text_input_start_icon 0x0
+int layout dropdown_spinner 0x0
 int layout exo_list_divider 0x0
 int layout exo_playback_control_view 0x0
 int layout exo_player_control_view 0x0
@@ -3191,6 +3240,7 @@ int layout fragment_play_video_controls 0x0
 int layout fragment_play_video_full_screen 0x0
 int layout fragment_play_video_main 0x0
 int layout fragment_view_image_full_screen 0x0
+int layout fragment_view_image_fullscreen 0x0
 int layout fui_activity_invisible 0x0
 int layout fui_activity_register_email 0x0
 int layout fui_activity_register_phone 0x0
@@ -3217,6 +3267,7 @@ int layout fui_welcome_back_password_prompt_layout 0x0
 int layout gig_info_card 0x0
 int layout help_expanded_page 0x0
 int layout help_row 0x0
+int layout icon_text_card_mol 0x0
 int layout image 0x0
 int layout invoice_collapsed_card 0x0
 int layout invoice_status_page 0x0
@@ -3231,6 +3282,7 @@ int layout layout_power_menu_library_skydoves 0x0
 int layout layout_round_corner_progress_bar 0x0
 int layout layout_rv_role_details 0x0
 int layout layout_text_round_corner_progress_bar 0x0
+int layout layout_toolbar 0x0
 int layout material_chip_input_combo 0x0
 int layout material_clock_display 0x0
 int layout material_clock_display_divider 0x0
@@ -4059,6 +4111,7 @@ int style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year 0x0
 int style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox 0x0
 int style ShapeAppearanceOverlay_TopLeftCut 0x0
 int style ShapeAppearanceOverlay_TopRightDifferentCornerSize 0x0
+int style ShapeAppearanceOverlay_toolbar_card_custom_corners 0x0
 int style ShapeAppearance_MaterialComponents 0x0
 int style ShapeAppearance_MaterialComponents_LargeComponent 0x0
 int style ShapeAppearance_MaterialComponents_MediumComponent 0x0
@@ -4329,6 +4382,7 @@ int style Theme_MaterialComponents_Light_NoActionBar_Bridge 0x0
 int style Theme_MaterialComponents_NoActionBar 0x0
 int style Theme_MaterialComponents_NoActionBar_Bridge 0x0
 int style Theme_RadioButtonLipstickPink 0x0
+int style ToolbarCustomCardViewStyle 0x0
 int style VideoInfoCardTitle 0x0
 int style VideoInfoItemCardTitle 0x0
 int style VideoInfoItemTimeCardTitle 0x0
@@ -4541,6 +4595,7 @@ int style Widget_MaterialProgressBar_ProgressBar_NoPadding 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding 0x0
 int style Widget_Support_CoordinatorLayout 0x0
+int style circleImageView 0x0
 int style ucrop_ImageViewWidgetIcon 0x0
 int style ucrop_TextViewCropAspectRatio 0x0
 int style ucrop_TextViewWidget 0x0
@@ -6152,22 +6207,27 @@ int styleable ShapeableImageView_shapeAppearance 7
 int styleable ShapeableImageView_shapeAppearanceOverlay 8
 int styleable ShapeableImageView_strokeColor 9
 int styleable ShapeableImageView_strokeWidth 10
-int[] styleable ShimmerFrameLayout { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
-int styleable ShimmerFrameLayout_angle 0
-int styleable ShimmerFrameLayout_auto_start 1
-int styleable ShimmerFrameLayout_base_alpha 2
-int styleable ShimmerFrameLayout_dropoff 3
-int styleable ShimmerFrameLayout_duration 4
-int styleable ShimmerFrameLayout_fixed_height 5
-int styleable ShimmerFrameLayout_fixed_width 6
-int styleable ShimmerFrameLayout_intensity 7
-int styleable ShimmerFrameLayout_relative_height 8
-int styleable ShimmerFrameLayout_relative_width 9
-int styleable ShimmerFrameLayout_repeat_count 10
-int styleable ShimmerFrameLayout_repeat_delay 11
-int styleable ShimmerFrameLayout_repeat_mode 12
-int styleable ShimmerFrameLayout_shape 13
-int styleable ShimmerFrameLayout_tilt 14
+int[] styleable ShimmerFrameLayout { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable ShimmerFrameLayout_shimmer_auto_start 0
+int styleable ShimmerFrameLayout_shimmer_base_alpha 1
+int styleable ShimmerFrameLayout_shimmer_base_color 2
+int styleable ShimmerFrameLayout_shimmer_clip_to_children 3
+int styleable ShimmerFrameLayout_shimmer_colored 4
+int styleable ShimmerFrameLayout_shimmer_direction 5
+int styleable ShimmerFrameLayout_shimmer_dropoff 6
+int styleable ShimmerFrameLayout_shimmer_duration 7
+int styleable ShimmerFrameLayout_shimmer_fixed_height 8
+int styleable ShimmerFrameLayout_shimmer_fixed_width 9
+int styleable ShimmerFrameLayout_shimmer_height_ratio 10
+int styleable ShimmerFrameLayout_shimmer_highlight_alpha 11
+int styleable ShimmerFrameLayout_shimmer_highlight_color 12
+int styleable ShimmerFrameLayout_shimmer_intensity 13
+int styleable ShimmerFrameLayout_shimmer_repeat_count 14
+int styleable ShimmerFrameLayout_shimmer_repeat_delay 15
+int styleable ShimmerFrameLayout_shimmer_repeat_mode 16
+int styleable ShimmerFrameLayout_shimmer_shape 17
+int styleable ShimmerFrameLayout_shimmer_tilt 18
+int styleable ShimmerFrameLayout_shimmer_width_ratio 19
 int[] styleable SignInButton { 0x0, 0x0, 0x0 }
 int styleable SignInButton_buttonSize 0
 int styleable SignInButton_colorScheme 1

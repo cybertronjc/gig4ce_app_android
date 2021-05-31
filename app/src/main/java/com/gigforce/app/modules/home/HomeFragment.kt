@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.gigforce.app.R
-import com.gigforce.app.modules.calendarscreen.HomeScreenFragment
-import com.gigforce.app.core.popAllBackStates
+import com.gigforce.giger_app.calendarscreen.HomeScreenFragment
+import com.gigforce.core.extensions.popAllBackStates
 
 class HomeFragment: Fragment(), View.OnClickListener {
 

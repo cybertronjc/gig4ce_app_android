@@ -41,7 +41,7 @@
               app:srcCompat="@drawable/ic_baseline_arrow_left_24" />
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/divider_one"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#b6b7ba"

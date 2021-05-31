@@ -1,24 +1,18 @@
 package com.gigforce.app.modules.profile
 
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.internal.main.DialogLayout
 import com.gigforce.app.R
-import com.gigforce.app.modules.profile.models.Skill
-import com.gigforce.app.utils.DropdownAdapter
-import com.gigforce.app.utils.Lce
+import com.gigforce.core.datamodels.profile.Skill
+import com.gigforce.common_ui.adapter.DropdownAdapter
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.utils.Lce
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.delete_confirmation_dialog.*

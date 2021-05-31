@@ -37,7 +37,8 @@ android {
 
 dependencies {
 
-
+    implementation project(path: ':modules:core')
+    implementation project(path: ':modules:common-ui')
 
     implementation 'com.google.android.material:material:1.2.1'
     testImplementation 'junit:junit:4.+'

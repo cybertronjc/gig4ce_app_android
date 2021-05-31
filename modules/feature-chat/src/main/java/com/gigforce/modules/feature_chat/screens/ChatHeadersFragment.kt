@@ -23,9 +23,9 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.CoreRecyclerView
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.models.ChatHeader
-import com.gigforce.modules.feature_chat.models.ChatListItemDataObject
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.common_ui.chat.models.ChatHeader
+import com.gigforce.common_ui.chat.models.ChatListItemDataObject
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.jaeger.library.StatusBarUtil

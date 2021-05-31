@@ -14,8 +14,10 @@ import com.gigforce.core.INavArgsProvider
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.NavArgs
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.feature_item_card.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,32 +54,40 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
         this.data = data
         this.setOnClickListener(null)
         if (data is FeatureItemCardDVM) {
-
             getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
                     navigation.navigateTo(it.navPath, it.args)
                 }
             }
+            if(data.isSelectedView) borderFrameLayout.visible() else borderFrameLayout.gone()
+            setImage(data)
+            setSubtitle(data)
 
-            if (data.image is String) {
-                if(data.image.contains("http")) {
-                    Glide.with(context)
-                        .load(data.image)
-                        .into(image)
-                }
-            } else if (data.image is Int) {
-                image.setImageResource(data.image)
-            } else {
-
-            }
-            if (data.title.isNotBlank())
-                title.text = data.title
-            else title.gone()
-            if (data.subtitle?.isNotBlank()?:false) {
-                subtitle.text = data.subtitle
-            }
-            else subtitle.gone()
         }
+    }
+
+    private fun setImage(data: FeatureItemCardDVM) {
+        if (data.image is String) {
+            if(data.image.contains("http") or data.image.contains("https")) {
+                Glide.with(context)
+                    .load(data.image)
+                    .into(image)
+            }
+        } else if (data.image is Int) {
+            image.setImageResource(data.image)
+        } else {
+
+        }
+    }
+
+    private fun setSubtitle(data:FeatureItemCardDVM) {
+        if (data.title.isNotBlank())
+            title.text = data.title
+        else title.gone()
+        if (data.subtitle?.isNotBlank()?:false) {
+            subtitle.text = data.subtitle
+        }
+        else subtitle.gone()
     }
 
 }

@@ -1,12 +1,10 @@
 package com.gigforce.app.utils.lang_models
 
-import com.gigforce.app.modules.ambassador_user_enrollment.models.AmbassadorProfiles
-import com.gigforce.app.utils.CheckCollectionTranslation
-import com.gigforce.app.utils.TranslationNeeded
-import com.gigforce.app.utils.CheckNestedTranslation
+import com.gigforce.core.CheckCollectionTranslation
+import com.gigforce.core.TranslationNeeded
+import com.gigforce.core.CheckNestedTranslation
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 open class BaseLangModel {

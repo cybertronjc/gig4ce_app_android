@@ -12,14 +12,21 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/modules" />
+            <option value="$PROJECT_DIR$/modules/ambassador" />
             <option value="$PROJECT_DIR$/modules/app-giger" />
             <option value="$PROJECT_DIR$/modules/client-activation" />
             <option value="$PROJECT_DIR$/modules/common-image-capture-picker" />
             <option value="$PROJECT_DIR$/modules/common-ui" />
             <option value="$PROJECT_DIR$/modules/core" />
             <option value="$PROJECT_DIR$/modules/feature-chat" />
+            <option value="$PROJECT_DIR$/modules/giger-gigs" />
+            <option value="$PROJECT_DIR$/modules/landing" />
             <option value="$PROJECT_DIR$/modules/learning" />
             <option value="$PROJECT_DIR$/modules/profile" />
+            <option value="$PROJECT_DIR$/modules/user_preferences" />
+            <option value="$PROJECT_DIR$/modules/user_profile" />
+            <option value="$PROJECT_DIR$/modules/verification" />
+            <option value="$PROJECT_DIR$/modules/wallet" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

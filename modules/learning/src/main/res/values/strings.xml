@@ -1,4 +1,65 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lessons">Lessons</string>
+    <string name="see_more">See more</string>
+    <string name="assessment_">Assessment</string>
+    <string name="learning_assign_to_you">Learning assigned to you</string>
+    <string name="why_learning_is_important">Why Learning is Important?</string>
+
+    <string name="increase_your_knowlegde">Increase Your Knowlegde</string>
+    <string name="anytime_anywhere">ANYTIME ANYWHERE</string>
+    <string name="skip">Skip</string>
+    <string name="assessment_dialog_background">Assessment Dialog Background</string>
+    <string name="keep_learning">Keep Learning !!!</string>
+    <string name="you_have_complete_the_two_lessons_successfully_would_you_like_to_complete_the_pending_lessons_of_this_module">You have complete the lessons successfully, would you like to complete the pending lessons of this module.</string>
+    <string name="next_lesson">Next Lesson</string>
+    <string name="skip_underline"><u>Skip</u></string>
+    <string name="okay_text">Okay</string>
+    <string name="okay_text_cap">OKAY</string>
+    <string name="good_luck">Good Luck!!!</string>
+    <string name="level">Level</string>
+    <string name="start_assessment">Start Assessment</string>
+    <string name="total_questions">Total Questions</string>
+    <string name="time_duration">Time Duration</string>
+    <string name="seconds">seconds</string>
+    <string name="mins">mins</string>
+    <string name="u_attempt">You attempt</string>
+    <string name="questions">questions</string>
+    <string name="attempt">attempt</string>
+    <string name="and_from">and from</string>
+    <string name="that">that</string>
+    <string name="answer_is_correct">answer is correct.</string>
+    <string name="is_string">is</string>
+    <string name="oops">Oops!!!</string>
+    <string name="assessment_not_completed">Assessment Not Completed Successfully</string>
+    <string name="scorecard">ScoreCard</string>
+    <string name="congrats">Congrats</string>
+    <string name="assess_complete">Assessment Completed Successfully</string>
+    <string name="ques">Ques</string>
+    <string name="assessment">Assessment</string>
+    <string name="time_is_up">Time is Up!!!!!</string>
+    <string name="answer_the_ques">Please Answer Question to Continue!!!</string>
+    <string name="hundred_percent">100%</string>
+    <string name="woe_you_are_correct">Wow ! You are correct.</string>
+    <string name="you_are_incorrect">Oops ! You are incorrect.</string>
+    <string name="you_will_be_soon_sent_an_invite">You’ll be soon be sent an invite to suitable gigs around you.</string>
+    <string name="keep_it_up">Keep It Up</string>
+    <string name="watch_lesson_again">Watch lesson again</string>
+    <string name="you_have_scored">You have scored</string>
+    <string name="new_cert_added_underlined"><![CDATA[<u>New certificate has been added to profile .</u>]]></string>
+    <string name="in_your_assessment">in your assessment</string>
+    <string name="hours">hrs</string>
+    <string name="secs">secs</string>
+    <string name="scenario">Scenario :</string>
+    <string name="next">NEXT</string>
+    <string name="suggested_learnings">Suggested learnings</string>
+    <string name="question_wise_summary">Question wise Summary</string>
+    <string name="time_taken">Time Taken :</string>
+    <string name="as_you_clear_more_assessments">As you clear more assessments suitable gigs will get assigned soon</string>
+    <string name="do_it_later"><u>Do It Later</u></string>
+    <string name="back_button">Back Button</string>
+
+
+
 </resources>

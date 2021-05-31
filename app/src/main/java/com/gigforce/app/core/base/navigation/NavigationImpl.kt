@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.popAllBackStates
+import com.gigforce.core.extensions.popAllBackStates
 
 class NavigationImpl :NavigationInterface {
     var navController: NavController

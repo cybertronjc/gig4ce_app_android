@@ -87,6 +87,9 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
+array com_google_android_gms_fonts_certs
+array com_google_android_gms_fonts_certs_dev
+array com_google_android_gms_fonts_certs_prod
 attr action
 attr actionBarDivider
 attr actionBarItemBackground
@@ -133,7 +136,6 @@ attr allowStacking
 attr alpha
 attr alphabeticModifiers
 attr altSrc
-attr angle
 attr animate_relativeTo
 attr animationMode
 attr appBarLayoutStyle
@@ -165,7 +167,6 @@ attr autoSizeStepGranularity
 attr autoSizeTextType
 attr autoTransition
 attr auto_show
-attr auto_start
 attr background
 attr backgroundColor
 attr backgroundInsetBottom
@@ -185,7 +186,6 @@ attr bar_height
 attr barrierAllowsGoneWidgets
 attr barrierDirection
 attr barrierMargin
-attr base_alpha
 attr behavior_autoHide
 attr behavior_autoShrink
 attr behavior_draggable
@@ -447,7 +447,6 @@ attr drawerArrowStyle
 attr drawerLayoutStyle
 attr dropDownListViewStyle
 attr dropdownListPreferredItemHeight
-attr dropoff
 attr duration
 attr editTextBackground
 attr editTextColor
@@ -501,8 +500,6 @@ attr fastScrollVerticalThumbDrawable
 attr fastScrollVerticalTrackDrawable
 attr fastforward_increment
 attr firstBaselineToTopHeight
-attr fixed_height
-attr fixed_width
 attr floatingActionButtonStyle
 attr flow_firstHorizontalBias
 attr flow_firstHorizontalStyle
@@ -586,7 +583,6 @@ attr indicatorInset
 attr indicatorSize
 attr initialActivityCount
 attr insetForeground
-attr intensity
 attr isLightTheme
 attr isMaterialTheme
 attr itemBackground
@@ -906,11 +902,6 @@ attr region_heightLessThan
 attr region_heightMoreThan
 attr region_widthLessThan
 attr region_widthMoreThan
-attr relative_height
-attr relative_width
-attr repeat_count
-attr repeat_delay
-attr repeat_mode
 attr repeat_toggle_modes
 attr resize_mode
 attr reverseLayout
@@ -937,12 +928,31 @@ attr selectableItemBackground
 attr selectableItemBackgroundBorderless
 attr selectionRequired
 attr selectorSize
-attr shape
 attr shapeAppearance
 attr shapeAppearanceLargeComponent
 attr shapeAppearanceMediumComponent
 attr shapeAppearanceOverlay
 attr shapeAppearanceSmallComponent
+attr shimmer_auto_start
+attr shimmer_base_alpha
+attr shimmer_base_color
+attr shimmer_clip_to_children
+attr shimmer_colored
+attr shimmer_direction
+attr shimmer_dropoff
+attr shimmer_duration
+attr shimmer_fixed_height
+attr shimmer_fixed_width
+attr shimmer_height_ratio
+attr shimmer_highlight_alpha
+attr shimmer_highlight_color
+attr shimmer_intensity
+attr shimmer_repeat_count
+attr shimmer_repeat_delay
+attr shimmer_repeat_mode
+attr shimmer_shape
+attr shimmer_tilt
+attr shimmer_width_ratio
 attr showAnimationBehavior
 attr showAsAction
 attr showDelay
@@ -1098,7 +1108,6 @@ attr tickMark
 attr tickMarkTint
 attr tickMarkTintMode
 attr tickVisible
-attr tilt
 attr time_bar_min_update_interval
 attr tint
 attr tintMode
@@ -1358,6 +1367,13 @@ color fui_bgTwitter
 color fui_buttonShadow
 color fui_linkColor
 color fui_transparent
+color gig_timer_completed_grey
+color gig_timer_declined_red
+color gig_timer_no_show_red
+color gig_timer_ongoing_green
+color gig_timer_silver_dark
+color gig_timer_silver_light
+color gig_timer_upcoming_pink
 color gray_color
 color green
 color grey
@@ -1370,6 +1386,7 @@ color highlighted_text_material_light
 color light_blue
 color light_pink
 color lipstick
+color lipstick_2
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -2101,6 +2118,7 @@ drawable bg_monthly_goal
 drawable bg_wallet_card
 drawable bg_white_top_rad_8
 drawable border_grey_square
+drawable border_option_dark
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -2195,7 +2213,10 @@ drawable fui_idp_button_background_twitter
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable ic_arrow_back_24
 drawable ic_arrow_back_black
+drawable ic_arrow_back_white
+drawable ic_arrow_forward
 drawable ic_backward
 drawable ic_balance_expanded
 drawable ic_baseline_autorenew_24
@@ -2210,9 +2231,18 @@ drawable ic_clock_orange
 drawable ic_cross_grey
 drawable ic_cross_red
 drawable ic_earning
+drawable ic_error_loading_image
+drawable ic_error_loading_image_red
 drawable ic_filled_circle
 drawable ic_forward
 drawable ic_fullscreen_white_18dp
+drawable ic_gig_decline
+drawable ic_gig_declined_cancelled
+drawable ic_gig_missed
+drawable ic_gig_ongoing
+drawable ic_gig_success_icon
+drawable ic_gig_type_square
+drawable ic_gig_upoming
 drawable ic_help
 drawable ic_homescreen_chat
 drawable ic_hsbc
@@ -2221,6 +2251,7 @@ drawable ic_keyboard_back
 drawable ic_keyboard_black_24dp
 drawable ic_landinghome_search
 drawable ic_learning_default_back
+drawable ic_location_pin_black
 drawable ic_location_tracking_image
 drawable ic_monthly_earning
 drawable ic_mtrl_checked_circle
@@ -2230,8 +2261,10 @@ drawable ic_mtrl_chip_close_circle
 drawable ic_ok
 drawable ic_oval_top_landingscreen
 drawable ic_payment_dispute
+drawable ic_search
 drawable ic_set_preference
 drawable ic_small_square
+drawable ic_three_dots
 drawable ic_time_help_
 drawable ic_tip
 drawable ic_wallet_happy
@@ -2277,9 +2310,12 @@ drawable profile_avatar
 drawable profile_mock
 drawable radio_button_drawable
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
+drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
 drawable test_custom_background
+drawable toolbar_background
+drawable toolbar_search_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
 drawable ucrop_crop
@@ -2411,6 +2447,7 @@ id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
 id avg_earning
+id back_arrow
 id back_button
 id balance_card
 id banner_body
@@ -2424,7 +2461,9 @@ id beginning
 id blocking
 id body_scroll
 id bonus_text
+id borderFrameLayout
 id bottom
+id bottom_to_top
 id bounce
 id browser_actions_header_text
 id browser_actions_menu_item_icon
@@ -2465,6 +2504,9 @@ id chip_group
 id chronometer
 id circle_center
 id circular
+id city_image_iv
+id city_name_tv
+id city_root_layout
 id clear_text
 id clockwise
 id close_click_layout
@@ -2493,10 +2535,6 @@ id custom
 id customPanel
 id cut
 id cv_top
-id cw_0
-id cw_180
-id cw_270
-id cw_90
 id dark
 id dash
 id date_picker_actions
@@ -2655,6 +2693,7 @@ id invoice_ic_forward
 id invoices_container
 id inward
 id italic
+id item
 id item_power_menu_icon
 id item_power_menu_layout
 id item_power_menu_title
@@ -2679,6 +2718,7 @@ id layout_title
 id left
 id leftToRight
 id left_aligned
+id left_to_right
 id light
 id line1
 id line3
@@ -2798,6 +2838,7 @@ id notification_main_column_container
 id notify_text
 id off
 id on
+id option_menu_iv
 id outline
 id outside
 id outward
@@ -2823,6 +2864,7 @@ id payment_due
 id payment_ic
 id payment_ic_forward
 id payment_summary
+id payslip_label
 id payslip_monthly_details_error
 id payslip_monthly_main_layout
 id payslip_monthly_progress_bar
@@ -2862,6 +2904,7 @@ id right
 id rightToLeft
 id right_icon
 id right_side
+id right_to_left
 id role_tv
 id root
 id rotate_scroll_wheel
@@ -2885,8 +2928,10 @@ id search_bar
 id search_button
 id search_close_btn
 id search_edit_frame
+id search_et
 id search_go_btn
 id search_icon
+id search_layout
 id search_mag_icon
 id search_plate
 id search_src_text
@@ -2941,6 +2986,7 @@ id status_iv
 id status_text
 id stop
 id stretch
+id subTitleTV
 id submenuarrow
 id submit_area
 id submit_confirmation_code
@@ -2996,10 +3042,12 @@ id timeline
 id timelineview
 id title
 id titleDividerNoCustom
+id titleTV
 id title_template
 id toggle_full_screen
 id toggle_terminology
 id toolbar
+id toolbar_image_iv
 id toolbar_title
 id top
 id topPanel
@@ -3008,6 +3056,7 @@ id top_cl
 id top_guide
 id top_level_view
 id top_progress_bar
+id top_to_bottom
 id total_amount
 id total_balance_text
 id touch_outside
@@ -3028,7 +3077,6 @@ id tv_allow_access
 id tv_desc
 id tv_pop_menu_normal
 id tv_progress
-id tv_rv_preferred_location
 id tv_title
 id txt_message
 id ucrop
@@ -3176,6 +3224,7 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_password_icon
 layout design_text_input_start_icon
+layout dropdown_spinner
 layout exo_list_divider
 layout exo_playback_control_view
 layout exo_player_control_view
@@ -3192,6 +3241,7 @@ layout fragment_play_video_controls
 layout fragment_play_video_full_screen
 layout fragment_play_video_main
 layout fragment_view_image_full_screen
+layout fragment_view_image_fullscreen
 layout fui_activity_invisible
 layout fui_activity_register_email
 layout fui_activity_register_phone
@@ -3218,6 +3268,7 @@ layout fui_welcome_back_password_prompt_layout
 layout gig_info_card
 layout help_expanded_page
 layout help_row
+layout icon_text_card_mol
 layout image
 layout invoice_collapsed_card
 layout invoice_status_page
@@ -3232,6 +3283,7 @@ layout layout_power_menu_library_skydoves
 layout layout_round_corner_progress_bar
 layout layout_rv_role_details
 layout layout_text_round_corner_progress_bar
+layout layout_toolbar
 layout material_chip_input_combo
 layout material_clock_display
 layout material_clock_display_divider
@@ -4060,6 +4112,7 @@ style ShapeAppearanceOverlay_MaterialComponents_MaterialCalendar_Year
 style ShapeAppearanceOverlay_MaterialComponents_TextInputLayout_FilledBox
 style ShapeAppearanceOverlay_TopLeftCut
 style ShapeAppearanceOverlay_TopRightDifferentCornerSize
+style ShapeAppearanceOverlay_toolbar_card_custom_corners
 style ShapeAppearance_MaterialComponents
 style ShapeAppearance_MaterialComponents_LargeComponent
 style ShapeAppearance_MaterialComponents_MediumComponent
@@ -4330,6 +4383,7 @@ style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_RadioButtonLipstickPink
+style ToolbarCustomCardViewStyle
 style VideoInfoCardTitle
 style VideoInfoItemCardTitle
 style VideoInfoItemTimeCardTitle
@@ -4542,6 +4596,7 @@ style Widget_MaterialProgressBar_ProgressBar_NoPadding
 style Widget_MaterialProgressBar_ProgressBar_Small
 style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding
 style Widget_Support_CoordinatorLayout
+style circleImageView
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
 style ucrop_TextViewWidget
@@ -4691,7 +4746,7 @@ styleable ScrollingViewBehavior_Layout behavior_overlapTop
 styleable SearchView android_focusable android_imeOptions android_inputType android_maxWidth closeIcon commitIcon defaultQueryHint goIcon iconifiedByDefault layout queryBackground queryHint searchHintIcon searchIcon submitBackground suggestionRowLayout voiceIcon
 styleable ShapeAppearance cornerFamily cornerFamilyBottomLeft cornerFamilyBottomRight cornerFamilyTopLeft cornerFamilyTopRight cornerSize cornerSizeBottomLeft cornerSizeBottomRight cornerSizeTopLeft cornerSizeTopRight
 styleable ShapeableImageView contentPadding contentPaddingBottom contentPaddingEnd contentPaddingLeft contentPaddingRight contentPaddingStart contentPaddingTop shapeAppearance shapeAppearanceOverlay strokeColor strokeWidth
-styleable ShimmerFrameLayout angle auto_start base_alpha dropoff duration fixed_height fixed_width intensity relative_height relative_width repeat_count repeat_delay repeat_mode shape tilt
+styleable ShimmerFrameLayout shimmer_auto_start shimmer_base_alpha shimmer_base_color shimmer_clip_to_children shimmer_colored shimmer_direction shimmer_dropoff shimmer_duration shimmer_fixed_height shimmer_fixed_width shimmer_height_ratio shimmer_highlight_alpha shimmer_highlight_color shimmer_intensity shimmer_repeat_count shimmer_repeat_delay shimmer_repeat_mode shimmer_shape shimmer_tilt shimmer_width_ratio
 styleable SignInButton buttonSize colorScheme scopeUris
 styleable Slider android_enabled android_stepSize android_value android_valueFrom android_valueTo haloColor haloRadius labelBehavior labelStyle thumbColor thumbElevation thumbRadius thumbStrokeColor thumbStrokeWidth tickColor tickColorActive tickColorInactive tickVisible trackColor trackColorActive trackColorInactive trackHeight
 styleable Snackbar snackbarButtonStyle snackbarStyle snackbarTextViewStyle
