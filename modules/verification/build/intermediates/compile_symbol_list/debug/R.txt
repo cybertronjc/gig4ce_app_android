@@ -1632,8 +1632,14 @@ int dimen activityPadding 0x0
 int dimen appcompat_dialog_background_inset 0x0
 int dimen bannerContentWeight 0x0
 int dimen bannerWeightSum 0x0
+int dimen border_width 0x0
+int dimen box_inset_layout_padding 0x0
 int dimen browser_actions_context_menu_max_width 0x0
 int dimen browser_actions_context_menu_min_padding 0x0
+int dimen bs_margin_end 0x0
+int dimen bs_margin_start 0x0
+int dimen bs_top_margin 0x0
+int dimen calendar_gig 0x0
 int dimen cardview_compat_inset_shadow 0x0
 int dimen cardview_default_elevation 0x0
 int dimen cardview_default_radius 0x0
@@ -1710,11 +1716,13 @@ int dimen dp_xl4 0x0
 int dimen dp_xl5 0x0
 int dimen dp_xsm1 0x0
 int dimen dp_xsm2 0x0
+int dimen eight_dp 0x0
 int dimen exo_media_button_height 0x0
 int dimen exo_media_button_width 0x0
 int dimen fastscroll_default_thickness 0x0
 int dimen fastscroll_margin 0x0
 int dimen fastscroll_minimum_range 0x0
+int dimen five_dp 0x0
 int dimen font10 0x0
 int dimen font12 0x0
 int dimen font14 0x0
@@ -1742,6 +1750,7 @@ int dimen fui_field_padding_vert 0x0
 int dimen fui_heading_padding_bottom 0x0
 int dimen fui_min_height_target 0x0
 int dimen fui_wrapper_padding_horiz 0x0
+int dimen height_select_lang_item 0x0
 int dimen highlight_alpha_material_colored 0x0
 int dimen highlight_alpha_material_dark 0x0
 int dimen highlight_alpha_material_light 0x0
@@ -1749,6 +1758,9 @@ int dimen hint_alpha_material_dark 0x0
 int dimen hint_alpha_material_light 0x0
 int dimen hint_pressed_alpha_material_dark 0x0
 int dimen hint_pressed_alpha_material_light 0x0
+int dimen img_height 0x0
+int dimen img_width 0x0
+int dimen inner_frame_layout_padding 0x0
 int dimen item_touch_helper_max_drag_scroll_per_frame 0x0
 int dimen item_touch_helper_swipe_escape_max_velocity 0x0
 int dimen item_touch_helper_swipe_escape_velocity 0x0
@@ -1985,8 +1997,10 @@ int dimen notification_top_pad 0x0
 int dimen notification_top_pad_large_text 0x0
 int dimen paddingSmall 0x0
 int dimen padding_10 0x0
+int dimen padding_default 0x0
 int dimen placeholderImage 0x0
 int dimen placeholderTextHeight 0x0
+int dimen roster_item_height 0x0
 int dimen size12 0x0
 int dimen size13 0x0
 int dimen size14 0x0
@@ -2144,6 +2158,7 @@ int dimen tooltip_precise_anchor_threshold 0x0
 int dimen tooltip_vertical_padding 0x0
 int dimen tooltip_y_offset_non_touch 0x0
 int dimen tooltip_y_offset_touch 0x0
+int dimen txv_padding 0x0
 int dimen ucrop_default_crop_frame_stoke_width 0x0
 int dimen ucrop_default_crop_grid_stoke_width 0x0
 int dimen ucrop_default_crop_logo_size 0x0

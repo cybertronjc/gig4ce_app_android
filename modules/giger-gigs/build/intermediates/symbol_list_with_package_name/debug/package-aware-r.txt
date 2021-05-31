@@ -1551,6 +1551,7 @@ dimen appcompat_dialog_background_inset
 dimen bannerContentWeight
 dimen bannerWeightSum
 dimen border_width
+dimen box_inset_layout_padding
 dimen browser_actions_context_menu_max_width
 dimen browser_actions_context_menu_min_padding
 dimen bs_margin_end
@@ -3604,7 +3605,7 @@ layout feature_item_card2
 layout feature_layout
 layout fragment_camera
 layout fragment_camera_permission
-layout fragment_click_or_select_profile_picture
+layout fragment_click_or_select_picture
 layout fragment_decline_gig_dialog
 layout fragment_decline_gig_dialog_main
 layout fragment_gig_contact_person_details
