@@ -58,14 +58,21 @@ class ChatRepository constructor(
             .document(headerId)
             .collection(COLLECTION_CHATS_MESSAGES)
 
-    suspend fun getChatHeader(chatHeaderId: String): ChatHeader {
+    suspend fun getChatHeader(chatHeaderId: String): ChatHeader? {
+        if (chatHeaderId.isBlank())
+            return null
+
         val docRef = userChatCollectionRef
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(chatHeaderId)
                 .getOrThrow()
 
-        return docRef.toObject(ChatHeader::class.java)!!.apply {
-            id = docRef.id
+        if (docRef.exists()) {
+            return docRef.toObject(ChatHeader::class.java)!!.apply {
+                id = docRef.id
+            }
+        } else {
+            return null
         }
     }
 
@@ -224,7 +231,7 @@ class ChatRepository constructor(
             uri: Uri
     ) {
 
-        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context,uri)}"
+        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
 
         val documentsDirectoryRef = chatLocalDirectoryReferenceManager.documentsDirectoryRef
         val documentFile = File(documentsDirectoryRef, newFileName)
@@ -255,22 +262,24 @@ class ChatRepository constructor(
         TODO("Not yet implemented")
     }
 
+
+
     override suspend fun reportAndBlockUser(
-            otherUserId: String,
-            reason: String
-    ) {
-
-    }
-
-    suspend fun reportAndBlockUser(
-            chatHeaderId: String,
-            otherUserId: String,
-            reason: String
+        chatHeaderId: String,
+        otherUserId: String,
+        otherUserMobileNo: String,
+        reason: String
     ) {
         userChatCollectionRef
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(chatHeaderId)
                 .updateOrThrow("isBlocked", true)
+
+        blockOrUnblockUser(
+            chatHeaderId,
+            otherUserMobileNo,
+            true
+        )
 
         userReportedCollectionRef
                 .addOrThrow(
@@ -285,12 +294,48 @@ class ChatRepository constructor(
 
     }
 
-    override suspend fun blockOrUnblockUser(chatHeaderId: String) {
-        val chatHeader = getChatHeader(chatHeaderId)
-        userChatCollectionRef
+    override suspend fun blockOrUnblockUser(
+            chatHeaderId: String,
+            otherUserMobileNo: String,
+            forceBlock : Boolean
+    ) {
+        if(forceBlock){
+            userChatCollectionRef
                 .collection(COLLECTION_CHAT_HEADERS)
                 .document(chatHeaderId)
-                .updateOrThrow("isBlocked", !chatHeader.isBlocked)
+                .updateOrThrow("isBlocked", true)
+
+            tryUpdatingBlockedInFlagInContacts(otherUserMobileNo, true)
+        } else {
+
+            val chatHeader = getChatHeader(chatHeaderId)
+            if (chatHeader != null) {
+
+                userChatCollectionRef
+                    .collection(COLLECTION_CHAT_HEADERS)
+                    .document(chatHeaderId)
+                    .updateOrThrow("isBlocked", !chatHeader.isBlocked)
+
+                tryUpdatingBlockedInFlagInContacts(otherUserMobileNo, !chatHeader.isBlocked)
+            }
+        }
+
+
+    }
+
+    private suspend fun tryUpdatingBlockedInFlagInContacts(
+        otherUserMobileNo: String,
+        block :Boolean
+    ) {
+        if(otherUserMobileNo.isEmpty())
+            return
+
+        try {
+            getDetailsOfUserFromContactsQuery(otherUserMobileNo = formatMobileNoForChatContact(otherUserMobileNo))
+                    .updateOrThrow("isUserBlocked", block)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override suspend fun setMessagesAsRead(unreadMessages: List<ChatMessage>) {
@@ -364,6 +409,14 @@ class ChatRepository constructor(
         }
     }
 
+    fun getDetailsOfUserFromContactsQuery(otherUserMobileNo: String): DocumentReference {
+        return db.collection(COLLECTION_CHATS)
+                .document(getUID())
+                .collection(COLLECTION_CHATS_CONTACTS)
+                .document(otherUserMobileNo)
+
+    }
+
     suspend fun sentMessagesSentMessageAsDelivered(
             headerId: String,
             otherUserId: String
@@ -412,6 +465,20 @@ class ChatRepository constructor(
             val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
             val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        }
+    }
+
+    fun formatMobileNoForChatContact(
+        mobileNo: String
+    ): String {
+        return if (mobileNo.length == 10) {
+            "91$mobileNo"
+        } else if (mobileNo.length == 12) {
+            mobileNo
+        } else if (mobileNo.length > 12) {
+            mobileNo.substring(1)
+        } else {
+            throw IllegalArgumentException("invalid mobile no")
         }
     }
 

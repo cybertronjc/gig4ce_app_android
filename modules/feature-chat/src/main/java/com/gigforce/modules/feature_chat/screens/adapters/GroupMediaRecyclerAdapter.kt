@@ -160,6 +160,8 @@ class GroupMediaRecyclerAdapter(
 
                     if (groupMedia.thumbnail != null)
                         thumbnailIV.loadImageIfUrlElseTryFirebaseStorage(groupMedia.thumbnail!!)
+                    else
+                        thumbnailIV.clearImage()
 
                     if (isFileDownloading) {
                         playDownloadOverlayIV.visible()
@@ -176,11 +178,13 @@ class GroupMediaRecyclerAdapter(
                     videoLengthLayout.visible()
                     videoLength.text =
                         convertMicroSecondsToNormalFormat(groupMedia.videoAttachmentLength)
-                    requestManager.load(groupMedia.thumbnail).into(thumbnailIV)
+
                     requestManager.load(R.drawable.ic_play).into(attachmentTypeIcon)
 
                     if (groupMedia.thumbnail != null)
                         thumbnailIV.loadImageIfUrlElseTryFirebaseStorage(groupMedia.thumbnail!!)
+                     else
+                        thumbnailIV.clearImage()
 
                     if (isFileDownloading) {
                         playDownloadOverlayIV.visible()
@@ -194,20 +198,18 @@ class GroupMediaRecyclerAdapter(
                     }
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                     //Need work
-                    requestManager.load(R.drawable.ic_document_media_list)
-                        .into(playDownloadOverlayIV)
+                    thumbnailIV.loadImage(R.drawable.ic_document_background)
 
                     videoLengthLayout.gone()
                     videoLength.text = ""
+                    playDownloadOverlayIV.visible()
 
                     if (isFileDownloading) {
-                        playDownloadOverlayIV.visible()
-                        playDownloadIconIV.setImageDrawable(null)
                         attachmentDownloadingProgressBar.visible()
+                        requestManager.clear(playDownloadIconIV)
                     } else {
                         attachmentDownloadingProgressBar.gone()
-                        playDownloadOverlayIV.visible()
-                        requestManager.load(R.drawable.ic_download_24).into(playDownloadOverlayIV)
+                        requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
                 } else {
                     throw IllegalArgumentException("other types not supperted yet")
