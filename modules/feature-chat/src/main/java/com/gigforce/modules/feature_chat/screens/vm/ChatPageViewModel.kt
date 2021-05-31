@@ -114,24 +114,15 @@ class ChatPageViewModel constructor(
 
             if (otherUserMobileNo.isNullOrBlank()) {
                 viewModelScope.launch {
-                    tryFetchingUsersNoFromProfile()
+                     val userMobileNo = tryFetchingUsersNoFromProfile()
 
-                    if (!otherUserMobileNo.isNullOrBlank()) {
-                        startListeningForContactChanges(otherUserMobileNo)
+                    if (userMobileNo.isNotBlank()) {
+                        startListeningForContactChanges(userMobileNo)
                     }
                 }
             } else {
                 startListeningForContactChanges(otherUserMobileNo)
             }
-        }
-    }
-
-    private fun fetchContactDetailsWithUserId(otherUserId: String) = viewModelScope.launch {
-        try {
-            val contactInfo = chatRepository.getDetailsOfUserFromContacts(otherUserId)
-            _otherUserInfo.postValue(contactInfo)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -843,18 +834,13 @@ class ChatPageViewModel constructor(
 
     fun blockOrUnBlockUser() = viewModelScope.launch {
 
-        if (headerId.isBlank())
-            return@launch
-
         _blockingOrUnblockingUser.value = Lse.loading()
-
-        if (otherUserMobileNo.isNullOrBlank())
-            tryFetchingUsersNoFromProfile()
 
         try {
             chatRepository.blockOrUnblockUser(
                 chatHeaderId = headerId,
-                otherUserMobileNo = otherUserMobileNo ?: "",
+                otherUserId = otherUserId,
+                forceBlock = false
             )
 
             _blockingOrUnblockingUser.value = Lse.success()
@@ -866,14 +852,16 @@ class ChatPageViewModel constructor(
         }
     }
 
-    private suspend fun tryFetchingUsersNoFromProfile() {
+    private suspend fun tryFetchingUsersNoFromProfile() : String{
         try {
            val profile =  chatProfileFirebaseRepository.getProfileDataIfExist(otherUserId)
             otherUserMobileNo = profile?.loginMobile
 
             Log.wtf("D","S")
+            return profile?.loginMobile ?: ""
         } catch (e: Exception) {
            // otherUserMobileNo = ""
+            return  ""
         }
     }
 
@@ -883,20 +871,15 @@ class ChatPageViewModel constructor(
         reason: String
     ) = viewModelScope.launch {
 
-        if (chatHeader.isBlank())
-            return@launch
-
         _blockingOrUnblockingUser.value = Lse.loading()
         try {
-            if (otherUserMobileNo.isNullOrBlank())
-                tryFetchingUsersNoFromProfile()
 
             chatRepository.reportAndBlockUser(
                 chatHeader,
                 otherUserId,
-                otherUserMobileNo ?: "",
                 reason
             )
+
             _blockingOrUnblockingUser.value = Lse.success()
             _blockingOrUnblockingUser.value = null
         } catch (e: Exception) {

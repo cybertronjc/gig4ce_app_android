@@ -263,22 +263,16 @@ class ChatRepository constructor(
     }
 
 
-
     override suspend fun reportAndBlockUser(
-        chatHeaderId: String,
-        otherUserId: String,
-        otherUserMobileNo: String,
-        reason: String
+            chatHeaderId: String,
+            otherUserId: String,
+            reason: String
     ) {
-        userChatCollectionRef
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(chatHeaderId)
-                .updateOrThrow("isBlocked", true)
 
         blockOrUnblockUser(
-            chatHeaderId,
-            otherUserMobileNo,
-            true
+                chatHeaderId,
+                otherUserId,
+                true
         )
 
         userReportedCollectionRef
@@ -296,38 +290,56 @@ class ChatRepository constructor(
 
     override suspend fun blockOrUnblockUser(
             chatHeaderId: String,
-            otherUserMobileNo: String,
-            forceBlock : Boolean
+            otherUserId: String,
+            forceBlock: Boolean
     ) {
-        if(forceBlock){
-            userChatCollectionRef
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(chatHeaderId)
-                .updateOrThrow("isBlocked", true)
+        if (forceBlock) {
 
-            tryUpdatingBlockedInFlagInContacts(otherUserMobileNo, true)
-        } else {
-
-            val chatHeader = getChatHeader(chatHeaderId)
-            if (chatHeader != null) {
-
+            if (chatHeaderId.isNotBlank()) {
                 userChatCollectionRef
-                    .collection(COLLECTION_CHAT_HEADERS)
-                    .document(chatHeaderId)
-                    .updateOrThrow("isBlocked", !chatHeader.isBlocked)
-
-                tryUpdatingBlockedInFlagInContacts(otherUserMobileNo, !chatHeader.isBlocked)
+                        .collection(COLLECTION_CHAT_HEADERS)
+                        .document(chatHeaderId)
+                        .updateOrThrow("isBlocked", true)
             }
+
+            val contactDetails =  if(otherUserId.isNotBlank())
+                getDetailsOfUserFromContacts(otherUserId)
+            else
+                null
+
+            if(contactDetails != null)
+                tryUpdatingBlockedInFlagInContacts(contactDetails.mobile, true)
+        } else {
+            var isUserBlocked = false
+            val chatHeader = if (chatHeaderId.isNotBlank())
+                getChatHeader(chatHeaderId)
+            else
+                null
+
+           val contactDetails =  if(otherUserId.isNotBlank())
+               getDetailsOfUserFromContacts(otherUserId)
+            else
+                null
+
+            isUserBlocked = chatHeader?.isBlocked ?: false || contactDetails?.isUserBlocked ?: false
+
+            if (chatHeaderId.isNotBlank()) {
+                userChatCollectionRef
+                        .collection(COLLECTION_CHAT_HEADERS)
+                        .document(chatHeaderId)
+                        .updateOrThrow("isBlocked", !isUserBlocked)
+            }
+
+            if(contactDetails != null)
+                tryUpdatingBlockedInFlagInContacts(contactDetails.mobile, !isUserBlocked)
         }
-
-
     }
 
     private suspend fun tryUpdatingBlockedInFlagInContacts(
-        otherUserMobileNo: String,
-        block :Boolean
+            otherUserMobileNo: String,
+            block: Boolean
     ) {
-        if(otherUserMobileNo.isEmpty())
+        if (otherUserMobileNo.isEmpty())
             return
 
         try {
@@ -395,17 +407,15 @@ class ChatRepository constructor(
         val contactRef = db.collection(COLLECTION_CHATS)
                 .document(getUID())
                 .collection(COLLECTION_CHATS_CONTACTS)
-                .document(otherUserId)
+                .whereEqualTo("uid", otherUserId)
                 .getOrThrow()
 
-        return if (contactRef.exists()) {
-            contactRef.toObject(ContactModel::class.java)!!.apply {
-                this.id = contactRef.id
-            }
+        return if (contactRef.isEmpty) {
+             ContactModel(id = otherUserId)
         } else {
-            ContactModel(
-                    id = otherUserId
-            )
+            contactRef.first().toObject(ContactModel::class.java).apply {
+                this.id =  contactRef.first().id
+            }
         }
     }
 
@@ -469,7 +479,7 @@ class ChatRepository constructor(
     }
 
     fun formatMobileNoForChatContact(
-        mobileNo: String
+            mobileNo: String
     ): String {
         return if (mobileNo.length == 10) {
             "91$mobileNo"

@@ -52,13 +52,12 @@ interface IChatService {
     suspend fun reportAndBlockUser(
         chatHeaderId: String,
         otherUserId: String,
-        otherUserMobileNo: String,
         reason: String
     )
 
     suspend fun blockOrUnblockUser(
         chatHeaderId: String,
-        otherUserMobileNo: String,
+        otherUserId: String,
         forceBlock : Boolean = false
     )
 
