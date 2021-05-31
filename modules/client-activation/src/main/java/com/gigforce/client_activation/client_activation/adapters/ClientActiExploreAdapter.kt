@@ -172,7 +172,7 @@ class ClientActiExploreAdapter(
 //            }
 
             jobActionTv.setOnClickListener {
-                clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId)
+                clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId, jobProfile.jobProfileTitle)
             }
 
         }

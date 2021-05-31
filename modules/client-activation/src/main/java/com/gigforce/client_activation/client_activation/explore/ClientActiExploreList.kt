@@ -236,14 +236,16 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         )
     }
 
-     fun takeAction(action: String, id: String){
+     fun takeAction(action: String, id: String, title: String){
         Log.d("action", action)
         Log.d("id", id)
+         Log.d("jbTitle", title)
         when(action){
             //navigate to Application
             "Apply Now"  ->  navigation.navigateTo(
                     "client_activation/applicationClientActivation", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to id
+                    StringConstants.JOB_PROFILE_ID.value to id,
+                    StringConstants.JOB_PROFILE_TITLE.value to title
 
             ))
             //share gig for approved
@@ -252,19 +254,22 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
             //rejected
             "Apply Again" -> navigation.navigateTo(
                 "client_activation/applicationClientActivation", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to id
+                    StringConstants.JOB_PROFILE_ID.value to id,
+                    StringConstants.JOB_PROFILE_TITLE.value to title
 
                 ))
             //completed applicaiton
             "Complete Application" -> navigation.navigateTo(
                 "client_activation/applicationClientActivation", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to id
+                    StringConstants.JOB_PROFILE_ID.value to id,
+                    StringConstants.JOB_PROFILE_TITLE.value to title
 
                 ))
             //Submitted applicaiton
             "View Application" -> navigation.navigateTo(
                 "client_activation/applicationClientActivation", bundleOf(
-                    StringConstants.JOB_PROFILE_ID.value to id
+                    StringConstants.JOB_PROFILE_ID.value to id,
+                    StringConstants.JOB_PROFILE_TITLE.value to title
 
                 ))
         }

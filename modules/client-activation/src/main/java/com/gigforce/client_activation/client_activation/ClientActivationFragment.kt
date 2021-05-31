@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -38,6 +39,8 @@ import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
 import com.gigforce.common_ui.viewdatamodels.client_activation.Media
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.datamodels.learning.LessonModel
 import com.gigforce.core.di.interfaces.IBuildConfig
 import com.gigforce.core.extensions.*
@@ -247,13 +250,16 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             val eventName = it.title ?: ""
             mJobProfileTitle = it.title ?: ""
 
-            eventTracker.pushEvent(TrackingEventArgs(
+            eventTracker.pushEvent(
+                TrackingEventArgs(
                 eventName = ClientActivationEvents.EVENT_APPLICATION_PAGE_LOADED,
                 props = mapOf(
                     "id" to id,
                     "title" to eventName
                 )
-            ))
+            )
+            )
+
 
             Glide.with(this).load(it.coverImg).placeholder(
                 ShimmerHelper.getShimmerDrawable()
@@ -320,7 +326,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             if (it == true) {
                 navigation.navigateTo(
                     "client_activation/applicationClientActivation", bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
+                        StringConstants.JOB_PROFILE_TITLE.value to viewModel.observableJobProfile.value?.title
                     )
                 )
             }
@@ -337,6 +344,7 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
                         navFragmentsData.setData(
                             bundleOf(
                                 StringConstants.JOB_PROFILE_ID.value to mJobProfileId,
+                                StringConstants.JOB_PROFILE_TITLE.value to mJobProfileTitle,
                                 StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to mClientViaDeeplink,
                                 StringConstants.INVITE_USER_ID.value to mInviteUserID,
                                 StringConstants.AUTO_REDIRECT_TO_APPL.value to true
@@ -732,7 +740,8 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             } else {
                 navigation.navigateTo(
                     "client_activation/applicationClientActivation", bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId
+                        StringConstants.JOB_PROFILE_ID.value to viewModel.observableJobProfile.value?.profileId,
+                        StringConstants.JOB_PROFILE_TITLE.value to mJobProfileTitle
                     )
                 )
                 viewModel.observableJpApplication.removeObservers(viewLifecycleOwner)
