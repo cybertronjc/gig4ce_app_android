@@ -119,6 +119,7 @@ class MainActivity : AppCompatActivity(),
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+       // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationIntentRecevier, intentFilters)
 

@@ -22,7 +22,9 @@
             <option value="$PROJECT_DIR$/modules/giger-gigs" />
             <option value="$PROJECT_DIR$/modules/landing" />
             <option value="$PROJECT_DIR$/modules/learning" />
+            <option value="$PROJECT_DIR$/modules/notifications" />
             <option value="$PROJECT_DIR$/modules/profile" />
+            <option value="$PROJECT_DIR$/modules/user-tracking" />
             <option value="$PROJECT_DIR$/modules/user_preferences" />
             <option value="$PROJECT_DIR$/modules/user_profile" />
             <option value="$PROJECT_DIR$/modules/verification" />

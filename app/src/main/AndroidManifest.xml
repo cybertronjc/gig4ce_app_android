@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 
     <uses-feature android:name="android.hardware.camera" />
@@ -98,6 +99,8 @@
             android:name="com.gigforce.modules.feature_chat.service.SyncContactsService"
             android:enabled="true"
             android:exported="true" />
+
+
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"

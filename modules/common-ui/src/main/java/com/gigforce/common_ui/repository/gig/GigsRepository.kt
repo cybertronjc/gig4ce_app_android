@@ -2,12 +2,8 @@ package com.gigforce.common_ui.repository.gig
 
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
-import com.gigforce.core.extensions.getOrThrow
-import com.gigforce.core.extensions.toLocalDate
-import com.gigforce.core.extensions.updateOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -15,8 +11,16 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import android.location.Location
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.datamodels.gigpage.*
+import com.gigforce.core.extensions.*
+import com.gigforce.user_tracking.models.UserGigLocationTrack
+import com.gigforce.user_tracking.models.UserLocation
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.GeoPoint
+import java.time.LocalDateTime
 
 open class GigsRepository : BaseFirestoreDBRepository() {
 
@@ -25,9 +29,18 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
 
-    fun markAttendance(markAttendance: GigAttendance, gigId: String) {
-        getCollectionReference().document(gigId).update(markAttendance.tableName, markAttendance)
+    private val userLocationCollectionRef: CollectionReference by lazy {
+        db.collection("UserLocations")
     }
+
+    private val profileRepository: ProfileFirebaseRepository by lazy {
+        ProfileFirebaseRepository()
+    }
+
+    private val user: FirebaseUser?
+        get() {
+            return FirebaseAuth.getInstance().currentUser
+        }
 
     suspend fun markCheckIn(
             gigId: String,
@@ -79,6 +92,16 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         getCollectionReference()
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
+
+        if(location != null ) {
+            submitUserLocationInTrackingCollection(
+                geoPoint = GeoPoint(location.latitude, location.longitude),
+                couldBeAFakeLocation = location.isFromMockProvider,
+                locationAccuracy = location.accuracy,
+                gigId = gigId,
+                fullAddressFromGps = locationPhysicalAddress
+            )
+        }
     }
 
     suspend fun markCheckOut(
@@ -131,6 +154,53 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 .document(gigId)
                 .updateOrThrow(attendanceUpdateMap)
 
+        if(location != null) {
+            submitUserLocationInTrackingCollection(
+                geoPoint = GeoPoint(location.latitude, location.longitude),
+                couldBeAFakeLocation = location.isFromMockProvider,
+                locationAccuracy = location.accuracy,
+                gigId = gigId,
+                fullAddressFromGps = locationPhysicalAddress
+            )
+        }
+    }
+
+    private suspend fun submitUserLocationInTrackingCollection(
+        gigId: String,
+        geoPoint: GeoPoint,
+        couldBeAFakeLocation: Boolean,
+        locationAccuracy: Float,
+        fullAddressFromGps: String,
+    ) {
+
+        val profile = try {
+            profileRepository.getProfileDataIfExist()
+        } catch (e: Exception) {
+            null
+        }
+
+        try {
+            userLocationCollectionRef
+                .document(gigId)
+                .setOrThrow(
+                    UserGigLocationTrack(
+                    uid = getUID(),
+                    userName = profile?.name,
+                    userPhoneNumber = user?.phoneNumber,
+                    locations = listOf(
+                        UserLocation(
+                            location = geoPoint,
+                            fakeLocation = couldBeAFakeLocation,
+                            locationAccuracy = locationAccuracy,
+                            locationCapturedTime = Timestamp.now(),
+                            fullAddressFromGps = fullAddressFromGps
+                        )
+                    )
+                )
+                )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     suspend fun getGig(gigId: String) = suspendCoroutine<Gig> { cont ->
@@ -185,8 +255,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
      suspend fun getJobDetails(jobId : String) : JobProfileFull {
         val getJobProfileQuery = db.collection("Job_Profiles")
                 .document(jobId)
-                .get()
-                .await()
+                .getOrThrow()
 
        return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
     }
@@ -211,7 +280,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
     private suspend fun getGigOrder(gigOrderId: String): GigOrder? {
         val getGigOrderQuery = db.collection("Gig_Order")
                 .document(gigOrderId)
-                .get().await()
+                .getOrThrow()
 
         if (!getGigOrderQuery.exists())
             return null
@@ -222,13 +291,36 @@ open class GigsRepository : BaseFirestoreDBRepository() {
     private suspend fun getBussinessLocation(bussinessLocationId: String): BussinessLocation? {
         val getBussinessLocationQuery = db.collection("Business_Locations")
                 .document(bussinessLocationId)
-                .get().await()
+                .getOrThrow()
 
         if (!getBussinessLocationQuery.exists())
             return null
 
        return getBussinessLocationQuery.toObject(BussinessLocation::class.java)!!
     }
+
+    suspend fun getOngoingAndUpcomingGigsFor(
+            date: LocalDate
+    ): List<Gig> {
+
+        val dateStart = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val nextDay = date.plusDays(1)
+        val dateEnd = Date.from(nextDay.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        val querySnap =
+                getCurrentUserGigs()
+                        .whereGreaterThan("startDateTime", dateStart)
+                        .whereLessThan("startDateTime", dateEnd)
+                        .getOrThrow()
+
+        val currentTime = LocalDateTime.now()
+        return extractGigs(querySnap)
+                .filter {
+                    it.endDateTime.toLocalDateTime().isAfter(currentTime)
+                }
+    }
+
 
     companion object {
         private const val COLLECTION_NAME = "Gigs"
