@@ -27,7 +27,7 @@ layout activity_camera
 layout activity_photo_crop
 layout fragment_camera
 layout fragment_camera_permission
-layout fragment_click_or_select_profile_picture
+layout fragment_click_or_select_picture
 layout fragment_image_viewer
 string crop_and_rotate
 string pick_image_intent_text

@@ -119,4 +119,8 @@ class GigforceImageView(
                 .error(getErrorImage())
                 .into(this)
     }
+
+    fun clearImage(){
+        Glide.with(context).clear(this)
+    }
 }
