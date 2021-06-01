@@ -1,6 +1,7 @@
 package com.gigforce.client_activation.client_activation.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -147,11 +148,14 @@ class ClientActiExploreAdapter(
             var actionButtonText =
                 if (jobProfile.status == "Interested") "Complete Application" else if (jobProfile.status == "Inprocess") "Complete Application"
                 else if (jobProfile.status == "") "Apply Now"  else ""
+            Log.d("actionText", actionButtonText)
             if (actionButtonText == ""){
                 divider_one.invisible()
-                jobActionTv.gone()}
+                jobActionTv.gone()
+            Log.d("empty", "true")}
             else{
                 divider_one.visible()
+                Log.d("empty", "true")
                 jobActionTv.text = actionButtonText}
 
 //            when (jobProfile.status){
@@ -172,7 +176,7 @@ class ClientActiExploreAdapter(
 //            }
 
             jobActionTv.setOnClickListener {
-                clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId)
+                clientActiExploreList.takeAction(jobActionTv.text.toString(), jobProfile.profileId, jobProfile.jobProfileTitle)
             }
 
         }

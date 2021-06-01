@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="vertical"
         android:paddingEnd="@dimen/size_24"
         app:layout_constraintStart_toStartOf="parent"

@@ -14,7 +14,8 @@ import com.google.firebase.storage.FirebaseStorage
 
 class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
-    private val profileImg : ImageView
+    private val profileImg: ImageView
+
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -22,23 +23,23 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
         profileImg = this.findViewById(R.id.profile_image)
     }
 
-    fun setProfilePic(image: String){
+    fun setProfilePic(image: String) {
         setImageToProfilePic(image)
     }
 
     override fun bind(data: Any?) {
-        if(data is AppProfilePicDVM){
+        if (data is AppProfilePicDVM) {
             setImageToProfilePic(data.image)
         }
     }
 
     private fun setImageToProfilePic(image: String) {
-//        val firebaseStoragePath = "gs://gig4ce-dev.appspot.com/profile_pics/${image}"
-        val firebaseStoragePath = "gs://gigforce-dev.appspot.com/profile_pics/IMG_20200409_235122_.jpg"
+        val firebaseStoragePath =
+            "gs://gigforce-dev.appspot.com/profile_pics/IMG_20200409_235122_.jpg"
         val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
         GlideApp.with(context)
             .load(gsReference)
             .into(profileImg)
-            }
+    }
 
 }

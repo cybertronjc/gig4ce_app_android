@@ -10,11 +10,11 @@ import com.gigforce.core.IViewHolder
 import kotlinx.android.synthetic.main.cell_app_bar.view.*
 
 class AppBarComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
-        IViewHolder {
+    IViewHolder {
 
     init {
         this.layoutParams =
-                LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.cell_app_bar, this, true)
     }
 

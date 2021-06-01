@@ -302,7 +302,7 @@ class ApplicationClientActivationFragment : Fragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(StringConstants.JOB_PROFILE_ID.value, mJobProfileId)
-
+        outState.putString(StringConstants.JOB_PROFILE_TITLE.value, mJobProfileTitle)
 
     }
 
@@ -310,11 +310,14 @@ class ApplicationClientActivationFragment : Fragment(),
         savedInstanceState?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
+
         }
 
         arguments?.let {
             mJobProfileId = it.getString(StringConstants.JOB_PROFILE_ID.value) ?: return@let
             mJobProfileTitle = it.getString(StringConstants.JOB_PROFILE_TITLE.value) ?: return@let
+
+
         }
     }
 

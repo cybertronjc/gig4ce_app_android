@@ -8,5 +8,6 @@ data class JpExplore(
     var title: String = "",
     var image: String = "",
     var status: String = "",
+    var jobProfileTitle: String = ""
 
 )
