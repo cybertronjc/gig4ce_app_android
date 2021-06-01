@@ -169,7 +169,7 @@ class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
 
                     checkInTV.setOnClickListener {
                         data?.get(adapterPosition)?.let {it1->
-                            callClickListener?.onItemClick(it,it1,adapterPosition)
+                            checkInClickListener?.onItemClick(it,it1,adapterPosition)
                         }
 
 //                        CheckInClickListener(
@@ -311,6 +311,12 @@ class UpcomingGigBSAdapter(val context: Context, val itemWidth : Int) :
 
     fun setcallOnclickListener(listener: AdapterClickListener<Any>) {
         this.callClickListener = listener
+    }
+
+    var checkInClickListener: AdapterClickListener<Any>? = null
+
+    fun setOnCheckInClickListener(listener: AdapterClickListener<Any>){
+        this.checkInClickListener = listener
     }
 
     var navigationClickListener: AdapterClickListener<Any>? = null
