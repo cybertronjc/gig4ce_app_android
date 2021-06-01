@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
 	package
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:3:5-34
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:3:5-34
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
 	android:versionCode
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:1-5:12
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml:2:11-69
 uses-sdk
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
-		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		ADDED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
+		INJECTED from /Users/apple/Documents/gig4ce/week4april2020/gig4ce_app_android/modules/wallet/src/main/AndroidManifest.xml
