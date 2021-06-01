@@ -142,8 +142,10 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
         startShimmer(
             assessment_loader as LinearLayout,
             ShimmerDataModel(
-                minHeight = 78,
-                minWidth = 227, marginRight = 1,
+                minHeight = R.dimen.size_78,
+                minWidth = R.dimen.size_227,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
                 orientation = LinearLayout.HORIZONTAL
             ), R.id.shimmer_controller
         )
@@ -175,9 +177,10 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
         startShimmer(
             learning_based_horizontal_progress as LinearLayout,
             ShimmerDataModel(
-                minHeight = 148,
-                minWidth = 300,
-                marginRight = 1,
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
                 orientation = LinearLayout.HORIZONTAL
             ),
             R.id.shimmer_controller
@@ -222,9 +225,11 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
         startShimmer(
             explore_learnings_loader as LinearLayout,
             ShimmerDataModel(
-                minHeight = 168,
-                minWidth = 147, marginRight = 1,
-                orientation = LinearLayout.HORIZONTAL
+               minHeight = R.dimen.size_168,
+               minWidth = R.dimen.size_147,
+               marginRight = R.dimen.size_1,
+               marginTop = R.dimen.size_1,
+               orientation = LinearLayout.HORIZONTAL
             ), R.id.shimmer_controller
         )
         explore_learnings_rv.gone()

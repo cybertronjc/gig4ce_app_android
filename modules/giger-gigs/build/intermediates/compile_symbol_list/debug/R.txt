@@ -1550,6 +1550,7 @@ int dimen appcompat_dialog_background_inset 0x0
 int dimen bannerContentWeight 0x0
 int dimen bannerWeightSum 0x0
 int dimen border_width 0x0
+int dimen box_inset_layout_padding 0x0
 int dimen browser_actions_context_menu_max_width 0x0
 int dimen browser_actions_context_menu_min_padding 0x0
 int dimen bs_margin_end 0x0
@@ -3603,7 +3604,7 @@ int layout feature_item_card2 0x0
 int layout feature_layout 0x0
 int layout fragment_camera 0x0
 int layout fragment_camera_permission 0x0
-int layout fragment_click_or_select_profile_picture 0x0
+int layout fragment_click_or_select_picture 0x0
 int layout fragment_decline_gig_dialog 0x0
 int layout fragment_decline_gig_dialog_main 0x0
 int layout fragment_gig_contact_person_details 0x0

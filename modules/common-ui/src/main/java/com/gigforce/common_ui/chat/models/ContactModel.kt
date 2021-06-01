@@ -60,7 +60,11 @@ data class ContactModel(
 
         @get:PropertyName("isUserGroupManager")
         @set:PropertyName("isUserGroupManager")
-        var isUserGroupManager: Boolean = false
+        var isUserGroupManager: Boolean = false,
+
+        @get:PropertyName("isUserBlocked")
+        @set:PropertyName("isUserBlocked")
+        var isUserBlocked: Boolean = false
 ) : Parcelable {
 
     @Exclude

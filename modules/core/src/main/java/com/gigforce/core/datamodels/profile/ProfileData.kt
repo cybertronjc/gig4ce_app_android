@@ -39,6 +39,7 @@ data class ProfileData(
     var contactEmail: ArrayList<ContactEmail>? = null,
     var invited: ArrayList<Invites>? = null,
     var role_interests: ArrayList<RoleInterests>? = null,
+    var gigerStatus : String = "lead",
 
     @get:PropertyName("companies")
     @set:PropertyName("companies")

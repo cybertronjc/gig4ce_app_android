@@ -220,7 +220,8 @@ class ChatPageFragment : Fragment(),
                     otherUserId = receiverUserId!!,
                     headerId = chatHeaderOrGroupId,
                     otherUserName = receiverName,
-                    otherUserProfilePicture = receiverPhotoUrl
+                    otherUserProfilePicture = receiverPhotoUrl,
+                    otherUserMobileNo = receiverMobileNumber
             )
             adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
@@ -460,6 +461,15 @@ class ChatPageFragment : Fragment(),
                         toolbar.showImageBehindBackButton(
                                 R.drawable.ic_user_white
                         )
+                    }
+
+                    if (it.isUserBlocked) {
+                        userBlockedOrRemovedLayout.visible()
+                        userBlockedOrRemovedLayout.text = "You've blocked this contact"
+                        chatFooter.gone()
+                    } else {
+                        userBlockedOrRemovedLayout.gone()
+                        chatFooter.visible()
                     }
                 })
 
