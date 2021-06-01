@@ -1543,6 +1543,8 @@ int color ucrop_color_widget_rotate_angle 0x0
 int color ucrop_color_widget_rotate_mid_line 0x0
 int color ucrop_color_widget_text 0x0
 int color ucrop_scale_text_view_selector 0x0
+int color upcoming_gig_time 0x0
+int color upcoming_gig_title 0x0
 int color warm_grey 0x0
 int color warm_grey_two 0x0
 int color white 0x0
@@ -2408,6 +2410,7 @@ int drawable ic_dl 0x0
 int drawable ic_down 0x0
 int drawable ic_download_24 0x0
 int drawable ic_edit 0x0
+int drawable ic_emoji 0x0
 int drawable ic_error_loading_image 0x0
 int drawable ic_error_loading_image_red 0x0
 int drawable ic_gig_decline 0x0
@@ -2429,6 +2432,7 @@ int drawable ic_next_screen 0x0
 int drawable ic_next_screen_ 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_pause_square_border 0x0
+int drawable ic_phone_white_24dp 0x0
 int drawable ic_play_sq 0x0
 int drawable ic_ques_round 0x0
 int drawable ic_question 0x0
@@ -2788,6 +2792,7 @@ int id city_image_iv 0x0
 int id city_name_tv 0x0
 int id city_root_layout 0x0
 int id clear_text 0x0
+int id clickedImage 0x0
 int id clickedImageIV 0x0
 int id clip_horizontal 0x0
 int id clip_vertical 0x0
@@ -3047,7 +3052,9 @@ int id ivVeriDD1 0x0
 int id iv_back_add_selfie 0x0
 int id iv_back_application_client_activation 0x0
 int id iv_back_upload_aadhar_card_client_activation 0x0
+int id iv_call 0x0
 int id iv_download_giger_verification 0x0
+int id iv_message 0x0
 int id jpeg 0x0
 int id jumpToEnd 0x0
 int id jumpToStart 0x0
@@ -3800,9 +3807,11 @@ int layout ucrop_fragment_photobox 0x0
 int layout ucrop_layout_rotate_wheel 0x0
 int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
+int layout upcoming_gig_card_component 0x0
 int layout upload_aadhar_card_fragment 0x0
 int layout upload_car_client_activation 0x0
 int layout upload_pan_card_fragment 0x0
+int layout verification_image_card_component 0x0
 int layout verified_button 0x0
 int menu ucrop_menu_activity 0x0
 int plurals fui_error_weak_password 0x0
@@ -3921,6 +3930,8 @@ int string change_slot 0x0
 int string character_counter_content_description 0x0
 int string character_counter_overflowed_content_description 0x0
 int string character_counter_pattern 0x0
+int string check_in 0x0
+int string check_out 0x0
 int string checkout 0x0
 int string chip_text 0x0
 int string choose_address 0x0

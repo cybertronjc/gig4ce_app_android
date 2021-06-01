@@ -7,4 +7,6 @@
     <string name="allow_access_location">Allow Access Location</string>
     <string name="read_more">more</string>
     <string name="read_less">less</string>
+    <string name="check_out">Check Out</string>
+    <string name="check_in">Check In</string>
 </resources>

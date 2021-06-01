@@ -76,15 +76,19 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initViews() {
-        aadharFrontImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_aadhar_card_front_side)
-        aadharFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_aadhar_card)
+        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_front_side))
+        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+//        aadharFrontImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_aadhar_card_front_side)
+//        aadharFrontImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_aadhar_card)
 
-        aadharBackImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_aadhar_card_back_side)
-        aadharBackImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_aadhar_card)
+        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_back_side))
+        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+//        aadharBackImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_aadhar_card_back_side)
+//        aadharBackImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_aadhar_card)
 
         aadharSubmitSliderBtn.isEnabled = false
 

@@ -2349,6 +2349,7 @@ drawable ic_no_gigs
 drawable ic_no_more_gigs
 drawable ic_oval_top_landingscreen
 drawable ic_pending_yellow_round
+drawable ic_phone_white_24dp
 drawable ic_play_round_pink_bck
 drawable ic_referal
 drawable ic_search
@@ -2951,8 +2952,10 @@ id iv_back_gig_page
 id iv_back_tb_gig_history
 id iv_brand_logo_giger_id
 id iv_brand_rv_gig_hist
+id iv_call
 id iv_chat_gig_his
 id iv_logo_giger_id
+id iv_message
 id iv_no_more_gigs
 id iv_options_gig_details
 id iv_options_gig_page
@@ -3776,6 +3779,7 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upcoming_gig_card_component
 layout verified_button
 menu menu_gig_2
 menu menu_gig_attendance
@@ -3836,6 +3840,8 @@ string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
 string chat
+string check_in
+string check_out
 string chip_text
 string clear_text_end_icon_content_description
 string common_google_play_services_enable_button

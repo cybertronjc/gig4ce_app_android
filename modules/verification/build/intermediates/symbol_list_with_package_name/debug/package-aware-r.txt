@@ -1544,6 +1544,8 @@ color ucrop_color_widget_rotate_angle
 color ucrop_color_widget_rotate_mid_line
 color ucrop_color_widget_text
 color ucrop_scale_text_view_selector
+color upcoming_gig_time
+color upcoming_gig_title
 color warm_grey
 color warm_grey_two
 color white
@@ -2409,6 +2411,7 @@ drawable ic_dl
 drawable ic_down
 drawable ic_download_24
 drawable ic_edit
+drawable ic_emoji
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
 drawable ic_gig_decline
@@ -2430,6 +2433,7 @@ drawable ic_next_screen
 drawable ic_next_screen_
 drawable ic_oval_top_landingscreen
 drawable ic_pause_square_border
+drawable ic_phone_white_24dp
 drawable ic_play_sq
 drawable ic_ques_round
 drawable ic_question
@@ -2789,6 +2793,7 @@ id city_image_iv
 id city_name_tv
 id city_root_layout
 id clear_text
+id clickedImage
 id clickedImageIV
 id clip_horizontal
 id clip_vertical
@@ -3048,7 +3053,9 @@ id ivVeriDD1
 id iv_back_add_selfie
 id iv_back_application_client_activation
 id iv_back_upload_aadhar_card_client_activation
+id iv_call
 id iv_download_giger_verification
+id iv_message
 id jpeg
 id jumpToEnd
 id jumpToStart
@@ -3801,9 +3808,11 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upcoming_gig_card_component
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout verification_image_card_component
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password
@@ -3922,6 +3931,8 @@ string change_slot
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
+string check_in
+string check_out
 string checkout
 string chip_text
 string choose_address

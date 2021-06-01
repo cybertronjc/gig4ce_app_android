@@ -77,6 +77,17 @@
         <attr name="civ_is_qr" format="boolean" />
     </declare-styleable>
 
+<!--    <declare-styleable name="ChipComponent">-->
+<!--        <attr name="android:textAllCaps" format="boolean"/>-->
+<!--        <attr name="android:text" format="string"/>-->
+<!--        <attr name="cornerRadius" format="dimension"/>-->
+<!--        <attr name="chipIcon" format="integer"/>-->
+<!--        <attr name="closable" format="boolean"/>-->
+<!--        <attr name="selectable" format="boolean"/>-->
+<!--        <attr name="chipBackgroundColor" format="color"/>-->
+
+<!--    </declare-styleable>-->
+
     <declare-styleable name="EditTextWithSuffix">
         <attr name="suffix" format="string|reference" />
         <attr name="suffixPadding" format="dimension" />

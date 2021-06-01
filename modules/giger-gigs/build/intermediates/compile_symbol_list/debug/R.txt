@@ -2348,6 +2348,7 @@ int drawable ic_no_gigs 0x0
 int drawable ic_no_more_gigs 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_pending_yellow_round 0x0
+int drawable ic_phone_white_24dp 0x0
 int drawable ic_play_round_pink_bck 0x0
 int drawable ic_referal 0x0
 int drawable ic_search 0x0
@@ -2950,8 +2951,10 @@ int id iv_back_gig_page 0x0
 int id iv_back_tb_gig_history 0x0
 int id iv_brand_logo_giger_id 0x0
 int id iv_brand_rv_gig_hist 0x0
+int id iv_call 0x0
 int id iv_chat_gig_his 0x0
 int id iv_logo_giger_id 0x0
+int id iv_message 0x0
 int id iv_no_more_gigs 0x0
 int id iv_options_gig_details 0x0
 int id iv_options_gig_page 0x0
@@ -3775,6 +3778,7 @@ int layout ucrop_fragment_photobox 0x0
 int layout ucrop_layout_rotate_wheel 0x0
 int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
+int layout upcoming_gig_card_component 0x0
 int layout verified_button 0x0
 int menu menu_gig_2 0x0
 int menu menu_gig_attendance 0x0
@@ -3835,6 +3839,8 @@ int string character_counter_content_description 0x0
 int string character_counter_overflowed_content_description 0x0
 int string character_counter_pattern 0x0
 int string chat 0x0
+int string check_in 0x0
+int string check_out 0x0
 int string chip_text 0x0
 int string clear_text_end_icon_content_description 0x0
 int string common_google_play_services_enable_button 0x0

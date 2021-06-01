@@ -293,6 +293,7 @@ id cameraView
 id cameraViewContainer
 id cifLabel
 id cifNumberET
+id clickedImage
 id clickedImageIV
 id close
 id confirmDLDataCB
@@ -554,6 +555,7 @@ layout layout_verification_pancard
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout verification_image_card_component
 string aadhar_card
 string aadhar_card_back_image
 string aadhar_card_details_uploaded
