@@ -757,6 +757,13 @@ class BSCalendarScreenFragment : Fragment() {
                 }
             })
 
+            upcomingGigBSAdapter.setOnCheckInClickListener(object : AdapterClickListener<Any>{
+                override fun onItemClick(view: View, obj: Any, position: Int) {
+                    CheckInClickListener(upcoming_gig_rv, position)
+                }
+
+            })
+
             viewModel.getTeamLeadInfo(upcomingGigs)
             viewModel.observableChatInfo.observe(viewLifecycleOwner, Observer {
                 upcomingGigBSAdapter.notifyItemChanged(upcomingGigs.indexOf(it))
