@@ -6,7 +6,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import java.time.LocalDateTime
 
 object TrackingScheduleCalculator {
-    private const val DEFAULT_TIME_DIFF_BETWEEN_ALARMS_IN_MINS = 15L //Mins
+    private const val DEFAULT_TIME_DIFF_BETWEEN_ALARMS_IN_MINS = 30L //Mins
     private const val TIME_DIFF_BETWEEN_TWO_LOCATION_UPDATES = "time_diff"
 
     private val firebaseRemoteConfig: FirebaseRemoteConfig by lazy {
