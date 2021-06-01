@@ -1,3 +1,5 @@
+include ':modules:notifications'
+include ':modules:user-tracking'
 include ':modules:landing'
 include ':modules:user_preferences'
 include ':modules:ambassador'

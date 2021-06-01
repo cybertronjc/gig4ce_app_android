@@ -100,8 +100,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <service android:name=".modules.userLocationCapture.service.TrackingService"
-            android:foregroundServiceType="location" />
+
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"

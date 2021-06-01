@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.userLocationCapture
+package com.gigforce.user_tracking
 
 import android.Manifest
 import android.content.Context

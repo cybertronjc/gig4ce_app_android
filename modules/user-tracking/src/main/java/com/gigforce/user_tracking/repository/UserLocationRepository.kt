@@ -1,9 +1,9 @@
-package com.gigforce.app.modules.userLocationCapture.repository
+package com.gigforce.user_tracking.repository
 
 import android.util.Log
-import com.gigforce.app.modules.userLocationCapture.models.UserLocation
-import com.gigforce.app.utils.updateOrThrow
-import com.google.android.gms.maps.model.LatLng
+import com.gigforce.core.extensions.updateOrThrow
+import com.gigforce.user_tracking.models.LatLng
+import com.gigforce.user_tracking.models.UserLocation
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -25,11 +25,11 @@ class UserLocationRepository constructor(
         }
 
     suspend fun updateUserLocation(
-            location: LatLng,
-            accuracy: Float,
-            gigId: String,
-            couldBeAFakeLocation: Boolean,
-            fullAddressFromGps: String
+        location: LatLng,
+        accuracy: Float,
+        gigId: String,
+        couldBeAFakeLocation: Boolean,
+        fullAddressFromGps: String
     ) {
 
         if (user == null) {
@@ -45,7 +45,8 @@ class UserLocationRepository constructor(
                                 locationCapturedTime = Timestamp.now(),
                                 fakeLocation = couldBeAFakeLocation,
                                 fullAddressFromGps = fullAddressFromGps
-                        )))
+                        )
+                ))
                 )
     }
 

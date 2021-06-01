@@ -1,6 +1,6 @@
-package com.gigforce.app.modules.userLocationCapture.service
+package com.gigforce.user_tracking.service
 
-import com.gigforce.app.core.toLocalDateTime
+import com.gigforce.core.extensions.toLocalDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import java.time.LocalDateTime

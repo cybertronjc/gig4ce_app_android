@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.userLocationCapture.service
+package com.gigforce.user_tracking.service
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -17,21 +17,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import com.gigforce.app.MainActivity
-import com.gigforce.app.R
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants.ACTION_PAUSE_SERVICE
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants.ACTION_STOP_SERVICE
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants.NOTIFICATION_CHANNEL_ID
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants.NOTIFICATION_ID
-import com.gigforce.app.modules.userLocationCapture.TrackingUtility
-import com.gigforce.app.modules.userLocationCapture.repository.UserLocationRepository
-import com.gigforce.app.utils.LocationUtils
+import com.gigforce.user_tracking.R
+import com.gigforce.user_tracking.TrackingConstants
+import com.gigforce.user_tracking.TrackingConstants.NOTIFICATION_CHANNEL_ID
+import com.gigforce.user_tracking.TrackingConstants.NOTIFICATION_ID
+import com.gigforce.user_tracking.TrackingUtility
+import com.gigforce.user_tracking.models.LatLng
+import com.gigforce.user_tracking.repository.UserLocationRepository
+import com.gigforce.user_tracking.utils.LocationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -82,10 +79,10 @@ class TrackingService : LifecycleService() {
                         Log.d(TAG, "Resuming service...")
                     }
                 }
-                ACTION_PAUSE_SERVICE -> {
+                TrackingConstants.ACTION_PAUSE_SERVICE -> {
                     Log.d(TAG, "Paused service")
                 }
-                ACTION_STOP_SERVICE -> {
+                TrackingConstants.ACTION_STOP_SERVICE -> {
                     Log.d(TAG, "Stopped service")
                 }
                 else -> {
@@ -208,6 +205,7 @@ class TrackingService : LifecycleService() {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_notification_icon)
+                .setColor(R.color.lipstick_2)
                 .setContentTitle("Checking Location...")
                 .setContentIntent(getMainActivityPendingIntent())
 
@@ -217,7 +215,7 @@ class TrackingService : LifecycleService() {
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
             this,
             0,
-            Intent(this, MainActivity::class.java).also {
+            Intent(this,  Class.forName("com.gigforce.app.MainActivity")).also {
                 it.action = TrackingConstants.ACTION_SHOW_TRACKING_FRAGMENT
             },
             FLAG_UPDATE_CURRENT

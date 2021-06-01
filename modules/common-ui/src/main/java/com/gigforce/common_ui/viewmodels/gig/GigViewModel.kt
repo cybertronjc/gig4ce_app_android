@@ -150,7 +150,7 @@ class GigViewModel constructor(
 //            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
-//            _markingAttendanceState.postValue(null)
+           _markingAttendanceState.postValue(null)
         }
     }
 

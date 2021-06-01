@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.userLocationCapture.models
+package com.gigforce.user_tracking.models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint

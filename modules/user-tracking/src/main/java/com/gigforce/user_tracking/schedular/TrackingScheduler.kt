@@ -1,33 +1,31 @@
-package com.gigforce.app.modules.userLocationCapture.schedular
+package com.gigforce.user_tracking.schedular
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.gigforce.app.modules.gigPage2.models.Gig
-import com.gigforce.app.modules.gigPage2.repositories.GigsRepository
-import com.gigforce.app.modules.profile.ProfileFirebaseRepository
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants
-import com.gigforce.app.modules.userLocationCapture.service.TrackingScheduleCalculator
-import com.gigforce.app.modules.userLocationCapture.service.TrackingService
-import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.user_tracking.TrackingConstants
+import com.gigforce.user_tracking.repository.TrackingUserProfileRepository
+import com.gigforce.user_tracking.service.TrackingScheduleCalculator
+import com.gigforce.user_tracking.service.TrackingService
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class TrackingScheduler constructor(
-        private val context: Context,
-        private val gigsRepository: GigsRepository = GigsRepository(),
-        private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val context: Context,
+    private val profileFirebaseRepository: TrackingUserProfileRepository = TrackingUserProfileRepository()
 ) {
 
     private val applicationContext: Context = context.applicationContext
 
-    fun checkForTodaysGigsAndScheduleTrackers() = GlobalScope.launch {
-        scheduleTrackers()
+    private val firebaseUser : FirebaseUser? get() {
+       return FirebaseAuth.getInstance().currentUser
     }
 
     fun scheduleTrackerForGig(
@@ -35,7 +33,12 @@ class TrackingScheduler constructor(
     ) = GlobalScope.launch {
 
         val profile = try {
-            profileFirebaseRepository.getProfileDataIfExist()
+
+            if(firebaseUser != null) {
+                profileFirebaseRepository.getProfileDataIfExist(firebaseUser!!.uid)
+            } else {
+                null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -55,33 +58,33 @@ class TrackingScheduler constructor(
         )
     }
 
-    private suspend fun scheduleTrackers() {
-        try {
-
-            val gigs = gigsRepository.getOngoingAndUpcomingGigsFor(LocalDate.now())
-            val profile = profileFirebaseRepository.getProfileDataIfExist()
-
-            for (gig in gigs) {
-
-                val possibleAlarmsBtw = TrackingScheduleCalculator.getPossibleAlarmTimesBetween(
-                        start = gig.startDateTime,
-                        end = gig.endDateTime
-                )
-                scheduleAlarmsBetween(
-                        alarmTimes = possibleAlarmsBtw,
-                        gigId = gig.gigId,
-                        userName = profile?.name
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CrashlyticsLogger.e(
-                    TAG,
-                    "Scheduling Alarms",
-                    e
-            )
-        }
-    }
+//    private suspend fun scheduleTrackers() {
+//        try {
+//
+//            val gigs = gigsRepository.getOngoingAndUpcomingGigsFor(LocalDate.now())
+//            val profile = profileFirebaseRepository.getProfileDataIfExist()
+//
+//            for (gig in gigs) {
+//
+//                val possibleAlarmsBtw = TrackingScheduleCalculator.getPossibleAlarmTimesBetween(
+//                        start = gig.startDateTime,
+//                        end = gig.endDateTime
+//                )
+//                scheduleAlarmsBetween(
+//                        alarmTimes = possibleAlarmsBtw,
+//                        gigId = gig.gigId,
+//                        userName = profile?.name
+//                )
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            CrashlyticsLogger.e(
+//                    TAG,
+//                    "Scheduling Alarms",
+//                    e
+//            )
+//        }
+//    }
 
 
     private fun scheduleAlarmsBetween(

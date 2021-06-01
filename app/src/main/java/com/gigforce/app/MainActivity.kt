@@ -22,8 +22,6 @@ import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
-import com.gigforce.app.modules.userLocationCapture.TrackingConstants
-import com.gigforce.app.modules.userLocationCapture.service.TrackingService
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
