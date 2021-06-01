@@ -54,22 +54,15 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.*
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenViewModel
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.FeatureModel
+import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigBSAdapter
 import com.gigforce.landing_screen.landingscreen.LandingScreenViewModel
 import com.gigforce.landing_screen.landingscreen.adapters.ExploreGigsAdapter
 import com.gigforce.landing_screen.landingscreen.adapters.UserLearningCourseAdapter
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.amb_join_open_btn
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.cv_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.iv_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_learning_error
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.learning_rv
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.ll_search_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_subtitle_role
-import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.tv_title_role
-import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -274,7 +267,7 @@ class BSCalendarScreenFragment : Fragment() {
 //                UserLearningAdater(
 //                    requireContext(),itemWidth
 //                )
-            val userLearningAdater = context?.let { UserLearningCourseAdapter(it,itemWidth) }
+            val userLearningAdater = context?.let { UserLearningCourseAdapter(it, itemWidth) }
             userLearningAdater?.setData(content)
             userLearningAdater?.setOnclickListener(object : AdapterClickListener<Course> {
                 override fun onItemClick(view: View, obj: Course, position: Int) {
@@ -670,7 +663,7 @@ class BSCalendarScreenFragment : Fragment() {
 
             var upcomingGigBSAdapter =
                 UpcomingGigBSAdapter(
-                    requireContext(),itemWidth
+                    requireContext(), itemWidth
                 )
             upcomingGigBSAdapter.data = upcomingGigs
             upcomingGigBSAdapter.setOnclickListener(object : AdapterClickListener<Gig> {
@@ -744,10 +737,24 @@ class BSCalendarScreenFragment : Fragment() {
 
             upcomingGigBSAdapter.setcallOnclickListener(object : AdapterClickListener<Any> {
                 override fun onItemClick(view: View, obj: Any, position: Int) {
-                    CallClickListener(
-                        upcoming_gig_rv,
-                        position
-                    )
+                    val gig = obj as Gig
+
+                    if (gig.gigContactDetails?.contactNumber != null &&
+                        gig.gigContactDetails?.contactNumber != 0L
+                    ) {
+
+                        val intent = Intent(
+                            Intent.ACTION_DIAL,
+                            Uri.fromParts("tel", gig.gigContactDetails?.contactNumber.toString(), null)
+                        )
+                        startActivity(intent)
+                    } else if (!gig.agencyContact?.contactNumber.isNullOrEmpty()) {
+                        val intent = Intent(
+                            Intent.ACTION_DIAL,
+                            Uri.fromParts("tel", gig.agencyContact?.contactNumber, null)
+                        )
+                        startActivity(intent)
+                    }
                 }
             })
 
@@ -757,9 +764,15 @@ class BSCalendarScreenFragment : Fragment() {
                 }
             })
 
-            upcomingGigBSAdapter.setOnCheckInClickListener(object : AdapterClickListener<Any>{
+            upcomingGigBSAdapter.setOnCheckInClickListener(object : AdapterClickListener<Any> {
                 override fun onItemClick(view: View, obj: Any, position: Int) {
-                    CheckInClickListener(upcoming_gig_rv, position)
+                    val gig =
+                        obj as Gig
+                    GigNavigation.openGigAttendancePage(
+                        findNavController(),
+                        gig.openNewGig(),
+                        gig.gigId
+                    )
                 }
 
             })
@@ -791,37 +804,6 @@ class BSCalendarScreenFragment : Fragment() {
 //            navigate(R.id.gigPageNavigationFragment, Bundle().apply {
 //                this.putString(GigPageNavigationFragment.INTENT_EXTRA_GIG_ID, gig.gigId)
 //            })
-        }
-    }
-
-    inner class CheckInClickListener(val rv: RecyclerView, var position: Int) :
-        View.OnClickListener {
-        override fun onClick(v: View?) {
-            val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-            GigNavigation.openGigAttendancePage(findNavController(), gig.openNewGig(), gig.gigId)
-        }
-    }
-
-    inner class CallClickListener(val rv: RecyclerView, var position: Int) : View.OnClickListener {
-        override fun onClick(v: View?) {
-            val gig = (rv.adapter as RecyclerGenericAdapter<Gig>).list.get(position)
-
-            if (gig.gigContactDetails?.contactNumber != null &&
-                gig.gigContactDetails?.contactNumber != 0L
-            ) {
-
-                val intent = Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", gig.gigContactDetails?.contactNumber.toString(), null)
-                )
-                startActivity(intent)
-            } else if (!gig.agencyContact?.contactNumber.isNullOrEmpty()) {
-                val intent = Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.fromParts("tel", gig.agencyContact?.contactNumber, null)
-                )
-                startActivity(intent)
-            }
         }
     }
 
@@ -957,22 +939,29 @@ class BSCalendarScreenFragment : Fragment() {
             RecyclerGenericAdapter<FeatureModel>(
                 activity?.applicationContext,
                 PFRecyclerViewAdapter.OnViewHolderClick<FeatureModel?> { view, position, item ->
-                    if (!item.navigationPath.equals("")) {
-                        navigation.navigateTo(item.navigationPath)
+                    item?.let {
+                        if (!it.navigationPath.equals("")) {
+                            navigation.navigateTo(it.navigationPath)
+                        }
                     }
                 },
                 RecyclerGenericAdapter.ItemInterface<FeatureModel?> { obj, viewHolder, position ->
                     val cardView = viewHolder.itemView.findViewById<View>(R.id.card_view)
-                    val feature_icon = viewHolder.itemView.findViewById<ImageView>(R.id.feature_icon)
-                    val feature_title = viewHolder.itemView.findViewById<TextView>(R.id.feature_title)
+                    val feature_icon =
+                        viewHolder.itemView.findViewById<ImageView>(R.id.feature_icon)
+                    val feature_title =
+                        viewHolder.itemView.findViewById<TextView>(R.id.feature_title)
 
                     val lp = cardView.layoutParams
                     lp.height = lp.height
                     lp.width = itemWidth
                     cardView.layoutParams = lp
 
-                    feature_icon.setImageResource(obj.icon)
-                    feature_title.text = obj.title
+                    obj?.let {
+                        feature_icon.setImageResource(it.icon)
+                        feature_title.text = it.title
+                    }
+
 //                    cardView.setOnClickListener(this)
 
 //                    getView(viewHolder, R.id.card_view).layoutParams = lp
@@ -982,12 +971,12 @@ class BSCalendarScreenFragment : Fragment() {
                 })
         recyclerGenericAdapter.list = datalist
         recyclerGenericAdapter.setLayout(R.layout.feature_item)
-            feature_rv.layoutManager = GridLayoutManager(
-                activity, 2,
-                GridLayoutManager.HORIZONTAL, false
-            )
-            feature_rv.adapter = recyclerGenericAdapter
-        }
+        feature_rv.layoutManager = GridLayoutManager(
+            activity, 2,
+            GridLayoutManager.HORIZONTAL, false
+        )
+        feature_rv.adapter = recyclerGenericAdapter
+    }
 
 //        activity?.let {
 //            var featureItemAdapter = FeatureItemAdapter(it,itemWidth)
