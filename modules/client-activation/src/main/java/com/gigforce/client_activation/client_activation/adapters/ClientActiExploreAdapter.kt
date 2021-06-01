@@ -156,6 +156,7 @@ class ClientActiExploreAdapter(
             else{
                 divider_one.visible()
                 Log.d("empty", "true")
+                jobActionTv.visible()
                 jobActionTv.text = actionButtonText}
 
 //            when (jobProfile.status){
