@@ -181,4 +181,8 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
         return ""
     }
 
+    override fun saveLoggedInUserName(username: String) {
+        saveData(AppConstants.USER_NAME,username)
+    }
+
 }

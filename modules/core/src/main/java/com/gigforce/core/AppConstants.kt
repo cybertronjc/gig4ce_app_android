@@ -1,6 +1,7 @@
 package com.gigforce.core
 
 object AppConstants {
+    val USER_NAME: String = "username"
     val LANGUAGE_SELECTED: String = "language_selected"
     const val UNLOCK_FEATURE = false
     const val ON_BOARDING_COMPLETED = "on_boarding_completed"

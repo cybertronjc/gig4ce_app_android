@@ -414,6 +414,10 @@ open class BaseFragment : Fragment(),
         return utilAndValidationInterface.getCurrentVersion()
     }
 
+    override fun saveLoggedInUserName(username: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun updateResources(language: String) {
         utilAndValidationInterface.updateResources(language)
     }

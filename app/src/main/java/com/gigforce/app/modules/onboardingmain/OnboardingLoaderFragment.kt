@@ -14,6 +14,7 @@ import com.gigforce.app.modules.auth.ui.main.LoginSuccessfulViewModel
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.profile.ProfileData
 
 import com.google.firebase.auth.FirebaseAuth
@@ -31,6 +32,9 @@ class OnboardingLoaderFragment : BaseFragment() {
     lateinit var eventTracker: IEventTracker
 
     private lateinit var viewModel: LoginSuccessfulViewModel
+
+    @Inject lateinit var shareDataAndCommUtil : SharedPreAndCommonUtilInterface
+
     private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +46,6 @@ class OnboardingLoaderFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginSuccessfulViewModel::class.java)
-//        val onboardingCompleted = isOnBoardingCompleted()
-//        if(onboardingCompleted!=null && onboardingCompleted.equals("true")){
-//            navigateToHomeScreen()
-//        }
         observer()
         Handler().postDelayed({
             viewModel.getProfileAndGigData()
@@ -72,6 +72,7 @@ class OnboardingLoaderFragment : BaseFragment() {
 
                     if (profileAndGig.profile.isonboardingdone) {
                         saveOnBoardingCompleted()
+                        shareDataAndCommUtil.saveLoggedInUserName(profileAndGig.profile.name)
                         if (!checkForDeepLink()) {
                             if (profileAndGig.hasGigs) {
                                 navigateToCalendarHomeScreen()
