@@ -135,6 +135,8 @@ class HighestQualificationFragment() : Fragment(),OnboardingFragmentNew.Fragment
         var map = mapOf("qualification" to selectedHighestQualification)
         eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_HIGHEST_QUALIFICATION,map))
         eventTracker.setUserProperty(map)
+
+        if(selectedHighestQualification.isNotBlank())
         eventTracker.setProfileProperty(ProfilePropArgs("Highest Qualification", selectedHighestQualification))
         return false
     }
