@@ -230,7 +230,7 @@
         <!-- Branch init -->
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_cf1kHW4fcGP4SXVy31QE6ehoxyjgqLlW" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ph6gM53mhJM4J7Vt14O1OpkftwepAJEe" />
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
     </application>
 
 </manifest>
