@@ -39,7 +39,20 @@ import kotlinx.android.synthetic.main.fragment_add_driving_license_info.progress
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlBackErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlBackImageIV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlFrontErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlFrontImageIV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlNoErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlNoTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlStateErrorMessage
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlStateTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.editLayout
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.helpIconViewIV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.statusTV
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.whyWeNeedThisViewTV
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import kotlinx.android.synthetic.main.layout_driving_license_info_client_activation.*
 import java.util.*
 import javax.inject.Inject
 
@@ -95,15 +108,20 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
 
 
 
-        dlFrontImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_driving_license_front_side)
-        dlFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_driving_license)
+//        dlFrontImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_driving_license_front_side)
+//        dlFrontImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_driving_license)
+        dlFrontImageHolder.setDocumentUploadLabel( getString(R.string.upload_driving_license_front_side))
+        dlFrontImageHolder.setDocumentUploadSubLabel( getString(R.string.upload_your_driving_license))
 
-        dlBackImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_driving_license_back_side)
-        dlBackImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_driving_license)
+//        dlBackImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_driving_license_back_side)
+//        dlBackImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_driving_license)
+        dlBackImageHolder.setDocumentUploadLabel( getString(R.string.upload_driving_license_back_side))
+        dlBackImageHolder.setDocumentUploadSubLabel( getString(R.string.upload_your_driving_license))
+
         dlSubmitSliderBtn.isEnabled = false
 
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
@@ -269,11 +287,13 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
             openCameraAndGalleryOptionForBackSideImage()
         }
 
-        dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_front_side)
+//        dlFrontImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.dl_image_front_side)
+        dlFrontImageHolder.uploadImageLabel( getString(R.string.dl_image_front_side))
 
-        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.dl_image_back_side)
+//        dlBackImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.dl_image_back_side)
+        dlBackImageHolder.uploadImageLabel( getString(R.string.dl_image_back_side))
 
         dlFrontImageHolder.uploadImageLayout.reuploadBtn.setOnClickListener {
             openCameraAndGalleryOptionForFrontSideImage()
@@ -646,23 +666,27 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showFrontDrivingLicense(aadharFrontImagePath: Uri) {
-        dlFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
-        dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-            .load(aadharFrontImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
+//        dlFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        dlFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//            .load(aadharFrontImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(dlFrontImageHolder.uploadImageLayout.clickedImageIV)
+        dlFrontImageHolder.makeUploadLayoutVisible()
+        dlFrontImageHolder.setImage(aadharFrontImagePath)
     }
 
     private fun showBackDrivingLicense(aadharBackImagePath: Uri) {
-        dlBackImageHolder.uploadDocumentCardView.visibility = View.GONE
-        dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-            .load(aadharBackImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
+        dlBackImageHolder.makeEditLayoutVisible()
+        dlBackImageHolder.setImage(aadharBackImagePath)
+//        dlBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        dlBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//            .load(aadharBackImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(dlBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
 }

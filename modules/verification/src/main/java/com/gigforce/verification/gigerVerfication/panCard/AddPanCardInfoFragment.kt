@@ -74,8 +74,10 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
     }
 
     private fun initViews() {
-        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
-        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
+        panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card))
+        panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan))
+//        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
+//        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
 
         StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2,null))
@@ -113,7 +115,8 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
             launchSelectImageSourceDialog()
         }
 
-        panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
+        //panImageHolder.uploadImageLayout.imageLabelTV.text = getString(R.string.pan_card_image)
+        panImageHolder.uploadImageLabel(getString(R.string.pan_card_image))
 
         panCardAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
 
@@ -490,13 +493,15 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
     }
 
     private fun showPanInfoCard(panInfoPath: Uri) {
-        panImageHolder.uploadDocumentCardView.visibility = View.GONE
-        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-            .load(panInfoPath)
-            .placeholder(getCircularProgressDrawable())
-            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+//        panImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//            .load(panInfoPath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+        panImageHolder.makeEditLayoutVisible()
+        panImageHolder.setImage(panInfoPath)
     }
 
 

@@ -38,6 +38,11 @@ import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.imageLabelTV
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.reuploadBtn
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.uploadDocumentCardView
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.uploadImageLayout
+import kotlinx.android.synthetic.main.verification_image_card_component.view.*
 import javax.inject.Inject
 
 enum class AadharCardSides {
@@ -594,27 +599,34 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
 
     private fun showFrontAadharCard(aadharFrontImagePath: Uri) {
-        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
-        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
-        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.aadhar_card_front_image)
+//        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
+        aadharFrontImageHolder.makeEditLayoutVisible()
+//        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.aadhar_card_front_image)
+        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image))
 
-        Glide.with(requireContext())
-            .load(aadharFrontImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
+        aadharFrontImageHolder.setImage(aadharFrontImagePath)
+//        Glide.with(requireContext())
+//            .load(aadharFrontImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(aadharFrontImageHolder.clickedImage)
     }
 
     private fun showBackAadharCard(aadharBackImagePath: Uri) {
-        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
-        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
-        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.aadhar_card_back_image)
+        aadharFrontImageHolder.makeUploadLayoutVisible()
+        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
 
-        Glide.with(requireContext())
-            .load(aadharBackImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
+        aadharFrontImageHolder.setImage(aadharBackImagePath)
+//        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.aadhar_card_back_image)
+//
+//        Glide.with(requireContext())
+//            .load(aadharBackImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
     }
 
 

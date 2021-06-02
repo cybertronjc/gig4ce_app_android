@@ -13,12 +13,14 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.datamodels.gigpage.ContactPerson
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.gigpage.GigContactDetails
 import com.gigforce.core.date.DateHelper.getHourMinutes
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.DateHelper
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,7 +83,11 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
             GigStatus.PENDING,
             GigStatus.NO_SHOW -> {
 
-            checkInTV.setOnClickListener {}
+//            checkInTV.setOnClickListener {
+//                checkInClickListener?.onItemClick(it)
+//            }
+
+
 
             if (!data.isPresentGig()) {
                 checkInTV.isEnabled = false
@@ -185,6 +191,43 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
         }
     }
 
+    var clickListener: AdapterClickListener<Gig>? = null
+
+    fun setOnclickListener(listener: AdapterClickListener<Gig>) {
+        this.clickListener = listener
+    }
+
+    var agencyClickListener: AdapterClickListener<ContactPerson>? = null
+
+    fun setAgencyOnclickListener(listener: AdapterClickListener<ContactPerson>) {
+        this.agencyClickListener = listener
+    }
+
+    var chatInfoClickListener: AdapterClickListener<Map<String, Any>>? = null
+
+    fun setchatInfoOnclickListener(listener: AdapterClickListener<Map<String, Any>>) {
+        this.chatInfoClickListener = listener
+    }
+
+
+    var callClickListener: AdapterClickListener<Any>? = null
+
+    fun setcallOnclickListener(listener: AdapterClickListener<Any>) {
+        this.callClickListener = listener
+    }
+
+    var navigationClickListener: AdapterClickListener<Any>? = null
+
+    fun setnavigationOnclickListener(listener: AdapterClickListener<Any>) {
+        this.navigationClickListener = listener
+    }
+
+    var checkInClickListener: AdapterClickListener<Any>? = null
+
+    fun setOnCheckInClickListener(listener: AdapterClickListener<Any>) {
+        this.checkInClickListener = listener
+    }
+
     override fun bind(obj: Any?){
         if (obj is Gig){
 
@@ -202,6 +245,12 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
 
             //set company logo
             setCompanyLogo(obj)
-        }
+
+            //set click listners
+
         }
     }
+
+
+
+}

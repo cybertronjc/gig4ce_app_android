@@ -36,7 +36,7 @@
                 app:chipSpacingHorizontal="14dp"
                 app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_profile"
                     style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
                     android:text="@string/profile"
                     app:chipStrokeWidth="1dp" />
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_my_details"
                     style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"

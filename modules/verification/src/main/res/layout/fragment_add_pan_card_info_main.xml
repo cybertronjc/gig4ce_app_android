@@ -193,9 +193,8 @@
             android:background="#cdccd1"
             app:layout_constraintTop_toBottomOf="@id/panInfoLayout" />
 
-        <include
+        <com.gigforce.verification.VerficationImageCardComponent
             android:id="@+id/panImageHolder"
-            layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
