@@ -205,4 +205,5 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
         return getData(AppConstants.USER_PROFILE_PIC)?:""
     }
 
+
 }

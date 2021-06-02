@@ -32,23 +32,14 @@ class AuthFlowFragment : BaseFragment() {
         if (lang != null && lang.isNotEmpty())
             updateResources(lang)
 
-        val introComplete = getIntroCompleted()
-
-
         popFragmentFromStack(R.id.authFlowFragment)
         when {
             lang.isNullOrBlank() -> {
                 navigate(
                     R.id.languageSelectFragment
-                )//, null, navOptionsPopToHome)
+                )
             }
-//            introComplete.isNullOrBlank() -> {
-//                navigate(
-//                    R.id.introSlidesFragment
-//                )//, null, navOptionsPopToHome)
-//            }
             else -> {
-//                popFragmentFromStack(R.id.authFlowFragment)
                 FirebaseAuth.getInstance().addAuthStateListener {
                     onAuthStateChanged(it.currentUser)
                 }
@@ -66,8 +57,6 @@ class AuthFlowFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-//    return inflater.inflate(R.layout.fragment_auth_flow,container,false)
         return inflateView(R.layout.fragment_auth_flow, inflater, container)
     }
 

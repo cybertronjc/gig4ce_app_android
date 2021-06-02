@@ -52,9 +52,6 @@ interface AppBindingsModule {
     fun provideUpcomingGigsRepo(imp: UpcomingGigInfoRepository): IUpcomingGigInfoRepository
 
     @Binds
-    fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
-
-    @Binds
     fun provideBuildConfig(imp: BuildConfigImp): IBuildConfig
 
     @Binds
@@ -65,6 +62,9 @@ interface AppBindingsModule {
 
     @Binds
     fun provideCommonUtil(imp: SharedPreAndCommonUtilDataImp): SharedPreAndCommonUtilInterface
+
+    @Binds
+    fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
 
     @Binds
     fun provideNavHost(imp: NavHostImp): INavHost
