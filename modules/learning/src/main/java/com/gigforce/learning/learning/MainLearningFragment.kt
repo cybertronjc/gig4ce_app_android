@@ -18,7 +18,7 @@ import com.example.learning.R
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.core.datamodels.learning.Course
 //import com.gigforce.app.utils.Lce
-import com.gigforce.common_ui.ILoginInfoRepo
+import com.gigforce.common_ui.IUserInfo
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -49,7 +49,7 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     private val learningViewModel: LearningViewModel by viewModels()
 
     @Inject
-    lateinit var loginInfo: ILoginInfoRepo
+    lateinit var loginInfo: IUserInfo
 
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
 

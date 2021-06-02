@@ -27,7 +27,6 @@ class AuthFlowFragment : BaseFragment() {
     lateinit var shareDataAndCommUtil : SharedPreAndCommonUtilInterface
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isLanguageSelected = getData(AppConstants.LANGUAGE_SELECTED)
         val lang = getAppLanguageCode()
         if (lang != null && lang.isNotEmpty())
             updateResources(lang)

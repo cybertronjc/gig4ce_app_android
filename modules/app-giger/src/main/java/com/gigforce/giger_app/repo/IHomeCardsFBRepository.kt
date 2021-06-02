@@ -23,6 +23,13 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
     init {
         loadData()
     }
+    override fun getData(): LiveData<List<Any>> {
+        return data
+    }
+
+    override fun loadData() {
+        getFirebaseReference()
+    }
 
     fun getFirebaseReference() {
         FirebaseFirestore.getInstance()
@@ -65,12 +72,6 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
         }
     }
 
-    override fun getData(): LiveData<List<Any>> {
-        return data
-    }
 
-    override fun loadData() {
-        getFirebaseReference()
-    }
 
 }

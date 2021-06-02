@@ -4,12 +4,12 @@ import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
-interface ILoginInfoRepo {
-    fun getData(): LoginInfoRepo.UserLoginInfo
+interface IUserInfo {
+    fun getData(): UserInfoImp.UserLoginInfo
 }
 
-class LoginInfoRepo @Inject constructor(val sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface) :
-    ILoginInfoRepo {
+class UserInfoImp @Inject constructor(val sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface) :
+    IUserInfo {
     val userLoginInfo: UserLoginInfo
 
     init {

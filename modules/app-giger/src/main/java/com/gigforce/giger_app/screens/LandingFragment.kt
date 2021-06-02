@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.giger_app.R
-import com.gigforce.common_ui.ILoginInfoRepo
 import com.gigforce.giger_app.vm.LandingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_landing.*
@@ -19,8 +18,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LandingFragment : Fragment() {
     val viewModel: LandingViewModel by viewModels()
-
-    @Inject lateinit var loginInfo: ILoginInfoRepo
     @Inject lateinit var navigation: INavigation
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,17 +33,10 @@ class LandingFragment : Fragment() {
             landing_rv.collection = it
 
         })
-        initViews()
         listeners()
     }
 
-    private fun initViews() {
-        loginInfo.getData().observeForever {
-            app_bar.setProfileName = it.profileName ?: ""
-            app_bar.setProfilePic(it.profilePicPath ?: "")
-        }
 
-    }
 
     private fun listeners() {
         app_bar.setOnClickListener {

@@ -5,8 +5,8 @@ import com.gigforce.app.nav.NavManagerImpl
 import com.gigforce.client_activation.repo.ClientActivationDataRepository
 import com.gigforce.client_activation.repo.IClientActivationDataRepository
 import com.gigforce.common_ui.AppDialogsInterface
-import com.gigforce.common_ui.ILoginInfoRepo
-import com.gigforce.common_ui.LoginInfoRepo
+import com.gigforce.common_ui.IUserInfo
+import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.repository.repo.LearningDataRepository
@@ -64,7 +64,7 @@ interface AppBindingsModule {
     fun provideCommonUtil(imp: SharedPreAndCommonUtilDataImp): SharedPreAndCommonUtilInterface
 
     @Binds
-    fun provideLoginInfo(imp: LoginInfoRepo): ILoginInfoRepo
+    fun provideLoginInfo(imp: UserInfoImp): IUserInfo
 
     @Binds
     fun provideNavHost(imp: NavHostImp): INavHost
