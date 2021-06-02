@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity(),
 
         eventTracker.setUpAnalyticsTools()
 
-        LogBranchData()
 
         intent?.extras?.let {
             it.printDebugLog("printDebugLog")
@@ -402,15 +401,4 @@ class MainActivity : AppCompatActivity(),
         return bundle ?: Bundle()
     }
 
-    fun LogBranchData(){
-        val branch = Branch.getAutoInstance(this)
-        Log.d("branch1", branch.toString())
-        Log.d("branch2", branch.firstReferringParams.toString())
-        Log.d("branch3", branch.latestReferringParams.toString())
-        branch.getLastAttributedTouchData { jsonObject, error ->
-            Log.d("branch4", error.toString())
-        }
-
-        Log.d("branch5", branch.deviceInfo.toString())
-    }
 }
