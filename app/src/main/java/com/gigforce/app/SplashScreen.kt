@@ -5,9 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.app.core.base.shareddata.SharedDataImp
-import com.gigforce.app.utils.StringConstants
-import com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.common_ui.StringConstants
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import io.branch.referral.Branch
@@ -46,11 +45,10 @@ class SplashScreen : AppCompatActivity() {
                     val jobProfileID = deepLink?.getQueryParameter("job_profile_id")
                     val ambassadorLatitude = deepLink?.getQueryParameter("latitude")
                     val ambassadorLongitude = deepLink?.getQueryParameter("longitude")
-                    val sp = SharedDataImp(this)
-
-                    Log.d("GigforceSplash","Invite Id = $inviteID")
-                    Log.d("GigforceSplash","Role Id = $roleID")
-
+                    val sp =
+                        SharedPreAndCommonUtilDataImp(
+                            this
+                        )
                     sp.saveData(
                         StringConstants.INVITE_USER_ID.value,
                         inviteID
@@ -126,6 +124,7 @@ class SplashScreen : AppCompatActivity() {
         super.onStart()
         Branch.sessionBuilder(this).withCallback(branchReferralInitListener)
             .withData(if (intent != null) intent.data else null).init()
+
     }
 
     override fun onNewIntent(intent: Intent?) {

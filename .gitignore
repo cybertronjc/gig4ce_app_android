@@ -33,4 +33,17 @@
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 .idea/assetWizardSettings.xml
+/modules/common-ui/build/*
+
+/modules/core/build/*
+/modules/client_activation/build/*
+/modules/common-image-capture-picker/build/*
+/modules/feature_chat/build/*
+/modules/learning/build/*
+/modules/profile/build/*
+/modules/user_profile/build/*
+/modules/verification/build/*
+/modules/wallet/build/*
+
+
 

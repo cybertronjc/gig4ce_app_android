@@ -4,7 +4,7 @@ import android.util.Log
 import com.gigforce.core.extensions.commitOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.gigforce.modules.feature_chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.modules.feature_chat.service.SyncPref
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

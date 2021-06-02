@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    tools:context="com.gigforce.user_preferences.daytime.weekday.WeekDayFragment">
+
+
+    <LinearLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="56dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+              app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/textView52"
+            app:layout_constraintStart_toStartOf="@+id/textView52"
+            app:layout_constraintTop_toTopOf="@+id/textView52" />
+
+
+        <TextView
+            android:id="@+id/textView59"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="19dp"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:text="@string/weekends"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView52"
+            app:layout_constraintStart_toEndOf="@+id/imageView16"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1" />
+
+        <Switch
+            android:id="@+id/switch3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:theme="@style/Theme.switchButton"
+            app:layout_constraintBottom_toBottomOf="@+id/textView52"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView52" />
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
+
+        <TextView
+            android:id="@+id/textView63"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f7f7"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="0"
+            android:paddingStart="@dimen/size_68"
+            android:paddingTop="@dimen/size_17"
+            android:paddingBottom="@dimen/size_16"
+            android:text="@string/schedules"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView60"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/rl_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView63"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/days_iv"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="@dimen/size_18"
+                  app:srcCompat="@drawable/ic_calendar_black" />
+
+
+            <TextView
+                android:id="@+id/textView61"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_23"
+                android:layout_marginTop="@dimen/size_14"
+
+                android:layout_toEndOf="@+id/days_iv"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+
+                android:text="@string/days_caps"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView62"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView61"
+                android:paddingBottom="@dimen/size_13"
+                android:layout_alignStart="@+id/textView61"
+                android:layout_marginTop="4dp"
+                android:letterSpacing="0"
+                android:text="Mon, Tues, Wed, Thus, Fri"
+                android:textColor="@color/gray_color"
+                android:textSize="@dimen/font_10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_slots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_days"
+            android:layout_marginTop="@dimen/size_1"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/slots_iv"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_marginStart="@dimen/size_24"
+                android:layout_marginTop="@dimen/size_13"
+                android:layout_marginBottom="@dimen/size_19"
+                  app:srcCompat="@drawable/ic_clock_black"
+                app:layout_constraintStart_toStartOf="@+id/textView64"
+                app:layout_constraintTop_toTopOf="@+id/textView64" />
+
+            <TextView
+                android:id="@+id/textView65"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_23"
+                android:layout_marginTop="@dimen/size_14"
+                android:layout_toEndOf="@+id/slots_iv"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:text="@string/slots"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView66"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView65"
+                android:layout_alignStart="@+id/textView65"
+                android:paddingBottom="@dimen/size_13"
+                android:layout_marginTop="4dp"
+                android:letterSpacing="0"
+                android:text="10:00 am"
+                android:textColor="@color/gray_color"
+                android:textSize="@dimen/font_10" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

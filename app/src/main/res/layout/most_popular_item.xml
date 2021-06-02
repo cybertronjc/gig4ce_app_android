@@ -19,7 +19,7 @@
         android:layout_gravity="center"
         android:paddingBottom="@dimen/size_8">
 
-        <com.gigforce.app.utils.widgets.RoundCornerImageView
+        <com.gigforce.common_ui.widgets.RoundCornerImageView
             android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="114dp"

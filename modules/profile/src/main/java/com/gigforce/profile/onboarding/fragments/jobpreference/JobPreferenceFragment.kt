@@ -167,7 +167,7 @@ class JobPreferenceFragment() :
         return workingdays
     }
 
-    fun getTimeSlots(): ArrayList<String> {
+    fun getTimeSlots(): List<String> {
         var workingTimeSlots = ArrayList<String>()
         timeSlotsIds.forEach { slot ->
             if (slot.isChecked) {
@@ -175,7 +175,9 @@ class JobPreferenceFragment() :
             }
         }
 
-        return workingTimeSlots
+        return workingTimeSlots.filter {
+            it.isNotBlank()
+        }
     }
 
     var currentStep = 0

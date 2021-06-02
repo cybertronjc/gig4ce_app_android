@@ -16,7 +16,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.graphics.drawable.IconCompat
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope

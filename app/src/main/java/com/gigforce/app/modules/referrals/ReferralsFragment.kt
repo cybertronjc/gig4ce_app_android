@@ -23,12 +23,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.preferences.PreferencesFragment
-import com.gigforce.app.modules.profile.ProfileViewModel
-import com.gigforce.app.utils.*
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.user_preferences.PreferencesFragment
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
+import com.gigforce.common_ui.utils.LocationUpdates
+import com.gigforce.common_ui.utils.PushDownAnim
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.common_ui.utils.getViewWidth
+import com.gigforce.core.PermissionUtils
 import com.gigforce.core.utils.GlideApp
+//import com.gigforce.core.utils.PermissionUtils
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -42,10 +48,13 @@ import java.io.FileOutputStream
 
 
 class ReferralsFragment : BaseFragment(),
-    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener,LocationUpdates.LocationUpdateCallbacks {
+    EnterPhoneNumberForReferralDialogFragment.EnterPhoneNumberForReferralDialogFragmentEventListener,
+    LocationUpdates.LocationUpdateCallbacks {
     val profileViewModel: ProfileViewModel by activityViewModels<ProfileViewModel>()
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ReferralFragmentViewModel(ModelReferralFragmentViewModel()))
+        ViewModelProviderFactory(
+            ReferralFragmentViewModel(ModelReferralFragmentViewModel())
+        )
     }
     private val viewModel: ReferralFragmentViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(ReferralFragmentViewModel::class.java)
@@ -269,7 +278,9 @@ class ReferralsFragment : BaseFragment(),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        params.setMargins(-(getViewWidth(tv_more_items_referrals_frag) / 2), 0, 0, 0)
+        params.setMargins(-(getViewWidth(
+            tv_more_items_referrals_frag
+        ) / 2), 0, 0, 0)
         params.addRule(RelativeLayout.END_OF, R.id.iv_two_referrals_frag)
         params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.iv_two_referrals_frag)
         tv_more_items_referrals_frag.layoutParams = params
@@ -405,7 +416,7 @@ class ReferralsFragment : BaseFragment(),
     override fun onPause() {
         super.onPause()
         try {
-            locationUpdates.stopLocationUpdates()
+            locationUpdates.stopLocationUpdates(activity)
         } catch (e: Exception) {
             e.printStackTrace()
         }

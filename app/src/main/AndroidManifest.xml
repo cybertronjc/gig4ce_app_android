@@ -14,11 +14,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 
     <uses-feature android:name="android.hardware.camera" />
@@ -98,6 +100,8 @@
             android:enabled="true"
             android:exported="true" />
 
+
+
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="true" />
@@ -130,7 +134,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/PhotoCrop" />
         <activity
-            android:name=".modules.markattendance.ImageCaptureActivity"
+            android:name=".modules.markattendance.AttendanceImageCaptureActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
@@ -168,6 +172,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".modules.profile_.ProfilePicUploadActivity"
+
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".MainActivity"

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:id="@+id/sv_assess_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/tb">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_sv_nested_assess_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/size_16">
+
+            <RelativeLayout
+                android:id="@+id/rv_remarks_assess_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_light_pink_round_corners"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ic_remarks_assess_result"
+                    android:layout_width="@dimen/size_87"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_18"
+                    android:layout_marginTop="@dimen/size_5"
+                    android:layout_marginBottom="@dimen/size_5"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                      app:srcCompat="@drawable/ic_remarks_assess_result" />
+
+                <View
+                    android:id="@+id/v_c_v_res_remarks_assess_result"
+                    android:layout_width="@dimen/size_1"
+                    android:layout_height="@dimen/size_1"
+                    android:layout_centerInParent="true" />
+
+                <TextView
+                    android:id="@+id/tv_kp_it_up_assess_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_18"
+                    android:layout_marginTop="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_toEndOf="@+id/ic_remarks_assess_result"
+                    android:letterSpacing="0"
+                    android:text="@string/keep_it_up"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_score_assess_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_kp_it_up_assess_result"
+                    android:layout_marginStart="@dimen/size_18"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:layout_marginEnd="@dimen/size_42"
+                    android:layout_marginBottom="@dimen/size_29"
+                    android:layout_toEndOf="@+id/ic_remarks_assess_result"
+                    android:letterSpacing="0"
+                    android:textColor="@color/black_85"
+                    android:textSize="@dimen/font_16" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_gigs_around_assess_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_18"
+                android:layout_marginTop="@dimen/size_19"
+                android:layout_marginEnd="@dimen/size_15"
+                android:gravity="start"
+                android:letterSpacing="0"
+                android:text="@string/as_you_clear_more_assessments"
+                android:textColor="@color/black_85"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_remarks_assess_result" />
+
+            <TextView
+                android:id="@+id/tv_time_taken_label_assess_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_19"
+                android:layout_marginEnd="@dimen/size_16"
+                android:letterSpacing="0"
+                android:text="@string/time_taken"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_14"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_gigs_around_assess_result" />
+
+            <TextView
+                android:id="@+id/tv_time_taken_value_assess_frag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_14"
+                android:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/tv_time_taken_label_assess_frag"
+                app:layout_constraintTop_toTopOf="@+id/tv_time_taken_label_assess_frag"
+                tools:text=" 4 Mins" />
+
+            <TextView
+                android:id="@+id/tv_question_wise_sum_label_assess_frag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_18"
+                android:layout_marginTop="@dimen/size_32"
+                android:layout_marginEnd="@dimen/size_16"
+                android:text="@string/question_wise_summary"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_time_taken_value_assess_frag" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_question_wise_sum_assess_frag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_13"
+                android:layout_marginEnd="@dimen/size_23"
+                android:letterSpacing="0"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_question_wise_sum_label_assess_frag" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/next_lesson_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:minHeight="@dimen/size_36"
+                android:text="Next Lesson"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/rv_question_wise_sum_assess_frag"
+                app:strokeColor="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/rl_new_certificate_assess_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_33"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_round_corner_d8d8d8"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/next_lesson_btn">
+
+                <ImageView
+                    android:id="@+id/ic_new_cert_assess_result"
+                    android:layout_width="@dimen/size_43"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_9"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginBottom="@dimen/size_12"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_new_certificate" />
+
+                <TextView
+                    android:id="@+id/tv_new_cert_asses_frag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/size_10"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_toEndOf="@+id/ic_new_cert_assess_result"
+                    android:gravity="center"
+                    android:letterSpacing="0.04"
+                    android:textColor="@color/lipstick"
+                    android:textSize="@dimen/font_16" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/lesson_suggestions_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result">
+
+                <TextView
+                    android:id="@+id/tv_lessons_on_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_24"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:letterSpacing="0"
+                    android:text="Lessons to Retake"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_18" />
+
+                <include
+                    android:id="@+id/lessons_on_failed_layout"
+                    layout="@layout/fragment_learning_video_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/size_16"
+                    app:layout_constraintTop_toBottomOf="@id/rl_new_certificate_assess_result" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_sug_learnings_label_assess_frag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_19"
+                android:layout_marginTop="@dimen/size_24"
+                android:layout_marginEnd="@dimen/size_16"
+                android:letterSpacing="0"
+                android:text="@string/suggested_learnings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_18"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lesson_suggestions_layout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sug_learnings_label_assess_frag" />
+
+            <com.gigforce.core.recyclerView.CoreRecyclerView
+                android:id="@+id/rv_sug_learnings_assess_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sug_learnings_label_assess_frag" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.app.R
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.models.Cities
-import com.gigforce.app.modules.client_activation.models.States
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.client_activation.client_activation.models.Cities
+import com.gigforce.client_activation.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.GfUsers
 import com.gigforce.app.modules.questionnaire.models.Questions
-import com.gigforce.app.utils.ItemOffsetDecoration
-import com.gigforce.app.utils.getCircularProgressDrawable
+import com.gigforce.common_ui.decors.ItemOffsetDecoration
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import kotlinx.android.synthetic.main.layout_rv_questionnaire_cards.view.*
 import java.util.*
 
@@ -46,7 +46,11 @@ class AdapterQuestionnaire : RecyclerView.Adapter<AdapterQuestionnaire.ViewHolde
         if (question.url.isNotEmpty()) {
             holder.itemView.iv_hint_questionnaire.visible()
             Glide.with(holder.itemView).load(question.url)
-                .placeholder(getCircularProgressDrawable(holder.itemView.context))
+                .placeholder(
+                    getCircularProgressDrawable(
+                        holder.itemView.context
+                    )
+                )
                 .into(holder.itemView.iv_hint_questionnaire)
         } else {
             holder.itemView.iv_hint_questionnaire.gone()

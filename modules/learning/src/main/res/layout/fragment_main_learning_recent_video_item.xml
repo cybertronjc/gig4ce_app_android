@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="15dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/videoThumbnailIV"
+        android:layout_width="67dp"
+        android:layout_height="62dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/videoTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="#080808"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/videoThumbnailIV"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/videoDescTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="0"
+        android:textColor="@color/battle_ship_grey"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/videoThumbnailIV"
+        app:layout_constraintTop_toBottomOf="@id/videoTitleTV" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

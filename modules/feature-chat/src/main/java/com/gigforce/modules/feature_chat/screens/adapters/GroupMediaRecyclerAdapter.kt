@@ -1,14 +1,12 @@
 package com.gigforce.modules.feature_chat.screens.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.gigforce.common_ui.views.GigforceImageView
@@ -16,8 +14,8 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.GroupMedia
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.GroupMedia
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -154,6 +152,8 @@ class GroupMediaRecyclerAdapter(
 
                     if (groupMedia.thumbnail != null)
                         thumbnailIV.loadImageIfUrlElseTryFirebaseStorage(groupMedia.thumbnail!!)
+                    else
+                        thumbnailIV.clearImage()
 
                     if (isFileDownloading) {
                         playDownloadOverlayIV.visible()
@@ -175,6 +175,8 @@ class GroupMediaRecyclerAdapter(
 
                     if (groupMedia.thumbnail != null)
                         thumbnailIV.loadImageIfUrlElseTryFirebaseStorage(groupMedia.thumbnail!!)
+                     else
+                        thumbnailIV.clearImage()
 
                     if (isFileDownloading) {
                         playDownloadOverlayIV.visible()
@@ -188,20 +190,18 @@ class GroupMediaRecyclerAdapter(
                     }
                 } else if (groupMedia.attachmentType == ChatConstants.ATTACHMENT_TYPE_DOCUMENT) {
                     //Need work
-                    requestManager.load(R.drawable.ic_document_media_list)
-                        .into(playDownloadOverlayIV)
+                    thumbnailIV.loadImage(R.drawable.ic_document_background)
 
                     videoLengthLayout.gone()
                     videoLength.text = ""
+                    playDownloadOverlayIV.visible()
 
                     if (isFileDownloading) {
-                        playDownloadOverlayIV.visible()
-                        playDownloadIconIV.setImageDrawable(null)
                         attachmentDownloadingProgressBar.visible()
+                        requestManager.clear(playDownloadIconIV)
                     } else {
                         attachmentDownloadingProgressBar.gone()
-                        playDownloadOverlayIV.visible()
-                        requestManager.load(R.drawable.ic_download_24).into(playDownloadOverlayIV)
+                        requestManager.load(R.drawable.ic_download_24).into(playDownloadIconIV)
                     }
                 } else {
                     throw IllegalArgumentException("other types not supperted yet")

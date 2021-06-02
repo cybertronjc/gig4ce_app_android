@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".modules.learning.myLearning.MyLearningFragment">
+        tools:context="com.gigforce.learning.learning.myLearning.MyLearningFragment">
 
         <include
             android:id="@+id/my_journey_progress"

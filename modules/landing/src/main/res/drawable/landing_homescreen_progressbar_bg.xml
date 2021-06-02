@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="0dip" />
+            //later we can give radius
+            <solid android:color="#506d7278" />
+        </shape>
+    </item>
+
+</layer-list>

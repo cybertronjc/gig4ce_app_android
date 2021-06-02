@@ -18,29 +18,29 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clevertap.android.sdk.CleverTapAPI
-import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.popAllBackStates
-import com.gigforce.app.core.printDebugLog
-import com.gigforce.app.modules.gigPage2.GigNavigation
-import com.gigforce.app.modules.landingscreen.LandingScreenFragment
-//import com.gigforce.giger_app.screens.LandingFragmentDirections as LandingScreenFragmentDirections
+import com.gigforce.core.extensions.popAllBackStates
+import com.gigforce.core.extensions.printDebugLog
+import com.gigforce.app.utils.GigNavigation
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.core.utils.NavFragmentsData
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.modules.feature_chat.core.ChatConstants
+import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
-import com.gigforce.modules.feature_chat.screens.vm.ChatHeadersViewModel
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
+import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import io.branch.referral.Branch
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -120,6 +120,7 @@ class MainActivity : AppCompatActivity(),
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
+       // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationIntentRecevier, intentFilters)
 
@@ -158,7 +159,8 @@ class MainActivity : AppCompatActivity(),
                 navController.popBackStack()
                 navController.navigate(
                     R.id.fragment_role_details, bundleOf(
-                        StringConstants.ROLE_ID.value to intent.getStringExtra(StringConstants.ROLE_ID.value),
+                        StringConstants.ROLE_ID.value to intent.getStringExtra(
+                            StringConstants.ROLE_ID.value),
                         StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
                             StringConstants.INVITE_USER_ID.value
                         ),
@@ -326,7 +328,7 @@ class MainActivity : AppCompatActivity(),
             navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
-            handled = (fragmentholder as BaseFragment).onBackPressed()
+            handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
         } catch (e: Exception) {
         }
 
@@ -399,4 +401,5 @@ class MainActivity : AppCompatActivity(),
     override fun getData(): Bundle {
         return bundle ?: Bundle()
     }
+
 }

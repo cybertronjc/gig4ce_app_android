@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.utils.AppConstants
+import com.gigforce.core.AppConstants
+//import com.gigforce.app.utils.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.google.firebase.auth.FirebaseAuth

@@ -1,5 +1,6 @@
 package com.gigforce.core.crashlytics
 
+import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object CrashlyticsLogger {
@@ -13,6 +14,7 @@ object CrashlyticsLogger {
         msg: String
     ) {
         firebaseCrashlytics.log("$tag : $msg")
+        Log.d(tag, msg)
     }
 
     fun e(
@@ -20,7 +22,8 @@ object CrashlyticsLogger {
         occurredWhen: String,
         e: Throwable
     ) {
-        firebaseCrashlytics.log("$tag :, Occured when: $occurredWhen")
+        firebaseCrashlytics.log("$tag :, Occurred when: $occurredWhen")
         firebaseCrashlytics.recordException(e)
+        Log.e(tag,"Occurred when: $occurredWhen", e)
     }
 }

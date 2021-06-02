@@ -505,7 +505,7 @@ class ProfileFirebaseRepository : BaseFirestoreDBRepository() {
                 ))
     }
 
-    suspend fun setJobPreferenceData(jobType:String,workingDays:ArrayList<String>,timeSlots : ArrayList<String>){
+    suspend fun setJobPreferenceData(jobType:String,workingDays:List<String>,timeSlots : List<String>){
         firebaseDB.collection(profileCollectionName)
                 .document(uid)
                 .updateOrThrow(mapOf(

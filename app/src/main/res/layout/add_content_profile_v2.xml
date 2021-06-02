@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_content_top_icon_profile_v2"
+        android:layout_width="@dimen/size_16"
+        android:layout_height="@dimen/size_16"
+        android:layout_marginStart="@dimen/size_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_content_top_profile_v2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:layout_marginEnd="@dimen/size_16"
+        android:fontFamily="@font/lato"
+        android:lineSpacingExtra="3sp"
+        android:textColor="#151212"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_content_top_icon_profile_v2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_content_top_icon_profile_v2"
+        app:layout_constraintTop_toTopOf="@+id/iv_content_top_icon_profile_v2"
+        tools:text="Education" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/br_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="iv_content_top_icon_profile_v2,tv_content_top_profile_v2" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:layout_marginEnd="@dimen/size_16"
+        android:background="@drawable/bg_c6ddf3_rad_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/br_2">
+
+        <TextView
+            android:id="@+id/tv_content_heading_profile_v2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_32"
+            android:layout_marginTop="@dimen/size_18"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Add language Known" />
+
+        <ImageView
+            android:id="@+id/iv_content_illustration_profile_v2"
+            android:layout_width="@dimen/size_53"
+            android:layout_height="@dimen/size_40"
+            android:layout_marginStart="@dimen/size_13"
+            android:layout_marginTop="@dimen/size_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content_heading_profile_v2" />
+
+        <TextView
+            android:id="@+id/tv_content_text_profile_v2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_15"
+            android:layout_marginEnd="@dimen/size_18"
+            android:fontFamily="@font/lato"
+            android:lineSpacingExtra="3sp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_profile_v2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_profile_v2"
+            app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_profile_v2"
+            tools:text="Lorem Ipsum is simply dummy .Lorem Ipsum is simply dummy. Lorem Ipsum" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/br_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="tv_content_heading_profile_v2,iv_content_illustration_profile_v2" />
+
+        <TextView
+            android:id="@+id/tv_add_now_profile_v2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_11"
+            android:fontFamily="@font/lato"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3sp"
+            android:textColor="@color/lipstick"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_content_text_profile_v2"
+            app:layout_constraintTop_toBottomOf="@+id/br_1"
+            tools:text="Add Now" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

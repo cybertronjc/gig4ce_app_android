@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_rad_5"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_driving_cert_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_174"
+        android:layout_marginStart="@dimen/size_29"
+        android:layout_marginTop="@dimen/size_47"
+        android:layout_marginEnd="@dimen/size_34"
+          app:srcCompat="@drawable/ic_image_driving_cert"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/size_19"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="-0.05"
+        android:text="@string/congratulations"
+        android:textColor="#dd2865"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_31"
+        android:layout_marginTop="@dimen/size_8"
+        android:layout_marginEnd="@dimen/size_25"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:text="@string/congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/tv_download_cert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_31"
+        android:layout_marginTop="@dimen/size_17"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:letterSpacing="-0.01"
+        android:text="@string/driving_certificate"
+        android:textColor="@color/lipstick"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_okay_driving_cert_success"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_18"
+        android:layout_marginTop="@dimen/size_30"
+        android:layout_marginEnd="@dimen/size_12"
+        android:layout_marginBottom="@dimen/size_14"
+        android:background="@drawable/gradient_onboarding_progressbar_gradient"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:minHeight="@dimen/size_36"
+        android:paddingStart="@dimen/size_30"
+        android:paddingTop="@dimen/size_10"
+        android:paddingEnd="@dimen/size_30"
+        android:paddingBottom="@dimen/size_9"
+        android:text="@string/okay"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_14"
+        android:textStyle="normal" />
+
+</LinearLayout>

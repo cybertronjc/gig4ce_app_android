@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
+    <string name="punch_in">Punch In</string>
+    <string name="past">Past</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="punch_out">Punch Out</string>
+    <string name="hours">hrs</string>
+    <string name="mins">mins</string>
+    <string name="no_on_going_gigs">No Ongoing Gigs</string>
+    <string name="on_going_gigs">Ongoing Gigs</string>
+    <string name="no_gigs_present">No Gigs Present</string>
+    <string name="pending">Pending</string>
+    <string name="profile_image_gig_history">profile image gig history</string>
+    <string name="my_gigs">My Gigs</string>
+    <string name="you_ll_soon_be_sent_invites_for_best_gigs_around_for_you">You\'ll soon be sent invites for best gigs around for you</string>
+    <string name="giger_since">Giger Since</string>
+    <string name="gig_id">Gig Id :</string>
+    <string name="please_let_us_know_more_about_your_gig">Please let us know more about your Gig .</string>
+    <string name="okay_text">Okay</string>
+    <string name="no_scheduled_gig_on_this_day">No scheduled Gig on this Day.</string>
+    <string name="no_more_gig">No more Gig !</string>
+    <string name="download_id_card">Download Id Card</string>
+    <string name="plus_see_more">+ see more</string>
+    <string name="back_button">Back Button</string>
+    <string name="okay">OKAY</string>
+    <string name="cancelling_out_a_gig">Cancelling out a gig !</string>
+    <string name="please_let_us_know_your_reason_why_are_you_declining_this_gig">Please let us know your reason, why are you declining this gig.</string>
+    <string name="i_m_on_sick_leave_today">I’m on sick leave.</string>
+    <string name="i_can_t_reach_the_location_today">I can’t reach the location.</string>
+    <string name="this_gig_is_unsuitable_for_me">This gig is unsuitable for me.</string>
+    <string name="others_camel_case">Others</string>
+    <string name="reason">Reason</string>
+    <string name="submit_all_caps">SUBMIT</string>
+    <string name="gig_location">Gig Location</string>
+    <string name="learning_assign_to_you">Learning assigned to you</string>
+    <string name="plus_see_less">+ see less</string>
+    <string name="explore_by_role">Explore By Role</string>
+    <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
+    <string name="valid_upto">Valid Upto :</string>
+    <string name="issued_on">Issued On</string>
+
+</resources>

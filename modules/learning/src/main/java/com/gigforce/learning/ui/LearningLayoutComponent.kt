@@ -7,7 +7,7 @@ import com.example.learning.R
 import com.gigforce.common_ui.cells.FeatureLayoutComponent
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
-import com.gigforce.learning.repo.ILearningDataRepository
+import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

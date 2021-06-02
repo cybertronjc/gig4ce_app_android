@@ -1,0 +1,33 @@
+R_DEF: Internal format may change without notice
+local
+color topBarDark
+drawable ic_camera_round
+drawable ic_gallery_round
+id back_button_photo_crop
+id camera_layout
+id camera_permission_image_view
+id camera_permission_label_text_view
+id camera_permission_list_textview
+id camera_permission_okay_button
+id capture_button
+id change_photo_label
+id cl_photo_crop
+id constraintLayout
+id fragment_container
+id gallery_layout
+id overlay
+id profile_avatar_photo_crop
+id progress_circular
+id retake_image
+id show_img_cl
+id show_pic
+id upload_img
+id view_finder
+layout activity_camera
+layout activity_photo_crop
+layout fragment_camera
+layout fragment_camera_permission
+layout fragment_click_or_select_picture
+layout fragment_image_viewer
+string crop_and_rotate
+string pick_image_intent_text

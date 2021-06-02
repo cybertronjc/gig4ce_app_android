@@ -24,27 +24,28 @@ import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.gigforce.app.R
-import com.gigforce.app.core.base.dialog.AppDialogsImp
-import com.gigforce.app.core.base.dialog.AppDialogsInterface
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.core.base.dialog.OptionSelected
+import com.gigforce.app.di.implementations.AppDialogsImp
+import com.gigforce.common_ui.AppDialogsInterface
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.OptionSelected
 import com.gigforce.app.core.base.language.LanguageUtilImp
 import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
-import com.gigforce.app.core.base.shareddata.SharedDataImp
-import com.gigforce.core.utils.SharedDataInterface
-import com.gigforce.app.core.base.utilfeatures.UtilAndValidationImp
-import com.gigforce.app.core.base.utilfeatures.UtilAndValidationInterface
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.base.utilfeatures.CommonUtilImp
+import com.gigforce.core.base.utilfeatures.CommonUtilInterface
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
 import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.NavFragmentsData
-import com.gigforce.app.utils.configrepository.ConfigDataModel
-import com.gigforce.app.utils.configrepository.ConfigRepository
+import com.gigforce.common_ui.configrepository.ConfigDataModel
+import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.app.utils.ui_models.ShimmerModel
+import com.gigforce.common_ui.core.IOnBackPressedOverride
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -52,15 +53,17 @@ import com.gigforce.app.utils.ui_models.ShimmerModel
  * Use the [BaseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterface,
-    SharedDataInterface, AppDialogsInterface, UtilAndValidationInterface, LanguageUtilInterface {
+open class BaseFragment : Fragment(),
+    ViewsFromViewsInterface, NavigationInterface,
+    IOnBackPressedOverride,
+    SharedPreAndCommonUtilInterface, AppDialogsInterface, CommonUtilInterface, LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
-    lateinit var sharedDataInterface: SharedDataInterface
+    lateinit var sharedDataInterface: SharedPreAndCommonUtilInterface
     lateinit var appDialogsInterface: AppDialogsInterface
     lateinit var languageUtilInterface: LanguageUtilInterface
-    lateinit var utilAndValidationInterface: UtilAndValidationInterface
+    lateinit var utilAndValidationInterface: CommonUtilInterface
     lateinit var baseFragment: BaseFragment
     var mView: View? = null
 
@@ -100,10 +103,14 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         // there will be no any requirement further after using DI
         viewsFromViewsInterface = ViewsFromViewsImpl(requireActivity())
         navigationInterface = NavigationImpl(requireActivity())
-        sharedDataInterface = SharedDataImp(requireActivity())
-        appDialogsInterface = AppDialogsImp(requireActivity())
+        sharedDataInterface =
+            SharedPreAndCommonUtilDataImp(
+                requireActivity()
+            )
+        appDialogsInterface =
+            AppDialogsImp(requireActivity())
         languageUtilInterface = LanguageUtilImp(this)
-        utilAndValidationInterface = UtilAndValidationImp(requireActivity())
+        utilAndValidationInterface = CommonUtilImp(requireActivity())
     }
 
     open fun getFragmentView(): View {
@@ -122,15 +129,15 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
 
     private fun configObserver() {
         this.configrepositoryObj = ConfigRepository()//ConfigRepository.getInstance()
-        this.configrepositoryObj?.configLiveDataModel?.observe(
-                viewLifecycleOwner,
-                androidx.lifecycle.Observer { configDataModel1 ->
-                    configDataModel = configDataModel1
-                })
-        this.configrepositoryObj?.configCollectionListener()
+//        this.configrepositoryObj?.configLiveDataModel?.observe(
+//                viewLifecycleOwner,
+//                androidx.lifecycle.Observer { configDataModel1 ->
+//                    configDataModel = configDataModel1
+//                })
+//        this.configrepositoryObj?.configCollectionListener()
     }
 
-    open fun onBackPressed(): Boolean {
+    override fun onBackPressed(): Boolean {
         return false
     }
 
@@ -391,17 +398,17 @@ open class BaseFragment : Fragment(), ViewsFromViewsInterface, NavigationInterfa
         return languageUtilInterface.getLanguageCodeToName(languageCode)
     }
 
-    override fun showToast(message: String) {
-        utilAndValidationInterface.showToast(message)
-    }
-
-    override fun isNullOrWhiteSpace(str: String): Boolean {
-        return utilAndValidationInterface.isNullOrWhiteSpace(str)
-    }
-
-    override fun showToastLong(message: String, duration: Int) {
-        utilAndValidationInterface.showToastLong(message, duration)
-    }
+//    override fun showToast(message: String) {
+//        utilAndValidationInterface.showToast(message)
+//    }
+//
+//    override fun isNullOrWhiteSpace(str: String): Boolean {
+//        return utilAndValidationInterface.isNullOrWhiteSpace(str)
+//    }
+//
+//    override fun showToastLong(message: String, duration: Int) {
+//        utilAndValidationInterface.showToastLong(message, duration)
+//    }
 
     override fun getCurrentVersion(): String {
         return utilAndValidationInterface.getCurrentVersion()

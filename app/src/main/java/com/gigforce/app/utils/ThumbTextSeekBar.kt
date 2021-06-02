@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import com.gigforce.app.R
+import com.gigforce.common_ui.utils.getViewWidth
 
 class ThumbTextSeekBar : LinearLayout {
     lateinit var tvThumb: ThumbTextView
@@ -28,7 +29,9 @@ class ThumbTextSeekBar : LinearLayout {
         seekBar = findViewById<SeekBar>(R.id.sbProgress)
 
         val lp = tvThumb.layoutParams as LayoutParams
-        lp.setMargins(seekBar.paddingLeft-(getViewWidth(tvThumb) / 2), resources.getDimensionPixelSize(R.dimen.size_9), 0, 0)
+        lp.setMargins(seekBar.paddingLeft-(getViewWidth(
+            tvThumb
+        ) / 2), resources.getDimensionPixelSize(R.dimen.size_9), 0, 0)
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (onSeekBarChangeListener != null) onSeekBarChangeListener!!.onStopTrackingTouch(

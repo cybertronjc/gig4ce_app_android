@@ -16,7 +16,7 @@
         android:paddingBottom="@dimen/size_10"
         android:layout_height="match_parent">
 
-        <com.gigforce.app.utils.widgets.RoundCornerImageView
+        <com.gigforce.common_ui.widgets.RoundCornerImageView
             android:id="@+id/learning_img"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_100"

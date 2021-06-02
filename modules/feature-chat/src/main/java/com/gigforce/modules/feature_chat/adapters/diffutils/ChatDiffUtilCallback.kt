@@ -1,7 +1,7 @@
 package com.gigforce.modules.feature_chat.adapters.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.gigforce.modules.feature_chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.ChatMessage
 
 class ChatDiffUtilCallback(
         private val oldOldChatList: List<ChatMessage>,

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    tools:context="com.gigforce.user_preferences.location.PermanentAddressEditFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/textView100"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:layout_marginTop="21dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    <ImageView
+        android:id="@+id/back_arrow_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+          app:srcCompat="@drawable/ic_arrow_back_black"
+        app:layout_constraintBottom_toBottomOf="@id/textView100"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView100" />
+
+    <TextView
+        android:id="@+id/textView46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/permanent_address"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:letterSpacing="0"
+        app:layout_constraintBottom_toBottomOf="@id/textView100"
+        app:layout_constraintStart_toEndOf="@+id/back_arrow_iv"
+        app:layout_constraintTop_toTopOf="@id/textView100" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/preferredNoOfDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:paddingBottom="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView100"
+        tools:layout_editor_absoluteX="-16dp" >
+
+        <EditText
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/addline1"
+            android:textSize="12sp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toTopOf="@+id/preferredNoOfDays" />
+
+        <EditText
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/addLine2"
+            android:layout_marginBottom="4dp"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+        <EditText
+            android:id="@+id/area"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/area"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:textSize="12sp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/location"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+        <EditText
+            android:id="@+id/state"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="23dp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/state"
+            android:textSize="12sp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/area" />
+
+        <EditText
+            android:id="@+id/pincode"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:textSize="12sp"
+            android:backgroundTint="@color/setting_bg"
+            android:hint="@string/pincode"
+            android:maxLength="6"
+            android:inputType="number"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/preferredNoOfDays"
+            app:layout_constraintTop_toBottomOf="@+id/area" />
+
+        <ImageView
+            android:id="@+id/imageView27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/warning_icon_"
+            android:layout_marginTop="31dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/state"
+            app:layout_constraintTop_toBottomOf="@+id/state" />
+
+        <TextView
+            android:id="@+id/textView90"
+            android:layout_width="0dp"
+            android:layout_height="33dp"
+            android:layout_marginLeft="6dp"
+            android:letterSpacing="0.04"
+            android:text="To Update Permanent address , you have to upload new address proofs. Click Here  "
+            android:textColor="#181717"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView27"
+            app:layout_constraintEnd_toEndOf="@+id/pincode"
+            app:layout_constraintStart_toEndOf="@+id/imageView27"
+            app:layout_constraintTop_toTopOf="@+id/imageView27" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:text="@string/save"
+        android:minHeight="@dimen/size_36"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:fontFamily="@font/lato"
+        android:background="@drawable/rect_button_outline"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:text="@string/cancel"
+        android:letterSpacing="0"
+        android:fontFamily="@font/lato"
+        android:textColor="@color/cancelcolor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import com.gigforce.app.R
+import com.gigforce.common_ui.utils.dp2Px
 
 class LinedEditText(context: Context, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {
     private val mRect: Rect
@@ -42,8 +43,8 @@ class LinedEditText(context: Context, attrs: AttributeSet?) : AppCompatEditText(
 
         mPaint.style = Paint.Style.FILL_AND_STROKE
         mPaint.color = context.resources.getColor(R.color.edit_note_line) //SET YOUR OWN COLOR HERE
-        linepadding = context.resources.getDimensionPixelSize(R.dimen.size_18)
-        notelineHeight = context.resources.getDimensionPixelSize(R.dimen.size_2)
+        linepadding = 18.dp2Px
+        notelineHeight = 2.dp2Px
         mPaint.strokeWidth = notelineHeight.toFloat()
     }
 

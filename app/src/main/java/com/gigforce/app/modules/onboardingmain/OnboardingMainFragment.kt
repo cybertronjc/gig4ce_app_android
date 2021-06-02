@@ -15,7 +15,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +23,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.app.core.genericadapter.RecyclerGenericAdapter
-import com.gigforce.app.modules.profile.models.ProfileData
-import com.gigforce.app.utils.StringConstants
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
+import com.gigforce.core.base.genericadapter.RecyclerGenericAdapter
+import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.ext.showToast
 import kotlinx.android.synthetic.main.onboarding_main_fragment.*
 
 
@@ -387,51 +387,51 @@ class OnboardingMainFragment : BaseFragment() {
 //                    )
                 },
                 RecyclerGenericAdapter.ItemInterface<OnboardingMainViewModel.OnboardingData?> { obj, viewHolder, position ->
-                    if (position != 0) {
-                        getView(viewHolder, R.id.user_name).visibility = View.GONE
-                        getView(viewHolder, R.id.first_item_indicator).visibility = View.VISIBLE
-                        var param = viewHolder.getView(R.id.first_item_indicator).layoutParams
-                        setRecylerData(
-                            getRecyclerView(viewHolder, R.id.onboarding_rv),
-                            obj?.data,
-                            position,
-                            param.height,
-                            obj?.defaultValue!!
-                        )
-
-                    } else {
-                        usernameEditText = getEditText(viewHolder, R.id.user_name)
-                        if (usernameEditText.text.toString().length <= 3) {
-                            enableNextButton(false)
-                        }
-                        usernameEditText?.addTextChangedListener(object :
-                            TextWatcher {
-                            override fun afterTextChanged(s: Editable?) {}
-
-                            override fun beforeTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                count: Int,
-                                after: Int
-                            ) {
-                            }
-
-                            override fun onTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                before: Int,
-                                count: Int
-                            ) {
-                                var str = s.toString().trim()
-                                if (str.length >= 3) {
-                                    enableNextButton(true)
-                                } else {
-                                    enableNextButton(false)
-                                }
-                            }
-                        })
-                        viewHolder.getView(R.id.first_item_indicator).visibility = View.GONE
-                    }
+//                    if (position != 0) {
+//                        getView(viewHolder, R.id.user_name).visibility = View.GONE
+//                        getView(viewHolder, R.id.first_item_indicator).visibility = View.VISIBLE
+//                        var param = viewHolder.getView(R.id.first_item_indicator).layoutParams
+//                        setRecylerData(
+//                            getRecyclerView(viewHolder, R.id.onboarding_rv),
+//                            obj?.data,
+//                            position,
+//                            param.height,
+//                            obj?.defaultValue!!
+//                        )
+//
+//                    } else {
+//                        usernameEditText = getEditText(viewHolder, R.id.user_name)
+//                        if (usernameEditText.text.toString().length <= 3) {
+//                            enableNextButton(false)
+//                        }
+//                        usernameEditText?.addTextChangedListener(object :
+//                            TextWatcher {
+//                            override fun afterTextChanged(s: Editable?) {}
+//
+//                            override fun beforeTextChanged(
+//                                s: CharSequence?,
+//                                start: Int,
+//                                count: Int,
+//                                after: Int
+//                            ) {
+//                            }
+//
+//                            override fun onTextChanged(
+//                                s: CharSequence?,
+//                                start: Int,
+//                                before: Int,
+//                                count: Int
+//                            ) {
+//                                var str = s.toString().trim()
+//                                if (str.length >= 3) {
+//                                    enableNextButton(true)
+//                                } else {
+//                                    enableNextButton(false)
+//                                }
+//                            }
+//                        })
+//                        viewHolder.getView(R.id.first_item_indicator).visibility = View.GONE
+//                    }
                 })!!
         recyclerGenericAdapter.setList(viewModel.getOnboardingData())
         recyclerGenericAdapter.setLayout(R.layout.onboarding_pager_item)
@@ -467,44 +467,44 @@ class OnboardingMainFragment : BaseFragment() {
                     enableNextButton(true)
                 },
                 RecyclerGenericAdapter.ItemInterface<String?> { obj, viewHolder, position ->
-                    var tv = getTextView(viewHolder, R.id.item)
-                    tv.text = obj
-                    if (dataArr.size >= position + 1 && position == 0) {
-                        setTextViewColor(tv, R.color.onboarding_rv_item_color)
-                        val face = Typeface.createFromAsset(
-                            activity?.getAssets(),
-                            "fonts/Lato-Bold.ttf"
-                        )
-                        tv.setTypeface(face)
-                    } else if (dataArr.size >= position + 1 && position == 1) {
-                        setTextViewColor(tv, R.color.onboarding_rv_item_color_60)
-                        val face = Typeface.createFromAsset(
-                            activity?.getAssets(),
-                            "fonts/Lato-Regular.ttf"
-                        )
-                        tv.setTypeface(face)
-                    } else if (dataArr.size >= position + 1 && position == 2) {
-                        setTextViewColor(tv, R.color.onboarding_rv_item_color_40)
-                        val face = Typeface.createFromAsset(
-                            activity?.getAssets(),
-                            "fonts/Lato-Regular.ttf"
-                        )
-                        tv.setTypeface(face)
-                    } else if (dataArr.size >= position + 1 && position == 3) {
-                        setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
-                        val face = Typeface.createFromAsset(
-                            activity?.getAssets(),
-                            "fonts/Lato-Regular.ttf"
-                        )
-                        tv.setTypeface(face)
-                    } else {
-                        setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
-                        val face = Typeface.createFromAsset(
-                            activity?.getAssets(),
-                            "fonts/Lato-Regular.ttf"
-                        )
-                        tv.setTypeface(face)
-                    }
+//                    var tv = getTextView(viewHolder, R.id.item)
+//                    tv.text = obj
+//                    if (dataArr.size >= position + 1 && position == 0) {
+//                        setTextViewColor(tv, R.color.onboarding_rv_item_color)
+//                        val face = Typeface.createFromAsset(
+//                            activity?.getAssets(),
+//                            "fonts/Lato-Bold.ttf"
+//                        )
+//                        tv.setTypeface(face)
+//                    } else if (dataArr.size >= position + 1 && position == 1) {
+//                        setTextViewColor(tv, R.color.onboarding_rv_item_color_60)
+//                        val face = Typeface.createFromAsset(
+//                            activity?.getAssets(),
+//                            "fonts/Lato-Regular.ttf"
+//                        )
+//                        tv.setTypeface(face)
+//                    } else if (dataArr.size >= position + 1 && position == 2) {
+//                        setTextViewColor(tv, R.color.onboarding_rv_item_color_40)
+//                        val face = Typeface.createFromAsset(
+//                            activity?.getAssets(),
+//                            "fonts/Lato-Regular.ttf"
+//                        )
+//                        tv.setTypeface(face)
+//                    } else if (dataArr.size >= position + 1 && position == 3) {
+//                        setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
+//                        val face = Typeface.createFromAsset(
+//                            activity?.getAssets(),
+//                            "fonts/Lato-Regular.ttf"
+//                        )
+//                        tv.setTypeface(face)
+//                    } else {
+//                        setTextViewColor(tv, R.color.onboarding_rv_item_color_10)
+//                        val face = Typeface.createFromAsset(
+//                            activity?.getAssets(),
+//                            "fonts/Lato-Regular.ttf"
+//                        )
+//                        tv.setTypeface(face)
+//                    }
                 })!!
         recyclerGenericAdapter.setList(dataArr)
 

@@ -46,10 +46,12 @@ class MainApplication : Application() {
 
     private fun setUpBranchTool() {
         // Branch logging for debugging
-        Branch.enableLogging();
+        Branch.enableLogging()
 
         // Branch object initialization
-        Branch.getAutoInstance(this);
+        Branch.getAutoInstance(this)
+        Branch.getAutoInstance(this).enableFacebookAppLinkCheck()
+
     }
 
 

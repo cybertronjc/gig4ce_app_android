@@ -7,8 +7,8 @@ import android.view.Window
 import android.widget.TextView
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.base.dialog.ConfirmationDialogOnClickListener
-import com.gigforce.app.modules.preferences.PreferencesRepository
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 
 class LanguageUtilImp : LanguageUtilInterface {
     var baseFragment: BaseFragment
@@ -89,9 +89,11 @@ class LanguageUtilImp : LanguageUtilInterface {
         var currentDeviceLanguageCode =
             getChangedDeviceLanguageCode(baseFragment.getLastStoredDeviceLanguage()!!)
         if (!(currentDeviceLanguageCode.equals(""))) {
-            preferencesRepositoryForBaseFragment = PreferencesRepository()
+            preferencesRepositoryForBaseFragment =
+                PreferencesRepository()
             confirmDialogForDeviceLanguageChanged(currentDeviceLanguageCode,
-                object : ConfirmationDialogOnClickListener {
+                object :
+                    ConfirmationDialogOnClickListener {
                     override fun clickedOnYes(dialog: Dialog?) {
                         baseFragment.saveDeviceLanguage(currentDeviceLanguageCode)
                         baseFragment.saveAppLanuageCode(currentDeviceLanguageCode)

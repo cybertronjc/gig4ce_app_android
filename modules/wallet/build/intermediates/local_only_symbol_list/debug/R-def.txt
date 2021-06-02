@@ -32,6 +32,7 @@ drawable ic_hsbc
 drawable ic_invoice_status
 drawable ic_keyboard_back
 drawable ic_landinghome_search
+drawable ic_location_pin_black
 drawable ic_monthly_earning
 drawable ic_ok
 drawable ic_payment_dispute
@@ -138,6 +139,7 @@ id payment_due
 id payment_ic
 id payment_ic_forward
 id payment_summary
+id payslip_label
 id payslip_monthly_details_error
 id payslip_monthly_main_layout
 id payslip_monthly_progress_bar

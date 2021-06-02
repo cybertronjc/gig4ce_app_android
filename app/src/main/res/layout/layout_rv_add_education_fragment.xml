@@ -149,7 +149,7 @@
         android:animateLayoutChanges="true"
         android:background="@drawable/dashed_border_979797_1dp"
         android:orientation="vertical"
-        tools:context=".modules.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
+        tools:context="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
 
 
         <RelativeLayout

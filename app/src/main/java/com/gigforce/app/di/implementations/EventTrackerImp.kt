@@ -9,14 +9,13 @@ import com.appsflyer.AppsFlyerLib
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.MainApplication
-import com.gigforce.app.core.toBundle
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.branch.referral.Branch
 import javax.inject.Inject
@@ -49,6 +48,14 @@ class EventTrackerImp @Inject constructor(
                 "user_id" to userId
         ))
         appsFlyerLib.setCustomerIdAndTrack(userId, context.applicationContext)
+
+        //branch to mixpanel
+        mixpanel?.distinctId?.let {
+            Branch.getInstance().setRequestMetadata(
+                "\$mixpanel_distinct_id",
+                it
+            )
+        }
     }
 
     override fun setUserProperty(props: Map<String, Any>) {
@@ -106,6 +113,8 @@ class EventTrackerImp @Inject constructor(
 
         // Branch object initialization
         Branch.getAutoInstance(context);
+
+
     }
 
     private fun setUpAppsFlyer() {

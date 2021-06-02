@@ -28,10 +28,10 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.modules.feature_chat.core.ChatConstants
-import com.gigforce.modules.feature_chat.models.ChatGroup
-import com.gigforce.modules.feature_chat.models.ContactModel
-import com.gigforce.modules.feature_chat.models.GroupMedia
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatGroup
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMediaRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.adapters.GroupMembersRecyclerAdapter
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -91,7 +91,6 @@ class GroupDetailsFragment : Fragment(),
     private val appDirectoryFileRef: File by lazy {
         Environment.getExternalStoragePublicDirectory(ChatConstants.DIRECTORY_APP_DATA_ROOT)!!
     }
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -450,7 +449,6 @@ class GroupDetailsFragment : Fragment(),
 
     private var contactLongPressed: ContactModel? = null
     override fun onGroupMemberItemLongPressed(view: View, position: Int, contact: ContactModel) {
-
         contactLongPressed = contact
         val popUp = PopupMenu(requireContext(), view)
         popUp.setOnMenuItemClickListener(this)

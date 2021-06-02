@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_add_education_profile_v2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_bg_client_activation"
+        android:minHeight="@dimen/size_72"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_back_application_add_education_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:paddingStart="@dimen/size_16"
+                android:paddingTop="@dimen/size_16"
+                android:paddingEnd="@dimen/size_16"
+                android:paddingBottom="@dimen/size_16"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_title_application_add_education_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/iv_back_application_add_education_v2"
+                android:fontFamily="@font/lato"
+                android:text="@string/add_education"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20"
+                android:textStyle="normal" />
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/size_100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_add_education_profile_v2">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_content_illustration_add_education"
+                android:layout_width="@dimen/size_53"
+                android:layout_height="@dimen/size_40"
+                android:layout_marginStart="@dimen/size_32"
+                android:layout_marginTop="@dimen/size_36"
+                android:src="@drawable/ic_education_profile_v2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_content_text_add_education"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_15"
+                android:layout_marginEnd="@dimen/size_18"
+                android:fontFamily="@font/lato"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/add_education_tag_line"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_content_illustration_add_education"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_content_illustration_add_education"
+                app:layout_constraintTop_toTopOf="@+id/iv_content_illustration_add_education" />
+
+
+            <LinearLayout
+                android:id="@+id/ll_select_lang_add_education"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="@dimen/size_26"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/bg_2d979797_rad_2"
+                android:minHeight="@dimen/size_140"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_text_add_education">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_16"
+                    android:fontFamily="@font/lato"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/select_level_education"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+
+                    android:textStyle="bold" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_add_education"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:animateLayoutChanges="true"
+                    android:visibility="visible"
+                    app:chipSpacingHorizontal="14dp">
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <RelativeLayout
+                    android:id="@+id/rl_education_details_add_education"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginTop="@dimen/size_14"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_label_institute_add_education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/institute_name"
+                        android:textColor="#707070"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:id="@+id/et_institute_add_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_label_institute_add_education"
+                        android:layout_marginTop="@dimen/size_6"
+                        android:background="@drawable/border_26_979797_rad_2"
+                        android:fontFamily="@font/lato"
+                        android:hint="@string/enter_institute_name"
+                        android:lineSpacingExtra="3sp"
+                        android:paddingStart="@dimen/size_8"
+                        android:paddingTop="@dimen/size_10"
+                        android:paddingEnd="@dimen/size_8"
+                        android:paddingBottom="@dimen/size_10"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_label_course_add_education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/et_institute_add_education"
+                        android:layout_marginTop="@dimen/size_15"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/course_name"
+                        android:textColor="#707070"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <EditText
+                        android:id="@+id/et_course_add_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_label_course_add_education"
+                        android:layout_marginTop="@dimen/size_6"
+                        android:background="@drawable/border_26_979797_rad_2"
+                        android:fontFamily="@font/lato"
+                        android:hint="@string/enter_course_name"
+                        android:lineSpacingExtra="3sp"
+                        android:paddingStart="@dimen/size_8"
+                        android:paddingTop="@dimen/size_10"
+                        android:paddingEnd="@dimen/size_8"
+                        android:paddingBottom="@dimen/size_10"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_label_completion_date_add_education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/et_course_add_education"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/completion_date"
+                        android:textColor="@color/warm_grey_two"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <View
+                        android:id="@+id/center_view"
+                        android:layout_width="6dp"
+                        android:layout_height="@dimen/size_1"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:id="@+id/tv_completion_month_add_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_label_completion_date_add_education"
+                        android:layout_marginTop="@dimen/size_6"
+                        android:layout_toStartOf="@+id/center_view"
+                        android:background="@drawable/border_26_979797_rad_2"
+                        android:fontFamily="@font/lato"
+                        android:gravity="center|start"
+                        android:lineSpacingExtra="3sp"
+                        android:paddingStart="@dimen/size_8"
+                        android:paddingTop="@dimen/size_10"
+                        android:paddingEnd="@dimen/size_8"
+                        android:paddingBottom="@dimen/size_10"
+                        android:text="@string/select_month"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        app:drawableEndCompat="@drawable/ic_calendar_month"
+                        app:drawableTint="#2d979797" />
+
+                    <TextView
+                        android:id="@+id/tv_completion_year_add_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_label_completion_date_add_education"
+                        android:layout_marginTop="@dimen/size_6"
+                        android:layout_toEndOf="@+id/center_view"
+                        android:background="@drawable/border_26_979797_rad_2"
+                        android:fontFamily="@font/lato"
+                        android:gravity="center|start"
+                        android:lineSpacingExtra="3sp"
+                        android:paddingStart="@dimen/size_8"
+                        android:paddingTop="@dimen/size_10"
+                        android:paddingEnd="@dimen/size_8"
+                        android:paddingBottom="@dimen/size_10"
+                        android:text="@string/select_year"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        app:drawableEndCompat="@drawable/ic_calendar_month"
+                        app:drawableTint="#2d979797" />
+
+                    <TextView
+                        android:id="@+id/tv_label_media_add_education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_completion_month_add_education"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/media_label"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_privacy_add_education"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tv_label_media_add_education"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/size_16"
+                        android:fontFamily="@font/lato"
+                        android:lineSpacingExtra="3sp"
+                        android:text="Public"
+                        android:textColor="#707070"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_label_media_add_education"
+                        android:layout_marginTop="@dimen/size_16"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_pdf_view_add_education"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border_69979797_rad_3"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.github.barteksc.pdfviewer.PDFView
+                                android:id="@+id/pdfView_add_education"
+                                android:layout_width="match_parent"
+                                android:layout_height="296dp"
+                                android:layout_marginStart="@dimen/size_1"
+                                android:layout_marginTop="@dimen/size_1"
+                                android:layout_marginEnd="@dimen/size_1"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/size_1"
+                                android:background="#66979797" />
+
+                            <TextView
+                                android:id="@+id/tv_file_name_add_education"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato"
+                                android:gravity="start|center_vertical"
+                                android:lineSpacingExtra="3sp"
+                                android:paddingStart="@dimen/size_16"
+                                android:paddingTop="@dimen/size_8"
+                                android:paddingEnd="@dimen/size_16"
+                                android:paddingBottom="@dimen/size_8"
+                                android:textColor="#333333"
+                                android:textSize="14sp"
+                                android:textStyle="normal"
+                                app:drawableEndCompat="@drawable/ic_document_outlined" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_add_certification_add_education"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/size_8"
+                            android:layout_marginBottom="@dimen/size_16"
+                            android:fontFamily="@font/lato"
+                            android:lineSpacingExtra="3sp"
+                            android:text="@string/add_certificate"
+                            android:textColor="@color/lipstick"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_save_add_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_26"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/gradient_button"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="@dimen/size_40"
+                android:paddingTop="@dimen/size_9"
+                android:paddingEnd="@dimen/size_40"
+                android:paddingBottom="@dimen/size_9"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_education" />
+
+            <TextView
+                android:id="@+id/tv_cancel_add_education"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_26"
+                android:layout_marginEnd="@dimen/size_16"
+                android:background="@drawable/border_lipstick_rad_4"
+                android:fontFamily="@font/lato"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="3sp"
+                android:paddingStart="@dimen/size_35"
+                android:paddingTop="@dimen/size_9"
+                android:paddingEnd="@dimen/size_35"
+                android:paddingBottom="@dimen/size_9"
+                android:text="@string/cancel"
+                android:textColor="@color/lipstick"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_save_add_education"
+                app:layout_constraintTop_toBottomOf="@+id/ll_select_lang_add_education" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

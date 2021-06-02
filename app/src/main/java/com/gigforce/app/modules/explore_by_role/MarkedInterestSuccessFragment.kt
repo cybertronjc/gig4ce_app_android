@@ -20,11 +20,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
-import com.gigforce.app.core.gone
-import com.gigforce.app.core.visible
-import com.gigforce.app.modules.client_activation.models.Role
-import com.gigforce.app.modules.profile.ProfileViewModel
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
+import com.gigforce.common_ui.viewdatamodels.client_activation.Role
+import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.app.utils.*
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.decors.HorizontaltemDecoration
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.utils.ViewModelProviderFactory
+import com.gigforce.core.utils.PermissionUtils
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.layout_marked_interest_success_fragment.*
 
@@ -34,7 +39,9 @@ class MarkedInterestSuccessFragment : BaseFragment(),
     private var roleUpdated: Boolean = false
     private var inviteID: String? = null
     private val viewModelFactory by lazy {
-        ViewModelProviderFactory(ExploreByRoleViewModel(ExploreByRoleRepository()))
+        ViewModelProviderFactory(
+            ExploreByRoleViewModel(ExploreByRoleRepository())
+        )
     }
     private val viewModel: ExploreByRoleViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(ExploreByRoleViewModel::class.java)
