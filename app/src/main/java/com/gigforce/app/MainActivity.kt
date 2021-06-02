@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import io.branch.referral.Branch
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -400,4 +401,5 @@ class MainActivity : AppCompatActivity(),
     override fun getData(): Bundle {
         return bundle ?: Bundle()
     }
+
 }
