@@ -185,4 +185,24 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
         saveData(AppConstants.USER_NAME,username)
     }
 
+    override fun getLoggedInUserName() :String{
+        return getData(AppConstants.USER_NAME)?:""
+    }
+
+    override fun saveLoggedInMobileNumber(mobileno: String) {
+        saveData(AppConstants.USER_MOBILE_NUMBER,mobileno)
+    }
+
+    override fun getLoggedInMobileNumber() :String {
+        return getData(AppConstants.USER_MOBILE_NUMBER)?:""
+    }
+
+    override fun saveUserProfilePic(profilePic : String) {
+        saveData(AppConstants.USER_PROFILE_PIC,profilePic)
+    }
+
+    override fun getUserProfilePic() :String {
+        return getData(AppConstants.USER_PROFILE_PIC)?:""
+    }
+
 }

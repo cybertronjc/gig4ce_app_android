@@ -1,6 +1,8 @@
 package com.gigforce.core
 
 object AppConstants {
+    val USER_PROFILE_PIC: String = "profile_pic"
+    val USER_MOBILE_NUMBER: String = "mobileno"
     val USER_NAME: String = "username"
     val LANGUAGE_SELECTED: String = "language_selected"
     const val UNLOCK_FEATURE = false

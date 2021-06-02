@@ -418,6 +418,27 @@ open class BaseFragment : Fragment(),
         TODO("Not yet implemented")
     }
 
+    override fun getLoggedInUserName(): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveLoggedInMobileNumber(mobileno: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLoggedInMobileNumber(): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveUserProfilePic(profilePic: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getUserProfilePic(): String {
+        TODO("Not yet implemented")
+    }
+
+
     override fun updateResources(language: String) {
         utilAndValidationInterface.updateResources(language)
     }

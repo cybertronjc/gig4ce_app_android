@@ -34,9 +34,14 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,6 +76,9 @@ class MainActivity : AppCompatActivity(),
     lateinit var navigation:INavigation
 
     @Inject lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var shareDataAndCommUtil : SharedPreAndCommonUtilInterface
 
     override fun getINavigation(): INavigation {
         return navigation
@@ -200,6 +208,29 @@ class MainActivity : AppCompatActivity(),
 // Ensure all future user profile properties sent from
 // the device will have the distinct_id 13793
         //mixpanel?.getPeople()?.identify(firebaseAuth.currentUser.phoneNumber);
+
+        profileDataSnapshot()
+
+    }
+
+    private fun profileDataSnapshot() {
+        FirebaseAuth.getInstance().addAuthStateListener {it1->
+            it1.currentUser?.uid?.let {
+
+                FirebaseFirestore.getInstance().collection("Profiles").document(it).addSnapshotListener { value, e ->
+                    value?.data?.let {
+                        value.toObject(ProfileData::class.java)?.let {
+                            shareDataAndCommUtil.saveLoggedInMobileNumber(it1.currentUser?.phoneNumber?:"")
+                            shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                            shareDataAndCommUtil.saveLoggedInUserName(it.profileAvatarThumbnail?:"")
+                        }
+                    }
+                }
+            }?: run {
+                shareDataAndCommUtil.saveLoggedInMobileNumber("")
+            }
+
+        }
     }
 
     private fun isUserLoggedIn(): Boolean {
