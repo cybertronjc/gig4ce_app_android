@@ -166,7 +166,6 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
 
 
     override fun onSubCitySelected(add: Boolean, text: String) {
-        formCompletionListener?.enableDisableNextButton(true)
 
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
@@ -180,6 +179,8 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
+
+        formCompletionListener?.enableDisableNextButton(confirmSubCityList.isNotEmpty())
     }
 
     override fun onCitySelected(city: City,isMajorCity : Boolean) {
@@ -235,7 +236,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 return false
             }
         }
-        setSelectedCityTracker()
+       // setSelectedCityTracker()
         setSelectedCitySubCityTracker()
         return false
     }
@@ -246,7 +247,10 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
                 eventTracker.setUserProperty(map)
+
+                if(it.isNotBlank())
                 eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
+
                 eventTracker.setProfileProperty(ProfilePropArgs("SubLocation", confirmSubCityList))
             }
         }
@@ -257,6 +261,8 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             var map = mapOf<String, String>("Location" to it)
             eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
             eventTracker.setUserProperty(map)
+
+            if(it.isNotBlank())
             eventTracker.setProfileProperty(ProfilePropArgs("Location", it))
             eventTracker.removeUserProperty("SubLocation")
         }

@@ -55,7 +55,7 @@ class OnboardingFragmentNewViewModel : ViewModel() {
 
     }
 
-    fun saveJobPreference(jobType: String,workingDays: ArrayList<String>,timeSlots: ArrayList<String>) = viewModelScope.launch {
+    fun saveJobPreference(jobType: String,workingDays: List<String>,timeSlots: List<String>) = viewModelScope.launch {
         try {
             profileFirebaseRepository.setJobPreferenceData(jobType, workingDays,timeSlots)
         } catch (e: Exception) {
