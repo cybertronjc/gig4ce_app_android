@@ -2788,7 +2788,7 @@ int id center 0x0
 int id center_horizontal 0x0
 int id center_vertical 0x0
 int id chain 0x0
-int id chat_fragment 0x0
+int id chat_icon 0x0
 int id checkInTV 0x0
 int id checkbox 0x0
 int id checked 0x0

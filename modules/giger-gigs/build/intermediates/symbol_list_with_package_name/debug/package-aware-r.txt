@@ -2753,7 +2753,7 @@ id chain
 id change_photo_label
 id change_time_tv
 id chat_btn
-id chat_fragment
+id chat_icon
 id checkInCheckOutSliderBtn
 id checkInIV
 id checkInTV

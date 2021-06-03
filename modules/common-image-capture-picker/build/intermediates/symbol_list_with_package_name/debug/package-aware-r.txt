@@ -2512,7 +2512,7 @@ id card_view
 id center
 id chain
 id change_photo_label
-id chat_fragment
+id chat_icon
 id checkInTV
 id checkbox
 id checked

@@ -3,21 +3,26 @@ package com.gigforce.common_ui.cells
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.R
+import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_app_bar.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class AppBarComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
-    IViewHolder {
-    @Inject lateinit var userinfo: UserInfoImp
+    IViewHolder, View.OnClickListener {
+    @Inject
+    lateinit var userinfo: UserInfoImp
+    @Inject
+    lateinit var navigation: INavigation
     var setProfileName: String
-        get() = profile_name.text as String
+        get() = userinfo.getData().profileName
         set(value) {
             profile_name.text = value
         }
@@ -26,18 +31,16 @@ class AppBarComponent(context: Context, attrs: AttributeSet?) : FrameLayout(cont
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.cell_app_bar, this, true)
-        setProfilePic(userinfo.getData().profilePicPath)
         setProfileName = userinfo.getData().profileName
+        chat_icon.setOnClickListener(this)
     }
-
-
-    fun setProfilePic(image: String) {
-        appProfileComponent.setProfilePic(image)
-    }
-
 
 
     override fun bind(data: Any?) {
 
+    }
+
+    override fun onClick(v: View?) {
+        navigation.navigateTo("chats/chatList")
     }
 }
