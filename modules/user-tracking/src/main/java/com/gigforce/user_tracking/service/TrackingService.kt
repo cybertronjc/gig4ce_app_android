@@ -68,7 +68,7 @@ class TrackingService : LifecycleService() {
         intent?.let {
             gigId = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_GIG_ID)!!
             userName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_USER_NAME)
-            fullCompanyName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME)
+            fullCompanyName = it.getStringExtra(TrackingConstants.SERVICE_INTENT_EXTRA_TRADING_NAME) ?: "Gigforce"
 
             when (it.action) {
 
