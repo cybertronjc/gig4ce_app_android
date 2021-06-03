@@ -35,24 +35,9 @@ import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.progressBar
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlBackErrorMessage
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlBackImageIV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlFrontErrorMessage
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlFrontImageIV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlNoErrorMessage
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlNoTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlStateErrorMessage
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.dlStateTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.editLayout
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.helpIconViewIV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.statusTV
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.whyWeNeedThisViewTV
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import kotlinx.android.synthetic.main.layout_driving_license_info_client_activation.*
+import kotlinx.android.synthetic.main.verification_image_card_component.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -112,7 +97,8 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
 //            getString(R.string.upload_driving_license_front_side)
 //        dlFrontImageHolder.documentUploadSubLabelTV.text =
 //            getString(R.string.upload_your_driving_license)
-        dlFrontImageHolder.setDocumentUploadLabel( getString(R.string.upload_driving_license_front_side))
+
+        dlFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_driving_license_front_side))
         dlFrontImageHolder.setDocumentUploadSubLabel( getString(R.string.upload_your_driving_license))
 
 //        dlBackImageHolder.documentUploadLabelTV.text =

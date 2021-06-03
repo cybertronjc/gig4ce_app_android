@@ -36,12 +36,6 @@ import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.progressBar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.imageLabelTV
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.reuploadBtn
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.uploadDocumentCardView
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.uploadImageLayout
 import kotlinx.android.synthetic.main.verification_image_card_component.view.*
 import javax.inject.Inject
 
@@ -88,8 +82,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 //        aadharFrontImageHolder.documentUploadSubLabelTV.text =
 //            getString(R.string.upload_your_aadhar_card)
 
-        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_back_side))
-        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+        aadharBackImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_back_side))
+        aadharBackImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
 //        aadharBackImageHolder.documentUploadLabelTV.text =
 //            getString(R.string.upload_aadhar_card_back_side)
 //        aadharBackImageHolder.documentUploadSubLabelTV.text =
@@ -614,10 +608,10 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun showBackAadharCard(aadharBackImagePath: Uri) {
-        aadharFrontImageHolder.makeUploadLayoutVisible()
-        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
+        aadharBackImageHolder.makeUploadLayoutVisible()
+        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
 
-        aadharFrontImageHolder.setImage(aadharBackImagePath)
+        aadharBackImageHolder .setImage(aadharBackImagePath)
 //        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
 //        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
 //        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =

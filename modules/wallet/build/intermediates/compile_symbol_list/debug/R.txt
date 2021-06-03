@@ -250,8 +250,10 @@ int attr checkedIconTint 0x0
 int attr checkedIconVisible 0x0
 int attr checkedTextViewStyle 0x0
 int attr chipBackgroundColor 0x0
+int attr chipComponent 0x0
 int attr chipCornerRadius 0x0
 int attr chipEndPadding 0x0
+int attr chipGroupComp 0x0
 int attr chipGroupStyle 0x0
 int attr chipIcon 0x0
 int attr chipIconEnabled 0x0
@@ -260,6 +262,7 @@ int attr chipIconTint 0x0
 int attr chipIconVisible 0x0
 int attr chipMinHeight 0x0
 int attr chipMinTouchTargetSize 0x0
+int attr chipSelected 0x0
 int attr chipSpacing 0x0
 int attr chipSpacingHorizontal 0x0
 int attr chipSpacingVertical 0x0
@@ -270,21 +273,10 @@ int attr chipStrokeWidth 0x0
 int attr chipStyle 0x0
 int attr chipSurfaceColor 0x0
 int attr chip_backgroundColor 0x0
-int attr chip_chipIcon 0x0
-int attr chip_closable 0x0
-int attr chip_closeColor 0x0
-int attr chip_cornerRadius 0x0
-int attr chip_iconText 0x0
-int attr chip_iconTextBackgroundColor 0x0
-int attr chip_iconTextColor 0x0
 int attr chip_selectable 0x0
-int attr chip_selectedBackgroundColor 0x0
-int attr chip_selectedCloseColor 0x0
-int attr chip_selectedStrokeColor 0x0
-int attr chip_selectedStrokeSize 0x0
-int attr chip_selectedTextColor 0x0
 int attr chip_strokeColor 0x0
 int attr chip_strokeSize 0x0
+int attr chip_text 0x0
 int attr chip_textColor 0x0
 int attr circleCrop 0x0
 int attr circleProgressStyle 0x0
@@ -5191,24 +5183,17 @@ int styleable Chip_shapeAppearanceOverlay 38
 int styleable Chip_showMotionSpec 39
 int styleable Chip_textEndPadding 40
 int styleable Chip_textStartPadding 41
-int[] styleable ChipComponent { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
-int styleable ChipComponent_chip_backgroundColor 0
-int styleable ChipComponent_chip_chipIcon 1
-int styleable ChipComponent_chip_closable 2
-int styleable ChipComponent_chip_closeColor 3
-int styleable ChipComponent_chip_cornerRadius 4
-int styleable ChipComponent_chip_iconText 5
-int styleable ChipComponent_chip_iconTextBackgroundColor 6
-int styleable ChipComponent_chip_iconTextColor 7
-int styleable ChipComponent_chip_selectable 8
-int styleable ChipComponent_chip_selectedBackgroundColor 9
-int styleable ChipComponent_chip_selectedCloseColor 10
-int styleable ChipComponent_chip_selectedStrokeColor 11
-int styleable ChipComponent_chip_selectedStrokeSize 12
-int styleable ChipComponent_chip_selectedTextColor 13
-int styleable ChipComponent_chip_strokeColor 14
-int styleable ChipComponent_chip_strokeSize 15
-int styleable ChipComponent_chip_textColor 16
+int[] styleable ChipComponent { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable ChipComponent_chipComponent 0
+int styleable ChipComponent_chipCornerRadius 1
+int styleable ChipComponent_chipSelected 2
+int styleable ChipComponent_chipStrokeWidth 3
+int styleable ChipComponent_chip_backgroundColor 4
+int styleable ChipComponent_chip_selectable 5
+int styleable ChipComponent_chip_strokeColor 6
+int styleable ChipComponent_chip_strokeSize 7
+int styleable ChipComponent_chip_text 8
+int styleable ChipComponent_chip_textColor 9
 int[] styleable ChipGroup { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable ChipGroup_checkedChip 0
 int styleable ChipGroup_chipSpacing 1
@@ -5217,6 +5202,8 @@ int styleable ChipGroup_chipSpacingVertical 3
 int styleable ChipGroup_selectionRequired 4
 int styleable ChipGroup_singleLine 5
 int styleable ChipGroup_singleSelection 6
+int[] styleable ChipGroupComponent { 0x0 }
+int styleable ChipGroupComponent_chipGroupComp 0
 int[] styleable CircleImageView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable CircleImageView_civ_border_color 0
 int styleable CircleImageView_civ_border_overlay 1

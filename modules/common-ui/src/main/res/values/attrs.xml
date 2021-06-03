@@ -76,25 +76,44 @@
         <attr name="civ_dashed_border" format="boolean" />
         <attr name="civ_is_qr" format="boolean" />
     </declare-styleable>
+    
+    <declare-styleable name="ChipGroupComponent">
+        <attr name="chipGroupComp" format="reference"/>
+    </declare-styleable>
 
     <declare-styleable name="ChipComponent">
-        <attr name="chip_chipIcon" format="integer" />
-        <attr name="chip_closable" format="boolean" />
+        <attr name="chipComponent" format="reference"/>
         <attr name="chip_selectable" format="boolean" />
-        <attr name="chip_backgroundColor" format="color" />
-        <attr name="chip_selectedBackgroundColor" format="color" />
-        <attr name="chip_textColor" format="color" />
-        <attr name="chip_selectedTextColor" format="color" />
-        <attr name="chip_closeColor" format="color" />
-        <attr name="chip_selectedCloseColor" format="color" />
-        <attr name="chip_cornerRadius" format="dimension" />
+        <attr name="chip_text" format="string"/>
+        <attr name="chipSelected" format="boolean"/>
+        <attr name="chipStrokeWidth" format="dimension"/>
+        <attr name="chipCornerRadius" format="dimension" />
         <attr name="chip_strokeSize" format="dimension" />
-        <attr name="chip_strokeColor" format="color" />
-        <attr name="chip_selectedStrokeColor" format="color" />
-        <attr name="chip_selectedStrokeSize" format="dimension" />
-        <attr name="chip_iconText" format="string" />
-        <attr name="chip_iconTextColor" format="color" />
-        <attr name="chip_iconTextBackgroundColor" format="color" />
+        <attr name="chip_backgroundColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+        <attr name="chip_textColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+
+        <attr name="chip_strokeColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="EditTextWithSuffix">
