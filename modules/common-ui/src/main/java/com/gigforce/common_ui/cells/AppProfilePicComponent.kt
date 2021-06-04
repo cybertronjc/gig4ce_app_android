@@ -46,9 +46,6 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     }
 
     private fun setImageToProfilePic(image: String) {
-        val firebaseStoragePath =
-            "gs://gigforce-dev.appspot.com/profile_pics/IMG_20200409_235122_.jpg"
-        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
         val profilePicRef: StorageReference =
             FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
         GlideApp.with(context)

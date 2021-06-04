@@ -52,6 +52,7 @@ enum class TextColorOptions(val value: Int) {
         fun getByValue(value: Int) = VALUES.first { it.value == value }
     }
 }
+
 @AndroidEntryPoint
 open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         FrameLayout(context, attrs),
