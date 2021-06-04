@@ -34,10 +34,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -87,7 +84,6 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
 //                findNavController().popBackStack(R.id.gigerVerificationFragment, false)
             })
         }
-
 
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()

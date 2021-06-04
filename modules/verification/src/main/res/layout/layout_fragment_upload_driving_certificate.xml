@@ -8,12 +8,24 @@
     android:orientation="vertical"
     tools:context="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment">
 
+    <com.gigforce.common_ui.cells.AppBar
+        android:id="@+id/appBarComp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        android:visibility="visible"
+        app:titleText="Upload Driving Certificate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tv_client_activation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_bg_client_activation"
         android:minHeight="@dimen/size_72"
+        android:visibility="gone"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"

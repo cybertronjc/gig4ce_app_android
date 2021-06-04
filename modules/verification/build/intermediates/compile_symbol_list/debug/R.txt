@@ -177,6 +177,7 @@ int attr backgroundSplit 0x0
 int attr backgroundStacked 0x0
 int attr backgroundTint 0x0
 int attr backgroundTintMode 0x0
+int attr backgroundType 0x0
 int attr badgeGravity 0x0
 int attr badgeStyle 0x0
 int attr badgeTextColor 0x0
@@ -616,6 +617,9 @@ int attr inner_color 0x0
 int attr insetForeground 0x0
 int attr isLightTheme 0x0
 int attr isMaterialTheme 0x0
+int attr isMenuItemVisible 0x0
+int attr isProfileVisible 0x0
+int attr isSearchVisible 0x0
 int attr itemBackground 0x0
 int attr itemFillColor 0x0
 int attr itemHorizontalPadding 0x0
@@ -926,6 +930,7 @@ int attr scrubber_disabled_size 0x0
 int attr scrubber_dragged_size 0x0
 int attr scrubber_drawable 0x0
 int attr scrubber_enabled_size 0x0
+int attr searchHint 0x0
 int attr searchHintIcon 0x0
 int attr searchIcon 0x0
 int attr searchViewStyle 0x0
@@ -1137,6 +1142,7 @@ int attr titleMarginEnd 0x0
 int attr titleMarginStart 0x0
 int attr titleMarginTop 0x0
 int attr titleMargins 0x0
+int attr titleText 0x0
 int attr titleTextAppearance 0x0
 int attr titleTextColor 0x0
 int attr titleTextStyle 0x0
@@ -2284,6 +2290,7 @@ int drawable abc_textfield_search_activated_mtrl_alpha 0x0
 int drawable abc_textfield_search_default_mtrl_alpha 0x0
 int drawable abc_textfield_search_material 0x0
 int drawable abc_vector_test 0x0
+int drawable app_bar_background 0x0
 int drawable app_gradient_button 0x0
 int drawable app_gradient_button_disabled 0x0
 int drawable avd_hide_password 0x0
@@ -2296,6 +2303,7 @@ int drawable avd_show_password_2 0x0
 int drawable avd_show_password_3 0x0
 int drawable bg_capsule_53ba25 0x0
 int drawable bg_capsule_border_fa6400 0x0
+int drawable bg_search_item 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_26_979797_rad_2 0x0
 int drawable border_27979797_rad_4 0x0
@@ -2401,6 +2409,7 @@ int drawable googleg_standard_color_18 0x0
 int drawable gradient_button 0x0
 int drawable gradient_onboarding_progressbar_bg 0x0
 int drawable gradient_onboarding_progressbar_gradient 0x0
+int drawable grey_app_bar_bg 0x0
 int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_black 0x0
 int drawable ic_arrow_back_white 0x0
@@ -2409,7 +2418,9 @@ int drawable ic_arrow_forward_white 0x0
 int drawable ic_attachment_grey 0x0
 int drawable ic_attachment_pink 0x0
 int drawable ic_bank 0x0
+int drawable ic_baseline_close_24 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
+int drawable ic_baseline_search_24 0x0
 int drawable ic_cal_gradient 0x0
 int drawable ic_calendar 0x0
 int drawable ic_calendar_ 0x0
@@ -2537,6 +2548,7 @@ int drawable ucrop_vector_loader 0x0
 int drawable ucrop_vector_loader_animated 0x0
 int drawable ucrop_wrapper_controls_shape 0x0
 int drawable verification_done 0x0
+int drawable white_app_bar_background 0x0
 int font lato 0x0
 int font lato_bold 0x0
 int font lato_italic 0x0
@@ -2554,6 +2566,7 @@ int id DL_back 0x0
 int id DL_front 0x0
 int id FUNCTION 0x0
 int id GRAY 0x0
+int id GreyBar 0x0
 int id LIGHT_BLUE 0x0
 int id LIGHT_PINK 0x0
 int id LIPSTICK 0x0
@@ -2563,6 +2576,7 @@ int id NO_DEBUG 0x0
 int id OVER 0x0
 int id Pan_back 0x0
 int id Pan_front 0x0
+int id PinkBar 0x0
 int id Profile 0x0
 int id SHIFT 0x0
 int id SHOW_ALL 0x0
@@ -2575,6 +2589,7 @@ int id UNDER 0x0
 int id VeriDD_back 0x0
 int id VeriDD_front 0x0
 int id WHITE 0x0
+int id WhiteBar 0x0
 int id aadharAvailaibilityOptionRG 0x0
 int id aadharBackImageEditErrorMessage 0x0
 int id aadharBackImageHolder 0x0
@@ -2691,6 +2706,7 @@ int id animateToEnd 0x0
 int id animateToStart 0x0
 int id anonymous_button 0x0
 int id appBar 0x0
+int id appBarComp 0x0
 int id appProfileComponent 0x0
 int id areaET 0x0
 int id areaLabel 0x0
@@ -2705,6 +2721,7 @@ int id autoCompleteToEnd 0x0
 int id autoCompleteToStart 0x0
 int id autoFocus 0x0
 int id back 0x0
+int id backImageButton 0x0
 int id back_arrow 0x0
 int id bankAccDetailsLabel 0x0
 int id bankAccNoEditErrorMessage 0x0
@@ -3126,6 +3143,7 @@ int id material_timepicker_ok_button 0x0
 int id material_timepicker_view 0x0
 int id material_value_index 0x0
 int id media_actions 0x0
+int id menuImageButton 0x0
 int id menu_crop 0x0
 int id menu_loader 0x0
 int id message 0x0
@@ -3259,6 +3277,7 @@ int id power_menu_card 0x0
 int id power_menu_listView 0x0
 int id primary_action 0x0
 int id primary_button 0x0
+int id profilePicComp 0x0
 int id profile_image 0x0
 int id profile_name 0x0
 int id progressBar 0x0
@@ -3301,6 +3320,7 @@ int id scrollIndicatorUp 0x0
 int id scrollView 0x0
 int id scrollable 0x0
 int id seaprator1 0x0
+int id searchImageButton 0x0
 int id search_badge 0x0
 int id search_bar 0x0
 int id search_button 0x0
@@ -3309,6 +3329,7 @@ int id search_edit_frame 0x0
 int id search_et 0x0
 int id search_go_btn 0x0
 int id search_icon 0x0
+int id search_item 0x0
 int id search_layout 0x0
 int id search_mag_icon 0x0
 int id search_plate 0x0
@@ -3375,6 +3396,7 @@ int id status_bar_latest_event_content 0x0
 int id status_iv 0x0
 int id statusbarutil_fake_status_bar_view 0x0
 int id statusbarutil_translucent_view 0x0
+int id steps 0x0
 int id stereo 0x0
 int id stop 0x0
 int id stretch 0x0
@@ -3411,6 +3433,7 @@ int id text 0x0
 int id text2 0x0
 int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
+int id textTitle 0x0
 int id textView21 0x0
 int id textView3 0x0
 int id textView30 0x0
@@ -3612,6 +3635,7 @@ int layout abc_search_dropdown_item_icons_2line 0x0
 int layout abc_search_view 0x0
 int layout abc_select_dialog_material 0x0
 int layout abc_tooltip 0x0
+int layout app_bar_layout 0x0
 int layout banner 0x0
 int layout browser_actions_context_menu_page 0x0
 int layout browser_actions_context_menu_row 0x0
@@ -5345,6 +5369,13 @@ int styleable AnimatedStateListDrawableTransition_android_drawable 0
 int styleable AnimatedStateListDrawableTransition_android_fromId 1
 int styleable AnimatedStateListDrawableTransition_android_reversible 2
 int styleable AnimatedStateListDrawableTransition_android_toId 3
+int[] styleable AppBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable AppBar_backgroundType 0
+int styleable AppBar_isMenuItemVisible 1
+int styleable AppBar_isProfileVisible 2
+int styleable AppBar_isSearchVisible 3
+int styleable AppBar_searchHint 4
+int styleable AppBar_titleText 5
 int[] styleable AppBarLayout { 0x10100d4, 0x1010540, 0x101048f, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable AppBarLayout_android_background 0
 int styleable AppBarLayout_android_keyboardNavigationCluster 1

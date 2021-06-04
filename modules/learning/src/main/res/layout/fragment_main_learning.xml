@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:layout_height="wrap_content">
 
+
         <include
             android:id="@+id/toolbar_layout"
             layout="@layout/fragment_main_learning_toolbar" />

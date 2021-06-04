@@ -77,6 +77,19 @@
         <attr name="civ_is_qr" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="AppBar">
+        <attr name="titleText" format="string"/>
+        <attr name="searchHint" format="string"/>
+        <attr name="isSearchVisible" format="boolean"/>
+        <attr name="isMenuItemVisible" format="boolean"/>
+        <attr name="isProfileVisible" format="boolean"/>
+        <attr name="backgroundType" format="enum">
+            <enum name="PinkBar" value="101"/>
+            <enum name="WhiteBar" value="102"/>
+            <enum name="GreyBar" value="103"/>
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="EditTextWithSuffix">
         <attr name="suffix" format="string|reference" />
         <attr name="suffixPadding" format="dimension" />

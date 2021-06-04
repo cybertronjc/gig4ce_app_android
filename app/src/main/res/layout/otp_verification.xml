@@ -11,6 +11,7 @@
         android:layout_height="56dp"
         android:background="@drawable/toolbar_bg_client_activation"
         android:minHeight="@dimen/size_56"
+        android:visibility="visible"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"

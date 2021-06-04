@@ -162,7 +162,9 @@ class UploadDrivingCertificate : Fragment() {
         iv_back_application_client_activation.setOnClickListener {
             navigation.popBackStack()
         }
-
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            navigation.popBackStack()
+        })
 
 
 

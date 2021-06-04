@@ -35,8 +35,6 @@ import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.progressBar
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.toolbar
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -115,7 +113,6 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 navigation.popBackStack("verification/main",inclusive = false)
             })
         }
-
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()
         }

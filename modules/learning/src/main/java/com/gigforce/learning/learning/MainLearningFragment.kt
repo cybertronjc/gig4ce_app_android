@@ -35,6 +35,7 @@ import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_main_learning.*
 //import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
 import kotlinx.android.synthetic.main.fragment_main_learning_assessments.*
 import kotlinx.android.synthetic.main.fragment_main_learning_explore_learnings_layout.*
@@ -69,6 +70,8 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 //            activity?.onBackPressed()
             parentFragmentManager.popBackStack()
         }
+
+//
 
         journey_completed_cardview.setOnClickListener {
 //            navigate(R.id.myLearningFragment)

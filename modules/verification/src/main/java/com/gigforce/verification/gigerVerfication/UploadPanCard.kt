@@ -36,8 +36,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.panViewLayout
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -101,6 +99,9 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()
         }
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            onBackPressed()
+        })
 
 
         helpIconViewIV.setOnClickListener {

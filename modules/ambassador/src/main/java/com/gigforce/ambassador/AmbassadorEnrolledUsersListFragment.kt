@@ -24,11 +24,13 @@ import com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.cells.SearchTextChangeListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.decors.VerticalItemDecorator
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
@@ -184,6 +186,24 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 //                    //activity?.onBackPressed()
 //                    navigation.popBackStack()
 //                }
+                activity?.onBackPressed()
+            })
+        }
+
+        appBar.apply {
+            setOnSearchClickListener(object : AppBarClicks.OnSearchClickListener{
+                override fun onSearchClick(v: View) {
+                    enrolledUserAdapter.filter.filter("")
+                }
+
+            })
+            setOnSearchTextChangeListener(object : SearchTextChangeListener{
+                override fun onSearchTextChanged(text: String) {
+                    enrolledUserAdapter.filter.filter(text)
+                }
+
+            })
+            setBackButtonListener(View.OnClickListener {
                 activity?.onBackPressed()
             })
         }
@@ -349,9 +369,9 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     }
 
     override fun onBackPressed(): Boolean {
-        if (toolbar_layout.isSearchCurrentlyShown) {
+        if (appBar.isSearchCurrentlyShown) {
             hideSoftKeyboard()
-            toolbar_layout.hideSearchOption()
+            appBar.hideSearchOption()
             enrolledUserAdapter.filter.filter("")
             return true
         } else {

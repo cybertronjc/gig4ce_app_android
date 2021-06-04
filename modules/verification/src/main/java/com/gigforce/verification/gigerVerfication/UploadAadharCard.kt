@@ -35,13 +35,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.topSeaparator
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.upload_aadhar_card_fragment.*
 import javax.inject.Inject
 
@@ -117,6 +115,10 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
         iv_back_upload_aadhar_card_client_activation.setOnClickListener {
             onBackPressed()
         }
+
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            onBackPressed()
+        })
 
 
         helpIconViewIV.setOnClickListener {

@@ -10,6 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:minHeight="@dimen/size_56"
+        android:visibility="visible"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         android:background="@drawable/toolbar_background"

@@ -186,6 +186,7 @@ attr backgroundSplit
 attr backgroundStacked
 attr backgroundTint
 attr backgroundTintMode
+attr backgroundType
 attr badgeGravity
 attr badgeStyle
 attr badgeTextColor
@@ -594,6 +595,9 @@ attr initialActivityCount
 attr insetForeground
 attr isLightTheme
 attr isMaterialTheme
+attr isMenuItemVisible
+attr isProfileVisible
+attr isSearchVisible
 attr itemBackground
 attr itemFillColor
 attr itemHorizontalPadding
@@ -929,6 +933,7 @@ attr scrubber_disabled_size
 attr scrubber_dragged_size
 attr scrubber_drawable
 attr scrubber_enabled_size
+attr searchHint
 attr searchHintIcon
 attr searchIcon
 attr searchViewStyle
@@ -1128,6 +1133,7 @@ attr titleMarginEnd
 attr titleMarginStart
 attr titleMarginTop
 attr titleMargins
+attr titleText
 attr titleTextAppearance
 attr titleTextColor
 attr titleTextStyle
@@ -2268,6 +2274,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable app_bar_background
 drawable app_gradient_button
 drawable app_gradient_button_disabled
 drawable avatar
@@ -2275,6 +2282,7 @@ drawable avd_hide_password
 drawable avd_show_password
 drawable back_button
 drawable bg_monthly_goal
+drawable bg_search_item
 drawable bg_wallet_card
 drawable bg_white_top_rad_8
 drawable border_grey_square
@@ -2373,6 +2381,7 @@ drawable fui_idp_button_background_twitter
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable grey_app_bar_bg
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
 drawable ic_arrow_back_white
@@ -2380,8 +2389,10 @@ drawable ic_arrow_forward
 drawable ic_backward
 drawable ic_balance_expanded
 drawable ic_baseline_autorenew_24
+drawable ic_baseline_close_24
 drawable ic_baseline_forward_24
 drawable ic_baseline_play_circle_outline_24_
+drawable ic_baseline_search_24
 drawable ic_baseline_up_24
 drawable ic_calendar
 drawable ic_chat
@@ -2499,6 +2510,7 @@ drawable ucrop_vector_loader
 drawable ucrop_vector_loader_animated
 drawable ucrop_wrapper_controls_shape
 drawable wallet
+drawable white_app_bar_background
 font lato
 font lato_bold
 font lato_italic
@@ -2512,6 +2524,7 @@ id Chat
 id DEFAULT
 id FUNCTION
 id GRAY
+id GreyBar
 id LIGHT_BLUE
 id LIGHT_PINK
 id LIPSTICK
@@ -2519,6 +2532,7 @@ id META
 id NEVER
 id NO_DEBUG
 id OVER
+id PinkBar
 id Profile
 id SHIFT
 id SHOW_ALL
@@ -2529,6 +2543,7 @@ id TOP_END
 id TOP_START
 id UNDER
 id WHITE
+id WhiteBar
 id about_me_verification_layout
 id accelerate
 id accessibility_action_clickable_span
@@ -2608,6 +2623,7 @@ id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
 id avg_earning
+id backImageButton
 id back_arrow
 id back_button
 id balance_card
@@ -2920,6 +2936,7 @@ id me_status_icon
 id me_status_text
 id me_text
 id media_actions
+id menuImageButton
 id menu_crop
 id menu_loader
 id message
@@ -3045,6 +3062,7 @@ id power_menu_listView
 id prev_month_btn
 id primary_action
 id primary_button
+id profilePicComp
 id profile_image
 id profile_name
 id progress_bar
@@ -3084,6 +3102,7 @@ id scrollIndicatorUp
 id scrollView
 id scrollable
 id seaprator1
+id searchImageButton
 id search_badge
 id search_bar
 id search_button
@@ -3092,6 +3111,7 @@ id search_edit_frame
 id search_et
 id search_go_btn
 id search_icon
+id search_item
 id search_layout
 id search_mag_icon
 id search_plate
@@ -3146,6 +3166,7 @@ id staticPostLayout
 id status_bar_latest_event_content
 id status_iv
 id status_text
+id steps
 id stop
 id stretch
 id subTitleTV
@@ -3182,6 +3203,7 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
+id textTitle
 id textView21
 id textView3
 id textView38
@@ -3363,6 +3385,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout all_invoice_status_page
+layout app_bar_layout
 layout balance_expanded_page
 layout balance_main_card
 layout banner
@@ -4790,6 +4813,7 @@ styleable AnimatedRoundCornerProgressBar rcAnimationEnable rcAnimationSpeedScale
 styleable AnimatedStateListDrawableCompat android_constantSize android_dither android_enterFadeDuration android_exitFadeDuration android_variablePadding android_visible
 styleable AnimatedStateListDrawableItem android_drawable android_id
 styleable AnimatedStateListDrawableTransition android_drawable android_fromId android_reversible android_toId
+styleable AppBar backgroundType isMenuItemVisible isProfileVisible isSearchVisible searchHint titleText
 styleable AppBarLayout android_background android_keyboardNavigationCluster android_touchscreenBlocksFocus elevation expanded liftOnScroll liftOnScrollTargetViewId statusBarForeground
 styleable AppBarLayoutStates state_collapsed state_collapsible state_liftable state_lifted
 styleable AppBarLayout_Layout layout_scrollFlags layout_scrollInterpolator

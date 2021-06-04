@@ -177,6 +177,7 @@ attr backgroundSplit
 attr backgroundStacked
 attr backgroundTint
 attr backgroundTintMode
+attr backgroundType
 attr badgeGravity
 attr badgeStyle
 attr badgeTextColor
@@ -566,6 +567,9 @@ attr inner_color
 attr insetForeground
 attr isLightTheme
 attr isMaterialTheme
+attr isMenuItemVisible
+attr isProfileVisible
+attr isSearchVisible
 attr itemBackground
 attr itemFillColor
 attr itemHorizontalPadding
@@ -879,6 +883,7 @@ attr scrubber_disabled_size
 attr scrubber_dragged_size
 attr scrubber_drawable
 attr scrubber_enabled_size
+attr searchHint
 attr searchHintIcon
 attr searchIcon
 attr searchViewStyle
@@ -1090,6 +1095,7 @@ attr titleMarginEnd
 attr titleMarginStart
 attr titleMarginTop
 attr titleMargins
+attr titleText
 attr titleTextAppearance
 attr titleTextColor
 attr titleTextStyle
@@ -2257,6 +2263,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable app_bar_background
 drawable app_gradient_button
 drawable app_gradient_button_disabled
 drawable avatar
@@ -2277,6 +2284,7 @@ drawable bg_circle_dashed
 drawable bg_delete_dialog_yes
 drawable bg_gig_type
 drawable bg_rad_4_e94b81
+drawable bg_search_item
 drawable bg_selected_event_rv_gig_hist
 drawable bg_unselected_event_rv_gig_hist
 drawable bg_wallet
@@ -2380,6 +2388,7 @@ drawable giglogo
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable grey_app_bar_bg
 drawable ic_add_pink
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
@@ -2401,6 +2410,7 @@ drawable ic_baseline_keyboard_arrow_down_24
 drawable ic_baseline_keyboard_arrow_right_24
 drawable ic_baseline_keyboard_arrow_up_c7c7c7
 drawable ic_baseline_play_circle_outline_24_
+drawable ic_baseline_search_24
 drawable ic_baseline_share_24
 drawable ic_calendar
 drawable ic_calendar_
@@ -2560,6 +2570,7 @@ drawable ucrop_vector_loader
 drawable ucrop_vector_loader_animated
 drawable ucrop_wrapper_controls_shape
 drawable warning_icon_
+drawable white_app_bar_background
 font lato
 font lato_bold
 font lato_italic
@@ -2573,6 +2584,7 @@ id Chat
 id DEFAULT
 id FUNCTION
 id GRAY
+id GreyBar
 id I_did_not_work_label
 id I_need_checkin_label
 id LIGHT_BLUE
@@ -2582,6 +2594,7 @@ id META
 id NEVER
 id NO_DEBUG
 id OVER
+id PinkBar
 id Profile
 id SHIFT
 id SHOW_ALL
@@ -2592,6 +2605,7 @@ id TOP_END
 id TOP_START
 id UNDER
 id WHITE
+id WhiteBar
 id accelerate
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
@@ -2692,6 +2706,7 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id backImageButton
 id back_arrow
 id back_button
 id back_button_photo_crop
@@ -3157,6 +3172,7 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id media_actions
+id menuImageButton
 id menu_crop
 id menu_loader
 id message
@@ -3284,6 +3300,7 @@ id presentOrFutureGigControls
 id primary_action
 id primary_button
 id processingLabel
+id profilePicComp
 id profile_avatar_photo_crop
 id profile_image
 id profile_name
@@ -3369,6 +3386,7 @@ id scrollView
 id scrollable
 id seaprator1
 id seaprator2
+id searchImageButton
 id search_badge
 id search_bar
 id search_button
@@ -3377,6 +3395,7 @@ id search_edit_frame
 id search_et
 id search_go_btn
 id search_icon
+id search_item
 id search_layout
 id search_mag_icon
 id search_plate
@@ -3455,6 +3474,7 @@ id status_card_view
 id status_iv
 id statusbarutil_fake_status_bar_view
 id statusbarutil_translucent_view
+id steps
 id stop
 id stretch
 id subTitleTV
@@ -3491,6 +3511,7 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
+id textTitle
 id textView124
 id textView125
 id textView126
@@ -3735,6 +3756,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_camera
 layout activity_photo_crop
+layout app_bar_layout
 layout banner
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
@@ -5203,6 +5225,7 @@ styleable AlertDialog android_layout buttonIconDimen buttonPanelSideLayout listI
 styleable AnimatedStateListDrawableCompat android_constantSize android_dither android_enterFadeDuration android_exitFadeDuration android_variablePadding android_visible
 styleable AnimatedStateListDrawableItem android_drawable android_id
 styleable AnimatedStateListDrawableTransition android_drawable android_fromId android_reversible android_toId
+styleable AppBar backgroundType isMenuItemVisible isProfileVisible isSearchVisible searchHint titleText
 styleable AppBarLayout android_background android_keyboardNavigationCluster android_touchscreenBlocksFocus elevation expanded liftOnScroll liftOnScrollTargetViewId statusBarForeground
 styleable AppBarLayoutStates state_collapsed state_collapsible state_liftable state_lifted
 styleable AppBarLayout_Layout layout_scrollFlags layout_scrollInterpolator

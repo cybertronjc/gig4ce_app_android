@@ -19,10 +19,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.gigforce.common_ui.cells.AppBar
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isSearchVisible="true"
+                app:backgroundType="PinkBar"
+                app:titleText="Gigforce Ambassador"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <com.gigforce.common_ui.views.GigforceToolbar
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <com.google.android.material.chip.ChipGroup

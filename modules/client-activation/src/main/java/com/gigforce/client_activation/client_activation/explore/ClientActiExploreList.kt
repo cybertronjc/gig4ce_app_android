@@ -17,16 +17,21 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.cells.SearchTextChangeListener
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.common_ui.ext.hideSoftKeyboard
+import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.*
+import kotlinx.android.synthetic.main.client_acti_explore_list_fragment.search_item
 import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ClientActiExploreList : Fragment(), OnJobSelectedListener {
+class ClientActiExploreList : Fragment(), IOnBackPressedOverride, OnJobSelectedListener {
 
     companion object {
         fun newInstance() = ClientActiExploreList()
@@ -128,26 +133,34 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
             navigation.popBackStack()
         }
 
-        iv_search_explore.setOnClickListener {
-            if (search_item.isVisible){
-                search_item.gone()
-                explore_text.visible()
-                iv_search_explore.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_search_24))
-                search_item.setText("")
-                hideKeyboard()
-                clientActiExploreAdapter.filter.filter("")
-            }
-            else{
-                search_item.visible()
-                explore_text.gone()
-                showKeyboard()
-                iv_search_explore.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_close_24))
-            }
-        }
+
+//        tb_explore_fragment1.setOnSearchClickListener(object : AppBarClicks.OnSearchClickListener{
+//            override fun onSearchClick(v: View) {
+//                Log.d("Click", "searchFrag")
+//                clientActiExploreAdapter.filter.filter("")
+//            }
+//
+//        })
 
         search_item.doOnTextChanged { text, start, before, count ->
             clientActiExploreAdapter.filter.filter(text)
         }
+
+        appBar.setOnSearchClickListener(object : AppBarClicks.OnSearchClickListener{
+            override fun onSearchClick(v: View) {
+                clientActiExploreAdapter.filter.filter("")
+            }
+
+        })
+        appBar.setOnSearchTextChangeListener(object : SearchTextChangeListener {
+            override fun onSearchTextChanged(text: String) {
+                clientActiExploreAdapter.filter.filter(text)
+            }
+
+        })
+        appBar.setBackButtonListener(View.OnClickListener {
+            activity?.onBackPressed()
+        })
 
 //        new_tv.setOnClickListener {
 //            if (new_selected){
@@ -318,5 +331,20 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
         }
 
     }
+
+    override fun onBackPressed(): Boolean {
+        if (appBar.isSearchCurrentlyShown) {
+            hideSoftKeyboard()
+            appBar.hideSearchOption()
+            clientActiExploreAdapter.filter.filter("")
+            return true
+        } else {
+
+            return false
+
+        }
+
+    }
+
 
 }

@@ -147,6 +147,10 @@ class UploadDrivingLicense : Fragment(),
             onBackPressed()
         }
 
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            onBackPressed()
+        })
+
         dlFrontImageHolder.documentUploadLabelTV.text =
             getString(R.string.upload_driving_license_front_side)
         dlFrontImageHolder.documentUploadSubLabelTV.text =

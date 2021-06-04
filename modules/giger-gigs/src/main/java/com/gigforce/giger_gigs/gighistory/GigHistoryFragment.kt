@@ -108,6 +108,15 @@ class GigHistoryFragment : Fragment(), AdapterGigHistory.AdapterGigHistoryCallba
 //            navigate(R.id.profileFragment)
             navigation.navigateTo("profile")
         }
+//        appBar.setBackButtonListener(View.OnClickListener {
+//            navigation.popBackStack()
+//        })
+
+//        appBar.apply {
+//            setBackButtonListener(View.OnClickListener {
+//                navigation.popBackStack()
+//            })
+//        }
 
 
     }
