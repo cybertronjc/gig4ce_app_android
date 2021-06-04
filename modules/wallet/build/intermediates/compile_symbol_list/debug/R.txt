@@ -259,8 +259,10 @@ int attr checkedIconTint 0x0
 int attr checkedIconVisible 0x0
 int attr checkedTextViewStyle 0x0
 int attr chipBackgroundColor 0x0
+int attr chipComponent 0x0
 int attr chipCornerRadius 0x0
 int attr chipEndPadding 0x0
+int attr chipGroupComp 0x0
 int attr chipGroupStyle 0x0
 int attr chipIcon 0x0
 int attr chipIconEnabled 0x0
@@ -269,6 +271,7 @@ int attr chipIconTint 0x0
 int attr chipIconVisible 0x0
 int attr chipMinHeight 0x0
 int attr chipMinTouchTargetSize 0x0
+int attr chipSelected 0x0
 int attr chipSpacing 0x0
 int attr chipSpacingHorizontal 0x0
 int attr chipSpacingVertical 0x0
@@ -278,6 +281,12 @@ int attr chipStrokeColor 0x0
 int attr chipStrokeWidth 0x0
 int attr chipStyle 0x0
 int attr chipSurfaceColor 0x0
+int attr chip_backgroundColor 0x0
+int attr chip_selectable 0x0
+int attr chip_strokeColor 0x0
+int attr chip_strokeSize 0x0
+int attr chip_text 0x0
+int attr chip_textColor 0x0
 int attr circleCrop 0x0
 int attr circleProgressStyle 0x0
 int attr circleRadius 0x0
@@ -1276,6 +1285,7 @@ int color blackDark 0x0
 int color blackLight 0x0
 int color black_42 0x0
 int color black_666 0x0
+int color black_85 0x0
 int color black_two 0x0
 int color blue 0x0
 int color blueDark 0x0
@@ -1301,6 +1311,12 @@ int color cardview_shadow_end_color 0x0
 int color cardview_shadow_start_color 0x0
 int color checkbox_themeable_attribute_color 0x0
 int color colorAccent 0x0
+int color colorChipBackground 0x0
+int color colorChipBackgroundClicked 0x0
+int color colorChipCloseClicked 0x0
+int color colorChipCloseInactive 0x0
+int color colorChipText 0x0
+int color colorChipTextClicked 0x0
 int color colorError 0x0
 int color colorLightAccent 0x0
 int color colorOnPrimary 0x0
@@ -1546,6 +1562,8 @@ int color ucrop_color_widget_rotate_angle 0x0
 int color ucrop_color_widget_rotate_mid_line 0x0
 int color ucrop_color_widget_text 0x0
 int color ucrop_scale_text_view_selector 0x0
+int color upcoming_gig_time 0x0
+int color upcoming_gig_title 0x0
 int color warm_grey 0x0
 int color white 0x0
 int color yellow 0x0
@@ -1647,6 +1665,14 @@ int dimen calendar_gig 0x0
 int dimen cardview_compat_inset_shadow 0x0
 int dimen cardview_default_elevation 0x0
 int dimen cardview_default_radius 0x0
+int dimen chip_close_horizontal_margin 0x0
+int dimen chip_close_icon_padding 0x0
+int dimen chip_close_icon_size 0x0
+int dimen chip_close_icon_size2 0x0
+int dimen chip_height 0x0
+int dimen chip_horizontal_padding 0x0
+int dimen chip_icon_horizontal_margin 0x0
+int dimen chip_vertical_padding 0x0
 int dimen clock_face_margin_start 0x0
 int dimen compat_button_inset_horizontal_material 0x0
 int dimen compat_button_inset_vertical_material 0x0
@@ -2401,6 +2427,7 @@ int drawable ic_clock_orange 0x0
 int drawable ic_cross_grey 0x0
 int drawable ic_cross_red 0x0
 int drawable ic_earning 0x0
+int drawable ic_emoji 0x0
 int drawable ic_error_loading_image 0x0
 int drawable ic_error_loading_image_red 0x0
 int drawable ic_filled_circle 0x0
@@ -2432,6 +2459,7 @@ int drawable ic_notification_icon 0x0
 int drawable ic_ok 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_payment_dispute 0x0
+int drawable ic_phone_white_24dp 0x0
 int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_small_square 0x0
@@ -2874,6 +2902,8 @@ int id item_power_menu_icon 0x0
 int id item_power_menu_layout 0x0
 int id item_power_menu_title 0x0
 int id item_touch_helper_previous_elevation 0x0
+int id iv_call 0x0
+int id iv_message 0x0
 int id iv_progress_icon 0x0
 int id jumpToEnd 0x0
 int id jumpToStart 0x0
@@ -3578,6 +3608,7 @@ int layout ucrop_fragment_photobox 0x0
 int layout ucrop_layout_rotate_wheel 0x0
 int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
+int layout upcoming_gig_card_component 0x0
 int layout verified_button 0x0
 int layout wallet_balance_card_component 0x0
 int layout wallet_balance_page 0x0
@@ -3636,6 +3667,8 @@ int string card_content_descriptor 0x0
 int string character_counter_content_description 0x0
 int string character_counter_overflowed_content_description 0x0
 int string character_counter_pattern 0x0
+int string check_in 0x0
+int string check_out 0x0
 int string chip_text 0x0
 int string clear_text_end_icon_content_description 0x0
 int string common_google_play_services_enable_button 0x0
@@ -5214,6 +5247,17 @@ int styleable Chip_shapeAppearanceOverlay 38
 int styleable Chip_showMotionSpec 39
 int styleable Chip_textEndPadding 40
 int styleable Chip_textStartPadding 41
+int[] styleable ChipComponent { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable ChipComponent_chipComponent 0
+int styleable ChipComponent_chipCornerRadius 1
+int styleable ChipComponent_chipSelected 2
+int styleable ChipComponent_chipStrokeWidth 3
+int styleable ChipComponent_chip_backgroundColor 4
+int styleable ChipComponent_chip_selectable 5
+int styleable ChipComponent_chip_strokeColor 6
+int styleable ChipComponent_chip_strokeSize 7
+int styleable ChipComponent_chip_text 8
+int styleable ChipComponent_chip_textColor 9
 int[] styleable ChipGroup { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable ChipGroup_checkedChip 0
 int styleable ChipGroup_chipSpacing 1
@@ -5222,6 +5266,8 @@ int styleable ChipGroup_chipSpacingVertical 3
 int styleable ChipGroup_selectionRequired 4
 int styleable ChipGroup_singleLine 5
 int styleable ChipGroup_singleSelection 6
+int[] styleable ChipGroupComponent { 0x0 }
+int styleable ChipGroupComponent_chipGroupComp 0
 int[] styleable CircleImageView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable CircleImageView_civ_border_color 0
 int styleable CircleImageView_civ_border_overlay 1

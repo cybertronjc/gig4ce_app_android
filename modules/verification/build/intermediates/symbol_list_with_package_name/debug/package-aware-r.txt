@@ -311,8 +311,10 @@ attr checkedIconTint
 attr checkedIconVisible
 attr checkedTextViewStyle
 attr chipBackgroundColor
+attr chipComponent
 attr chipCornerRadius
 attr chipEndPadding
+attr chipGroupComp
 attr chipGroupStyle
 attr chipIcon
 attr chipIconEnabled
@@ -321,6 +323,7 @@ attr chipIconTint
 attr chipIconVisible
 attr chipMinHeight
 attr chipMinTouchTargetSize
+attr chipSelected
 attr chipSpacing
 attr chipSpacingHorizontal
 attr chipSpacingVertical
@@ -330,6 +333,12 @@ attr chipStrokeColor
 attr chipStrokeWidth
 attr chipStyle
 attr chipSurfaceColor
+attr chip_backgroundColor
+attr chip_selectable
+attr chip_strokeColor
+attr chip_strokeSize
+attr chip_text
+attr chip_textColor
 attr circleCrop
 attr circleRadius
 attr circularProgressIndicatorStyle
@@ -1314,6 +1323,12 @@ color cardview_shadow_end_color
 color cardview_shadow_start_color
 color checkbox_themeable_attribute_color
 color colorAccent
+color colorChipBackground
+color colorChipBackgroundClicked
+color colorChipCloseClicked
+color colorChipCloseInactive
+color colorChipText
+color colorChipTextClicked
 color colorError
 color colorLightAccent
 color colorOnPrimary
@@ -1559,6 +1574,8 @@ color ucrop_color_widget_rotate_angle
 color ucrop_color_widget_rotate_mid_line
 color ucrop_color_widget_text
 color ucrop_scale_text_view_selector
+color upcoming_gig_time
+color upcoming_gig_title
 color warm_grey
 color warm_grey_two
 color white
@@ -1662,6 +1679,14 @@ dimen calendar_gig
 dimen cardview_compat_inset_shadow
 dimen cardview_default_elevation
 dimen cardview_default_radius
+dimen chip_close_horizontal_margin
+dimen chip_close_icon_padding
+dimen chip_close_icon_size
+dimen chip_close_icon_size2
+dimen chip_height
+dimen chip_horizontal_padding
+dimen chip_icon_horizontal_margin
+dimen chip_vertical_padding
 dimen clock_face_margin_start
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
@@ -2437,6 +2462,7 @@ drawable ic_dl
 drawable ic_down
 drawable ic_download_24
 drawable ic_edit
+drawable ic_emoji
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
 drawable ic_gig_decline
@@ -2459,6 +2485,7 @@ drawable ic_next_screen_
 drawable ic_notification_icon
 drawable ic_oval_top_landingscreen
 drawable ic_pause_square_border
+drawable ic_phone_white_24dp
 drawable ic_play_sq
 drawable ic_ques_round
 drawable ic_question
@@ -2824,6 +2851,7 @@ id city_image_iv
 id city_name_tv
 id city_root_layout
 id clear_text
+id clickedImage
 id clickedImageIV
 id clip_horizontal
 id clip_vertical
@@ -3083,7 +3111,9 @@ id ivVeriDD1
 id iv_back_add_selfie
 id iv_back_application_client_activation
 id iv_back_upload_aadhar_card_client_activation
+id iv_call
 id iv_download_giger_verification
+id iv_message
 id jpeg
 id jumpToEnd
 id jumpToStart
@@ -3851,9 +3881,11 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upcoming_gig_card_component
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout verification_image_card_component
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password
@@ -3972,6 +4004,8 @@ string change_slot
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
+string check_in
+string check_out
 string checkout
 string chip_text
 string choose_address
@@ -5326,7 +5360,9 @@ styleable CameraView cameraAudio cameraAudioBitRate cameraAutoFocusMarker camera
 styleable CameraView_Layout layout_drawOnPictureSnapshot layout_drawOnPreview layout_drawOnVideoSnapshot
 styleable CardView android_minHeight android_minWidth cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable Chip android_checkable android_ellipsize android_maxWidth android_text android_textAppearance android_textColor android_textSize checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
+styleable ChipComponent chipComponent chipCornerRadius chipSelected chipStrokeWidth chip_backgroundColor chip_selectable chip_strokeColor chip_strokeSize chip_text chip_textColor
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection
+styleable ChipGroupComponent chipGroupComp
 styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color civ_dashed_border civ_is_qr
 styleable CircularProgressIndicator indicatorDirectionCircular indicatorInset indicatorSize
 styleable ClockFaceView clockFaceBackgroundColor clockNumberTextColor

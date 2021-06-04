@@ -39,8 +39,8 @@ import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.topSeaparator
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
-import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.upload_aadhar_card_fragment.*
+import kotlinx.android.synthetic.main.verification_image_card_component.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -100,25 +100,27 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
 
 
     private fun initClicks() {
-        aadharFrontImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_aadhar_card_front_side)
-        aadharFrontImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_aadhar_card)
+        aadharFrontImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_front_side))
+        aadharFrontImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
 
-        aadharBackImageHolder.documentUploadLabelTV.text =
-            getString(R.string.upload_aadhar_card_back_side)
-        aadharBackImageHolder.documentUploadSubLabelTV.text =
-            getString(R.string.upload_your_aadhar_card)
+//        aadharFrontImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_aadhar_card_front_side)
+//        aadharFrontImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_aadhar_card)
+
+        aadharBackImageHolder.setDocumentUploadLabel(getString(R.string.upload_aadhar_card_front_side))
+        aadharBackImageHolder.setDocumentUploadSubLabel(getString(R.string.upload_your_aadhar_card))
+
+//        aadharBackImageHolder.documentUploadLabelTV.text =
+//            getString(R.string.upload_aadhar_card_back_side)
+//        aadharBackImageHolder.documentUploadSubLabelTV.text =
+//            getString(R.string.upload_your_aadhar_card)
 
         aadharSubmitSliderBtn.isEnabled = false
 
         iv_back_upload_aadhar_card_client_activation.setOnClickListener {
             onBackPressed()
         }
-
-        appBarComp.setBackButtonListener(View.OnClickListener {
-            onBackPressed()
-        })
 
 
         helpIconViewIV.setOnClickListener {
@@ -610,27 +612,35 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
 
 
     private fun showFrontAadharCard(aadharFrontImagePath: Uri) {
-        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
-        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
-        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.aadhar_card_front_image)
 
-        Glide.with(requireContext())
-            .load(aadharFrontImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
+//        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.aadhar_card_front_image)
+//
+//        Glide.with(requireContext())
+//            .load(aadharFrontImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(aadharFrontImageHolder.uploadImageLayout.clickedImageIV)
+        aadharFrontImageHolder.makeEditLayoutVisible()
+        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image))
+        aadharFrontImageHolder.setImage(aadharFrontImagePath)
     }
 
     private fun showBackAadharCard(aadharBackImagePath: Uri) {
-        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
-        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
-        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
-            getString(R.string.aadhar_card_back_image)
+//        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
+//            getString(R.string.aadhar_card_back_image)
+//
+//        Glide.with(requireContext())
+//            .load(aadharBackImagePath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
+        aadharBackImageHolder.makeUploadLayoutVisible()
+        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
 
-        Glide.with(requireContext())
-            .load(aadharBackImagePath)
-            .placeholder(getCircularProgressDrawable())
-            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
+        aadharBackImageHolder .setImage(aadharBackImagePath)
     }
 
 }

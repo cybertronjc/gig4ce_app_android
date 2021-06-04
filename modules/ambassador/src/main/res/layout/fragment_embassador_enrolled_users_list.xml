@@ -48,22 +48,25 @@
                 app:chipSpacingHorizontal="14dp"
                 app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_profile"
-                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/profile"
-                    app:chipStrokeWidth="1dp" />
+                    app:chip_backgroundColor="LIGHT_BLUE"
+                    app:chip_text="Profile"
+                    app:chipCornerRadius="@dimen/size_2"
+                    app:chip_strokeSize="@dimen/size_1" />
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_my_details"
-                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Details"
-                    app:chipStrokeWidth="1dp" />
+                    app:chip_backgroundColor="LIGHT_BLUE"
+                    app:chip_text="My Details"
+                    app:chipStrokeWidth="@dimen/size_1"
+                    app:chip_strokeColor="LIPSTICK"
+                    app:chip_textColor="LIPSTICK"
+                    app:chipCornerRadius="1dp"/>
 
 
             </com.google.android.material.chip.ChipGroup>
