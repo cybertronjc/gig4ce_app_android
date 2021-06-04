@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.core.IViewHolder
@@ -17,6 +18,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_standard_action_card.view.*
@@ -74,11 +76,6 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             val styledAttributeSet = context.obtainStyledAttributes(it, R.styleable.StandardActionCardComponent, 0, 0)
             this.bgColorOption = ColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_bgcolor, 0))
             this.textColorOption = TextColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_textcolor, 0))
-//            var titleColor = styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_titleTextColor, 0)
-//            if(titleColor!=0){
-//                tv_title.setTextColor(titleColor)
-//            }
-//            subtitle.setTextColor(styledAttributeSet.getColor(R.styleable.StandardActionCardComponent_subtitleTextColor, 0))
             backgroundColor = this.bgColorOption
             textColor = this.textColorOption
 
@@ -137,27 +134,30 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                 .into(image)
     }
 
-    fun setImageFromUrl(storageReference: StorageReference) {
+    fun setImageFromFirebaseUrl(storageReference: StorageReference) {
         GlideApp.with(context)
                 .load(storageReference)
                 .into(image)
     }
 
     fun setImage(data: StandardActionCardDVM) {
-        data.imageUrl?.let {
-            setImageFromUrl(it)
-            return
-        }
 
-//        data.imageRes ?. let {
-//            feature_icon.setImageResource(data.imageRes)
-//        }
-//
-//        data.image_type ?. let{
-//            val firebaseStoragePath = "gs://gigforce-dev.appspot.com/pub/app_icons/ic_${data.image_type}.png"
-//            val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(firebaseStoragePath)
-//            setImageFromUrl(gsReference)
-//        }
+        if (data.image is Int && data.image !=-1) {
+            image.setImageResource(data.image)
+        }
+        else {
+            data.imageUrl?.let {
+                if(it.isNotBlank() && it.isNotEmpty()) {
+                    if (it.contains("http") || it.contains("https")) {
+                        setImageFromUrl(it)
+                    } else {
+                        val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
+                        setImageFromFirebaseUrl(gsReference)
+                    }
+                }
+                return
+            }
+        }
     }
 
     var applyMargin: Boolean
@@ -189,54 +189,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         return (value * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-    override fun bind(data: Any?) {
-        primary_action.gone()
-        secondary_action.gone()
-        applyMargin = false
-        if (data is StandardActionCardDVM) {
-            /*if (data.image is String && (data.image as String).contains("http")) {
-                Glide.with(context)
-                        .load(data.image as String)
-                        .into(image)
-            } else */if (data.image is Int) {
-                image.setImageResource(data.image)
-            } else {
-            }
-            tv_title.text = data.title
-            tv_desc.text = data.desc
 
-            setImage(data)
-            data.action1?.let {
-                primary_action.visible()
-                primary_action.text = it.title ?: ""
-                primary_action.setOnClickListener{it2->
-                    it.type?.let {it1->
-                        when(it1){
-                            "youtube_video"->playvideo(it.link)
-                            "navigation" -> navigation.navigateTo(it.navPath?:"")
-                        }
-                    }
-                }
-            } ?: primary_action.gone()
-
-            data.action2?.let {
-                secondary_action.visible()
-                secondary_action.text = it.title ?: ""
-            } ?: secondary_action.gone()
-
-            backgroundColor = ColorOptions.getByValue(data.bgcolor.toInt())
-            textColor = TextColorOptions.getByValue(data.textColor)
-            applyMargin = data.marginRequired
-//            if (data.action.isNotBlank()) {
-//                primary_action.text = data.action
-//            } else primary_action.gone()
-//
-//            if (data.secondAction.isNotBlank()) {
-//                secondary_action.visible()
-//                secondary_action.text = data.secondAction
-//            } else secondary_action.gone()
-        }
-    }
 
     private fun playvideo(link: String?) {
         val appIntent =
@@ -252,4 +205,37 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
+    override fun bind(data: Any?) {
+        primary_action.gone()
+        secondary_action.gone()
+        applyMargin = false
+        if (data is StandardActionCardDVM) {
+            tv_title.text = data.title
+            tv_desc.text = data.desc
+            setImage(data)
+
+            data.action1?.let {
+                primary_action.visible()
+                primary_action.text = it.title ?: ""
+                primary_action.setOnClickListener{it2->
+                    it.type?.let {it1->
+                        when(it1){
+                            "youtube_video"->playvideo(it.link)
+                            "navigation" -> navigation.navigateTo(it.navPath?:"")
+                        }
+                    }
+                }
+            } ?: primary_action.gone()
+
+            data.action2?.let {
+                secondary_action.isVisible = it.title?.isNotEmpty()?:false && it.title?.isNotBlank()?:false
+                secondary_action.text = it.title ?: ""
+            } ?: secondary_action.gone()
+
+            backgroundColor = ColorOptions.getByValue(data.bgcolor.toInt())
+            textColor = TextColorOptions.getByValue(data.textColor)
+            applyMargin = data.marginRequired
+
+        }
+    }
 }

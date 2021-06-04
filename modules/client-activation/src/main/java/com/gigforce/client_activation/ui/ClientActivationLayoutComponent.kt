@@ -20,7 +20,6 @@ class ClientActivationLayoutComponent (context: Context, attrs: AttributeSet?) :
     init {
         this.setSectionTitle("Explore Gigs")
         this.setSectionIcon()
-
         repository.getData().observeForever {
             if(it.size == 0){
                 this.findViewById<ConstraintLayout>(R.id.top_cl).gone()

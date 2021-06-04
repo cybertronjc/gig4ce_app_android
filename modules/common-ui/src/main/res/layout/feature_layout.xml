@@ -52,27 +52,6 @@
         app:layout_constraintStart_toEndOf="@+id/layout_img"
         app:layout_constraintTop_toTopOf="@id/left_aligned" />
 
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:layout_marginBottom="@dimen/size16"
-        android:clipToPadding="false"
-        android:paddingRight="@dimen/size16"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_title"
-        android:visibility="gone"/>
-
-
-
-
-
-
-
-
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,27 +62,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_title">
 
-        <LinearLayout
-            android:id="@+id/assessment_loader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone" />
-
         <com.gigforce.core.recyclerView.CoreRecyclerView
             android:id="@+id/featured_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:paddingRight="@dimen/size16"
-            android:visibility="gone"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:visibility="gone" />
-
+            android:paddingRight="@dimen/size16"/>
 
         <TextView
             android:id="@+id/main_learning_assessment_error"
@@ -112,7 +76,8 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
-            tools:text="Unable to load your stuff" />
+            android:text="Unable to load your stuff"
+            android:visibility="gone"/>
 
     </FrameLayout>
 

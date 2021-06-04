@@ -2600,7 +2600,6 @@ int id answer_summary 0x0
 int id appProfileComponent 0x0
 int id arc 0x0
 int id asConfigured 0x0
-int id assessment_loader 0x0
 int id async 0x0
 int id auto 0x0
 int id autoComplete 0x0

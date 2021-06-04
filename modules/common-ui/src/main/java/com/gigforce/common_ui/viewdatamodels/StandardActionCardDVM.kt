@@ -6,7 +6,7 @@ import com.gigforce.core.SimpleDVM
 
 
 open class StandardActionCardDVM(
-    val image: Int? = 0,
+    val image: Int? = -1,
     val imageUrl: String? = null,
     val title: String = "",
     var desc: String = "",

@@ -31,7 +31,6 @@ class LandingFragment : Fragment() {
 
         viewModel._allLandingData.observe(viewLifecycleOwner, Observer {
             landing_rv.collection = it
-
         })
         listeners()
     }

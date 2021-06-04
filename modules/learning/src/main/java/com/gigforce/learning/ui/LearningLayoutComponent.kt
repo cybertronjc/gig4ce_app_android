@@ -18,7 +18,7 @@ class LearningLayoutComponent(context: Context, attrs: AttributeSet?) :
 {
     @Inject lateinit var repository : ILearningDataRepository
     init {
-        this.setSectionTitle("Learning")
+        this.setSectionTitle("Learning1")
         this.setSectionIcon()
 
         repository.getData().observeForever {

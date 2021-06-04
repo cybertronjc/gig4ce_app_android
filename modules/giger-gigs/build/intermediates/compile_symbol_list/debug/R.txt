@@ -2671,7 +2671,6 @@ int id anonymous_button 0x0
 int id appBar 0x0
 int id appProfileComponent 0x0
 int id asConfigured 0x0
-int id assessment_loader 0x0
 int id async 0x0
 int id att_date_day 0x0
 int id attachmentContainer 0x0
