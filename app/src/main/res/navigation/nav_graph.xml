@@ -96,15 +96,7 @@
             android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
             app:destination="@id/addExperienceBottomSheet" />
     </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.gigforce.app.modules.home.HomeFragment"
-        android:label="home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_homeScreenIcons"
-            app:destination="@id/loginSuccessfulFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/tempFragment"
         android:name="com.gigforce.app.TempFragment"
