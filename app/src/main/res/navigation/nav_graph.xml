@@ -141,10 +141,11 @@
     </fragment>
 
 <!--    android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"-->
+<!--    com.gigforce.giger_app.screens.LandingFragment-->
 
     <fragment
         android:id="@+id/landinghomefragment"
-        android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"
+        android:name="com.gigforce.giger_app.screens.LandingFragment"
         android:label="landing_home_fragment"
         tools:layout="@layout/landingscreen_fragment">
         <action

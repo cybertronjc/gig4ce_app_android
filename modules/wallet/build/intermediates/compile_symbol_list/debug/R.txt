@@ -606,6 +606,7 @@ int attr isMaterialTheme 0x0
 int attr isMenuItemVisible 0x0
 int attr isProfileVisible 0x0
 int attr isSearchVisible 0x0
+int attr isStepsVisible 0x0
 int attr itemBackground 0x0
 int attr itemFillColor 0x0
 int attr itemHorizontalPadding 0x0
@@ -4911,13 +4912,14 @@ int styleable AnimatedStateListDrawableTransition_android_drawable 0
 int styleable AnimatedStateListDrawableTransition_android_fromId 1
 int styleable AnimatedStateListDrawableTransition_android_reversible 2
 int styleable AnimatedStateListDrawableTransition_android_toId 3
-int[] styleable AppBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int[] styleable AppBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable AppBar_backgroundType 0
 int styleable AppBar_isMenuItemVisible 1
 int styleable AppBar_isProfileVisible 2
 int styleable AppBar_isSearchVisible 3
-int styleable AppBar_searchHint 4
-int styleable AppBar_titleText 5
+int styleable AppBar_isStepsVisible 4
+int styleable AppBar_searchHint 5
+int styleable AppBar_titleText 6
 int[] styleable AppBarLayout { 0x10100d4, 0x1010540, 0x101048f, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable AppBarLayout_android_background 0
 int styleable AppBarLayout_android_keyboardNavigationCluster 1

@@ -20,9 +20,21 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <com.gigforce.common_ui.cells.AppBar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundType="PinkBar"
+            app:isStepsVisible="true"
+            app:titleText="Introduction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:visibility="gone"
             android:background="@drawable/introduction_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

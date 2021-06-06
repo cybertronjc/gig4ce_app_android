@@ -25,7 +25,7 @@ class LandingViewTypeLoader : IViewTypeLoader {
                 null
             )
             CommonViewTypes.VIEW_FEATURE_ITEM_CARD2 -> FeatureItemCard2Component(context,null)
-            CommonViewTypes.VIEW_GIG_ITEM_CARD -> GigInfoCardComponent(context,null)
+            CommonViewTypes.VIEW_GIG_ITEM_CARD -> UpcomingGigCardComponent(context,null)
             else -> null
         }
     }

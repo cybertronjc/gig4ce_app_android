@@ -25,6 +25,7 @@ import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.app_bar_layout.view.*
 import javax.inject.Inject
 
 enum class BackgroundType(val value: Int){
@@ -53,6 +54,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
      var backImageButton: ImageButton
      var menuImageButton: ImageButton
      var searchImageButton: ImageButton
+     var stepsTextView: TextView
      var search_item: EditText
      var profilePic: AppProfilePicComponent
      var onBackClickListener: View.OnClickListener? = null
@@ -109,7 +111,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         val isMenuItemVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isMenuItemVisible, false)
         val isProfileVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isProfileVisible, false)
         val searchHint = styledAttributeSet.getString(R.styleable.AppBar_searchHint)
-
+        val isStepsVisible = styledAttributeSet.getBoolean(R.styleable.AppBar_isStepsVisible, false)
         this.backGroundType = BackgroundType.getByValue(styledAttributeSet.getInt(R.styleable.AppBar_backgroundType, 0))
 
 
@@ -119,6 +121,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         searchImageButton = findViewById(R.id.searchImageButton)
         search_item = findViewById(R.id.search_item)
         profilePic = findViewById(R.id.profilePicComp)
+        stepsTextView = findViewById(R.id.steps)
 
         if (app_title.isNotEmpty()){
             titleText.visible()
@@ -130,6 +133,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
         makeSearchVisible(isSearchVisible)
         makeMenuItemVisible(isMenuItemVisible)
         makeProfileVisible(isProfileVisible)
+        makeStepsVisible(isStepsVisible)
         searchHint?.let { setHint(it) }
         userinfo.getData().profilePicPath?.let {
             setProfilePicture = it
@@ -203,12 +207,21 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     fun setAppBarTitle(appTitle: CharSequence?) {
         titleText.setText(appTitle.toString())
     }
+
+    fun setSteps(step: String){
+        stepsTextView.setText(step)
+    }
     fun setHint(text: String){
         search_item.setHint(text)
     }
     fun makeProfileVisible(visible: Boolean){
         if (visible) profilePic.visible() else profilePic.gone()
     }
+
+    fun makeStepsVisible(visible: Boolean){
+        if (visible) stepsTextView.visible() else stepsTextView.gone()
+    }
+
 
     fun makeSearchVisible(visible: Boolean){
          if (visible) searchImageButton.visible() else searchImageButton.invisible()

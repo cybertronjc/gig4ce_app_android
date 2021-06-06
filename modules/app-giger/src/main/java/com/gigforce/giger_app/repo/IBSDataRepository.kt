@@ -2,6 +2,7 @@ package com.gigforce.giger_app.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.gigforce.common_ui.cells.UpcomingGigCardComponent
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.dataviewmodel.*
 import com.google.firebase.firestore.DocumentSnapshot
