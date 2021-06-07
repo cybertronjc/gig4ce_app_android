@@ -2298,6 +2298,7 @@ int drawable avd_show_password_3 0x0
 int drawable bg_capsule_53ba25 0x0
 int drawable bg_capsule_border_fa6400 0x0
 int drawable bg_seekbar_add_language 0x0
+int drawable bg_white_rad_5 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_26_979797_rad_2 0x0
 int drawable border_27979797_rad_4 0x0
@@ -2315,6 +2316,7 @@ int drawable btn_radio_on_mtrl 0x0
 int drawable btn_radio_on_to_off_mtrl_animation 0x0
 int drawable cameraview_focus_marker_fill 0x0
 int drawable cameraview_focus_marker_outline 0x0
+int drawable circle_dot_lipstick_12_12 0x0
 int drawable collapse 0x0
 int drawable common_full_open_on_phone 0x0
 int drawable common_google_signin_btn_icon_dark 0x0
@@ -2437,6 +2439,7 @@ int drawable ic_gig_success_icon 0x0
 int drawable ic_gig_type_square 0x0
 int drawable ic_gig_upoming 0x0
 int drawable ic_homescreen_chat 0x0
+int drawable ic_image_driving_cert 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_learning_default_back 0x0
 int drawable ic_location_tracking_image 0x0
@@ -2454,6 +2457,8 @@ int drawable ic_ques_round 0x0
 int drawable ic_question 0x0
 int drawable ic_question_mark 0x0
 int drawable ic_record 0x0
+int drawable ic_rectangle_rad_5 0x0
+int drawable ic_rejected 0x0
 int drawable ic_repeat 0x0
 int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
@@ -3068,6 +3073,8 @@ int id iv_back_add_selfie 0x0
 int id iv_back_application_client_activation 0x0
 int id iv_back_upload_aadhar_card_client_activation 0x0
 int id iv_download_giger_verification 0x0
+int id iv_driving_cert_dialog 0x0
+int id iv_rejection_illustration 0x0
 int id jpeg 0x0
 int id jumpToEnd 0x0
 int id jumpToStart 0x0
@@ -3289,6 +3296,7 @@ int id root 0x0
 int id rotate_scroll_wheel 0x0
 int id rounded 0x0
 int id row_index_key 0x0
+int id rv_wrong_questions_rejection_dialog 0x0
 int id save_image_matrix 0x0
 int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
@@ -3492,12 +3500,20 @@ int id tv_action_upload_pan 0x0
 int id tv_allow_access 0x0
 int id tv_cities 0x0
 int id tv_client_activation 0x0
+int id tv_content_title_rejection_dialog 0x0
 int id tv_contract_status 0x0
 int id tv_contract_status_label 0x0
 int id tv_desc 0x0
+int id tv_download_cert 0x0
 int id tv_no_driving_cert 0x0
+int id tv_okay_driving_cert_success 0x0
 int id tv_pop_menu_normal 0x0
+int id tv_refer_rejection_dialog 0x0
+int id tv_rejected_item 0x0
 int id tv_schedule_test 0x0
+int id tv_sub_one_rejection_dialog 0x0
+int id tv_sub_two_rejection_dialog 0x0
+int id tv_take_me_home_rejection_dialog 0x0
 int id tv_title 0x0
 int id tv_title_add_selfie 0x0
 int id txt_message 0x0
@@ -3720,6 +3736,7 @@ int layout image_uploader_driving_license 0x0
 int layout item_power_menu_library_skydoves 0x0
 int layout layout_bs_location_access_dialog 0x0
 int layout layout_button_upload_dl_cert 0x0
+int layout layout_dialog_driving_certificate_success 0x0
 int layout layout_driving_license_info_client_activation 0x0
 int layout layout_driving_license_upload_client_activation 0x0
 int layout layout_fragment_upload_driving_certificate 0x0
@@ -3728,6 +3745,8 @@ int layout layout_loading_dialog 0x0
 int layout layout_material_power_menu_library_skydoves 0x0
 int layout layout_power_background_library_skydoves 0x0
 int layout layout_power_menu_library_skydoves 0x0
+int layout layout_rejection_dialog 0x0
+int layout layout_rv_rejected_answers 0x0
 int layout layout_rv_role_details 0x0
 int layout layout_sp_city_dropdown 0x0
 int layout layout_sp_completion_year 0x0
@@ -3981,6 +4000,8 @@ int string common_open_on_phone 0x0
 int string common_signin_button_text 0x0
 int string common_signin_button_text_long 0x0
 int string confirm 0x0
+int string congratulations 0x0
+int string congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us 0x0
 int string current_address 0x0
 int string date_of_birth 0x0
 int string date_of_birth_without_colon 0x0
@@ -4000,6 +4021,7 @@ int string document_under_verification_ 0x0
 int string documents_uploaded_long 0x0
 int string done 0x0
 int string download_contracts_exists 0x0
+int string driving_certificate 0x0
 int string driving_license 0x0
 int string driving_license_back_image 0x0
 int string driving_license_front_image 0x0
@@ -4208,6 +4230,7 @@ int string material_timepicker_minute 0x0
 int string material_timepicker_pm 0x0
 int string material_timepicker_select_time 0x0
 int string material_timepicker_text_input_mode_description 0x0
+int string meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role 0x0
 int string modal_content_descriptor 0x0
 int string modal_inner_content_descriptor 0x0
 int string mtrl_badge_numberless_content_description 0x0
@@ -4251,12 +4274,14 @@ int string nav_app_bar_navigate_up_description 0x0
 int string nav_app_bar_open_drawer_description 0x0
 int string new_experience 0x0
 int string next 0x0
+int string next_camel_case 0x0
 int string no 0x0
 int string no_i_don_t_have_aadhar_card 0x0
 int string no_i_don_t_have_driving_license 0x0
 int string no_i_don_t_have_pan_card 0x0
 int string no_i_dont_have_bank_passbook 0x0
 int string no_time_slot 0x0
+int string no_worries 0x0
 int string note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test 0x0
 int string okay 0x0
 int string okay_lower_case 0x0
@@ -4295,6 +4320,7 @@ int string ready_to_join_immediately 0x0
 int string ready_to_work_6_days 0x0
 int string ready_to_wotk_on_field 0x0
 int string record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video 0x0
+int string refer_a_friend 0x0
 int string reupload 0x0
 int string reuploading_driving_license 0x0
 int string same_as_permanent_address 0x0
@@ -4319,6 +4345,7 @@ int string state_pascal_case 0x0
 int string status_bar_notification_info_overflow 0x0
 int string submit 0x0
 int string submit_documents 0x0
+int string take_me_to_home 0x0
 int string tap_to_upload 0x0
 int string thank_you 0x0
 int string title_madatory 0x0
@@ -4388,6 +4415,7 @@ int string yes_i_have_driving_license 0x0
 int string yes_i_have_pan_card 0x0
 int string you_are_reuploading_aadhar 0x0
 int string you_are_reuploading_pan_card 0x0
+int string you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you 0x0
 int string your_are_reuploading_bank_details 0x0
 int string your_location_details_will_help_us_find_you_best_gig_near_you 0x0
 int style ActionButtonStyle 0x0

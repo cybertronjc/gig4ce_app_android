@@ -2299,6 +2299,7 @@ drawable avd_show_password_3
 drawable bg_capsule_53ba25
 drawable bg_capsule_border_fa6400
 drawable bg_seekbar_add_language
+drawable bg_white_rad_5
 drawable bg_white_top_rad_8
 drawable border_26_979797_rad_2
 drawable border_27979797_rad_4
@@ -2316,6 +2317,7 @@ drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
 drawable cameraview_focus_marker_fill
 drawable cameraview_focus_marker_outline
+drawable circle_dot_lipstick_12_12
 drawable collapse
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -2438,6 +2440,7 @@ drawable ic_gig_success_icon
 drawable ic_gig_type_square
 drawable ic_gig_upoming
 drawable ic_homescreen_chat
+drawable ic_image_driving_cert
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back
 drawable ic_location_tracking_image
@@ -2455,6 +2458,8 @@ drawable ic_ques_round
 drawable ic_question
 drawable ic_question_mark
 drawable ic_record
+drawable ic_rectangle_rad_5
+drawable ic_rejected
 drawable ic_repeat
 drawable ic_search
 drawable ic_set_preference
@@ -3069,6 +3074,8 @@ id iv_back_add_selfie
 id iv_back_application_client_activation
 id iv_back_upload_aadhar_card_client_activation
 id iv_download_giger_verification
+id iv_driving_cert_dialog
+id iv_rejection_illustration
 id jpeg
 id jumpToEnd
 id jumpToStart
@@ -3290,6 +3297,7 @@ id root
 id rotate_scroll_wheel
 id rounded
 id row_index_key
+id rv_wrong_questions_rejection_dialog
 id save_image_matrix
 id save_non_transition_alpha
 id save_overlay_view
@@ -3493,12 +3501,20 @@ id tv_action_upload_pan
 id tv_allow_access
 id tv_cities
 id tv_client_activation
+id tv_content_title_rejection_dialog
 id tv_contract_status
 id tv_contract_status_label
 id tv_desc
+id tv_download_cert
 id tv_no_driving_cert
+id tv_okay_driving_cert_success
 id tv_pop_menu_normal
+id tv_refer_rejection_dialog
+id tv_rejected_item
 id tv_schedule_test
+id tv_sub_one_rejection_dialog
+id tv_sub_two_rejection_dialog
+id tv_take_me_home_rejection_dialog
 id tv_title
 id tv_title_add_selfie
 id txt_message
@@ -3721,6 +3737,7 @@ layout image_uploader_driving_license
 layout item_power_menu_library_skydoves
 layout layout_bs_location_access_dialog
 layout layout_button_upload_dl_cert
+layout layout_dialog_driving_certificate_success
 layout layout_driving_license_info_client_activation
 layout layout_driving_license_upload_client_activation
 layout layout_fragment_upload_driving_certificate
@@ -3729,6 +3746,8 @@ layout layout_loading_dialog
 layout layout_material_power_menu_library_skydoves
 layout layout_power_background_library_skydoves
 layout layout_power_menu_library_skydoves
+layout layout_rejection_dialog
+layout layout_rv_rejected_answers
 layout layout_rv_role_details
 layout layout_sp_city_dropdown
 layout layout_sp_completion_year
@@ -3982,6 +4001,8 @@ string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
 string confirm
+string congratulations
+string congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us
 string current_address
 string date_of_birth
 string date_of_birth_without_colon
@@ -4001,6 +4022,7 @@ string document_under_verification_
 string documents_uploaded_long
 string done
 string download_contracts_exists
+string driving_certificate
 string driving_license
 string driving_license_back_image
 string driving_license_front_image
@@ -4209,6 +4231,7 @@ string material_timepicker_minute
 string material_timepicker_pm
 string material_timepicker_select_time
 string material_timepicker_text_input_mode_description
+string meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role
 string modal_content_descriptor
 string modal_inner_content_descriptor
 string mtrl_badge_numberless_content_description
@@ -4252,12 +4275,14 @@ string nav_app_bar_navigate_up_description
 string nav_app_bar_open_drawer_description
 string new_experience
 string next
+string next_camel_case
 string no
 string no_i_don_t_have_aadhar_card
 string no_i_don_t_have_driving_license
 string no_i_don_t_have_pan_card
 string no_i_dont_have_bank_passbook
 string no_time_slot
+string no_worries
 string note_it_is_mandatory_to_submit_required_docs_at_time_of_driving_test
 string okay
 string okay_lower_case
@@ -4296,6 +4321,7 @@ string ready_to_join_immediately
 string ready_to_work_6_days
 string ready_to_wotk_on_field
 string record_a_10_second_video_of_yourself_nface_the_camera_and_say_hi_i_m_your_name_and_i_like_to_do_mention_2_things_you_like_to_do_selfie_video
+string refer_a_friend
 string reupload
 string reuploading_driving_license
 string same_as_permanent_address
@@ -4320,6 +4346,7 @@ string state_pascal_case
 string status_bar_notification_info_overflow
 string submit
 string submit_documents
+string take_me_to_home
 string tap_to_upload
 string thank_you
 string title_madatory
@@ -4389,6 +4416,7 @@ string yes_i_have_driving_license
 string yes_i_have_pan_card
 string you_are_reuploading_aadhar
 string you_are_reuploading_pan_card
+string you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you
 string your_are_reuploading_bank_details
 string your_location_details_will_help_us_find_you_best_gig_near_you
 style ActionButtonStyle

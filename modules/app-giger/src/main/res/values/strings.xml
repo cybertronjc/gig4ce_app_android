@@ -25,5 +25,6 @@
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
     <string name="available">Available</string>
+    <string name="good_morning">Good morning!</string>
 
 </resources>

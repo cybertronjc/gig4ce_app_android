@@ -55,9 +55,7 @@ class VerifyOTP : BaseFragment() {
     var timerStarted = false
     private var client: SmsRetrieverClient? = null
 
-    //    private var otpReceiver: SmsRetrieverBroadcastReceiver.OTPReceiveListener = this
-//    private  var smsBroadcast = SmsRetrieverBroadcastReceiver()
-    //var appSignature = AppSignatureHelper(context)
+
     private var win: Window? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

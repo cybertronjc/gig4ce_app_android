@@ -8,5 +8,15 @@
     <string name="read_more">more</string>
     <string name="read_less">less</string>
     <string name="low">Low</string>
+    <string name="take_me_to_home">Take me to Home</string>
+    <string name="refer_a_friend">Refer a Friend</string>
+    <string name="meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role">Meanwhile you can refer your contacts who can be eligible for this role</string>
+    <string name="you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you">You can reapply for this role once you are eligible.We are always here to help you.</string>
+    <string name="no_worries">No Worries!!</string>
+    <string name="next_camel_case">Next</string>
+    <string name="congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us">Congratulations! Your Driving Certificate successfully uploaded.Your docs are safe with us.</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="okay">OKAY</string>
+    <string name="driving_certificate">Driving Certificate</string>
 
 </resources>

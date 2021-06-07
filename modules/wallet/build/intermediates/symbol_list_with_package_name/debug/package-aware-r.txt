@@ -1271,6 +1271,7 @@ color blackDark
 color blackLight
 color black_42
 color black_666
+color black_85
 color black_two
 color blue
 color blueDark
@@ -2279,6 +2280,7 @@ drawable back_button
 drawable bg_monthly_goal
 drawable bg_seekbar_add_language
 drawable bg_wallet_card
+drawable bg_white_rad_5
 drawable bg_white_top_rad_8
 drawable border_grey_square
 drawable border_option_dark
@@ -2291,6 +2293,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable circle_dot_lipstick_12_12
 drawable collapse
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -2376,6 +2379,7 @@ drawable fui_idp_button_background_twitter
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable gradient_onboarding_progressbar_gradient
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
 drawable ic_arrow_back_white
@@ -2409,6 +2413,7 @@ drawable ic_gig_upoming
 drawable ic_help
 drawable ic_homescreen_chat
 drawable ic_hsbc
+drawable ic_image_driving_cert
 drawable ic_invoice_status
 drawable ic_keyboard_back
 drawable ic_keyboard_black_24dp
@@ -2425,6 +2430,8 @@ drawable ic_notification_icon
 drawable ic_ok
 drawable ic_oval_top_landingscreen
 drawable ic_payment_dispute
+drawable ic_rectangle_rad_5
+drawable ic_rejected
 drawable ic_search
 drawable ic_set_preference
 drawable ic_small_square
@@ -2862,7 +2869,9 @@ id item_power_menu_icon
 id item_power_menu_layout
 id item_power_menu_title
 id item_touch_helper_previous_elevation
+id iv_driving_cert_dialog
 id iv_progress_icon
+id iv_rejection_illustration
 id jumpToEnd
 id jumpToStart
 id labelGroup
@@ -3074,6 +3083,7 @@ id root
 id rotate_scroll_wheel
 id rounded
 id row_index_key
+id rv_wrong_questions_rejection_dialog
 id save_image_matrix
 id save_non_transition_alpha
 id save_overlay_view
@@ -3246,9 +3256,17 @@ id trouble_signing_in
 id trouble_signing_in_possible_fixes
 id tvThumb
 id tv_allow_access
+id tv_content_title_rejection_dialog
 id tv_desc
+id tv_download_cert
+id tv_okay_driving_cert_success
 id tv_pop_menu_normal
 id tv_progress
+id tv_refer_rejection_dialog
+id tv_rejected_item
+id tv_sub_one_rejection_dialog
+id tv_sub_two_rejection_dialog
+id tv_take_me_home_rejection_dialog
 id tv_title
 id txt_message
 id ucrop
@@ -3450,12 +3468,15 @@ layout invoice_status_page
 layout item_power_menu_library_skydoves
 layout item_timeline
 layout layout_bs_location_access_dialog
+layout layout_dialog_driving_certificate_success
 layout layout_icon_round_corner_progress_bar
 layout layout_loading_dialog
 layout layout_material_power_menu_library_skydoves
 layout layout_power_background_library_skydoves
 layout layout_power_menu_library_skydoves
+layout layout_rejection_dialog
 layout layout_round_corner_progress_bar
+layout layout_rv_rejected_answers
 layout layout_rv_role_details
 layout layout_text_round_corner_progress_bar
 layout layout_thumb_text_seekbar
@@ -3640,8 +3661,11 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string congratulations
+string congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us
 string current_month
 string default_web_client_id
+string driving_certificate
 string earning_info
 string error_icon_content_description
 string exo_controls_fastforward_description
@@ -3808,6 +3832,7 @@ string material_timepicker_minute
 string material_timepicker_pm
 string material_timepicker_select_time
 string material_timepicker_text_input_mode_description
+string meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role
 string modal_content_descriptor
 string modal_inner_content_descriptor
 string money_received_info
@@ -3852,7 +3877,10 @@ string mtrl_picker_toggle_to_text_input_mode
 string mtrl_picker_toggle_to_year_selection
 string nav_app_bar_navigate_up_description
 string nav_app_bar_open_drawer_description
+string next_camel_case
 string no_transactions_yet
+string no_worries
+string okay
 string password_toggle_content_description
 string path_password_eye
 string path_password_eye_mask_strike_through
@@ -3866,10 +3894,12 @@ string rationale_ask_again
 string read_less
 string read_more
 string received
+string refer_a_friend
 string sample_info
 string search_menu_title
 string see_all
 string status_bar_notification_info_overflow
+string take_me_to_home
 string title_settings_dialog
 string total_balance
 string transactions
@@ -3887,6 +3917,7 @@ string w_my_wallet
 string w_my_wallet_balance
 string wallet_balance_info
 string withdrawn
+string you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you
 string your_location_details_will_help_us_find_you_best_gig_near_you
 style ActionButtonStyle
 style ActionButtonStyle_Plain

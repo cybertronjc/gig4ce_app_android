@@ -2281,6 +2281,7 @@ drawable bg_seekbar_add_language
 drawable bg_selected_event_rv_gig_hist
 drawable bg_unselected_event_rv_gig_hist
 drawable bg_wallet
+drawable bg_white_rad_5
 drawable bg_white_top_rad_8
 drawable border_option_dark
 drawable border_option_grey
@@ -2294,6 +2295,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable circle_dot_lipstick_12_12
 drawable collapse
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -2381,6 +2383,7 @@ drawable giglogo
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
+drawable gradient_onboarding_progressbar_gradient
 drawable ic_add_pink
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
@@ -2448,6 +2451,7 @@ drawable ic_homescreen_chat
 drawable ic_homescreen_profile
 drawable ic_id
 drawable ic_identity_card
+drawable ic_image_driving_cert
 drawable ic_keyboard_arrow_down_c7c7cc
 drawable ic_keyboard_black_24dp
 drawable ic_landinghome_search
@@ -2472,7 +2476,9 @@ drawable ic_notification_icon
 drawable ic_oval_top_landingscreen
 drawable ic_pending_yellow_round
 drawable ic_play_round_pink_bck
+drawable ic_rectangle_rad_5
 drawable ic_referal
+drawable ic_rejected
 drawable ic_search
 drawable ic_set_preference
 drawable ic_star
@@ -3088,12 +3094,14 @@ id iv_back_tb_gig_history
 id iv_brand_logo_giger_id
 id iv_brand_rv_gig_hist
 id iv_chat_gig_his
+id iv_driving_cert_dialog
 id iv_logo_giger_id
 id iv_no_more_gigs
 id iv_options_gig_details
 id iv_options_gig_page
 id iv_profile_image_gig_his
 id iv_qr_code_giger_id
+id iv_rejection_illustration
 id iv_search_gig_his
 id iv_share_giger_id
 id jumpToEnd
@@ -3354,6 +3362,7 @@ id rounded
 id row_index_key
 id rv_gigs_gig_history
 id rv_on_going_gigs_gig_hist
+id rv_wrong_questions_rejection_dialog
 id satellite
 id save_image_matrix
 id save_non_transition_alpha
@@ -3564,10 +3573,12 @@ id tv_allow_access
 id tv_brand_name_giger_id
 id tv_completed_gig_hist
 id tv_contact_giger_id
+id tv_content_title_rejection_dialog
 id tv_date_gig_hist
 id tv_desc
 id tv_designation_giger_id
 id tv_designation_rv_gig_hist
+id tv_download_cert
 id tv_explore_no_gigs_gig_hist
 id tv_gig_date_giger_id
 id tv_gig_day_rv_gig_his
@@ -3580,6 +3591,7 @@ id tv_issued_date_giger_id
 id tv_message_no_gig_gig_hist
 id tv_no_gigs
 id tv_no_on_going_gigs_gig_hist
+id tv_okay_driving_cert_success
 id tv_okay_no_gigs_present
 id tv_on_going_gigs_gig_hist
 id tv_past_events_rv_gig_hist
@@ -3589,6 +3601,11 @@ id tv_punch_in_time_rv_gig_hist
 id tv_punch_out_rv_gig_hist
 id tv_punch_out_time_rv_gig_hist
 id tv_rating_rv_gig_hist
+id tv_refer_rejection_dialog
+id tv_rejected_item
+id tv_sub_one_rejection_dialog
+id tv_sub_two_rejection_dialog
+id tv_take_me_home_rejection_dialog
 id tv_time_rv_gig_hist
 id tv_timing_rv_gig_hist
 id tv_title
@@ -3858,6 +3875,7 @@ layout icon_text_card_mol
 layout image
 layout item_power_menu_library_skydoves
 layout layout_bs_location_access_dialog
+layout layout_dialog_driving_certificate_success
 layout layout_dialog_no_gigs
 layout layout_gig_location_picture_item
 layout layout_giger_id_fragment
@@ -3865,10 +3883,12 @@ layout layout_loading_dialog
 layout layout_material_power_menu_library_skydoves
 layout layout_power_background_library_skydoves
 layout layout_power_menu_library_skydoves
+layout layout_rejection_dialog
 layout layout_rv_gig_details_gig_history
 layout layout_rv_gig_events_gig_hist
 layout layout_rv_on_going_gigs
 layout layout_rv_ongoing_gigs_gig_hist
+layout layout_rv_rejected_answers
 layout layout_rv_role_details
 layout layout_thumb_text_seekbar
 layout layout_toolbar
@@ -4046,9 +4066,12 @@ string common_google_play_services_wear_update_text
 string common_open_on_phone
 string common_signin_button_text
 string common_signin_button_text_long
+string congratulations
+string congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us
 string crop_and_rotate
 string default_web_client_id
 string download_id_card
+string driving_certificate
 string error_icon_content_description
 string exo_controls_fastforward_description
 string exo_controls_fullscreen_description
@@ -4219,6 +4242,7 @@ string material_timepicker_minute
 string material_timepicker_pm
 string material_timepicker_select_time
 string material_timepicker_text_input_mode_description
+string meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role
 string mins
 string modal_content_descriptor
 string modal_inner_content_descriptor
@@ -4260,10 +4284,12 @@ string mtrl_picker_toggle_to_year_selection
 string my_gigs
 string nav_app_bar_navigate_up_description
 string nav_app_bar_open_drawer_description
+string next_camel_case
 string no_gigs_present
 string no_more_gig
 string no_on_going_gigs
 string no_scheduled_gig_on_this_day
+string no_worries
 string okay
 string okay_text
 string on_going_gigs
@@ -4288,9 +4314,11 @@ string rationale_ask_again
 string read_less
 string read_more
 string reason
+string refer_a_friend
 string search_menu_title
 string status_bar_notification_info_overflow
 string submit_all_caps
+string take_me_to_home
 string this_gig_is_unsuitable_for_me
 string title_settings_dialog
 string twitter_consumer_key
@@ -4305,6 +4333,7 @@ string ucrop_rotate
 string ucrop_scale
 string upcoming
 string valid_upto
+string you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you
 string you_ll_soon_be_sent_invites_for_best_gigs_around_for_you
 string your_location_details_will_help_us_find_you_best_gig_near_you
 style ActionButtonStyle

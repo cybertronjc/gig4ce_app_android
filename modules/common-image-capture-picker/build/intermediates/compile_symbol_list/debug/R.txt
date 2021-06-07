@@ -1174,6 +1174,7 @@ int color blackDark 0x0
 int color blackLight 0x0
 int color black_42 0x0
 int color black_666 0x0
+int color black_85 0x0
 int color black_two 0x0
 int color blue 0x0
 int color blueDark 0x0
@@ -2172,6 +2173,7 @@ int drawable app_gradient_button_disabled 0x0
 int drawable avd_hide_password 0x0
 int drawable avd_show_password 0x0
 int drawable bg_seekbar_add_language 0x0
+int drawable bg_white_rad_5 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_option_dark 0x0
 int drawable btn_checkbox_checked_mtrl 0x0
@@ -2183,6 +2185,7 @@ int drawable btn_radio_off_mtrl 0x0
 int drawable btn_radio_off_to_on_mtrl_animation 0x0
 int drawable btn_radio_on_mtrl 0x0
 int drawable btn_radio_on_to_off_mtrl_animation 0x0
+int drawable circle_dot_lipstick_12_12 0x0
 int drawable collapse 0x0
 int drawable common_full_open_on_phone 0x0
 int drawable common_google_signin_btn_icon_dark 0x0
@@ -2268,6 +2271,7 @@ int drawable fui_idp_button_background_twitter 0x0
 int drawable googleg_disabled_color_18 0x0
 int drawable googleg_standard_color_18 0x0
 int drawable gradient_button 0x0
+int drawable gradient_onboarding_progressbar_gradient 0x0
 int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_white 0x0
 int drawable ic_arrow_forward 0x0
@@ -2288,6 +2292,7 @@ int drawable ic_gig_success_icon 0x0
 int drawable ic_gig_type_square 0x0
 int drawable ic_gig_upoming 0x0
 int drawable ic_homescreen_chat 0x0
+int drawable ic_image_driving_cert 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_learning_default_back 0x0
 int drawable ic_location_tracking_image 0x0
@@ -2297,6 +2302,8 @@ int drawable ic_mtrl_chip_checked_circle 0x0
 int drawable ic_mtrl_chip_close_circle 0x0
 int drawable ic_notification_icon 0x0
 int drawable ic_oval_top_landingscreen 0x0
+int drawable ic_rectangle_rad_5 0x0
+int drawable ic_rejected 0x0
 int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_three_dots 0x0
@@ -2680,6 +2687,8 @@ int id item_power_menu_icon 0x0
 int id item_power_menu_layout 0x0
 int id item_power_menu_title 0x0
 int id item_touch_helper_previous_elevation 0x0
+int id iv_driving_cert_dialog 0x0
+int id iv_rejection_illustration 0x0
 int id jumpToEnd 0x0
 int id jumpToStart 0x0
 int id labelGroup 0x0
@@ -2837,6 +2846,7 @@ int id root 0x0
 int id rotate_scroll_wheel 0x0
 int id rounded 0x0
 int id row_index_key 0x0
+int id rv_wrong_questions_rejection_dialog 0x0
 int id save_image_matrix 0x0
 int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
@@ -2988,8 +2998,16 @@ int id trouble_signing_in 0x0
 int id trouble_signing_in_possible_fixes 0x0
 int id tvThumb 0x0
 int id tv_allow_access 0x0
+int id tv_content_title_rejection_dialog 0x0
 int id tv_desc 0x0
+int id tv_download_cert 0x0
+int id tv_okay_driving_cert_success 0x0
 int id tv_pop_menu_normal 0x0
+int id tv_refer_rejection_dialog 0x0
+int id tv_rejected_item 0x0
+int id tv_sub_one_rejection_dialog 0x0
+int id tv_sub_two_rejection_dialog 0x0
+int id tv_take_me_home_rejection_dialog 0x0
 int id tv_title 0x0
 int id txt_message 0x0
 int id ucrop 0x0
@@ -3172,10 +3190,13 @@ int layout icon_text_card_mol 0x0
 int layout image 0x0
 int layout item_power_menu_library_skydoves 0x0
 int layout layout_bs_location_access_dialog 0x0
+int layout layout_dialog_driving_certificate_success 0x0
 int layout layout_loading_dialog 0x0
 int layout layout_material_power_menu_library_skydoves 0x0
 int layout layout_power_background_library_skydoves 0x0
 int layout layout_power_menu_library_skydoves 0x0
+int layout layout_rejection_dialog 0x0
+int layout layout_rv_rejected_answers 0x0
 int layout layout_rv_role_details 0x0
 int layout layout_thumb_text_seekbar 0x0
 int layout layout_toolbar 0x0
@@ -3341,8 +3362,11 @@ int string common_google_play_services_wear_update_text 0x0
 int string common_open_on_phone 0x0
 int string common_signin_button_text 0x0
 int string common_signin_button_text_long 0x0
+int string congratulations 0x0
+int string congratulations_your_driving_certificate_successfully_uploaded_your_docs_are_safe_with_us 0x0
 int string crop_and_rotate 0x0
 int string default_web_client_id 0x0
+int string driving_certificate 0x0
 int string error_icon_content_description 0x0
 int string exo_controls_fastforward_description 0x0
 int string exo_controls_fullscreen_description 0x0
@@ -3503,6 +3527,7 @@ int string material_timepicker_minute 0x0
 int string material_timepicker_pm 0x0
 int string material_timepicker_select_time 0x0
 int string material_timepicker_text_input_mode_description 0x0
+int string meanwhile_you_can_refer_your_contacts_who_can_be_eligible_for_this_role 0x0
 int string modal_content_descriptor 0x0
 int string modal_inner_content_descriptor 0x0
 int string mtrl_badge_numberless_content_description 0x0
@@ -3540,6 +3565,9 @@ int string mtrl_picker_toggle_to_calendar_input_mode 0x0
 int string mtrl_picker_toggle_to_day_selection 0x0
 int string mtrl_picker_toggle_to_text_input_mode 0x0
 int string mtrl_picker_toggle_to_year_selection 0x0
+int string next_camel_case 0x0
+int string no_worries 0x0
+int string okay 0x0
 int string password_toggle_content_description 0x0
 int string path_password_eye 0x0
 int string path_password_eye_mask_strike_through 0x0
@@ -3550,8 +3578,10 @@ int string rationale_ask 0x0
 int string rationale_ask_again 0x0
 int string read_less 0x0
 int string read_more 0x0
+int string refer_a_friend 0x0
 int string search_menu_title 0x0
 int string status_bar_notification_info_overflow 0x0
+int string take_me_to_home 0x0
 int string title_settings_dialog 0x0
 int string twitter_consumer_key 0x0
 int string twitter_consumer_secret 0x0
@@ -3563,6 +3593,7 @@ int string ucrop_menu_crop 0x0
 int string ucrop_mutate_exception_hint 0x0
 int string ucrop_rotate 0x0
 int string ucrop_scale 0x0
+int string you_can_reapply_for_this_role_once_you_are_eligible_we_are_always_here_to_help_you 0x0
 int string your_location_details_will_help_us_find_you_best_gig_near_you 0x0
 int style ActionButtonStyle 0x0
 int style ActionButtonStyle_Plain 0x0
