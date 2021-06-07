@@ -28,5 +28,8 @@ class CommonViewTypes {
         const val VIEW_GIG_ITEM_CARD = 20204
 
         const val VIEW_PROFILE_PIC = 20401
+
+        const val VIEW_VIDEOS_ITEM_CARD2 = 20205
+        const val VIEW_ASSESMENT_ITEM_CARD = 20206
     }
 }

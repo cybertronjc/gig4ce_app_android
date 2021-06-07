@@ -1423,6 +1423,7 @@ color green_dc3ab105
 color grey
 color greyDark
 color greyLight
+color grey_transparetn
 color greyish_brown
 color highlighted_text_material_dark
 color highlighted_text_material_light
@@ -1539,6 +1540,8 @@ color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
 color slidetoact_defaultAccent
 color slidetoact_white
+color status_bg_completed
+color status_bg_pending
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -1547,6 +1550,9 @@ color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
 color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
+color text_green
+color text_orange
+color text_yellow
 color tooltip_background_dark
 color tooltip_background_light
 color topBarDark
@@ -2456,6 +2462,7 @@ drawable ic_calendar_month
 drawable ic_calendar_small
 drawable ic_chat
 drawable ic_check
+drawable ic_clock_assessment
 drawable ic_clock_black_24dp
 drawable ic_clock_orange
 drawable ic_cross_grey
@@ -2476,6 +2483,7 @@ drawable ic_gig_upoming
 drawable ic_homescreen_chat
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back
+drawable ic_learning_play
 drawable ic_location_tracking_image
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
@@ -2491,6 +2499,7 @@ drawable ic_play_sq
 drawable ic_ques_round
 drawable ic_question
 drawable ic_question_mark
+drawable ic_quiz
 drawable ic_record
 drawable ic_repeat
 drawable ic_search
@@ -2500,6 +2509,7 @@ drawable ic_three_dots
 drawable ic_time
 drawable ic_time_fa6400
 drawable ic_time_help_
+drawable ic_time_light_grey
 drawable ic_time_upload_driving_cert
 drawable ic_tip
 drawable ic_undraw_taking_selfie_lbo_7
@@ -2544,6 +2554,8 @@ drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable profile_avatar
 drawable radio_button_drawable
+drawable rect_assessment_status_completed
+drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rect_button_outline
 drawable rounded_layout
@@ -2881,6 +2893,7 @@ id cos
 id countDownTimerTV
 id counterclockwise
 id country_list
+id course_content_video_slide_layout
 id cross_device_linking_body
 id custom
 id customPanel
@@ -2905,6 +2918,7 @@ id design_navigation_view
 id deviceDefault
 id dialog_button
 id disableHome
+id disabled_overlay
 id disjoint
 id dlAvailaibilityOptionRG
 id dlBackEditErrorMessage
@@ -3080,7 +3094,9 @@ id ignore
 id ignoreRequest
 id image
 id imageLabelTV
+id imageLayout
 id imageView
+id imageView18
 id imageView4
 id imageView6
 id image_content_root
@@ -3131,6 +3147,8 @@ id left
 id leftToRight
 id left_aligned
 id left_to_right
+id lesson_completion_tv
+id lessonsSeeMoreButton
 id licenseNoET
 id licenseNoLabel
 id licenseValidityET
@@ -3301,6 +3319,7 @@ id picture
 id pin
 id pinET
 id pinLabel
+id play_button_iv
 id playerView
 id position
 id postLayout
@@ -3316,6 +3335,7 @@ id progressBar
 id progressBar1
 id progress_circular
 id progress_horizontal
+id quiz_icon_iv
 id radial
 id radio
 id recordVideoButton
@@ -3389,6 +3409,7 @@ id shortcut
 id showCustom
 id showHome
 id showTitle
+id side_bar_status
 id sign_in_email_sent_header_text
 id sign_in_email_sent_text
 id sin
@@ -3423,6 +3444,7 @@ id state_rotate
 id state_scale
 id staticLayout
 id staticPostLayout
+id status
 id statusTV
 id status_bar_latest_event_content
 id status_iv
@@ -3492,7 +3514,9 @@ id texture_view
 id thumbnail
 id ticker
 id time
+id time_imageview
 id time_text
+id timeline
 id title
 id titleDividerNoCustom
 id titleTV
@@ -3571,8 +3595,11 @@ id verification_status_cardview
 id verification_status_tv
 id vertical
 id video
+id videoThumbnailIV
 id videoUploadingLayout
 id video_decoder_gl_surface_view
+id video_time
+id video_title
 id videos_list
 id view_bottom
 id view_offset_helper
@@ -3888,6 +3915,8 @@ layout upload_car_client_activation
 layout upload_pan_card_fragment
 layout verification_image_card_component
 layout verified_button
+layout view_assessment_card_layout
+layout view_play_card_layout
 menu ucrop_menu_activity
 plurals fui_error_weak_password
 plurals mtrl_badge_content_description

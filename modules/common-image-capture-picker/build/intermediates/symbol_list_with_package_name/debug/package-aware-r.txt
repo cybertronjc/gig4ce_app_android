@@ -430,6 +430,7 @@ attr endIconDrawable
 attr endIconMode
 attr endIconTint
 attr endIconTintMode
+attr endLineColor
 attr enforceMaterialTheme
 attr enforceTextAppearance
 attr ensureMinTouchTargetSize
@@ -659,7 +660,13 @@ attr liftOnScroll
 attr liftOnScrollTargetViewId
 attr limitBoundsTo
 attr lineHeight
+attr lineOrientation
+attr linePadding
 attr lineSpacing
+attr lineStyle
+attr lineStyleDashGap
+attr lineStyleDashLength
+attr lineWidth
 attr linearProgressIndicatorStyle
 attr listChoiceBackgroundIndicator
 attr listChoiceIndicatorMultipleAnimated
@@ -678,6 +685,13 @@ attr listPreferredItemPaddingRight
 attr listPreferredItemPaddingStart
 attr logo
 attr logoDescription
+attr marker
+attr markerInCenter
+attr markerPaddingBottom
+attr markerPaddingLeft
+attr markerPaddingRight
+attr markerPaddingTop
+attr markerSize
 attr materialAlertDialogBodyTextStyle
 attr materialAlertDialogTheme
 attr materialAlertDialogTitleIconStyle
@@ -927,6 +941,7 @@ attr startIconContentDescription
 attr startIconDrawable
 attr startIconTint
 attr startIconTintMode
+attr startLineColor
 attr state_above_anchor
 attr state_collapsed
 attr state_collapsible
@@ -1314,6 +1329,7 @@ color green
 color grey
 color greyDark
 color greyLight
+color grey_transparetn
 color greyish_brown
 color highlighted_text_material_dark
 color highlighted_text_material_light
@@ -1427,6 +1443,8 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color status_bg_completed
+color status_bg_pending
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -1435,6 +1453,9 @@ color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
 color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
+color text_green
+color text_orange
+color text_yellow
 color tooltip_background_dark
 color tooltip_background_light
 color topBarDark
@@ -2310,6 +2331,7 @@ drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_search_24
 drawable ic_camera_round
 drawable ic_chat
+drawable ic_clock_assessment
 drawable ic_clock_black_24dp
 drawable ic_clock_orange
 drawable ic_cross_grey
@@ -2327,6 +2349,7 @@ drawable ic_gig_upoming
 drawable ic_homescreen_chat
 drawable ic_keyboard_black_24dp
 drawable ic_learning_default_back
+drawable ic_learning_play
 drawable ic_location_tracking_image
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
@@ -2335,12 +2358,15 @@ drawable ic_mtrl_chip_close_circle
 drawable ic_notification_icon
 drawable ic_oval_top_landingscreen
 drawable ic_phone_white_24dp
+drawable ic_quiz
 drawable ic_search
 drawable ic_set_preference
 drawable ic_three_dots
 drawable ic_time_help_
+drawable ic_time_light_grey
 drawable ic_tip
 drawable image_placeholder
+drawable marker
 drawable material_cursor_drawable
 drawable material_ic_calendar_black_24dp
 drawable material_ic_clear_black_24dp
@@ -2376,6 +2402,8 @@ drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable profile_avatar
 drawable radio_button_drawable
+drawable rect_assessment_status_completed
+drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rect_button_outline
 drawable rounded_layout
@@ -2594,12 +2622,14 @@ id coordinator
 id cos
 id counterclockwise
 id country_list
+id course_content_video_slide_layout
 id cross_device_linking_body
 id custom
 id customPanel
 id cut
 id cv_top
 id dark
+id dash
 id date_picker_actions
 id decelerate
 id decelerateAndComplete
@@ -2613,6 +2643,7 @@ id design_menu_item_text
 id design_navigation_view
 id dialog_button
 id disableHome
+id disabled_overlay
 id disjoint
 id dragDown
 id dragEnd
@@ -2703,7 +2734,9 @@ id ifRoom
 id ignore
 id ignoreRequest
 id image
+id imageLayout
 id imageView
+id imageView18
 id image_content_root
 id image_root
 id image_view
@@ -2740,6 +2773,8 @@ id left
 id leftToRight
 id left_aligned
 id left_to_right
+id lesson_completion_tv
+id lessonsSeeMoreButton
 id light
 id line1
 id line3
@@ -2852,6 +2887,7 @@ id phone_button
 id phone_layout
 id phone_number
 id pin
+id play_button_iv
 id playerView
 id position
 id postLayout
@@ -2866,6 +2902,7 @@ id profile_image
 id profile_name
 id progress_circular
 id progress_horizontal
+id quiz_icon_iv
 id radial
 id radio
 id rectangles
@@ -2927,6 +2964,7 @@ id showHome
 id showTitle
 id show_img_cl
 id show_pic
+id side_bar_status
 id sign_in_email_sent_header_text
 id sign_in_email_sent_text
 id sin
@@ -2955,6 +2993,7 @@ id state_rotate
 id state_scale
 id staticLayout
 id staticPostLayout
+id status
 id status_bar_latest_event_content
 id status_iv
 id steps
@@ -3010,7 +3049,9 @@ id texture_view
 id thumbnail
 id ticker
 id time
+id time_imageview
 id time_text
+id timeline
 id title
 id titleDividerNoCustom
 id titleTV
@@ -3052,7 +3093,11 @@ id upload_img
 id useLogo
 id verification_status_cardview
 id verification_status_tv
+id vertical
+id videoThumbnailIV
 id video_decoder_gl_surface_view
+id video_time
+id video_title
 id videos_list
 id view_bottom
 id view_finder
@@ -3317,6 +3362,8 @@ layout ucrop_layout_scale_wheel
 layout ucrop_view
 layout upcoming_gig_card_component
 layout verified_button
+layout view_assessment_card_layout
+layout view_play_card_layout
 menu ucrop_menu_activity
 plurals fui_error_weak_password
 plurals mtrl_badge_content_description
@@ -4652,6 +4699,7 @@ styleable TextAppearance android_fontFamily android_shadowColor android_shadowDx
 styleable TextInputEditText textInputLayoutFocusedRectEnabled
 styleable TextInputLayout android_enabled android_hint android_textColorHint boxBackgroundColor boxBackgroundMode boxCollapsedPaddingTop boxCornerRadiusBottomEnd boxCornerRadiusBottomStart boxCornerRadiusTopEnd boxCornerRadiusTopStart boxStrokeColor boxStrokeErrorColor boxStrokeWidth boxStrokeWidthFocused counterEnabled counterMaxLength counterOverflowTextAppearance counterOverflowTextColor counterTextAppearance counterTextColor endIconCheckable endIconContentDescription endIconDrawable endIconMode endIconTint endIconTintMode errorContentDescription errorEnabled errorIconDrawable errorIconTint errorIconTintMode errorTextAppearance errorTextColor expandedHintEnabled helperText helperTextEnabled helperTextTextAppearance helperTextTextColor hintAnimationEnabled hintEnabled hintTextAppearance hintTextColor passwordToggleContentDescription passwordToggleDrawable passwordToggleEnabled passwordToggleTint passwordToggleTintMode placeholderText placeholderTextAppearance placeholderTextColor prefixText prefixTextAppearance prefixTextColor shapeAppearance shapeAppearanceOverlay startIconCheckable startIconContentDescription startIconDrawable startIconTint startIconTintMode suffixText suffixTextAppearance suffixTextColor
 styleable ThemeEnforcement android_textAppearance enforceMaterialTheme enforceTextAppearance
+styleable TimelineView endLineColor lineOrientation linePadding lineStyle lineStyleDashGap lineStyleDashLength lineWidth marker markerInCenter markerPaddingBottom markerPaddingLeft markerPaddingRight markerPaddingTop markerSize startLineColor
 styleable Toolbar android_gravity android_minHeight buttonGravity collapseContentDescription collapseIcon contentInsetEnd contentInsetEndWithActions contentInsetLeft contentInsetRight contentInsetStart contentInsetStartWithNavigation logo logoDescription maxButtonHeight menu navigationContentDescription navigationIcon popupTheme subtitle subtitleTextAppearance subtitleTextColor title titleMargin titleMarginBottom titleMarginEnd titleMarginStart titleMarginTop titleMargins titleTextAppearance titleTextColor
 styleable Tooltip android_layout_margin android_minHeight android_minWidth android_padding android_text android_textAppearance backgroundTint
 styleable Transform android_elevation android_rotation android_rotationX android_rotationY android_scaleX android_scaleY android_transformPivotX android_transformPivotY android_translationX android_translationY android_translationZ

@@ -80,4 +80,12 @@
     <color name="colorChipCloseInactive">#757575</color>
     <color name="colorChipCloseClicked">#F5F5F5</color>
 
+    <color name="grey_transparetn">#4B979797</color>
+    <color name="text_yellow">#fa6400</color>
+    <color name="text_orange">#f7b500</color>
+    <color name="text_green">#468800</color>
+
+    <color name="status_bg_pending">#f5a623</color>
+    <color name="status_bg_completed">#72a839</color>
+
 </resources>

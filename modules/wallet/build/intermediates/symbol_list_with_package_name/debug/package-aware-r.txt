@@ -1412,6 +1412,7 @@ color grey
 color greyDark
 color greyLight
 color grey_c7
+color grey_transparetn
 color greyish_brown
 color highlighted_text_material_dark
 color highlighted_text_material_light
@@ -1528,6 +1529,8 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color status_bg_completed
+color status_bg_pending
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -1536,6 +1539,9 @@ color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
 color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
+color text_green
+color text_orange
+color text_yellow
 color tooltip_background_dark
 color tooltip_background_light
 color topBarDark
@@ -2424,6 +2430,7 @@ drawable ic_baseline_up_24
 drawable ic_calendar
 drawable ic_chat
 drawable ic_circle_empty
+drawable ic_clock_assessment
 drawable ic_clock_black_24dp
 drawable ic_clock_orange
 drawable ic_cross_grey
@@ -2450,6 +2457,7 @@ drawable ic_keyboard_back
 drawable ic_keyboard_black_24dp
 drawable ic_landinghome_search
 drawable ic_learning_default_back
+drawable ic_learning_play
 drawable ic_location_pin_black
 drawable ic_location_tracking_image
 drawable ic_monthly_earning
@@ -2462,11 +2470,13 @@ drawable ic_ok
 drawable ic_oval_top_landingscreen
 drawable ic_payment_dispute
 drawable ic_phone_white_24dp
+drawable ic_quiz
 drawable ic_search
 drawable ic_set_preference
 drawable ic_small_square
 drawable ic_three_dots
 drawable ic_time_help_
+drawable ic_time_light_grey
 drawable ic_tip
 drawable ic_wallet_happy
 drawable ic_warning
@@ -2510,6 +2520,8 @@ drawable placeholder_user
 drawable profile_avatar
 drawable profile_mock
 drawable radio_button_drawable
+drawable rect_assessment_status_completed
+drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rect_button_outline
 drawable rounded_layout
@@ -2735,6 +2747,7 @@ id coordinator
 id cos
 id counterclockwise
 id country_list
+id course_content_video_slide_layout
 id cross_device_linking_body
 id current_month_text
 id custom
@@ -2758,6 +2771,7 @@ id design_menu_item_text
 id design_navigation_view
 id dialog_button
 id disableHome
+id disabled_overlay
 id disjoint
 id disputedInvoices
 id disputed_heading
@@ -2875,7 +2889,9 @@ id ifRoom
 id ignore
 id ignoreRequest
 id image
+id imageLayout
 id imageView
+id imageView18
 id image_content_root
 id image_root
 id image_view
@@ -2927,6 +2943,8 @@ id left
 id leftToRight
 id left_aligned
 id left_to_right
+id lesson_completion_tv
+id lessonsSeeMoreButton
 id light
 id line1
 id line3
@@ -3084,6 +3102,7 @@ id phone_button
 id phone_layout
 id phone_number
 id pin
+id play_button_iv
 id playerView
 id position
 id postLayout
@@ -3100,6 +3119,7 @@ id progress_bar
 id progress_circular
 id progress_horizontal
 id question
+id quiz_icon_iv
 id radial
 id radio
 id received_text
@@ -3162,6 +3182,7 @@ id shortcut
 id showCustom
 id showHome
 id showTitle
+id side_bar_status
 id sign_in_email_sent_header_text
 id sign_in_email_sent_text
 id sin
@@ -3194,6 +3215,7 @@ id state_rotate
 id state_scale
 id staticLayout
 id staticPostLayout
+id status
 id status_bar_latest_event_content
 id status_iv
 id status_text
@@ -3257,6 +3279,7 @@ id texture_view
 id thumbnail
 id ticker
 id time
+id time_imageview
 id time_text
 id timeline
 id timelineview
@@ -3311,7 +3334,10 @@ id user_name
 id verification_status_cardview
 id verification_status_tv
 id vertical
+id videoThumbnailIV
 id video_decoder_gl_surface_view
+id video_time
+id video_title
 id videos_list
 id view_bottom
 id view_offset_helper
@@ -3612,6 +3638,8 @@ layout ucrop_layout_scale_wheel
 layout ucrop_view
 layout upcoming_gig_card_component
 layout verified_button
+layout view_assessment_card_layout
+layout view_play_card_layout
 layout wallet_balance_card_component
 layout wallet_balance_page
 layout wallet_top_bar_component
