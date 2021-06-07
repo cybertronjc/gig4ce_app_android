@@ -148,7 +148,7 @@ class UploadDrivingLicense : Fragment(),
         }
 
         appBarComp.setBackButtonListener(View.OnClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         })
 
         dlFrontImageHolder.documentUploadLabelTV.text =

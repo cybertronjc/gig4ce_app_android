@@ -18,6 +18,7 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.atoms.IconType
 import com.gigforce.common_ui.listeners.AppBarClicks
+import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.invisible
@@ -30,10 +31,11 @@ import javax.inject.Inject
 
 enum class BackgroundType(val value: Int){
 
-    Default(0),
-    PinkBar(101),
-    WhiteBar(102),
-    GreyBar(103);
+
+    Default(AppConstants.BACKGROUND_TYPE_DEFAULT),
+    PinkBar(AppConstants.BACKGROUND_TYPE_PINKBAR),
+    WhiteBar(AppConstants.BACKGROUND_TYPE_WHITEBAR),
+    GreyBar(AppConstants.BACKGROUND_TYPE_GREYBAR);
 
     companion object {
         private val VALUES = values();
@@ -50,7 +52,8 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     @Inject
     lateinit var navigation: INavigation
 
-     var titleText: TextView
+
+    var titleText: TextView
      var backImageButton: ImageButton
      var menuImageButton: ImageButton
      var searchImageButton: ImageButton
@@ -175,7 +178,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
 
     private fun setColorsOnViews(backgroundType: BackgroundType) {
         when(backgroundType.value){
-            101 -> {
+            AppConstants.BACKGROUND_TYPE_PINKBAR -> {
                 backImageButton.setColorFilter(context.resources.getColor(R.color.white))
                 titleText.setTextColor(context.resources.getColor(R.color.white))
                 searchImageButton.setColorFilter(context.resources.getColor(R.color.white))
@@ -184,7 +187,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
                 search_item.setTextColor(context.resources.getColor(R.color.black))
 
             }
-            102 -> {
+            AppConstants.BACKGROUND_TYPE_WHITEBAR -> {
                 backImageButton.setColorFilter(context.resources.getColor(R.color.black))
                 titleText.setTextColor(context.resources.getColor(R.color.black))
                 searchImageButton.setColorFilter(context.resources.getColor(R.color.black))
@@ -192,7 +195,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
                 search_item.setHintTextColor(context.resources.getColor(R.color.black))
                 search_item.setTextColor(context.resources.getColor(R.color.black))
             }
-            103 -> {
+            AppConstants.BACKGROUND_TYPE_GREYBAR -> {
                 backImageButton.setColorFilter(context.resources.getColor(R.color.black))
                 titleText.setTextColor(context.resources.getColor(R.color.black))
                 searchImageButton.setColorFilter(context.resources.getColor(R.color.black))
@@ -235,16 +238,6 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     }
 
     fun hideKeyboard(view: View) {
-//        view?.let {
-//            it.isFocusableInTouchMode = false
-//            it.clearFocus()
-//            val inputMethodManager =
-//                    context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-//            inputMethodManager!!.toggleSoftInputFromWindow(
-//                    it.applicationWindowToken,
-//                    InputMethodManager.HIDE_NOT_ALWAYS, 0
-//            )
-//        }
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.toggleSoftInputFromWindow(
                 view.applicationWindowToken,
@@ -281,6 +274,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
                 searchTextChangeListener?.onSearchTextChanged(it)
             }
             openSoftKeyboard(search_item)
+
             searchImageButton.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_close_24))
         }
     }
@@ -288,6 +282,7 @@ class AppBar(context: Context, attributeSet: AttributeSet): FrameLayout(context,
     override fun onMenuClick(v: View) {
         Log.d("Click", "Menu")
     }
+
 
 
 }

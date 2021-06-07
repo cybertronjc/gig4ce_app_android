@@ -67,5 +67,10 @@ object AppConstants {
     const val INTEN_EXTRA_DATE = "date"
 
 
+    //app bar component constants
+    const val BACKGROUND_TYPE_DEFAULT = 0
+    const val BACKGROUND_TYPE_PINKBAR = 101
+    const val BACKGROUND_TYPE_WHITEBAR = 102
+    const val BACKGROUND_TYPE_GREYBAR = 103
 
 }
