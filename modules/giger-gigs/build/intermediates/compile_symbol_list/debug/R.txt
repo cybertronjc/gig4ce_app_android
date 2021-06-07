@@ -2276,6 +2276,7 @@ int drawable bg_circle_dashed 0x0
 int drawable bg_delete_dialog_yes 0x0
 int drawable bg_gig_type 0x0
 int drawable bg_rad_4_e94b81 0x0
+int drawable bg_seekbar_add_language 0x0
 int drawable bg_selected_event_rv_gig_hist 0x0
 int drawable bg_unselected_event_rv_gig_hist 0x0
 int drawable bg_wallet 0x0
@@ -2535,6 +2536,7 @@ int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
 int drawable test_custom_background 0x0
+int drawable thumb_seekbar_language 0x0
 int drawable toolbar_background 0x0
 int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
@@ -3357,6 +3359,7 @@ int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
 int id save_scale_type 0x0
 int id sawtooth 0x0
+int id sbProgress 0x0
 int id scale 0x0
 int id scale_scroll_wheel 0x0
 int id screen 0x0
@@ -3555,6 +3558,7 @@ int id trimModeLine 0x0
 int id trouble_signing_in 0x0
 int id trouble_signing_in_possible_fixes 0x0
 int id try_later_btn 0x0
+int id tvThumb 0x0
 int id tv_allow_access 0x0
 int id tv_brand_name_giger_id 0x0
 int id tv_completed_gig_hist 0x0
@@ -3865,6 +3869,7 @@ int layout layout_rv_gig_events_gig_hist 0x0
 int layout layout_rv_on_going_gigs 0x0
 int layout layout_rv_ongoing_gigs_gig_hist 0x0
 int layout layout_rv_role_details 0x0
+int layout layout_thumb_text_seekbar 0x0
 int layout layout_toolbar 0x0
 int layout learning_bs_item 0x0
 int layout material_chip_input_combo 0x0
@@ -4197,6 +4202,7 @@ int string icon_content_description 0x0
 int string issued_on 0x0
 int string item_view_role_description 0x0
 int string learning_assign_to_you 0x0
+int string low 0x0
 int string material_clock_display_divider 0x0
 int string material_clock_toggle_content_description 0x0
 int string material_hour_selection 0x0

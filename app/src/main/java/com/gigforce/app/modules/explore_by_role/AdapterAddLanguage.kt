@@ -12,7 +12,7 @@ import com.gigforce.app.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.datamodels.profile.Language
 import com.gigforce.common_ui.utils.PushDownAnim
-import com.gigforce.app.utils.ThumbTextSeekBar
+import com.gigforce.common_ui.widgets.ThumbTextSeekBar
 import com.gigforce.common_ui.utils.addAsteriskHint
 import kotlinx.android.synthetic.main.layout_next_add_profile_segments.view.*
 import kotlinx.android.synthetic.main.layout_rv_add_language.view.*

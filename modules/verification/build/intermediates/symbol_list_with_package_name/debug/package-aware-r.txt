@@ -1327,6 +1327,7 @@ color common_google_signin_btn_text_light_focused
 color common_google_signin_btn_text_light_pressed
 color common_google_signin_btn_tint
 color d9_black
+color darkish_pink_two
 color design_bottom_navigation_shadow_color
 color design_box_stroke_color
 color design_dark_default_color_background
@@ -2297,6 +2298,7 @@ drawable avd_show_password_2
 drawable avd_show_password_3
 drawable bg_capsule_53ba25
 drawable bg_capsule_border_fa6400
+drawable bg_seekbar_add_language
 drawable bg_white_top_rad_8
 drawable border_26_979797_rad_2
 drawable border_27979797_rad_4
@@ -2513,6 +2515,7 @@ drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
 drawable test_custom_background
+drawable thumb_seekbar_language
 drawable toolbar_background
 drawable toolbar_bg_client_activation
 drawable toolbar_search_background
@@ -3292,6 +3295,7 @@ id save_non_transition_alpha
 id save_overlay_view
 id save_scale_type
 id sawtooth
+id sbProgress
 id scale
 id scale_scroll_wheel
 id screen
@@ -3476,6 +3480,7 @@ id tvDL6
 id tvPan3
 id tvPan5
 id tvPan6
+id tvThumb
 id tvVeriAddressTitle
 id tvVeriBankTitle
 id tvVeriDD5
@@ -3729,6 +3734,7 @@ layout layout_sp_city_dropdown
 layout layout_sp_completion_year
 layout layout_sp_driving_license_state
 layout layout_sp_state_dl
+layout layout_thumb_text_seekbar
 layout layout_toolbar
 layout layout_upload_driving_certificate
 layout layout_verification
@@ -4187,6 +4193,7 @@ string license_number_with_colon
 string license_validity
 string license_validity_with_colon
 string location
+string low
 string material_clock_display_divider
 string material_clock_toggle_content_description
 string material_hour_selection

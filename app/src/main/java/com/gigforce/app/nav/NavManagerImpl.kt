@@ -36,6 +36,8 @@ class NavManagerImpl @Inject constructor(
     override fun registerAllRoutes() {
         this.registerRoute("referrals", R.id.referrals_fragment)
         this.registerRoute("login", R.id.Login)
+        this.registerRoute("languageSelectFragment", R.id.languageSelectFragment)
+        this.registerRoute("authFlowFragment", R.id.authFlowFragment)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)

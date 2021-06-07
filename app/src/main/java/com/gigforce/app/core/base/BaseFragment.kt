@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -22,30 +21,24 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
-import com.facebook.shimmer.ShimmerFrameLayout
-import com.gigforce.app.R
-import com.gigforce.app.di.implementations.AppDialogsImp
-import com.gigforce.common_ui.AppDialogsInterface
-import com.gigforce.common_ui.ConfirmationDialogOnClickListener
-import com.gigforce.common_ui.OptionSelected
-import com.gigforce.app.core.base.language.LanguageUtilImp
 import com.gigforce.app.core.base.language.LanguageUtilInterface
 import com.gigforce.app.core.base.navigation.NavigationImpl
 import com.gigforce.app.core.base.navigation.NavigationInterface
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
+import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
+import com.gigforce.app.di.implementations.AppDialogsImp
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.common_ui.AppDialogsInterface
+import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.OptionSelected
+import com.gigforce.common_ui.configrepository.ConfigDataModel
+import com.gigforce.common_ui.configrepository.ConfigRepository
+import com.gigforce.common_ui.core.IOnBackPressedOverride
+import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.base.utilfeatures.CommonUtilImp
 import com.gigforce.core.base.utilfeatures.CommonUtilInterface
-import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsImpl
-import com.gigforce.app.core.base.viewsfromviews.ViewsFromViewsInterface
-import com.gigforce.core.base.genericadapter.PFRecyclerViewAdapter
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.NavFragmentsData
-import com.gigforce.common_ui.configrepository.ConfigDataModel
-import com.gigforce.common_ui.configrepository.ConfigRepository
-import com.gigforce.app.utils.ui_models.ShimmerModel
-import com.gigforce.common_ui.core.IOnBackPressedOverride
 
 // TODO: Rename parameter arguments, choose names that match
 /**
@@ -56,18 +49,19 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 open class BaseFragment : Fragment(),
     ViewsFromViewsInterface, NavigationInterface,
     IOnBackPressedOverride,
-    SharedPreAndCommonUtilInterface, AppDialogsInterface, CommonUtilInterface, LanguageUtilInterface {
+    SharedPreAndCommonUtilInterface, AppDialogsInterface, CommonUtilInterface,
+    LanguageUtilInterface {
     var navFragmentsData: NavFragmentsData? = null
     lateinit var viewsFromViewsInterface: ViewsFromViewsInterface
     lateinit var navigationInterface: NavigationInterface
     lateinit var sharedDataInterface: SharedPreAndCommonUtilInterface
     lateinit var appDialogsInterface: AppDialogsInterface
-    lateinit var languageUtilInterface: LanguageUtilInterface
+//    lateinit var languageUtilInterface: LanguageUtilInterface
     lateinit var utilAndValidationInterface: CommonUtilInterface
-    lateinit var baseFragment: BaseFragment
+//    lateinit var baseFragment: BaseFragment
     var mView: View? = null
 
-    private var configrepositoryObj: ConfigRepository? = null;
+    private var configrepositoryObj: ConfigRepository? = null
     private var requestOptions: RequestOptions? = null
 
     open fun isConfigRequired(): Boolean {
@@ -79,15 +73,13 @@ open class BaseFragment : Fragment(),
     }
 
     open fun inflateView(
-            resource: Int, inflater: LayoutInflater,
-            container: ViewGroup?
+        resource: Int, inflater: LayoutInflater,
+        container: ViewGroup?
     ): View? {
         navFragmentsData = activity as NavFragmentsData
-        baseFragment = this
+//        baseFragment = this
         mView = inflater.inflate(resource, container, false)
-        getActivity()?.setRequestedOrientation(
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        );
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         initializeDI()
         init()
         try {
@@ -109,7 +101,7 @@ open class BaseFragment : Fragment(),
             )
         appDialogsInterface =
             AppDialogsImp(requireActivity())
-        languageUtilInterface = LanguageUtilImp(this)
+//        languageUtilInterface = LanguageUtilImp(this)
         utilAndValidationInterface = CommonUtilImp(requireActivity())
     }
 
@@ -142,8 +134,8 @@ open class BaseFragment : Fragment(),
     }
 
     override fun onDetach() {
-        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!
-                .dismiss()
+//        if (this::languageUtilInterface.isInitialized && languageUtilInterface.getDeviceLanguageDialog() != null) languageUtilInterface.getDeviceLanguageDialog()!!
+//            .dismiss()
         super.onDetach()
     }
 
@@ -151,7 +143,7 @@ open class BaseFragment : Fragment(),
     fun initGlide(placeHolder: Int, errorImg: Int): RequestManager? {
         if (requestOptions == null) {
             requestOptions = RequestOptions().placeholder(placeHolder)
-                    .error(errorImg)
+                .error(errorImg)
         }
         return Glide.with(this).setDefaultRequestOptions(requestOptions!!)
     }
@@ -178,8 +170,8 @@ open class BaseFragment : Fragment(),
     }
 
     override fun getRecyclerView(
-            view: PFRecyclerViewAdapter<Any?>.ViewHolder,
-            id: Int
+        view: PFRecyclerViewAdapter<Any?>.ViewHolder,
+        id: Int
     ): RecyclerView {
         return viewsFromViewsInterface.getRecyclerView(view, id)
     }
@@ -320,82 +312,82 @@ open class BaseFragment : Fragment(),
     }
 
     override fun getChangedDeviceLanguageCode(deviceLanguage: String): String {
-        return languageUtilInterface.getChangedDeviceLanguageCode(deviceLanguage)
+        return ""//languageUtilInterface.getChangedDeviceLanguageCode(deviceLanguage)
 
     }
 
     override fun confirmDialogForDeviceLanguageChanged(
-            currentDeviceLanguageCode: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        currentDeviceLanguageCode: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
-        languageUtilInterface.confirmDialogForDeviceLanguageChanged(
-                currentDeviceLanguageCode,
-                buttonClickListener
-        )
+//        languageUtilInterface.confirmDialogForDeviceLanguageChanged(
+//            currentDeviceLanguageCode,
+//            buttonClickListener
+//        )
     }
 
     override fun showDialogIfDeviceLanguageChanged() {
-        languageUtilInterface.showDialogIfDeviceLanguageChanged()
+//        languageUtilInterface.showDialogIfDeviceLanguageChanged()
     }
 
     override fun getDeviceLanguageDialog(): Dialog? {
-        return languageUtilInterface.getDeviceLanguageDialog()
+        return null //languageUtilInterface.getDeviceLanguageDialog()
     }
 
     override fun showConfirmationDialogType1(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType1(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType2(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType2(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType3(
-            title: String,
-            subTitle: String,
-            yesButtonText: String,
-            noButtonText: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        subTitle: String,
+        yesButtonText: String,
+        noButtonText: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType3(
-                title,
-                subTitle,
-                yesButtonText,
-                noButtonText,
-                buttonClickListener
+            title,
+            subTitle,
+            yesButtonText,
+            noButtonText,
+            buttonClickListener
         )
     }
 
     override fun showConfirmationDialogType5(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType5(title, buttonClickListener)
     }
 
     override fun showConfirmationDialogType4(
-            title: String,
-            subTitle: String,
-            optionSelected: OptionSelected
+        title: String,
+        subTitle: String,
+        optionSelected: OptionSelected
     ) {
         appDialogsInterface.showConfirmationDialogType4(title, subTitle, optionSelected)
     }
 
     override fun showConfirmationDialogType7(
-            title: String,
-            buttonClickListener: ConfirmationDialogOnClickListener
+        title: String,
+        buttonClickListener: ConfirmationDialogOnClickListener
     ) {
         appDialogsInterface.showConfirmationDialogType7(title, buttonClickListener)
     }
 
     override fun getLanguageCodeToName(languageCode: String): String {
-        return languageUtilInterface.getLanguageCodeToName(languageCode)
+        return ""//languageUtilInterface.getLanguageCodeToName(languageCode)
     }
 
 //    override fun showToast(message: String) {
@@ -454,17 +446,17 @@ open class BaseFragment : Fragment(),
         return getShimmerDrawable()
     }
 
-    fun getShimmerDrawable() : ShimmerDrawable{
+    fun getShimmerDrawable(): ShimmerDrawable {
 
 
-
-        val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
-            .setDuration(1800) // how long the shimmering animation takes to do one full sweep
-            .setBaseAlpha(0.9f) //the alpha of the underlying children
-            .setHighlightAlpha(1.0f) // the shimmer alpha amount
-            .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-            .setAutoStart(true)
-            .build()
+        val shimmer =
+            Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
+                .setDuration(1800) // how long the shimmering animation takes to do one full sweep
+                .setBaseAlpha(0.9f) //the alpha of the underlying children
+                .setHighlightAlpha(1.0f) // the shimmer alpha amount
+                .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
+                .setAutoStart(true)
+                .build()
 
 
 // This is the placeholder for the imageView
@@ -478,39 +470,48 @@ open class BaseFragment : Fragment(),
         val activity = activity ?: return
 
         val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
     }
 
-    fun startShimmer(ll_shimmer: LinearLayout, shimmerModel: ShimmerModel) {
-        ll_shimmer.removeAllViews()
-        ll_shimmer.visible()
-        ll_shimmer.orientation = shimmerModel.orientation
-        for (i in 0 until shimmerModel.itemsToBeDrawn) {
-            val view = LayoutInflater.from(requireContext()).inflate(shimmerModel.cardRes, null)
-            ll_shimmer.addView(view)
-            val layoutParams: LinearLayout.LayoutParams =
-                    view.layoutParams as LinearLayout.LayoutParams
-            layoutParams.height = resources.getDimensionPixelSize(shimmerModel.minHeight)
-            layoutParams.width = resources.getDimensionPixelSize(shimmerModel.minWidth)
-            layoutParams.setMargins(resources.getDimensionPixelSize(shimmerModel.marginLeft),
-                    resources.getDimensionPixelSize(shimmerModel.marginTop), resources.getDimensionPixelSize(shimmerModel.marginRight),
-                    resources.getDimensionPixelSize(shimmerModel.marginBottom))
-            view.layoutParams = layoutParams
-            val shimmerLayout = view.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
-            shimmerLayout.startShimmer()
-        }
-    }
+//    fun startShimmer(ll_shimmer: LinearLayout, shimmerModel: ShimmerModel) {
+//        ll_shimmer.removeAllViews()
+//        ll_shimmer.visible()
+//        ll_shimmer.orientation = shimmerModel.orientation
+//        for (i in 0 until shimmerModel.itemsToBeDrawn) {
+//            val view = LayoutInflater.from(requireContext()).inflate(shimmerModel.cardRes, null)
+//            ll_shimmer.addView(view)
+//            val layoutParams: LinearLayout.LayoutParams =
+//                    view.layoutParams as LinearLayout.LayoutParams
+//            layoutParams.height = resources.getDimensionPixelSize(shimmerModel.minHeight)
+//            layoutParams.width = resources.getDimensionPixelSize(shimmerModel.minWidth)
+//            layoutParams.setMargins(resources.getDimensionPixelSize(shimmerModel.marginLeft),
+//                    resources.getDimensionPixelSize(shimmerModel.marginTop), resources.getDimensionPixelSize(shimmerModel.marginRight),
+//                    resources.getDimensionPixelSize(shimmerModel.marginBottom))
+//            view.layoutParams = layoutParams
+//            val shimmerLayout = view.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+//            shimmerLayout.startShimmer()
+//        }
+//    }
 
-    fun stopShimmer(view: LinearLayout) {
-        for (i in 0 until view.childCount) {
-            val nestedView = view.getChildAt(i)
-            val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
-            shimmerLayout.stopShimmer()
-
-        }
-        view.removeAllViews()
-        view.gone()
-    }
+//    fun stopShimmer(view: LinearLayout) {
+//        for (i in 0 until view.childCount) {
+//            val nestedView = view.getChildAt(i)
+//            val shimmerLayout = nestedView.findViewById<ShimmerFrameLayout>(R.id.shimmer_controller)
+//            shimmerLayout.stopShimmer()
+//
+//        }
+//        view.removeAllViews()
+//        view.gone()
+//    }
+//data class ShimmerModel(@DimenRes val marginLeft: Int = R.dimen.size_16,
+//                        @DimenRes val marginRight: Int =  R.dimen.size_16,
+//                        @DimenRes val marginTop: Int =  R.dimen.size_16,
+//                        @DimenRes val marginBottom: Int =  R.dimen.size_16,
+//                        @LayoutRes var cardRes: Int = R.layout.data_placeholder_layout,
+//                        @DimenRes var minWidth: Int = R.dimen.size_300,
+//                        @DimenRes var minHeight: Int = R.dimen.size_200,
+//                        var itemsToBeDrawn: Int = 4,
+//                        var orientation: Int = LinearLayout.VERTICAL)
 
 }

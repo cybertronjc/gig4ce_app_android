@@ -1,11 +1,11 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.widgets
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.widget.AppCompatTextView
-import com.gigforce.app.R
+import com.gigforce.common_ui.R
 
 
 class ThumbTextView : AppCompatTextView {

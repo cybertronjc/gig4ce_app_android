@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.widgets
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import com.gigforce.app.R
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.utils.getViewWidth
 
 class ThumbTextSeekBar : LinearLayout {

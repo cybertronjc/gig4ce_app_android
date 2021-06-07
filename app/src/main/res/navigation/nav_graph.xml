@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navStartingFragment">
+
+    <fragment
+        android:id="@+id/navStartingFragment"
+        android:name="com.gigforce.app.NavStartingFragment"
+        tools:layout="@layout/fragment_nav_starting">
+    </fragment>
 
     <fragment
         android:id="@+id/aboutExpandedFragment"
@@ -95,13 +101,6 @@
         <action
             android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
             app:destination="@id/addExperienceBottomSheet" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/tempFragment"
-        android:name="com.gigforce.app.TempFragment"
-        android:label="TempFragment"
-        tools:layout="@layout/calendar_dialog">
     </fragment>
 
 

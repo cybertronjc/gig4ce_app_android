@@ -1314,6 +1314,7 @@ int color common_google_signin_btn_text_light_focused 0x0
 int color common_google_signin_btn_text_light_pressed 0x0
 int color common_google_signin_btn_tint 0x0
 int color d9_black 0x0
+int color darkish_pink_two 0x0
 int color design_bottom_navigation_shadow_color 0x0
 int color design_box_stroke_color 0x0
 int color design_dark_default_color_background 0x0
@@ -1541,6 +1542,7 @@ int color ucrop_color_widget_rotate_mid_line 0x0
 int color ucrop_color_widget_text 0x0
 int color ucrop_scale_text_view_selector 0x0
 int color warm_grey 0x0
+int color warm_grey_two 0x0
 int color white 0x0
 int color yellow 0x0
 int dimen abc_action_bar_content_inset_material 0x0
@@ -2274,6 +2276,7 @@ int drawable avd_hide_password 0x0
 int drawable avd_show_password 0x0
 int drawable back_button 0x0
 int drawable bg_monthly_goal 0x0
+int drawable bg_seekbar_add_language 0x0
 int drawable bg_wallet_card 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_grey_square 0x0
@@ -2474,6 +2477,7 @@ int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
 int drawable shape_circle_lipstick 0x0
 int drawable test_custom_background 0x0
+int drawable thumb_seekbar_language 0x0
 int drawable toolbar_background 0x0
 int drawable toolbar_search_background 0x0
 int drawable tooltip_frame_dark 0x0
@@ -3074,6 +3078,7 @@ int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
 int id save_scale_type 0x0
 int id sawtooth 0x0
+int id sbProgress 0x0
 int id scale 0x0
 int id scale_scroll_wheel 0x0
 int id screen 0x0
@@ -3238,6 +3243,7 @@ int id trimModeLength 0x0
 int id trimModeLine 0x0
 int id trouble_signing_in 0x0
 int id trouble_signing_in_possible_fixes 0x0
+int id tvThumb 0x0
 int id tv_allow_access 0x0
 int id tv_desc 0x0
 int id tv_pop_menu_normal 0x0
@@ -3451,6 +3457,7 @@ int layout layout_power_menu_library_skydoves 0x0
 int layout layout_round_corner_progress_bar 0x0
 int layout layout_rv_role_details 0x0
 int layout layout_text_round_corner_progress_bar 0x0
+int layout layout_thumb_text_seekbar 0x0
 int layout layout_toolbar 0x0
 int layout material_chip_input_combo 0x0
 int layout material_clock_display 0x0
@@ -3784,6 +3791,7 @@ int string invoice_generated_info 0x0
 int string invoice_info 0x0
 int string item_view_role_description 0x0
 int string looks_like_you_have_not_explored_much 0x0
+int string low 0x0
 int string material_clock_display_divider 0x0
 int string material_clock_toggle_content_description 0x0
 int string material_hour_selection 0x0

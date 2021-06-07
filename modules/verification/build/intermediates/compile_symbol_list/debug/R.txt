@@ -1326,6 +1326,7 @@ int color common_google_signin_btn_text_light_focused 0x0
 int color common_google_signin_btn_text_light_pressed 0x0
 int color common_google_signin_btn_tint 0x0
 int color d9_black 0x0
+int color darkish_pink_two 0x0
 int color design_bottom_navigation_shadow_color 0x0
 int color design_box_stroke_color 0x0
 int color design_dark_default_color_background 0x0
@@ -2296,6 +2297,7 @@ int drawable avd_show_password_2 0x0
 int drawable avd_show_password_3 0x0
 int drawable bg_capsule_53ba25 0x0
 int drawable bg_capsule_border_fa6400 0x0
+int drawable bg_seekbar_add_language 0x0
 int drawable bg_white_top_rad_8 0x0
 int drawable border_26_979797_rad_2 0x0
 int drawable border_27979797_rad_4 0x0
@@ -2512,6 +2514,7 @@ int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
 int drawable test_custom_background 0x0
+int drawable thumb_seekbar_language 0x0
 int drawable toolbar_background 0x0
 int drawable toolbar_bg_client_activation 0x0
 int drawable toolbar_search_background 0x0
@@ -3291,6 +3294,7 @@ int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
 int id save_scale_type 0x0
 int id sawtooth 0x0
+int id sbProgress 0x0
 int id scale 0x0
 int id scale_scroll_wheel 0x0
 int id screen 0x0
@@ -3475,6 +3479,7 @@ int id tvDL6 0x0
 int id tvPan3 0x0
 int id tvPan5 0x0
 int id tvPan6 0x0
+int id tvThumb 0x0
 int id tvVeriAddressTitle 0x0
 int id tvVeriBankTitle 0x0
 int id tvVeriDD5 0x0
@@ -3728,6 +3733,7 @@ int layout layout_sp_city_dropdown 0x0
 int layout layout_sp_completion_year 0x0
 int layout layout_sp_driving_license_state 0x0
 int layout layout_sp_state_dl 0x0
+int layout layout_thumb_text_seekbar 0x0
 int layout layout_toolbar 0x0
 int layout layout_upload_driving_certificate 0x0
 int layout layout_verification 0x0
@@ -4186,6 +4192,7 @@ int string license_number_with_colon 0x0
 int string license_validity 0x0
 int string license_validity_with_colon 0x0
 int string location 0x0
+int string low 0x0
 int string material_clock_display_divider 0x0
 int string material_clock_toggle_content_description 0x0
 int string material_hour_selection 0x0

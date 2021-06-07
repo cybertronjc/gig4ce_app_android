@@ -2277,6 +2277,7 @@ drawable bg_circle_dashed
 drawable bg_delete_dialog_yes
 drawable bg_gig_type
 drawable bg_rad_4_e94b81
+drawable bg_seekbar_add_language
 drawable bg_selected_event_rv_gig_hist
 drawable bg_unselected_event_rv_gig_hist
 drawable bg_wallet
@@ -2536,6 +2537,7 @@ drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
 drawable test_custom_background
+drawable thumb_seekbar_language
 drawable toolbar_background
 drawable toolbar_search_background
 drawable tooltip_frame_dark
@@ -3358,6 +3360,7 @@ id save_non_transition_alpha
 id save_overlay_view
 id save_scale_type
 id sawtooth
+id sbProgress
 id scale
 id scale_scroll_wheel
 id screen
@@ -3556,6 +3559,7 @@ id trimModeLine
 id trouble_signing_in
 id trouble_signing_in_possible_fixes
 id try_later_btn
+id tvThumb
 id tv_allow_access
 id tv_brand_name_giger_id
 id tv_completed_gig_hist
@@ -3866,6 +3870,7 @@ layout layout_rv_gig_events_gig_hist
 layout layout_rv_on_going_gigs
 layout layout_rv_ongoing_gigs_gig_hist
 layout layout_rv_role_details
+layout layout_thumb_text_seekbar
 layout layout_toolbar
 layout learning_bs_item
 layout material_chip_input_combo
@@ -4198,6 +4203,7 @@ string icon_content_description
 string issued_on
 string item_view_role_description
 string learning_assign_to_you
+string low
 string material_clock_display_divider
 string material_clock_toggle_content_description
 string material_hour_selection

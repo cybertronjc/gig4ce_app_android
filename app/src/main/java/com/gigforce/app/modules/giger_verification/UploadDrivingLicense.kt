@@ -22,7 +22,7 @@ import com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicen
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.GenericSpinnerAdapter
+import com.gigforce.common_ui.adapter.GenericSpinnerAdapter
 import com.gigforce.client_activation.client_activation.RejectionDialog
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.IOnBackPressedOverride

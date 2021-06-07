@@ -16,7 +16,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.client_activation.client_activation.models.Cities
 import com.gigforce.client_activation.client_activation.models.States
 import com.gigforce.app.modules.questionnaire.models.Questions
-import com.gigforce.app.utils.GenericSpinnerAdapter
+import com.gigforce.common_ui.adapter.GenericSpinnerAdapter
 import kotlinx.android.synthetic.main.layout_answers_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_date_rv_questionnaire.view.*
 import kotlinx.android.synthetic.main.layout_drop_down_questionnaire.view.*
@@ -122,11 +122,12 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                     holder.itemView.pb_state_city.visible()
                 } else {
                     holder.itemView.sp_state.visible()
-                    val arrayAdapter: GenericSpinnerAdapter<States> = GenericSpinnerAdapter(
-                        holder.itemView.context,
-                        R.layout.tv_options_header_sp,
-                        stateCityMap.keys.toList()
-                    )
+                    val arrayAdapter: GenericSpinnerAdapter<States> =
+                        GenericSpinnerAdapter(
+                            holder.itemView.context,
+                            R.layout.tv_options_header_sp,
+                            stateCityMap.keys.toList()
+                        )
                     holder.itemView.sp_state.adapter = arrayAdapter
                     if (option.selectedItemPosition != -1) {
                         holder.itemView.sp_state.setSelection(option.selectedItemPosition)
@@ -239,11 +240,12 @@ class AdapterOptionsQuestionnaire : RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (option.options[0] != option.dropDownHint) {
                     option.options.add(0, option.dropDownHint)
                 }
-                val arrayAdapter: GenericSpinnerAdapter<String> = GenericSpinnerAdapter(
-                    holder.itemView.context,
-                    R.layout.tv_options_header_sp,
-                    option.options
-                )
+                val arrayAdapter: GenericSpinnerAdapter<String> =
+                    GenericSpinnerAdapter(
+                        holder.itemView.context,
+                        R.layout.tv_options_header_sp,
+                        option.options
+                    )
                 holder.itemView.sp_dropdown.adapter = arrayAdapter
                 if (option.selectedItemPosition != -1) {
                     holder.itemView.sp_dropdown.setSelection(option.selectedItemPosition)

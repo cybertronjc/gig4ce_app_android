@@ -69,4 +69,7 @@
     <color name="gig_timer_no_show_red">#ff8b8b</color>
     <color name="gig_timer_upcoming_pink">#f7d16a</color>
 
+    <color name="warm_grey_two">#979797</color>
+    <color name="darkish_pink_two">#e94b81</color>
+
 </resources>

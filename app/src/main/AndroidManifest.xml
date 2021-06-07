@@ -223,10 +223,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <!--        <receiver android:name=".core.base.language.LanguageChangeReceiver">-->
-        <!--            <intent-filter><action android:name="android.intent.action.ACTION_LOCALE_CHANGED"/>-->
-        <!--            </intent-filter>-->
-        <!--        </receiver>-->
+
         <!-- Branch init -->
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_cf1kHW4fcGP4SXVy31QE6ehoxyjgqLlW" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ph6gM53mhJM4J7Vt14O1OpkftwepAJEe" />

@@ -1315,6 +1315,7 @@ color common_google_signin_btn_text_light_focused
 color common_google_signin_btn_text_light_pressed
 color common_google_signin_btn_tint
 color d9_black
+color darkish_pink_two
 color design_bottom_navigation_shadow_color
 color design_box_stroke_color
 color design_dark_default_color_background
@@ -1542,6 +1543,7 @@ color ucrop_color_widget_rotate_mid_line
 color ucrop_color_widget_text
 color ucrop_scale_text_view_selector
 color warm_grey
+color warm_grey_two
 color white
 color yellow
 dimen abc_action_bar_content_inset_material
@@ -2275,6 +2277,7 @@ drawable avd_hide_password
 drawable avd_show_password
 drawable back_button
 drawable bg_monthly_goal
+drawable bg_seekbar_add_language
 drawable bg_wallet_card
 drawable bg_white_top_rad_8
 drawable border_grey_square
@@ -2475,6 +2478,7 @@ drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
 drawable test_custom_background
+drawable thumb_seekbar_language
 drawable toolbar_background
 drawable toolbar_search_background
 drawable tooltip_frame_dark
@@ -3075,6 +3079,7 @@ id save_non_transition_alpha
 id save_overlay_view
 id save_scale_type
 id sawtooth
+id sbProgress
 id scale
 id scale_scroll_wheel
 id screen
@@ -3239,6 +3244,7 @@ id trimModeLength
 id trimModeLine
 id trouble_signing_in
 id trouble_signing_in_possible_fixes
+id tvThumb
 id tv_allow_access
 id tv_desc
 id tv_pop_menu_normal
@@ -3452,6 +3458,7 @@ layout layout_power_menu_library_skydoves
 layout layout_round_corner_progress_bar
 layout layout_rv_role_details
 layout layout_text_round_corner_progress_bar
+layout layout_thumb_text_seekbar
 layout layout_toolbar
 layout material_chip_input_combo
 layout material_clock_display
@@ -3785,6 +3792,7 @@ string invoice_generated_info
 string invoice_info
 string item_view_role_description
 string looks_like_you_have_not_explored_much
+string low
 string material_clock_display_divider
 string material_clock_toggle_content_description
 string material_hour_selection

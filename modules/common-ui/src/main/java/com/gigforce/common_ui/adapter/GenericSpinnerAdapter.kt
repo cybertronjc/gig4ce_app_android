@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
-import com.gigforce.app.R
 
 class GenericSpinnerAdapter<T>(context: Context, resource: Int, objects: List<T>) :
     ArrayAdapter<T>(context, resource, objects) {
