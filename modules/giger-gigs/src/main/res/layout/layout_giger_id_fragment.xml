@@ -246,15 +246,32 @@
                     app:layout_constraintStart_toEndOf="@+id/ll_brand_details_giger_id"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/tv_gig_id_giger_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
-                        android:text="Gig Id : GG00001"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        tools:text="Gig Id : GG00001"
                         android:textColor="@color/lipstick"
                         android:textSize="@dimen/font_14" />
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/gig_act_code_copy_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20dp"
+
+                            android:src="@drawable/ic_baseline_content_copy_24"/>
+
+                    </LinearLayout>
+
 
                     <View
                         android:id="@+id/view_one"
