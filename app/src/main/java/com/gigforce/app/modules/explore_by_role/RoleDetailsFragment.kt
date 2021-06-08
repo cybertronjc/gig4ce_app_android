@@ -272,7 +272,8 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
             showToast(it ?: "")
         })
         viewModel.observerMarkedAsInterest.observe(viewLifecycleOwner, Observer {
-            navigate(R.id.fragment_marked_as_interest)
+            //if we need fragment_marked_as_interest file search in modular final branch
+//            navigate(R.id.fragment_marked_as_interest)
         })
         viewModel.observerDataToCheck.observe(viewLifecycleOwner, Observer {
             run {
@@ -288,13 +289,14 @@ class RoleDetailsFragment : BaseFragment(), PopupMenu.OnMenuItemClickListener {
                                         StringConstants.NAVIGATE_TO_MARK_AS_INTERESTED.value,
                                         false
                                 )
-                        navigate(
-                                R.id.fragment_marked_as_interest,
-                                bundleOf(
-                                        StringConstants.ROLE_ID.value to mRoleID,
-                                        StringConstants.INVITE_USER_ID.value to mInviteUserID
-                                )
-                        )
+                        //if we need fragment_marked_as_interest file search in modular final branch
+//                        navigate(
+//                                R.id.fragment_marked_as_interest,
+//                                bundleOf(
+//                                        StringConstants.ROLE_ID.value to mRoleID,
+//                                        StringConstants.INVITE_USER_ID.value to mInviteUserID
+//                                )
+//                        )
                         break
                     } else if (navFragmentsData?.getData()
                                     ?.getBoolean(StringConstants.NAV_TO_QUESTIONNARE.value) == true
