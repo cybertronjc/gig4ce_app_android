@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.language
+package com.gigforce.giger_app.applanguage
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestManager
-import com.gigforce.app.R
-import com.gigforce.profile.models.CityWithImage
+import com.gigforce.giger_app.R
 
 class LanguageAdapter(
         private val context: Context
@@ -73,13 +71,11 @@ class LanguageAdapter(
     }
 
     fun setData(contacts: List<Language>) {
-
-//        this.selectedItemIndex = -1
         this.originalLanguageList = contacts
         this.filteredLanguageList = contacts
         notifyDataSetChanged()
     }
-    fun getSelectedLanguage():Language{
+    fun getSelectedLanguage(): Language {
         return originalLanguageList.get(selectedItemIndex)
     }
     override fun getFilter(): Filter = contactsFilter
@@ -180,7 +176,7 @@ class LanguageAdapter(
 
     interface LanguageAdapterClickListener{
 
-        fun onLanguageSelected(language : Language,viewHolder:OnboardingMajorCityViewHolder)
+        fun onLanguageSelected(language : Language, viewHolder: OnboardingMajorCityViewHolder)
     }
 
 }

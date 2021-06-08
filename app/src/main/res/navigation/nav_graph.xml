@@ -221,7 +221,7 @@
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.gigforce.app.modules.language.LanguageSelectFragment"
+        android:name="com.gigforce.giger_app.applanguage.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"

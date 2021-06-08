@@ -1,27 +1,28 @@
-package com.gigforce.app.modules.language
+package com.gigforce.giger_app.applanguage
 
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.franmontiel.localechanger.LocaleChanger
-import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
-//import com.gigforce.app.utils.configrepository.ConfigViewModel
 import kotlinx.android.synthetic.main.fragment_select_language.*
 import java.util.*
 import com.gigforce.core.analytics.LanguageEvents
 import com.gigforce.common_ui.configrepository.ConfigViewModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.giger_app.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
 @AndroidEntryPoint
-class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterClickListener {
+class LanguageSelectFragment : Fragment(), LanguageAdapter.LanguageAdapterClickListener {
 
     private val viewModel: ConfigViewModel by viewModels()
 
@@ -34,7 +35,8 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
     private var win: Window? = null
 
     @Inject lateinit var eventTracker: IEventTracker
-
+    @Inject lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+    @Inject lateinit var navigation : INavigation
     val SUPPORTED_LOCALES =
             Arrays.asList(
                     Locale("en", "US"),
@@ -59,7 +61,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
             LocaleChanger.initialize(this.context, SUPPORTED_LOCALES)
         } catch (e: Exception) {
         }
-        return inflateView(R.layout.fragment_select_language, inflater, container)
+        return inflater.inflate(R.layout.fragment_select_language, container,false)
     }
 
 
@@ -102,9 +104,6 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 //                })
     }
 
-    override fun isDeviceLanguageChangedDialogRequired(): Boolean {
-        return false
-    }
 
 //    private fun dismissLanguageSelectionDialog() {
 //        //LanguageSelectFragment is the first screen we don't need alert here and its picking up device language already for radio button.
@@ -114,7 +113,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 //    }
 
     private fun storeDeviceLanguage() {
-        saveDeviceLanguage(Resources.getSystem().getConfiguration().locale.getLanguage())
+        sharedPreAndCommonUtilInterface.saveDeviceLanguage(Resources.getSystem().getConfiguration().locale.getLanguage())
     }
 
     private fun changeStatusBarColor(){
@@ -137,16 +136,16 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 
         languageAdapter.setData(
                 listOf(
-                        Language(
-                                languageCode = "en",
-                                languageName = "English",
-                                bigTextToDisplay = "Aa"
-                        ),
-                        Language(
-                                languageCode = "hi",
-                                languageName = "हिंदी",
-                                bigTextToDisplay = "अआ"
-                        )
+                    Language(
+                        languageCode = "en",
+                        languageName = "English",
+                        bigTextToDisplay = "Aa"
+                    ),
+                    Language(
+                        languageCode = "hi",
+                        languageName = "हिंदी",
+                        bigTextToDisplay = "अआ"
+                    )
                 )
         )
     }
@@ -166,9 +165,9 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
 //        }
         next.setOnClickListener{
             var language = languageAdapter.getSelectedLanguage()
-            updateResources(language.languageCode)
-            saveAppLanuageCode(language.languageCode)
-            saveAppLanguageName(language.languageCode)
+            sharedPreAndCommonUtilInterface.updateResources(language.languageCode)
+            sharedPreAndCommonUtilInterface.saveAppLanuageCode(language.languageCode)
+            sharedPreAndCommonUtilInterface.saveAppLanguageName(language.languageCode)
 
             languageCode = language.languageCode
             var props = HashMap<String, Any>()
@@ -210,9 +209,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
     }
 
     private fun navNext() {
-        navigate(
-                R.id.authFlowFragment
-        )
+        navigation.navigateTo("authFlowFragment")
     }
 
 
@@ -221,7 +218,7 @@ class LanguageSelectFragment : BaseFragment(), LanguageAdapter.LanguageAdapterCl
         super.onDestroyView()
     }
 
-    override fun onLanguageSelected(language: Language,viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {
+    override fun onLanguageSelected(language: Language, viewHolder: LanguageAdapter.OnboardingMajorCityViewHolder) {
         setSelected(viewHolder)
     }
 

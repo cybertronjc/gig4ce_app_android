@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.language
+package com.gigforce.giger_app.applanguage
 
 data class Language(
         val languageCode : String,
