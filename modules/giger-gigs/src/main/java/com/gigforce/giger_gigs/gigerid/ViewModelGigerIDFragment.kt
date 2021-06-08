@@ -144,10 +144,13 @@ class ViewModelGigerIDFragment(private val gigerIDCallbacks: GigerIDCallbacks) :
         gigerIDCallbacks.getURls(this)
     }
 
+    var currentGig : GigAndGigOrder? = null
     fun getGigDetails(string: String?) = viewModelScope.launch{
 
        try {
            val gigAndGigOrder =  gigerIDCallbacks.getGigAndGigOrderDetails(string!!)
+           currentGig = gigAndGigOrder
+
            observableGigDetails.value = gigAndGigOrder
            fileNameToShare += gigAndGigOrder.gig.gigId
        } catch (e: Exception) {
