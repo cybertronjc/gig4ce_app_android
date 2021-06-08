@@ -313,6 +313,7 @@ class GigPage2Fragment : Fragment(),
         locationHelper.checkForGpsSettings(object : GpsSettingsCheckCallback {
 
             override fun requiredGpsSettingAreUnAvailable(status: ResolvableApiException) {
+                if (!isAdded) return
 
                 startIntentSenderForResult(
                     status.resolution.intentSender,
@@ -326,6 +327,8 @@ class GigPage2Fragment : Fragment(),
             }
 
             override fun requiredGpsSettingAreAvailable() {
+                if (!isAdded) return
+
                 locationHelper.startLocationUpdates()
             }
 
