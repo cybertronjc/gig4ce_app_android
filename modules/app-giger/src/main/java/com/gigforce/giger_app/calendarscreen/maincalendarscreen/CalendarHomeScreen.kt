@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.calendarscreen
+package com.gigforce.giger_app.calendarscreen.maincalendarscreen
 
 
 import android.app.Dialog
@@ -50,7 +50,6 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.CalendarHomeScreenViewModel
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.giger_app.components.CalendarView
@@ -78,7 +77,7 @@ class CalendarHomeScreen : Fragment(),
 
     companion object {
         fun newInstance() =
-                CalendarHomeScreen()
+            CalendarHomeScreen()
 
         lateinit var temporaryData: VerticalCalendarDataItemModel
         var fistvisibleItemOnclick = -1
@@ -1031,12 +1030,12 @@ class CalendarHomeScreen : Fragment(),
         // Inflate our custom view
         var snackView = layoutInflater.inflate(R.layout.snackbar_layout, null)
         snackView.setOnClickListener(
-                OnSnackBarUndoClickListener(
-                        position,
-                        recyclerGenericAdapter,
-                        snackbar,
-                        viewModelCustomPreference
-                )
+            OnSnackBarUndoClickListener(
+                position,
+                recyclerGenericAdapter,
+                snackbar,
+                viewModelCustomPreference
+            )
         )
         //If the view is not covering the whole snackbar layout, add this line
         layout.setPadding(0, 0, 0, 0)

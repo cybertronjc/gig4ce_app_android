@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.calendarscreen
+package com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet
 
 import android.content.Intent
 import android.graphics.Paint
@@ -27,12 +27,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gigforce.app.R
-import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -54,13 +51,11 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenViewModel
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.FeatureModel
-import com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.UpcomingGigBSAdapter
+import com.gigforce.giger_app.R
 import com.gigforce.landing_screen.landingscreen.LandingScreenViewModel
 import com.gigforce.landing_screen.landingscreen.adapters.ExploreGigsAdapter
 import com.gigforce.landing_screen.landingscreen.adapters.UserLearningCourseAdapter
-import com.gigforce.modules.feature_chat.screens.ChatPageFragment
+//import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.home_screen_bottom_sheet_fragment.*
 import java.text.SimpleDateFormat
@@ -677,10 +672,10 @@ class BSCalendarScreenFragment : Fragment() {
                 override fun onItemClick(view: View, obj: ContactPerson, position: Int) {
                     navigation.navigateTo(
                         "chats/chatPage", bundleOf(
-                            ChatPageFragment.INTENT_EXTRA_CHAT_TYPE to ChatConstants.CHAT_TYPE_USER,
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID to obj.uid,
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to obj.profilePicture,
-                            ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to obj.name
+                            "chat_type" to ChatConstants.CHAT_TYPE_USER,
+                            "sender_id" to obj.uid,
+                            "sender_profile" to obj.profilePicture,
+                            "sender_name" to obj.name
                         )
                     )
 //                    navigate(
@@ -701,24 +696,24 @@ class BSCalendarScreenFragment : Fragment() {
                     val bundle = Bundle()
                     val map = obj
                     bundle.putString(
-                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE,
+                        "sender_profile",
                         AppConstants.IMAGE_URL
                     )
                     bundle.putString(
-                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME,
+                        "sender_name",
                         AppConstants.CONTACT_NAME
                     )
                     bundle.putString(
-                        ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                        "chat_type",
                         ChatConstants.CHAT_TYPE_USER
                     )
 
                     bundle.putString(
-                        ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID,
+                        "chat_header_id",
                         map.get("chatHeaderId") as String
                     )
                     bundle.putString(
-                        ChatPageFragment.INTENT_EXTRA_OTHER_USER_ID,
+                        "sender_id",
                         map.get("otherUserId") as String
                     )
                     bundle.putString(
@@ -745,7 +740,11 @@ class BSCalendarScreenFragment : Fragment() {
 
                         val intent = Intent(
                             Intent.ACTION_DIAL,
-                            Uri.fromParts("tel", gig.gigContactDetails?.contactNumber.toString(), null)
+                            Uri.fromParts(
+                                "tel",
+                                gig.gigContactDetails?.contactNumber.toString(),
+                                null
+                            )
                         )
                         startActivity(intent)
                     } else if (!gig.agencyContact?.contactNumber.isNullOrEmpty()) {
@@ -768,11 +767,12 @@ class BSCalendarScreenFragment : Fragment() {
                 override fun onItemClick(view: View, obj: Any, position: Int) {
                     val gig =
                         obj as Gig
-                    GigNavigation.openGigAttendancePage(
-                        findNavController(),
-                        gig.openNewGig(),
-                        gig.gigId
-                    )
+                    navigation.navigateTo("gig/attendance", bundleOf("gig_id" to gig.gigId))
+//                    GigNavigation.openGigAttendancePage(
+//                        findNavController(),
+//                        gig.openNewGig(),
+//                        gig.gigId
+//                    )
                 }
 
             })

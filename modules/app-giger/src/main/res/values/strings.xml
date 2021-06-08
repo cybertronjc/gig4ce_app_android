@@ -26,5 +26,18 @@
     <string name="sun">Sun</string>
     <string name="available">Available</string>
     <string name="good_morning">Good morning!</string>
+    <string name="kyc_verification_not_done">Kyc Verification is not done , Click here to  complete.</string>
+    <string name="video_resume_pending">Your Video resume is Pending , Click here to  complete.</string>
+    <string name="upcoming_gig_">Scheduled gigs</string>
+    <string name="features">Features</string>
+    <string name="my_interest">My Interest</string>
+    <string name="explore_gigs_start_earning">Explore gigs to start earning.</string>
+    <string name="learning">Learning</string>
+    <string name="explore_by_role_">Explore By Role</string>
+    <string name="see_more_underline"> <u>See more</u></string>
+    <string name="explore_by_industry">Explore by Industry</string>
+    <string name="browse_all_help_topic">Browse all help topic</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="invite_your_contacts">Invite your contacts</string>
 
 </resources>
