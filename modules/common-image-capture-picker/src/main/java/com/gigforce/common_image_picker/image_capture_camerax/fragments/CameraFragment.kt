@@ -38,6 +38,8 @@ import com.gigforce.common_image_picker.image_capture_camerax.utils.AutoFitSurfa
 import com.gigforce.common_image_picker.image_capture_camerax.utils.OrientationLiveData
 import com.gigforce.common_image_picker.image_capture_camerax.utils.computeExifOrientation
 import com.gigforce.common_image_picker.image_capture_camerax.utils.getPreviewOutputSize
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -202,7 +204,20 @@ class CameraFragment : Fragment() {
     @SuppressLint("WrongConstant")
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         // Open the selected camera
-        camera = openCamera(cameraManager, cameraId, cameraHandler)
+
+        try {
+            camera = openCamera(cameraManager, cameraId, cameraHandler)
+        } catch (e: Exception){
+            CrashlyticsLogger.e(
+                    "CameraFragment",
+                    "Opening camera",
+                    e
+            )
+
+            showToast("Unable to open camera ..check for device permissions")
+            return@launch
+        }
+
 
         // Initialize an image reader which will be used to capture still photos
         val size = characteristics.get(
