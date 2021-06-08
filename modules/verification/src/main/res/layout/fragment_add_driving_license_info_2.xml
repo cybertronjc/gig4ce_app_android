@@ -29,12 +29,12 @@
         <include
             android:id="@+id/dlMainLayout"
             android:visibility="visible"
-            layout="@layout/fragment_add_driving_license_info_main"/>
+            layout="@layout/fragment_add_driving_license_info_main_2"/>
 
         <include
             android:id="@+id/dlViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_driving_license_info_view"/>
+            layout="@layout/fragment_add_driving_license_info_view_2"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

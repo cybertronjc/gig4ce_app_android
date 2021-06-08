@@ -316,17 +316,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                         UtilMethods.hideLoading()
                         if (it.content.status.equals("Success")) {
                             allPostoffices = it.content.postOffice
-                            state_spinner?.let {
-                                for (index in 0 until it.adapter.count) {
-                                    val item = it.adapter.getItem(index)
-                                    allPostoffices.mapIndexed { index1, postalOffice ->
-                                        if (item.toString().equals(postalOffice.state)) {
-                                            it.setSelection(index)
-                                            return@Observer
-                                        }
-                                    }
-                                }
-                            }
+                            selectStateOnSpinners()
                         } else {
                             state_spinner?.setSelection(0)
                             city_spinner?.setSelection(0)
@@ -424,6 +414,25 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         )
         viewModel.loadCityAndStates()
 
+    }
+
+    private fun selectStateOnSpinners() {
+        try {
+
+            state_spinner?.let {
+                for (index in 0 until it.adapter.count) {
+                    val item = it.adapter.getItem(index)
+                    allPostoffices.mapIndexed { index1, postalOffice ->
+                        if (item.toString().equals(postalOffice.state)) {
+                            it.setSelection(index)
+                            return
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     private fun setUserDataOnView(content: ProfileData) {

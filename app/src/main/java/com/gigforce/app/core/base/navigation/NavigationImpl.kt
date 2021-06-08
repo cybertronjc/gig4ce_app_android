@@ -9,11 +9,10 @@ import androidx.navigation.findNavController
 import com.gigforce.app.R
 import com.gigforce.core.extensions.popAllBackStates
 
-class NavigationImpl :NavigationInterface {
-    var navController: NavController
-    constructor(activity: Activity){
-        navController = activity?.findNavController(R.id.nav_fragment)!!
-    }
+class NavigationImpl constructor(
+    private val navController: NavController
+) :NavigationInterface {
+
 
     override fun getNavigationController(): NavController {
         return navController
