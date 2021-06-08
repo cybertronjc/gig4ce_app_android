@@ -640,8 +640,9 @@ class LandingScreenFragment : Fragment(){
 
             tipsAdapter?.setOnSkipListener(object : TipsViewAdapter.OnSkipListener {
                 override fun onSkipClicked(model: Tip, pos: Int) {
-                    if (pos == -1) return
+                    if (pos == -1 || pos >= tips.size) return
                     sharedPreAndCommonUtilInterface.saveDataBoolean(model.tip_id.toString(), true)
+
                     tips.removeAt(pos)
                     tipsAdapter.notifyItemRemoved(pos)
                     if (tips.isEmpty()) {

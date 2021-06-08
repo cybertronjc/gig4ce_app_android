@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.regex.Pattern
 
 class ChatContactsRepository constructor(
         private val syncPref: SyncPref
@@ -53,9 +54,11 @@ class ChatContactsRepository constructor(
     private val mutex = Mutex()
     private var currentBatchSize = 0
     private var batch = db.batch()
+    private var numbersOnlyRegEx = "^[0-9]*$"
 
-    suspend fun updateContacts(newContacts: List<ContactModel>) = mutex.withLock {
+    suspend fun updateContacts(contacts: List<ContactModel>) = mutex.withLock {
         Log.d(TAG, "Sync Started...")
+        val newContacts = filterContactsForIllegalMobileNos(contacts)
         batch = db.batch()
 
         val oldContacts = getUsersAlreadyUploadedContacts()
@@ -92,6 +95,14 @@ class ChatContactsRepository constructor(
         }
 
         syncPref.setContactsAsSynced()
+    }
+
+    private fun filterContactsForIllegalMobileNos(contacts: List<ContactModel>): List<ContactModel> {
+        val patterns = Pattern.compile(numbersOnlyRegEx)
+
+        return contacts.filter {
+            patterns.matcher(it.mobile).matches()
+        }
     }
 
     private suspend fun addContactToUsersContactList(
