@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.markattendance
+package com.gigforce.giger_gigs.captureimage
 
 import android.app.Activity
 import android.content.Intent
@@ -13,9 +13,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.gigforce.app.R
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.giger_gigs.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask

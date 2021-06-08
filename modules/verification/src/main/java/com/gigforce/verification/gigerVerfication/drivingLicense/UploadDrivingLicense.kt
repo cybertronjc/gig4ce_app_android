@@ -139,9 +139,6 @@ class UploadDrivingLicense : Fragment(),
             )
         stateSpinner.adapter = adapter
 
-        iv_back_application_client_activation.setOnClickListener {
-            onBackPressed()
-        }
 
         appBarComp.setBackButtonListener(View.OnClickListener {
             activity?.onBackPressed()

@@ -8,6 +8,7 @@ color black_2222
 color black_85
 color black_color_future_date
 color black_three
+color colorLigthSeparater
 color colorText
 color darkish_pink_two
 color gig_timer_completed_grey
@@ -17,11 +18,14 @@ color gig_timer_ongoing_green
 color gig_timer_silver_dark
 color gig_timer_silver_light
 color gig_timer_upcoming_pink
+color gray_chat_module
 color grey_c7
+color lightGrey
 color light_grey
 color lipstick
 color lipstick_two
 color shadow_color
+color text_color
 color upcoming_gig_time
 color upcoming_gig_title
 color vertical_calendar_today
@@ -175,6 +179,7 @@ drawable avatar
 drawable back_button
 drawable bck_gig_toolbar_grey
 drawable bck_gig_toolbar_pink
+drawable bg_bottom_sheet
 drawable bg_capsule_shape_ffd9e6
 drawable bg_circle_468800
 drawable bg_circle_dashed
@@ -270,6 +275,7 @@ drawable map_demo
 drawable p_g_logo
 drawable pink_border
 drawable profile
+drawable rect_button_gradient
 drawable round_pink
 drawable round_white
 drawable sl_favorite_24_dp
@@ -305,6 +311,7 @@ id attendance_present_chip
 id attendance_top_bar
 id attendance_type_chipgroup
 id back_button
+id back_button_photo_crop
 id bt_download_id_gig_page
 id bt_download_id_gig_past_gigs
 id calendar_iv
@@ -312,7 +319,10 @@ id callCardView
 id call_btn
 id call_card_view
 id call_tv
+id cameraView
+id camera_cl
 id cancel
+id capture_icon
 id card_view
 id center_divider
 id change_time_tv
@@ -322,11 +332,13 @@ id checkInIV
 id checkOutIV
 id check_in_label
 id checkin_time_tv
+id cl
 id cl_contact_us
 id cl_gig_details_giger_id
 id cl_ongoing_gigs
 id cl_parent
 id cl_parent_giger_id
+id cl_photo_crop
 id cl_present_future_gig_controls_nested
 id clip_image_view
 id companyLogoIV
@@ -339,6 +351,7 @@ id company_star_logo_iv
 id company_star_logo_tv
 id completedGigControlsLayout
 id completed_iv
+id constraintLayout
 id contactPersonIV
 id contactPersonLabel
 id contactPersonTV
@@ -369,6 +382,7 @@ id designation_tv
 id detailsLabelTV
 id details_label
 id dialog_content
+id dialog_title
 id divider_below_feedback
 id divider_below_gig_type
 id divider_below_people_to_expect
@@ -465,6 +479,7 @@ id gigs_recycler_view
 id grayline3
 id gross_wage
 id gross_wage_label
+id handle
 id ic_close_giger_id
 id ic_cross
 id ic_delete_btn
@@ -494,6 +509,7 @@ id learning_based_horizontal_progress
 id learning_based_role_layout
 id learning_based_role_rv
 id learning_img
+id linear_layout_bottomsheet
 id ll_brand_details_giger_id
 id ll_decline_layout
 id ll_gig_time_details_giger_id
@@ -512,6 +528,7 @@ id noteTV
 id okay_btn
 id other_options_recycler_view
 id overview_label
+id parent_cl
 id pastGigCheckOutIV
 id pastGigNoteLabel
 id pastGigNoteTV
@@ -542,8 +559,11 @@ id presentGigpunchInTimeTV
 id presentGigpunchOutTimeTV
 id presentOrFutureGigControls
 id processingLabel
+id profilePictureTitle
+id profile_avatar_photo_crop
 id progressBar
 id progress_bar
+id progress_circular
 id provide_fb_txt
 id provide_feedback
 id punchInLabel
@@ -576,6 +596,8 @@ id regularise_details_progress_bar
 id regularise_layout
 id regularise_main_layout
 id regularise_slider_btn
+id removeProfilePicture
+id retake_image
 id reviewET
 id right_arrow2
 id rl_gigs
@@ -613,6 +635,8 @@ id separator_vertical_2
 id sheetEdge
 id shiftIconIV
 id shiftTV
+id show_img_cl
+id show_pic
 id startNavigationSliderBtn
 id status_card_view
 id submitBtn
@@ -679,6 +703,8 @@ id tv_title_no_gig_gig_hist
 id tv_title_toolbar_gig_history
 id tv_upcoming_events_rv_gig_hist
 id type_of_gig_label
+id updateProfilePicture
+id upload_img
 id userFeedbackAttachmentsContainer
 id userFeedbackRatingBar
 id userFeedbackRatingLayout
@@ -710,6 +736,9 @@ id you_can_label
 id your_checkin_layout
 id your_checkin_time_tv
 id your_time_tv
+layout activity_photo_crop
+layout activity_picture_preview
+layout confirmation_custom_alert_type1
 layout dialog_rating_image_layout
 layout fragment_decline_gig_dialog
 layout fragment_decline_gig_dialog_main
@@ -764,6 +793,7 @@ layout layout_rv_gig_events_gig_hist
 layout layout_rv_on_going_gigs
 layout layout_rv_ongoing_gigs_gig_hist
 layout learning_bs_item
+layout profile_photo_bottom_sheet
 layout recycler_item_gig_attendance
 layout recycler_item_gig_people_to_expect
 layout recycler_item_other_option
@@ -774,6 +804,7 @@ string back_button
 string call
 string cancelling_out_a_gig
 string chat
+string document_picture
 string download_id_card
 string explore_by_role
 string gig_id
@@ -805,13 +836,16 @@ string profile_image_gig_history
 string punch_in
 string punch_out
 string reason
+string remove_document_picture
 string submit_all_caps
 string this_gig_is_unsuitable_for_me
 string upcoming
+string update_document_picture
 string valid_upto
 string you_ll_soon_be_sent_invites_for_best_gigs_around_for_you
 style AppTheme.TextStyle
 style AppTheme.TextStyle.SectionTitle
 style AttendanceSingleChoiceChip
+style Divider
 style IconOnlyButton
 style LatoRegular16Black

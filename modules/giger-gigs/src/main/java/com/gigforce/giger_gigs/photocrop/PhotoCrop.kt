@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.photocrop
+package com.gigforce.giger_gigs.photocrop
 
 import android.Manifest
 import android.app.Activity
@@ -22,12 +22,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
-import com.gigforce.app.R
 import com.gigforce.common_ui.widgets.ImagePicker
-//import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.ImageUtils
+import com.gigforce.giger_gigs.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage

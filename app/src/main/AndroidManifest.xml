@@ -112,13 +112,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/PhotoCrop" />
         <activity
-            android:name=".modules.markattendance.AttendanceImageCaptureActivity"
+            android:name="com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
+            android:name="com.gigforce.giger_gigs.photocrop.PhotoCrop"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".utils.DocViewerActivity"
+            android:name="com.gigforce.client_activation.client_activation.DocViewerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity

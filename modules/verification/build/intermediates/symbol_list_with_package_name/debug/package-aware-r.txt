@@ -178,6 +178,7 @@ attr backgroundSplit
 attr backgroundStacked
 attr backgroundTint
 attr backgroundTintMode
+attr backgroundType
 attr badgeGravity
 attr badgeStyle
 attr badgeTextColor
@@ -310,8 +311,10 @@ attr checkedIconTint
 attr checkedIconVisible
 attr checkedTextViewStyle
 attr chipBackgroundColor
+attr chipComponent
 attr chipCornerRadius
 attr chipEndPadding
+attr chipGroupComp
 attr chipGroupStyle
 attr chipIcon
 attr chipIconEnabled
@@ -320,6 +323,7 @@ attr chipIconTint
 attr chipIconVisible
 attr chipMinHeight
 attr chipMinTouchTargetSize
+attr chipSelected
 attr chipSpacing
 attr chipSpacingHorizontal
 attr chipSpacingVertical
@@ -329,6 +333,12 @@ attr chipStrokeColor
 attr chipStrokeWidth
 attr chipStyle
 attr chipSurfaceColor
+attr chip_backgroundColor
+attr chip_selectable
+attr chip_strokeColor
+attr chip_strokeSize
+attr chip_text
+attr chip_textColor
 attr circleCrop
 attr circleRadius
 attr circularProgressIndicatorStyle
@@ -617,6 +627,10 @@ attr inner_color
 attr insetForeground
 attr isLightTheme
 attr isMaterialTheme
+attr isMenuItemVisible
+attr isProfileVisible
+attr isSearchVisible
+attr isStepsVisible
 attr itemBackground
 attr itemFillColor
 attr itemHorizontalPadding
@@ -927,6 +941,7 @@ attr scrubber_disabled_size
 attr scrubber_dragged_size
 attr scrubber_drawable
 attr scrubber_enabled_size
+attr searchHint
 attr searchHintIcon
 attr searchIcon
 attr searchViewStyle
@@ -1138,6 +1153,7 @@ attr titleMarginEnd
 attr titleMarginStart
 attr titleMarginTop
 attr titleMargins
+attr titleText
 attr titleTextAppearance
 attr titleTextColor
 attr titleTextStyle
@@ -1308,6 +1324,12 @@ color cardview_shadow_end_color
 color cardview_shadow_start_color
 color checkbox_themeable_attribute_color
 color colorAccent
+color colorChipBackground
+color colorChipBackgroundClicked
+color colorChipCloseClicked
+color colorChipCloseInactive
+color colorChipText
+color colorChipTextClicked
 color colorError
 color colorLightAccent
 color colorOnPrimary
@@ -1554,6 +1576,8 @@ color ucrop_color_widget_rotate_angle
 color ucrop_color_widget_rotate_mid_line
 color ucrop_color_widget_text
 color ucrop_scale_text_view_selector
+color upcoming_gig_time
+color upcoming_gig_title
 color warm_grey
 color warm_grey_two
 color white
@@ -1657,6 +1681,14 @@ dimen calendar_gig
 dimen cardview_compat_inset_shadow
 dimen cardview_default_elevation
 dimen cardview_default_radius
+dimen chip_close_horizontal_margin
+dimen chip_close_icon_padding
+dimen chip_close_icon_size
+dimen chip_close_icon_size2
+dimen chip_height
+dimen chip_horizontal_padding
+dimen chip_icon_horizontal_margin
+dimen chip_vertical_padding
 dimen clock_face_margin_start
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
@@ -2286,6 +2318,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable app_bar_background
 drawable app_gradient_button
 drawable app_gradient_button_disabled
 drawable avd_hide_password
@@ -2298,6 +2331,7 @@ drawable avd_show_password_2
 drawable avd_show_password_3
 drawable bg_capsule_53ba25
 drawable bg_capsule_border_fa6400
+drawable bg_search_item
 drawable bg_seekbar_add_language
 drawable bg_white_rad_5
 drawable bg_white_top_rad_8
@@ -2406,6 +2440,7 @@ drawable googleg_standard_color_18
 drawable gradient_button
 drawable gradient_onboarding_progressbar_bg
 drawable gradient_onboarding_progressbar_gradient
+drawable grey_app_bar_bg
 drawable ic_arrow_back_24
 drawable ic_arrow_back_black
 drawable ic_arrow_back_white
@@ -2414,7 +2449,9 @@ drawable ic_arrow_forward_white
 drawable ic_attachment_grey
 drawable ic_attachment_pink
 drawable ic_bank
+drawable ic_baseline_close_24
 drawable ic_baseline_play_circle_outline_24_
+drawable ic_baseline_search_24
 drawable ic_cal_gradient
 drawable ic_calendar
 drawable ic_calendar_
@@ -2430,6 +2467,7 @@ drawable ic_dl
 drawable ic_down
 drawable ic_download_24
 drawable ic_edit
+drawable ic_emoji
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
 drawable ic_gig_decline
@@ -2453,6 +2491,7 @@ drawable ic_next_screen_
 drawable ic_notification_icon
 drawable ic_oval_top_landingscreen
 drawable ic_pause_square_border
+drawable ic_phone_white_24dp
 drawable ic_play_sq
 drawable ic_ques_round
 drawable ic_question
@@ -2546,6 +2585,7 @@ drawable ucrop_vector_loader
 drawable ucrop_vector_loader_animated
 drawable ucrop_wrapper_controls_shape
 drawable verification_done
+drawable white_app_bar_background
 font lato
 font lato_bold
 font lato_italic
@@ -2563,6 +2603,7 @@ id DL_back
 id DL_front
 id FUNCTION
 id GRAY
+id GreyBar
 id LIGHT_BLUE
 id LIGHT_PINK
 id LIPSTICK
@@ -2572,6 +2613,7 @@ id NO_DEBUG
 id OVER
 id Pan_back
 id Pan_front
+id PinkBar
 id Profile
 id SHIFT
 id SHOW_ALL
@@ -2584,6 +2626,7 @@ id UNDER
 id VeriDD_back
 id VeriDD_front
 id WHITE
+id WhiteBar
 id aadharAvailaibilityOptionRG
 id aadharBackImageEditErrorMessage
 id aadharBackImageHolder
@@ -2700,6 +2743,7 @@ id animateToEnd
 id animateToStart
 id anonymous_button
 id appBar
+id appBarComp
 id appProfileComponent
 id areaET
 id areaLabel
@@ -2713,6 +2757,7 @@ id autoCompleteToEnd
 id autoCompleteToStart
 id autoFocus
 id back
+id backImageButton
 id back_arrow
 id bankAccDetailsLabel
 id bankAccNoEditErrorMessage
@@ -2814,6 +2859,7 @@ id city_image_iv
 id city_name_tv
 id city_root_layout
 id clear_text
+id clickedImage
 id clickedImageIV
 id clip_horizontal
 id clip_vertical
@@ -3073,8 +3119,10 @@ id ivVeriDD1
 id iv_back_add_selfie
 id iv_back_application_client_activation
 id iv_back_upload_aadhar_card_client_activation
+id iv_call
 id iv_download_giger_verification
 id iv_driving_cert_dialog
+id iv_message
 id iv_rejection_illustration
 id jpeg
 id jumpToEnd
@@ -3136,6 +3184,7 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id media_actions
+id menuImageButton
 id menu_crop
 id menu_loader
 id message
@@ -3269,6 +3318,7 @@ id power_menu_card
 id power_menu_listView
 id primary_action
 id primary_button
+id profilePicComp
 id profile_image
 id profile_name
 id progressBar
@@ -3313,6 +3363,7 @@ id scrollIndicatorUp
 id scrollView
 id scrollable
 id seaprator1
+id searchImageButton
 id search_badge
 id search_bar
 id search_button
@@ -3321,6 +3372,7 @@ id search_edit_frame
 id search_et
 id search_go_btn
 id search_icon
+id search_item
 id search_layout
 id search_mag_icon
 id search_plate
@@ -3387,6 +3439,7 @@ id status_bar_latest_event_content
 id status_iv
 id statusbarutil_fake_status_bar_view
 id statusbarutil_translucent_view
+id steps
 id stereo
 id stop
 id stretch
@@ -3423,6 +3476,7 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
+id textTitle
 id textView21
 id textView3
 id textView30
@@ -3633,6 +3687,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout app_bar_layout
 layout banner
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
@@ -3851,9 +3906,11 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upcoming_gig_card_component
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout verification_image_card_component
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password
@@ -3972,6 +4029,8 @@ string change_slot
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
+string check_in
+string check_out
 string checkout
 string chip_text
 string choose_address
@@ -5316,6 +5375,7 @@ styleable AlertDialog android_layout buttonIconDimen buttonPanelSideLayout listI
 styleable AnimatedStateListDrawableCompat android_constantSize android_dither android_enterFadeDuration android_exitFadeDuration android_variablePadding android_visible
 styleable AnimatedStateListDrawableItem android_drawable android_id
 styleable AnimatedStateListDrawableTransition android_drawable android_fromId android_reversible android_toId
+styleable AppBar backgroundType isMenuItemVisible isProfileVisible isSearchVisible isStepsVisible searchHint titleText
 styleable AppBarLayout android_background android_keyboardNavigationCluster android_touchscreenBlocksFocus elevation expanded liftOnScroll liftOnScrollTargetViewId statusBarForeground
 styleable AppBarLayoutStates state_collapsed state_collapsible state_liftable state_lifted
 styleable AppBarLayout_Layout layout_scrollFlags layout_scrollInterpolator
@@ -5335,7 +5395,9 @@ styleable CameraView cameraAudio cameraAudioBitRate cameraAutoFocusMarker camera
 styleable CameraView_Layout layout_drawOnPictureSnapshot layout_drawOnPreview layout_drawOnVideoSnapshot
 styleable CardView android_minHeight android_minWidth cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable Chip android_checkable android_ellipsize android_maxWidth android_text android_textAppearance android_textColor android_textSize checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
+styleable ChipComponent chipComponent chipCornerRadius chipSelected chipStrokeWidth chip_backgroundColor chip_selectable chip_strokeColor chip_strokeSize chip_text chip_textColor
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection
+styleable ChipGroupComponent chipGroupComp
 styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color civ_dashed_border civ_is_qr
 styleable CircularProgressIndicator indicatorDirectionCircular indicatorInset indicatorSize
 styleable ClockFaceView clockFaceBackgroundColor clockNumberTextColor

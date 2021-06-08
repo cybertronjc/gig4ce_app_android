@@ -16,10 +16,6 @@ class ChatNavigation(
 ) {
 
 
-    fun navigateToChatList() {
-
-    }
-
     fun navigateBackToChatListIfExistElseOneStepBack() {
 
         try {

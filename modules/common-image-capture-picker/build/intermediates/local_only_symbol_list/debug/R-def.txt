@@ -1,6 +1,11 @@
 R_DEF: Internal format may change without notice
 local
 color topBarDark
+drawable circle_shape
+drawable circular_progress_bar
+drawable ic_baseline_camera_40
+drawable ic_baseline_check_32
+drawable ic_baseline_close_32
 drawable ic_camera_round
 drawable ic_gallery_round
 id back_button_photo_crop

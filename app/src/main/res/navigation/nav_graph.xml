@@ -47,9 +47,7 @@
         android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
-    <fragment
-        android:id="@+id/markAttendanceFragment"
-        android:name="com.gigforce.app.modules.markattendance.MarkAttendanceFragment" />
+
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.gigforce.user_preferences.PreferencesFragment"
@@ -637,15 +635,6 @@
         tools:layout="@layout/layout_add_bio_fragment">
 
     </fragment>
-    <fragment
-        android:id="@+id/fragment_marked_as_interest"
-        android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
-        android:label="fragment_marked_as_interest"
-        tools:layout="@layout/layout_marked_interest_success_fragment">
-        <action
-            android:id="@+id/open_role_details"
-            app:destination="@id/fragment_role_details" />
-    </fragment>
 
     <fragment
         android:id="@+id/fragment_home_bottom_sheet"
@@ -885,7 +874,7 @@
         android:label="ViewFullScreenImageDialogFragment" />
     <dialog
         android:id="@+id/viewFullScreenVideoDialogFragment"
-        android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
+        android:name="com.gigforce.modules.feature_chat.ViewFullScreenVideoDialogFragment"
         android:label="ViewFullScreenVideoDialogFragment" />
     <fragment
         android:id="@+id/groupDetailsFragment2"

@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
-import com.gigforce.app.R
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
@@ -50,6 +49,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
+import com.gigforce.giger_app.R
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.CalendarRecyclerItemTouchHelper
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
 import com.gigforce.giger_app.components.CalendarView
@@ -489,7 +489,8 @@ class CalendarHomeScreen : Fragment(),
                             RosterDayFragment.arrMainHomeDataModel = viewModel.arrMainHomeDataModel!!
                             val bundle = Bundle()
                             bundle.putSerializable("active_date", activeDateTime)
-                            findNavController().navigate(R.id.rosterDayFragment, bundle)
+                            navigation.navigateTo("rosterDayFragment",bundle)
+//                            findNavController().navigate(R.id.rosterDayFragment, bundle)
                         },
                         RecyclerGenericAdapter.ItemInterface<VerticalCalendarDataItemModel?> { obj, viewHolder, position ->
                             if (obj!!.isMonth) {

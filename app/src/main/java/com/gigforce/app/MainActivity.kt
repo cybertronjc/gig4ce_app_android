@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -22,7 +21,6 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
@@ -43,7 +41,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -237,12 +234,14 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
                 Log.d("MainActivity", "redirecting to attendance page 2")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")

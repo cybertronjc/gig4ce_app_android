@@ -1,16 +1,12 @@
-package com.gigforce.app.modules.photocrop
+package com.gigforce.giger_gigs.photocrop
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.gigforce.app.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gigforce.giger_gigs.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.profile_photo_bottom_sheet.view.*
 
 
 class ProfilePictureOptionsBottomSheetFragment : BottomSheetDialogFragment() {

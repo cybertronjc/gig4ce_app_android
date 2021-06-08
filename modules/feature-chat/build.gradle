@@ -103,4 +103,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+
+    //Exo Player
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.5'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
+
 }

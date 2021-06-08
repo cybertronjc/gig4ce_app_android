@@ -33,7 +33,6 @@ import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activ
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.whyWeNeedThisTV
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_certificate.*
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.dlMainLayout
-import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.iv_back_application_client_activation
 import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.progressBar
 import kotlinx.android.synthetic.main.layout_upload_driving_certificate.*
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.*

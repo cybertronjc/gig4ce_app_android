@@ -1,21 +1,16 @@
-package com.gigforce.app.utils
+package com.gigforce.modules.feature_chat
 
 
 import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
-import com.gigforce.app.R
-import com.gigforce.learning.learning.slides.types.VideoWithTextFragment
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -108,7 +103,6 @@ class ViewFullScreenVideoDialogFragment : DialogFragment() {
     private fun adjustUiforOrientation() {
         when (currentOrientation) {
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> {
-                Log.d(VideoWithTextFragment.TAG, "PORTRAIT")
 
                 val scale = resources.displayMetrics.density
                 val pixels = (303 * scale + 0.5f).toInt()
@@ -120,7 +114,6 @@ class ViewFullScreenVideoDialogFragment : DialogFragment() {
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> {
-                Log.d(VideoWithTextFragment.TAG, "LANDSCAPE")
 
                 playerView?.layoutParams?.height = LinearLayout.LayoutParams.MATCH_PARENT
                 playerView?.layoutParams?.width = LinearLayout.LayoutParams.MATCH_PARENT
@@ -196,18 +189,18 @@ class ViewFullScreenVideoDialogFragment : DialogFragment() {
         const val INTENT_EXTRA_MODULE_ID = "module_id"
         const val TAG = "ViewFullScreenVideoDialogFragment"
 
-        fun launch(
-            childFragmentManager: FragmentManager,
-            uri: Uri
-        ) {
-            val frag = ViewFullScreenVideoDialogFragment()
-            val bundle = bundleOf(
-                INTENT_EXTRA_URI to uri.toString()
-            )
-
-            frag.arguments = bundle
-            frag.show(childFragmentManager, TAG)
-        }
+//        fun launch(
+//            childFragmentManager: FragmentManager,
+//            uri: Uri
+//        ) {
+//            val frag = ViewFullScreenVideoDialogFragment()
+//            val bundle = bundleOf(
+//                INTENT_EXTRA_URI to uri.toString()
+//            )
+//
+//            frag.arguments = bundle
+//            frag.show(childFragmentManager, TAG)
+//        }
     }
 
 

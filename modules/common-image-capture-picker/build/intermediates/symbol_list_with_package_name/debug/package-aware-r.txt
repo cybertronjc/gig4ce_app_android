@@ -168,6 +168,7 @@ attr backgroundSplit
 attr backgroundStacked
 attr backgroundTint
 attr backgroundTintMode
+attr backgroundType
 attr badgeGravity
 attr badgeStyle
 attr badgeTextColor
@@ -221,6 +222,63 @@ attr buttonStyle
 attr buttonStyleSmall
 attr buttonTint
 attr buttonTintMode
+attr cameraAudio
+attr cameraAudioBitRate
+attr cameraAutoFocusMarker
+attr cameraAutoFocusResetDelay
+attr cameraEngine
+attr cameraExperimental
+attr cameraFacing
+attr cameraFilter
+attr cameraFlash
+attr cameraFrameProcessingExecutors
+attr cameraFrameProcessingFormat
+attr cameraFrameProcessingMaxHeight
+attr cameraFrameProcessingMaxWidth
+attr cameraFrameProcessingPoolSize
+attr cameraGestureLongTap
+attr cameraGesturePinch
+attr cameraGestureScrollHorizontal
+attr cameraGestureScrollVertical
+attr cameraGestureTap
+attr cameraGrid
+attr cameraGridColor
+attr cameraHdr
+attr cameraMode
+attr cameraPictureFormat
+attr cameraPictureMetering
+attr cameraPictureSizeAspectRatio
+attr cameraPictureSizeBiggest
+attr cameraPictureSizeMaxArea
+attr cameraPictureSizeMaxHeight
+attr cameraPictureSizeMaxWidth
+attr cameraPictureSizeMinArea
+attr cameraPictureSizeMinHeight
+attr cameraPictureSizeMinWidth
+attr cameraPictureSizeSmallest
+attr cameraPictureSnapshotMetering
+attr cameraPlaySounds
+attr cameraPreview
+attr cameraPreviewFrameRate
+attr cameraPreviewFrameRateExact
+attr cameraRequestPermissions
+attr cameraSnapshotMaxHeight
+attr cameraSnapshotMaxWidth
+attr cameraUseDeviceOrientation
+attr cameraVideoBitRate
+attr cameraVideoCodec
+attr cameraVideoMaxDuration
+attr cameraVideoMaxSize
+attr cameraVideoSizeAspectRatio
+attr cameraVideoSizeBiggest
+attr cameraVideoSizeMaxArea
+attr cameraVideoSizeMaxHeight
+attr cameraVideoSizeMaxWidth
+attr cameraVideoSizeMinArea
+attr cameraVideoSizeMinHeight
+attr cameraVideoSizeMinWidth
+attr cameraVideoSizeSmallest
+attr cameraWhiteBalance
 attr cardBackgroundColor
 attr cardCornerRadius
 attr cardElevation
@@ -241,8 +299,10 @@ attr checkedIconTint
 attr checkedIconVisible
 attr checkedTextViewStyle
 attr chipBackgroundColor
+attr chipComponent
 attr chipCornerRadius
 attr chipEndPadding
+attr chipGroupComp
 attr chipGroupStyle
 attr chipIcon
 attr chipIconEnabled
@@ -251,6 +311,7 @@ attr chipIconTint
 attr chipIconVisible
 attr chipMinHeight
 attr chipMinTouchTargetSize
+attr chipSelected
 attr chipSpacing
 attr chipSpacingHorizontal
 attr chipSpacingVertical
@@ -260,6 +321,12 @@ attr chipStrokeColor
 attr chipStrokeWidth
 attr chipStyle
 attr chipSurfaceColor
+attr chip_backgroundColor
+attr chip_selectable
+attr chip_strokeColor
+attr chip_strokeSize
+attr chip_text
+attr chip_textColor
 attr circleCrop
 attr circleRadius
 attr circularProgressIndicatorStyle
@@ -543,6 +610,10 @@ attr initialActivityCount
 attr insetForeground
 attr isLightTheme
 attr isMaterialTheme
+attr isMenuItemVisible
+attr isProfileVisible
+attr isSearchVisible
+attr isStepsVisible
 attr itemBackground
 attr itemFillColor
 attr itemHorizontalPadding
@@ -628,6 +699,9 @@ attr layout_constraintWidth_max
 attr layout_constraintWidth_min
 attr layout_constraintWidth_percent
 attr layout_dodgeInsetEdges
+attr layout_drawOnPictureSnapshot
+attr layout_drawOnPreview
+attr layout_drawOnVideoSnapshot
 attr layout_editor_absoluteX
 attr layout_editor_absoluteY
 attr layout_goneMarginBottom
@@ -835,6 +909,7 @@ attr scrubber_disabled_size
 attr scrubber_dragged_size
 attr scrubber_drawable
 attr scrubber_enabled_size
+attr searchHint
 attr searchHintIcon
 attr searchIcon
 attr searchViewStyle
@@ -1033,6 +1108,7 @@ attr titleMarginEnd
 attr titleMarginStart
 attr titleMarginTop
 attr titleMargins
+attr titleText
 attr titleTextAppearance
 attr titleTextColor
 attr titleTextStyle
@@ -1201,6 +1277,12 @@ color cardview_shadow_end_color
 color cardview_shadow_start_color
 color checkbox_themeable_attribute_color
 color colorAccent
+color colorChipBackground
+color colorChipBackgroundClicked
+color colorChipCloseClicked
+color colorChipCloseInactive
+color colorChipText
+color colorChipTextClicked
 color colorError
 color colorLightAccent
 color colorOnPrimary
@@ -1442,6 +1524,8 @@ color ucrop_color_widget_rotate_angle
 color ucrop_color_widget_rotate_mid_line
 color ucrop_color_widget_text
 color ucrop_scale_text_view_selector
+color upcoming_gig_time
+color upcoming_gig_title
 color warm_grey
 color warm_grey_two
 color white
@@ -1544,6 +1628,14 @@ dimen calendar_gig
 dimen cardview_compat_inset_shadow
 dimen cardview_default_elevation
 dimen cardview_default_radius
+dimen chip_close_horizontal_margin
+dimen chip_close_icon_padding
+dimen chip_close_icon_size
+dimen chip_close_icon_size2
+dimen chip_height
+dimen chip_horizontal_padding
+dimen chip_icon_horizontal_margin
+dimen chip_vertical_padding
 dimen clock_face_margin_start
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
@@ -2169,10 +2261,12 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable app_bar_background
 drawable app_gradient_button
 drawable app_gradient_button_disabled
 drawable avd_hide_password
 drawable avd_show_password
+drawable bg_search_item
 drawable bg_seekbar_add_language
 drawable bg_white_rad_5
 drawable bg_white_top_rad_8
@@ -2186,7 +2280,11 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable cameraview_focus_marker_fill
+drawable cameraview_focus_marker_outline
 drawable circle_dot_lipstick_12_12
+drawable circle_shape
+drawable circular_progress_bar
 drawable collapse
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
@@ -2273,15 +2371,22 @@ drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gradient_button
 drawable gradient_onboarding_progressbar_gradient
+drawable grey_app_bar_bg
 drawable ic_arrow_back_24
 drawable ic_arrow_back_white
 drawable ic_arrow_forward
+drawable ic_baseline_camera_40
+drawable ic_baseline_check_32
+drawable ic_baseline_close_24
+drawable ic_baseline_close_32
 drawable ic_baseline_play_circle_outline_24_
+drawable ic_baseline_search_24
 drawable ic_camera_round
 drawable ic_chat
 drawable ic_clock_black_24dp
 drawable ic_clock_orange
 drawable ic_cross_grey
+drawable ic_emoji
 drawable ic_error_loading_image
 drawable ic_error_loading_image_red
 drawable ic_gallery_round
@@ -2303,6 +2408,7 @@ drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_notification_icon
 drawable ic_oval_top_landingscreen
+drawable ic_phone_white_24dp
 drawable ic_rectangle_rad_5
 drawable ic_rejected
 drawable ic_search
@@ -2375,6 +2481,7 @@ drawable ucrop_vector_ic_crop
 drawable ucrop_vector_loader
 drawable ucrop_vector_loader_animated
 drawable ucrop_wrapper_controls_shape
+drawable white_app_bar_background
 font lato
 font lato_bold
 font lato_italic
@@ -2388,6 +2495,7 @@ id Chat
 id DEFAULT
 id FUNCTION
 id GRAY
+id GreyBar
 id LIGHT_BLUE
 id LIGHT_PINK
 id LIPSTICK
@@ -2395,6 +2503,7 @@ id META
 id NEVER
 id NO_DEBUG
 id OVER
+id PinkBar
 id Profile
 id SHIFT
 id SHOW_ALL
@@ -2405,6 +2514,7 @@ id TOP_END
 id TOP_START
 id UNDER
 id WHITE
+id WhiteBar
 id accelerate
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
@@ -2475,6 +2585,9 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id autoFocus
+id back
+id backImageButton
 id back_arrow
 id back_button_photo_crop
 id banner_body
@@ -2507,6 +2620,8 @@ id button_next
 id button_resend_email
 id button_sign_in
 id callCardView
+id camera1
+id camera2
 id camera_layout
 id camera_permission_image_view
 id camera_permission_label_text_view
@@ -2540,6 +2655,7 @@ id city_root_layout
 id cl_photo_crop
 id clear_text
 id clockwise
+id cloudy
 id collapseActionView
 id collapse_button
 id companyLogoIV
@@ -2566,6 +2682,7 @@ id cut
 id cv_top
 id dark
 id date_picker_actions
+id daylight
 id decelerate
 id decelerateAndComplete
 id decor_content_parent
@@ -2576,15 +2693,20 @@ id design_menu_item_action_area
 id design_menu_item_action_area_stub
 id design_menu_item_text
 id design_navigation_view
+id deviceDefault
 id dialog_button
 id disableHome
 id disjoint
+id dng
 id dragDown
 id dragEnd
 id dragLeft
 id dragRight
 id dragStart
 id dragUp
+id draw3x3
+id draw4x4
+id drawPhi
 id dropdown_menu
 id dynamic
 id easeIn
@@ -2628,30 +2750,41 @@ id exo_track_selection_view
 id exo_vr
 id expand_activities_button
 id expanded_menu
+id exposureCorrection
 id fade
 id feature_icon
 id feature_title
 id featured_rv
 id fill
 id filled
+id filterControl1
+id filterControl2
 id fit
 id fixed
 id fixed_height
 id fixed_width
 id flip
 id floating
+id fluorescent
+id focusMarkerContainer
+id focusMarkerFill
 id forever
 id fragment_container
 id fragment_container_view_tag
 id fragment_phone
 id fragment_register_email
+id front
 id gallery_layout
 id ghost_view
 id ghost_view_holder
+id glSurface
+id gl_surface_view
 id glide_custom_view_target_tag
 id gone
 id group_divider
 id guideline
+id h263
+id h264
 id header
 id header_text
 id header_title
@@ -2678,6 +2811,7 @@ id image_view_state_aspect_ratio
 id image_view_state_rotate
 id image_view_state_scale
 id imgage
+id incandescent
 id info
 id invisible
 id invisible_frame
@@ -2688,8 +2822,11 @@ id item_power_menu_icon
 id item_power_menu_layout
 id item_power_menu_title
 id item_touch_helper_previous_elevation
+id iv_call
 id iv_driving_cert_dialog
+id iv_message
 id iv_rejection_illustration
+id jpeg
 id jumpToEnd
 id jumpToStart
 id labelGroup
@@ -2739,6 +2876,7 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id media_actions
+id menuImageButton
 id menu_crop
 id menu_loader
 id message
@@ -2751,6 +2889,7 @@ id modal_content_root
 id modal_root
 id module_completed_iv
 id module_completed_perc_tv
+id mono
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -2815,6 +2954,7 @@ id percent
 id phone_button
 id phone_layout
 id phone_number
+id picture
 id pin
 id playerView
 id position
@@ -2824,6 +2964,7 @@ id power_menu_card
 id power_menu_listView
 id primary_action
 id primary_button
+id profilePicComp
 id profile_avatar_photo_crop
 id profile_image
 id profile_name
@@ -2862,6 +3003,7 @@ id scrollIndicatorUp
 id scrollView
 id scrollable
 id seaprator1
+id searchImageButton
 id search_badge
 id search_bar
 id search_button
@@ -2870,6 +3012,7 @@ id search_edit_frame
 id search_et
 id search_go_btn
 id search_icon
+id search_item
 id search_layout
 id search_mag_icon
 id search_plate
@@ -2920,6 +3063,8 @@ id staticLayout
 id staticPostLayout
 id status_bar_latest_event_content
 id status_iv
+id steps
+id stereo
 id stop
 id stretch
 id subTitleTV
@@ -2927,7 +3072,9 @@ id submenuarrow
 id submit_area
 id submit_confirmation_code
 id subtitle
+id surface
 id surface_view
+id surface_view_root
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -2942,6 +3089,7 @@ id tag_transition_group
 id tag_unhandled_key_event_manager
 id tag_unhandled_key_listeners
 id tag_window_insets_animation_callback
+id takePicture
 id test_checkbox_android_button_tint
 id test_checkbox_app_button_tint
 id test_radiobutton_android_button_tint
@@ -2950,6 +3098,7 @@ id text
 id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
+id textTitle
 id textView21
 id textView3
 id textView41
@@ -2967,6 +3116,7 @@ id textinput_helper_text
 id textinput_placeholder
 id textinput_prefix_text
 id textinput_suffix_text
+id texture
 id texture_view
 id thumbnail
 id ticker
@@ -2986,6 +3136,7 @@ id top_cl
 id top_level_view
 id top_progress_bar
 id top_to_bottom
+id torch
 id touch_outside
 id transition_current_scene
 id transition_layout_save
@@ -3022,6 +3173,7 @@ id upload_img
 id useLogo
 id verification_status_cardview
 id verification_status_tv
+id video
 id video_decoder_gl_surface_view
 id videos_list
 id view_bottom
@@ -3117,9 +3269,14 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_camera
 layout activity_photo_crop
+layout app_bar_layout
 layout banner
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
+layout cameraview_gl_view
+layout cameraview_layout_focus_marker
+layout cameraview_surface_view
+layout cameraview_texture_view
 layout card
 layout card_landscape_inner
 layout card_portrait_inner
@@ -3288,6 +3445,7 @@ layout ucrop_fragment_photobox
 layout ucrop_layout_rotate_wheel
 layout ucrop_layout_scale_wheel
 layout ucrop_view
+layout upcoming_gig_card_component
 layout verified_button
 menu ucrop_menu_activity
 plurals fui_error_weak_password
@@ -3339,10 +3497,35 @@ string app_name
 string appbar_scrolling_view_behavior
 string bottom_sheet_behavior
 string bottomsheet_action_expand_halfway
+string cameraview_default_autofocus_marker
+string cameraview_filter_autofix
+string cameraview_filter_black_and_white
+string cameraview_filter_brightness
+string cameraview_filter_contrast
+string cameraview_filter_cross_process
+string cameraview_filter_documentary
+string cameraview_filter_duotone
+string cameraview_filter_fill_light
+string cameraview_filter_gamma
+string cameraview_filter_grain
+string cameraview_filter_grayscale
+string cameraview_filter_hue
+string cameraview_filter_invert_colors
+string cameraview_filter_lomoish
+string cameraview_filter_none
+string cameraview_filter_posterize
+string cameraview_filter_saturation
+string cameraview_filter_sepia
+string cameraview_filter_sharpness
+string cameraview_filter_temperature
+string cameraview_filter_tint
+string cameraview_filter_vignette
 string card_content_descriptor
 string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
+string check_in
+string check_out
 string chip_text
 string clear_text_end_icon_content_description
 string common_google_play_services_enable_button
@@ -4486,6 +4669,7 @@ styleable AlertDialog android_layout buttonIconDimen buttonPanelSideLayout listI
 styleable AnimatedStateListDrawableCompat android_constantSize android_dither android_enterFadeDuration android_exitFadeDuration android_variablePadding android_visible
 styleable AnimatedStateListDrawableItem android_drawable android_id
 styleable AnimatedStateListDrawableTransition android_drawable android_fromId android_reversible android_toId
+styleable AppBar backgroundType isMenuItemVisible isProfileVisible isSearchVisible isStepsVisible searchHint titleText
 styleable AppBarLayout android_background android_keyboardNavigationCluster android_touchscreenBlocksFocus elevation expanded liftOnScroll liftOnScrollTargetViewId statusBarForeground
 styleable AppBarLayoutStates state_collapsed state_collapsible state_liftable state_lifted
 styleable AppBarLayout_Layout layout_scrollFlags layout_scrollInterpolator
@@ -4501,9 +4685,13 @@ styleable BottomAppBar backgroundTint elevation fabAlignmentMode fabAnimationMod
 styleable BottomNavigationView backgroundTint elevation itemBackground itemHorizontalTranslationEnabled itemIconSize itemIconTint itemRippleColor itemTextAppearanceActive itemTextAppearanceInactive itemTextColor labelVisibilityMode menu
 styleable BottomSheetBehavior_Layout android_elevation backgroundTint behavior_draggable behavior_expandedOffset behavior_fitToContents behavior_halfExpandedRatio behavior_hideable behavior_peekHeight behavior_saveFlags behavior_skipCollapsed gestureInsetBottomIgnored shapeAppearance shapeAppearanceOverlay
 styleable ButtonBarLayout allowStacking
+styleable CameraView cameraAudio cameraAudioBitRate cameraAutoFocusMarker cameraAutoFocusResetDelay cameraEngine cameraExperimental cameraFacing cameraFilter cameraFlash cameraFrameProcessingExecutors cameraFrameProcessingFormat cameraFrameProcessingMaxHeight cameraFrameProcessingMaxWidth cameraFrameProcessingPoolSize cameraGestureLongTap cameraGesturePinch cameraGestureScrollHorizontal cameraGestureScrollVertical cameraGestureTap cameraGrid cameraGridColor cameraHdr cameraMode cameraPictureFormat cameraPictureMetering cameraPictureSizeAspectRatio cameraPictureSizeBiggest cameraPictureSizeMaxArea cameraPictureSizeMaxHeight cameraPictureSizeMaxWidth cameraPictureSizeMinArea cameraPictureSizeMinHeight cameraPictureSizeMinWidth cameraPictureSizeSmallest cameraPictureSnapshotMetering cameraPlaySounds cameraPreview cameraPreviewFrameRate cameraPreviewFrameRateExact cameraRequestPermissions cameraSnapshotMaxHeight cameraSnapshotMaxWidth cameraUseDeviceOrientation cameraVideoBitRate cameraVideoCodec cameraVideoMaxDuration cameraVideoMaxSize cameraVideoSizeAspectRatio cameraVideoSizeBiggest cameraVideoSizeMaxArea cameraVideoSizeMaxHeight cameraVideoSizeMaxWidth cameraVideoSizeMinArea cameraVideoSizeMinHeight cameraVideoSizeMinWidth cameraVideoSizeSmallest cameraWhiteBalance
+styleable CameraView_Layout layout_drawOnPictureSnapshot layout_drawOnPreview layout_drawOnVideoSnapshot
 styleable CardView android_minHeight android_minWidth cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable Chip android_checkable android_ellipsize android_maxWidth android_text android_textAppearance android_textColor android_textSize checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
+styleable ChipComponent chipComponent chipCornerRadius chipSelected chipStrokeWidth chip_backgroundColor chip_selectable chip_strokeColor chip_strokeSize chip_text chip_textColor
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection
+styleable ChipGroupComponent chipGroupComp
 styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color civ_dashed_border civ_is_qr
 styleable CircularProgressIndicator indicatorDirectionCircular indicatorInset indicatorSize
 styleable ClockFaceView clockFaceBackgroundColor clockNumberTextColor

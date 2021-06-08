@@ -26,9 +26,6 @@
     <color name="lipstick">#d72467</color>
     <color name="lipstick_2">#e42c64</color>
 
-<!--    Extea colors later will remove this-->
-    <color name="black_85">#d9000000</color>
-
 
     <!-- Theme Colors -->
     <color name="colorPrimary">@color/brandColor1</color>

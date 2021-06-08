@@ -120,4 +120,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+    //Camera View
+    implementation 'com.otaliastudios:cameraview:2.6.2'
+
+    implementation 'com.github.yalantis:ucrop:2.2.4'
 }

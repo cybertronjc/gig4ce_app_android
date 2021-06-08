@@ -40,5 +40,8 @@
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="valid_upto">Valid Upto :</string>
     <string name="issued_on">Issued On</string>
+    <string name="update_document_picture">Update Picture</string>
+    <string name="remove_document_picture">Remove Picture</string>
+    <string name="document_picture">Image Option</string>
 
 </resources>

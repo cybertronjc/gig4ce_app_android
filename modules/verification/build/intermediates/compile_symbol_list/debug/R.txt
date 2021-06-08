@@ -177,6 +177,7 @@ int attr backgroundSplit 0x0
 int attr backgroundStacked 0x0
 int attr backgroundTint 0x0
 int attr backgroundTintMode 0x0
+int attr backgroundType 0x0
 int attr badgeGravity 0x0
 int attr badgeStyle 0x0
 int attr badgeTextColor 0x0
@@ -309,8 +310,10 @@ int attr checkedIconTint 0x0
 int attr checkedIconVisible 0x0
 int attr checkedTextViewStyle 0x0
 int attr chipBackgroundColor 0x0
+int attr chipComponent 0x0
 int attr chipCornerRadius 0x0
 int attr chipEndPadding 0x0
+int attr chipGroupComp 0x0
 int attr chipGroupStyle 0x0
 int attr chipIcon 0x0
 int attr chipIconEnabled 0x0
@@ -319,6 +322,7 @@ int attr chipIconTint 0x0
 int attr chipIconVisible 0x0
 int attr chipMinHeight 0x0
 int attr chipMinTouchTargetSize 0x0
+int attr chipSelected 0x0
 int attr chipSpacing 0x0
 int attr chipSpacingHorizontal 0x0
 int attr chipSpacingVertical 0x0
@@ -328,6 +332,12 @@ int attr chipStrokeColor 0x0
 int attr chipStrokeWidth 0x0
 int attr chipStyle 0x0
 int attr chipSurfaceColor 0x0
+int attr chip_backgroundColor 0x0
+int attr chip_selectable 0x0
+int attr chip_strokeColor 0x0
+int attr chip_strokeSize 0x0
+int attr chip_text 0x0
+int attr chip_textColor 0x0
 int attr circleCrop 0x0
 int attr circleRadius 0x0
 int attr circularProgressIndicatorStyle 0x0
@@ -616,6 +626,10 @@ int attr inner_color 0x0
 int attr insetForeground 0x0
 int attr isLightTheme 0x0
 int attr isMaterialTheme 0x0
+int attr isMenuItemVisible 0x0
+int attr isProfileVisible 0x0
+int attr isSearchVisible 0x0
+int attr isStepsVisible 0x0
 int attr itemBackground 0x0
 int attr itemFillColor 0x0
 int attr itemHorizontalPadding 0x0
@@ -926,6 +940,7 @@ int attr scrubber_disabled_size 0x0
 int attr scrubber_dragged_size 0x0
 int attr scrubber_drawable 0x0
 int attr scrubber_enabled_size 0x0
+int attr searchHint 0x0
 int attr searchHintIcon 0x0
 int attr searchIcon 0x0
 int attr searchViewStyle 0x0
@@ -1137,6 +1152,7 @@ int attr titleMarginEnd 0x0
 int attr titleMarginStart 0x0
 int attr titleMarginTop 0x0
 int attr titleMargins 0x0
+int attr titleText 0x0
 int attr titleTextAppearance 0x0
 int attr titleTextColor 0x0
 int attr titleTextStyle 0x0
@@ -1307,6 +1323,12 @@ int color cardview_shadow_end_color 0x0
 int color cardview_shadow_start_color 0x0
 int color checkbox_themeable_attribute_color 0x0
 int color colorAccent 0x0
+int color colorChipBackground 0x0
+int color colorChipBackgroundClicked 0x0
+int color colorChipCloseClicked 0x0
+int color colorChipCloseInactive 0x0
+int color colorChipText 0x0
+int color colorChipTextClicked 0x0
 int color colorError 0x0
 int color colorLightAccent 0x0
 int color colorOnPrimary 0x0
@@ -1553,6 +1575,8 @@ int color ucrop_color_widget_rotate_angle 0x0
 int color ucrop_color_widget_rotate_mid_line 0x0
 int color ucrop_color_widget_text 0x0
 int color ucrop_scale_text_view_selector 0x0
+int color upcoming_gig_time 0x0
+int color upcoming_gig_title 0x0
 int color warm_grey 0x0
 int color warm_grey_two 0x0
 int color white 0x0
@@ -1656,6 +1680,14 @@ int dimen calendar_gig 0x0
 int dimen cardview_compat_inset_shadow 0x0
 int dimen cardview_default_elevation 0x0
 int dimen cardview_default_radius 0x0
+int dimen chip_close_horizontal_margin 0x0
+int dimen chip_close_icon_padding 0x0
+int dimen chip_close_icon_size 0x0
+int dimen chip_close_icon_size2 0x0
+int dimen chip_height 0x0
+int dimen chip_horizontal_padding 0x0
+int dimen chip_icon_horizontal_margin 0x0
+int dimen chip_vertical_padding 0x0
 int dimen clock_face_margin_start 0x0
 int dimen compat_button_inset_horizontal_material 0x0
 int dimen compat_button_inset_vertical_material 0x0
@@ -2285,6 +2317,7 @@ int drawable abc_textfield_search_activated_mtrl_alpha 0x0
 int drawable abc_textfield_search_default_mtrl_alpha 0x0
 int drawable abc_textfield_search_material 0x0
 int drawable abc_vector_test 0x0
+int drawable app_bar_background 0x0
 int drawable app_gradient_button 0x0
 int drawable app_gradient_button_disabled 0x0
 int drawable avd_hide_password 0x0
@@ -2297,6 +2330,7 @@ int drawable avd_show_password_2 0x0
 int drawable avd_show_password_3 0x0
 int drawable bg_capsule_53ba25 0x0
 int drawable bg_capsule_border_fa6400 0x0
+int drawable bg_search_item 0x0
 int drawable bg_seekbar_add_language 0x0
 int drawable bg_white_rad_5 0x0
 int drawable bg_white_top_rad_8 0x0
@@ -2405,6 +2439,7 @@ int drawable googleg_standard_color_18 0x0
 int drawable gradient_button 0x0
 int drawable gradient_onboarding_progressbar_bg 0x0
 int drawable gradient_onboarding_progressbar_gradient 0x0
+int drawable grey_app_bar_bg 0x0
 int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_black 0x0
 int drawable ic_arrow_back_white 0x0
@@ -2413,7 +2448,9 @@ int drawable ic_arrow_forward_white 0x0
 int drawable ic_attachment_grey 0x0
 int drawable ic_attachment_pink 0x0
 int drawable ic_bank 0x0
+int drawable ic_baseline_close_24 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
+int drawable ic_baseline_search_24 0x0
 int drawable ic_cal_gradient 0x0
 int drawable ic_calendar 0x0
 int drawable ic_calendar_ 0x0
@@ -2429,6 +2466,7 @@ int drawable ic_dl 0x0
 int drawable ic_down 0x0
 int drawable ic_download_24 0x0
 int drawable ic_edit 0x0
+int drawable ic_emoji 0x0
 int drawable ic_error_loading_image 0x0
 int drawable ic_error_loading_image_red 0x0
 int drawable ic_gig_decline 0x0
@@ -2452,6 +2490,7 @@ int drawable ic_next_screen_ 0x0
 int drawable ic_notification_icon 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_pause_square_border 0x0
+int drawable ic_phone_white_24dp 0x0
 int drawable ic_play_sq 0x0
 int drawable ic_ques_round 0x0
 int drawable ic_question 0x0
@@ -2545,6 +2584,7 @@ int drawable ucrop_vector_loader 0x0
 int drawable ucrop_vector_loader_animated 0x0
 int drawable ucrop_wrapper_controls_shape 0x0
 int drawable verification_done 0x0
+int drawable white_app_bar_background 0x0
 int font lato 0x0
 int font lato_bold 0x0
 int font lato_italic 0x0
@@ -2562,6 +2602,7 @@ int id DL_back 0x0
 int id DL_front 0x0
 int id FUNCTION 0x0
 int id GRAY 0x0
+int id GreyBar 0x0
 int id LIGHT_BLUE 0x0
 int id LIGHT_PINK 0x0
 int id LIPSTICK 0x0
@@ -2571,6 +2612,7 @@ int id NO_DEBUG 0x0
 int id OVER 0x0
 int id Pan_back 0x0
 int id Pan_front 0x0
+int id PinkBar 0x0
 int id Profile 0x0
 int id SHIFT 0x0
 int id SHOW_ALL 0x0
@@ -2583,6 +2625,7 @@ int id UNDER 0x0
 int id VeriDD_back 0x0
 int id VeriDD_front 0x0
 int id WHITE 0x0
+int id WhiteBar 0x0
 int id aadharAvailaibilityOptionRG 0x0
 int id aadharBackImageEditErrorMessage 0x0
 int id aadharBackImageHolder 0x0
@@ -2699,6 +2742,7 @@ int id animateToEnd 0x0
 int id animateToStart 0x0
 int id anonymous_button 0x0
 int id appBar 0x0
+int id appBarComp 0x0
 int id appProfileComponent 0x0
 int id areaET 0x0
 int id areaLabel 0x0
@@ -2712,6 +2756,7 @@ int id autoCompleteToEnd 0x0
 int id autoCompleteToStart 0x0
 int id autoFocus 0x0
 int id back 0x0
+int id backImageButton 0x0
 int id back_arrow 0x0
 int id bankAccDetailsLabel 0x0
 int id bankAccNoEditErrorMessage 0x0
@@ -2813,6 +2858,7 @@ int id city_image_iv 0x0
 int id city_name_tv 0x0
 int id city_root_layout 0x0
 int id clear_text 0x0
+int id clickedImage 0x0
 int id clickedImageIV 0x0
 int id clip_horizontal 0x0
 int id clip_vertical 0x0
@@ -3072,8 +3118,10 @@ int id ivVeriDD1 0x0
 int id iv_back_add_selfie 0x0
 int id iv_back_application_client_activation 0x0
 int id iv_back_upload_aadhar_card_client_activation 0x0
+int id iv_call 0x0
 int id iv_download_giger_verification 0x0
 int id iv_driving_cert_dialog 0x0
+int id iv_message 0x0
 int id iv_rejection_illustration 0x0
 int id jpeg 0x0
 int id jumpToEnd 0x0
@@ -3135,6 +3183,7 @@ int id material_timepicker_ok_button 0x0
 int id material_timepicker_view 0x0
 int id material_value_index 0x0
 int id media_actions 0x0
+int id menuImageButton 0x0
 int id menu_crop 0x0
 int id menu_loader 0x0
 int id message 0x0
@@ -3268,6 +3317,7 @@ int id power_menu_card 0x0
 int id power_menu_listView 0x0
 int id primary_action 0x0
 int id primary_button 0x0
+int id profilePicComp 0x0
 int id profile_image 0x0
 int id profile_name 0x0
 int id progressBar 0x0
@@ -3312,6 +3362,7 @@ int id scrollIndicatorUp 0x0
 int id scrollView 0x0
 int id scrollable 0x0
 int id seaprator1 0x0
+int id searchImageButton 0x0
 int id search_badge 0x0
 int id search_bar 0x0
 int id search_button 0x0
@@ -3320,6 +3371,7 @@ int id search_edit_frame 0x0
 int id search_et 0x0
 int id search_go_btn 0x0
 int id search_icon 0x0
+int id search_item 0x0
 int id search_layout 0x0
 int id search_mag_icon 0x0
 int id search_plate 0x0
@@ -3386,6 +3438,7 @@ int id status_bar_latest_event_content 0x0
 int id status_iv 0x0
 int id statusbarutil_fake_status_bar_view 0x0
 int id statusbarutil_translucent_view 0x0
+int id steps 0x0
 int id stereo 0x0
 int id stop 0x0
 int id stretch 0x0
@@ -3422,6 +3475,7 @@ int id text 0x0
 int id text2 0x0
 int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
+int id textTitle 0x0
 int id textView21 0x0
 int id textView3 0x0
 int id textView30 0x0
@@ -3632,6 +3686,7 @@ int layout abc_search_dropdown_item_icons_2line 0x0
 int layout abc_search_view 0x0
 int layout abc_select_dialog_material 0x0
 int layout abc_tooltip 0x0
+int layout app_bar_layout 0x0
 int layout banner 0x0
 int layout browser_actions_context_menu_page 0x0
 int layout browser_actions_context_menu_row 0x0
@@ -3850,9 +3905,11 @@ int layout ucrop_fragment_photobox 0x0
 int layout ucrop_layout_rotate_wheel 0x0
 int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
+int layout upcoming_gig_card_component 0x0
 int layout upload_aadhar_card_fragment 0x0
 int layout upload_car_client_activation 0x0
 int layout upload_pan_card_fragment 0x0
+int layout verification_image_card_component 0x0
 int layout verified_button 0x0
 int menu ucrop_menu_activity 0x0
 int plurals fui_error_weak_password 0x0
@@ -3971,6 +4028,8 @@ int string change_slot 0x0
 int string character_counter_content_description 0x0
 int string character_counter_overflowed_content_description 0x0
 int string character_counter_pattern 0x0
+int string check_in 0x0
+int string check_out 0x0
 int string checkout 0x0
 int string chip_text 0x0
 int string choose_address 0x0
@@ -5379,6 +5438,14 @@ int styleable AnimatedStateListDrawableTransition_android_drawable 0
 int styleable AnimatedStateListDrawableTransition_android_fromId 1
 int styleable AnimatedStateListDrawableTransition_android_reversible 2
 int styleable AnimatedStateListDrawableTransition_android_toId 3
+int[] styleable AppBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable AppBar_backgroundType 0
+int styleable AppBar_isMenuItemVisible 1
+int styleable AppBar_isProfileVisible 2
+int styleable AppBar_isSearchVisible 3
+int styleable AppBar_isStepsVisible 4
+int styleable AppBar_searchHint 5
+int styleable AppBar_titleText 6
 int[] styleable AppBarLayout { 0x10100d4, 0x1010540, 0x101048f, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable AppBarLayout_android_background 0
 int styleable AppBarLayout_android_keyboardNavigationCluster 1
@@ -5744,6 +5811,17 @@ int styleable Chip_shapeAppearanceOverlay 38
 int styleable Chip_showMotionSpec 39
 int styleable Chip_textEndPadding 40
 int styleable Chip_textStartPadding 41
+int[] styleable ChipComponent { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable ChipComponent_chipComponent 0
+int styleable ChipComponent_chipCornerRadius 1
+int styleable ChipComponent_chipSelected 2
+int styleable ChipComponent_chipStrokeWidth 3
+int styleable ChipComponent_chip_backgroundColor 4
+int styleable ChipComponent_chip_selectable 5
+int styleable ChipComponent_chip_strokeColor 6
+int styleable ChipComponent_chip_strokeSize 7
+int styleable ChipComponent_chip_text 8
+int styleable ChipComponent_chip_textColor 9
 int[] styleable ChipGroup { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable ChipGroup_checkedChip 0
 int styleable ChipGroup_chipSpacing 1
@@ -5752,6 +5830,8 @@ int styleable ChipGroup_chipSpacingVertical 3
 int styleable ChipGroup_selectionRequired 4
 int styleable ChipGroup_singleLine 5
 int styleable ChipGroup_singleSelection 6
+int[] styleable ChipGroupComponent { 0x0 }
+int styleable ChipGroupComponent_chipGroupComp 0
 int[] styleable CircleImageView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable CircleImageView_civ_border_color 0
 int styleable CircleImageView_civ_border_overlay 1
