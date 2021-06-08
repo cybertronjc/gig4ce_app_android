@@ -1,6 +1,7 @@
 package com.gigforce.app.di.implementations
 
 import android.app.Activity
+import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
@@ -16,6 +17,9 @@ import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.moe.pushlibrary.MoEHelper
+import com.moengage.core.MoEngage
+import com.moengage.core.Properties
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.branch.referral.Branch
 import javax.inject.Inject
@@ -26,9 +30,11 @@ class EventTrackerImp @Inject constructor(
 
     //var mixpanel: MixpanelAPI? = (context as MainApplication).mixpanel
 
-    var mixpanel: MixpanelAPI = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
+    var mixpanel: MixpanelAPI? = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
+
 
     private var cleverTapApi: CleverTapAPI? = CleverTapAPI.getDefaultInstance(context)
+    private var moEngageHelper: MoEHelper? = MoEHelper.getInstance(context)
 
     private val appsFlyerLib: AppsFlyerLib by lazy {
         AppsFlyerLib.getInstance()
@@ -56,6 +62,8 @@ class EventTrackerImp @Inject constructor(
                 it
             )
         }
+        moEngageHelper?.setUniqueId(userId)
+        moEngageHelper?.setNumber(userId)
     }
 
     override fun setUserProperty(props: Map<String, Any>) {
@@ -76,13 +84,17 @@ class EventTrackerImp @Inject constructor(
         logEventOnFirebaseAnalytics(args)
         logEventOnCleverTap(args)
         logEventOnAppsFlyer(args)
+        logEventOnMoEngage(args)
     }
+
+
 
     override fun setUpAnalyticsTools(){
         setupCleverTap()
         setupBranchWithMixpanel()
         setUpAppsFlyer()
     }
+
 
     //setup clevertap
     private fun setupCleverTap() {
@@ -157,7 +169,14 @@ class EventTrackerImp @Inject constructor(
 
     override fun setProfileProperty(args: ProfilePropArgs) {
         logProfilePropertiesOnMixpanel(args)
+        logProfilePropertiesOnMoEngage(args)
     }
+
+    override fun logoutUserFromAnalytics(){
+        mixpanel?.reset()
+        moEngageHelper?.logoutUser()
+    }
+
 
     private fun logEventOnAppsFlyer(args: TrackingEventArgs) {
         try {
@@ -198,6 +217,20 @@ class EventTrackerImp @Inject constructor(
         }
     }
 
+    private fun logEventOnMoEngage(args: TrackingEventArgs) {
+        try {
+            val properties = Properties()
+            args.props?.forEach {
+                properties.addAttribute(it.key, it.value)
+            }
+            moEngageHelper?.trackEvent(args.eventName, properties)
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            CrashlyticsLogger.e("EventTrackerImp", "While logging event on MoEngage", e)
+        }
+    }
+
     private fun logProfilePropertiesOnMixpanel(args: ProfilePropArgs){
         try {
             mixpanel?.people?.set(args.propertyName, args.propertyValue)
@@ -205,6 +238,16 @@ class EventTrackerImp @Inject constructor(
         catch (e: Exception){
             e.printStackTrace()
             CrashlyticsLogger.e("EventTrackerImp", "While logging profile property on MixPanel", e)
+        }
+    }
+
+    private fun logProfilePropertiesOnMoEngage(args: ProfilePropArgs) {
+        try {
+            moEngageHelper?.setUserAttribute(args.propertyName, args.propertyValue.toString())
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            CrashlyticsLogger.e("EventTrackerImp", "While logging profile property on MoEngage", e)
         }
     }
 }
