@@ -1,4 +1,4 @@
-package com.gigforce.app.modules.onboardingmain
+package com.gigforce.app.modules.auth
 
 import android.os.Bundle
 import android.os.Handler
@@ -25,7 +25,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class OnboardingLoaderFragment : BaseFragment() {
     companion object {
-        fun newInstance() = OnboardingLoaderFragment()
+        fun newInstance() =
+            OnboardingLoaderFragment()
     }
 
     @Inject

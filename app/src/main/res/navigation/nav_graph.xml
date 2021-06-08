@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/onboardingLoaderfragment"
-        android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
+        android:name="com.gigforce.app.modules.auth.OnboardingLoaderFragment"
         tools:layout="@layout/onboarding_loader_fragment" />
 
     <fragment
