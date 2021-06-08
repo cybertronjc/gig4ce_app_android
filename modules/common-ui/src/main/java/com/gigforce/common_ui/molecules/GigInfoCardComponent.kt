@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +16,9 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.utils.TextDrawable
-import com.gigforce.common_ui.viewdatamodels.GigContactDetails
 import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -54,7 +55,7 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
         this.findViewById<TextView>(R.id.textView41).text = title
     }
 
-    private fun setGigDate(data: GigInfoCardDVM) {
+    private fun setGigDate(data: Gig) {
         if (data.isGigOfToday()) {
             val gigTiming = if (data.endDateTime != null)
                 "${DateHelper.getHourMinutes(data.startDateTime!!.toDate())} - ${
@@ -94,7 +95,7 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
         )
         context.startActivity(intent)
     }
-    private fun setContactPerson(gigContactDetails: GigContactDetails?) {
+    private fun setContactPerson(gigContactDetails: com.gigforce.core.datamodels.gigpage.GigContactDetails?) {
         gigContactDetails?.let {
             if (it.contactNumberString.isNullOrBlank()) {
                 findViewById<View>(R.id.callCardView).visibility = View.GONE
@@ -110,8 +111,9 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
 
 
     override fun bind(data: Any?) {
-        if (data is GigInfoCardDVM) {
-            setTitle(data.title)
+        if (data is Gig) {
+            Log.d("dataHere", data.toString())
+            data.profile.title?.let { setTitle(it) }
             setContactPerson(data.gigContactDetails)
             setGigDate(data)
             setCompanyLogo(data)
@@ -120,7 +122,7 @@ class GigInfoCardComponent(context: Context, attrs: AttributeSet?) :
         }
     }
 
-    private fun setCompanyLogo(data: GigInfoCardDVM) {
+    private fun setCompanyLogo(data: Gig) {
         val companyLogoIV = this.findViewById<ImageView>(R.id.companyLogoIV)
 
         if (!data.companyLogo.isNullOrBlank()) {

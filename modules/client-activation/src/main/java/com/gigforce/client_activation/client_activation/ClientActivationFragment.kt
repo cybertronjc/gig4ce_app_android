@@ -32,6 +32,7 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
@@ -152,6 +153,65 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         iv_back_client_activation.setOnClickListener {
             navigation.popBackStack()
         }
+        appBar.setBackButtonListener(View.OnClickListener {
+            navigation.popBackStack()
+        })
+
+        appBar.setOnMenuClickListener(object : AppBarClicks.OnMenuClickListener{
+            override fun onMenuClick(v: View) {
+                 customPowerMenu =
+                CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
+                    .addItem(
+                        MenuItem(getString(R.string.share))
+                    )
+
+                    .setShowBackground(false)
+                    .setOnMenuItemClickListener(object :
+                        OnMenuItemClickListener<MenuItem> {
+                        override fun onItemClick(
+                            position: Int,
+                            item: MenuItem?
+                        ) {
+                            pb_client_activation.visible()
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                val shortLink = result.shortLink
+                                shareToAnyApp(shortLink.toString())
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                showToast(it.message!!)
+                            }
+                            customPowerMenu?.dismiss()
+                        }
+
+                    })
+                    .setAnimation(MenuAnimation.DROP_DOWN)
+                    .setMenuRadius(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+                    .setMenuShadow(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+
+                    .build()
+            customPowerMenu?.showAsDropDown(
+                v,
+                -(((customPowerMenu?.getContentViewWidth()
+                    ?: 0) - (v.resources.getDimensionPixelSize(R.dimen.size_32))
+                        )
+                        ),
+                -(resources.getDimensionPixelSize(
+                    R.dimen.size_24
+                )
+                        )
+            )
+        }
+
+        })
 
         iv_options_client_activation.setOnClickListener {
 

@@ -132,6 +132,7 @@
     </fragment>
 
 <!--    android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"-->
+<!--    com.gigforce.giger_app.screens.LandingFragment-->
 
     <fragment
         android:id="@+id/landinghomefragment"

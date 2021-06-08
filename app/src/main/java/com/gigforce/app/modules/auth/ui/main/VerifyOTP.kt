@@ -278,6 +278,7 @@ class VerifyOTP : BaseFragment() {
         iv_back_otp_fragment.setOnClickListener {
             onBackPressed()
         }
+
     }
 
     private fun navigateToLoginScreen() {

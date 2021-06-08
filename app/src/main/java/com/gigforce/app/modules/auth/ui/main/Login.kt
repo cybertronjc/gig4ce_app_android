@@ -87,7 +87,7 @@ class Login : BaseFragment() {
     ): View? {
         //this.setDarkStatusBarTheme(false);
 
-        return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
+        return inflateView(R.layout.login_frament, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -114,6 +114,10 @@ class Login : BaseFragment() {
                 hideKeyboard()
                 activity?.onBackPressed()
             }
+//        appBar.setBackButtonListener(View.OnClickListener {
+//            hideKeyboard()
+//            activity?.onBackPressed()
+//        })
 //            showKeyboard()
             //registerTextWatcher()
 //            if (mobile_number.equals(""))

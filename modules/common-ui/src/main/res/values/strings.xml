@@ -19,4 +19,6 @@
     <string name="okay">OKAY</string>
     <string name="driving_certificate">Driving Certificate</string>
 
+    <string name="check_out">Check Out</string>
+    <string name="check_in">Check In</string>
 </resources>

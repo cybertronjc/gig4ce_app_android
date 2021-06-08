@@ -7,6 +7,16 @@
     android:background="@color/setting_bg"
     tools:context="com.gigforce.user_preferences.location.LocationFragment">
 
+    <com.gigforce.common_ui.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="WhiteBar"
+        android:minHeight="@dimen/size_56"
+        app:titleText="@string/location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
         android:id="@+id/toolbar_layout"
@@ -14,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:background="@color/white"
+        android:visibility="gone"
         android:gravity="center_vertical"
         android:minHeight="56dp"
         android:orientation="horizontal"
@@ -52,7 +63,7 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
 
         <ImageView

@@ -2,13 +2,16 @@ package com.gigforce.common_ui.cells
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
+import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import kotlinx.android.synthetic.main.feature_layout.view.*
@@ -62,6 +65,7 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : Fram
 
     open fun setCollection(data: List<Any>){
         featured_rv.collection = data
+        Log.d("My Data", data.toString())
     }
 
     override fun bind(data: Any?) {
@@ -69,6 +73,11 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : Fram
             this.setSectionTitle(data.title)
             this.setSectionIcon(data.image)
             this.setCollection(data.collection)
+            Log.d("FeatureLayout", "FeatureLayoutDVM")
         }
+//        else if (data is GigInfoCardDVM){
+//            this.setCollection(data = data as List<GigInfoCardDVM>)
+//            Log.d("FeatureLayout", "GIg")
+//        }
     }
 }

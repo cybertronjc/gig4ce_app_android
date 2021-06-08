@@ -242,9 +242,8 @@
             android:background="#cdccd1"
             app:layout_constraintTop_toBottomOf="@id/dlInfoLayout" />
 
-        <include
+        <com.gigforce.verification.VerficationImageCardComponent
             android:id="@+id/dlFrontImageHolder"
-            layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
@@ -267,9 +266,8 @@
             tools:text="Error : Uploaded Image is not a Driving License Image" />
 
 
-        <include
+        <com.gigforce.verification.VerficationImageCardComponent
             android:id="@+id/dlBackImageHolder"
-            layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"

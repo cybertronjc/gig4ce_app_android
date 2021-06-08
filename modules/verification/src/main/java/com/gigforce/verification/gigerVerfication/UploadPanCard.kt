@@ -36,8 +36,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.panViewLayout
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
@@ -95,12 +93,17 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     }
 
     private fun initViews() {
-        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
-        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
+        panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card))
+        panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan))
+//        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
+//        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()
         }
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            onBackPressed()
+        })
 
 
         helpIconViewIV.setOnClickListener {
@@ -484,13 +487,15 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     }
 
     private fun showPanInfoCard(panInfoPath: Uri) {
-        panImageHolder.uploadDocumentCardView.visibility = View.GONE
-        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-            .load(panInfoPath)
-            .placeholder(getCircularProgressDrawable())
-            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+//        panImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//            .load(panInfoPath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+        panImageHolder.makeEditLayoutVisible()
+        panImageHolder.setImage(panInfoPath)
     }
 
     override fun onBackPressed(): Boolean {

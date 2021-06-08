@@ -19,10 +19,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.gigforce.common_ui.cells.AppBar
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isSearchVisible="true"
+                app:backgroundType="PinkBar"
+                app:titleText="Gigforce Ambassador"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <com.gigforce.common_ui.views.GigforceToolbar
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <com.google.android.material.chip.ChipGroup
@@ -36,22 +48,25 @@
                 app:chipSpacingHorizontal="14dp"
                 app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_profile"
-                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/profile"
-                    app:chipStrokeWidth="1dp" />
+                    app:chip_backgroundColor="LIGHT_BLUE"
+                    app:chip_text="Profile"
+                    app:chipCornerRadius="@dimen/size_2"
+                    app:chip_strokeSize="@dimen/size_1" />
 
-                <com.google.android.material.chip.Chip
+                <com.gigforce.common_ui.atoms.ChipComponent
                     android:id="@+id/chip_my_details"
-                    style="@style/RoundedSquaredChips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Details"
-                    app:chipStrokeWidth="1dp" />
+                    app:chip_backgroundColor="LIGHT_BLUE"
+                    app:chip_text="My Details"
+                    app:chipStrokeWidth="@dimen/size_1"
+                    app:chip_strokeColor="LIPSTICK"
+                    app:chip_textColor="LIPSTICK"
+                    app:chipCornerRadius="1dp"/>
 
 
             </com.google.android.material.chip.ChipGroup>

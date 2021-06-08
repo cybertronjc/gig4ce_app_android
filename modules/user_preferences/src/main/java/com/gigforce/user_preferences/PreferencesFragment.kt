@@ -116,6 +116,8 @@ class PreferencesFragment : Fragment() {
     }
 
     private fun listener() {
+        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
+
         imageView8.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
         imageView9.setOnClickListener(View.OnClickListener { navigation.navigateTo("profile")/*navigate(R.id.profileFragment)*/ })
     }

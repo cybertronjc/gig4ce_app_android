@@ -87,6 +87,7 @@ class LanguagePreferencesFragment : Fragment() {
                 )
             })
         back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
     }
 
     private fun initializer() {
