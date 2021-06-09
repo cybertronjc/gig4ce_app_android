@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.learning.R
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -30,14 +29,12 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.core.utils.Lce
 import com.gigforce.learning.learning.LearningConstants
 import com.gigforce.learning.learning.courseContent.CourseContentListFragment
-import com.gigforce.learning.learning.learningVideo.PlayVideoDialogFragment
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.common_ui.viewdatamodels.models.Module
-import com.gigforce.learning.learning.slides.SlidesFragment
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_learning_course_details.*
-import kotlinx.android.synthetic.main.fragment_learning_course_details_main.*
+import kotlinx.android.synthetic.main.layout_fragment_course_details.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -102,56 +99,58 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
     }
 
     private fun initView() {
-        ViewCompat.setNestedScrollingEnabled(learning_details_lessons_rv, false)
-        ViewCompat.setNestedScrollingEnabled(learning_details_assessments_rv, false)
-
-        learning_details_lessons_rv.layoutManager = LinearLayoutManager(
-            requireContext(),
-            RecyclerView.VERTICAL,
-            false
-        )
-
-        mAdapter.setOnLearningVideoActionListener {
-            when (it.type) {
-                CourseContent.TYPE_ASSESSMENT -> {
-                    navigation.navigateTo(
-                        "learning/assessment", bundleOf(
-                            StringConstants.INTENT_LESSON_ID.value to it.id,
-                            StringConstants.INTENT_MODULE_ID.value to it.moduleId
-                        )
-                    )
-                }
-                CourseContent.TYPE_SLIDE -> {
-                    navigation.navigateTo(
-                        "learning/assessmentslides",
-                        bundleOf(
-                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
-                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
-                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
-                        )
-                    )
-                }
-                CourseContent.TYPE_VIDEO -> {
-                    PlayVideoDialogFragment.launch(
-                        childFragmentManager = childFragmentManager,
-                        moduleId = it.moduleId,
-                        lessonId = it.id,
-                        shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
-                    )
-
-//                    navigate(
-//                        R.id.playVideoDialogFragment,
-//                        bundleOf(
-//                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
-//                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
+//        ViewCompat.setNestedScrollingEnabled(learning_details_lessons_rv, false)
+//        ViewCompat.setNestedScrollingEnabled(learning_details_assessments_rv, false)
+//
+//        learning_details_lessons_rv.layoutManager = LinearLayoutManager(
+//            requireContext(),
+//            RecyclerView.VERTICAL,
+//            false
+//        )
+//
+//        mAdapter.setOnLearningVideoActionListener {
+//            when (it.type) {
+//                CourseContent.TYPE_ASSESSMENT -> {
+//                    navigation.navigateTo(
+//                        "learning/assessment", bundleOf(
+//                            StringConstants.INTENT_LESSON_ID.value to it.id,
+//                            StringConstants.INTENT_MODULE_ID.value to it.moduleId
 //                        )
 //                    )
-                }
-                else -> {
-                }
-            }
-        }
-        learning_details_lessons_rv.adapter = mAdapter
+//                }
+//                CourseContent.TYPE_SLIDE -> {
+//                    navigation.navigateTo(
+//                        "learning/assessmentslides",
+//                        bundleOf(
+//                            SlidesFragment.INTENT_EXTRA_SLIDE_TITLE to it.title,
+//                            SlidesFragment.INTENT_EXTRA_MODULE_ID to it.moduleId,
+//                            SlidesFragment.INTENT_EXTRA_LESSON_ID to it.id
+//                        )
+//                    )
+//                }
+//                CourseContent.TYPE_VIDEO -> {
+//                    PlayVideoDialogFragment.launch(
+//                        childFragmentManager = childFragmentManager,
+//                        moduleId = it.moduleId,
+//                        lessonId = it.id,
+//                        shouldShowFeedbackDialog = it.shouldShowFeedbackDialog
+//                    )
+//
+////                    navigate(
+////                        R.id.playVideoDialogFragment,
+////                        bundleOf(
+////                            PlayVideoDialogFragment.INTENT_EXTRA_LESSON_ID to it.id,
+////                            PlayVideoDialogFragment.INTENT_EXTRA_MODULE_ID to it.moduleId
+////                        )
+////                    )
+//                }
+//                else -> {
+//                }
+//            }
+//        }
+        //learning_details_lessons_rv.adapter = mAdapter
+
+
 
 
         learningBackButton.setOnClickListener {
@@ -208,9 +207,9 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
             .observe(viewLifecycleOwner, Observer {
 
                 when (it) {
-                    Lce.Loading -> showLessonsAsLoading()
-                    is Lce.Content -> showLessonsOnView(it.content)
-                    is Lce.Error -> showErrorInLoadingLessons(it.error)
+//                    Lce.Loading -> showLessonsAsLoading()
+//                    is Lce.Content -> showLessonsOnView(it.content)
+//                    is Lce.Error -> showErrorInLoadingLessons(it.error)
                 }
             })
 
@@ -224,6 +223,22 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
 //                    is Lce.Error -> showErrorInLoadingAssessments(it.error)
 //                }
 //            })
+
+        //loading and showing lessons and assessments
+        viewModel.courseLessonsAndAssessments.observe(viewLifecycleOwner, Observer {
+            Log.d("list1234", it.toString())
+            if (it.size > 0){
+                var sublist = it.subList(0,4)
+                learning_all_lesson_rv.visible()
+                learning_details_learning_error.gone()
+                learning_all_lesson_rv.collection = sublist
+            }
+            else{
+                learning_all_lesson_rv.gone()
+                learning_details_learning_error.visible()
+            }
+
+        })
     }
 
     private fun showCourseDetails(course: Course) {
@@ -321,39 +336,39 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         course_details_progress_bar.visible()
     }
 
-    private fun showLessonsAsLoading() {
-
-        learning_details_lessons_rv.gone()
-        learning_details_learning_error.gone()
-        learning_details_progress_bar.visible()
-    }
-
-
-    private fun showLessonsOnView(content: List<CourseContent>) {
-
-        learning_details_learning_error.gone()
-        learning_details_progress_bar.gone()
-        learning_details_lessons_rv.visible()
-
-        loadModulesInfoInView()
-
-        if (content.isEmpty()) {
-            mAdapter.updateCourseContent(emptyList())
-            learning_details_lessons_rv.gone()
-            learning_details_progress_bar.gone()
-
-            learning_details_learning_error.visible()
-            learning_details_learning_error.text = "No Lessons Found"
-            lessonsSeeMoreButton.gone()
-
-        } else if (content.size > 4) {
-            lessonsSeeMoreButton.visible()
-            mAdapter.updateCourseContent(content.sortedBy { it.priority }.take(4))
-        } else {
-            lessonsSeeMoreButton.gone()
-            mAdapter.updateCourseContent(content.sortedBy { it.priority })
-        }
-    }
+//    private fun showLessonsAsLoading() {
+//
+//        learning_details_lessons_rv.gone()
+//        learning_details_learning_error.gone()
+//        learning_details_progress_bar.visible()
+//    }
+//
+//
+//    private fun showLessonsOnView(content: List<CourseContent>) {
+//
+//        learning_details_learning_error.gone()
+//        learning_details_progress_bar.gone()
+//        learning_details_lessons_rv.visible()
+//
+//        loadModulesInfoInView()
+//
+//        if (content.isEmpty()) {
+//            mAdapter.updateCourseContent(emptyList())
+//            learning_details_lessons_rv.gone()
+//            learning_details_progress_bar.gone()
+//
+//            learning_details_learning_error.visible()
+//            learning_details_learning_error.text = "No Lessons Found"
+//            lessonsSeeMoreButton.gone()
+//
+//        } else if (content.size > 4) {
+//            lessonsSeeMoreButton.visible()
+//            mAdapter.updateCourseContent(content.sortedBy { it.priority }.take(4))
+//        } else {
+//            lessonsSeeMoreButton.gone()
+//            mAdapter.updateCourseContent(content.sortedBy { it.priority })
+//        }
+//    }
 
     private fun loadModulesInfoInView() {
 
@@ -404,14 +419,14 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         }
     }
 
-    private fun showErrorInLoadingLessons(error: String) {
-
-        learning_details_lessons_rv.gone()
-        learning_details_progress_bar.gone()
-
-        learning_details_learning_error.visible()
-        learning_details_learning_error.text = error
-    }
+//    private fun showErrorInLoadingLessons(error: String) {
+//
+//        learning_details_lessons_rv.gone()
+//        learning_details_progress_bar.gone()
+//
+//        learning_details_learning_error.visible()
+//        learning_details_learning_error.text = error
+//    }
 
 
     private fun showModulesAsLoading() {

@@ -65,7 +65,6 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : Fram
 
     open fun setCollection(data: List<Any>){
         featured_rv.collection = data
-        Log.d("My Data", data.toString())
     }
 
     override fun bind(data: Any?) {
@@ -73,11 +72,6 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : Fram
             this.setSectionTitle(data.title)
             this.setSectionIcon(data.image)
             this.setCollection(data.collection)
-            Log.d("FeatureLayout", "FeatureLayoutDVM")
         }
-//        else if (data is GigInfoCardDVM){
-//            this.setCollection(data = data as List<GigInfoCardDVM>)
-//            Log.d("FeatureLayout", "GIg")
-//        }
     }
 }

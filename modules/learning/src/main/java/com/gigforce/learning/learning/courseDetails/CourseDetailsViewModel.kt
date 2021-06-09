@@ -1,5 +1,6 @@
 package com.gigforce.learning.learning.courseDetails
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.gigforce.core.utils.Lce
 //import com.gigforce.core.utils.Lce
 import com.gigforce.common_ui.repository.LearningRepository
+import com.gigforce.common_ui.viewdatamodels.AssessmentCardDVM
+import com.gigforce.common_ui.viewdatamodels.VideoPlayCardDVM
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.learning.CourseContent
 import com.gigforce.common_ui.viewdatamodels.models.Module
@@ -157,6 +160,9 @@ class CourseDetailsViewModel constructor(
     private val _courseLessons = MutableLiveData<Lce<List<CourseContent>>>()
     val courseLessons: LiveData<Lce<List<CourseContent>>> = _courseLessons
 
+    private val _courseLessonsAndAssessments = MutableLiveData<List<Any>>()
+    val courseLessonsAndAssessments : LiveData<List<Any>> = _courseLessonsAndAssessments
+
     fun getCourseLessonsAndAssessments(
         courseId: String,
         moduleId: String
@@ -178,9 +184,21 @@ class CourseDetailsViewModel constructor(
             )
 
             mCurrentModuleId = moduleId
+            var assessmentsAndLessons = ArrayList<Any>()
 
             if (mCurrentModulesProgressData != null) {
+
                 currentLessons = appendLessonProgressInfo(courseId, moduleId, courseLessons)
+
+                courseLessons.forEach {
+                    if (it.type == CourseContent.TYPE_ASSESSMENT){
+                        assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString))
+                    }
+                    else if (it.type == CourseContent.TYPE_VIDEO){
+                        assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString))
+                    }
+                }
+                _courseLessonsAndAssessments.value = assessmentsAndLessons
 
                 _courseLessons.postValue(Lce.content(courseLessons))
 
@@ -190,10 +208,13 @@ class CourseDetailsViewModel constructor(
                 currentAssessments = assessments
                 _courseAssessments.postValue(Lce.content(assessments))
 
+
             } else {
+
                 currentLessons = courseLessons
                 startWatchingForUpdates(courseId, moduleId)
             }
+
         } catch (e: Exception) {
             _courseLessons.postValue(Lce.error(e.toString()))
         }
@@ -210,6 +231,7 @@ class CourseDetailsViewModel constructor(
                     }.filter {
                         it.isActive
                     }
+
 
                     if (currentModules != null && mCurrentModulesProgressData != null) {
                         currentModules!!.forEach { module ->
@@ -230,10 +252,20 @@ class CourseDetailsViewModel constructor(
                         _courseModules.postValue(Lce.content(currentModules!!))
                     }
 
+
                     if (currentLessons != null) {
                         currentLessons =
                             appendLessonProgressInfo(courseId, moduleId, currentLessons!!)
-
+                        var assessmentsAndLessons = ArrayList<Any>()
+                        currentLessons!!.forEach {
+                            if (it.type == CourseContent.TYPE_ASSESSMENT){
+                                assessmentsAndLessons.add(AssessmentCardDVM(title = it.title, completed = it.completed, videoLengthString = it.videoLengthString))
+                            }
+                            else if (it.type == CourseContent.TYPE_VIDEO){
+                                assessmentsAndLessons.add(VideoPlayCardDVM(title = it.title, coverPicture = it.coverPicture, completed = it.completed, completionProgress = it.completionProgress, lessonTotalLength = it.lessonTotalLength, videoLengthString = it.videoLengthString))
+                            }
+                        }
+                        _courseLessonsAndAssessments.value = assessmentsAndLessons
                         _courseLessons.postValue(Lce.content(currentLessons!!))
 
                         val assessments = currentLessons!!.filter {
