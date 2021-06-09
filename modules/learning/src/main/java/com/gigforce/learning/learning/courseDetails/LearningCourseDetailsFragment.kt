@@ -228,9 +228,10 @@ class LearningCourseDetailsFragment : Fragment(), IOnBackPressedOverride {
         viewModel.courseLessonsAndAssessments.observe(viewLifecycleOwner, Observer {
             Log.d("list1234", it.toString())
             if (it.size > 0){
+                var sublist = it.subList(0,4)
                 learning_all_lesson_rv.visible()
                 learning_details_learning_error.gone()
-                learning_all_lesson_rv.collection = it
+                learning_all_lesson_rv.collection = sublist
             }
             else{
                 learning_all_lesson_rv.gone()
