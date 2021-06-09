@@ -1452,6 +1452,7 @@ color grey
 color greyDark
 color greyLight
 color grey_c7
+color grey_transparetn
 color greyish_brown
 color highlighted_text_material_dark
 color highlighted_text_material_light
@@ -1571,6 +1572,8 @@ color secondary_text_disabled_material_light
 color shadow_color
 color slidetoact_defaultAccent
 color slidetoact_white
+color status_bg_completed
+color status_bg_pending
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
 color switch_thumb_material_dark
@@ -1580,6 +1583,9 @@ color switch_thumb_normal_material_light
 color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
 color text_color
+color text_green
+color text_orange
+color text_yellow
 color tooltip_background_dark
 color tooltip_background_light
 color topBarDark
@@ -2524,6 +2530,7 @@ drawable ic_check_in_green
 drawable ic_checkin_illus
 drawable ic_checkout
 drawable ic_checkout_illus
+drawable ic_clock_assessment
 drawable ic_clock_black_24dp
 drawable ic_clock_orange
 drawable ic_clock_pink
@@ -2562,6 +2569,7 @@ drawable ic_keyboard_arrow_down_c7c7cc
 drawable ic_keyboard_black_24dp
 drawable ic_landinghome_search
 drawable ic_learning_default_back
+drawable ic_learning_play
 drawable ic_learning_role
 drawable ic_like
 drawable ic_location
@@ -2583,6 +2591,7 @@ drawable ic_oval_top_landingscreen
 drawable ic_pending_yellow_round
 drawable ic_phone_white_24dp
 drawable ic_play_round_pink_bck
+drawable ic_quiz
 drawable ic_rectangle_rad_5
 drawable ic_referal
 drawable ic_rejected
@@ -2592,6 +2601,7 @@ drawable ic_star
 drawable ic_status_pending
 drawable ic_three_dots
 drawable ic_time_help_
+drawable ic_time_light_grey
 drawable ic_tip
 drawable ic_warning
 drawable ic_warning_
@@ -2639,6 +2649,8 @@ drawable pink_border
 drawable profile
 drawable profile_avatar
 drawable radio_button_drawable
+drawable rect_assessment_status_completed
+drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rect_button_gradient
 drawable rect_button_outline
@@ -2948,6 +2960,7 @@ id coordinator
 id cos
 id counterclockwise
 id country_list
+id course_content_video_slide_layout
 id cross_btn
 id cross_device_linking_body
 id cross_iv
@@ -2992,6 +3005,7 @@ id dialog_button
 id dialog_content
 id dialog_title
 id disableHome
+id disabled_overlay
 id disjoint
 id divider_below_feedback
 id divider_below_gig_type
@@ -3205,9 +3219,11 @@ id ifRoom
 id ignore
 id ignoreRequest
 id image
+id imageLayout
 id imageNameTV
 id imageView
 id imageView10
+id imageView18
 id image_content_root
 id image_root
 id image_view
@@ -3268,6 +3284,8 @@ id left
 id leftToRight
 id left_aligned
 id left_to_right
+id lesson_completion_tv
+id lessonsSeeMoreButton
 id light
 id line1
 id line3
@@ -3424,6 +3442,7 @@ id phone_number
 id pickers
 id picture
 id pin
+id play_button_iv
 id playerView
 id position
 id postLayout
@@ -3466,6 +3485,7 @@ id punch_out_label
 id punch_out_time
 id punch_out_time_tv
 id punch_out_tv
+id quiz_icon_iv
 id radial
 id radio
 id ratingBar
@@ -3586,6 +3606,7 @@ id showHome
 id showTitle
 id show_img_cl
 id show_pic
+id side_bar_status
 id sign_in_email_sent_header_text
 id sign_in_email_sent_text
 id sin
@@ -3616,6 +3637,7 @@ id state_rotate
 id state_scale
 id staticLayout
 id staticPostLayout
+id status
 id status_bar_latest_event_content
 id status_card_view
 id status_iv
@@ -3690,8 +3712,10 @@ id textview
 id thumbnail
 id ticker
 id time
+id time_imageview
 id time_layout
 id time_text
+id timeline
 id timer_and_attendance_layout
 id timer_root_card_layout
 id title
@@ -3806,7 +3830,10 @@ id verification_status_cardview
 id verification_status_tv
 id vertical
 id video
+id videoThumbnailIV
 id video_decoder_gl_surface_view
+id video_time
+id video_title
 id videos_list
 id view4
 id view40
@@ -4160,6 +4187,8 @@ layout ucrop_layout_scale_wheel
 layout ucrop_view
 layout upcoming_gig_card_component
 layout verified_button
+layout view_assessment_card_layout
+layout view_play_card_layout
 menu menu_gig_2
 menu menu_gig_attendance
 menu ucrop_menu_activity

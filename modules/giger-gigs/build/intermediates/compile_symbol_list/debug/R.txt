@@ -1451,6 +1451,7 @@ int color grey 0x0
 int color greyDark 0x0
 int color greyLight 0x0
 int color grey_c7 0x0
+int color grey_transparetn 0x0
 int color greyish_brown 0x0
 int color highlighted_text_material_dark 0x0
 int color highlighted_text_material_light 0x0
@@ -1570,6 +1571,8 @@ int color secondary_text_disabled_material_light 0x0
 int color shadow_color 0x0
 int color slidetoact_defaultAccent 0x0
 int color slidetoact_white 0x0
+int color status_bg_completed 0x0
+int color status_bg_pending 0x0
 int color switch_thumb_disabled_material_dark 0x0
 int color switch_thumb_disabled_material_light 0x0
 int color switch_thumb_material_dark 0x0
@@ -1579,6 +1582,9 @@ int color switch_thumb_normal_material_light 0x0
 int color test_mtrl_calendar_day 0x0
 int color test_mtrl_calendar_day_selected 0x0
 int color text_color 0x0
+int color text_green 0x0
+int color text_orange 0x0
+int color text_yellow 0x0
 int color tooltip_background_dark 0x0
 int color tooltip_background_light 0x0
 int color topBarDark 0x0
@@ -2523,6 +2529,7 @@ int drawable ic_check_in_green 0x0
 int drawable ic_checkin_illus 0x0
 int drawable ic_checkout 0x0
 int drawable ic_checkout_illus 0x0
+int drawable ic_clock_assessment 0x0
 int drawable ic_clock_black_24dp 0x0
 int drawable ic_clock_orange 0x0
 int drawable ic_clock_pink 0x0
@@ -2561,6 +2568,7 @@ int drawable ic_keyboard_arrow_down_c7c7cc 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_landinghome_search 0x0
 int drawable ic_learning_default_back 0x0
+int drawable ic_learning_play 0x0
 int drawable ic_learning_role 0x0
 int drawable ic_like 0x0
 int drawable ic_location 0x0
@@ -2582,6 +2590,7 @@ int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_pending_yellow_round 0x0
 int drawable ic_phone_white_24dp 0x0
 int drawable ic_play_round_pink_bck 0x0
+int drawable ic_quiz 0x0
 int drawable ic_rectangle_rad_5 0x0
 int drawable ic_referal 0x0
 int drawable ic_rejected 0x0
@@ -2591,6 +2600,7 @@ int drawable ic_star 0x0
 int drawable ic_status_pending 0x0
 int drawable ic_three_dots 0x0
 int drawable ic_time_help_ 0x0
+int drawable ic_time_light_grey 0x0
 int drawable ic_tip 0x0
 int drawable ic_warning 0x0
 int drawable ic_warning_ 0x0
@@ -2638,6 +2648,8 @@ int drawable pink_border 0x0
 int drawable profile 0x0
 int drawable profile_avatar 0x0
 int drawable radio_button_drawable 0x0
+int drawable rect_assessment_status_completed 0x0
+int drawable rect_assessment_status_pending 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
 int drawable rect_button_gradient 0x0
 int drawable rect_button_outline 0x0
@@ -2947,6 +2959,7 @@ int id coordinator 0x0
 int id cos 0x0
 int id counterclockwise 0x0
 int id country_list 0x0
+int id course_content_video_slide_layout 0x0
 int id cross_btn 0x0
 int id cross_device_linking_body 0x0
 int id cross_iv 0x0
@@ -2991,6 +3004,7 @@ int id dialog_button 0x0
 int id dialog_content 0x0
 int id dialog_title 0x0
 int id disableHome 0x0
+int id disabled_overlay 0x0
 int id disjoint 0x0
 int id divider_below_feedback 0x0
 int id divider_below_gig_type 0x0
@@ -3204,9 +3218,11 @@ int id ifRoom 0x0
 int id ignore 0x0
 int id ignoreRequest 0x0
 int id image 0x0
+int id imageLayout 0x0
 int id imageNameTV 0x0
 int id imageView 0x0
 int id imageView10 0x0
+int id imageView18 0x0
 int id image_content_root 0x0
 int id image_root 0x0
 int id image_view 0x0
@@ -3267,6 +3283,8 @@ int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
 int id left_to_right 0x0
+int id lesson_completion_tv 0x0
+int id lessonsSeeMoreButton 0x0
 int id light 0x0
 int id line1 0x0
 int id line3 0x0
@@ -3423,6 +3441,7 @@ int id phone_number 0x0
 int id pickers 0x0
 int id picture 0x0
 int id pin 0x0
+int id play_button_iv 0x0
 int id playerView 0x0
 int id position 0x0
 int id postLayout 0x0
@@ -3465,6 +3484,7 @@ int id punch_out_label 0x0
 int id punch_out_time 0x0
 int id punch_out_time_tv 0x0
 int id punch_out_tv 0x0
+int id quiz_icon_iv 0x0
 int id radial 0x0
 int id radio 0x0
 int id ratingBar 0x0
@@ -3585,6 +3605,7 @@ int id showHome 0x0
 int id showTitle 0x0
 int id show_img_cl 0x0
 int id show_pic 0x0
+int id side_bar_status 0x0
 int id sign_in_email_sent_header_text 0x0
 int id sign_in_email_sent_text 0x0
 int id sin 0x0
@@ -3615,6 +3636,7 @@ int id state_rotate 0x0
 int id state_scale 0x0
 int id staticLayout 0x0
 int id staticPostLayout 0x0
+int id status 0x0
 int id status_bar_latest_event_content 0x0
 int id status_card_view 0x0
 int id status_iv 0x0
@@ -3689,8 +3711,10 @@ int id textview 0x0
 int id thumbnail 0x0
 int id ticker 0x0
 int id time 0x0
+int id time_imageview 0x0
 int id time_layout 0x0
 int id time_text 0x0
+int id timeline 0x0
 int id timer_and_attendance_layout 0x0
 int id timer_root_card_layout 0x0
 int id title 0x0
@@ -3805,7 +3829,10 @@ int id verification_status_cardview 0x0
 int id verification_status_tv 0x0
 int id vertical 0x0
 int id video 0x0
+int id videoThumbnailIV 0x0
 int id video_decoder_gl_surface_view 0x0
+int id video_time 0x0
+int id video_title 0x0
 int id videos_list 0x0
 int id view4 0x0
 int id view40 0x0
@@ -4159,6 +4186,8 @@ int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
 int layout upcoming_gig_card_component 0x0
 int layout verified_button 0x0
+int layout view_assessment_card_layout 0x0
+int layout view_play_card_layout 0x0
 int menu menu_gig_2 0x0
 int menu menu_gig_attendance 0x0
 int menu ucrop_menu_activity 0x0

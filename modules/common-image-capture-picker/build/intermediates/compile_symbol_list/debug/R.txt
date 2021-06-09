@@ -486,6 +486,7 @@ int attr endIconDrawable 0x0
 int attr endIconMode 0x0
 int attr endIconTint 0x0
 int attr endIconTintMode 0x0
+int attr endLineColor 0x0
 int attr enforceMaterialTheme 0x0
 int attr enforceTextAppearance 0x0
 int attr ensureMinTouchTargetSize 0x0
@@ -718,7 +719,13 @@ int attr liftOnScroll 0x0
 int attr liftOnScrollTargetViewId 0x0
 int attr limitBoundsTo 0x0
 int attr lineHeight 0x0
+int attr lineOrientation 0x0
+int attr linePadding 0x0
 int attr lineSpacing 0x0
+int attr lineStyle 0x0
+int attr lineStyleDashGap 0x0
+int attr lineStyleDashLength 0x0
+int attr lineWidth 0x0
 int attr linearProgressIndicatorStyle 0x0
 int attr listChoiceBackgroundIndicator 0x0
 int attr listChoiceIndicatorMultipleAnimated 0x0
@@ -737,6 +744,13 @@ int attr listPreferredItemPaddingRight 0x0
 int attr listPreferredItemPaddingStart 0x0
 int attr logo 0x0
 int attr logoDescription 0x0
+int attr marker 0x0
+int attr markerInCenter 0x0
+int attr markerPaddingBottom 0x0
+int attr markerPaddingLeft 0x0
+int attr markerPaddingRight 0x0
+int attr markerPaddingTop 0x0
+int attr markerSize 0x0
 int attr materialAlertDialogBodyTextStyle 0x0
 int attr materialAlertDialogTheme 0x0
 int attr materialAlertDialogTitleIconStyle 0x0
@@ -986,6 +1000,7 @@ int attr startIconContentDescription 0x0
 int attr startIconDrawable 0x0
 int attr startIconTint 0x0
 int attr startIconTintMode 0x0
+int attr startLineColor 0x0
 int attr state_above_anchor 0x0
 int attr state_collapsed 0x0
 int attr state_collapsible 0x0
@@ -1374,6 +1389,7 @@ int color green 0x0
 int color grey 0x0
 int color greyDark 0x0
 int color greyLight 0x0
+int color grey_transparetn 0x0
 int color greyish_brown 0x0
 int color highlighted_text_material_dark 0x0
 int color highlighted_text_material_light 0x0
@@ -1487,6 +1503,8 @@ int color secondary_text_default_material_dark 0x0
 int color secondary_text_default_material_light 0x0
 int color secondary_text_disabled_material_dark 0x0
 int color secondary_text_disabled_material_light 0x0
+int color status_bg_completed 0x0
+int color status_bg_pending 0x0
 int color switch_thumb_disabled_material_dark 0x0
 int color switch_thumb_disabled_material_light 0x0
 int color switch_thumb_material_dark 0x0
@@ -1495,6 +1513,9 @@ int color switch_thumb_normal_material_dark 0x0
 int color switch_thumb_normal_material_light 0x0
 int color test_mtrl_calendar_day 0x0
 int color test_mtrl_calendar_day_selected 0x0
+int color text_green 0x0
+int color text_orange 0x0
+int color text_yellow 0x0
 int color tooltip_background_dark 0x0
 int color tooltip_background_light 0x0
 int color topBarDark 0x0
@@ -2382,6 +2403,7 @@ int drawable ic_baseline_play_circle_outline_24_ 0x0
 int drawable ic_baseline_search_24 0x0
 int drawable ic_camera_round 0x0
 int drawable ic_chat 0x0
+int drawable ic_clock_assessment 0x0
 int drawable ic_clock_black_24dp 0x0
 int drawable ic_clock_orange 0x0
 int drawable ic_cross_grey 0x0
@@ -2400,6 +2422,7 @@ int drawable ic_homescreen_chat 0x0
 int drawable ic_image_driving_cert 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_learning_default_back 0x0
+int drawable ic_learning_play 0x0
 int drawable ic_location_tracking_image 0x0
 int drawable ic_mtrl_checked_circle 0x0
 int drawable ic_mtrl_chip_checked_black 0x0
@@ -2408,14 +2431,17 @@ int drawable ic_mtrl_chip_close_circle 0x0
 int drawable ic_notification_icon 0x0
 int drawable ic_oval_top_landingscreen 0x0
 int drawable ic_phone_white_24dp 0x0
+int drawable ic_quiz 0x0
 int drawable ic_rectangle_rad_5 0x0
 int drawable ic_rejected 0x0
 int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_three_dots 0x0
 int drawable ic_time_help_ 0x0
+int drawable ic_time_light_grey 0x0
 int drawable ic_tip 0x0
 int drawable image_placeholder 0x0
+int drawable marker 0x0
 int drawable material_cursor_drawable 0x0
 int drawable material_ic_calendar_black_24dp 0x0
 int drawable material_ic_clear_black_24dp 0x0
@@ -2451,6 +2477,8 @@ int drawable notification_tile_bg 0x0
 int drawable notify_panel_notification_icon_bg 0x0
 int drawable profile_avatar 0x0
 int drawable radio_button_drawable 0x0
+int drawable rect_assessment_status_completed 0x0
+int drawable rect_assessment_status_pending 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
 int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
@@ -2674,12 +2702,14 @@ int id coordinator 0x0
 int id cos 0x0
 int id counterclockwise 0x0
 int id country_list 0x0
+int id course_content_video_slide_layout 0x0
 int id cross_device_linking_body 0x0
 int id custom 0x0
 int id customPanel 0x0
 int id cut 0x0
 int id cv_top 0x0
 int id dark 0x0
+int id dash 0x0
 int id date_picker_actions 0x0
 int id daylight 0x0
 int id decelerate 0x0
@@ -2695,6 +2725,7 @@ int id design_navigation_view 0x0
 int id deviceDefault 0x0
 int id dialog_button 0x0
 int id disableHome 0x0
+int id disabled_overlay 0x0
 int id disjoint 0x0
 int id dng 0x0
 int id dragDown 0x0
@@ -2800,7 +2831,9 @@ int id ifRoom 0x0
 int id ignore 0x0
 int id ignoreRequest 0x0
 int id image 0x0
+int id imageLayout 0x0
 int id imageView 0x0
+int id imageView18 0x0
 int id image_content_root 0x0
 int id image_root 0x0
 int id image_view 0x0
@@ -2841,6 +2874,8 @@ int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
 int id left_to_right 0x0
+int id lesson_completion_tv 0x0
+int id lessonsSeeMoreButton 0x0
 int id light 0x0
 int id line1 0x0
 int id line3 0x0
@@ -2955,6 +2990,7 @@ int id phone_layout 0x0
 int id phone_number 0x0
 int id picture 0x0
 int id pin 0x0
+int id play_button_iv 0x0
 int id playerView 0x0
 int id position 0x0
 int id postLayout 0x0
@@ -2969,6 +3005,7 @@ int id profile_image 0x0
 int id profile_name 0x0
 int id progress_circular 0x0
 int id progress_horizontal 0x0
+int id quiz_icon_iv 0x0
 int id radial 0x0
 int id radio 0x0
 int id rectangles 0x0
@@ -3032,6 +3069,7 @@ int id showHome 0x0
 int id showTitle 0x0
 int id show_img_cl 0x0
 int id show_pic 0x0
+int id side_bar_status 0x0
 int id sign_in_email_sent_header_text 0x0
 int id sign_in_email_sent_text 0x0
 int id sin 0x0
@@ -3060,6 +3098,7 @@ int id state_rotate 0x0
 int id state_scale 0x0
 int id staticLayout 0x0
 int id staticPostLayout 0x0
+int id status 0x0
 int id status_bar_latest_event_content 0x0
 int id status_iv 0x0
 int id steps 0x0
@@ -3120,7 +3159,9 @@ int id texture_view 0x0
 int id thumbnail 0x0
 int id ticker 0x0
 int id time 0x0
+int id time_imageview 0x0
 int id time_text 0x0
+int id timeline 0x0
 int id title 0x0
 int id titleDividerNoCustom 0x0
 int id titleTV 0x0
@@ -3172,8 +3213,12 @@ int id upload_img 0x0
 int id useLogo 0x0
 int id verification_status_cardview 0x0
 int id verification_status_tv 0x0
+int id vertical 0x0
 int id video 0x0
+int id videoThumbnailIV 0x0
 int id video_decoder_gl_surface_view 0x0
+int id video_time 0x0
+int id video_title 0x0
 int id videos_list 0x0
 int id view_bottom 0x0
 int id view_finder 0x0
@@ -3446,6 +3491,8 @@ int layout ucrop_layout_scale_wheel 0x0
 int layout ucrop_view 0x0
 int layout upcoming_gig_card_component 0x0
 int layout verified_button 0x0
+int layout view_assessment_card_layout 0x0
+int layout view_play_card_layout 0x0
 int menu ucrop_menu_activity 0x0
 int plurals fui_error_weak_password 0x0
 int plurals mtrl_badge_content_description 0x0
@@ -6500,6 +6547,22 @@ int[] styleable ThemeEnforcement { 0x1010034, 0x0, 0x0 }
 int styleable ThemeEnforcement_android_textAppearance 0
 int styleable ThemeEnforcement_enforceMaterialTheme 1
 int styleable ThemeEnforcement_enforceTextAppearance 2
+int[] styleable TimelineView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable TimelineView_endLineColor 0
+int styleable TimelineView_lineOrientation 1
+int styleable TimelineView_linePadding 2
+int styleable TimelineView_lineStyle 3
+int styleable TimelineView_lineStyleDashGap 4
+int styleable TimelineView_lineStyleDashLength 5
+int styleable TimelineView_lineWidth 6
+int styleable TimelineView_marker 7
+int styleable TimelineView_markerInCenter 8
+int styleable TimelineView_markerPaddingBottom 9
+int styleable TimelineView_markerPaddingLeft 10
+int styleable TimelineView_markerPaddingRight 11
+int styleable TimelineView_markerPaddingTop 12
+int styleable TimelineView_markerSize 13
+int styleable TimelineView_startLineColor 14
 int[] styleable Toolbar { 0x10100af, 0x1010140, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable Toolbar_android_gravity 0
 int styleable Toolbar_android_minHeight 1
