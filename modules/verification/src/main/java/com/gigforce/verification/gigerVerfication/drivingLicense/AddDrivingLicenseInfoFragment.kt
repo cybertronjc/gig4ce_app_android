@@ -119,6 +119,12 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 navigation.popBackStack("verification/main",inclusive = false)
             })
         }
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
+            })
+        }
+
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()
         }

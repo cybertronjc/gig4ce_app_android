@@ -121,20 +121,20 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 //            }
         }
 
-//        appBarComp.apply {
-//            setAppBarTitle(getString(R.string.giger_verification))
-//            setBackButtonListener(object : View.OnClickListener{
-//                override fun onClick(v: View?) {
-//                    if (didUserCameFromAmbassadorScreen) {
-//                        onBackPressed()
-//                    } else {
-//                        navigation.popBackStack("verification/main",inclusive = false)
-////                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
-//                    }
-//                }
-//
-//            })
-//        }
+        appBarComp.apply {
+            setAppBarTitle(getString(R.string.giger_verification))
+            setBackButtonListener(object : View.OnClickListener{
+                override fun onClick(v: View?) {
+                    if (didUserCameFromAmbassadorScreen) {
+                        onBackPressed()
+                    } else {
+                        navigation.popBackStack("verification/main",inclusive = false)
+//                    findNavController().popBackStack(R.id.gigerVerificationFragment, false)
+                    }
+                }
+
+            })
+        }
 
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()

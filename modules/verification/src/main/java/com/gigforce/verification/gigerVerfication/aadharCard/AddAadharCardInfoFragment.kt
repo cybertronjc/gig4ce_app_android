@@ -103,6 +103,12 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
         }
 
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
+            })
+        }
+
         whyWeNeedThisViewTV.setOnClickListener {
             showWhyWeNeedThisBottomSheet()
         }

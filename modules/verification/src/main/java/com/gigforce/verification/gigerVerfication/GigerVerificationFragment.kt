@@ -206,6 +206,12 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
 
         }
 
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                activity?.onBackPressed()
+            })
+        }
+
 //        appBarComp.apply {
 //            setAppBarTitle(getString(R.string.giger_verification))
 //            setBackButtonListener(View.OnClickListener {
