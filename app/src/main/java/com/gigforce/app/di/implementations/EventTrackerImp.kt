@@ -74,6 +74,10 @@ class EventTrackerImp @Inject constructor(
         mixpanel?.unregisterSuperProperty(prop)
     }
 
+    override fun setUserName(name: String){
+        moEngageHelper?.setFirstName(name)
+    }
+
 
     override fun pushEvent(args: TrackingEventArgs) {
         Log.d("EventTrackerImp", "---Event Pushed-------")
@@ -223,6 +227,7 @@ class EventTrackerImp @Inject constructor(
             args.props?.forEach {
                 properties.addAttribute(it.key, it.value)
             }
+            Log.d("properties", properties.getPayload().toString())
             moEngageHelper?.trackEvent(args.eventName, properties)
         }
         catch (e: Exception){
