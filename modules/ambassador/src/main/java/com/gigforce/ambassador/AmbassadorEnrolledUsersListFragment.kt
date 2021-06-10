@@ -18,6 +18,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment
@@ -61,9 +62,9 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         LocationUpdates()
     }
 
-    private val viewModel: AmbassadorEnrollViewModel by activityViewModels()
-    private val profileViewModel: ProfileViewModel by activityViewModels()
-    private val gigVerificationViewModel: GigVerificationViewModel by activityViewModels()
+    private val viewModel: AmbassadorEnrollViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+    private val gigVerificationViewModel: GigVerificationViewModel by viewModels()
 
     private val completedItems = LinkedHashMap<String, Boolean>()
     private var redirectToNextStep = false

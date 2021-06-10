@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -61,7 +62,7 @@ class AddUserDrivingLicenseInfoFragment : Fragment(),
         const val INTENT_EXTRA_DL_NO = "dl_no"
     }
 
-    private val viewModel: GigVerificationViewModel by activityViewModels()
+    private val viewModel: GigVerificationViewModel by viewModels()
 
     private var dlFrontImagePath: Uri? = null
     private var dlBackImagePath: Uri? = null

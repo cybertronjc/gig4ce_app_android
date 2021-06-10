@@ -30,12 +30,12 @@
         <include
             android:id="@+id/panEditLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_pan_card_info_main"/>
+            layout="@layout/fragment_add_pan_card_info_main_2"/>
 
         <include
             android:id="@+id/panViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_pan_card_info_view"/>
+            layout="@layout/fragment_add_pan_card_info_view_2"/>
 
 
         <ProgressBar

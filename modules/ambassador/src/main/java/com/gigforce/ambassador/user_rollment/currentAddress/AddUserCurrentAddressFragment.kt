@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
@@ -40,7 +41,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
-    private val viewModel: UserDetailsViewModel by activityViewModels()
+    private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var userId: String
     private lateinit var userName: String
     var allPostoffices = ArrayList<PostalOffice>()
