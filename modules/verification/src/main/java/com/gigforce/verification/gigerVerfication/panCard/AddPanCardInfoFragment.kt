@@ -87,6 +87,12 @@ class AddPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActionLis
             })
         }
 
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.navigateTo("verification/main")
+            })
+        }
+
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
