@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -52,7 +53,7 @@ class AddUserPanCardInfoFragment : Fragment(), SelectImageSourceBottomSheetActio
         const val INTENT_EXTRA_PAN = "pan"
     }
 
-    private val viewModel: GigVerificationViewModel by activityViewModels()
+    private val viewModel: GigVerificationViewModel by viewModels()
     private var clickedImagePath: Uri? = null
     private lateinit var userId: String
     private lateinit var userName: String
