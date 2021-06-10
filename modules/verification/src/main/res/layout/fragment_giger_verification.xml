@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.gigforce.common_ui.cells.AppBar
+        <com.gigforce.common_ui.components.cells.AppBar
             android:id="@+id/appBarComp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

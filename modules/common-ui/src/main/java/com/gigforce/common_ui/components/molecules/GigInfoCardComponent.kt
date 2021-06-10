@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.molecules
+package com.gigforce.common_ui.components.molecules
 
 import android.content.Context
 import android.content.Intent
@@ -16,7 +16,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.utils.TextDrawable
-import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.date.DateHelper

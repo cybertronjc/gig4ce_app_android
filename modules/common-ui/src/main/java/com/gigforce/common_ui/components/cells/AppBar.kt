@@ -1,6 +1,5 @@
-package com.gigforce.common_ui.cells
+package com.gigforce.common_ui.components.cells
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -16,7 +15,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.UserInfoImp
-import com.gigforce.common_ui.atoms.IconType
 import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
@@ -26,7 +24,6 @@ import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.app_bar_layout.view.*
 import javax.inject.Inject
 
 enum class BackgroundType(val value: Int){

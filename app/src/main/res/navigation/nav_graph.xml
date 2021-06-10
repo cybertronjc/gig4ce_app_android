@@ -515,7 +515,6 @@
     <fragment
         android:id="@+id/mainLearningFragment"
         android:name="com.gigforce.learning.learning.MainLearningFragment"
-        android:label="fragment_main_learning"
         tools:layout="@layout/fragment_main_learning" />
 
     <fragment

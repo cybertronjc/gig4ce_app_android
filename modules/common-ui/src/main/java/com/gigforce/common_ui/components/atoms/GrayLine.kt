@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.atoms
+package com.gigforce.common_ui.components.atoms
 
 import android.content.Context
 import android.util.AttributeSet

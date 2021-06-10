@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.molecules
+package com.gigforce.common_ui.components.molecules
 
 import android.content.ActivityNotFoundException
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.molecules
+package com.gigforce.common_ui.components.molecules
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,14 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.gigforce.common_ui.R
-import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.navigation.INavigation
-import com.gigforce.core.utils.GlideApp
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.feature_item_card2.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint

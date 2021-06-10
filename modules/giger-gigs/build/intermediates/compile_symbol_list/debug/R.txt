@@ -1421,6 +1421,7 @@ int color dim_foreground_disabled_material_light 0x0
 int color dim_foreground_material_dark 0x0
 int color dim_foreground_material_light 0x0
 int color disabled_button_color 0x0
+int color edit_note_line 0x0
 int color error_color_material 0x0
 int color error_color_material_dark 0x0
 int color error_color_material_light 0x0
@@ -3570,6 +3571,7 @@ int id search_voice_btn 0x0
 int id secondary_action 0x0
 int id secondary_button 0x0
 int id seeMoreBtn 0x0
+int id see_more_btn 0x0
 int id selectRadioButton 0x0
 int id select_date_layout 0x0
 int id select_dialog_listview 0x0
@@ -3964,6 +3966,7 @@ int layout cell_standard_action_card 0x0
 int layout cell_video_info_card 0x0
 int layout cell_video_item_card 0x0
 int layout confirmation_custom_alert_type1 0x0
+int layout custom_chip 0x0
 int layout custom_dialog 0x0
 int layout design_bottom_navigation_item 0x0
 int layout design_bottom_sheet_dialog 0x0
@@ -4545,6 +4548,7 @@ int string reason 0x0
 int string refer_a_friend 0x0
 int string remove_document_picture 0x0
 int string search_menu_title 0x0
+int string see_more 0x0
 int string status_bar_notification_info_overflow 0x0
 int string submit_all_caps 0x0
 int string take_me_to_home 0x0

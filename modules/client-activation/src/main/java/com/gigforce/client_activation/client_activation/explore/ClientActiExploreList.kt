@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,7 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.cells.SearchTextChangeListener
+import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.ext.hideSoftKeyboard
 import com.gigforce.common_ui.listeners.AppBarClicks

@@ -1383,6 +1383,7 @@ color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
 color dim_foreground_material_light
 color disabled_button_color
+color edit_note_line
 color error_color_material
 color error_color_material_dark
 color error_color_material_light
@@ -3183,6 +3184,7 @@ id search_src_text
 id search_voice_btn
 id secondary_action
 id secondary_button
+id see_more_btn
 id select_dialog_listview
 id selected
 id selection_type
@@ -3479,6 +3481,7 @@ layout cell_app_profile
 layout cell_standard_action_card
 layout cell_video_info_card
 layout cell_video_item_card
+layout custom_chip
 layout custom_dialog
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
@@ -3982,6 +3985,7 @@ string refer_a_friend
 string sample_info
 string search_menu_title
 string see_all
+string see_more
 string status_bar_notification_info_overflow
 string take_me_to_home
 string title_settings_dialog

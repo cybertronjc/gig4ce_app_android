@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.components.atoms
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import com.gigforce.app.R
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.utils.dp2Px
 
 class LinedEditText(context: Context, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {

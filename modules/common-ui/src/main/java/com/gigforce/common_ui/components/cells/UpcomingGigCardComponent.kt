@@ -1,11 +1,10 @@
-package com.gigforce.common_ui.cells
+package com.gigforce.common_ui.components.cells
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,9 +24,6 @@ import com.gigforce.common_ui.viewdatamodels.MyGig
 import com.gigforce.common_ui.viewdatamodels.MyGigStatus
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
-import com.gigforce.core.datamodels.gigpage.GigContactDetails
-import com.gigforce.core.date.DateHelper.getDateInDDMMYYYY
-import com.gigforce.core.date.DateHelper.getHourMinutes
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -35,7 +31,6 @@ import com.gigforce.core.utils.AdapterClickListener
 import com.gigforce.core.utils.DateHelper
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.upcoming_gig_card_component.view.*
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 

@@ -3,7 +3,6 @@ package com.gigforce.giger_app
 import android.content.Context
 import android.view.View
 import com.gigforce.client_activation.ui.ClientActivationLayoutComponent
-import com.gigforce.common_ui.cells.UpcomingGigCardComponent
 import com.gigforce.core.IViewTypeLoader
 import com.gigforce.giger_app.ui.HelpVideoInfoComponent
 import com.gigforce.giger_app.ui.MainNavigationComponent

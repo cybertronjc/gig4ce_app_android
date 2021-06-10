@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -24,7 +23,10 @@ import com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.EditProfileConsentAndSendOtpDialogFragment
 import com.gigforce.ambassador.user_rollment.verify_mobile.UserDetailsFilledDialogFragmentResultListener
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.cells.SearchTextChangeListener
+import com.gigforce.common_ui.components.atoms.ChipComponent
+import com.gigforce.common_ui.components.atoms.ChipGroupComponent
+import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
+import com.gigforce.common_ui.components.cells.SearchTextChangeListener
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.decors.VerticalItemDecorator
@@ -84,21 +86,6 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
 
     var isEditingDetails = false
 
-//    private val onBackPressCallback = object : OnBackPressedCallback(true) {
-//        override fun handleOnBackPressed() {
-//            Log.d("TAg", "Back preseed")
-//
-//            if (toolbar_layout.isSearchCurrentlyShown) {
-//                hideSoftKeyboard()
-//                toolbar_layout.hideSearchOption()
-//                enrolledUserAdapter.filter.filter("")
-//            } else {
-//                isEnabled = false
-////                activity?.onBackPressed()
-//                navigation.popBackStack()
-//            }
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,11 +102,6 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
     }
 
     private fun initUi() {
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            viewLifecycleOwner,
-////            onBackPressCallback
-//        )
-//        onBackPressCallback.isEnabled = true
 
         bank_details_layout.setOnClickListener {
             redirectToNextStep = true
@@ -207,6 +189,41 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                 activity?.onBackPressed()
             })
         }
+
+        testingchipgrp.addChips(viewModel.getChipsData())
+        testingchipgrp.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
+            override fun onCheckedChangeListener(model: ChipGroupModel) {
+                if (model.text == "Profile1") {
+                    //hide chip
+
+                    user_details_layout.gone()
+                    enrolled_users_rv.visible()
+                    toolbar_layout.showSearchOption("Search User")
+                    toolbar_layout.hideSubTitle()
+
+                    if (enrolledUserAdapter.itemCount != 0) {
+                        createProfileBtn.visible()
+                        share_link.visible()
+                        no_users_enrolled_layout.gone()
+                    } else {
+                        createProfileBtn.gone()
+                        share_link.gone()
+                        no_users_enrolled_layout.visible()
+                    }
+                } else if (model.text == "My Details1") {
+
+                    //hide
+                    no_users_enrolled_layout.gone()
+                    enrolled_users_rv.gone()
+                    toolbar_layout.hideSearchOption()
+                    toolbar_layout.hideSubTitle()
+                    createProfileBtn.gone()
+                    share_link.gone()
+                    user_details_layout.visible()
+                }
+            }
+
+        })
 
         enrolled_user_chipgroup.setOnCheckedChangeListener { group, checkedId ->
 
