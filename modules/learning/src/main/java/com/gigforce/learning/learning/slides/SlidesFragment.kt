@@ -12,21 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.example.learning.R
-//import com.gigforce.app.R
-//import com.gigforce.app.core.base.BaseFragment
-//import com.gigforce.app.core.gone
-//import com.gigforce.app.core.visible
 import com.gigforce.learning.learning.slides.types.VideoFragmentOrientationListener
-//import com.gigforce.app.utils.Lce
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.utils.Lce
 import kotlinx.android.synthetic.main.fragment_slides.*
 import kotlinx.android.synthetic.main.fragment_slides_main.*
-
-//import kotlinx.android.synthetic.main.fragment_slides.*
-//import kotlinx.android.synthetic.main.fragment_slides_main.*
 
 class SlidesFragment : Fragment(),
     ViewPager.OnPageChangeListener,

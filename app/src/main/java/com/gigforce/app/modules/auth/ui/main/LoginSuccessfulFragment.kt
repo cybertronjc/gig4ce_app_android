@@ -43,7 +43,6 @@ class LoginSuccessfulFragment : BaseFragment() {
     lateinit var eventTracker: IEventTracker
     @Inject lateinit var navigation : INavigation
 
-    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
     var layout: View? = null
     private lateinit var viewModel: LoginSuccessfulViewModel
     private var profileData: ProfileData? = null

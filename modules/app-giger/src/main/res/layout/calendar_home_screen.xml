@@ -19,22 +19,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_oval_top_landingscreen" />
-<!--        <View-->
-<!--            android:id="@+id/below_oval"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="40dp"-->
-<!--            android:elevation="5dp"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />-->
-
-<!--        <View-->
-<!--            android:id="@+id/margin_40"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:background="@color/white"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/oval_gradient_iv" />-->
 
         <TextView
             android:id="@+id/tv1HS1"
@@ -176,9 +160,9 @@
         app:hideable="false"
         app:layout_behavior="com.riningan.widget.ExtendedBottomSheetBehavior"
         app:peekHeight="200dp">
-
+<!--        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"-->
         <fragment
-            android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+            android:name="com.gigforce.giger_app.screens.FeaturesBSFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
