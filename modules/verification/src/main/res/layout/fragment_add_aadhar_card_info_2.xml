@@ -21,6 +21,7 @@
             app:contentInsetLeft="0dp"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/white"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -29,21 +30,21 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/bankEditLayout"
+            android:id="@+id/aadharEditLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_bank_details_info_main"/>
+            layout="@layout/fragment_add_aadhar_card_info_main_2" />
 
         <include
-            android:id="@+id/bankViewLayout"
+            android:id="@+id/aadharViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_bank_details_info_view"/>
+            layout="@layout/fragment_add_aadhar_card_view_2" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="gone"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
 
     </RelativeLayout>

@@ -34,9 +34,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_2.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_main_2.*
+import kotlinx.android.synthetic.main.fragment_add_bank_details_info_view_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 import javax.inject.Inject
@@ -62,7 +62,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_add_bank_details_info, container, false)
+    ) = inflater.inflate(R.layout.fragment_add_bank_details_info_2, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -150,7 +150,6 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
             getString(R.string.bank_passbook_front_image)
 
         passbookAvailaibilityOptionRG.setOnCheckedChangeListener { _, checkedId ->
-            passbookSubmitSliderBtn.resetSlider()
 
             if (checkedId == R.id.passbookYesRB) {
                 showPassbookImageLayout()
@@ -202,9 +201,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 //            navigate(R.id.editBankDetailsInfoBottomSheet)
 //        }
 
-        passbookSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-                override fun onSlideComplete(view: SlideToActView) {
+        passbookSubmitSliderBtn.setOnClickListener  {
 
                     if (passbookYesRB.isChecked || passbookSubmitSliderBtn.text == getString(R.string.update)) {
 
@@ -217,8 +214,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         if (bankNameEditText.text.isNullOrBlank()) {
@@ -229,8 +225,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         if (bankNameEditText.text.toString().length < 3) {
@@ -241,8 +236,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         if (accountNoEditText.text.toString().length < 4) {
@@ -253,8 +247,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
-                            passbookSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
 //                        if (passbookSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
@@ -291,7 +284,7 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
                         )
                     }
                 }
-            }
+
 
         editLayout.setOnClickListener {
 
@@ -476,7 +469,6 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
         progressBar.visibility = View.GONE
         bankViewLayout.visibility = View.GONE
         bankEditLayout.visibility = View.VISIBLE
-        passbookSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -585,10 +577,6 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
     private fun disableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = false
 
-        passbookSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        passbookSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showPassbookImageLayout() {
@@ -606,11 +594,6 @@ class AddBankDetailsInfoFragment : Fragment(), IOnBackPressedOverride {
 
     private fun enableSubmitButton() {
         passbookSubmitSliderBtn.isEnabled = true
-
-        passbookSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        passbookSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
 
