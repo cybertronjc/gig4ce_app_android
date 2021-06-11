@@ -4,6 +4,9 @@ import android.app.Application
 import android.util.Log
 import com.gigforce.app.BuildConfig
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.MoEngage
@@ -25,6 +28,7 @@ class MainApplication : Application() {
 //    private val appsFlyerLib: AppsFlyerLib by lazy {
 //        AppsFlyerLib.getInstance()
 //    }
+    lateinit var sp: SharedPreAndCommonUtilInterface
     var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY).build()
 
     override fun onCreate() {
@@ -76,16 +80,16 @@ class MainApplication : Application() {
      */
     private fun trackInstallOrUpdate() {
         //keys are just sample keys, use suitable keys for the apps
-        val preferences = getSharedPreferences("moengage", 0)
+        sp = SharedPreAndCommonUtilDataImp(this)
         var appStatus = AppStatus.INSTALL
-        if (preferences.getBoolean("has_sent_install", false)) {
-            if (preferences.getBoolean("existing", false)) {
+        if (sp.getDataBoolean("has_sent_install") == true) {
+            if (sp.getDataBoolean("existing") == true) {
                 appStatus = AppStatus.UPDATE
             }
             // passing install/update to MoEngage SDK
             MoEHelper.getInstance(this).setAppStatus(appStatus)
-            preferences.edit().putBoolean("has_sent_install", true).apply()
-            preferences.edit().putBoolean("existing", true).apply()
+            sp.saveDataBoolean("has_sent_install", true)
+            sp.saveDataBoolean("existing", true)
         }
     }
 
