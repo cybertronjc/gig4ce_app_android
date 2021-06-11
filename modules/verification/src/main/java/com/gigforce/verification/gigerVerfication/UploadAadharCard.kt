@@ -35,11 +35,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.topSeaparator
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.whyWeNeedThisTV
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.topSeaparator
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
 import kotlinx.android.synthetic.main.upload_aadhar_card_fragment.*
@@ -192,11 +192,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
         }
 
 
-        aadharSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
-
+        aadharSubmitSliderBtn.setOnClickListener {
                     if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
                         if (aadharCardET.text!!.length != 12) {
 
@@ -209,8 +205,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
                                 .setMessage(getString(R.string.enter_valid_aadhar_no))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
 
@@ -221,8 +216,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
                                 .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         val aadharNo = aadharCardET.text.toString()
@@ -238,7 +232,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
                         viewModel.updateAadharData(false, null, null, null)
                     }
                 }
-            }
+
 
 
         editLayout.setOnClickListener {
@@ -445,7 +439,7 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
         progressBar1.visibility = View.GONE
         aadharViewLayout1.gone()
         aadharMainLayout.visibility = View.VISIBLE
-        aadharSubmitSliderBtn.resetSlider()
+
         Log.d("showing", "error with layout")
 
         MaterialAlertDialogBuilder(requireContext())
@@ -587,19 +581,11 @@ class UploadAadharCard : Fragment(), IOnBackPressedOverride {
     private fun enableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = true
 
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = false
 
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {

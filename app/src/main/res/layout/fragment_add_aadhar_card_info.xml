@@ -31,12 +31,12 @@
         <include
             android:id="@+id/aadharEditLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_aadhar_card_info_main" />
+            layout="@layout/fragment_add_aadhar_card_info_main_2" />
 
         <include
             android:id="@+id/aadharViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_aadhar_card_view" />
+            layout="@layout/fragment_add_aadhar_card_view_2" />
 
         <ProgressBar
             android:id="@+id/progressBar"

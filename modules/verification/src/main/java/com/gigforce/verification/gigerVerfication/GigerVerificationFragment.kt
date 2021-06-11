@@ -36,7 +36,6 @@ import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
 import com.gigforce.verification.R
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
 import kotlinx.android.synthetic.main.fragment_giger_verification.toolbar
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*

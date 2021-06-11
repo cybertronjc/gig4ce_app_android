@@ -518,13 +518,17 @@ class ProfileFragment : BaseFragment() {
 //        })
         appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
-                    main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
-                    main_expanded_user_name.visibility = View.INVISIBLE
-                } else {
-                    main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
-                    main_expanded_user_name.visibility = View.VISIBLE
 
+                try {
+                    if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() == 0) {
+                        main_expanded_user_name.animate().alpha(0.0f).setDuration(100)
+                        main_expanded_user_name.visibility = View.INVISIBLE
+                    } else {
+                        main_expanded_user_name.animate().alpha(1.0f).setDuration(0)
+                        main_expanded_user_name.visibility = View.VISIBLE
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         })
