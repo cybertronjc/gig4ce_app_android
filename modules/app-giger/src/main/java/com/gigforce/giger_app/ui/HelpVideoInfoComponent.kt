@@ -2,6 +2,7 @@ package com.gigforce.giger_app.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
@@ -50,6 +51,12 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
             }
 
             this.findViewById<TextView>(R.id.layout_title).setOnClickListener {
+                data.navPath?.let {
+                    navigation.navigateTo(it)
+                }
+            }
+
+            this.findViewById<View>(R.id.see_more_btn).setOnClickListener {
                 data.navPath?.let {
                     navigation.navigateTo(it)
                 }

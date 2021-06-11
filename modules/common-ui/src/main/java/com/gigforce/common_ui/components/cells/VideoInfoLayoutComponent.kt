@@ -9,10 +9,15 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.VideoInfoLayoutDVM
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.navigation.INavigation
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_video_info_card.view.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VideoInfoLayoutComponent (context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
     IViewHolder {
+    @Inject lateinit var navigation : INavigation
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
