@@ -195,7 +195,6 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
             override fun onCheckedChangeListener(model: ChipGroupModel) {
                 if (model.chipId == 0) {
                     //hide chip
-
                     user_details_layout.gone()
                     enrolled_users_rv.visible()
                     toolbar_layout.showSearchOption("Search User")
