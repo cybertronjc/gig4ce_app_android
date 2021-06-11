@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="com.gigforce.verification.gigerVerfication.GigerVerificationFragment">
 
+
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -18,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
-            android:visibility="gone"
+            app:titleText="@string/giger_verification"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -27,7 +30,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             app:contentInsetLeft="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:contentInsetStart="0dp"
             android:layout_height="?android:attr/actionBarSize"
             app:contentInsetStartWithNavigation="0dp"

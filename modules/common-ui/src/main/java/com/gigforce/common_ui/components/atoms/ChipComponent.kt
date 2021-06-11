@@ -80,9 +80,9 @@ class ChipComponent : Chip{
     private fun extractAttributesValues(context: Context, attrs: AttributeSet) {
         val styleAttributeSet = context?.obtainStyledAttributes(attrs, R.styleable.ChipComponent)
         try {
-            this.bgColorOption = BackGroundColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_backgroundColor, 0))
-            this.textColorOption = TextColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_textColor, 0))
-            this.strokeColorOptions = StrokeColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_strokeColor, 0))
+            this.bgColorOption = BackGroundColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_backgroundColor, -1))
+            this.textColorOption = TextColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_textColor, -1))
+            this.strokeColorOptions = StrokeColorOptions.getByValue(styleAttributeSet.getInt(R.styleable.ChipComponent_chip_strokeColor, -1))
             chipText = styleAttributeSet.getString(R.styleable.ChipComponent_chip_text).toString()
             chipStrokeSize = styleAttributeSet.getDimension(R.styleable.ChipComponent_chip_strokeSize, 0f).toInt()
             chipCornerRadius = styleAttributeSet.getDimension(R.styleable.ChipComponent_chipCornerRadius, 0f).toInt()
@@ -91,11 +91,12 @@ class ChipComponent : Chip{
             chipSelectable = styleAttributeSet.getBoolean(R.styleable.ChipComponent_chip_selectable, false)
 
             setText(chipText)
-            setTextColor(textColorOption.value)
+            chipTextColor = textColorOption
 
             chipBackGroundColor = this.bgColorOption
             chipStrokeColor = this.strokeColorOptions
             chipTextColor = this.textColorOption
+
 
         }
         finally {
@@ -114,7 +115,7 @@ class ChipComponent : Chip{
             BackGroundColorOptions.LightBlue -> R.color.light_blue
             BackGroundColorOptions.Lipstick -> R.color.lipstick
             BackGroundColorOptions.GRAY -> R.color.grey
-            else -> R.color.white
+            else -> R.color.app_chip_bck_colors
         }
         this.setChipBackgroundColorResource(selectedBackgroundColor)
     }
@@ -129,7 +130,7 @@ class ChipComponent : Chip{
             StrokeColorOptions.LightBlue -> R.color.light_blue
             StrokeColorOptions.Lipstick -> R.color.lipstick
             StrokeColorOptions.GRAY -> R.color.grey
-            else -> R.color.white
+            else -> R.color.app_enrolled_users_chip_stroke_colors
         }
         this.setChipStrokeColorResource(selectedStrokeColor)
     }
@@ -143,28 +144,28 @@ class ChipComponent : Chip{
                 TextColorOptions.LightBlue -> R.color.light_blue
                 TextColorOptions.Lipstick -> R.color.lipstick
                 TextColorOptions.GRAY -> R.color.grey
-                else -> R.color.white
+                else -> R.color.app_chip_text_colors
             }
             this.setTextColor(selectedTextColor)
         }
 
 
 
-    override fun setChecked(checked: Boolean) {
-        var wasChecked = isChecked()
-        super.setChecked(checked);
-        if(checked){
-            chipTextColor = TextColorOptions.Lipstick
-            chipBackGroundColor = BackGroundColorOptions.Lipstick
-        }
-        else{
-            chipTextColor = TextColorOptions.Default
-            chipBackGroundColor = BackGroundColorOptions.Default
-        }
-//        if (wasChecked != checked) {
-//            setTextColor(TextColorOptions.Lipstick.value)
+//    override fun setChecked(checked: Boolean) {
+//        var wasChecked = isChecked()
+//        super.setChecked(checked);
+//        if(checked){
+//            chipTextColor = TextColorOptions.Lipstick
+//            chipBackGroundColor = BackGroundColorOptions.Lipstick
 //        }
-    }
+//        else{
+//            chipTextColor = TextColorOptions.Default
+//            chipBackGroundColor = BackGroundColorOptions.Default
+//        }
+////        if (wasChecked != checked) {
+////            setTextColor(TextColorOptions.Lipstick.value)
+////        }
+//    }
 
 
     fun setData( chipModel : ChipGroupModel){

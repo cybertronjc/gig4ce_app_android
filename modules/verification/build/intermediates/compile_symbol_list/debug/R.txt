@@ -1283,6 +1283,12 @@ int color accent_material_dark 0x0
 int color accent_material_light 0x0
 int color androidx_core_ripple_material_light 0x0
 int color androidx_core_secondary_text_default_material_light 0x0
+int color app_chip_bck_colors 0x0
+int color app_chip_bck_colors_2 0x0
+int color app_chip_stroke_colors_2 0x0
+int color app_chip_text_colors 0x0
+int color app_chip_text_colors_2 0x0
+int color app_enrolled_users_chip_stroke_colors 0x0
 int color app_orange 0x0
 int color app_red 0x0
 int color background 0x0

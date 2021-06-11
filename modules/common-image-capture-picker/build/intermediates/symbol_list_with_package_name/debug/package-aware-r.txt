@@ -1254,6 +1254,12 @@ color accent_material_dark
 color accent_material_light
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
+color app_chip_bck_colors
+color app_chip_bck_colors_2
+color app_chip_stroke_colors_2
+color app_chip_text_colors
+color app_chip_text_colors_2
+color app_enrolled_users_chip_stroke_colors
 color app_orange
 color app_red
 color background
