@@ -37,8 +37,8 @@ class AmbassadorEnrollViewModel @Inject constructor(
     }
     fun getChipsData(): List<ChipGroupModel> {
         var chips = arrayListOf<ChipGroupModel>()
-        chips.add(ChipGroupModel("Profile1", R.drawable.ic_gig_success_icon))
-        chips.add(ChipGroupModel("My Details1", R.drawable.ic_gig_success_icon))
+        chips.add(ChipGroupModel("Profile1", R.drawable.ic_gig_success_icon,0))
+        chips.add(ChipGroupModel("My Details1", R.drawable.ic_gig_success_icon,1))
         return chips
     }
     private fun startWatchingEnrolledUsersList() {

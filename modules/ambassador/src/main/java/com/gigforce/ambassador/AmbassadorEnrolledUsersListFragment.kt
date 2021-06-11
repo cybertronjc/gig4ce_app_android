@@ -193,7 +193,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         testingchipgrp.addChips(viewModel.getChipsData())
         testingchipgrp.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model: ChipGroupModel) {
-                if (model.text == "Profile1") {
+                if (model.chipId == 0) {
                     //hide chip
 
                     user_details_layout.gone()
@@ -210,7 +210,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                         share_link.gone()
                         no_users_enrolled_layout.visible()
                     }
-                } else if (model.text == "My Details1") {
+                } else if (model.chipId == 1) {
 
                     //hide
                     no_users_enrolled_layout.gone()
