@@ -1306,12 +1306,12 @@ color accent_material_dark
 color accent_material_light
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
-color app_chip_bck_colors
 color app_chip_bck_colors_2
+color app_chip_bck_colors_ui
 color app_chip_stroke_colors_2
-color app_chip_text_colors
 color app_chip_text_colors_2
-color app_enrolled_users_chip_stroke_colors
+color app_chip_text_colors_ui
+color app_enrolled_users_chip_stroke_colors_ui
 color app_orange
 color app_red
 color attendance_chip_bck_colors
@@ -4943,6 +4943,8 @@ style Platform_V21_AppCompat_Light
 style Platform_V25_AppCompat
 style Platform_V25_AppCompat_Light
 style Platform_Widget_AppCompat_Spinner
+style RoundedSquaredChipsStyle
+style RoundedSquaredChipsUI
 style RtlOverlay_DialogWindowTitle_AppCompat
 style RtlOverlay_Widget_AppCompat_ActionBar_TitleItem
 style RtlOverlay_Widget_AppCompat_DialogTitle_Icon

@@ -21,8 +21,8 @@ import javax.inject.Inject
 class AmbassadorEnrollViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    private val ambassadorEnrollmentRepository: com.gigforce.ambassador.AmbassadorEnrollmentRepository =
-        com.gigforce.ambassador.AmbassadorEnrollmentRepository()
+    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository =
+        AmbassadorEnrollmentRepository()
     private val profileFirebaseRepository: ProfileFirebaseRepository =
         ProfileFirebaseRepository()
     private val userEnrollmentRepository: UserEnrollmentRepository =

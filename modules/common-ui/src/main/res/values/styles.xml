@@ -186,6 +186,7 @@
         <item name="textAppearanceSubtitle1">@style/TextAppearance.GigforceStyles.Subtitle1</item>
         <item name="textAppearanceSubtitle2">@style/TextAppearance.GigforceStyles.Subtitle2</item>
         <item name="iconButtonStyle">@style/IconButtonStyle</item>
+        <item name="chipStyle">@style/RoundedSquaredChipsUI</item>
     </style>
 
     <style name="AppBarTitle" parent="Widget.MaterialComponents.TextView">
@@ -256,6 +257,16 @@
         <item name="colorOnPrimary">@color/blackLight</item>
     </style>
 
+    <style name="RoundedSquaredChipsUI" parent="@style/Widget.MaterialComponents.Chip.Choice">
+<!--        <item name="chipBackgroundColor">@color/app_chip_bck_colors_ui</item>-->
+        <item name="android:textColor">@color/app_chip_text_colors_ui</item>
+        <item name="chipStrokeColor">@color/app_enrolled_users_chip_stroke_colors_ui</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedSquaredChipsStyle</item>
+    </style>
+    <style name="RoundedSquaredChipsStyle" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
 
 </resources>

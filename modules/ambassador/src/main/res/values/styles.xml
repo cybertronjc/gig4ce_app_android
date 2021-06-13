@@ -19,9 +19,9 @@
         <item name="strokeWidth">1dp</item>
     </style>
     <style name="RoundedSquaredChips" parent="@style/Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/app_chip_bck_colors</item>
-        <item name="android:textColor">@color/app_chip_text_colors</item>
-        <item name="chipStrokeColor">@color/app_enrolled_users_chip_stroke_colors</item>
+        <item name="chipBackgroundColor">@color/app_chip_bck_colors_ui</item>
+        <item name="android:textColor">@color/app_chip_text_colors_ui</item>
+        <item name="chipStrokeColor">@color/app_enrolled_users_chip_stroke_colors_ui</item>
         <item name="shapeAppearanceOverlay">@style/RoundedSquaredChipsStyle</item>
     </style>
     <style name="RoundedSquaredChipsStyle" parent="">
