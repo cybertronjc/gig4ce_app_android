@@ -62,7 +62,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
                 try {
                     MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
-                    Log.d("token", token)
                 }catch (e: Exception){
                     Log.e(TAG, "Token Update Failed on MoEngage")
                     CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
