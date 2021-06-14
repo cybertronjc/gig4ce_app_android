@@ -44,21 +44,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // doing nothing for now
 
         FirebaseAuth.getInstance().addAuthStateListener {
-            if (it.currentUser != null){
-                val uid = it.currentUser?.uid
+            it.currentUser?.let {
                 FirebaseFirestore.getInstance().collection("firebase_tokens").document(token)
-                    .set(
-                        hashMapOf(
-                            "uid" to uid,
-                            "type" to "fcm",
-                            "timestamp" to Date().time
-                        )
-                    ).addOnSuccessListener {
-                        Log.v(TAG, "Token Updated on Firestore Successfully")
-                    }.addOnFailureListener {
-                        Log.e(TAG, "Token Update Failed on Firestore", it)
-                        CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
-                    }
+                        .set(
+                                hashMapOf(
+                                        "uid" to it.uid,
+                                        "type" to "fcm",
+                                        "timestamp" to Date().time
+                                )
+                        ).addOnSuccessListener {
+                            Log.v(TAG, "Token Updated on Firestore Successfully")
+                        }.addOnFailureListener {
+                            Log.e(TAG, "Token Update Failed on Firestore", it)
+                            CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
+                        }
 
                 try {
                     MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
@@ -66,11 +65,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     Log.e(TAG, "Token Update Failed on MoEngage")
                     CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
                 }
-            }
-            else {
+            } ?: run {
                 Log.v(
-                    TAG,
-                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                        TAG,
+                        "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
                 )
             }
         }
