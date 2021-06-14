@@ -3307,6 +3307,7 @@ id timelineview
 id title
 id titleDividerNoCustom
 id titleTV
+id title_cl
 id title_template
 id toggle_full_screen
 id toggle_terminology

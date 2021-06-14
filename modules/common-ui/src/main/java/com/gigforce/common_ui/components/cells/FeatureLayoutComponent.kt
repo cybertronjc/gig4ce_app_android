@@ -11,9 +11,11 @@ import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
+import com.gigforce.core.recyclerView.CoreRecyclerView
 import kotlinx.android.synthetic.main.feature_layout.view.*
 
-open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs),
+open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs),
     IViewHolder {
     init {
         this.layoutParams =
@@ -34,43 +36,54 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) : Fram
         featured_rv.setOrientationAndRows(orientation, noOfRows)
     }
 
-    open fun setSectionTitle(title:String){
+    fun getFeatureRV() : CoreRecyclerView{
+        return featured_rv
+    }
+
+    open fun setSectionTitle(title: String) {
         layout_title.text = title
     }
 
-    open fun setSectionIcon(){
+    open fun setSectionIcon() {
         layout_img.gone()
     }
 
-    open fun setSectionIcon(imageResource:Int){
+    open fun setSectionIcon(imageResource: Int) {
         layout_img.visible()
         image.setImageResource(imageResource)
     }
 
-    open fun setSectionIcon(iconUrl:String){
+    open fun setSectionIcon(iconUrl: String) {
         layout_img.visible()
         Glide.with(context)
             .load(iconUrl)
             .into(image)
     }
 
-    open fun setSectionIcon(imageData:Any){
-        if(imageData is Int) setSectionIcon(imageData)
-        else if (imageData is String) setSectionIcon(imageData)
+    open fun setSectionIcon(imageData: Any) {
+        if (imageData is Int) setSectionIcon(imageData)
+        else if (imageData is String && imageData.isNotEmpty() && imageData.isNotBlank()) {
+            setSectionIcon(imageData)
+        }
         else setSectionIcon()
     }
 
-    open fun setCollection(data: List<Any>){
+    open fun setCollection(data: List<Any>) {
         featured_rv.collection = data
     }
 
-    fun enableSeemoreButton(){
+    fun enableSeemoreButton() {
         see_more_btn.visible()
     }
 
     override fun bind(data: Any?) {
         if (data is FeatureLayoutDVM) {
-            this.setSectionTitle(data.title)
+            if (data.title.isNotEmpty() && data.title.isNotBlank()) {
+                title_cl.visible()
+                this.setSectionTitle(data.title)
+            } else {
+                title_cl.gone()
+            }
             this.setSectionIcon(data.image)
             this.setCollection(data.collection)
         }

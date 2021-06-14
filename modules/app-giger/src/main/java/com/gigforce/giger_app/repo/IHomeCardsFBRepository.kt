@@ -2,11 +2,8 @@ package com.gigforce.giger_app.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.gigforce.common_ui.viewdatamodels.ActionButton
-import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.dataviewmodel.*
-import com.gigforce.giger_app.ui.UpcomingGigsComponent
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -51,6 +48,9 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
         when (type) {
             "sec_action" -> {
                 return snapshot.toObject(StandardActionCardDVM::class.java)
+            }
+            "sec_tips" -> {
+                return snapshot.toObject(GigForceTipsDVM::class.java)
             }
             "sec_learning" -> {
                 return snapshot.toObject(LearningLayoutDVM::class.java)

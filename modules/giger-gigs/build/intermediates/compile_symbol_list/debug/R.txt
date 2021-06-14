@@ -3731,6 +3731,7 @@ int id titleLayout 0x0
 int id titleTV 0x0
 int id title_ 0x0
 int id title_bar 0x0
+int id title_cl 0x0
 int id title_template 0x0
 int id toReachTV 0x0
 int id toggle_full_screen 0x0
