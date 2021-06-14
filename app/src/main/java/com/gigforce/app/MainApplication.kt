@@ -2,7 +2,6 @@ package com.gigforce.app
 
 import android.app.Application
 import android.util.Log
-import com.gigforce.app.BuildConfig
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
