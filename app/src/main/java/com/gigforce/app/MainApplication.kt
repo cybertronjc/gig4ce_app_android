@@ -1,23 +1,17 @@
 package com.gigforce.app
 
 import android.app.Application
-import android.app.NotificationManager
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.appsflyer.AppsFlyerConversionListener
-import com.appsflyer.AppsFlyerLib
-import com.clevertap.android.sdk.CleverTapAPI
-import com.gigforce.core.IEventTracker
-import com.gigforce.core.fb.BaseFirestoreDBRepository
+import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
+import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.moe.pushlibrary.MoEHelper
+import com.moengage.core.MoEngage
+import com.moengage.core.model.AppStatus
 import dagger.hilt.android.HiltAndroidApp
 import io.branch.referral.Branch
-import javax.inject.Inject
 
 @HiltAndroidApp
 class MainApplication : Application() {
@@ -33,11 +27,13 @@ class MainApplication : Application() {
 //    private val appsFlyerLib: AppsFlyerLib by lazy {
 //        AppsFlyerLib.getInstance()
 //    }
-
+    lateinit var sp: SharedPreAndCommonUtilInterface
+    var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY).build()
 
     override fun onCreate() {
         super.onCreate()
         setUpBranchTool()
+        setUpMoengage()
         //setupCleverTap()
         //setupMixpanel()
         //setUpAppsFlyer()
@@ -61,6 +57,11 @@ class MainApplication : Application() {
 
     }
 
+    private fun setUpMoengage() {
+        MoEngage.initialise(moEngage)
+        // install update differentiation
+        trackInstallOrUpdate()
+    }
 
 
 
@@ -78,7 +79,23 @@ class MainApplication : Application() {
         }
     }
 
-
+    /**
+     * Tell MoEngage SDK whether the user is a new user of the application or an existing user.
+     */
+    private fun trackInstallOrUpdate() {
+        //keys are just sample keys, use suitable keys for the apps
+        sp = SharedPreAndCommonUtilDataImp(this)
+        var appStatus = AppStatus.INSTALL
+        if (sp.getDataBoolean("has_sent_install") == true) {
+            if (sp.getDataBoolean("existing") == true) {
+                appStatus = AppStatus.UPDATE
+            }
+            // passing install/update to MoEngage SDK
+            MoEHelper.getInstance(this).setAppStatus(appStatus)
+            sp.saveDataBoolean("has_sent_install", true)
+            sp.saveDataBoolean("existing", true)
+        }
+    }
 
 
     companion object {

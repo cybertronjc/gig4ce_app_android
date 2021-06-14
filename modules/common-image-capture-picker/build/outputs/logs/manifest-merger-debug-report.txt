@@ -1,45 +1,45 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
 	package
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:3:5-47
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:3:5-47
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 	android:versionCode
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:1-11:12
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:2:11-69
 application
-ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:5:5-9:19
+ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:5:5-9:19
 activity#com.gigforce.common_image_picker.image_capture_camerax.CameraActivity
-ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:9-8:15
+ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:9-8:15
 	android:screenOrientation
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:7:13-49
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:7:13-49
 	android:name
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:19-71
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml:6:19-71
 uses-sdk
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		ADDED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
-		INJECTED from /home/himanshu/Projects/Android/GigForce/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		ADDED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
+		INJECTED from /Users/cybertron_jc/StudioProjects/gig4ce_app_android/modules/common-image-capture-picker/src/main/AndroidManifest.xml
