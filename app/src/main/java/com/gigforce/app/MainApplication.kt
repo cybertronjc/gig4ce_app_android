@@ -9,6 +9,8 @@ import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.MoEngage
+import com.moengage.core.config.FcmConfig
+import com.moengage.core.config.NotificationConfig
 import com.moengage.core.model.AppStatus
 import dagger.hilt.android.HiltAndroidApp
 import io.branch.referral.Branch
@@ -28,7 +30,10 @@ class MainApplication : Application() {
 //        AppsFlyerLib.getInstance()
 //    }
     lateinit var sp: SharedPreAndCommonUtilInterface
-    var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY).build()
+    var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY)
+        .configureNotificationMetaData(NotificationConfig(R.drawable.ic_notification_icon, R.drawable.ic_notification_icon, R.color.colorPrimary, null, true, isBuildingBackStackEnabled = false, isLargeIconDisplayEnabled = true))
+        .configureFcm(FcmConfig(false))
+        .build()
 
     override fun onCreate() {
         super.onCreate()
