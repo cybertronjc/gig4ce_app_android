@@ -8,6 +8,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.toBundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,7 +17,9 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.pushbase.MoEPushHelper
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 import kotlin.random.Random
 
 
@@ -40,45 +43,66 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun registerFirebaseToken(token: String) {
         // doing nothing for now
 
-        registerFirebaseTokenIfLoggedIn()
-        FirebaseAuth.getInstance().currentUser ?: let {
-            Log.v(
-                TAG,
-                "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
-            )
-            FirebaseAuth.getInstance().addAuthStateListener {
-                Log.v(TAG, "Firebase Auth State Changed")
-                registerFirebaseTokenIfLoggedIn()
-            }
-        }
-    }
+        FirebaseAuth.getInstance().addAuthStateListener {
+            if (it.currentUser != null){
+                val uid = it.currentUser?.uid
+                FirebaseFirestore.getInstance().collection("firebase_tokens").document(token)
+                    .set(
+                        hashMapOf(
+                            "uid" to uid,
+                            "type" to "fcm",
+                            "timestamp" to Date().time
+                        )
+                    ).addOnSuccessListener {
+                        Log.v(TAG, "Token Updated on Firestore Successfully")
+                    }.addOnFailureListener {
+                        Log.e(TAG, "Token Update Failed on Firestore", it)
+                        CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
+                    }
 
-    private fun registerFirebaseTokenIfLoggedIn() {
-        FirebaseAuth.getInstance().currentUser?.let {
-            val uid = it.uid
-            FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
-                .set(
-                    hashMapOf(
-                        "uid" to uid,
-                        "type" to "fcm",
-                        "timestamp" to Date().time
-                    )
-                ).addOnSuccessListener {
-                    Log.v(TAG, "Token Updated on Firestore Successfully")
-                }.addOnFailureListener {
-                    Log.e(TAG, "Token Update Failed on Firestore", it)
+                try {
+                    MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
+                    Log.d("token", token)
+                }catch (e: Exception){
+                    Log.e(TAG, "Token Update Failed on MoEngage")
+                    CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
                 }
-
-            try {
-                MoEFireBaseHelper.getInstance().passPushToken(applicationContext, this.fcmToken!!)
-            }catch (e: Exception){
-                Log.e(TAG, "Token Update Failed on MoEngage")
             }
-
-
+            else {
+                Log.v(
+                    TAG,
+                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                )
+            }
         }
-
     }
+
+//    private fun registerFirebaseTokenIfLoggedIn() {
+//        FirebaseAuth.getInstance().currentUser?.let {
+//            val uid = it.uid
+//            FirebaseFirestore.getInstance().collection("firebase_tokens").document(this.fcmToken!!)
+//                .set(
+//                    hashMapOf(
+//                        "uid" to uid,
+//                        "type" to "fcm",
+//                        "timestamp" to Date().time
+//                    )
+//                ).addOnSuccessListener {
+//                    Log.v(TAG, "Token Updated on Firestore Successfully")
+//                }.addOnFailureListener {
+//                    Log.e(TAG, "Token Update Failed on Firestore", it)
+//                }
+//
+//            try {
+//                MoEFireBaseHelper.getInstance().passPushToken(applicationContext, this.fcmToken!!)
+//            }catch (e: Exception){
+//                Log.e(TAG, "Token Update Failed on MoEngage")
+//            }
+//
+//
+//        }
+//
+//    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
