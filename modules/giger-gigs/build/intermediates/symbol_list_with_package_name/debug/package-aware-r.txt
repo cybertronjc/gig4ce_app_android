@@ -2396,6 +2396,7 @@ drawable ic_baseline_arrow_drop_down_8
 drawable ic_baseline_arrow_right_24
 drawable ic_baseline_chevron_left_24
 drawable ic_baseline_close_24
+drawable ic_baseline_content_copy_24
 drawable ic_baseline_keyboard_arrow_down_16
 drawable ic_baseline_keyboard_arrow_down_24
 drawable ic_baseline_keyboard_arrow_right_24
@@ -2973,6 +2974,7 @@ id gigRequirementsLayout
 id gigRequirementsSeeMoreTV
 id gigResponsiblitiesSeeMoreTV
 id gigTypeTV
+id gig_act_code_copy_btn
 id gig_address_tv
 id gig_approval_tv
 id gig_attendance

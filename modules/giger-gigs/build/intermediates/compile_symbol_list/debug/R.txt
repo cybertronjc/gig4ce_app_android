@@ -2395,6 +2395,7 @@ int drawable ic_baseline_arrow_drop_down_8 0x0
 int drawable ic_baseline_arrow_right_24 0x0
 int drawable ic_baseline_chevron_left_24 0x0
 int drawable ic_baseline_close_24 0x0
+int drawable ic_baseline_content_copy_24 0x0
 int drawable ic_baseline_keyboard_arrow_down_16 0x0
 int drawable ic_baseline_keyboard_arrow_down_24 0x0
 int drawable ic_baseline_keyboard_arrow_right_24 0x0
@@ -2972,6 +2973,7 @@ int id gigRequirementsLayout 0x0
 int id gigRequirementsSeeMoreTV 0x0
 int id gigResponsiblitiesSeeMoreTV 0x0
 int id gigTypeTV 0x0
+int id gig_act_code_copy_btn 0x0
 int id gig_address_tv 0x0
 int id gig_approval_tv 0x0
 int id gig_attendance 0x0
