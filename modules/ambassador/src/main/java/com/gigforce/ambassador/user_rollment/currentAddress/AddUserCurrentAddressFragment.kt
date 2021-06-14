@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
@@ -40,7 +41,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
 
-    private val viewModel: UserDetailsViewModel by activityViewModels()
+    private val viewModel: UserDetailsViewModel by viewModels()
     private lateinit var userId: String
     private lateinit var userName: String
     var allPostoffices = ArrayList<PostalOffice>()
@@ -316,17 +317,7 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
                         UtilMethods.hideLoading()
                         if (it.content.status.equals("Success")) {
                             allPostoffices = it.content.postOffice
-                            state_spinner?.let {
-                                for (index in 0 until it.adapter.count) {
-                                    val item = it.adapter.getItem(index)
-                                    allPostoffices.mapIndexed { index1, postalOffice ->
-                                        if (item.toString().equals(postalOffice.state)) {
-                                            it.setSelection(index)
-                                            return@Observer
-                                        }
-                                    }
-                                }
-                            }
+                            selectStateOnSpinners()
                         } else {
                             state_spinner?.setSelection(0)
                             city_spinner?.setSelection(0)
@@ -424,6 +415,25 @@ class AddUserCurrentAddressFragment : Fragment(), IOnBackPressedOverride {
         )
         viewModel.loadCityAndStates()
 
+    }
+
+    private fun selectStateOnSpinners() {
+        try {
+
+            state_spinner?.let {
+                for (index in 0 until it.adapter.count) {
+                    val item = it.adapter.getItem(index)
+                    allPostoffices.mapIndexed { index1, postalOffice ->
+                        if (item.toString().equals(postalOffice.state)) {
+                            it.setSelection(index)
+                            return
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     private fun setUserDataOnView(content: ProfileData) {

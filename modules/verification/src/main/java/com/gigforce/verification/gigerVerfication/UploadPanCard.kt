@@ -36,10 +36,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info.panViewLayout
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.panViewLayout
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main_2.*
+import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import kotlinx.android.synthetic.main.upload_pan_card_fragment.*
 import java.util.*
@@ -188,11 +188,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                 .show()
         }
 
-        panSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
-
+        panSubmitSliderBtn.setOnClickListener {
                     if (panYesRB.isChecked || panSubmitSliderBtn.text == getString(R.string.update)) {
                         val panCardNo =
                             panCardEditText.text.toString().toUpperCase(Locale.getDefault())
@@ -204,8 +200,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
 
-                            panSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         if (panSubmitSliderBtn.text != getString(R.string.update) && clickedImagePath == null) {
@@ -215,8 +210,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                                 .setMessage(getString(R.string.click_select_pan_image))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            panSubmitSliderBtn.resetSlider()
-                            return
+                            return@setOnClickListener
                         }
 
                         viewModel.updatePanImagePath(true, clickedImagePath, panCardNo)
@@ -224,7 +218,7 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
                         viewModel.updatePanImagePath(false, null, null)
                     }
                 }
-            }
+
     }
 
     private fun showWhyWeNeedThisDialog() {
@@ -458,19 +452,10 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     private fun enableSubmitButton() {
         panSubmitSliderBtn.isEnabled = true
 
-        panSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        panSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         panSubmitSliderBtn.isEnabled = false
-
-        panSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        panSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     override fun onImageSourceSelected(source: ImageSource) {

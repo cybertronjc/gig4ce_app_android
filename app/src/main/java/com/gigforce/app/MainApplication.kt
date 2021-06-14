@@ -5,8 +5,8 @@ import android.util.Log
 import com.gigforce.app.BuildConfig
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.gigforce.app.di.implementations.SharedPreAndCommonUtilDataImp
-import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.moe.pushlibrary.MoEHelper
 import com.moengage.core.MoEngage
@@ -41,6 +41,11 @@ class MainApplication : Application() {
         //setUpUserOnAnalyticsAndCrashlytics()
         ProcessLifecycleOwner.get().lifecycle.addObserver(PresenceManager())
         setUpRemoteConfig()
+        initFirebaseAuthListener()
+    }
+
+    private fun initFirebaseAuthListener() {
+        FirebaseAuthStateListener.getInstance()
     }
 
     private fun setUpBranchTool() {

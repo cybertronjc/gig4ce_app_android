@@ -148,7 +148,7 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                 if (selectedPosition == adapter.items.size - 1 && adapter.items[selectedPosition].selectedAnswer != -1) {
                     val items = adapter.items.filter { questions ->
                         questions.type == "mcq" &&
-                                (questions.options.size > questions.selectedAnswer && !questions.options[questions.selectedAnswer].isAnswer) ||
+                                (questions.options.size > questions.selectedAnswer &&    (questions.options.size > questions.selectedAnswer && !questions.options[questions.selectedAnswer].isAnswer)) ||
                                 questions.type == "date" && checkForDateRange(questions)
                     }
                     if (items.isEmpty()) {
@@ -178,7 +178,8 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
 
                     return@OnClickListener
                 }
-                if (selectedPosition > -1 && adapter.itemCount > selectedPosition && adapter.items[selectedPosition].selectedAnswer != -1) {
+                if (selectedPosition > -1 && adapter.itemCount > selectedPosition &&
+                        (  adapter.items.size > selectedPosition && adapter.items[selectedPosition].selectedAnswer != -1)) {
                     selectedPosition += 1
                     ratioLayoutManager.setScrollEnabled(true)
                     smoothScroller.targetPosition = selectedPosition
@@ -194,8 +195,6 @@ class QuestionnaireFragment : BaseFragment(), AdapterQuestionnaire.AdapterQuesti
                     showToast(getString(R.string.answer_the_ques))
 
                 }
-
-
             })
 
 

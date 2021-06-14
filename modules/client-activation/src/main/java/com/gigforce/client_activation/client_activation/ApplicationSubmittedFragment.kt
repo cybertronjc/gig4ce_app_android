@@ -135,9 +135,10 @@ class ApplicationSubmittedFragment : Fragment() {
             )
             )
             startActivity(Intent.createChooser(shareIntent, "choose one"))
+            pb_client_activation.gone()
         } catch (e: Exception) {
             //e.toString();
         }
-        pb_client_activation.gone()
+
     }
 }
