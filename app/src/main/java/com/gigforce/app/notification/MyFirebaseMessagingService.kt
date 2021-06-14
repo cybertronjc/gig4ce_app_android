@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.moengage.firebase.MoEFireBaseHelper
+import com.moengage.pushbase.MoEPushHelper
 import java.util.*
 import kotlin.random.Random
 
@@ -66,7 +68,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }.addOnFailureListener {
                     Log.e(TAG, "Token Update Failed on Firestore", it)
                 }
+
+            try {
+                MoEFireBaseHelper.getInstance().passPushToken(applicationContext, this.fcmToken!!)
+            }catch (e: Exception){
+                Log.e(TAG, "Token Update Failed on MoEngage")
+            }
+
+
         }
+
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -79,8 +90,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     extras.putString(key, value)
                 }
                 val info = CleverTapAPI.getNotificationInfo(extras)
+                val moEInfo = MoEPushHelper.getInstance().isFromMoEngagePlatform(extras)
                 if (info.fromCleverTap) {
                     CleverTapAPI.createNotification(applicationContext, extras)
+                } else if(moEInfo){
+                    MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
                 } else {
                     // not from CleverTap handle yourself or pass to another provider
                     handleNotificationMessageNotFromCleverTap(remoteMessage)
