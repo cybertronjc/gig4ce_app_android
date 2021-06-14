@@ -39,7 +39,6 @@ class ChipGroupComponent : ChipGroup {
             chipComponent.setOnClickListener { it1 ->
                 setAllChipsUnselected()
                 setChipSelected(it1)
-                this.childCount
                 checkedChangeListener?.onCheckedChangeListener(it)
             }
             this.addView(chipComponent)
