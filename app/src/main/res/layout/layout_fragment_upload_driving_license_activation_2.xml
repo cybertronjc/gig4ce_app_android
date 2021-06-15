@@ -68,7 +68,7 @@
 
             <include
                 android:id="@+id/dlMainLayout"
-                layout="@layout/layout_driving_license_upload_client_activation"
+                layout="@layout/layout_driving_license_upload_client_activation_2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
