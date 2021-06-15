@@ -1,24 +1,39 @@
 package com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.core.AppConstants
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.profile.ProfileData
+import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.giger_app.R
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.launch
 
 class BSCalendarScreenViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     private var disposable: CompositeDisposable? = CompositeDisposable()
+    private val firebaseAuthStateListener : FirebaseAuthStateListener by lazy {
+        FirebaseAuthStateListener.getInstance()
+    }
 
     val bsCalendarScreenRepository = BsCalendarScreenRepository()
     private val _observableChatInfo: MutableLiveData<Gig> = MutableLiveData()
     val observableChatInfo: MutableLiveData<Gig> = _observableChatInfo
+
+    init {
+        viewModelScope.launch {  prepareMenus() }
+    }
+
+
 
 
     fun checkForChatProfile(gig: Gig): BehaviorSubject<Gig> {
@@ -76,6 +91,35 @@ class BSCalendarScreenViewModel : ViewModel() {
         )
 
 
+    }
+
+
+    private val _isUserTlCheck  : MutableLiveData<Boolean> = MutableLiveData()
+    val isUserTlCheck  : LiveData<Boolean> = _isUserTlCheck
+
+    private suspend fun prepareMenus() {
+
+        try {
+            val currentUser =
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+            val phoneNumber = currentUser.phoneNumber!!
+            val phoneNumber2 = phoneNumber.substring(1)
+            val phoneNumber3 = "0" + phoneNumber.substring(3)
+            val phoneNumber4 =   phoneNumber.substring(3)
+
+            val getBussinessContactQuery =   bsCalendarScreenRepository
+                  .db
+                  .collection("Business_Contacts")
+                  .whereEqualTo("primary_no",phoneNumber)
+                  .whereEqualTo("primary_no",phoneNumber2)
+                  .whereEqualTo("primary_no",phoneNumber3)
+                  .whereEqualTo("primary_no",phoneNumber4)
+                  .getOrThrow()
+
+            _isUserTlCheck.postValue(getBussinessContactQuery.size() > 0)
+        } catch (e: Exception) {
+            _isUserTlCheck.postValue(false)
+        }
     }
 
     override fun onCleared() {

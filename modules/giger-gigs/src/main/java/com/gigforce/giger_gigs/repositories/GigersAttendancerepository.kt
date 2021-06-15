@@ -23,8 +23,8 @@ class GigersAttendanceRepository constructor(
 
         val loggedInUser = firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
         val getGigersAttendanceResponse = gigerAttendanceService.getGigersAttendance(
-            dateInYYYMMDD = /*date.format(dateFormatter)*/ "2021-02-25",
-            managerLoginMobile = /*loggedInUser.phoneNumber!!*/ "+917406777383"
+            dateInYYYMMDD = date.format(dateFormatter) /*"2021-02-25"*/,
+            managerLoginMobile = loggedInUser.phoneNumber!! /*"+917406777383"*/
         )
 
         if (getGigersAttendanceResponse.isSuccessful) {
