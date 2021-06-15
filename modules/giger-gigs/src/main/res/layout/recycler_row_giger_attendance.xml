@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="18dp"
+        android:paddingBottom="2dp"
+        android:layout_marginStart="@dimen/size_22"
+        >
+
+        <com.gigforce.common_ui.views.GigforceImageView
+            android:id="@+id/user_image_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/circleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/call_giger_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:background="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_call"
+            app:tint="@color/black" />
+
+        <TextView
+            android:id="@+id/user_name_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="#646464"
+            android:textSize="16sp"
+            android:fontFamily="@font/lato_bold"
+            app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
+            app:layout_constraintStart_toEndOf="@id/user_image_iv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Rahulxededdeded d Yeadav" />
+
+
+        <TextView
+            android:id="@+id/user_designation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="97dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/lato"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/call_giger_btn"
+            app:layout_constraintStart_toEndOf="@id/user_image_iv"
+            app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+            tools:text="Last messsage that I sent" />
+
+        <TextView
+            android:id="@+id/user_phone_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/user_image_iv"
+            app:layout_constraintTop_toBottomOf="@id/user_designation"/>
+
+        <TextView
+            android:id="@+id/user_attendance_status_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="10dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/user_image_iv"
+            app:layout_constraintTop_toBottomOf="@id/user_phone_number"/>
+
+
+        <View
+            android:id="@+id/bottom_border"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#35BDBDBD"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/user_name_tv"
+            app:layout_constraintTop_toBottomOf="@id/user_attendance_status_textview" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

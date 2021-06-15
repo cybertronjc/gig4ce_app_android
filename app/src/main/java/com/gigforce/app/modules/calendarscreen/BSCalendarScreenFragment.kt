@@ -380,7 +380,7 @@ class BSCalendarScreenFragment : Fragment() {
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         width = displayMetrics.widthPixels
         initializeVerificationAlert()
-        initializeFeaturesBottomSheet()
+
 //        initializeAssessmentBottomSheet()
         application_version.text =
             getString(R.string.version) + " " + sharedPreAndCommonUtilInterface.getCurrentVersion()
@@ -388,6 +388,8 @@ class BSCalendarScreenFragment : Fragment() {
         initializeExploreByRole()
 //        initializeExploreByIndustry()
         initBottomMenuClicks()
+
+        viewModel.isUserTlCheck.observe(viewLifecycleOwner, {  initializeFeaturesBottomSheet(it)})
     }
 
     private fun initializeVerificationAlert() {
@@ -880,7 +882,9 @@ class BSCalendarScreenFragment : Fragment() {
         return drawable
     }
 
-    private fun initializeFeaturesBottomSheet() {
+    private fun initializeFeaturesBottomSheet(
+            isUserTl : Boolean
+    ) {
         var datalist: ArrayList<FeatureModel> = ArrayList<FeatureModel>()
         datalist.add(FeatureModel("My Gig", R.drawable.mygig, navigationPath = "gig/mygig"))
         datalist.add(
@@ -913,6 +917,17 @@ class BSCalendarScreenFragment : Fragment() {
                 navigationPath = "verification/main"
             )
         )
+
+        if(isUserTl) {
+
+            datalist.add(
+                    FeatureModel(
+                            "Gigers Attendance",
+                            R.drawable.ic_group_black,
+                            navigationPath = "gig/gigerAttendanceUnderManagerFragment"
+                    )
+            )
+        }
 
         val itemWidth = ((width / 7) * 1.6).toInt()
 //        val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
@@ -1358,8 +1373,6 @@ class BSCalendarScreenFragment : Fragment() {
                 }
 
             })
-
-
         }
     }
 }
