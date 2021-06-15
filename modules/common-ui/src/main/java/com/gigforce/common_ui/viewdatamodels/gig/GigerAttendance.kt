@@ -1,0 +1,33 @@
+package com.gigforce.common_ui.viewdatamodels.gig
+
+import com.google.gson.annotations.SerializedName
+
+data class GigerAttendance(
+
+	@field:SerializedName("shiftTime")
+	val shiftTime: String? = null,
+
+	@field:SerializedName("uid")
+	val uid: String? = null,
+
+	@field:SerializedName("role")
+	val role: String? = null,
+
+	@field:SerializedName("companyName")
+	val companyName: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("phonenumber")
+	val phoneNumber: String? = null,
+
+	@field:SerializedName("profilepicture")
+	val profilePicture: String? = null,
+
+	@field:SerializedName("attendanceStatus")
+	val attendanceStatus: String? = null,
+
+	@field:SerializedName("gigId")
+	val gigId: String? = null
+)

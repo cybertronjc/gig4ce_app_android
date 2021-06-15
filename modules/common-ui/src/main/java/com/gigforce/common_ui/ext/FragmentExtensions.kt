@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.utils.dp2Px
 import com.gigforce.core.extensions.gone
@@ -33,8 +34,17 @@ fun Fragment.startShimmer(
 
         ll_shimmer.addView(view)
         val layoutParams: LinearLayout.LayoutParams = view.layoutParams as LinearLayout.LayoutParams
-        layoutParams.height = resources.getDimensionPixelSize(shimmerModel.minHeight)
-        layoutParams.width = resources.getDimensionPixelSize(shimmerModel.minWidth)
+
+        layoutParams.height = if(shimmerModel.minHeight == LinearLayout.LayoutParams.MATCH_PARENT){
+            LinearLayout.LayoutParams.MATCH_PARENT
+        } else
+            resources.getDimensionPixelSize(shimmerModel.minHeight)
+
+        layoutParams.width = if(shimmerModel.minWidth == LinearLayout.LayoutParams.MATCH_PARENT){
+            LinearLayout.LayoutParams.MATCH_PARENT
+        } else
+            resources.getDimensionPixelSize(shimmerModel.minWidth)
+
         layoutParams.setMargins(resources.getDimensionPixelSize(shimmerModel.marginLeft),
                 resources.getDimensionPixelSize(shimmerModel.marginTop),
                 resources.getDimensionPixelSize(shimmerModel.marginRight),

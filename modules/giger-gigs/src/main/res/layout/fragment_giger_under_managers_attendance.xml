@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.gigforce.common_ui.views.GigforceToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:actionBarSize" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+            <include
+                android:id="@+id/gigers_under_manager_main_layout"
+                layout="@layout/fragment_giger_under_managers_attendance_main"
+             />
+
+            <TextView
+                android:id="@+id/gigers_under_manager_main_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_cross_grey"
+                android:drawablePadding="10dp"
+                android:text="Unable to load your stuff"
+                android:visibility="gone" />
+
+            <!--        app:drawableTopCompat="@drawable/illus_no_attendance"-->
+
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

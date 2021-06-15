@@ -1,29 +1,35 @@
 package com.gigforce.giger_gigs.models
 
-enum class AttendanceRecyclerViewType {
-    BUSINESS_NAME_ITEM,
-    SHIFT_NAME_ITEM,
-    ATTENDANCE_ITEM;
+import com.gigforce.core.SimpleDVM
+import com.gigforce.giger_gigs.GigViewTypes
+
+
+open class AttendanceRecyclerItemData(
+        val type: Int
+) : SimpleDVM(type){
+
+    data class AttendanceRecyclerItemBusinessData(
+            val businessName: String
+    ) : AttendanceRecyclerItemData(
+            type = GigViewTypes.ATTENDANCE_BUSSINESS_NAME
+    )
+
+    data class AttendanceRecyclerItemShiftNameData(
+            val shiftName: String
+    ) : AttendanceRecyclerItemData(
+        type = GigViewTypes.ATTENDANCE_SHIFT_TIME
+    )
+
+    data class AttendanceRecyclerItemAttendanceData(
+            val attendanceStatus: String,
+            val gigId : String,
+            val gigerId: String,
+            val gigerName: String,
+            val gigerImage : String,
+            val gigerPhoneNumber: String,
+            val gigerDesignation: String,
+    ) : AttendanceRecyclerItemData(
+        type = GigViewTypes.GIGER_ATTENDANCE
+    )
 }
 
-open class AttendanceRecyclerItem(
-        val type: AttendanceRecyclerViewType
-)
-
-data class AttendanceRecyclerItemBusiness(
-        val businessName: String
-) : AttendanceRecyclerItem(
-        type = AttendanceRecyclerViewType.BUSINESS_NAME_ITEM
-)
-
-data class AttendanceRecyclerItemShiftName(
-        val shiftName: String
-) : AttendanceRecyclerItem(
-        type = AttendanceRecyclerViewType.SHIFT_NAME_ITEM
-)
-
-data class AttendanceRecyclerItemAttendance(
-        val businessName: String
-) : AttendanceRecyclerItem(
-        type = AttendanceRecyclerViewType.ATTENDANCE_ITEM
-)

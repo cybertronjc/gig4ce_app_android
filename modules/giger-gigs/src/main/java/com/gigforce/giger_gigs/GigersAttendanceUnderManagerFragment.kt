@@ -1,70 +1,94 @@
 package com.gigforce.giger_gigs
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.gigforce.giger_gigs.adapters.GigAttendanceAdapter
-import com.gigforce.giger_gigs.adapters.GigAttendanceAdapterClickListener
-import com.gigforce.core.datamodels.gigpage.Gig
-import com.gigforce.common_ui.viewmodels.gig.GigViewModel
-import com.gigforce.common_ui.core.TextDrawable
-import com.gigforce.common_ui.ext.getCircularProgressDrawable
-import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.common_ui.datamodels.ShimmerDataModel
+import com.gigforce.common_ui.ext.startShimmer
+import com.gigforce.common_ui.ext.stopShimmer
 import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.toLocalDate
 import com.gigforce.core.extensions.visible
-import com.gigforce.core.utils.Lce
-import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
-import com.google.firebase.storage.FirebaseStorage
+import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
+import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
+import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
+import com.gigforce.giger_gigs.models.AttendanceStatusAndViewModelData
+import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModel
+import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModelState
+import com.gigforce.giger_gigs.viewModels.SharedGigerAttendanceUnderManagerViewModel
 import com.jaeger.library.StatusBarUtil
-import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance.*
-import kotlinx.android.synthetic.main.fragment_gig_monthly_attendance_toolbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.TextStyle
-import java.util.*
 
-class GigersAttendanceUnderManagerFragment : Fragment(), GigAttendanceAdapterClickListener {
+class GigersAttendanceUnderManagerFragment : Fragment() {
 
-    private val viewModel: GigViewModel by viewModels()
-
-    private val adapter: GigAttendanceAdapter by lazy {
-        GigAttendanceAdapter(
-            requireContext()
-        ).apply {
-            setListener(this@GigersAttendanceUnderManagerFragment)
-        }
-    }
-
-    private var role: String? = null
-    private var companyName: String? = null
-    private var companyLogo: String? = null
-    private lateinit var gigOrderId: String
-
-    private var currentlySelectedMonthYear: LocalDate = LocalDate.now()
+    private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
+    private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
+    private lateinit var viewBinding: FragmentGigerUnderManagersAttendanceBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_gig_monthly_attendance, container, false)
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        viewBinding = FragmentGigerUnderManagersAttendanceBinding.inflate(
+                inflater,
+                container,
+                false
+        )
+        return viewBinding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDataFromIntents(arguments, savedInstanceState)
-        initUi()
+        initView()
         initViewModel()
-        showMonthYearValueOnViewAndStartFetchingData()
+        getAttendanceFor(LocalDate.now())
+    }
+
+    private fun initView() {
+        viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        viewBinding.toolbar.setBackButtonListener{
+            if (viewBinding.toolbar.isSearchCurrentlyShown) {
+                hideSoftKeyboard()
+            } else {
+                activity?.onBackPressed()
+            }
+        }
+
+        lifecycleScope.launch {
+
+            viewBinding.toolbar.showTitle("Gigers Attendance")
+            viewBinding.toolbar.showSearchOption("Search Attendance")
+            viewBinding.toolbar.getSearchTextChangeAsFlow()
+                    .debounce(300)
+                    .distinctUntilChanged()
+                    .flowOn(Dispatchers.Default)
+                    .collect { searchString ->
+                        Log.d("Search ","Searhcingg...$searchString")
+
+                       viewModel.searchAttendance(searchString)
+                    }
+        }
+    }
+
+    private fun getAttendanceFor(date: LocalDate) {
+        viewModel.fetchUsersAttendanceDate(date)
     }
 
     override fun onResume() {
@@ -76,229 +100,129 @@ class GigersAttendanceUnderManagerFragment : Fragment(), GigAttendanceAdapterCli
         ))
     }
 
-    private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
-        arguments?.let {
-            val monthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE)
-            if (monthYear != null) currentlySelectedMonthYear = monthYear as LocalDate
-
-            role = it.getString(INTENT_EXTRA_ROLE)
-            companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
-            companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                "Gig order id not passed in intent"
-            )
-        }
-
-        savedInstanceState?.let {
-            currentlySelectedMonthYear = it.getSerializable(INTENT_EXTRA_SELECTED_DATE) as LocalDate
-
-            role = it.getString(INTENT_EXTRA_ROLE)
-            companyName = it.getString(INTENT_EXTRA_COMPANY_NAME)
-            companyLogo = it.getString(INTENT_EXTRA_COMPANY_LOGO)
-            gigOrderId = it.getString(INTENT_EXTRA_GIG_ORDER_ID) ?: throw IllegalArgumentException(
-                "Gig order id not passed in saved intent"
-            )
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(INTENT_EXTRA_SELECTED_DATE, currentlySelectedMonthYear)
-
-        outState.putString(INTENT_EXTRA_ROLE, role)
-        outState.putString(INTENT_EXTRA_COMPANY_NAME, companyName)
-        outState.putString(INTENT_EXTRA_COMPANY_LOGO, companyLogo)
-        outState.putString(INTENT_EXTRA_GIG_ORDER_ID, gigOrderId)
-    }
-
-    private fun initUi() {
-
-        gig_ellipses_iv.gone()
-        dateYearTV.setOnClickListener {
-            showMonthCalendar()
-        }
-
-        gig_cross_btn.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        attendance_monthly_rv.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        attendance_monthly_rv.adapter = adapter
-
-        if (!companyLogo.isNullOrBlank()) {
-            if (companyLogo!!.startsWith("http", true)) {
-
-                Glide.with(requireContext())
-                    .load(companyLogo)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(company_logo_iv)
-            } else {
-                val imageRef = FirebaseStorage.getInstance()
-                    .getReference("companies_gigs_images")
-                    .child(companyLogo!!)
-
-                Glide.with(requireContext())
-                    .load(imageRef)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(company_logo_iv)
-            }
-        } else {
-            val companyInitials = if (companyLogo.isNullOrBlank())
-                "C"
-            else
-                companyLogo!![0].toString().toUpperCase()
-            val drawable = TextDrawable.builder().buildRound(
-                companyInitials,
-                ResourcesCompat.getColor(resources, R.color.lipstick, null)
-            )
-
-            company_logo_iv.setImageDrawable(drawable)
-        }
-
-        gig_title_tv.text = role
-        gig_company_name_tv.text = "\ufeff@ $companyName"
-
-        attendance_type_chipgroup.setOnCheckedChangeListener { group, checkedId ->
-
-            when (checkedId) {
-                R.id.attendance_all_chip -> adapter.showAllAttendances()
-                R.id.attendance_present_chip -> adapter.showPresentAttendances()
-                R.id.attendance_absent_chip -> adapter.showAbsentAttendances()
-            }
-        }
-    }
-
     private fun initViewModel() {
-        viewModel.monthlyGigs
-            .observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    Lce.Loading -> {
-                        attendance_monthly_learning_error.gone()
-                        attendance_montly_progress_bar.visible()
-                    }
-                    is Lce.Content -> {
-                        attendance_monthly_learning_error.gone()
-                        attendance_montly_progress_bar.gone()
 
-                        setGigAttendanceOnView(it.content)
-                    }
-                    is Lce.Error -> {
-                        attendance_montly_progress_bar.gone()
-                        attendance_monthly_learning_error.visible()
+        viewModel.gigerAttendanceUnderManagerViewState
+                .observe(viewLifecycleOwner, {
 
-                        attendance_monthly_learning_error.text = it.error
+                    when (it) {
+                        is GigerAttendanceUnderManagerViewModelState.AttendanceDataLoaded -> showStatusAndAttendanceOnView(
+                                it.attendanceStatuses,
+                                it.attendanceItemData
+                        )
+                        is GigerAttendanceUnderManagerViewModelState.ErrorInLoadingDataFromServer -> errorInLoadingAttendanceFromServer(
+                                it.error,
+                                it.shouldShowErrorButton
+                        )
+                        GigerAttendanceUnderManagerViewModelState.LoadingDataFromServer -> showDataLoadingFromServer()
+                        GigerAttendanceUnderManagerViewModelState.NoAttendanceFound -> noAttendanceFound()
                     }
-                }
-            })
+                })
     }
 
-    private fun setGigAttendanceOnView(content: List<Gig>) {
-        attendance_montly_progress_bar.gone()
-        attendance_monthly_learning_error.gone()
-        attendance_monthly_rv.visible()
+    private fun showStatusAndAttendanceOnView(
+            attendanceStatuses: List<AttendanceStatusAndCountItemData>,
+            attendanceItemData: List<AttendanceRecyclerItemData>
+    ) = viewBinding.apply {
 
-        var completedGigsCount = 0
-        var absentGigsCount = 0
+        this.gigersUnderManagerMainError.gone()
+        this.gigersUnderManagerMainLayout.apply {
+            this.root.visible()
 
-        content.forEach {
-            val status = GigStatus.fromGig(it)
-
-            when (status) {
-                GigStatus.COMPLETED, GigStatus.ONGOING -> {
-                    completedGigsCount++
-                }
-                GigStatus.DECLINED, GigStatus.MISSED, GigStatus.NO_SHOW -> {
-                    absentGigsCount++
-                }
+            stopShimmer(
+                    this.statusShimmerContainer as LinearLayout,
+                    R.id.chip_like_shimmer_controller
+            )
+            this.statusesRecyclerview.collection = attendanceStatuses.map {
+                AttendanceStatusAndViewModelData(
+                        it,
+                        viewModel
+                )
             }
-        }
 
-        total_days_tv.text = ": ${completedGigsCount} Days"
-        total_working_days_tv.text = ": ${absentGigsCount} Days"
-
-        attendance_type_chipgroup.check(R.id.attendance_all_chip)
-        adapter.updateAttendanceList(content)
-        if (content.isEmpty()) {
-            attendance_monthly_learning_error.visible()
-            attendance_monthly_learning_error.text = "No Gigs assigned in selected month!"
-        } else {
-            attendance_monthly_learning_error.gone()
+            stopShimmer(
+                    this.attendanceShimmerContainer as LinearLayout,
+                    R.id.shimmer_controller
+            )
+            this.attendanceRecyclerView.collection = attendanceItemData
         }
     }
 
 
-    override fun onAttendanceClicked(option: Gig) {
-//        navigate(
-//                R.id.gigsAttendanceForADayDetailsBottomSheet, bundleOf(
-//                GigsAttendanceForADayDetailsBottomSheet.INTENT_GIG_ID to option.gigId
-//        )
-//        )
+    private fun errorInLoadingAttendanceFromServer(
+            error: String,
+            shouldShowRetryButton: Boolean
+    ) = viewBinding.apply {
+
+        stopShimmer(
+                this.gigersUnderManagerMainLayout.attendanceShimmerContainer as LinearLayout,
+                R.id.shimmer_controller
+        )
+        stopShimmer(
+                this.gigersUnderManagerMainLayout.statusShimmerContainer as LinearLayout,
+                R.id.chip_like_shimmer_controller
+        )
+
+        this.gigersUnderManagerMainLayout.root.gone()
+        this.gigersUnderManagerMainError.visible()
+        this.gigersUnderManagerMainError.text = error
     }
 
-    fun showMonthCalendar() {
 
-        val selectedDate: Pair<Int, Int> = Pair(
-            currentlySelectedMonthYear.monthValue,
-            currentlySelectedMonthYear.year
-        )
-        val maxDate = Date().time
+    private fun noAttendanceFound() = viewBinding.apply {
 
-        val localDate = LocalDateTime.of(2015, 1, 1, 0, 0)
-        val zdt: ZonedDateTime = ZonedDateTime.of(localDate, ZoneId.systemDefault())
-        val defaultMinTime: Long = zdt.toInstant().toEpochMilli()
-
-        MonthYearPickerDialogFragment.getInstance(
-            selectedDate.first - 1,
-            selectedDate.second,
-            defaultMinTime,
-            maxDate
-        ).apply {
-            setOnDateSetListener { year, monthOfYear ->
-
-                Log.d("AddExp", "End Values Set Month : $monthOfYear")
-                Log.d("AddExp", "End Values Set Year : $year")
-
-                val newCal = Calendar.getInstance()
-                newCal.set(Calendar.YEAR, year)
-                newCal.set(Calendar.MONTH, monthOfYear)
-                newCal.set(Calendar.DAY_OF_MONTH, 1)
-                newCal.set(Calendar.HOUR_OF_DAY, 0)
-                newCal.set(Calendar.MINUTE, 0)
-                newCal.set(Calendar.SECOND, 0)
-                newCal.set(Calendar.MILLISECOND, 0)
-
-                currentlySelectedMonthYear = newCal.time.toLocalDate()
-                showMonthYearValueOnViewAndStartFetchingData()
-            }
-        }.show(childFragmentManager, "MonthYearPickerDialogFragment")
+        this.gigersUnderManagerMainLayout.root.gone()
+        this.gigersUnderManagerMainError.visible()
+        this.gigersUnderManagerMainError.text = "No Attendance Found"
     }
 
-    private fun showMonthYearValueOnViewAndStartFetchingData() {
-        val monthName = currentlySelectedMonthYear.month.getDisplayName(
-            TextStyle.SHORT,
-            Locale.getDefault()
-        )
-        val year = currentlySelectedMonthYear.year
-        dateYearTV.text = "$monthName - $year"
 
-        viewModel.getGigsForMonth(
-            gigOrderId = gigOrderId,
-            month = currentlySelectedMonthYear.monthValue,
-            year = currentlySelectedMonthYear.year
-        )
+    private fun showDataLoadingFromServer() = viewBinding.apply {
+
+        this.gigersUnderManagerMainError.gone()
+        this.gigersUnderManagerMainLayout.apply {
+            this.root.visible()
+
+            this.statusesRecyclerview.collection = emptyList()
+            startShimmer(
+                    this.statusShimmerContainer as LinearLayout,
+                    ShimmerDataModel(
+                            cardRes = com.gigforce.common_ui.R.layout.shimmer_chip_like_layout,
+                            minHeight = R.dimen.size_60,
+                            minWidth = R.dimen.size_90,
+                            marginRight = R.dimen.size_8,
+                            marginTop = R.dimen.size16,
+                            marginLeft = R.dimen.size_1,
+                            orientation = LinearLayout.HORIZONTAL
+                    ),
+                    R.id.chip_like_shimmer_controller
+            )
+
+            this.attendanceRecyclerView.collection = emptyList()
+            startShimmer(
+                    this.attendanceShimmerContainer as LinearLayout,
+                    ShimmerDataModel(
+                            minHeight = R.dimen.size_120,
+                            minWidth = LinearLayout.LayoutParams.MATCH_PARENT,
+                            marginRight = R.dimen.size_16,
+                            marginTop = R.dimen.size_1,
+                            orientation = LinearLayout.VERTICAL
+                    ),
+                    R.id.shimmer_controller
+            )
+        }
     }
 
+    private fun hideSoftKeyboard() {
+
+        val activity = activity ?: return
+
+        val inputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
+    }
 
     companion object {
-        const val INTENT_EXTRA_ROLE = "role"
-        const val INTENT_EXTRA_COMPANY_NAME = "company_name"
-        const val INTENT_EXTRA_COMPANY_LOGO = "company_logo"
-        const val INTENT_EXTRA_SELECTED_DATE = "selected_month_year"
-        const val INTENT_EXTRA_GIG_ORDER_ID = "gig_order_id"
+        const val TAG = "role"
     }
-
 }

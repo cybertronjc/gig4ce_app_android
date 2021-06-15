@@ -913,6 +913,10 @@
         android:id="@+id/uploadPanCard"
         android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
         android:label="UploadPanCard" />
+    <fragment
+        android:id="@+id/gigerAttendanceUnderManagerFragment"
+        android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
+        android:label="Giger Attendance under Mgr" />
 
 
 </navigation>

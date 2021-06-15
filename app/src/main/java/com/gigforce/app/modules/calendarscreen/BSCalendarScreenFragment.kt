@@ -913,6 +913,13 @@ class BSCalendarScreenFragment : Fragment() {
                 navigationPath = "verification/main"
             )
         )
+        datalist.add(
+            FeatureModel(
+                "Gigers Attendance",
+                R.drawable.ic_shield_black,
+                navigationPath = "gig/gigerAttendanceUnderManagerFragment"
+            )
+        )
 
         val itemWidth = ((width / 7) * 1.6).toInt()
 //        val recyclerGenericAdapter: RecyclerGenericAdapter<FeatureModel> =
