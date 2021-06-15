@@ -108,6 +108,8 @@ class ChatContactsRepository constructor(
     private suspend fun addContactToUsersContactList(
             pickedContact: ContactModel
     ) {
+        if(pickedContact.mobile.isBlank()) return
+
         val contactRef = userChatContactsCollectionRef.document(pickedContact.mobile)
         batch.set(contactRef, pickedContact)
 
