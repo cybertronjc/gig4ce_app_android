@@ -227,20 +227,10 @@ class DocsSubSchedulerFragment : Fragment() {
 
     private fun enableCheckoutButton() {
         slider_checkout.isEnabled = true
-
-        slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableCheckoutButton() {
         slider_checkout.isEnabled = false
-
-        slider_checkout.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        slider_checkout.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun initClicks() {
@@ -257,10 +247,7 @@ class DocsSubSchedulerFragment : Fragment() {
             }
         }
 
-        slider_checkout.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
+        slider_checkout.setOnClickListener {
                     viewModel.gfmappedUserObj?.numberWithoutnineone?.let {
                         navigation.navigateTo(
                             "client_activation/schedule_test",
@@ -274,8 +261,8 @@ class DocsSubSchedulerFragment : Fragment() {
                         )
                     }
 
-                }
-            }
+          }
+
 //        tv_change_slot.setOnClickListener {
 //            changeSlot()
 //
