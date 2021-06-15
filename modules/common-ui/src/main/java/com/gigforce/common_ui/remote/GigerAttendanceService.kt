@@ -8,8 +8,9 @@ import retrofit2.http.Url
 
 interface GigerAttendanceService {
 
-    @GET("https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise")
+    @GET
     suspend fun getGigersAttendance(
+        @Url getGigersAttendanceUrl : String,
         @Query("date") dateInYYYMMDD: String,
         @Query("loginMobile") managerLoginMobile: String
     ): Response<List<GigerAttendance>>

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
@@ -27,6 +28,7 @@ import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModel
 import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModelState
 import com.gigforce.giger_gigs.viewModels.SharedGigerAttendanceUnderManagerViewModel
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class GigersAttendanceUnderManagerFragment : Fragment() {
 
     private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()

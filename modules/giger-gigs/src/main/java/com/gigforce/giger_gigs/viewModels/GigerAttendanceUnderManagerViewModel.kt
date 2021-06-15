@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigforce.common_ui.viewdatamodels.gig.GigerAttendance
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
 import com.gigforce.giger_gigs.repositories.GigersAttendanceRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 sealed class GigerAttendanceUnderManagerViewModelState {
 
@@ -31,9 +34,13 @@ sealed class GigerAttendanceUnderManagerViewModelState {
     ) : GigerAttendanceUnderManagerViewModelState()
 }
 
-class GigerAttendanceUnderManagerViewModel constructor(
-        private val gigersAttendanceRepository: GigersAttendanceRepository = GigersAttendanceRepository()
+@HiltViewModel
+class GigerAttendanceUnderManagerViewModel @Inject constructor(
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
+
+    //todo shift up
+    private val gigersAttendanceRepository: GigersAttendanceRepository = GigersAttendanceRepository(buildConfig)
 
     /* data*/
     private var currentlyShownAttendanceData: List<GigerAttendance>? = null
