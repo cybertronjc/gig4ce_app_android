@@ -759,23 +759,23 @@
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.ncorti.slidetoact.SlideToActView
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/slider_checkout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_24"
-            android:layout_marginBottom="@dimen/size_27"
-            app:border_radius="8dp"
-            app:icon_margin="@dimen/size_7"
-            app:inner_color="#888888"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:outer_color="#dddddd"
-            app:slider_height="60dp"
-            app:slider_icon="@drawable/ic_arrow_forward_white"
-            app:slider_icon_color="@color/white"
-            app:text="@string/activate"
-            app:text_size="@dimen/font_16"
-            app:text_style="bold" />
+            android:layout_height="69dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="5dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/activate"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

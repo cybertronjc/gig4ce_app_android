@@ -163,15 +163,20 @@ class ProfileFragment : BaseFragment() {
         val behavior = params.behavior as AppBarLayout.Behavior?
 
 
-        behavior!!.onNestedPreScroll(
-            layout.coordinator,
-            layout.appbar,
-            this.requireView(),
-            0,
-            offsetPx,
-            intArrayOf(0, 0),
-            0
-        )
+        try {
+            behavior!!.onNestedPreScroll(
+                layout.coordinator,
+                layout.appbar,
+                this.requireView(),
+                0,
+                offsetPx,
+                intArrayOf(0, 0),
+                0
+            )
+        } catch (e : Exception){
+            e.printStackTrace()
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

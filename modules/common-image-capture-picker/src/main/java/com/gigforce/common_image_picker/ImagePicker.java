@@ -298,7 +298,7 @@ public class ImagePicker {
         try {
             fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
         } catch (FileNotFoundException e) {
-            Log.e(TAG, e.getMessage() == null ? "No file found" : e.getMessage());
+            if(e != null) e.printStackTrace();
         }
 
         Bitmap actuallyUsableBitmap = null;
