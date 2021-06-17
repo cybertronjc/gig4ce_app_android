@@ -1,5 +1,7 @@
 package com.gigforce.landing_screen.landingscreen
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -58,6 +60,16 @@ import com.gigforce.landing_screen.landingscreen.adapters.*
 import com.gigforce.landing_screen.landingscreen.help.HelpVideo
 import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import com.gigforce.landing_screen.landingscreen.models.Tip
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
+import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
+import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.startUpdateFlowForResult
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -74,6 +86,7 @@ class LandingScreenFragment : Fragment(){
 
         private const val SCREEN_VERIFICATION = 10
         private const val SCREEN_GIG = 11
+        private const val UPDATE_REQUEST_CODE = 100
 
     }
 
@@ -93,6 +106,7 @@ class LandingScreenFragment : Fragment(){
     private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
+    private var appUpdateManager: AppUpdateManager? = null
     private var comingFromOrGoingToScreen = -1
     private val verificationViewModel: GigVerificationViewModel by viewModels()
     private val helpViewModel: HelpViewModel by viewModels()
@@ -100,6 +114,7 @@ class LandingScreenFragment : Fragment(){
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,7 +149,10 @@ class LandingScreenFragment : Fragment(){
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
-        checkforForceupdate()
+        //checkforForceupdate()
+        appUpdateManager = context?.let { AppUpdateManagerFactory.create(it) }
+        checkforUpdate()
+
 
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
@@ -158,6 +176,10 @@ class LandingScreenFragment : Fragment(){
 //        chat_icon_iv.performClick()
 
     }
+
+
+
+
 
 //    private fun checkForDeepLink() {
 //        if (navFragmentsData?.getData()
@@ -196,6 +218,68 @@ class LandingScreenFragment : Fragment(){
 //
 //        }
 //    }
+    val listener = InstallStateUpdatedListener { state ->
+        // (Optional) Provide a download progress bar.
+        if (state.installStatus() == InstallStatus.DOWNLOADING) {
+            val bytesDownloaded = state.bytesDownloaded()
+            val totalBytesToDownload = state.totalBytesToDownload()
+            // Show update progress bar.
+            Log.d("Update Progress", "Progress : " + bytesDownloaded + " Remaining: " + totalBytesToDownload)
+        }
+        else if (state.installStatus() == InstallStatus.DOWNLOADED){
+            // After the update is downloaded, show a notification
+            // and request user confirmation to restart the app.
+            popupSnackbarForCompleteUpdate()
+            Log.d("Update", "Downloaded")
+
+        }
+        // Log state or install the update.
+    }
+        // Displays the snackbar notification and call to action.
+        fun popupSnackbarForCompleteUpdate() {
+            appUpdateManager?.completeUpdate()
+            appUpdateManager?.unregisterListener(listener)
+        }
+    private fun checkforUpdate() {
+        Log.d("Update", "Checking for updates")
+        Log.d("UpdateInfo", appUpdateManager?.appUpdateInfo.toString())
+        appUpdateManager?.registerListener(listener)
+        appUpdateManager?.appUpdateInfo?.addOnSuccessListener {appUpdateInfo ->
+            Log.d("UpdateInfo", appUpdateInfo.toString())
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.updatePriority() <= 3 /* medium priority */
+                    && appUpdateInfo.isUpdateTypeAllowed(FLEXIBLE)
+            ) {
+                // Request the update.
+                Log.d("Update", "Update available")
+                // Before starting an update, register a listener for updates.
+                appUpdateManager?.registerListener(listener)
+                appUpdateManager?.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    UPDATE_REQUEST_CODE)
+            }
+            else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.updatePriority() >= 4 /* high priority */
+                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)){
+                //request for immediate update
+                appUpdateManager?.registerListener(listener)
+                appUpdateManager?.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    IMMEDIATE,
+                    this,
+                    UPDATE_REQUEST_CODE)
+            }
+            else if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE){
+                Log.d("Update", "No Update available")
+            }
+        }
+    }
 
 
     private fun checkforForceupdate() {
@@ -882,17 +966,6 @@ class LandingScreenFragment : Fragment(){
         learningViewModel.getRoleBasedCourses()
     }
 
-    override fun onResume() {
-        super.onResume()
-        StatusBarUtil.setColorNoTranslucent(
-            requireActivity(), ResourcesCompat.getColor(
-                resources,
-                android.R.color.white,
-                null
-            )
-        )
-    }
-
     private fun showLearningAsLoading() {
         learning_cl.visible()
         learning_rv.gone()
@@ -1223,7 +1296,73 @@ class LandingScreenFragment : Fragment(){
         }
     }
 
-//    override fun onCardSelected(any: Any) {
+    override fun onStop() {
+        super.onStop()
+        appUpdateManager?.unregisterListener(listener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+        )
+        )
+        appUpdateManager
+            ?.appUpdateInfo
+            ?.addOnSuccessListener { appUpdateInfo ->
+                // If the update is downloaded but not installed,
+                // notify the user to complete the update.
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    popupSnackbarForCompleteUpdate()
+                }
+                if (appUpdateInfo.updateAvailability()
+                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                ) {
+                    // If an in-app update is already running, resume the update.
+                    appUpdateManager?.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        IMMEDIATE,
+                        this,
+                        UPDATE_REQUEST_CODE
+                    )
+                }
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UPDATE_REQUEST_CODE) {
+//            if (resultCode != RESULT_OK) {
+//                Log.e("MY_APP", "Update flow failed! Result code: $resultCode")
+//                // If the update is cancelled or fails,
+//                // you can request to start the update again.
+//            }
+            when (resultCode) {
+                RESULT_OK -> {
+                    Log.d("Update", "" + "Result Ok")
+                    //  handle user's approval }
+                }
+                RESULT_CANCELED -> {
+                    {
+                    //if you want to request the update again just call checkUpdate()
+                    }
+                    Log.d("Update", "" + "Result Cancelled")
+                    //  handle user's rejection  }
+                }
+                RESULT_IN_APP_UPDATE_FAILED -> {
+                    //if you want to request the update again just call checkUpdate()
+                    Log.d("Update", "" + "Update Failure")
+                    //  handle update failure
+                }
+            }
+        }
+
+    }
+
+    //    override fun onCardSelected(any: Any) {
 //        var id = (any as JobProfile).id
 //        Log.d("cardId", id)
 ////        navigate(
