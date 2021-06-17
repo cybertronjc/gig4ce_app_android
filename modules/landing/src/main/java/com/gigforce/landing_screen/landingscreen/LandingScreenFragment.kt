@@ -1222,14 +1222,16 @@ class LandingScreenFragment : Fragment(){
                             eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
                             props = mapOf(
                                     "id" to id,
-                                    "title" to title
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
                             )
                     ))
                     eventTracker.pushEvent(TrackingEventArgs(
                             eventName = ClientActivationEvents.EVENT_USER_CLICKED,
                             props = mapOf(
                                     "id" to id,
-                                    "title" to title
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
                             )
                     ))
                     navigation.navigateTo(

@@ -1382,7 +1382,8 @@ class BSCalendarScreenFragment : Fragment() {
                         eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
                         props = mapOf(
                             "id" to id,
-                            "title" to title
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
                         )
                     )
                     )
@@ -1391,7 +1392,8 @@ class BSCalendarScreenFragment : Fragment() {
                         eventName = ClientActivationEvents.EVENT_USER_CLICKED,
                         props = mapOf(
                             "id" to id,
-                            "title" to title
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
                         )
                     )
                     )

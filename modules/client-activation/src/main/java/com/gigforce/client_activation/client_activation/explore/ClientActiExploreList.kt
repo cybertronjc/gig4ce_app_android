@@ -17,6 +17,10 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
+import com.gigforce.core.IEventTracker
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -34,6 +38,8 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
 
     @Inject
     lateinit var navigation : INavigation
+    @Inject
+    lateinit var eventTracker: IEventTracker
     private lateinit var viewModel: ClientActiExploreListViewModel
     private val clientActiExploreAdapter: ClientActiExploreAdapter by lazy {
         ClientActiExploreAdapter(requireContext(), this).apply {
@@ -231,6 +237,36 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
 
     override fun onJobSelected(jpExplore: JpExplore) {
         Log.d("id", jpExplore.id)
+
+//                    Log.d("cardId", id)
+//        navigate(
+//                R.id.fragment_client_activation,
+//                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+//        )
+        val id = jpExplore?.id ?: ""
+        val title = jpExplore?.jobProfileTitle ?: ""
+        Log.d("title", jpExplore.jobProfileTitle)
+
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = jpExplore.jobProfileTitle + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                props = mapOf(
+                    "id" to id,
+                    "title" to title,
+                    "screen_source" to "Client Explore Job List"
+                )
+            )
+        )
+        eventTracker.pushEvent(
+            TrackingEventArgs(
+                eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                props = mapOf(
+                    "id" to id,
+                    "title" to title,
+                    "screen_source" to "Client Explore Job List"
+                )
+            )
+        )
         navigation.navigateTo("client_activation",
             bundleOf(StringConstants.JOB_PROFILE_ID.value to jpExplore.id)
         )
