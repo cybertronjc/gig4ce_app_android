@@ -15,10 +15,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -60,11 +62,13 @@ import com.gigforce.landing_screen.landingscreen.adapters.*
 import com.gigforce.landing_screen.landingscreen.help.HelpVideo
 import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import com.gigforce.landing_screen.landingscreen.models.Tip
+import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.ActivityResult
 import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
+import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
 import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
 import com.google.android.play.core.install.model.InstallStatus
@@ -107,6 +111,8 @@ class LandingScreenFragment : Fragment(){
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
     private var appUpdateManager: AppUpdateManager? = null
+    var updateInfo : LiveData<AppUpdateInfo>? = null
+    var updateAvailable : LiveData<Boolean>? = null
     private var comingFromOrGoingToScreen = -1
     private val verificationViewModel: GigVerificationViewModel by viewModels()
     private val helpViewModel: HelpViewModel by viewModels()
@@ -151,6 +157,9 @@ class LandingScreenFragment : Fragment(){
         broadcastReceiverForLanguageCahnge()
         //checkforForceupdate()
         appUpdateManager = context?.let { AppUpdateManagerFactory.create(it) }
+//        updateAvailable?.observe(viewLifecycleOwner, Observer {
+//            requestUpdate(updateInfo, )
+//        })
         checkforUpdate()
 
 
@@ -227,10 +236,9 @@ class LandingScreenFragment : Fragment(){
             Log.d("Update Progress", "Progress : " + bytesDownloaded + " Remaining: " + totalBytesToDownload)
         }
         else if (state.installStatus() == InstallStatus.DOWNLOADED){
-            // After the update is downloaded, show a notification
-            // and request user confirmation to restart the app.
             popupSnackbarForCompleteUpdate()
             Log.d("Update", "Downloaded")
+            showToast("download complete")
 
         }
         // Log state or install the update.
@@ -254,33 +262,38 @@ class LandingScreenFragment : Fragment(){
                 Log.d("Update", "Update available")
                 // Before starting an update, register a listener for updates.
                 appUpdateManager?.registerListener(listener)
-                appUpdateManager?.startUpdateFlowForResult(
-                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                    appUpdateInfo,
-                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                    FLEXIBLE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    UPDATE_REQUEST_CODE)
+                requestUpdate(appUpdateInfo, FLEXIBLE)
+                showToast("Version code available ${appUpdateInfo.availableVersionCode()}")
+//                updateInfo.value = appUpdateInfo
+//                updateAvailable.value = true
+
             }
             else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                 && appUpdateInfo.updatePriority() >= 4 /* high priority */
                 && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)){
                 //request for immediate update
                 appUpdateManager?.registerListener(listener)
-                appUpdateManager?.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    IMMEDIATE,
-                    this,
-                    UPDATE_REQUEST_CODE)
+                requestUpdate(appUpdateInfo, IMMEDIATE)
+                showToast("Version code available ${appUpdateInfo.availableVersionCode()}")
+//                updateInfo.value = appUpdateInfo
+//                updateAvailable.value = true
             }
             else if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE){
                 Log.d("Update", "No Update available")
+                showToast("Update not available")
+//                updateInfo.value = null
+//                updateAvailable.value = false
             }
         }
     }
-
+    private fun requestUpdate(appUpdateInfo: AppUpdateInfo, updateType: Int ) {
+        appUpdateManager?.startUpdateFlowForResult(
+            appUpdateInfo,
+            updateType, //  HERE specify the type of update flow you want
+            this,   //  the instance of an activity
+            UPDATE_REQUEST_CODE
+        )
+    }
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
@@ -1296,8 +1309,13 @@ class LandingScreenFragment : Fragment(){
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+//    override fun onStop() {
+//        super.onStop()
+//        appUpdateManager?.unregisterListener(listener)
+//    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         appUpdateManager?.unregisterListener(listener)
     }
 
@@ -1310,6 +1328,13 @@ class LandingScreenFragment : Fragment(){
                 null
         )
         )
+        appUpdateManager?.appUpdateInfo?.addOnCompleteListener {
+            showToast("GET Info complete")
+        }
+
+        appUpdateManager?.appUpdateInfo?.addOnFailureListener {
+            showToast("GET Info failed ${it.message}")
+        }
         appUpdateManager
             ?.appUpdateInfo
             ?.addOnSuccessListener { appUpdateInfo ->
@@ -1317,8 +1342,9 @@ class LandingScreenFragment : Fragment(){
                 // notify the user to complete the update.
                 if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                     popupSnackbarForCompleteUpdate()
+                    showToast("in onResume, download complete")
                 }
-                if (appUpdateInfo.updateAvailability()
+                else if (appUpdateInfo.updateAvailability()
                     == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
                 ) {
                     // If an in-app update is already running, resume the update.
@@ -1328,6 +1354,9 @@ class LandingScreenFragment : Fragment(){
                         this,
                         UPDATE_REQUEST_CODE
                     )
+                }
+                else {
+                    showToast("${appUpdateInfo.installStatus()}")
                 }
             }
     }
@@ -1344,18 +1373,18 @@ class LandingScreenFragment : Fragment(){
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
                     //  handle user's approval }
+                    showToast("Update Approved by User")
                 }
                 RESULT_CANCELED -> {
-                    {
-                    //if you want to request the update again just call checkUpdate()
-                    }
                     Log.d("Update", "" + "Result Cancelled")
                     //  handle user's rejection  }
+                    showToast("Update Cancelled by User")
                 }
                 RESULT_IN_APP_UPDATE_FAILED -> {
                     //if you want to request the update again just call checkUpdate()
                     Log.d("Update", "" + "Update Failure")
                     //  handle update failure
+                    showToast("Update Failure Internal")
                 }
             }
         }
