@@ -1,7 +1,5 @@
 package com.gigforce.landing_screen.landingscreen
 
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
@@ -19,7 +17,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -61,20 +58,7 @@ import com.gigforce.landing_screen.landingscreen.adapters.*
 import com.gigforce.landing_screen.landingscreen.help.HelpVideo
 import com.gigforce.landing_screen.landingscreen.help.HelpViewModel
 import com.gigforce.landing_screen.landingscreen.models.Tip
-import com.google.android.play.core.appupdate.AppUpdateInfo
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
-import com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE
-import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.ktx.startUpdateFlowForResult
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.google.firebase.remoteconfig.internal.FirebaseRemoteConfigInfoImpl
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jaeger.library.StatusBarUtil
@@ -82,15 +66,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class LandingScreenFragment : Fragment(){
+class LandingScreenFragment : Fragment() {
     companion object {
         fun newInstance() = LandingScreenFragment()
         private const val INTENT_EXTRA_SCREEN = "scrren"
 
         private const val SCREEN_VERIFICATION = 10
         private const val SCREEN_GIG = 11
-        private const val UPDATE_REQUEST_CODE = 100
 
     }
 
@@ -110,24 +94,18 @@ class LandingScreenFragment : Fragment(){
     private var profile: ProfileData? = null
     private lateinit var viewModel: LandingScreenViewModel
     var width: Int = 0
-    private var appUpdateManager: AppUpdateManager? = null
-    var updateInfo : LiveData<AppUpdateInfo>? = null
-    var updateAvailable : LiveData<Boolean>? = null
     private var comingFromOrGoingToScreen = -1
     private val verificationViewModel: GigVerificationViewModel by viewModels()
     private val helpViewModel: HelpViewModel by viewModels()
     private val landingScreenViewModel: LandingScreenViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
-    private val firebaseRemoteConfig: FirebaseRemoteConfig by lazy {
-        FirebaseRemoteConfig.getInstance()
-    }
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
 
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         savedInstanceState?.let {
@@ -159,12 +137,6 @@ class LandingScreenFragment : Fragment(){
         observers()
         broadcastReceiverForLanguageCahnge()
         //checkforForceupdate()
-        setupFirebaseConfig()
-        appUpdateManager = context?.let { AppUpdateManagerFactory.create(it) }
-//        updateAvailable?.observe(viewLifecycleOwner, Observer {
-//            requestUpdate(updateInfo, )
-//        })
-        checkforUpdate()
 
 
 //        checkforLanguagedSelectedForLastLogin()
@@ -189,9 +161,6 @@ class LandingScreenFragment : Fragment(){
 //        chat_icon_iv.performClick()
 
     }
-
-
-
 
 
 //    private fun checkForDeepLink() {
@@ -232,106 +201,30 @@ class LandingScreenFragment : Fragment(){
 //        }
 //    }
 
-    fun setupFirebaseConfig(){
-        val configSettings: FirebaseRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
-                .setMinimumFetchIntervalInSeconds(3600)
-                .build()
-        firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
-    }
-
-    val listener = InstallStateUpdatedListener { state ->
-        // (Optional) Provide a download progress bar.
-        if (state.installStatus() == InstallStatus.DOWNLOADING) {
-            val bytesDownloaded = state.bytesDownloaded()
-            val totalBytesToDownload = state.totalBytesToDownload()
-            // Show update progress bar.
-            Log.d("Update Progress", "Progress : " + bytesDownloaded + " Remaining: " + totalBytesToDownload)
-        }
-        else if (state.installStatus() == InstallStatus.DOWNLOADED){
-            popupSnackbarForCompleteUpdate()
-            Log.d("Update", "Downloaded")
-            showToast("download complete")
-
-        }
-        // Log state or install the update.
-    }
-        // Displays the snackbar notification and call to action.
-        fun popupSnackbarForCompleteUpdate() {
-            appUpdateManager?.completeUpdate()
-            appUpdateManager?.unregisterListener(listener)
-        }
-    private fun checkforUpdate() {
-        Log.d("Update", "Checking for updates")
-        Log.d("UpdateInfo", appUpdateManager?.appUpdateInfo.toString())
-        appUpdateManager?.registerListener(listener)
-        appUpdateManager?.appUpdateInfo?.addOnSuccessListener { appUpdateInfo ->
-            Log.d("UpdateInfo", appUpdateInfo.toString())
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.updatePriority() <= 3 /* medium priority */
-                    && appUpdateInfo.isUpdateTypeAllowed(FLEXIBLE)
-            ) {
-                // Request the update.
-                Log.d("Update", "Update available")
-                // Before starting an update, register a listener for updates.
-                appUpdateManager?.registerListener(listener)
-                requestUpdate(appUpdateInfo, FLEXIBLE)
-                showToast("Version code available ${appUpdateInfo.availableVersionCode()}")
-//                updateInfo.value = appUpdateInfo
-//                updateAvailable.value = true
-
-            }
-            else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                && appUpdateInfo.updatePriority() >= 4 /* high priority */
-                && appUpdateInfo.isUpdateTypeAllowed(IMMEDIATE)){
-                //request for immediate update
-                appUpdateManager?.registerListener(listener)
-                requestUpdate(appUpdateInfo, IMMEDIATE)
-                showToast("Version code available ${appUpdateInfo.availableVersionCode()}")
-//                updateInfo.value = appUpdateInfo
-//                updateAvailable.value = true
-            }
-            else if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE){
-                Log.d("Update", "No Update available")
-                showToast("Update not available")
-//                updateInfo.value = null
-//                updateAvailable.value = false
-            }
-        }
-    }
-    private fun getUpdate
-    private fun requestUpdate(appUpdateInfo: AppUpdateInfo, updateType: Int) {
-        appUpdateManager?.startUpdateFlowForResult(
-                appUpdateInfo,
-                updateType, //  HERE specify the type of update flow you want
-                this,   //  the instance of an activity
-                UPDATE_REQUEST_CODE
-        )
-    }
-
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
-                ConfigRepository.LatestAPPUpdateListener {
+            ConfigRepository.LatestAPPUpdateListener {
             override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
                 if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
                 //doubt
                     appDialogsInterface.showConfirmationDialogType3(
-                            getString(R.string.new_version_available),
-                            getString(R.string.new_version_available_detail),
-                            getString(R.string.update_now),
-                            getString(R.string.cancel_update),
-                            object :
-                                    ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-                                }
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object :
+                            ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
 
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    if (latestAPPUpdateModel.force_update_required)
-                                        activity?.finish()
-                                    dialog?.dismiss()
-                                }
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
 
-                            })
+                        })
             }
         })
     }
@@ -530,8 +423,8 @@ class LandingScreenFragment : Fragment(){
                     unread_message_count_tv.setImageDrawable(null)
                 } else {
                     val drawable = TextDrawable.builder().buildRound(
-                            it.toString(),
-                            ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
+                        it.toString(),
+                        ResourcesCompat.getColor(requireContext().resources, R.color.lipstick, null)
                     )
                     unread_message_count_tv.setImageDrawable(drawable)
                 }
@@ -557,18 +450,18 @@ class LandingScreenFragment : Fragment(){
 
     fun setTipsInViewModel() {
         val tipsList = listOf<Tip>(
-                Tip(
-                        key = "ADD_EDUCATION_TIP",
-                        title = getString(R.string.gig_force_tip),
-                        subTitle = getString(R.string.tip_one),
+            Tip(
+                key = "ADD_EDUCATION_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_one),
 //                whereToRedirect = R.id.educationExpandedFragment,
-                        navPath = "education_expended",
-                        tip_id = 1097,
-                        intentExtraMap = mapOf(
-                                LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                                LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
-                        )
-                ), Tip(
+                navPath = "education_expended",
+                tip_id = 1097,
+                intentExtraMap = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EDUCATION_BOTTOM_SHEET
+                )
+            ), Tip(
                 key = "ADD_WORK_EXP_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_two),
@@ -576,10 +469,10 @@ class LandingScreenFragment : Fragment(){
                 navPath = "education_expended",
                 tip_id = 1098,
                 intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_EXPERIENCE_BOTTOM_SHEET
                 )
-        ), Tip(
+            ), Tip(
                 key = "ADD_SKILLS_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_three),
@@ -587,10 +480,10 @@ class LandingScreenFragment : Fragment(){
                 navPath = "education_expended",
                 tip_id = 1099,
                 intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_SKILLS_BOTTOM_SHEET
                 )
-        ), Tip(
+            ), Tip(
                 key = "ADD_ACHIEVEMENTS_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_four),
@@ -598,17 +491,17 @@ class LandingScreenFragment : Fragment(){
                 navPath = "education_expended",
                 tip_id = 1100,
                 intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ACHIEVEMENTS_BOTTOM_SHEET
                 )
-        ), Tip(
+            ), Tip(
                 key = "ADD_PROFILE_PHOTO_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_five),
                 tip_id = 1101,
 //                whereToRedirect = R.id.profileFragment
                 navPath = "profile"
-        ), Tip(
+            ), Tip(
                 key = "ADD_LANGUAGE_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_six),
@@ -616,10 +509,10 @@ class LandingScreenFragment : Fragment(){
                 navPath = "about_expended",
                 tip_id = 1102,
                 intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
                 )
-        ), Tip(
+            ), Tip(
                 key = "ADD_ABOUT_ME_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_seven),
@@ -627,53 +520,53 @@ class LandingScreenFragment : Fragment(){
                 navPath = "about_expended",
                 tip_id = 1103,
                 intentExtraMap = mapOf(
-                        LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
-                        LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_ABOUT_ME_BOTTOM_SHEET
                 )
-        ),
-                Tip(
-                        key = "ADD_PERMANENT_ADD_TIP",
-                        title = getString(R.string.gig_force_tip),
-                        subTitle = getString(R.string.tip_eight),
-                        tip_id = 1104,
+            ),
+            Tip(
+                key = "ADD_PERMANENT_ADD_TIP",
+                title = getString(R.string.gig_force_tip),
+                subTitle = getString(R.string.tip_eight),
+                tip_id = 1104,
 //                whereToRedirect = R.id.permanentAddressViewFragment
-                        navPath = "permanent_address"
-                ), Tip(
+                navPath = "permanent_address"
+            ), Tip(
                 key = "ADD_PREFERRED_DISTANCE_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_nine),
                 tip_id = 1105,
 //                whereToRedirect = R.id.arrountCurrentAddress
                 navPath = "current_address"
-        ), Tip(
+            ), Tip(
                 key = "ADD_DAILY_EARNING_EXPECTATION_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_ten),
                 tip_id = 1106,
                 navPath = "earning"
 //                whereToRedirect = R.id.earningFragment
-        ), Tip(
+            ), Tip(
                 key = "ADD_WEEKDAY_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_eleven),
                 tip_id = 1107,
                 navPath = "week_day"
 //                whereToRedirect = R.id.weekDayFragment
-        ), Tip(
+            ), Tip(
                 key = "ADD_WEEKEND_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_twelve),
                 tip_id = 1108,
                 navPath = "week_end"
 //                whereToRedirect = R.id.weekEndFragment
-        ), Tip(
+            ), Tip(
                 key = "ADD_WFH_TIP",
                 title = getString(R.string.gig_force_tip),
                 subTitle = getString(R.string.tip_thirteen),
                 tip_id = 1109,
                 navPath = "location"
 //                whereToRedirect = R.id.locationFragment
-        )
+            )
         )
         viewModel.setTips(tipsList)
     }
@@ -732,9 +625,9 @@ class LandingScreenFragment : Fragment(){
             val tipsAdapter = context?.let { TipsViewAdapter(it) }
             tipsAdapter?.setData(tips)
             gigforce_tip.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
             gigforce_tip.adapter = tipsAdapter
             tipsAdapter?.setOnTipListener(object : TipsViewAdapter.OnTipListener {
@@ -858,9 +751,9 @@ class LandingScreenFragment : Fragment(){
 
         })
         helpVideoRV.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
         )
         helpVideoRV.adapter = helpVideosAdapter
     }
@@ -869,8 +762,8 @@ class LandingScreenFragment : Fragment(){
         val appIntent =
             Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
         val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.youtube.com/watch?v=$id")
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.youtube.com/watch?v=$id")
         )
         try {
             requireContext().startActivity(appIntent)
@@ -916,8 +809,8 @@ class LandingScreenFragment : Fragment(){
         }
         skip_about_intro.setOnClickListener {
             sharedPreAndCommonUtilInterface.saveDataBoolean(
-                    StringConstants.SKIPPED_ABOUT_INTRO.value,
-                    true
+                StringConstants.SKIPPED_ABOUT_INTRO.value,
+                true
             )
             about_us_cl.visibility = View.GONE
         }
@@ -997,14 +890,14 @@ class LandingScreenFragment : Fragment(){
         learning_rv.gone()
         learning_learning_error.gone()
         startShimmer(
-                loader_learning_home as LinearLayout,
-                ShimmerDataModel(
-                        minHeight = R.dimen.size_148,
-                        minWidth = R.dimen.size_300,
-                        marginRight = R.dimen.size_1,
-                        marginTop = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL
-                ), R.id.shimmer_controller
+            loader_learning_home as LinearLayout,
+            ShimmerDataModel(
+                minHeight = R.dimen.size_148,
+                minWidth = R.dimen.size_300,
+                marginRight = R.dimen.size_1,
+                marginTop = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            ), R.id.shimmer_controller
         )
     }
 
@@ -1095,9 +988,9 @@ class LandingScreenFragment : Fragment(){
 
             })
             learning_rv.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
             learning_rv.adapter = learningCourseAdapter
 
@@ -1116,32 +1009,32 @@ class LandingScreenFragment : Fragment(){
         val itemWidth = ((width / 3) * 2).toInt()
         var datalist: ArrayList<TitleSubtitleModel> = ArrayList<TitleSubtitleModel>()
         datalist.add(
-                TitleSubtitleModel(
-                        "Delivery",
-                        "",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
-                )
+            TitleSubtitleModel(
+                "Delivery",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry.jpg?alt=media&token=039ddf50-9597-4ee4-bc12-0abdea74fd16"
+            )
         )
         datalist.add(
-                TitleSubtitleModel(
-                        "Retail",
-                        "",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
-                )
+            TitleSubtitleModel(
+                "Retail",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry3.jpg?alt=media&token=1813f5dd-5596-4a04-a0e1-3c8400a3d82d"
+            )
         )
         datalist.add(
-                TitleSubtitleModel(
-                        "Quick Service Restuarant",
-                        "",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
-                )
+            TitleSubtitleModel(
+                "Quick Service Restuarant",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry1.jpg?alt=media&token=2634019b-9777-4dbb-9103-1d63eb44df97"
+            )
         )
         datalist.add(
-                TitleSubtitleModel(
-                        "Telesales and Support",
-                        "",
-                        "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
-                )
+            TitleSubtitleModel(
+                "Telesales and Support",
+                "",
+                "https://firebasestorage.googleapis.com/v0/b/gigforce-dev.appspot.com/o/temp_files%2Findustry2.jpg?alt=media&token=00412b0a-fbbe-4790-9a9b-050fefaf5d02"
+            )
         )
 //        val recyclerGenericAdapter: RecyclerGenericAdapter<TitleSubtitleModel> =
 //                RecyclerGenericAdapter<TitleSubtitleModel>(
@@ -1167,15 +1060,15 @@ class LandingScreenFragment : Fragment(){
         val exploreIndustryAdapter = context?.let { ExploreByIndustryAdapter(it) }
         exploreIndustryAdapter?.setData(datalist)
         exploreIndustryAdapter?.setOnclickListener(object :
-                AdapterClickListener<TitleSubtitleModel> {
+            AdapterClickListener<TitleSubtitleModel> {
             override fun onItemClick(view: View, obj: TitleSubtitleModel, position: Int) {
                 //nothing here
             }
         })
         explore_by_industry.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            activity?.applicationContext,
+            LinearLayoutManager.HORIZONTAL,
+            false
         )
         explore_by_industry.adapter = exploreIndustryAdapter
 
@@ -1221,21 +1114,21 @@ class LandingScreenFragment : Fragment(){
 
     private fun initializeClientActivation() {
         landingScreenViewModel.observableJobProfile.observe(
-                viewLifecycleOwner,
-                Observer { jobProfile ->
-                    run {
-                        jobProfile?.let {
-                            showClientActivations(jobProfile)
-                        }
-
+            viewLifecycleOwner,
+            Observer { jobProfile ->
+                run {
+                    jobProfile?.let {
+                        showClientActivations(jobProfile)
                     }
-                })
+
+                }
+            })
         startShimmer(
-                loader_explore_gigs as LinearLayout,
-                ShimmerDataModel(
-                        marginRight = R.dimen.size_1,
-                        orientation = LinearLayout.HORIZONTAL
-                ), R.id.shimmer_controller
+            loader_explore_gigs as LinearLayout,
+            ShimmerDataModel(
+                marginRight = R.dimen.size_1,
+                orientation = LinearLayout.HORIZONTAL
+            ), R.id.shimmer_controller
         )
         landingScreenViewModel.getJobProfile()
     }
@@ -1288,22 +1181,22 @@ class LandingScreenFragment : Fragment(){
             val exploreGigsAdapter = context?.let { ExploreGigsAdapter(it) }
             exploreGigsAdapter?.setData(jobProfiles)
             client_activation_rv.layoutManager = LinearLayoutManager(
-                    activity?.applicationContext,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
 
             client_activation_rv.adapter = exploreGigsAdapter
 
             exploreGigsAdapter?.setOnSeeMoreSelectedListener(object :
-                    ExploreGigsAdapter.OnSeeMoreSelectedListener {
+                ExploreGigsAdapter.OnSeeMoreSelectedListener {
                 override fun onSeeMoreSelected(any: Any) {
                     navigation.navigateTo("client_activation/gig_detail")
                 }
 
             })
             exploreGigsAdapter?.setOnCardSelectedListener(object :
-                    ExploreGigsAdapter.OnCardSelectedListener {
+                ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
                     var id = (any as JobProfile).id
 //                    Log.d("cardId", id)
@@ -1312,8 +1205,8 @@ class LandingScreenFragment : Fragment(){
 //                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
 //        )
                     navigation.navigateTo(
-                            "client_activation",
-                            bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+                        "client_activation",
+                        bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
                     )
                 }
 
@@ -1322,102 +1215,14 @@ class LandingScreenFragment : Fragment(){
         }
     }
 
-//    override fun onStop() {
-//        super.onStop()
-//        appUpdateManager?.unregisterListener(listener)
-//    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        appUpdateManager?.unregisterListener(listener)
-    }
-
     override fun onResume() {
         super.onResume()
         StatusBarUtil.setColorNoTranslucent(
-                requireActivity(), ResourcesCompat.getColor(
+            requireActivity(), ResourcesCompat.getColor(
                 resources,
                 android.R.color.white,
                 null
+            )
         )
-        )
-        appUpdateManager?.appUpdateInfo?.addOnCompleteListener {
-            showToast("GET Info complete")
-        }
-
-        appUpdateManager?.appUpdateInfo?.addOnFailureListener {
-            showToast("GET Info failed ${it.message}")
-        }
-        appUpdateManager
-            ?.appUpdateInfo
-            ?.addOnSuccessListener { appUpdateInfo ->
-                // If the update is downloaded but not installed,
-                // notify the user to complete the update.
-                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                    popupSnackbarForCompleteUpdate()
-                    showToast("in onResume, download complete")
-                }
-                else if (appUpdateInfo.updateAvailability()
-                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
-                ) {
-                    // If an in-app update is already running, resume the update.
-                    appUpdateManager?.startUpdateFlowForResult(
-                            appUpdateInfo,
-                            IMMEDIATE,
-                            this,
-                            UPDATE_REQUEST_CODE
-                    )
-                }
-                else {
-                    showToast("${appUpdateInfo.installStatus()}")
-                }
-            }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UPDATE_REQUEST_CODE) {
-//            if (resultCode != RESULT_OK) {
-//                Log.e("MY_APP", "Update flow failed! Result code: $resultCode")
-//                // If the update is cancelled or fails,
-//                // you can request to start the update again.
-//            }
-            when (resultCode) {
-                RESULT_OK -> {
-                    Log.d("Update", "" + "Result Ok")
-                    //  handle user's approval }
-                    showToast("Update Approved by User")
-                }
-                RESULT_CANCELED -> {
-                    Log.d("Update", "" + "Result Cancelled")
-                    //  handle user's rejection  }
-                    showToast("Update Cancelled by User")
-                }
-                RESULT_IN_APP_UPDATE_FAILED -> {
-                    //if you want to request the update again just call checkUpdate()
-                    Log.d("Update", "" + "Update Failure")
-                    //  handle update failure
-                    showToast("Update Failure Internal")
-                }
-            }
-        }
-
-    }
-
-    //    override fun onCardSelected(any: Any) {
-//        var id = (any as JobProfile).id
-//        Log.d("cardId", id)
-////        navigate(
-////                R.id.fragment_client_activation,
-////                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
-////        )
-//        navigation.navigateTo("client_activation",bundleOf(StringConstants.JOB_PROFILE_ID.value to id) )
-//    }
-//
-//    override fun onSeeMoreSelected(any: Any) {
-////        navigate(
-////                R.id.clientActiExploreList,
-////        )
-//        navigation.navigateTo("client_activation/gig_detail")
-//    }
 }
