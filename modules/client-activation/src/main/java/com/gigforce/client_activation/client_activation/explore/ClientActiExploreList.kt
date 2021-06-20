@@ -17,6 +17,7 @@ import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ClientActiExploreAdapter
 import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.viewdatamodels.client_activation.JobProfile
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.ClientActivationEvents
@@ -39,7 +40,6 @@ class ClientActiExploreList : Fragment(), OnJobSelectedListener {
     lateinit var navigation : INavigation
     @Inject
     lateinit var eventTracker: IEventTracker
-
     private lateinit var viewModel: ClientActiExploreListViewModel
     private val clientActiExploreAdapter: ClientActiExploreAdapter by lazy {
         ClientActiExploreAdapter(requireContext(), this).apply {

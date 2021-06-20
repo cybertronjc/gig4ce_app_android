@@ -86,9 +86,9 @@ class BSCalendarScreenFragment : Fragment() {
 
     @Inject
     lateinit var navigation: INavigation
+
     @Inject
     lateinit var eventTracker: IEventTracker
-
 
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
@@ -1368,29 +1368,34 @@ class BSCalendarScreenFragment : Fragment() {
                 ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
                     var data = (any as JobProfile)
+//                    Log.d("cardId", id)
+//        navigate(
+//                R.id.fragment_client_activation,
+//                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
+//        )
                     val id = data?.id ?: ""
                     val title = data?.cardTitle ?: ""
-
                     Log.d("title", data.title)
+
                     eventTracker.pushEvent(
                         TrackingEventArgs(
-                            eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
-                            props = mapOf(
-                                "id" to id,
-                                "title" to title,
-                                "screen_source" to "Calendar Bottom Sheet"
-                            )
+                        eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                        props = mapOf(
+                            "id" to id,
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
                         )
+                    )
                     )
                     eventTracker.pushEvent(
                         TrackingEventArgs(
-                            eventName = ClientActivationEvents.EVENT_USER_CLICKED,
-                            props = mapOf(
-                                "id" to id,
-                                "title" to title,
-                                "screen_source" to "Calendar Bottom Sheet"
-                            )
+                        eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                        props = mapOf(
+                            "id" to id,
+                            "title" to title,
+                            "screen_source" to "Calendar Bottom Sheet"
                         )
+                    )
                     )
 //                    Log.d("cardId", id)
 //        navigate(

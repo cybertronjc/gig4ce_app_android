@@ -14,7 +14,7 @@
     android:width="@dimen/size_10"
     android:height="@dimen/size_10"
 
-    android:drawable="@drawable/ic_call_doc_scheduler"
+    android:drawable="@drawable/ic_call_doc_scheduler_2"
     android:gravity="center" />
 
 </layer-list>

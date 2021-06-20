@@ -78,7 +78,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
-                android:text="@string/i_m_on_sick_leave_today" />
+                />
 
             <RadioButton
                 android:id="@+id/reason_on_leave"
@@ -89,8 +89,7 @@
                 android:paddingStart="@dimen/size_8"
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
-                android:paddingBottom="8dp"
-                android:text="I have some personal work." />
+                android:paddingBottom="8dp" />
 
             <RadioButton
                 android:id="@+id/reason_cant_reach_location"
@@ -102,7 +101,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
-                android:text="@string/i_can_t_reach_the_location_today" />
+                 />
 
             <RadioButton
                 android:id="@+id/reason_gig_unsuitable"
@@ -114,7 +113,7 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="@dimen/size_8"
                 android:paddingBottom="8dp"
-                android:text="@string/this_gig_is_unsuitable_for_me" />
+                 />
 
             <RadioButton
                 android:id="@+id/reason_others"
