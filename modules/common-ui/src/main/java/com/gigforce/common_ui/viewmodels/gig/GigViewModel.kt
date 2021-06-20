@@ -7,11 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gigforce.core.datamodels.gigpage.models.AttendanceType
-import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.common_ui.repository.gig.GigerProfileFirebaseRepository
 import com.gigforce.common_ui.repository.gig.GigsRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.models.AttendanceType
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.*
 import com.gigforce.core.utils.Lce
@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -77,7 +76,7 @@ class GigViewModel constructor(
 
     fun markAttendance(
         location: Location?,
-        distanceBetweenGigAndUser : Float,
+        distanceBetweenGigAndUser: Float,
         locationPhysicalAddress: String,
         image: String,
         checkInTimeAccToUser: Timestamp?,
@@ -103,7 +102,10 @@ class GigViewModel constructor(
             val minutes = Duration.between(checkInTime, currentTime).toMinutes()
 
             if (minutes < 15L) {
-                Log.d("GigViewModel","Ignoring checkout call as difference between checkin-time and current time is less than 15 mins")
+                Log.d(
+                    "GigViewModel",
+                    "Ignoring checkout call as difference between checkin-time and current time is less than 15 mins"
+                )
                 return@launch
             }
 
@@ -127,7 +129,7 @@ class GigViewModel constructor(
     private suspend fun markCheckIn(
         gigId: String,
         location: Location?,
-        distanceBetweenGigAndUser : Float,
+        distanceBetweenGigAndUser: Float,
         locationPhysicalAddress: String,
         image: String,
         checkInTimeAccToUser: Timestamp?,
@@ -150,31 +152,31 @@ class GigViewModel constructor(
 //            _markingAttendanceState.postValue(null)
         } catch (e: Exception) {
             _markingAttendanceState.postValue(Lce.error(e.toString()))
-           _markingAttendanceState.postValue(null)
+            _markingAttendanceState.postValue(null)
         }
     }
 
     private suspend fun markCheckOut(
-            gigId: String,
-            location: Location?,
-            distanceBetweenGigAndUser : Float,
-            locationPhysicalAddress: String,
-            image: String,
-            checkOutTimeAccToUser: Timestamp?,
-            remarks: String?
+        gigId: String,
+        location: Location?,
+        distanceBetweenGigAndUser: Float,
+        locationPhysicalAddress: String,
+        image: String,
+        checkOutTimeAccToUser: Timestamp?,
+        remarks: String?
     ) {
         _markingAttendanceState.postValue(Lce.loading())
 
         try {
             gigsRepository.markCheckOut(
-                    gigId = gigId,
-                    location = location,
-                    locationPhysicalAddress = locationPhysicalAddress,
-                    image = image,
-                    checkOutTime = Timestamp.now(),
-                    checkOutTimeAccToUser = checkOutTimeAccToUser,
-                    remarks = remarks,
-                    distanceBetweenGigAndUser = distanceBetweenGigAndUser
+                gigId = gigId,
+                location = location,
+                locationPhysicalAddress = locationPhysicalAddress,
+                image = image,
+                checkOutTime = Timestamp.now(),
+                checkOutTimeAccToUser = checkOutTimeAccToUser,
+                remarks = remarks,
+                distanceBetweenGigAndUser = distanceBetweenGigAndUser
             )
             _markingAttendanceState.value = Lce.content(AttendanceType.CHECK_OUT)
 //            _markingAttendanceState.value = null
@@ -343,7 +345,7 @@ class GigViewModel constructor(
                 }
             }
 
-            if(shouldGetContactdetails){
+            if (shouldGetContactdetails) {
                 val location = gigsRepository.getGigLocationFromGigOrder(gig.gigOrderId)
                 location?.let {
 
@@ -403,10 +405,14 @@ class GigViewModel constructor(
             .addOnSuccessListener { documentSnapshot ->
 
                 if (documentSnapshot != null) {
-                    val gig = documentSnapshot.toObject(Gig::class.java)
-                        ?: throw IllegalArgumentException()
-                    gig.gigId = documentSnapshot.id
-                    cont.resume(gig)
+                    if (!documentSnapshot.exists()) {
+                        cont.resumeWithException(IllegalArgumentException("No gig found in db with id $gigId"))
+                    } else {
+                        val gig = documentSnapshot.toObject(Gig::class.java)
+                            ?: throw IllegalArgumentException()
+                        gig.gigId = documentSnapshot.id
+                        cont.resume(gig)
+                    }
                 }
             }
             .addOnFailureListener {
@@ -536,7 +542,8 @@ class GigViewModel constructor(
                         "gigStatus" to GigStatus.DECLINED.getStatusString(),
                         "declinedBy" to gig.gigerId,
                         "declineReason" to reason,
-                        "declinedOn" to Timestamp.now()
+                        "declinedOn" to Timestamp.now(),
+                        "attendance" to null
                     )
                 )
             _declineGig.value = Lse.success()

@@ -323,6 +323,6 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
 
     companion object {
-        private const val COLLECTION_NAME = "Gigs"
+        const val COLLECTION_NAME = "Gigs"
     }
 }

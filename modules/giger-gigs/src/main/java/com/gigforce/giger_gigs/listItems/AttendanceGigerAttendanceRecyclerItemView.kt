@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.core.view.isVisible
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -24,7 +25,7 @@ class AttendanceGigerAttendanceRecyclerItemView(
 ), IViewHolder, View.OnClickListener {
 
     private lateinit var viewBinding: RecyclerRowGigerAttendanceBinding
-    private var viewData : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
+    private var viewData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
 
     init {
         setDefault()
@@ -53,39 +54,44 @@ class AttendanceGigerAttendanceRecyclerItemView(
         viewData = null
 
         data?.let {
-            val gigerAttendanceData = it as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+            val gigerAttendanceData =
+                it as AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
             viewData = gigerAttendanceData
 
             viewBinding.userNameTv.text = gigerAttendanceData.gigerName
-            viewBinding.userDesignation.text = gigerAttendanceData.gigerDesignation
+            viewBinding.userDesignationTv.text = gigerAttendanceData.gigerDesignation
+            viewBinding.callGigerBtn.isVisible = gigerAttendanceData.gigerPhoneNumber.isNotBlank()
 
             setUserImage(gigerAttendanceData.gigerImage)
-            setPhoneNumberOnView(gigerAttendanceData.gigerPhoneNumber)
-            setUserAttendanceStatus(gigerAttendanceData.attendanceStatus)
+            setOfficeOnView(gigerAttendanceData.gigerOffice)
+            setUserAttendanceStatus(gigerAttendanceData.attendanceStatus, gigerAttendanceData.gigStatus)
         }
     }
 
-    private fun setUserAttendanceStatus(attendanceStatus: String) {
-        viewBinding.userAttendanceStatusTextview.text = attendanceStatus
-        if("Present".equals(attendanceStatus,true)){
+    private fun setUserAttendanceStatus(
+        attendanceStatus: String,
+        gigStatus: String
+    ) {
+        viewBinding.userAttendanceStatusTextview.text = gigStatus
+        if ("Present".equals(attendanceStatus, true)) {
             viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.status_present_chip_background)
-        } else{
+        } else {
             viewBinding.userAttendanceStatusTextview.setBackgroundResource(R.drawable.status_absent_chip_background)
         }
     }
 
-    private fun setPhoneNumberOnView(gigerPhoneNumber: String) {
-        if(gigerPhoneNumber.isEmpty()){
-            viewBinding.callGigerBtn.gone()
-            viewBinding.userPhoneNumber.text = "Phone number : N/A"
+    private fun setOfficeOnView(
+        office: String
+    ) {
+        if (office.isEmpty()) {
+            viewBinding.userPhoneNumber.text = "Office : N/A"
         } else {
-            viewBinding.callGigerBtn.visible()
-            viewBinding.userPhoneNumber.text = gigerPhoneNumber
+            viewBinding.userPhoneNumber.text = office
         }
     }
 
     private fun setUserImage(gigerImage: String) {
-        if(gigerImage.isEmpty() || gigerImage == "avatar.jpg"){
+        if (gigerImage.isEmpty() || gigerImage == "avatar.jpg") {
             viewBinding.userImageIv.loadImage(R.drawable.ic_user_2)
             return
         }
@@ -105,7 +111,12 @@ class AttendanceGigerAttendanceRecyclerItemView(
     override fun onClick(v: View?) {
         val currentViewData = viewData ?: return
 
-        val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", currentViewData.gigerPhoneNumber, null))
+        val intent =
+            Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", currentViewData.gigerPhoneNumber, null))
         context.startActivity(intent)
+    }
+
+    fun getGigIdOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
+        return viewData?: throw NullPointerException("view data is null")
     }
 }

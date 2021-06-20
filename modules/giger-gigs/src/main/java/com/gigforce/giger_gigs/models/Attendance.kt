@@ -8,26 +8,29 @@ open class AttendanceRecyclerItemData(
         val type: Int
 ) : SimpleDVM(type){
 
-    data class AttendanceRecyclerItemBusinessData(
-            val businessName: String
-    ) : AttendanceRecyclerItemData(
-            type = GigViewTypes.ATTENDANCE_BUSSINESS_NAME
-    )
+//    data class AttendanceRecyclerItemBusinessData(
+//            val businessName: String
+//    ) : AttendanceRecyclerItemData(
+//            type = GigViewTypes.ATTENDANCE_BUSSINESS_NAME
+//    )
 
-    data class AttendanceRecyclerItemShiftNameData(
+    data class AttendanceRecyclerItemBusinessAndShiftNameData(
+            val businessName : String,
             val shiftName: String
     ) : AttendanceRecyclerItemData(
-        type = GigViewTypes.ATTENDANCE_SHIFT_TIME
+        type = GigViewTypes.ATTENDANCE_BUSINESS_SHIFT_TIME
     )
 
     data class AttendanceRecyclerItemAttendanceData(
             val attendanceStatus: String,
             val gigId : String,
+            val gigStatus : String,
             val gigerId: String,
             val gigerName: String,
             val gigerImage : String,
             val gigerPhoneNumber: String,
             val gigerDesignation: String,
+            val gigerOffice: String,
     ) : AttendanceRecyclerItemData(
         type = GigViewTypes.GIGER_ATTENDANCE
     )

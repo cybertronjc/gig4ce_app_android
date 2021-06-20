@@ -26,8 +26,17 @@ data class GigerAttendance(
 	val profilePicture: String? = null,
 
 	@field:SerializedName("attendanceStatus")
-	val attendanceStatus: String? = null,
+	var attendanceStatus: String? = null,
+
+	@field:SerializedName("status")
+	var gigStatus: String? = null,
 
 	@field:SerializedName("gigId")
-	val gigId: String? = null
+	val gigId: String? = null,
+
+	@field:SerializedName("location")
+	val location: String? = null
+
+
+
 )

@@ -23,17 +23,7 @@
                 layout="@layout/fragment_giger_under_managers_attendance_main"
              />
 
-            <TextView
-                android:id="@+id/gigers_under_manager_main_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableTop="@drawable/ic_cross_grey"
-                android:drawablePadding="10dp"
-                android:text="Unable to load your stuff"
-                android:visibility="gone" />
 
-            <!--        app:drawableTopCompat="@drawable/illus_no_attendance"-->
 
         </FrameLayout>
 

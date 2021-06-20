@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        >
+
+        <TextView
+            android:id="@+id/company_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:lineHeight="15sp"
+            android:paddingTop="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            tools:text="Company Name"
+            />
+
+        <TextView
+            android:id="@+id/shift_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:lineHeight="15sp"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="@dimen/size_6"
+            android:fontFamily="@font/lato"
+            tools:text="10 Am -10 Pm Name"
+            />
+
+    </RelativeLayout>
+</layout>

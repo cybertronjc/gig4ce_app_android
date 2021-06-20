@@ -11,7 +11,6 @@
         android:focusable="true"
         android:paddingTop="18dp"
         android:paddingBottom="2dp"
-        android:layout_marginStart="@dimen/size_22"
         >
 
         <com.gigforce.common_ui.views.GigforceImageView
@@ -26,32 +25,34 @@
 
         <ImageButton
             android:id="@+id/call_giger_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_call"
-            app:tint="@color/black" />
+            app:srcCompat="@drawable/ic_call_drawable_2"
+            />
+
+
+
 
         <TextView
             android:id="@+id/user_name_tv"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="#646464"
             android:textSize="16sp"
-            android:fontFamily="@font/lato_bold"
-            app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
+            android:lineHeight="19sp"
+            android:fontFamily="@font/lato"
             app:layout_constraintStart_toEndOf="@id/user_image_iv"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Rahulxededdeded d Yeadav" />
+            tools:text="Rahulefefeav" />
 
 
         <TextView
-            android:id="@+id/user_designation"
-            android:layout_width="0dp"
+            android:id="@+id/user_designation_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="6dp"
@@ -62,44 +63,42 @@
             android:maxLines="1"
             android:scrollHorizontally="true"
             android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/call_giger_btn"
             app:layout_constraintStart_toEndOf="@id/user_image_iv"
             app:layout_constraintTop_toBottomOf="@id/user_name_tv"
-            tools:text="Last messsage that I sent" />
+            tools:text="Contracter" />
 
         <TextView
             android:id="@+id/user_phone_number"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@id/user_image_iv"
-            app:layout_constraintTop_toBottomOf="@id/user_designation"/>
+            app:layout_constraintTop_toBottomOf="@id/user_designation_tv"/>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="user_name_tv" />
 
         <TextView
             android:id="@+id/user_attendance_status_textview"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="10dp"
             android:paddingStart="8dp"
+            android:paddingTop="2dp"
             android:paddingEnd="8dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:layout_marginStart="8dp"
+            android:paddingBottom="2dp"
             android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@id/user_image_iv"
-            app:layout_constraintTop_toBottomOf="@id/user_phone_number"/>
-
-
-        <View
-            android:id="@+id/bottom_border"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="#35BDBDBD"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/user_name_tv"
-            app:layout_constraintTop_toBottomOf="@id/user_attendance_status_textview" />
+            app:layout_constraintEnd_toStartOf="@id/call_giger_btn"
+            app:layout_constraintHorizontal_bias="0.008"
+            app:layout_constraintStart_toEndOf="@id/barrier1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/status_present_chip_background"
+            tools:text="Present" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
