@@ -65,6 +65,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkInMarked" to true,
                     "attendance.checkInTime" to checkInTime,
                     "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                    "attendance.checkInSource" to "from_gig_in_app",
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         } else {
@@ -85,6 +86,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "regularisationRequest.checkOutTimeAccToUser" to null,
                     "regularisationRequest.remarksFromUser" to remarks,
                     "regularisationRequest.remarksFromManager" to null,
+                    "attendance.checkInSource" to "from_gig_in_app",
                     "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         }
@@ -127,6 +129,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "attendance.checkOutMarked" to true,
                     "attendance.checkOutTime" to checkOutTime,
                     "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                    "attendance.checkOutSource" to "from_gig_in_app",
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         } else {
@@ -146,6 +149,7 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                     "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
                     "regularisationRequest.remarksFromUser" to remarks,
                     "regularisationRequest.remarksFromManager" to null,
+                    "attendance.checkOutSource" to "from_gig_in_app",
                     "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         }

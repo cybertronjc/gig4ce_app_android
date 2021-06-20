@@ -27,6 +27,9 @@ class AttendanceGigerAttendanceRecyclerItemView(
     private lateinit var viewBinding: RecyclerRowGigerAttendanceBinding
     private var viewData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData? = null
 
+    lateinit var foregroundView : View
+    lateinit var backgroundView : View
+
     init {
         setDefault()
         inflate()
@@ -48,6 +51,8 @@ class AttendanceGigerAttendanceRecyclerItemView(
             this,
             true
         )
+        foregroundView = viewBinding.viewForeground
+        backgroundView = viewBinding.viewBackground
     }
 
     override fun bind(data: Any?) {
@@ -116,7 +121,7 @@ class AttendanceGigerAttendanceRecyclerItemView(
         context.startActivity(intent)
     }
 
-    fun getGigIdOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
+    fun getGigDataOrThrow() : AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
         return viewData?: throw NullPointerException("view data is null")
     }
 }

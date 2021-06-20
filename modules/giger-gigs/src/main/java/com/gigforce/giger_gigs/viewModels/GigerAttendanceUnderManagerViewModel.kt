@@ -297,7 +297,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 filteredAttendanceData
         )
 
-        delay(300)
+//        delay(300)
         _gigerAttendanceUnderManagerViewState.postValue(
                 GigerAttendanceUnderManagerViewModelState.AttendanceDataLoaded(
                         currentlyFetchingForDate == LocalDate.now(),
@@ -498,6 +498,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                             "$userName marked present"
                     )
             )
+            delay(300)
             updateStatusCounts()
             filterCachedResultsAndEmit()
         } catch (e: Exception) {

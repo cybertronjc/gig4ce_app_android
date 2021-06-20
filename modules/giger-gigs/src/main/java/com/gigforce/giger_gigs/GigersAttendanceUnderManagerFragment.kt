@@ -55,130 +55,16 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class GigersAttendanceUnderManagerFragment : Fragment() {
-
-    private val swipeTouchListener = object : ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-    ) {
-        private var previousDx = 0f
-
-        override fun getSwipeDirs(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-        ): Int {
-            if (viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView) {
-
-                try {
-                    val gigData =
-                            (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).getGigIdOrThrow()
-
-                    return when {
-                        "Present".equals(gigData.attendanceStatus, true) -> ItemTouchHelper.LEFT
-                        "Declined".equals(gigData.attendanceStatus, true) -> ItemTouchHelper.RIGHT
-                        else -> super.getSwipeDirs(recyclerView, viewHolder)
-                    }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    return super.getSwipeDirs(recyclerView, viewHolder)
-                }
-            } else {
-                return 0 //Disabling swipe for view type that are not attendance items
-            }
-        }
-
-        override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-        ): Boolean {
-            return false
-        }
-
-        override fun isItemViewSwipeEnabled(): Boolean = attendanceSwipeControlsEnabled
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            if (viewHolder is CoreViewHolder && viewHolder.itemView is AttendanceGigerAttendanceRecyclerItemView) {
-
-                try {
-                    val gigData =
-                            (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).getGigIdOrThrow()
-
-                    when (direction) {
-                        ItemTouchHelper.LEFT -> showDeclineGigerAttendanceDialog(gigData.gigId)
-                        ItemTouchHelper.RIGHT -> markUserAttendanceAsPresent(
-                                gigData.gigId,
-                                gigData.gigerName
-                        )
-                        else -> { /*Do Nothing*/
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            previousDx = 0f
-        }
-
-        override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-        ) {
-
-            if (previousDx <= 0 && dX > 0) {
-                // swiping from left to right
-
-                val itemView = viewHolder.itemView
-                val height = itemView.bottom.toFloat() - itemView.top.toFloat()
-                val width = height / 5
-                viewHolder.itemView.translationX = dX / 5
-                val paint = Paint()
-                paint.color = Color.parseColor("#D32F2F")
-                val background = RectF(
-                        itemView.right.toFloat() + dX / 5,
-                        itemView.top.toFloat(),
-                        itemView.right.toFloat(),
-                        itemView.bottom.toFloat()
-                )
-                c.drawRect(background, paint)
-//                val icon = BitmapFactory.decodeResource(resources, R.drawable.ic_checkin_illus)
-//                val icon_dest = RectF((itemView.right + dX / 7), itemView.top.toFloat() + width, itemView.right.toFloat() + dX / 20, itemView.bottom.toFloat() - width)
-//                c.drawBitmap(icon, null, icon_dest, paint)
-
-
-            } else if (previousDx >= 0 && dX < 0) {
-                // swiping from right to left
-
-
-            }
-
-            previousDx = dX
-            super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX / 1.5f,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-            )
-        }
-    }
+class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.AttendanceSwipeHandlerListener {
 
 
     private val sharedGigViewModel: SharedGigerAttendanceUnderManagerViewModel by activityViewModels()
     private val viewModel: GigerAttendanceUnderManagerViewModel by viewModels()
     private lateinit var viewBinding: FragmentGigerUnderManagersAttendanceBinding
     private val simpleDateFormat = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.getDefault())
-    private val itemTouchHelper = ItemTouchHelper(swipeTouchListener)
-    private var attendanceSwipeControlsEnabled = false
+
+    private val swipeTouchHandler = AttendanceSwipeHandler(this)
+    private val itemTouchHelper = ItemTouchHelper(swipeTouchHandler)
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -215,8 +101,8 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
 
             viewBinding.toolbar.apply {
                 showTitle("Gigers Attendance")
-                showSearchOption("Search Attendance")
                 hideActionMenu()
+                showSearchOption("Search Attendance")
                 getSearchTextChangeAsFlow()
                         .debounce(300)
                         .distinctUntilChanged()
@@ -440,11 +326,12 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
             attendanceItemData: List<AttendanceRecyclerItemData>
     ) = viewBinding.apply {
 
-        attendanceSwipeControlsEnabled = enableAttendanceSwipeControls
+        swipeTouchHandler.attendanceSwipeControlsEnabled = enableAttendanceSwipeControls
         this.gigersUnderManagerMainLayout.errorInfoLayout.gone()
         toolbar.showSearchOption("Search Attendance")
         this.gigersUnderManagerMainLayout.apply {
             this.root.visible()
+            this.swipeLabel.isVisible = enableAttendanceSwipeControls
 
             stopShimmer(
                     this.statusShimmerContainer as LinearLayout,
@@ -508,6 +395,7 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
                 R.id.chip_like_shimmer_controller
         )
 
+        this.gigersUnderManagerMainLayout.swipeLabel.gone()
         this.gigersUnderManagerMainLayout.errorInfoLayout.visible()
         this.gigersUnderManagerMainLayout.gigersUnderManagerMainError.text = error
     }
@@ -536,6 +424,7 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
             this.root.visible()
             this.errorInfoLayout.gone()
 
+            this.swipeLabel.gone()
             toolbar.hideSearchOption()
             this.statusTabLayout.removeAllTabs()
             startShimmer(
@@ -568,24 +457,6 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
         }
     }
 
-
-    private fun markUserAttendanceAsPresent(
-            gigId: String,
-            userName: String
-    ) = viewModel.markUserCheckedIn(
-            gigId,
-            userName
-    )
-
-
-    private fun showDeclineGigerAttendanceDialog(gigId: String) = DeclineGigDialogFragment.launch(
-            gigId,
-            childFragmentManager,
-            null,
-            true
-    )
-
-
     private fun hideSoftKeyboard() {
 
         val activity = activity ?: return
@@ -597,6 +468,34 @@ class GigersAttendanceUnderManagerFragment : Fragment() {
 
     companion object {
         const val TAG = "GigerAttendanceUnderManagerFrg"
+    }
+
+    override fun onRightSwipedForMarkingPresent(
+            viewHolder : RecyclerView.ViewHolder,
+            attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+    ) {
+        viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(viewHolder.adapterPosition)
+        itemTouchHelper.startSwipe(viewHolder)
+
+        viewModel.markUserCheckedIn(
+                attendanceData.gigId,
+                attendanceData.gigerName
+        )
+    }
+
+    override fun onLeftSwipedForDecliningAttendance(
+            viewHolder : RecyclerView.ViewHolder,
+            attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
+    ) {
+        viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(viewHolder.adapterPosition)
+        itemTouchHelper.startSwipe(viewHolder)
+
+        DeclineGigDialogFragment.launch(
+                attendanceData.gigId,
+                childFragmentManager,
+                null,
+                true
+        )
     }
 
 }

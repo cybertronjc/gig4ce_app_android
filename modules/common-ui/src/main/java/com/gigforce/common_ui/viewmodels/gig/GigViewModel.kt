@@ -528,7 +528,11 @@ class GigViewModel constructor(
     private val _declineGig = MutableLiveData<Lse>()
     val declineGig: LiveData<Lse> get() = _declineGig
 
-    fun declineGig(gigId: String, reason: String) = viewModelScope.launch {
+    fun declineGig(
+            gigId: String,
+            reason: String,
+            isDeclinedByTL : Boolean
+    ) = viewModelScope.launch {
         _declineGig.value = Lse.loading()
 
         try {
@@ -543,7 +547,8 @@ class GigViewModel constructor(
                         "declinedBy" to gig.gigerId,
                         "declineReason" to reason,
                         "declinedOn" to Timestamp.now(),
-                        "attendance" to null
+                        "attendance" to null,
+                        "declinedSource" to if(isDeclinedByTL) "declined_from_tl_app" else "declined_from_gig_in_app",
                     )
                 )
             _declineGig.value = Lse.success()

@@ -1,6 +1,10 @@
 package com.gigforce.common_ui.viewdatamodels.gig
 
+import com.gigforce.core.extensions.toLocalDateTime
 import com.google.gson.annotations.SerializedName
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 data class GigerAttendance(
 
@@ -36,7 +40,32 @@ data class GigerAttendance(
 
 	@field:SerializedName("location")
 	val location: String? = null
+){
 
+	private var timeFormat24Hour: SimpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+	private var timeFormat12Hour: SimpleDateFormat =
+			SimpleDateFormat("hh:mm a", Locale.getDefault())
 
+	fun getShiftStartTime() : LocalDateTime{
+		if (shiftTime.isNullOrBlank()) LocalDateTime.now()
+		if (!shiftTime!!.contains("-")) return LocalDateTime.now()
 
-)
+		val shiftTimes = shiftTime.split("-")
+		val currentTime = LocalDateTime.now()
+
+		val time1 = timeFormat24Hour.parse(shiftTimes[0].trim())
+		return time1.toLocalDateTime()
+	}
+
+	fun getShiftEndTime() : LocalDateTime{
+		if (shiftTime.isNullOrBlank()) LocalDateTime.now()
+		if (!shiftTime!!.contains("-")) return LocalDateTime.now()
+
+		val shiftTimes = shiftTime.split("-")
+		val currentTime = LocalDateTime.now()
+
+		val time2 = timeFormat24Hour.parse(shiftTimes[1].trim())
+		return time2.toLocalDateTime()
+	}
+
+}

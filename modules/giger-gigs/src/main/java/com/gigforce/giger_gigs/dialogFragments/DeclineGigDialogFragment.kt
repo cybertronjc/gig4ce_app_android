@@ -217,7 +217,7 @@ class DeclineGigDialogFragment : DialogFragment() {
             }
 
             if (gigId != null)
-                viewModel.declineGig(gigId!!, reason)
+                viewModel.declineGig(gigId!!, reason,isAnyUserOtherThanGigerIsDecliningTheGig)
             else if (!gigIds.isNullOrEmpty())
                 viewModel.declineGigs(gigIds!!, reason)
         }
