@@ -43,6 +43,8 @@ import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
+import com.gigforce.core.TrackingEventArgs
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.datamodels.profile.ProfileData
@@ -1206,12 +1208,32 @@ class LandingScreenFragment : Fragment(){
             exploreGigsAdapter?.setOnCardSelectedListener(object :
                 ExploreGigsAdapter.OnCardSelectedListener {
                 override fun onCardSelected(any: Any) {
-                    var id = (any as JobProfile).id
+                    var data = (any as JobProfile)
 //                    Log.d("cardId", id)
 //        navigate(
 //                R.id.fragment_client_activation,
 //                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
 //        )
+                    val id = data?.id ?: ""
+                    val title = data?.cardTitle ?: ""
+                    Log.d("title", data.title)
+
+                    eventTracker.pushEvent(TrackingEventArgs(
+                            eventName = data.title + "_" + ClientActivationEvents.EVENT_USER_CLICKED,
+                            props = mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
+                            )
+                    ))
+                    eventTracker.pushEvent(TrackingEventArgs(
+                            eventName = ClientActivationEvents.EVENT_USER_CLICKED,
+                            props = mapOf(
+                                    "id" to id,
+                                    "title" to title,
+                                    "screen_source" to "Landing Screen"
+                            )
+                    ))
                     navigation.navigateTo(
                         "client_activation",
                         bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
