@@ -14,4 +14,5 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getGeneratePayslipURL(): String = BuildConfig.GENERATE_PAYSLIP_URL
     override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
     override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
+    override fun getGigersUnderTlUrl(): String  = BuildConfig.GET_GIGER_UNDER_TL_ATTENDANCE_URL
 }

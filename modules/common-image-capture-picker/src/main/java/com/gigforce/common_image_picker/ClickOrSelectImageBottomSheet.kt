@@ -54,7 +54,13 @@ class ClickOrSelectImageBottomSheet : BottomSheetDialogFragment() {
             fragment.arguments =
                 bundleOf(StringConstants.PROFILE_PIC_PRESENT.value to isPicturePresent)
             fragment.listener = listener
-            fragment.show(childFragmentManager, TAG)
+
+            try {
+                fragment.show(childFragmentManager, TAG)
+            } catch (e : Exception){
+                e.printStackTrace()
+            }
+
         }
     }
 

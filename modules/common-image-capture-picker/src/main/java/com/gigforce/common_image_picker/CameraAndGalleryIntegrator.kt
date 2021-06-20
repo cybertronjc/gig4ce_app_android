@@ -77,7 +77,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity
         }
 
-        val intents = ImagePicker.getCaptureImageIntentsOnly(context)
+        val intents = ImagePicker.getCaptureImageIntentsOnly(context) ?: return
         if(openFrontCamera){
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {

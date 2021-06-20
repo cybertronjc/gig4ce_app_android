@@ -46,18 +46,18 @@ import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlB
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlEditOverallErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.dlFrontEditErrorMessage
 import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.*
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlAvailaibilityOptionRG
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlBackImageHolder
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlFrontImageHolder
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlInfoLayout
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlNoRB
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.dlYesRB
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.drivingLicenseEditText
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.helpIconIV
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.stateSpinner
-import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation.whyWeNeedThisTV
-import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation.*
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.*
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlAvailaibilityOptionRG
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlBackImageHolder
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlFrontImageHolder
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlInfoLayout
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlNoRB
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.dlYesRB
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.drivingLicenseEditText
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.helpIconIV
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.stateSpinner
+import kotlinx.android.synthetic.main.layout_driving_license_upload_client_activation_2.whyWeNeedThisTV
+import kotlinx.android.synthetic.main.layout_fragment_upload_driving_license_activation_2.*
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.*
 import kotlinx.android.synthetic.main.upload_car_client_activation.view.imageLabelTV
 import java.util.*
@@ -84,7 +84,7 @@ class UploadDrivingLicense : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(
-            R.layout.layout_fragment_upload_driving_license_activation,
+            R.layout.layout_fragment_upload_driving_license_activation_2,
             container,false
         )
     }
@@ -224,10 +224,7 @@ class UploadDrivingLicense : Fragment(),
             } else
                 disableSubmitButton()
         }
-        dlSubmitSliderBtn_client_act.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
+        dlSubmitSliderBtn_client_act.setOnClickListener {
 
                     if (dlYesRB.isChecked || dlSubmitSliderBtn_client_act.text == getString(R.string.update)) {
 
@@ -237,8 +234,8 @@ class UploadDrivingLicense : Fragment(),
                                 .setMessage(getString(R.string.select_dl_state))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            dlSubmitSliderBtn_client_act.resetSlider()
-                            return
+
+                            return@setOnClickListener
                         }
 
                             val dlNo =
@@ -262,8 +259,8 @@ class UploadDrivingLicense : Fragment(),
                                 .setMessage(getString(R.string.capture_both_sides_dl))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            dlSubmitSliderBtn_client_act.resetSlider()
-                            return
+
+                            return@setOnClickListener
                         }
 
                         val state = stateSpinner.selectedItem.toString()
@@ -285,8 +282,8 @@ class UploadDrivingLicense : Fragment(),
                             RejectionDialog::class.java.name
                         )
                     }
-                }
             }
+
 
 
 
@@ -563,20 +560,10 @@ class UploadDrivingLicense : Fragment(),
 
     private fun enableSubmitButton() {
         dlSubmitSliderBtn_client_act.isEnabled = true
-
-        dlSubmitSliderBtn_client_act.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        dlSubmitSliderBtn_client_act.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         dlSubmitSliderBtn_client_act.isEnabled = false
-
-        dlSubmitSliderBtn_client_act.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        dlSubmitSliderBtn_client_act.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
 
@@ -757,7 +744,6 @@ class UploadDrivingLicense : Fragment(),
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
         dlMainLayout.visibility = View.VISIBLE
-        dlSubmitSliderBtn_client_act.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))

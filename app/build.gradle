@@ -49,6 +49,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         debug {
             signingConfig null
@@ -91,6 +95,7 @@ android {
             buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
             buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
             buildConfigField "String", 'MOENGAGE_KEY', '"FDSRKA48B5958ZF44VZYWYAR"'
+            buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigs/tlwise"'
         }
 
         /**
@@ -117,7 +122,7 @@ android {
             buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
-
+            buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
         }
 
         staging {
@@ -140,7 +145,7 @@ android {
             buildConfigField "String", 'APPS_FLYER_KEY', '"Bk38zee7sTkan7nxmtoMWM"'
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
-
+            buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
         }
     }
 
@@ -160,7 +165,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-    
+
     packagingOptions {
         exclude 'META-INF/core_release.kotlin_module'
     }
