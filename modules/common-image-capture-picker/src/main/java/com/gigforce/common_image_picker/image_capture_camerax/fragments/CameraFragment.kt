@@ -150,15 +150,18 @@ class CameraFragment : Fragment() {
 
                 // To ensure that size is set, initialize camera in the view's thread
                 view.post {
+                    lifecycleScope.launch(Dispatchers.Main) {
 
-                    try {
-                        initializeCamera()
-                    } catch (e: Exception) {
-                        CrashlyticsLogger.e(
-                            "CameraFragment",
-                            "initializeCamera",
-                            e
-                        )
+                        try {
+                            initializeCamera()
+                        } catch (e: Exception) {
+                            showToast("Unable to initialise camera")
+                            CrashlyticsLogger.e(
+                                    "CameraFragment",
+                                    "initializeCamera",
+                                    e
+                            )
+                        }
                     }
                 }
             }
@@ -202,7 +205,7 @@ class CameraFragment : Fragment() {
      * - Sets up the still image capture listeners
      */
     @SuppressLint("WrongConstant")
-    private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
+    private suspend fun initializeCamera() {
         // Open the selected camera
 
         try {
@@ -215,7 +218,7 @@ class CameraFragment : Fragment() {
             )
 
             showToast("Unable to open camera ..check for device permissions")
-            return@launch
+            return
         }
 
 

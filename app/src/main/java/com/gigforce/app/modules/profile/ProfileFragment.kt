@@ -139,24 +139,10 @@ class ProfileFragment : BaseFragment() {
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         dWidth = wm.defaultDisplay
         layout = inflateView(R.layout.fragment_profile_main_expanded, inflater, container)!!
-        layout.appbar.post(Runnable {
-            val heightPx: Int = dWidth.width * 1 / 3
-            setAppBarOffset(heightPx)
-
-            if (!viewModel.profileAppBarExpanded) {
-                appbar.setExpanded(true)
-                viewModel.profileAppBarExpanded = true
-            }
-        })
-
-        layout.profile_avatar.layoutParams.height = dWidth.width
-
-        layout.main_expanded_is_verified.setOnClickListener {
-            navigate(R.id.gigerVerificationFragment)
-        }
-
         return layout
     }
+
+
 
     private fun setAppBarOffset(offsetPx: Int) {
         val params = layout.appbar.layoutParams as CoordinatorLayout.LayoutParams
@@ -181,6 +167,23 @@ class ProfileFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        layout.appbar.post(Runnable {
+            val heightPx: Int = dWidth.width * 1 / 3
+            setAppBarOffset(heightPx)
+
+            if (!viewModel.profileAppBarExpanded) {
+                appbar.setExpanded(true)
+                viewModel.profileAppBarExpanded = true
+            }
+        })
+
+        layout.profile_avatar.layoutParams.height = dWidth.width
+        layout.main_expanded_is_verified.setOnClickListener {
+            navigate(R.id.gigerVerificationFragment)
+        }
+
+
 
         gigerVerificationViewModel.gigerVerificationStatus.observe(viewLifecycleOwner, Observer {
 
