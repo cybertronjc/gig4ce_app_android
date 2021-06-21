@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
-    private var userProfile: ProfileData? = null
+//    private var userProfile: ProfileData? = null
 
 
     init {
@@ -188,18 +188,18 @@ class LoginViewModel @Inject constructor(
         phoneNumber: String
     ) = viewModelScope.launch {
 
-        if (userProfile == null) {
-
-            val docRef = FirebaseFirestore
-                .getInstance()
-                .collection("Profiles")
-                .whereEqualTo("loginMobile", phoneNumber)
-                .getOrThrow()
-
-            if (docRef.size() > 0) {
-                userProfile = docRef.documents[0].toObject(ProfileData::class.java)
-            }
-        }
+//        if (userProfile == null) {
+//
+//            val docRef = FirebaseFirestore
+//                .getInstance()
+//                .collection("Profiles")
+//                .whereEqualTo("loginMobile", phoneNumber)
+//                .getOrThrow()
+//
+//            if (docRef.size() > 0) {
+//                userProfile = docRef.documents[0].toObject(ProfileData::class.java)
+//            }
+//        }
 
         val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
         signInWithPhoneAuthCredential(credential)
