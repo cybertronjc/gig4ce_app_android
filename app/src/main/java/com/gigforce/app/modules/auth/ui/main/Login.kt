@@ -87,7 +87,7 @@ class Login : BaseFragment() {
     ): View? {
         //this.setDarkStatusBarTheme(false);
 
-        return inflateView(com.gigforce.app.R.layout.login_frament, inflater, container)
+        return inflateView(R.layout.login_frament, inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,7 +96,7 @@ class Login : BaseFragment() {
 //            navigateWithAllPopupStack(R.id.authFlowFragment)
 //        } else {
 
-        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.SIGN_UP_LOADED, null))
+        eventTracker.pushEvent(TrackingEventArgs(AuthEvents.LOGIN_OR_SIGNUP_LOADED, null))
         viewModel.activity = this.requireActivity()
         invisible_edit_mobile.setText(mobile_number)
         populateMobileInEditTexts(mobile_number)
