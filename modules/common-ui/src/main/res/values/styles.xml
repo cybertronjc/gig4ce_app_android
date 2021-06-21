@@ -111,7 +111,7 @@
     <style name="TextAppearance.GigforceStyles.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">@font/lato</item>
         <item name="android:fontFamily">@font/lato</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.GigforceStyles.Body1" parent="TextAppearance.MaterialComponents.Body1">
@@ -157,6 +157,9 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="AppCardHeading1" parent="TextAppearance.GigforceStyles.Body2">
+        <item name="android:textColor">@color/app_card_heading_color1</item>
+    </style>
 
     <style name="GigforceTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -198,8 +201,12 @@
     </style>
 
     <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="fontFamily">@font/lato_bold</item>
     </style>
+
+
 
     <style name="CardSubtitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>

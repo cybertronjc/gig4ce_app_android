@@ -1283,6 +1283,7 @@ int color accent_material_dark 0x0
 int color accent_material_light 0x0
 int color androidx_core_ripple_material_light 0x0
 int color androidx_core_secondary_text_default_material_light 0x0
+int color app_card_heading_color1 0x0
 int color app_chip_bck_colors_2 0x0
 int color app_chip_bck_colors_ui 0x0
 int color app_chip_stroke_colors_2 0x0
@@ -4530,6 +4531,7 @@ int style Animation_Design_BottomSheetDialog 0x0
 int style Animation_MaterialComponents_BottomSheetDialog 0x0
 int style AppBarSubTitle 0x0
 int style AppBarTitle 0x0
+int style AppCardHeading1 0x0
 int style Base_AlertDialog_AppCompat 0x0
 int style Base_AlertDialog_AppCompat_Light 0x0
 int style Base_Animation_AppCompat_Dialog 0x0

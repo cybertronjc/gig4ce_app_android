@@ -1274,6 +1274,7 @@ color accent_material_dark
 color accent_material_light
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
+color app_card_heading_color1
 color app_chip_bck_colors_2
 color app_chip_bck_colors_ui
 color app_chip_stroke_colors_2
@@ -4027,6 +4028,7 @@ style Animation_Design_BottomSheetDialog
 style Animation_MaterialComponents_BottomSheetDialog
 style AppBarSubTitle
 style AppBarTitle
+style AppCardHeading1
 style AppTabLayout
 style AppTabTextAppearance
 style Base_AlertDialog_AppCompat
