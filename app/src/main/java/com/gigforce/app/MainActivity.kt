@@ -44,8 +44,10 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
@@ -63,14 +65,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     NavFragmentsData,
-    INavigationProvider
+    INavigationProvider, InstallStateUpdatedListener
 {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
     private var doubleBackToExitPressedOnce = false
     val MIXPANEL_TOKEN = "536f16151a9da631a385119be6510d56"
-    private var appUpdateManager: AppUpdateManager? = null
+    private lateinit var appUpdateManager: AppUpdateManager
     var currentPriority: Int? = 0
     private val firebaseRemoteConfig: FirebaseRemoteConfig by lazy {
         FirebaseRemoteConfig.getInstance()
@@ -329,7 +331,7 @@ class MainActivity : AppCompatActivity(),
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
 //        mixpanel?.flush();
-        appUpdateManager?.unregisterListener(listener)
+        appUpdateManager.unregisterListener(this)
 
     }
 
@@ -385,24 +387,17 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupFirebaseConfig(){
-        firebaseRemoteConfig.fetch(1200)
-            .addOnCompleteListener {
-                if (it.isSuccessful()) {
-                    firebaseRemoteConfig.activate()
-                    val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
-                    if (update_cancelled == true) runOnceADay() else checkforUpdate()
-                }
-            }
-    }
-
-    val listener = InstallStateUpdatedListener { state ->
-        if (state.installStatus() == InstallStatus.DOWNLOADED){
-            showToast("download complete", this)
-            currentPriority?.let {
-                if (currentPriority == 0) showRestartDialog() else restartAppUpdate()
-            }
-        } else if (state.installStatus() == InstallStatus.INSTALLED){
-            showToast("install complete", this)
+        val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
+        try {
+            Log.d("Update", "Data fetched from Remote Config")
+            //showToast("Data fetched from Remote Config", this)
+            val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
+            if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+            Log.d("Update", "Fetching error from Remote config")
+            //showToast("Fetching error from Remote config", this)
         }
     }
     private fun showRestartDialog() {
@@ -415,7 +410,8 @@ class MainActivity : AppCompatActivity(),
             object :
                 ConfirmationDialogOnClickListener {
                 override fun clickedOnYes(dialog: Dialog?) {
-                    restartAppUpdate()
+                    //restartAppUpdate()
+                    appUpdateManager?.completeUpdate()
                 }
                 override fun clickedOnNo(dialog: Dialog?) {
                     dialog?.dismiss()
@@ -424,50 +420,52 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun restartAppUpdate() {
-        val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
-        intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val intent = baseContext?.packageManager?.getLaunchIntentForPackage(baseContext.packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
 
-    private fun checkforUpdate() {
-        val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
+    private fun checkforUpdate(appUpdatePriority: String?) {
         val gson = GsonBuilder().create()
-        val versionUpdateInfo = gson.fromJson(appUpdatePriority, VersionUpdateInfo::class.java)
-        currentPriority = getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
-        if (currentPriority != -1) {
-            appUpdateManager?.appUpdateInfo?.addOnSuccessListener { appUpdateInfo ->
-                if ((appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                            || appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS)
-                    && currentPriority == 0 /* flexible priority */
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
-                ) {
-                    // Request the update.
-                    requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
-                    showToast(
-                        "Version code available ${appUpdateInfo.availableVersionCode()}",
-                        this
-                    )
-                    showToast("Requesting Flexible update priority: " + currentPriority, this)
+        appUpdatePriority?.let {
+            val versionUpdateInfo = gson.fromJson(it, VersionUpdateInfo::class.java)
+            currentPriority = getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
+            if (currentPriority != -1) {
+                appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                        if (currentPriority == 0 /* flexible priority */
+                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
 
-                } else if ((appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                            || appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS)
-                    && currentPriority == 1 /* immediate priority */
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                    //request for immediate update
-                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                    showToast(
-                        "Version code available ${appUpdateInfo.availableVersionCode()}",
-                        this
-                    )
-                    showToast("Requesting Immediate update priority: " + currentPriority, this)
-                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                            // Request the update.
+                            requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
+                            appUpdateManager.registerListener(this@MainActivity)
+                            showToast("Update Available", this)
+//                            showToast(
+//                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
+//                                    this
+//                            )
+//                            showToast("Requesting Flexible update priority: " + currentPriority, this)
+
+                        } else if (currentPriority == 1 /* immediate priority */
+                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                            //request for immediate update
+                            requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                            showToast("Update Available", this)
+//                            showToast(
+//                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
+//                                    this
+//                            )
+//                            showToast("Requesting Immediate update priority: " + currentPriority, this)
+                        }
+                    }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
                         showToast("Update not available", this)
                     }
                 }
-        }
-        else{
-            showToast("Latest version installed (firebase config)", this)
+            } else {
+                Log.d("Update", "Latest version installed")
+                //showToast("Latest version installed", this)
+            }
         }
     }
     fun getCurrentVersionCode(): Int? {
@@ -487,42 +485,50 @@ class MainActivity : AppCompatActivity(),
     }
     private fun requestUpdate(appUpdateInfo: AppUpdateInfo, updateType: Int) {
         try {
-            showToast("Start update intent", this)
+            //showToast("Start update intent", this)
+            Log.d("Update", "Start update intent")
             appUpdateManager?.startUpdateFlowForResult(
                 appUpdateInfo,
                 updateType, //  HERE specify the type of update flow you want
-                this,   //  the instance of an activity
+                    this@MainActivity,   //  the instance of an activity
                 UPDATE_REQUEST_CODE
             )
         }
         catch (e: java.lang.Exception){
             e.printStackTrace()
-            showToast("Start update intent error", this)
+            Log.d("Update", "Start update intent error")
+            //showToast("Start update intent error", this)
         }
 
     }
-    fun runOnceADay() {
+    fun runOnceADay(appUpdatePriority: String?) {
         val lastCheckedMillis = sharedPreAndCommonUtilInterface.getLong("once_a_day")
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
         val now = System.currentTimeMillis()
         val diffMillis = now - lastCheckedMillis
-        if (update_cancelled == true && (diffMillis >= 900000 * 1)) { // in 15 minutes
+        if (update_cancelled == true && (diffMillis >= 3600000 * 12)) { // in  12 hours
             sharedPreAndCommonUtilInterface.saveLong("once_a_day", now)
             //check for update
-            checkforUpdate()
+            checkforUpdate(appUpdatePriority)
         } else {
             showToast("You will be notified again in 15 minutes", this)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_REQUEST_CODE) {
             when (resultCode) {
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
                     //  handle user's approval }
-                    showToast("Update Approved by User", this)
+//                    if (currentPriority == 0){
+//                        showToast("Update Approved by User: Flexible", this)
+//                        showToast("We will notify you when the download is completed", this)
+//                    } else {
+//                        showToast("Update Approved by User: Immediate", this)
+//                    }
+
+
                 }
                 RESULT_CANCELED -> {
                     //  handle user's rejection
@@ -553,19 +559,20 @@ class MainActivity : AppCompatActivity(),
                         sharedPreAndCommonUtilInterface.saveDataBoolean("update_cancelled", true)
                     }
                 }
-                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+                RESULT_IN_APP_UPDATE_FAILED -> {
                     //if you want to request the update again just call checkUpdate()
                     Log.d("Update", "" + "Update Failure")
                     //  handle update failure
                     showToast("Update Failure Internal", this)
                 }
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        appUpdateManager?.registerListener(listener)
         appUpdateManager
             ?.appUpdateInfo
             ?.addOnSuccessListener { appUpdateInfo ->
@@ -573,21 +580,15 @@ class MainActivity : AppCompatActivity(),
                 // notify the user to complete the update.
                 if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                     showRestartDialog()
-                    showToast("On Resume Downloaded", this)
-                } else if (appUpdateInfo.updateAvailability()
-                    == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
+                    showToast("Update Downloaded", this)
+                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
                 ) {
-                    showToast("On Resume In Progress", this)
+                    showToast("Update download in progress", this)
                     // If an in-app update is already running, resume the update.
-                    appUpdateManager?.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        AppUpdateType.IMMEDIATE,
-                        this,
-                        UPDATE_REQUEST_CODE
-                    )
+                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                 }
                 else {
-                    showToast("On Resume" + "${appUpdateInfo.installStatus()}", this)
+                    //showToast("On Resume" + "${appUpdateInfo.installStatus()}", this)
                 }
             }
     }
@@ -622,6 +623,17 @@ class MainActivity : AppCompatActivity(),
 
     override fun getData(): Bundle {
         return bundle ?: Bundle()
+    }
+
+    override fun onStateUpdate(state: InstallState) {
+        if (state.installStatus() == InstallStatus.DOWNLOADED){
+            showToast("download completed", this)
+            showRestartDialog()
+            appUpdateManager?.unregisterListener(this)
+//            currentPriority?.let {
+//                if (currentPriority == 0) showRestartDialog() else restartAppUpdate()
+//            }
+        }
     }
 
 }
