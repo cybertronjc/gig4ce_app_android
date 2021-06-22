@@ -10,4 +10,5 @@ interface IBuildConfigVM {
     fun getApplicationID():String
     fun getSendSMSURL():String
     fun getGigersUnderTlUrl(): String
+    fun getUserRegisterInfoUrl() : String
 }

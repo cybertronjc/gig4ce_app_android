@@ -17,16 +17,30 @@ object LanguageEvents{
 
 
 object AuthEvents{
-    const val SIGN_UP_LOADED = "signup_loaded"
-    const val SIGN_UP_STARTED = "signup_started"
-    const val SIGN_UP_ERROR = "signup_error"
-    const val LOGIN_ERROR = "login_error"
-    const val SIGN_RESEND_OTP = "signup_resend_otp"
-    const val LOGIN_RESEND_OTP = "login_resend_otp"
-    const val SIGN_SUCCESS = "signup_success"
-    const val LOGIN_STARTED = "login_started"
-    const val LOGIN_SUCCESS = "login_success"
-    const val SIGN_OUT_SUCCESS = "signout_success"
 
+    const val LOGIN_OR_SIGNUP_LOADED = "login_or_signup_loaded"
+
+//    const val LOGIN_OR_SIGNUP_STARTED = "login_or_signup_started"
+//    const val LOGIN_OR_SIGNUP_ERROR = "login_or_signup_error"
+//
+//    const val LOGIN_OR_SIGNUP_RESEND_OTP = "login_or_signup_resend_otp"
+
+    const val SIGN_SUCCESS = "signup_success"
+    const val LOGIN_SUCCESS = "login_success"
+
+//    const val SIGN_UP_LOADED = "signup_loaded"
+//
+//
+
+    const val SIGN_UP_STARTED = "signup_started"
+    const val SIGN_RESEND_OTP = "signup_resend_otp"
+    const val SIGN_UP_ERROR = "signup_error"
+
+    const val LOGIN_STARTED = "login_started"
+    const val LOGIN_RESEND_OTP = "login_resend_otp"
+    const val LOGIN_ERROR = "login_error"
+
+
+    const val SIGN_OUT_SUCCESS = "signout_success"
     const val SIGN_UP_OTP_SCREEN_LOADED = "verify_otp_loaded"
 }

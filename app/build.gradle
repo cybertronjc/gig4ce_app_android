@@ -96,6 +96,7 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
             buildConfigField "String", 'MOENGAGE_KEY', '"FDSRKA48B5958ZF44VZYWYAR"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/check"'
         }
 
         /**
@@ -123,6 +124,7 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
         }
 
         staging {
@@ -146,6 +148,8 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
+
         }
     }
 

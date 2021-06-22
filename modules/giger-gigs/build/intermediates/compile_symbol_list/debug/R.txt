@@ -744,6 +744,24 @@ int attr maxLines 0x0
 int attr maxVelocity 0x0
 int attr maxWidth 0x0
 int attr maxWidthPct 0x0
+int attr mcv_allowClickDaysOutsideCurrentMonth 0x0
+int attr mcv_calendarMode 0x0
+int attr mcv_dateTextAppearance 0x0
+int attr mcv_firstDayOfWeek 0x0
+int attr mcv_headerTextAppearance 0x0
+int attr mcv_leftArrow 0x0
+int attr mcv_monthLabels 0x0
+int attr mcv_rightArrow 0x0
+int attr mcv_selectionColor 0x0
+int attr mcv_selectionMode 0x0
+int attr mcv_showOtherDates 0x0
+int attr mcv_showWeekDays 0x0
+int attr mcv_tileHeight 0x0
+int attr mcv_tileSize 0x0
+int attr mcv_tileWidth 0x0
+int attr mcv_titleAnimationOrientation 0x0
+int attr mcv_weekDayLabels 0x0
+int attr mcv_weekDayTextAppearance 0x0
 int attr measureWithLargestChild 0x0
 int attr menu 0x0
 int attr mimeType 0x0
@@ -1375,6 +1393,7 @@ int color light_grey 0x0
 int color light_pink 0x0
 int color lipstick 0x0
 int color lipstick_2 0x0
+int color lipstick_3 0x0
 int color lipstick_two 0x0
 int color material_blue_grey_800 0x0
 int color material_blue_grey_900 0x0
@@ -1410,6 +1429,8 @@ int color material_timepicker_button_stroke 0x0
 int color material_timepicker_clock_text_color 0x0
 int color material_timepicker_clockface 0x0
 int color material_timepicker_modebutton_tint 0x0
+int color mcv_text_date_dark 0x0
+int color mcv_text_date_light 0x0
 int color mtrl_bottom_nav_colored_item_tint 0x0
 int color mtrl_bottom_nav_colored_ripple_color 0x0
 int color mtrl_bottom_nav_item_tint 0x0
@@ -1777,6 +1798,8 @@ int dimen material_input_text_to_prefix_suffix_padding 0x0
 int dimen material_text_view_test_line_height 0x0
 int dimen material_text_view_test_line_height_override 0x0
 int dimen material_timepicker_dialog_buttons_margin_top 0x0
+int dimen mcv_arrow_margin 0x0
+int dimen mcv_arrow_padding 0x0
 int dimen minImageHeight 0x0
 int dimen minImageWidth 0x0
 int dimen mtrl_alert_dialog_background_inset_bottom 0x0
@@ -2404,7 +2427,10 @@ int drawable ic_baseline_play_circle_outline_24_ 0x0
 int drawable ic_baseline_share_24 0x0
 int drawable ic_calendar 0x0
 int drawable ic_calendar_ 0x0
+int drawable ic_calendar_black 0x0
 int drawable ic_call 0x0
+int drawable ic_call_doc_scheduler_2 0x0
+int drawable ic_call_drawable_2 0x0
 int drawable ic_call_giger_id 0x0
 int drawable ic_call_pink 0x0
 int drawable ic_camera_round 0x0
@@ -2476,9 +2502,12 @@ int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_star 0x0
 int drawable ic_status_pending 0x0
+int drawable ic_swipe_check_in_24 0x0
+int drawable ic_swipe_decline_24 0x0
 int drawable ic_three_dots 0x0
 int drawable ic_time_help_ 0x0
 int drawable ic_tip 0x0
+int drawable ic_user_2 0x0
 int drawable ic_warning 0x0
 int drawable ic_warning_ 0x0
 int drawable ic_warning_white 0x0
@@ -2497,6 +2526,8 @@ int drawable material_ic_keyboard_arrow_previous_black_24dp 0x0
 int drawable material_ic_keyboard_arrow_right_black_24dp 0x0
 int drawable material_ic_menu_arrow_down_black_24dp 0x0
 int drawable material_ic_menu_arrow_up_black_24dp 0x0
+int drawable mcv_action_next 0x0
+int drawable mcv_action_previous 0x0
 int drawable mtrl_dialog_background 0x0
 int drawable mtrl_dropdown_arrow 0x0
 int drawable mtrl_ic_arrow_drop_down 0x0
@@ -2535,6 +2566,13 @@ int drawable sl_favorite_24_dp 0x0
 int drawable slidetoact_animated_ic_check 0x0
 int drawable slidetoact_ic_arrow 0x0
 int drawable slidetoact_ic_check 0x0
+int drawable spinner_background_gig_attendance 0x0
+int drawable spinner_background_rectangle_round_grey 0x0
+int drawable status_absent_chip_background 0x0
+int drawable status_present_chip_background 0x0
+int drawable status_selected_border 0x0
+int drawable status_tab_indicator 0x0
+int drawable status_unselected_border 0x0
 int drawable test_custom_background 0x0
 int drawable toolbar_background 0x0
 int drawable toolbar_search_background 0x0
@@ -2686,6 +2724,8 @@ int id attendance_monthly_rv 0x0
 int id attendance_montly_progress_bar 0x0
 int id attendance_overview_layout 0x0
 int id attendance_present_chip 0x0
+int id attendance_recycler_view 0x0
+int id attendance_shimmer_container 0x0
 int id attendance_top_bar 0x0
 int id attendance_type_chipgroup 0x0
 int id auto 0x0
@@ -2701,6 +2741,7 @@ int id banner_image 0x0
 int id banner_root 0x0
 int id banner_title 0x0
 int id barrier 0x0
+int id barrier1 0x0
 int id baseline 0x0
 int id beginning 0x0
 int id blocking 0x0
@@ -2718,6 +2759,8 @@ int id browser_actions_menu_view 0x0
 int id bt_download_id_gig_page 0x0
 int id bt_download_id_gig_past_gigs 0x0
 int id btn_holder 0x0
+int id business_label 0x0
+int id business_spinner 0x0
 int id button 0x0
 int id buttonPanel 0x0
 int id buttonSpace 0x0
@@ -2731,6 +2774,7 @@ int id calendar_iv 0x0
 int id callCardView 0x0
 int id call_btn 0x0
 int id call_card_view 0x0
+int id call_giger_btn 0x0
 int id call_tv 0x0
 int id camera_layout 0x0
 int id camera_permission_image_view 0x0
@@ -2761,12 +2805,14 @@ int id checkOutIV 0x0
 int id check_in_label 0x0
 int id checkbox 0x0
 int id checked 0x0
+int id checkin_image 0x0
 int id checkin_time_tv 0x0
 int id chip 0x0
 int id chip1 0x0
 int id chip2 0x0
 int id chip3 0x0
 int id chip_group 0x0
+int id chip_like_shimmer_controller 0x0
 int id chronometer 0x0
 int id circle_center 0x0
 int id circular 0x0
@@ -2834,6 +2880,7 @@ int id cv_scroll_to_top_gig_hist 0x0
 int id cv_top 0x0
 int id dark 0x0
 int id dash 0x0
+int id dataBinding 0x0
 int id dateIV 0x0
 int id dateTV 0x0
 int id dateYearTV 0x0
@@ -2845,6 +2892,7 @@ int id decelerate 0x0
 int id decelerateAndComplete 0x0
 int id declineGigLabel 0x0
 int id declineGigMainLayout 0x0
+int id decline_image 0x0
 int id decline_slider_btn 0x0
 int id decor_content_parent 0x0
 int id default_activity_button 0x0
@@ -2894,6 +2942,7 @@ int id endToStart 0x0
 int id end_padder 0x0
 int id enterAlways 0x0
 int id enterAlwaysCollapsed 0x0
+int id error_info_layout 0x0
 int id estimateTimeToReachTV 0x0
 int id exitUntilCollapsed 0x0
 int id exo_ad_overlay 0x0
@@ -2945,6 +2994,7 @@ int id fragment_container 0x0
 int id fragment_container_view_tag 0x0
 int id fragment_phone 0x0
 int id fragment_register_email 0x0
+int id friday 0x0
 int id fullMapAddresLabel 0x0
 int id fullMapAddresTV 0x0
 int id gallery_layout 0x0
@@ -3028,6 +3078,8 @@ int id gig_type 0x0
 int id gig_type_iv 0x0
 int id gig_type_label 0x0
 int id gig_type_layout 0x0
+int id gigers_under_manager_main_error 0x0
+int id gigers_under_manager_main_layout 0x0
 int id gigs_recycler_view 0x0
 int id glide_custom_view_target_tag 0x0
 int id gone 0x0
@@ -3138,6 +3190,7 @@ int id mapCardView 0x0
 int id mapView 0x0
 int id margin_8 0x0
 int id masked 0x0
+int id match_parent 0x0
 int id material_clock_display 0x0
 int id material_clock_face 0x0
 int id material_clock_hand 0x0
@@ -3157,6 +3210,7 @@ int id material_timepicker_mode_button 0x0
 int id material_timepicker_ok_button 0x0
 int id material_timepicker_view 0x0
 int id material_value_index 0x0
+int id mcv_pager 0x0
 int id media_actions 0x0
 int id menu_crop 0x0
 int id menu_loader 0x0
@@ -3172,7 +3226,10 @@ int id modal_content_root 0x0
 int id modal_root 0x0
 int id module_completed_iv 0x0
 int id module_completed_perc_tv 0x0
+int id monday 0x0
+int id month 0x0
 int id month_grid 0x0
+int id month_name 0x0
 int id month_navigation_bar 0x0
 int id month_navigation_fragment_toggle 0x0
 int id month_navigation_next 0x0
@@ -3202,6 +3259,7 @@ int id mtrl_picker_text_input_range_end 0x0
 int id mtrl_picker_text_input_range_start 0x0
 int id mtrl_picker_title_text 0x0
 int id mtrl_view_tag_bottom_padding 0x0
+int id multiple 0x0
 int id multiply 0x0
 int id myp_month 0x0
 int id myp_year 0x0
@@ -3212,6 +3270,7 @@ int id nav_host_fragment_container 0x0
 int id navigateTV 0x0
 int id navigation_header_container 0x0
 int id never 0x0
+int id next 0x0
 int id no_gigs_layout 0x0
 int id none 0x0
 int id normal 0x0
@@ -3223,6 +3282,8 @@ int id notification_main_column_container 0x0
 int id off 0x0
 int id okay_btn 0x0
 int id on 0x0
+int id onAttachStateChangeListener 0x0
+int id onDateChanged 0x0
 int id option_menu_iv 0x0
 int id other_options_recycler_view 0x0
 int id outline 0x0
@@ -3282,6 +3343,7 @@ int id presentGigcheckInIV 0x0
 int id presentGigpunchInTimeTV 0x0
 int id presentGigpunchOutTimeTV 0x0
 int id presentOrFutureGigControls 0x0
+int id previous 0x0
 int id primary_action 0x0
 int id primary_button 0x0
 int id processingLabel 0x0
@@ -3308,6 +3370,7 @@ int id punch_out_time_tv 0x0
 int id punch_out_tv 0x0
 int id radial 0x0
 int id radio 0x0
+int id range 0x0
 int id ratingBar 0x0
 int id ratingMainLayout 0x0
 int id rating_star_iv 0x0
@@ -3355,6 +3418,7 @@ int id row_index_key 0x0
 int id rv_gigs_gig_history 0x0
 int id rv_on_going_gigs_gig_hist 0x0
 int id satellite 0x0
+int id saturday 0x0
 int id save_image_matrix 0x0
 int id save_non_transition_alpha 0x0
 int id save_overlay_view 0x0
@@ -3390,6 +3454,7 @@ int id selectRadioButton 0x0
 int id select_date_layout 0x0
 int id select_dialog_listview 0x0
 int id selected 0x0
+int id selected_slot_tv 0x0
 int id selection_type 0x0
 int id send_code 0x0
 int id send_sms_tos 0x0
@@ -3413,6 +3478,9 @@ int id separator_vertical_2 0x0
 int id sheetEdge 0x0
 int id shiftIconIV 0x0
 int id shiftTV 0x0
+int id shift_label 0x0
+int id shift_spinner 0x0
+int id shift_time_tv 0x0
 int id shimmer_card 0x0
 int id shimmer_controller 0x0
 int id shortcut 0x0
@@ -3424,7 +3492,11 @@ int id show_pic 0x0
 int id sign_in_email_sent_header_text 0x0
 int id sign_in_email_sent_text 0x0
 int id sin 0x0
+int id single 0x0
 int id slide 0x0
+int id slot_calendar 0x0
+int id slot_container 0x0
+int id slot_label 0x0
 int id smallLabel 0x0
 int id snackbar_action 0x0
 int id snackbar_text 0x0
@@ -3453,7 +3525,13 @@ int id staticLayout 0x0
 int id staticPostLayout 0x0
 int id status_bar_latest_event_content 0x0
 int id status_card_view 0x0
+int id status_container 0x0
+int id status_count_tv 0x0
 int id status_iv 0x0
+int id status_layout 0x0
+int id status_shimmer_container 0x0
+int id status_tab_layout 0x0
+int id status_tv 0x0
 int id statusbarutil_fake_status_bar_view 0x0
 int id statusbarutil_translucent_view 0x0
 int id stop 0x0
@@ -3464,8 +3542,14 @@ int id submitBtn 0x0
 int id submit_area 0x0
 int id submit_confirmation_code 0x0
 int id subtitle 0x0
+int id sunday 0x0
 int id surface_view 0x0
 int id sv_giger_id 0x0
+int id swipe_bck_left_half 0x0
+int id swipe_bck_right_half 0x0
+int id swipe_check_in_label 0x0
+int id swipe_decline_label 0x0
+int id swipe_label 0x0
 int id tabMode 0x0
 int id tag_accessibility_actions 0x0
 int id tag_accessibility_clickable_spans 0x0
@@ -3500,6 +3584,7 @@ int id textView21 0x0
 int id textView3 0x0
 int id textView41 0x0
 int id textView67 0x0
+int id textWatcher 0x0
 int id text_input_end_icon 0x0
 int id text_input_error_icon 0x0
 int id text_input_password_toggle 0x0
@@ -3516,6 +3601,7 @@ int id textinput_suffix_text 0x0
 int id texture_view 0x0
 int id textview 0x0
 int id thumbnail 0x0
+int id thursday 0x0
 int id ticker 0x0
 int id time 0x0
 int id time_layout 0x0
@@ -3558,6 +3644,7 @@ int id trimModeLine 0x0
 int id trouble_signing_in 0x0
 int id trouble_signing_in_possible_fixes 0x0
 int id try_later_btn 0x0
+int id tuesday 0x0
 int id tv_allow_access 0x0
 int id tv_brand_name_giger_id 0x0
 int id tv_completed_gig_hist 0x0
@@ -3615,8 +3702,11 @@ int id userReceivedRatingAttachmentsContainer 0x0
 int id userReceivedRatingBar 0x0
 int id userReceivedRatingFeedbackTV 0x0
 int id userReceviedFeedbackRatingLayout 0x0
+int id user_attendance_status_textview 0x0
+int id user_designation_tv 0x0
 int id user_image_iv 0x0
 int id user_name_tv 0x0
+int id user_phone_number 0x0
 int id usersFeedbackTV 0x0
 int id v_car_left_bg_rv_gig_hist 0x0
 int id verification_status_cardview 0x0
@@ -3627,8 +3717,10 @@ int id videos_list 0x0
 int id view4 0x0
 int id view40 0x0
 int id view41 0x0
+int id view_background 0x0
 int id view_bottom 0x0
 int id view_finder 0x0
+int id view_foreground 0x0
 int id view_middle_rv_gig_hist 0x0
 int id view_offset_helper 0x0
 int id view_one 0x0
@@ -3642,6 +3734,8 @@ int id visible_removing_fragment_view_tag 0x0
 int id wageIV 0x0
 int id wageTV 0x0
 int id warningIconIV 0x0
+int id wednesday 0x0
+int id week 0x0
 int id welcome_back_email_link_body 0x0
 int id welcome_back_idp_button 0x0
 int id welcome_back_idp_prompt 0x0
@@ -3739,6 +3833,7 @@ int layout activity_photo_crop 0x0
 int layout banner 0x0
 int layout browser_actions_context_menu_page 0x0
 int layout browser_actions_context_menu_row 0x0
+int layout calendar_view 0x0
 int layout card 0x0
 int layout card_landscape_inner 0x0
 int layout card_portrait_inner 0x0
@@ -3812,6 +3907,9 @@ int layout fragment_gig_regularise_attendance 0x0
 int layout fragment_gig_regularise_attendance_main 0x0
 int layout fragment_gig_single_day_attendance_details 0x0
 int layout fragment_gig_single_day_attendance_details_main 0x0
+int layout fragment_giger_attendance_under_manager 0x0
+int layout fragment_giger_under_managers_attendance 0x0
+int layout fragment_giger_under_managers_attendance_main 0x0
 int layout fragment_gigs_list_for_decline 0x0
 int layout fragment_image_viewer 0x0
 int layout fragment_main_learning_role_based_learnings 0x0
@@ -3934,10 +4032,14 @@ int layout pop_up_menu_tv 0x0
 int layout recycler_item_gig_attendance 0x0
 int layout recycler_item_gig_people_to_expect 0x0
 int layout recycler_item_other_option 0x0
+int layout recycler_row_attendance_status 0x0
+int layout recycler_row_business_name_shift_time 0x0
 int layout recycler_row_gig_list_for_decline 0x0
+int layout recycler_row_giger_attendance 0x0
 int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
 int layout select_dialog_singlechoice_material 0x0
+int layout shimmer_chip_like_layout 0x0
 int layout shimmer_data_layout 0x0
 int layout support_simple_spinner_dropdown_item 0x0
 int layout test_action_chip 0x0
@@ -4016,6 +4118,7 @@ int string appbar_scrolling_view_behavior 0x0
 int string back_button 0x0
 int string bottom_sheet_behavior 0x0
 int string bottomsheet_action_expand_halfway 0x0
+int string calendar 0x0
 int string call 0x0
 int string cancelling_out_a_gig 0x0
 int string card_content_descriptor 0x0
@@ -4187,6 +4290,9 @@ int string fui_welcome_back_idp_prompt 0x0
 int string fui_welcome_back_password_prompt_body 0x0
 int string gig_id 0x0
 int string gig_location 0x0
+int string giger_can_t_reach_the_location_today 0x0
+int string giger_have_some_personal_work 0x0
+int string giger_on_sick_leave_today 0x0
 int string giger_since 0x0
 int string gigforce_pvt_ltd 0x0
 int string github_client_id 0x0
@@ -4195,6 +4301,7 @@ int string hello_blank_fragment 0x0
 int string hide_bottom_view_on_scroll_behavior 0x0
 int string hours 0x0
 int string i_can_t_reach_the_location_today 0x0
+int string i_have_some_personal_work 0x0
 int string i_m_on_sick_leave_today 0x0
 int string icon_content_description 0x0
 int string issued_on 0x0
@@ -4256,6 +4363,7 @@ int string mtrl_picker_toggle_to_year_selection 0x0
 int string my_gigs 0x0
 int string nav_app_bar_navigate_up_description 0x0
 int string nav_app_bar_open_drawer_description 0x0
+int string next 0x0
 int string no_gigs_present 0x0
 int string no_more_gig 0x0
 int string no_on_going_gigs 0x0
@@ -4276,6 +4384,7 @@ int string please_let_us_know_more_about_your_gig 0x0
 int string please_let_us_know_your_reason_why_are_you_declining_this_gig 0x0
 int string plus_see_less 0x0
 int string plus_see_more 0x0
+int string previous 0x0
 int string profile_image_gig_history 0x0
 int string punch_in 0x0
 int string punch_out 0x0
@@ -4287,6 +4396,7 @@ int string reason 0x0
 int string search_menu_title 0x0
 int string status_bar_notification_info_overflow 0x0
 int string submit_all_caps 0x0
+int string this_gig_is_unsuitable_for_giger 0x0
 int string this_gig_is_unsuitable_for_me 0x0
 int string title_settings_dialog 0x0
 int string twitter_consumer_key 0x0
@@ -4822,6 +4932,9 @@ int style TextAppearance_GigforceStyles_Headline6 0x0
 int style TextAppearance_GigforceStyles_Overline 0x0
 int style TextAppearance_GigforceStyles_Subtitle1 0x0
 int style TextAppearance_GigforceStyles_Subtitle2 0x0
+int style TextAppearance_MaterialCalendarWidget_Date 0x0
+int style TextAppearance_MaterialCalendarWidget_Header 0x0
+int style TextAppearance_MaterialCalendarWidget_WeekDay 0x0
 int style TextAppearance_MaterialComponents_Badge 0x0
 int style TextAppearance_MaterialComponents_Body1 0x0
 int style TextAppearance_MaterialComponents_Body2 0x0
@@ -6375,6 +6488,25 @@ int styleable MaterialCalendarItem_itemShapeAppearanceOverlay 6
 int styleable MaterialCalendarItem_itemStrokeColor 7
 int styleable MaterialCalendarItem_itemStrokeWidth 8
 int styleable MaterialCalendarItem_itemTextColor 9
+int[] styleable MaterialCalendarView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable MaterialCalendarView_mcv_allowClickDaysOutsideCurrentMonth 0
+int styleable MaterialCalendarView_mcv_calendarMode 1
+int styleable MaterialCalendarView_mcv_dateTextAppearance 2
+int styleable MaterialCalendarView_mcv_firstDayOfWeek 3
+int styleable MaterialCalendarView_mcv_headerTextAppearance 4
+int styleable MaterialCalendarView_mcv_leftArrow 5
+int styleable MaterialCalendarView_mcv_monthLabels 6
+int styleable MaterialCalendarView_mcv_rightArrow 7
+int styleable MaterialCalendarView_mcv_selectionColor 8
+int styleable MaterialCalendarView_mcv_selectionMode 9
+int styleable MaterialCalendarView_mcv_showOtherDates 10
+int styleable MaterialCalendarView_mcv_showWeekDays 11
+int styleable MaterialCalendarView_mcv_tileHeight 12
+int styleable MaterialCalendarView_mcv_tileSize 13
+int styleable MaterialCalendarView_mcv_tileWidth 14
+int styleable MaterialCalendarView_mcv_titleAnimationOrientation 15
+int styleable MaterialCalendarView_mcv_weekDayLabels 16
+int styleable MaterialCalendarView_mcv_weekDayTextAppearance 17
 int[] styleable MaterialCardView { 0x10101e5, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable MaterialCardView_android_checkable 0
 int styleable MaterialCardView_cardForegroundColor 1
