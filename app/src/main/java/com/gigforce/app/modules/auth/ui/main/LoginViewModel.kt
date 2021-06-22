@@ -174,7 +174,7 @@ class LoginViewModel @Inject constructor(
 //
 //        PhoneAuthProvider.verifyPhoneNumber(phoneNumberOptions)
 
-                userAuthStatus = userAuthRepo.getUserAuthStatus(phoneNumber)
+                userAuthStatus = userAuthRepo.getUserAuthStatus(phoneNumber.substring(3,phoneNumber.length))
                 if (userAuthStatus?.status == true) {
 
                     if (userAuthStatus?.isUserRegistered == true) {
@@ -246,7 +246,7 @@ class LoginViewModel @Inject constructor(
                                         props = null
                                 )
                         )
-                        //
+                        updateRegisterStatusToDB()
                     } else {
                         checkIfSignInOrSignup() // User can be enrolled by ambassador or by using portal. so need to get detail from profile collection
                     }
@@ -260,6 +260,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun checkIfSignInOrSignup() {
+
         FirebaseAuth.getInstance().currentUser?.let {
             FirebaseFirestore
                     .getInstance()
@@ -293,7 +294,7 @@ class LoginViewModel @Inject constructor(
                                             props = null
                                     )
                             )
-                            //code for updating register status
+                            updateRegisterStatusToDB()
 
                         }
                     }.addOnFailureListener { exception ->

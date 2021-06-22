@@ -17,7 +17,7 @@ class UserAuthRepo(private val iBuildConfigVM: IBuildConfigVM) {
         }
         else{
             FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method ${userAuthStatus.message()}")
-            throw Exception("Issue in Authentication result")
+            throw Exception("Issue in Authentication result ${userAuthStatus.message()}")
         }
     }
 }
