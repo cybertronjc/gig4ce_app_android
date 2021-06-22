@@ -335,12 +335,14 @@ class VerifyOTP : BaseFragment() {
     }
 
     private fun showWrongOTPLayout(show: Boolean) {
-        if (show) {
-            cvotpwrong.visibility = View.VISIBLE
-
-        } else {
-            cvotpwrong.visibility = View.INVISIBLE
-
+        try {
+            if (show) {
+                cvotpwrong.visibility = View.VISIBLE
+            } else {
+                cvotpwrong.visibility = View.INVISIBLE
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
         }
     }
 
