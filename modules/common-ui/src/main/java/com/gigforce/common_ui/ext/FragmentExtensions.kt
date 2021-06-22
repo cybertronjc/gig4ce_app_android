@@ -15,7 +15,7 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 
 fun Fragment.showToast(string: String) {
-    Toast.makeText(this.context, string, Toast.LENGTH_SHORT).show()
+    Toast.makeText(requireContext(), string, Toast.LENGTH_SHORT).show()
 }
 
 fun Fragment.startShimmer(
