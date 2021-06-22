@@ -68,8 +68,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.landingscreen_fragment.*
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class LandingScreenFragment : Fragment(){
+class LandingScreenFragment : Fragment() {
     companion object {
         fun newInstance() = LandingScreenFragment()
         private const val INTENT_EXTRA_SCREEN = "scrren"
@@ -102,6 +103,7 @@ class LandingScreenFragment : Fragment(){
     private val learningViewModel: LearningViewModel by viewModels()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private val chatHeadersViewModel: ChatHeadersViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,7 +138,8 @@ class LandingScreenFragment : Fragment(){
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
-        checkforForceupdate()
+        //checkforForceupdate()
+
 
 //        checkforLanguagedSelectedForLastLogin()
         exploreByIndustryLayout?.let {
@@ -160,6 +163,7 @@ class LandingScreenFragment : Fragment(){
 //        chat_icon_iv.performClick()
 
     }
+
 
 //    private fun checkForDeepLink() {
 //        if (navFragmentsData?.getData()
@@ -198,7 +202,6 @@ class LandingScreenFragment : Fragment(){
 //
 //        }
 //    }
-
 
     private fun checkforForceupdate() {
         ConfigRepository().getForceUpdateCurrentVersion(object :
@@ -374,7 +377,7 @@ class LandingScreenFragment : Fragment(){
             val profile: ProfileData = profileObs
 
             displayImage(profile.profileAvatarName)
-            if (profile.name != null && !profile.name.equals("")){
+            if (profile.name != null && !profile.name.equals("")) {
                 profile_name.text = profile.name
 
                 //setting user's name to mixpanel
@@ -884,17 +887,6 @@ class LandingScreenFragment : Fragment(){
         learningViewModel.getRoleBasedCourses()
     }
 
-    override fun onResume() {
-        super.onResume()
-        StatusBarUtil.setColorNoTranslucent(
-            requireActivity(), ResourcesCompat.getColor(
-                resources,
-                android.R.color.white,
-                null
-            )
-        )
-    }
-
     private fun showLearningAsLoading() {
         learning_cl.visible()
         learning_rv.gone()
@@ -1245,20 +1237,14 @@ class LandingScreenFragment : Fragment(){
         }
     }
 
-//    override fun onCardSelected(any: Any) {
-//        var id = (any as JobProfile).id
-//        Log.d("cardId", id)
-////        navigate(
-////                R.id.fragment_client_activation,
-////                bundleOf(StringConstants.JOB_PROFILE_ID.value to id)
-////        )
-//        navigation.navigateTo("client_activation",bundleOf(StringConstants.JOB_PROFILE_ID.value to id) )
-//    }
-//
-//    override fun onSeeMoreSelected(any: Any) {
-////        navigate(
-////                R.id.clientActiExploreList,
-////        )
-//        navigation.navigateTo("client_activation/gig_detail")
-//    }
+    override fun onResume() {
+        super.onResume()
+        StatusBarUtil.setColorNoTranslucent(
+            requireActivity(), ResourcesCompat.getColor(
+                resources,
+                android.R.color.white,
+                null
+            )
+        )
+    }
 }
