@@ -51,7 +51,6 @@
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/lato"
             android:letterSpacing="0"
-            android:text="@string/please_let_us_know_your_reason_why_are_you_declining_this_gig"
             android:textColor="#313131"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/titleLayout" />

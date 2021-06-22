@@ -20,7 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance.*
 import kotlinx.android.synthetic.main.fragment_gig_regularise_attendance_main.*
 import java.text.SimpleDateFormat
@@ -131,13 +130,9 @@ class GigRegulariseAttendanceFragment : Fragment() {
     }
 
     private fun initView() {
-        regularise_slider_btn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
-                    submitRegularisationRequest()
-                }
-            }
+        regularise_slider_btn.setOnClickListener {
+            submitRegularisationRequest()
+        }
 
         punch_in_time_tv.setOnClickListener {
             punchInTimePicker.show()
@@ -209,7 +204,6 @@ class GigRegulariseAttendanceFragment : Fragment() {
     private fun errorInSubmittingRegularisationRequest(error: String) {
         regularise_details_progress_bar.gone()
         regularise_main_layout.visible()
-        regularise_slider_btn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Alert")
@@ -228,7 +222,6 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
                 }.show()
 
-            regularise_slider_btn.resetSlider()
             return
         }
 
@@ -240,7 +233,6 @@ class GigRegulariseAttendanceFragment : Fragment() {
 
                 }.show()
 
-            regularise_slider_btn.resetSlider()
             return
         }
 
@@ -254,7 +246,6 @@ class GigRegulariseAttendanceFragment : Fragment() {
                 .setPositiveButton(R.string.okay_text) { _, _ ->
                 }.show()
 
-            regularise_slider_btn.resetSlider()
             return
         }
 

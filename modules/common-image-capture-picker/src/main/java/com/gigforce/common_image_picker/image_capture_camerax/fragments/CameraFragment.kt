@@ -253,33 +253,42 @@ class CameraFragment : Fragment() {
 
             // Perform I/O heavy operations in a different scope
             lifecycleScope.launch(Dispatchers.IO) {
-                takePhoto().use { result ->
-                    Log.d(TAG, "Result received: $result")
 
-                    // Save the result to disk
-                    val output = saveResult(result)
-                    Log.d(TAG, "Image saved: ${output.absolutePath}")
+                try {
 
-                    // If the result is a JPEG file, update EXIF metadata with orientation info
-                    if (output.extension == "jpg") {
-                        val exif = ExifInterface(output.absolutePath)
-                        exif.setAttribute(
-                            ExifInterface.TAG_ORIENTATION, result.orientation.toString()
-                        )
-                        exif.saveAttributes()
-                        Log.d(TAG, "EXIF metadata saved: ${output.absolutePath}")
+
+                    takePhoto().use { result ->
+                        Log.d(TAG, "Result received: $result")
+
+                        // Save the result to disk
+                        val output = saveResult(result)
+                        Log.d(TAG, "Image saved: ${output.absolutePath}")
+
+                        // If the result is a JPEG file, update EXIF metadata with orientation info
+                        if (output.extension == "jpg") {
+                            val exif = ExifInterface(output.absolutePath)
+                            exif.setAttribute(
+                                ExifInterface.TAG_ORIENTATION, result.orientation.toString()
+                            )
+                            exif.saveAttributes()
+                            Log.d(TAG, "EXIF metadata saved: ${output.absolutePath}")
+                        }
+
+                        // Display the photo taken to user
+                        lifecycleScope.launch(Dispatchers.Main) {
+
+                            sharedCameraViewModel.imageCapturedOpenImageViewer(
+                                output,
+                                result.orientation,
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && result.format == ImageFormat.DEPTH_JPEG
+                            )
+                        }
                     }
-
-                    // Display the photo taken to user
-                    lifecycleScope.launch(Dispatchers.Main) {
-
-                        sharedCameraViewModel.imageCapturedOpenImageViewer(
-                            output,
-                            result.orientation,
-                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && result.format == ImageFormat.DEPTH_JPEG
-                        )
-                    }
+                } catch (e: Exception){
+                    showToast("unable to capture photo")
+                    CrashlyticsLogger.e(TAG,"capturing image",e)
                 }
+
 
                 // Re-enable click listener after photo is taken
                 it.post { it.isEnabled = true }
@@ -401,8 +410,7 @@ class CameraFragment : Fragment() {
 
                         // Dequeue images while timestamps don't match
                         val image = imageQueue.take()
-                        // TODO(owahltinez): b/142011420
-                        // if (image.timestamp != resultTimestamp) continue
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                             image.format != ImageFormat.DEPTH_JPEG &&
                             image.timestamp != resultTimestamp
