@@ -1409,6 +1409,7 @@ color light_grey
 color light_pink
 color lipstick
 color lipstick_2
+color lipstick_3
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -2418,6 +2419,8 @@ drawable ic_calendar_
 drawable ic_calendar_black
 drawable ic_calendar_month
 drawable ic_calendar_small
+drawable ic_call_doc_scheduler_2
+drawable ic_call_drawable_2
 drawable ic_chat
 drawable ic_check
 drawable ic_clock_black_24dp
@@ -2467,6 +2470,7 @@ drawable ic_tip
 drawable ic_undraw_taking_selfie_lbo_7
 drawable ic_undraw_task_31_wc
 drawable ic_user
+drawable ic_user_2
 drawable ic_user_icon
 drawable ic_video_round
 drawable image_placeholder
@@ -2513,6 +2517,7 @@ drawable shape_circle_lipstick
 drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
+drawable spinner_background_rectangle_round_grey
 drawable test_custom_background
 drawable toolbar_background
 drawable toolbar_bg_client_activation
@@ -2799,6 +2804,7 @@ id chip1
 id chip2
 id chip3
 id chip_group
+id chip_like_shimmer_controller
 id chronometer
 id cifLabel
 id cifNumberET
@@ -3804,6 +3810,7 @@ layout pop_up_menu_tv
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout shimmer_chip_like_layout
 layout shimmer_data_layout
 layout support_simple_spinner_dropdown_item
 layout test_action_chip

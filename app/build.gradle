@@ -81,8 +81,8 @@ android {
 
             applicationId "com.gigforce.app"
             resValue "string", "app_name", "Gigforce"
-            versionCode 115
-            versionName "1.30.8"
+            versionCode 119
+            versionName "1.31.0"
             buildConfigField "String", 'REFERRAL_BASE_URL', '"https://gig4ce.page.link/"'
             buildConfigField "String", 'GENERATE_PAYSLIP_URL', '"https://45nydq0i5g.execute-api.ap-south-1.amazonaws.com/default/get-or-create-payment-advice-prod"'
             buildConfigField "String", 'DRIVING_CERTIFICATE_URL', '"https://d1rdwfmrsl.execute-api.ap-south-1.amazonaws.com/default/"'
@@ -96,6 +96,7 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"536f16151a9da631a385119be6510d56"'
             buildConfigField "String", 'MOENGAGE_KEY', '"FDSRKA48B5958ZF44VZYWYAR"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/prod/auth/check"'
         }
 
         /**
@@ -123,6 +124,7 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
         }
 
         staging {
@@ -146,6 +148,8 @@ android {
             buildConfigField "String", 'MIX_PANEL_KEY', '"8f3f72753f8ead04f824d65eecd8e95e"'
             buildConfigField "String", 'MOENGAGE_KEY', '"L991NPOGW0FVJBN6C2FN3KS5"'
             buildConfigField "String", 'GET_GIGER_UNDER_TL_ATTENDANCE_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/gigs/tlwise"'
+            buildConfigField "String", 'GET_USER_REGISTER_INFO_URL', '"https://dk2gichyyc.execute-api.ap-south-1.amazonaws.com/dev/auth/check"'
+
         }
     }
 
@@ -273,8 +277,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:4.3.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.1'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
     implementation 'com.google.firebase:firebase-functions:19.1.0'
 

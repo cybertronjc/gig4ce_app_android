@@ -466,6 +466,14 @@ class PlayVideoDialogFragment :
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             super.onPlayerStateChanged(playWhenReady, playbackState)
 
+            try {
+                setPlayerViewScreen(playbackState, playWhenReady)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        private fun setPlayerViewScreen(playbackState: Int, playWhenReady: Boolean) {
             if (playbackState == Player.STATE_IDLE || !playWhenReady) {
                 playerView.keepScreenOn = false
             } else if (playbackState == Player.STATE_ENDED) {
@@ -482,16 +490,16 @@ class PlayVideoDialogFragment :
                     Handler().postDelayed({
                         if (shouldShowFeedbackDialog) {
                             RateLessonDialogFragment.launch(
-                                childFragmentManager,
-                                this@PlayVideoDialogFragment,
-                                mModuleId,
-                                mLessonId
+                                    childFragmentManager,
+                                    this@PlayVideoDialogFragment,
+                                    mModuleId,
+                                    mLessonId
                             )
                         } else {
                             initShowLessCompDialog()
                             viewModel.markVideoAsComplete(
-                                moduleId = mModuleId,
-                                lessonId = mLessonId
+                                    moduleId = mModuleId,
+                                    lessonId = mLessonId
                             )
                         }
                     }, 300)

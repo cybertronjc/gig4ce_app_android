@@ -40,5 +40,13 @@
     <string name="gigforce_pvt_ltd">Gigforce Pvt. Ltd.</string>
     <string name="valid_upto">Valid Upto :</string>
     <string name="issued_on">Issued On</string>
+    <string name="giger_on_sick_leave_today">Giger on sick leave.</string>
+    <string name="giger_can_t_reach_the_location_today">Giger can’t reach the location.</string>
+    <string name="this_gig_is_unsuitable_for_giger">This gig is unsuitable for giger.</string>
+    <string name="i_have_some_personal_work">I have some personal work.</string>
+    <string name="giger_have_some_personal_work">Giger has some personal work.</string>
+    <string name="please_let_us_know_your_reason_why_giger_declining_this_gig">Please let us know the reason, why are you declining this gig.</string>
+
+
 
 </resources>

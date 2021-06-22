@@ -7,9 +7,11 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 
 interface INavigation {
+    fun getNavController(): NavController
     fun navigateTo(dest:String, args: Bundle? = null, navOptions: NavOptions? = null)
     fun popBackStack()
     fun popBackStack(des: String, inclusive: Boolean = true)

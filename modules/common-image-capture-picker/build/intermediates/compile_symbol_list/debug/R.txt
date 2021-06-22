@@ -1297,6 +1297,7 @@ int color light_blue 0x0
 int color light_pink 0x0
 int color lipstick 0x0
 int color lipstick_2 0x0
+int color lipstick_3 0x0
 int color material_blue_grey_800 0x0
 int color material_blue_grey_900 0x0
 int color material_blue_grey_950 0x0
@@ -2269,6 +2270,9 @@ int drawable ic_arrow_back_24 0x0
 int drawable ic_arrow_back_white 0x0
 int drawable ic_arrow_forward 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
+int drawable ic_calendar_black 0x0
+int drawable ic_call_doc_scheduler_2 0x0
+int drawable ic_call_drawable_2 0x0
 int drawable ic_camera_round 0x0
 int drawable ic_chat 0x0
 int drawable ic_clock_black_24dp 0x0
@@ -2299,6 +2303,7 @@ int drawable ic_set_preference 0x0
 int drawable ic_three_dots 0x0
 int drawable ic_time_help_ 0x0
 int drawable ic_tip 0x0
+int drawable ic_user_2 0x0
 int drawable image_placeholder 0x0
 int drawable material_cursor_drawable 0x0
 int drawable material_ic_calendar_black_24dp 0x0
@@ -2339,6 +2344,7 @@ int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
 int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
 int drawable shape_circle_lipstick 0x0
+int drawable spinner_background_rectangle_round_grey 0x0
 int drawable test_custom_background 0x0
 int drawable toolbar_background 0x0
 int drawable toolbar_search_background 0x0
@@ -2520,6 +2526,7 @@ int id chip1 0x0
 int id chip2 0x0
 int id chip3 0x0
 int id chip_group 0x0
+int id chip_like_shimmer_controller 0x0
 int id chronometer 0x0
 int id circle_center 0x0
 int id circular 0x0
@@ -3236,6 +3243,7 @@ int layout pop_up_menu_tv 0x0
 int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
 int layout select_dialog_singlechoice_material 0x0
+int layout shimmer_chip_like_layout 0x0
 int layout shimmer_data_layout 0x0
 int layout support_simple_spinner_dropdown_item 0x0
 int layout test_action_chip 0x0
