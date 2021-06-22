@@ -27,22 +27,6 @@ sealed class GigerAttendanceUnderManagerViewModelState {
 
     object NoAttendanceFound : GigerAttendanceUnderManagerViewModelState()
 
-    data class UserMarkedPresent(
-            val message: String
-    ) : GigerAttendanceUnderManagerViewModelState()
-
-    data class ErrorWhileMarkingUserPresent(
-            val error: String
-    ) : GigerAttendanceUnderManagerViewModelState()
-
-    // Null means keep the data unchanged dont touch it on view
-    data class FiltersUpdated(
-            val shouldRemoveOlderStatusTabs: Boolean,
-            val attendanceStatuses: List<AttendanceStatusAndCountItemData>?,
-            val business: List<String>?,
-            val shiftTimings: List<AttendanceFilterItemShift>?
-    ) : GigerAttendanceUnderManagerViewModelState()
-
     data class ErrorInLoadingDataFromServer(
             val error: String,
             val shouldShowErrorButton: Boolean
@@ -53,6 +37,26 @@ sealed class GigerAttendanceUnderManagerViewModelState {
             val attendanceItemData: List<AttendanceRecyclerItemData>
     ) : GigerAttendanceUnderManagerViewModelState()
 }
+
+
+sealed class GigerAttendanceUnderManagerViewModelMarkAttendanceState {
+
+    data class UserMarkedPresent(
+            val message: String
+    ) : GigerAttendanceUnderManagerViewModelMarkAttendanceState()
+
+    data class ErrorWhileMarkingUserPresent(
+            val error: String
+    ) : GigerAttendanceUnderManagerViewModelMarkAttendanceState()
+
+}
+
+data class AttendanceFilters(
+        val shouldRemoveOlderStatusTabs: Boolean,
+        val attendanceStatuses: List<AttendanceStatusAndCountItemData>?,
+        val business: List<String>?,
+        val shiftTimings: List<AttendanceFilterItemShift>?
+)
 
 @HiltViewModel
 class GigerAttendanceUnderManagerViewModel @Inject constructor(
@@ -83,6 +87,12 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             MutableLiveData<GigerAttendanceUnderManagerViewModelState>()
     val gigerAttendanceUnderManagerViewState: LiveData<GigerAttendanceUnderManagerViewModelState> =
             _gigerAttendanceUnderManagerViewState
+
+    private val _filters = MutableLiveData<AttendanceFilters>()
+    val filters: LiveData<AttendanceFilters> = _filters
+
+    private val _markAttendanceState = MutableLiveData<GigerAttendanceUnderManagerViewModelMarkAttendanceState>()
+    val markAttendanceState: LiveData<GigerAttendanceUnderManagerViewModelMarkAttendanceState> = _markAttendanceState
 
 
     fun fetchUsersAttendanceDate(
@@ -374,8 +384,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 }
 
 
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
+        _filters.postValue(
+                AttendanceFilters(
                         shouldRemoveOlderStatusTabs = true,
                         attendanceStatuses = statuses,
                         business = businesses,
@@ -420,8 +430,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                     )
                 }
 
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
+        _filters.postValue(
+                AttendanceFilters(
                         shouldRemoveOlderStatusTabs = false,
                         attendanceStatuses = null,
                         business = businesses,
@@ -461,8 +471,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                     )
                 }
 
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
+        _filters.postValue(
+                AttendanceFilters(
                         shouldRemoveOlderStatusTabs = false,
                         attendanceStatuses = null,
                         business = null,
@@ -493,18 +503,19 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 it.attendanceStatus = "Present"
                 it.gigStatus = GigStatus.ONGOING.getStatusString()
             }
-            _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.UserMarkedPresent(
+            _markAttendanceState.postValue(
+                    GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent(
                             "$userName marked present"
                     )
             )
             delay(300)
             updateStatusCounts()
+            delay(300)
             filterCachedResultsAndEmit()
         } catch (e: Exception) {
             CrashlyticsLogger.e(TAG, "while marking present in tl", e)
-            _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.ErrorWhileMarkingUserPresent(
+            _markAttendanceState.postValue(
+                    GigerAttendanceUnderManagerViewModelMarkAttendanceState.ErrorWhileMarkingUserPresent(
                             error = "Error while marking $userName present"
                     )
             )
@@ -522,6 +533,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             it.gigStatus = GigStatus.DECLINED.getStatusString()
         }
         updateStatusCounts()
+        delay(300)
         filterCachedResultsAndEmit()
     }
 
@@ -550,8 +562,8 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                     )
                 }
 
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
+        _filters.postValue(
+                AttendanceFilters(
                         shouldRemoveOlderStatusTabs = false,
                         attendanceStatuses = statuses,
                         business = null,

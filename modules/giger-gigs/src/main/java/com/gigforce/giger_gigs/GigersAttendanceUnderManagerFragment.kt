@@ -24,19 +24,14 @@ import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.onTabSelected
 import com.gigforce.common_ui.ext.startShimmer
 import com.gigforce.common_ui.ext.stopShimmer
-import com.gigforce.core.CoreViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_gigs.databinding.FragmentGigerUnderManagersAttendanceBinding
 import com.gigforce.giger_gigs.dialogFragments.DeclineGigDialogFragment
-import com.gigforce.giger_gigs.listItems.AttendanceGigerAttendanceRecyclerItemView
 import com.gigforce.giger_gigs.models.AttendanceFilterItemShift
 import com.gigforce.giger_gigs.models.AttendanceRecyclerItemData
 import com.gigforce.giger_gigs.models.AttendanceStatusAndCountItemData
-import com.gigforce.giger_gigs.viewModels.AttendanceUnderManagerSharedViewState
-import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModel
-import com.gigforce.giger_gigs.viewModels.GigerAttendanceUnderManagerViewModelState
-import com.gigforce.giger_gigs.viewModels.SharedGigerAttendanceUnderManagerViewModel
+import com.gigforce.giger_gigs.viewModels.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jaeger.library.StatusBarUtil
@@ -97,12 +92,14 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
             }
         }
 
+
         lifecycleScope.launch {
 
             viewBinding.toolbar.apply {
                 showTitle("Gigers Attendance")
                 hideActionMenu()
-                showSearchOption("Search Attendance")
+                showSearchOption("Search Name")
+                viewBinding.toolbar.hideSubTitle()
                 getSearchTextChangeAsFlow()
                         .debounce(300)
                         .distinctUntilChanged()
@@ -152,7 +149,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                     if (businessSpinner.childCount != 0 && businessSpinner.selectedItemPosition != 0) {
                         viewModel.filterAttendanceByBusiness(businessSpinner.selectedItem.toString())
-                    } else{
+                    } else {
                         viewModel.filterAttendanceByBusiness(null)
                     }
                 }
@@ -173,7 +170,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                         val selectedShift = shiftSpinner.selectedItem as AttendanceFilterItemShift
                         viewModel.filterDataByShift(selectedShift.shift)
-                    } else{
+                    } else {
                         viewModel.filterDataByShift(null)
                     }
                 }
@@ -215,20 +212,26 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
                         )
                         GigerAttendanceUnderManagerViewModelState.LoadingDataFromServer -> showDataLoadingFromServer()
                         GigerAttendanceUnderManagerViewModelState.NoAttendanceFound -> noAttendanceFound()
-                        is GigerAttendanceUnderManagerViewModelState.FiltersUpdated -> updateFilters(
-                                it.shouldRemoveOlderStatusTabs,
-                                it.attendanceStatuses,
-                                it.business,
-                                it.shiftTimings
-                        )
-                        is GigerAttendanceUnderManagerViewModelState.UserMarkedPresent -> {
-                            showSnackBar(it.message)
-                        }
-                        is GigerAttendanceUnderManagerViewModelState.ErrorWhileMarkingUserPresent -> {
-                            showErrorInMarkingPresent(it.error)
-                        }
                     }
                 })
+
+        viewModel.filters.observe(viewLifecycleOwner, {
+
+            updateFilters(
+                    it.shouldRemoveOlderStatusTabs,
+                    it.attendanceStatuses,
+                    it.business,
+                    it.shiftTimings
+            )
+        })
+
+        viewModel.markAttendanceState.observe(viewLifecycleOwner,{
+
+            when (it) {
+                is GigerAttendanceUnderManagerViewModelMarkAttendanceState.ErrorWhileMarkingUserPresent -> showErrorInMarkingPresent(it.error)
+                is GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent -> showSnackBar(it.message)
+            }
+        })
 
         sharedGigViewModel.attendanceUnderManagerSharedViewState
                 .observe(viewLifecycleOwner, {
@@ -328,7 +331,6 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
         swipeTouchHandler.attendanceSwipeControlsEnabled = enableAttendanceSwipeControls
         this.gigersUnderManagerMainLayout.errorInfoLayout.gone()
-        toolbar.showSearchOption("Search Attendance")
         this.gigersUnderManagerMainLayout.apply {
             this.root.visible()
             this.swipeLabel.isVisible = enableAttendanceSwipeControls
@@ -343,7 +345,6 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
             )
             this.attendanceRecyclerView.collection = attendanceItemData
             if (attendanceItemData.isEmpty()) noAttendanceFound()
-
         }
     }
 
@@ -365,19 +366,59 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
             }
         } else {
             //Just updating Tabs Text
+            val currentShownTabsInView = mutableListOf<String>()
             for (i in 0 until this.statusTabLayout.tabCount) {
 
                 val tab = this.statusTabLayout.getTabAt(i)
                 val tabStatus = tab!!.tag.toString()
+                currentShownTabsInView.add(tabStatus)
+            }
 
-                val attendanceStatusCount =
-                        attendanceStatuses.find { it.status == tabStatus }?.attendanceCount
-                                ?: 0
-                tab.text = "$tabStatus ($attendanceStatusCount)"
+            val tabsAdded = mutableListOf<AttendanceStatusAndCountItemData>()
+            val tabsDeleted = mutableListOf<String>()
+            val tabsUpdated = mutableListOf<AttendanceStatusAndCountItemData>()
+
+            attendanceStatuses.forEach {
+
+                if (!currentShownTabsInView.contains(it.status)) {
+                    tabsAdded.add(it)
+                } else {
+                    tabsUpdated.add(it)
+                }
+            }
+
+            currentShownTabsInView.forEach { tabShown ->
+
+                if (attendanceStatuses.find { it.status == tabShown } == null)
+                    tabsDeleted.add(tabShown)
+            }
+
+            tabsAdded.forEach {
+
+                val newTab = this.statusTabLayout.newTab().apply {
+                    this.text = "${it.status} (${it.attendanceCount})"
+                    this.tag = it.status
+                }
+                this.statusTabLayout.addTab(newTab)
+            }
+
+            for (i in 0 until statusTabLayout.tabCount) {
+
+                val tab = statusTabLayout.getTabAt(i)
+                val tabStatus = tab!!.tag.toString()
+
+                if (tabsDeleted.contains(tabStatus)) {
+                    tab.text = "$tabStatus (0)"
+                } else {
+                    val tabMatch = tabsUpdated.find { it.status == tabStatus }
+                    val tabChanged = tabMatch != null
+
+                    if (tabChanged) {
+                        tab.text = "$tabStatus (${tabMatch!!.attendanceCount})"
+                    }
+                }
             }
         }
-
-
     }
 
 
@@ -425,7 +466,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
             this.errorInfoLayout.gone()
 
             this.swipeLabel.gone()
-            toolbar.hideSearchOption()
+//            toolbar.hideSearchOption()
             this.statusTabLayout.removeAllTabs()
             startShimmer(
                     this.statusShimmerContainer as LinearLayout,
@@ -471,7 +512,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     }
 
     override fun onRightSwipedForMarkingPresent(
-            viewHolder : RecyclerView.ViewHolder,
+            viewHolder: RecyclerView.ViewHolder,
             attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) {
         viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(viewHolder.adapterPosition)
@@ -484,7 +525,7 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     }
 
     override fun onLeftSwipedForDecliningAttendance(
-            viewHolder : RecyclerView.ViewHolder,
+            viewHolder: RecyclerView.ViewHolder,
             attendanceData: AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData
     ) {
         viewBinding.gigersUnderManagerMainLayout.attendanceRecyclerView.coreAdapter.notifyItemChanged(viewHolder.adapterPosition)
