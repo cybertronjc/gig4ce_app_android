@@ -15,10 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="150dp"
-        android:minWidth="50dp"
-        android:minHeight="50dp"
-        app:layout_constraintHeight_min="50dp"
-        app:layout_constraintWidth_max="80dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:adjustViewBounds="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />

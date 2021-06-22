@@ -3,8 +3,10 @@ package com.gigforce.common_ui.components.cells
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
@@ -17,10 +19,11 @@ import kotlinx.android.synthetic.main.feature_layout.view.*
 open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs),
     IViewHolder {
+    val view : View
     init {
         this.layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        LayoutInflater.from(context).inflate(R.layout.feature_layout, this, true)
+        view = LayoutInflater.from(context).inflate(R.layout.feature_layout, this, true)
         attrs?.let {
             val styledAttributeSet =
                 context.obtainStyledAttributes(it, R.styleable.FeatureLayoutComponent, 0, 0)
@@ -79,10 +82,10 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
     override fun bind(data: Any?) {
         if (data is FeatureLayoutDVM) {
             if (data.title.isNotEmpty() && data.title.isNotBlank()) {
-                title_cl.visible()
+                view.findViewById<ConstraintLayout>(R.id.title_cl).visible()
                 this.setSectionTitle(data.title)
             } else {
-                title_cl.gone()
+                view.findViewById<ConstraintLayout>(R.id.title_cl).gone()
             }
             this.setSectionIcon(data.image)
             this.setCollection(data.collection)
