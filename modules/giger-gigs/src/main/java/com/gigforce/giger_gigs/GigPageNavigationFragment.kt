@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.storage.FirebaseStorage
-import com.ncorti.slidetoact.SlideToActView
 import kotlinx.android.synthetic.main.fragment_gig_navigation_bottom_sheet.*
 
 
@@ -74,21 +73,18 @@ class GigPageNavigationFragment : Fragment() {
         }
 
 
-        startNavigationSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+        startNavigationSliderBtn.setOnClickListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
+            if (gig != null && gig!!.latitude != null) {
 
-                    if (gig != null && gig!!.latitude != null) {
-
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("http://maps.google.com/maps?daddr=${gig?.latitude},${gig?.longitude}")
-                        )
-                        startActivity(intent)
-                    }
-                }
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?daddr=${gig?.latitude},${gig?.longitude}")
+                )
+                startActivity(intent)
             }
+
+        }
     }
 
 
