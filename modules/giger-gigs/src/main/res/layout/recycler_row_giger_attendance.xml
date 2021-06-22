@@ -117,10 +117,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/lato"
                 android:lineHeight="19sp"
                 android:textColor="#646464"
                 android:textSize="16sp"
+                android:fontFamily="@font/lato_bold"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Rahulefefeav" />
@@ -132,6 +132,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
+                android:textColor="@color/dust_grey"
+                android:fontFamily="@font/lato"
+                android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/user_image_iv"
                 app:layout_constraintTop_toBottomOf="@id/user_name_tv" />
 
