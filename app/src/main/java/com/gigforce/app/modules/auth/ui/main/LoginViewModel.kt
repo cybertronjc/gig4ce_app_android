@@ -7,16 +7,19 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.app.modules.auth.UserAuthRepo
+import com.gigforce.common_ui.viewdatamodels.UserAuthStatusModel
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.analytics.AuthEvents
 import com.gigforce.core.datamodels.login.LoginResponse
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.gigforce.core.extensions.getOrThrow
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,11 +27,11 @@ import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val eventTracker: IEventTracker
+        private val eventTracker: IEventTracker,
+        private val iBuildConfigVM: IBuildConfigVM
 ) : ViewModel() {
 
     companion object {
@@ -42,14 +45,17 @@ class LoginViewModel @Inject constructor(
         const val STATE_SIGNIN_SUCCESS = 6
     }
 
+    val userAuthRepo = UserAuthRepo(iBuildConfigVM)
+
     //    val liveState: MutableLiveData<Int> = MutableLiveData<Int>(STATE_INITIALIZED)
     val liveState: MutableLiveData<LoginResponse> = MutableLiveData<LoginResponse>()
 
     var verificationId: String? = null
     var token: PhoneAuthProvider.ForceResendingToken? = null
     var activity: Activity? = null
-//    private var userProfile: ProfileData? = null
 
+    //    private var userProfile: ProfileData? = null
+    var userAuthStatus: UserAuthStatusModel? = null
 
     init {
         FirebaseAuth.getInstance().currentUser.let {
@@ -61,10 +67,10 @@ class LoginViewModel @Inject constructor(
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
             liveState.postValue(
-                LoginResponse(
-                    STATE_VERIFY_SUCCESS,
-                    ""
-                )
+                    LoginResponse(
+                            STATE_VERIFY_SUCCESS,
+                            ""
+                    )
             )
             signInWithPhoneAuthCredential(credential)
         }
@@ -78,34 +84,38 @@ class LoginViewModel @Inject constructor(
 //                val errorMap = mapOf("Error" to e.toString())
 //                eventTracker.pushEvent(TrackingEventArgs(AuthEvents.LOGIN_ERROR, errorMap))
 //            }
-            eventTracker.pushEvent(
-                TrackingEventArgs(
-                    AuthEvents.LOGIN_OR_SIGNUP_ERROR,
-                    mapOf("Error" to e.toString())
-                )
-            )
+            userAuthStatus?.let {
+                if (it.status)
+                    eventTracker.pushEvent(
+                            TrackingEventArgs(
+                                    if (it.isUserRegistered) AuthEvents.LOGIN_ERROR else AuthEvents.SIGN_UP_ERROR,
+                                    mapOf("Error" to e.toString())
+                            )
+                    )
+            }
+
             liveState.postValue(LoginResponse(STATE_VERIFY_FAILED, e.toString()))
         }
 
         override fun onCodeSent(
-            _verificationId: String,
-            _token: PhoneAuthProvider.ForceResendingToken
+                _verificationId: String,
+                _token: PhoneAuthProvider.ForceResendingToken
         ) {
             super.onCodeSent(_verificationId, _token)
             verificationId = _verificationId
             token = _token
             liveState.postValue(
-                LoginResponse(
-                    STATE_CODE_SENT,
-                    ""
-                )
+                    LoginResponse(
+                            STATE_CODE_SENT,
+                            ""
+                    )
             )
         }
     }
 
 
     fun sendVerificationCode(phoneNumber: String, isResendCall: Boolean = false) =
-        viewModelScope.launch {
+            viewModelScope.launch {
 
 //            if (userProfile == null) {
 //
@@ -164,28 +174,45 @@ class LoginViewModel @Inject constructor(
 //
 //        PhoneAuthProvider.verifyPhoneNumber(phoneNumberOptions)
 
-            eventTracker.pushEvent(
-                TrackingEventArgs(
-                    eventName = if (isResendCall) AuthEvents.LOGIN_OR_SIGNUP_RESEND_OTP else AuthEvents.LOGIN_OR_SIGNUP_STARTED,
-                    props = if (isResendCall) null else mapOf(
-                        "phone_no" to phoneNumber
-                    )
-                )
-            )
+                userAuthStatus = userAuthRepo.getUserAuthStatus(phoneNumber)
+                if (userAuthStatus?.status == true) {
 
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber, // Phone number to verify
-                60, // Timeout duration
-                TimeUnit.SECONDS, // Unit of timeout
-                activity!!, // Activity (for callback binding)
-                callbacks // OnVerificationStateChangedCallbacks
-            ) // ForceResendingToken from callbacks
-        }
+                    if (userAuthStatus?.isUserRegistered == true) {
+
+                        eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                        eventName = if (isResendCall) AuthEvents.LOGIN_RESEND_OTP else AuthEvents.LOGIN_STARTED,
+                                        props = if (isResendCall) null else mapOf(
+                                                "phone_no" to phoneNumber
+                                        )
+                                )
+                        )
+                    } else {
+                        eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                        eventName = if (isResendCall) AuthEvents.SIGN_RESEND_OTP else AuthEvents.SIGN_UP_STARTED,
+                                        props = if (isResendCall) null else mapOf(
+                                                "phone_no" to phoneNumber
+                                        )
+                                )
+                        )
+                    }
+
+
+                }
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        phoneNumber, // Phone number to verify
+                        60, // Timeout duration
+                        TimeUnit.SECONDS, // Unit of timeout
+                        activity!!, // Activity (for callback binding)
+                        callbacks // OnVerificationStateChangedCallbacks
+                ) // ForceResendingToken from callbacks
+            }
 
 
     fun verifyPhoneNumberWithCode(
-        code: String,
-        phoneNumber: String
+            code: String,
+            phoneNumber: String
     ) = viewModelScope.launch {
 
 //        if (userProfile == null) {
@@ -208,70 +235,86 @@ class LoginViewModel @Inject constructor(
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         FirebaseAuth.getInstance()
-            .signInWithCredential(credential)
-            .addOnSuccessListener {
-                Log.d(TAG, "signInWithCredential:success")
+                .signInWithCredential(credential)
+                .addOnSuccessListener {
+                    Log.d(TAG, "signInWithCredential:success")
 
-                if (it.additionalUserInfo!!.isNewUser) {
-                    eventTracker.pushEvent(
-                        TrackingEventArgs(
-                            eventName = AuthEvents.SIGN_SUCCESS,
-                            props = null
+                    if (it.additionalUserInfo!!.isNewUser) {
+                        eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                        eventName = AuthEvents.SIGN_SUCCESS,
+                                        props = null
+                                )
                         )
-                    )
-                } else {
-                    checkIfSignInOrSignup() // User can be enrolled by ambassador or by using portal. so need to get detail from profile collection
+                        //
+                    } else {
+                        checkIfSignInOrSignup() // User can be enrolled by ambassador or by using portal. so need to get detail from profile collection
+                    }
+
+                    registerFirebaseToken()
                 }
+                .addOnFailureListener {
 
-                registerFirebaseToken()
-            }
-            .addOnFailureListener {
-
-                handleSignInError(credential, it)
-            }
+                    handleSignInError(it)
+                }
     }
 
-    private fun checkIfSignInOrSignup() = viewModelScope.launch {
+    private fun checkIfSignInOrSignup() {
         FirebaseAuth.getInstance().currentUser?.let {
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("Profiles").document(it.uid).get().addOnSuccessListener {
+                        if (it.exists()) {
+                            val profileData = it.toObject(ProfileData::class.java)
+                                    ?: throw  IllegalStateException("unable to parse profile object")
+                            if (profileData.isUserRegistered) {
+                                eventTracker.pushEvent(
+                                        TrackingEventArgs(
+                                                eventName = AuthEvents.LOGIN_SUCCESS,
+                                                props = null
+                                        )
+                                )
+                            } else {
+                                eventTracker.pushEvent(
+                                        TrackingEventArgs(
+                                                eventName = AuthEvents.SIGN_SUCCESS,
+                                                props = null
+                                        )
+                                )
+                                //code for updating register status
+                                updateRegisterStatusToDB()
 
-            var data = FirebaseFirestore
-                .getInstance()
-                .collection("Profiles").document(it.uid).getOrThrow()
-            if (data.exists()) {
-                val profileData = data.toObject(ProfileData::class.java)
-                    ?: throw  IllegalStateException("unable to parse profile object")
-                if(profileData.isUserRegistered){
-                    eventTracker.pushEvent(
-                        TrackingEventArgs(
-                            eventName = AuthEvents.LOGIN_SUCCESS,
-                            props = null
-                        )
-                    )
-                }
-                else{
-                    eventTracker.pushEvent(
-                        TrackingEventArgs(
-                            eventName = AuthEvents.SIGN_SUCCESS,
-                            props = null
-                        )
-                    )
-                }
+                            }
 
-            } else {
-                eventTracker.pushEvent(
-                    TrackingEventArgs(
-                        eventName = AuthEvents.SIGN_SUCCESS,
-                        props = null
-                    )
-                )
-            }
+                        } else {
+                            eventTracker.pushEvent(
+                                    TrackingEventArgs(
+                                            eventName = AuthEvents.SIGN_SUCCESS,
+                                            props = null
+                                    )
+                            )
+                            //code for updating register status
 
+                        }
+                    }.addOnFailureListener { exception ->
+                        FirebaseCrashlytics.getInstance().log("Exception : checkIfSignInOrSignup Method $exception")
+                    }
         }
 
     }
 
-    private fun handleSignInError(credential: PhoneAuthCredential, it: Exception) =
-        viewModelScope.launch {
+    private fun updateRegisterStatusToDB() {
+        FirebaseAuth.getInstance().currentUser?.let { it ->
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("Profiles").document(it.uid).update(mapOf("isUserRegistered" to true)).addOnFailureListener { exception ->
+                        FirebaseCrashlytics.getInstance().log("Exception : updateRegisterStatusToDB Method $exception")
+                    }
+        }
+    }
+
+    private fun handleSignInError(it: Exception) =
+            viewModelScope.launch {
 
 //        if (userProfile == null) {
 //
@@ -293,15 +336,26 @@ class LoginViewModel @Inject constructor(
 //            val errorMap = mapOf("Error" to it.message!!)
 //            eventTracker.pushEvent(TrackingEventArgs(AuthEvents.LOGIN_ERROR, errorMap))
 //        }
-            eventTracker.pushEvent(
-                TrackingEventArgs(
-                    AuthEvents.LOGIN_OR_SIGNUP_ERROR,
-                    mapOf("Error" to it.message!!)
-                )
-            )
-            Log.w(TAG, "signInWithCredential:failure", it)
-            liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
-        }
+
+                userAuthStatus?.let { userAuthModel ->
+                    if (userAuthModel.status)
+                        eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                        if (userAuthModel.isUserRegistered) AuthEvents.LOGIN_ERROR else AuthEvents.SIGN_UP_ERROR,
+                                        mapOf("Error" to it.toString())
+                                )
+                        )
+                }
+
+//                eventTracker.pushEvent(
+//                        TrackingEventArgs(
+//                                AuthEvents.LOGIN_OR_SIGNUP_ERROR,
+//                                mapOf("Error" to it.message!!)
+//                        )
+//                )
+                Log.w(TAG, "signInWithCredential:failure", it)
+                liveState.postValue(LoginResponse(STATE_SIGNIN_FAILED, it.toString()))
+            }
 
     private fun registerFirebaseToken() {
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -314,38 +368,38 @@ class LoginViewModel @Inject constructor(
                     registerTokenOnServer(currentUser.uid, token!!)
                 } else {
                     liveState.postValue(
-                        LoginResponse(
-                            STATE_SIGNIN_SUCCESS,
-                            ""
-                        )
+                            LoginResponse(
+                                    STATE_SIGNIN_SUCCESS,
+                                    ""
+                            )
                     )
                 }
             }
         } else {
             liveState.postValue(
-                LoginResponse(
-                    STATE_SIGNIN_SUCCESS,
-                    ""
-                )
+                    LoginResponse(
+                            STATE_SIGNIN_SUCCESS,
+                            ""
+                    )
             )
         }
     }
 
     private fun registerTokenOnServer(uid: String, fcmToken: String) {
         FirebaseFirestore.getInstance().collection("firebase_tokens")
-            .document(fcmToken)
-            .set(
-                hashMapOf(
-                    "uid" to uid,
-                    "type" to "fcm",
-                    "timestamp" to Date().time
-                )
-            ).addOnSuccessListener {
-                Log.v(TAG, "Token Updated on Firestore Successfully")
-                liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
-            }.addOnFailureListener {
-                Log.e(TAG, "Token Update Failed on Firestore", it)
-                liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
-            }
+                .document(fcmToken)
+                .set(
+                        hashMapOf(
+                                "uid" to uid,
+                                "type" to "fcm",
+                                "timestamp" to Date().time
+                        )
+                ).addOnSuccessListener {
+                    Log.v(TAG, "Token Updated on Firestore Successfully")
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                }.addOnFailureListener {
+                    Log.e(TAG, "Token Update Failed on Firestore", it)
+                    liveState.postValue(LoginResponse(STATE_SIGNIN_SUCCESS, ""))
+                }
     }
 }
