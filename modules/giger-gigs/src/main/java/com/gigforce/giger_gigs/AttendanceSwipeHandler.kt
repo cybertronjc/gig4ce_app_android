@@ -14,7 +14,10 @@ class AttendanceSwipeHandler(
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {
     private var previousDx = 0f
+
     var attendanceSwipeControlsEnabled : Boolean = false
+    var enablePresentSwipeAction : Boolean = false
+    var enableDeclineSwipeAction : Boolean = false
 
     override fun getSwipeDirs(
             recyclerView: RecyclerView,
@@ -27,9 +30,9 @@ class AttendanceSwipeHandler(
                         (viewHolder.itemView as AttendanceGigerAttendanceRecyclerItemView).getGigDataOrThrow()
 
                 return when {
-                    "Present".equals(gigData.attendanceStatus, true) -> ItemTouchHelper.LEFT
-                    "Declined".equals(gigData.attendanceStatus, true) -> ItemTouchHelper.RIGHT
-                    else -> super.getSwipeDirs(recyclerView, viewHolder)
+                    "Present".equals(gigData.attendanceStatus, true) && enableDeclineSwipeAction-> ItemTouchHelper.LEFT
+                    "Declined".equals(gigData.attendanceStatus, true) && enablePresentSwipeAction -> ItemTouchHelper.RIGHT
+                    else -> 0 //Disabling swipe
                 }
 
             } catch (e: Exception) {

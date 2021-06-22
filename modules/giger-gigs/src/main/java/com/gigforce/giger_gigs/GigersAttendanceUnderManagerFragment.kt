@@ -203,7 +203,9 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
 
                     when (it) {
                         is GigerAttendanceUnderManagerViewModelState.AttendanceDataLoaded -> showStatusAndAttendanceOnView(
-                                it.shouldEnableAttendanceControls,
+                                it.attendanceSwipeControlsEnabled,
+                                it.enablePresentSwipeAction,
+                                it.enableDeclineSwipeAction,
                                 it.attendanceItemData
                         )
                         is GigerAttendanceUnderManagerViewModelState.ErrorInLoadingDataFromServer -> errorInLoadingAttendanceFromServer(
@@ -325,15 +327,20 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     }
 
     private fun showStatusAndAttendanceOnView(
-            enableAttendanceSwipeControls: Boolean,
+            attendanceSwipeControlsEnabled: Boolean,
+            enablePresentSwipeAction: Boolean,
+            enableDeclineSwipeAction: Boolean,
             attendanceItemData: List<AttendanceRecyclerItemData>
     ) = viewBinding.apply {
 
-        swipeTouchHandler.attendanceSwipeControlsEnabled = enableAttendanceSwipeControls
+        swipeTouchHandler.attendanceSwipeControlsEnabled = attendanceSwipeControlsEnabled
+        swipeTouchHandler.enablePresentSwipeAction = enablePresentSwipeAction
+        swipeTouchHandler.enableDeclineSwipeAction = enableDeclineSwipeAction
+
         this.gigersUnderManagerMainLayout.errorInfoLayout.gone()
         this.gigersUnderManagerMainLayout.apply {
             this.root.visible()
-            this.swipeLabel.isVisible = enableAttendanceSwipeControls
+            this.swipeLabel.isVisible = attendanceSwipeControlsEnabled
 
             stopShimmer(
                     this.statusShimmerContainer as LinearLayout,
