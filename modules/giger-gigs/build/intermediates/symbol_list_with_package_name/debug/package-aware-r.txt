@@ -4851,9 +4851,9 @@ style ExoMediaButton_Previous
 style ExoMediaButton_Rewind
 style ExoMediaButton_VR
 style FadeMenuAnimation
-style FetureCardTitle
-style FetureItemCardSubtitle
-style FetureItemCardTitle
+style FeatureCardTitle
+style FeatureItemCardSubtitle
+style FeatureItemCardTitle
 style FiamUI
 style FiamUI_Banner
 style FiamUI_Card

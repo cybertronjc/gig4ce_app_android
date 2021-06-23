@@ -56,7 +56,7 @@
             android:id="@+id/layout_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/FetureCardTitle"
+            android:theme="@style/FeatureCardTitle"
             app:layout_constraintBottom_toBottomOf="@id/left_aligned"
             app:layout_constraintStart_toEndOf="@+id/layout_img"
             app:layout_constraintTop_toTopOf="@id/left_aligned" />

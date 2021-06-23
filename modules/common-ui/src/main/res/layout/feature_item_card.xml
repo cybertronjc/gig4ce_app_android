@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:theme="@style/FetureItemCardTitle"
+                android:theme="@style/FeatureItemCardTitle"
                 app:layout_constraintBottom_toTopOf="@+id/subtitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Subtittle Here"
-                android:theme="@style/FetureItemCardSubtitle"
+                android:theme="@style/FeatureItemCardSubtitle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />

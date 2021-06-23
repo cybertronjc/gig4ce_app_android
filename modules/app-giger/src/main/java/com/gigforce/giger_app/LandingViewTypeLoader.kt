@@ -13,7 +13,7 @@ class LandingViewTypeLoader : IViewTypeLoader {
     override fun getView(context: Context, viewType: Int): View? {
         return when (viewType) {
             CommonViewTypes.VIEW_STANDARD_ACTION_CARD -> StandardActionCardComponent(context, null)
-            CommonViewTypes.VIEW_VIDEOS_LAYOUT -> VideoInfoLayoutComponent(context, null)
+//            CommonViewTypes.VIEW_VIDEOS_LAYOUT -> VideoInfoLayoutComponent(context, null)
             CommonViewTypes.VIEW_VIDEOS_ITEM_CARD -> VideoItemCardComponent(
                 context,
                 null

@@ -4786,9 +4786,9 @@ int style ExoMediaButton_Previous 0x0
 int style ExoMediaButton_Rewind 0x0
 int style ExoMediaButton_VR 0x0
 int style FadeMenuAnimation 0x0
-int style FetureCardTitle 0x0
-int style FetureItemCardSubtitle 0x0
-int style FetureItemCardTitle 0x0
+int style FeatureCardTitle 0x0
+int style FeatureItemCardSubtitle 0x0
+int style FeatureItemCardTitle 0x0
 int style FiamUI 0x0
 int style FiamUI_Banner 0x0
 int style FiamUI_Card 0x0
