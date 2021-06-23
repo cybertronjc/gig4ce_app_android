@@ -156,6 +156,15 @@ class SharedPreAndCommonUtilDataImp @Inject constructor(@ActivityContext val act
         return SP.getInt(key, 0)
     }
 
+    override fun saveLong(key: String?, value: Long){
+        editor?.putLong(key, value)
+        editor?.commit()
+    }
+
+    override fun getLong(key: String?): Long {
+        return SP.getLong(key, 0)
+    }
+
     override fun updateResources(language: String) {
         val locale = Locale(language)
         val config2 = Configuration()

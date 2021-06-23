@@ -416,6 +416,14 @@ open class BaseFragment : Fragment(),
         return utilAndValidationInterface.getCurrentVersion()
     }
 
+    override fun saveLong(key: String?, value: Long) {
+        sharedDataInterface.saveLong(key, value)
+    }
+
+    override fun getLong(key: String?): Long {
+        return sharedDataInterface.getLong(key)
+    }
+
     override fun updateResources(language: String) {
         utilAndValidationInterface.updateResources(language)
     }

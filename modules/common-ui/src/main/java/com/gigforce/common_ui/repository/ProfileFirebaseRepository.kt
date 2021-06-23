@@ -77,7 +77,8 @@ class ProfileFirebaseRepository @Inject constructor() : BaseFirestoreDBRepositor
                     lastLoginLocationLatitude = latitude,
                     lastLoginLocationLongitude = longitude,
                     lastLoginFromAddress = locationAddress
-                )
+                ),
+            isUserRegistered = true
             )
         )
     }

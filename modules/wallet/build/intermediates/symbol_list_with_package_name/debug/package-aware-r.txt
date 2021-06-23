@@ -1396,6 +1396,7 @@ color light_blue
 color light_pink
 color lipstick
 color lipstick_2
+color lipstick_3
 color material_blue_grey_800
 color material_blue_grey_900
 color material_blue_grey_950
@@ -2384,6 +2385,9 @@ drawable ic_baseline_forward_24
 drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_up_24
 drawable ic_calendar
+drawable ic_calendar_black
+drawable ic_call_doc_scheduler_2
+drawable ic_call_drawable_2
 drawable ic_chat
 drawable ic_circle_empty
 drawable ic_clock_black_24dp
@@ -2428,6 +2432,7 @@ drawable ic_small_square
 drawable ic_three_dots
 drawable ic_time_help_
 drawable ic_tip
+drawable ic_user_2
 drawable ic_wallet_happy
 drawable ic_warning
 drawable ic_zero_balance_transaction
@@ -2474,6 +2479,7 @@ drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
 drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
+drawable spinner_background_rectangle_round_grey
 drawable test_custom_background
 drawable toolbar_background
 drawable toolbar_search_background
@@ -2662,6 +2668,7 @@ id chip1
 id chip2
 id chip3
 id chip_group
+id chip_like_shimmer_controller
 id chronometer
 id circle_center
 id circular
@@ -3529,6 +3536,7 @@ layout recycler_item_monthly_payslip
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout shimmer_chip_like_layout
 layout shimmer_data_layout
 layout support_simple_spinner_dropdown_item
 layout test_action_chip
