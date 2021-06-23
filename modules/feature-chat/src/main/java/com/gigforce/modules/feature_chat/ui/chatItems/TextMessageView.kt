@@ -13,11 +13,14 @@ import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.DisplayUtil
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 
 
 abstract class TextMessageView(
@@ -26,7 +29,9 @@ abstract class TextMessageView(
         context: Context,
         attrs: AttributeSet?
 ) : RelativeLayout(context, attrs),
-        IViewHolder, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+        IViewHolder,
+        View.OnLongClickListener,
+        PopupMenu.OnMenuItemClickListener {
 
     private lateinit var containerView: View
     private lateinit var senderNameTV: TextView
@@ -34,12 +39,16 @@ abstract class TextMessageView(
     private lateinit var timeView: TextView
     private lateinit var receivedStatusIV: ImageView
 
+    private lateinit var message: ChatMessage
+    private lateinit var oneToOneChatViewModel: ChatPageViewModel
+    private lateinit var groupChatViewModel: GroupChatViewModel
+
     init {
         setDefault()
         inflate()
     }
 
-    fun setDefault() {
+    private fun setDefault() {
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         this.layoutParams = params
     }
@@ -71,15 +80,18 @@ abstract class TextMessageView(
 
     override fun bind(data: Any?) {
         data?.let {
-            val msg = it as ChatMessage
+           val dataAndViewModels =  it as ChatMessageWrapper
+            message = dataAndViewModels.message
+            groupChatViewModel = dataAndViewModels.groupChatViewModel
+            oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
 
             senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
-            senderNameTV.text = msg.senderInfo.name
-            msgView.setText(msg.content)
-            LinkifyCompat.addLinks(msgView,Linkify.ALL)
+            senderNameTV.text = message.senderInfo.name
+            msgView.setText(message.content)
+            LinkifyCompat.addLinks(msgView, Linkify.ALL)
 
-            timeView.setText(msg.timestamp?.toDisplayText())
-            setReceivedStatus(msg)
+            timeView.setText(message.timestamp?.toDisplayText())
+            setReceivedStatus(message)
         }
     }
 
@@ -114,22 +126,43 @@ abstract class TextMessageView(
     override fun onLongClick(v: View?): Boolean {
 
         val popUpMenu = PopupMenu(context, v)
-        popUpMenu.setOnMenuItemClickListener(this)
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
+
+        popUpMenu.menu.findItem(R.id.action_copy).isVisible = true
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.OUT
+
+        popUpMenu.setOnMenuItemClickListener(this)
         popUpMenu.show()
 
         return true
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val itemClicked = item ?: return true
 
-        val clip: ClipData = ClipData.newPlainText("Copy", msgView.text)
-        (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(clip)
-        Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
-
+        when (itemClicked.itemId) {
+            R.id.action_copy -> copyMessageToClipBoard()
+            R.id.action_delete -> deleteMessage()
+        }
         return true
     }
 
+    private fun deleteMessage() {
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+            //
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+
+            groupChatViewModel.deleteMessage(
+                    message.id
+            )
+        }
+    }
+
+    private fun copyMessageToClipBoard() {
+        val clip: ClipData = ClipData.newPlainText("Copy", msgView.text)
+        (context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?)?.setPrimaryClip(clip)
+        Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+    }
 }
 
 class InTextMessageView(

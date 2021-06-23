@@ -3,8 +3,10 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -37,7 +39,7 @@ abstract class VideoMessageView(
 ) : MediaMessage(
     context,
     attrs
-), View.OnClickListener {
+), View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
 
     //View
     private lateinit var senderNameTV: TextView
@@ -83,6 +85,7 @@ abstract class VideoMessageView(
 
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
+        cardView.setOnLongClickListener(this)
     }
 
     fun loadViews() {
@@ -261,6 +264,40 @@ abstract class VideoMessageView(
                 handleVideoDownloaded()
             }
         } catch (e: Exception) {
+        }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        val popUpMenu = PopupMenu(context, v)
+        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+
+        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.OUT
+
+        popUpMenu.setOnMenuItemClickListener(this)
+        popUpMenu.show()
+
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val itemClicked = item ?: return true
+
+        when (itemClicked.itemId) {
+            R.id.action_copy -> {}
+            R.id.action_delete -> deleteMessage()
+        }
+        return true
+    }
+
+    private fun deleteMessage() {
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+            //
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+
+            groupChatViewModel.deleteMessage(
+                    message.id
+            )
         }
     }
 }

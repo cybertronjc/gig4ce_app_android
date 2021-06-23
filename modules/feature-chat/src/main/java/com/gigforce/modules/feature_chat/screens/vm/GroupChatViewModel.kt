@@ -13,6 +13,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.ChatGroupRepository
+import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
+import com.gigforce.common_ui.chat.models.*
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.crashlytics.CrashlyticsLogger
@@ -22,11 +26,7 @@ import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
-import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.ChatLocalDirectoryReferenceManager
-import com.gigforce.common_ui.chat.models.*
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
-import com.gigforce.common_ui.chat.ChatGroupRepository
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -56,11 +56,11 @@ interface GroupChatViewModelInputs {
 
 
 class GroupChatViewModel constructor(
-    private val chatContactsRepository: ChatContactsRepository,
-    private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
-    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
+        private val chatContactsRepository: ChatContactsRepository,
+        private val chatGroupRepository: ChatGroupRepository = ChatGroupRepository(),
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        private val chatLocalDirectoryReferenceManager: ChatLocalDirectoryReferenceManager = ChatLocalDirectoryReferenceManager(),
+        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
 ) : ViewModel(),
         GroupChatViewModelInputs,
         GroupChatViewModelOutputs {
@@ -267,7 +267,7 @@ class GroupChatViewModel constructor(
     }
 
 
-    private  fun compareGroupMembersWithContactsAndEmit()  = viewModelScope.launch{
+    private fun compareGroupMembersWithContactsAndEmit() = viewModelScope.launch {
         groupDetails!!.groupMembers.forEach { groupMember ->
 
             val matchInContact = userContacts!!.find { groupMember.uid == it.uid }
@@ -276,7 +276,7 @@ class GroupChatViewModel constructor(
                 groupMember.name = matchInContact.name
             } else if (currentUser.phoneNumber!!.contains(groupMember.mobile)) {
                 groupMember.name = "You"
-            } else if(groupMember.name == null){
+            } else if (groupMember.name == null) {
                 groupMember.name = ""
             }
         }
@@ -315,9 +315,9 @@ class GroupChatViewModel constructor(
                     "profile_pics/${profile.profileAvatarName}"
                 }
         return UserInfo(
-            id = currentUser.uid,
-            name = profile.name,
-            profilePic = profilePic
+                id = currentUser.uid,
+                name = profile.name,
+                profilePic = profilePic
         )
     }
 
@@ -491,7 +491,7 @@ class GroupChatViewModel constructor(
                     id = UUID.randomUUID().toString(),
                     headerId = groupId,
                     senderInfo = UserInfo(
-                        id = currentUser.uid
+                            id = currentUser.uid
                     ),
                     receiverInfo = null,
                     type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION,
@@ -682,6 +682,20 @@ class GroupChatViewModel constructor(
                 }
             }
 
+    fun deleteMessage(id: String) = viewModelScope.launch {
+        try {
+            chatGroupRepository.deleteMessage(
+                    groupId,
+                    id
+            )
+        } catch (e: Exception) {
+            CrashlyticsLogger.e(
+                    TAG,
+                    "deleting group message",
+                    e
+            )
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

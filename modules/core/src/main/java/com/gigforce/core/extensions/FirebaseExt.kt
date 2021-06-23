@@ -120,3 +120,9 @@ suspend fun StorageReference.getFileOrThrow(
         cont.resumeWithException(it)
     }
 }
+
+
+suspend fun DocumentReference.deleteOrThrow() = suspendCoroutine<Unit?> { cont ->
+    delete().addOnSuccessListener { cont.resume(null) }
+            .addOnFailureListener { cont.resumeWithException(it) }
+}
