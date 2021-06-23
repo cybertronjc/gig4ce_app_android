@@ -88,7 +88,7 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
                 view.findViewById<ConstraintLayout>(R.id.title_cl).gone()
             }
             this.setSectionIcon(data.image)
-            if(data.collection.size>0) {
+            if(data.collection.isNotEmpty()) {
                 view.findViewById<ConstraintLayout>(R.id.top_cl).visible()
                 this.setCollection(data.collection)
             }

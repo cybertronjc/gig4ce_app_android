@@ -3181,7 +3181,6 @@ id ll_contracts
 id ll_no_driving_license
 id ll_parent_location
 id ll_questionnaire
-id load_more
 id locationET
 id locationLabel
 id logo
@@ -3631,7 +3630,6 @@ id videoUploadingLayout
 id video_decoder_gl_surface_view
 id video_time
 id video_title
-id videos_list
 id view_bottom
 id view_offset_helper
 id view_overlay
@@ -3739,7 +3737,6 @@ layout card_portrait_inner
 layout cell_app_bar
 layout cell_app_profile
 layout cell_standard_action_card
-layout cell_video_info_card
 layout cell_video_item_card
 layout custom_chip
 layout custom_dialog

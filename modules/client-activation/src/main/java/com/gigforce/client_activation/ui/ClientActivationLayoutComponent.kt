@@ -19,4 +19,5 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
             bind(FeatureLayoutDVM("", "Explore Gigs", it))
         }
     }
+
 }

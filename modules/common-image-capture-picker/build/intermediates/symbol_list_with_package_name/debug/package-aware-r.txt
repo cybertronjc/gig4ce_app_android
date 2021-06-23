@@ -2893,7 +2893,6 @@ id linear
 id listMode
 id list_item
 id ll_parent_location
-id load_more
 id logo
 id main_img
 id main_learning_assessment_error
@@ -3231,7 +3230,6 @@ id videoThumbnailIV
 id video_decoder_gl_surface_view
 id video_time
 id video_title
-id videos_list
 id view_bottom
 id view_finder
 id view_offset_helper
@@ -3339,7 +3337,6 @@ layout card_portrait_inner
 layout cell_app_bar
 layout cell_app_profile
 layout cell_standard_action_card
-layout cell_video_info_card
 layout cell_video_item_card
 layout custom_chip
 layout custom_dialog

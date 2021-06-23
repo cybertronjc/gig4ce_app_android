@@ -3306,7 +3306,6 @@ id ll_brand_details_giger_id
 id ll_decline_layout
 id ll_gig_time_details_giger_id
 id ll_parent_location
-id load_more
 id locationImageContainer
 id locationImageScrollView
 id location_from_gig_tv
@@ -3845,7 +3844,6 @@ id videoThumbnailIV
 id video_decoder_gl_surface_view
 id video_time
 id video_title
-id videos_list
 id view4
 id view40
 id view41
@@ -3973,7 +3971,6 @@ layout card_portrait_inner
 layout cell_app_bar
 layout cell_app_profile
 layout cell_standard_action_card
-layout cell_video_info_card
 layout cell_video_item_card
 layout confirmation_custom_alert_type1
 layout custom_chip

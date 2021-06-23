@@ -35,16 +35,16 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
                 if (it.size > data.showVideo) {
                     var videoToShow = data.showVideo
                     if (videoToShow == 0) {
-                        super.bind(FeatureLayoutDVM("", "Help", ArrayList()))
+                        super.bind(FeatureLayoutDVM("", "", emptyList()))
                     } else {
                         if(it.size>videoToShow){
                             enableSeemoreButton()
                         }
-                        super.bind(FeatureLayoutDVM("", "Help", it.slice(IntRange(0, videoToShow - 1))))
+                        super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it.slice(IntRange(0, videoToShow - 1))))
 
                     }
                 } else {
-                    super.bind(FeatureLayoutDVM("", "Help", ArrayList()))
+                    super.bind(FeatureLayoutDVM("", "", emptyList()))
                 }
             }
 

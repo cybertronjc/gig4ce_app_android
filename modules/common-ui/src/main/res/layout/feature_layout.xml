@@ -46,26 +46,28 @@
                 android:id="@+id/margin_8"
                 android:layout_width="@dimen/size8"
                 android:layout_height="8dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/layout_img"
-                app:layout_constraintStart_toEndOf="@+id/layout_img"
-                app:layout_constraintTop_toTopOf="@+id/layout_img" />
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toTopOf="@id/image" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/layout_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/FeatureCardTitle"
             app:layout_constraintBottom_toBottomOf="@id/left_aligned"
-            app:layout_constraintStart_toEndOf="@+id/layout_img"
+            app:layout_constraintStart_toEndOf="@id/layout_img"
             app:layout_constraintTop_toTopOf="@id/left_aligned" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/size16"
+        android:layout_marginTop="@dimen/size16"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:paddingRight="@dimen/size16" />
+            android:paddingRight="@dimen/size16"
+            android:paddingLeft="@dimen/size16"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/see_more_btn"
@@ -86,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_16"
             android:layout_marginRight="@dimen/size16"
+            android:layout_marginLeft="@dimen/size16"
             android:text="@string/see_more"
             android:visibility="gone" />
 

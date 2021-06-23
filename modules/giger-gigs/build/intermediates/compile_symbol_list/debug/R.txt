@@ -3305,7 +3305,6 @@ int id ll_brand_details_giger_id 0x0
 int id ll_decline_layout 0x0
 int id ll_gig_time_details_giger_id 0x0
 int id ll_parent_location 0x0
-int id load_more 0x0
 int id locationImageContainer 0x0
 int id locationImageScrollView 0x0
 int id location_from_gig_tv 0x0
@@ -3844,7 +3843,6 @@ int id videoThumbnailIV 0x0
 int id video_decoder_gl_surface_view 0x0
 int id video_time 0x0
 int id video_title 0x0
-int id videos_list 0x0
 int id view4 0x0
 int id view40 0x0
 int id view41 0x0
@@ -3972,7 +3970,6 @@ int layout card_portrait_inner 0x0
 int layout cell_app_bar 0x0
 int layout cell_app_profile 0x0
 int layout cell_standard_action_card 0x0
-int layout cell_video_info_card 0x0
 int layout cell_video_item_card 0x0
 int layout confirmation_custom_alert_type1 0x0
 int layout custom_chip 0x0

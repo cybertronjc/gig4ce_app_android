@@ -1,4 +1,4 @@
-package com.gigforce.giger_app
+package com.gigforce.common_ui.viewconfigs
 
 class AppModuleLevelViewTypes {
 

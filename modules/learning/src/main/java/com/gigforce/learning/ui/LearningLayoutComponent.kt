@@ -9,18 +9,23 @@ import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.common_ui.repository.repo.ILearningDataRepository
 import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
+import com.gigforce.learning.dataviewmodels.LearningLayoutDVM
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class LearningLayoutComponent(context: Context, attrs: AttributeSet?) :
-        FeatureLayoutComponent(context, attrs)
-{
-    @Inject lateinit var repository : ILearningDataRepository
-    init {
-        repository.getData().observeForever {
-            bind(FeatureLayoutDVM("", "Learning", it))
+        FeatureLayoutComponent(context, attrs) {
+    @Inject
+    lateinit var repository: ILearningDataRepository
+
+
+    override fun bind(data: Any?) {
+        if (data is LearningLayoutDVM) {
+            repository.getData().observeForever {
+                super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it))
+            }
         }
     }
 }

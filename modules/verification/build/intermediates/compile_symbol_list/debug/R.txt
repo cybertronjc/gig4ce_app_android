@@ -3180,7 +3180,6 @@ int id ll_contracts 0x0
 int id ll_no_driving_license 0x0
 int id ll_parent_location 0x0
 int id ll_questionnaire 0x0
-int id load_more 0x0
 int id locationET 0x0
 int id locationLabel 0x0
 int id logo 0x0
@@ -3630,7 +3629,6 @@ int id videoUploadingLayout 0x0
 int id video_decoder_gl_surface_view 0x0
 int id video_time 0x0
 int id video_title 0x0
-int id videos_list 0x0
 int id view_bottom 0x0
 int id view_offset_helper 0x0
 int id view_overlay 0x0
@@ -3738,7 +3736,6 @@ int layout card_portrait_inner 0x0
 int layout cell_app_bar 0x0
 int layout cell_app_profile 0x0
 int layout cell_standard_action_card 0x0
-int layout cell_video_info_card 0x0
 int layout cell_video_item_card 0x0
 int layout custom_chip 0x0
 int layout custom_dialog 0x0

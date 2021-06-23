@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.dataviewmodel.*
+import com.gigforce.learning.dataviewmodels.LearningLayoutDVM
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
