@@ -60,6 +60,7 @@ class InvoicesListFragment : WalletBaseFragment() {
     private fun showInvoices(invoices: ArrayList<Invoice>) {
         if (invoices.size == 0){
             invoices_error.visible()
+            invoices_rv.gone()
         }
         else{
             invoices_error.gone()
@@ -97,6 +98,7 @@ class InvoicesListFragment : WalletBaseFragment() {
                 )
             } else {
                 // month change
+                Log.d("WEP", "Adding SECTION " + transaction.toString())
                 result.add(
                     TransactionAdapter.HeaderRow(
                         String.format("%02d / %d", transaction.month, transaction.year)
