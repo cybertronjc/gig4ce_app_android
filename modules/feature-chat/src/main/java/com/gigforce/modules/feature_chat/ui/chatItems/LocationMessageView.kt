@@ -6,11 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -20,6 +18,9 @@ import com.gigforce.core.extensions.toDisplayText
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.models.ChatMessageWrapper
+import com.gigforce.modules.feature_chat.screens.vm.ChatPageViewModel
+import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
 import com.google.firebase.storage.FirebaseStorage
 
 
@@ -30,7 +31,7 @@ abstract class LocationMessageView(
         attrs: AttributeSet?
 ) : RelativeLayout(context, attrs),
         IViewHolder,
-        View.OnClickListener {
+        View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
 
     private lateinit var imageView: ImageView
     private lateinit var locationAddressTV: TextView
@@ -47,7 +48,10 @@ abstract class LocationMessageView(
         FirebaseStorage.getInstance()
     }
 
-    private var message: ChatMessage? = null
+    private lateinit var message: ChatMessage
+    private lateinit var oneToOneChatViewModel: ChatPageViewModel
+    private lateinit var groupChatViewModel: GroupChatViewModel
+
 
     init {
         setDefault()
@@ -87,6 +91,7 @@ abstract class LocationMessageView(
 
     private fun setOnClickListeners() {
         cardView.setOnClickListener(this)
+        cardView.setOnLongClickListener(this)
     }
 
     private fun loadThumbnail(msg: ChatMessage) {
@@ -114,16 +119,18 @@ abstract class LocationMessageView(
 
     override fun bind(data: Any?) {
         data?.let {
-            val msg = it as ChatMessage
-            message = msg
+            val dataAndViewModels =  it as ChatMessageWrapper
+            message = dataAndViewModels.message
+            groupChatViewModel = dataAndViewModels.groupChatViewModel
+            oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
 
             senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
-            senderNameTV.text = msg.senderInfo.name
+            senderNameTV.text = message.senderInfo.name
 
-            locationAddressTV.setText("\uD83D\uDCCD ${msg.locationPhysicalAddress}")
-            textViewTime.setText(msg.timestamp?.toDisplayText())
-            loadThumbnail(msg)
-            setReceivedStatus(msg)
+            locationAddressTV.setText("\uD83D\uDCCD ${message.locationPhysicalAddress}")
+            textViewTime.setText(message.timestamp?.toDisplayText())
+            loadThumbnail(message)
+            setReceivedStatus(message)
 
 //            if(msg.thumbnailBitmap != null){
 //                handleLocationUploading()
@@ -194,6 +201,39 @@ abstract class LocationMessageView(
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(context, "No App found to open location", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        val popUpMenu = PopupMenu(context, v)
+        popUpMenu.inflate(R.menu.menu_chat_clipboard)
+
+        popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE &&  type == MessageFlowType.OUT
+
+        popUpMenu.setOnMenuItemClickListener(this)
+        popUpMenu.show()
+
+        return true
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val itemClicked = item ?: return true
+
+        when (itemClicked.itemId) {
+            R.id.action_copy -> {}
+            R.id.action_delete -> deleteMessage()
+        }
+        return true
+    }
+
+    private fun deleteMessage() {
+        if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
+            //
+        } else if (messageType == MessageType.GROUP_MESSAGE) {
+            groupChatViewModel.deleteMessage(
+                message.id
+            )
         }
     }
 

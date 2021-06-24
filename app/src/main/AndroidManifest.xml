@@ -160,12 +160,24 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="image/*" /><!--Images All-->
+                <data android:mimeType="video/*" /><!--Videos All-->
+                <data android:mimeType="application/pdf" /> <!--PDF-->
+                <data android:mimeType="application/vnd.ms-excel" /><!--XLS-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><!--XLSX-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><!--Docx-->
+                <data android:mimeType="application/msword" /> <!--Doc-->
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="image/*" /><!--Images All-->
+                <data android:mimeType="video/*" /><!--Videos All-->
+                <data android:mimeType="application/pdf" /> <!--PDF-->
+                <data android:mimeType="application/vnd.ms-excel" /><!--XLS-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><!--XLSX-->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" /><!--Docx-->
+                <data android:mimeType="application/msword" /> <!--Doc-->
             </intent-filter>
 
             <intent-filter>

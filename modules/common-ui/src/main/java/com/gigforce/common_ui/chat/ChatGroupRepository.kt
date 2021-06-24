@@ -563,6 +563,52 @@ class ChatGroupRepository constructor(
             .document(messageId)
             .deleteOrThrow()
 
+    suspend fun makeUserGroupAdmin(
+        groupId :String,
+        uid : String
+    ){
+       val groupDetails =  getGroupDetails(groupId)
+
+        groupDetails.groupMembers.find { contact ->
+            contact.uid == uid
+        }?.isUserGroupManager = true
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+    }
+
+    suspend fun dismissUserAsGroupAdmin(
+        groupId :String,
+        uid : String
+    ){
+        val groupDetails =  getGroupDetails(groupId)
+
+        groupDetails.groupMembers.find { contact ->
+            contact.uid == uid
+        }?.isUserGroupManager = false
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .updateOrThrow("groupMembers", groupDetails.groupMembers)
+    }
+
+    suspend fun allowEveryoneToPostInThisGroup(
+            groupId : String
+    ) {
+        db.collection(COLLECTION_GROUP_CHATS)
+                .document(groupId)
+                .updateOrThrow("onlyAdminCanPostInGroup", false)
+    }
+
+    suspend fun limitPostingToAdminsInGroup(
+            groupId : String
+    ) {
+        db.collection(COLLECTION_GROUP_CHATS)
+                .document(groupId)
+                .updateOrThrow("onlyAdminCanPostInGroup", true)
+    }
+
     companion object {
         const val COLLECTION_CHATS = "chats"
         const val COLLECTION_CHATS_CONTACTS = "contacts"

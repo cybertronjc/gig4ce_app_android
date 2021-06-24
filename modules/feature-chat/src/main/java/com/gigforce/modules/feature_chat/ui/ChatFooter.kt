@@ -4,10 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.view.View
+import android.widget.*
 import androidx.appcompat.widget.AppCompatImageButton
 import com.gigforce.modules.feature_chat.R
 
@@ -18,6 +16,9 @@ class ChatFooter(context: Context,  attrs: AttributeSet) :
      var btn_send:AppCompatImageButton
     var attachmentOptionButton : ImageView
 
+    var replyBlockedLayout : TextView
+    var replyLayout : View
+
     init {
         LayoutInflater.from(context)
             .inflate(R.layout.fragment_chat_footer, this, true)
@@ -26,5 +27,8 @@ class ChatFooter(context: Context,  attrs: AttributeSet) :
         et_message = this.findViewById(R.id.et_typedMessageValue)
         btn_send = this.findViewById(R.id.btn_send_chat)
         attachmentOptionButton = this.findViewById(R.id.iv_greyPlus)
+
+        replyBlockedLayout = this.findViewById(R.id.group_does_support_replies_text)
+        replyLayout = this.findViewById(R.id.chat_footer_type_layout)
     }
 }

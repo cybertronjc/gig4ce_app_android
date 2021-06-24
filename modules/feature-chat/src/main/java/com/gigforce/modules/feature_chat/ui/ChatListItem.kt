@@ -2,6 +2,7 @@ package com.gigforce.modules.feature_chat.ui
 
 import android.content.Context
 import android.net.Uri
+import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.TextDrawable
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
+import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.core.IViewHolder
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
@@ -74,11 +76,14 @@ class ChatListItem(
     }
 
     private var dObj: ChatListItemDataObject? = null
+    private var sharedFilesBundle : Bundle? = null
 
     override fun bind(data: Any?) {
         dObj = null
         data?.let {
-            dObj = data as ChatListItemDataObject
+            val dataAndSharedData = data as ChatListItemDataWrapper
+            sharedFilesBundle = dataAndSharedData.sharedFilesBundle
+            dObj = dataAndSharedData.chatItem
             dObj?.let { chatHeader ->
 
                 userOnlineIV.isVisible = chatHeader.isOtherUserOnline
@@ -224,8 +229,11 @@ class ChatListItem(
                 otherUserId = it.profileId,
                 headerId = it.id,
                 otherUserName = it.title,
-                otherUserProfilePicture = it.profilePath
+                otherUserProfilePicture = it.profilePath,
+                sharedFileBundle = sharedFilesBundle
             )
+
+            sharedFilesBundle = null
         }
     }
 }

@@ -1,7 +1,13 @@
 package com.gigforce.common_ui.chat.models
 
+import android.os.Bundle
 import com.gigforce.core.SimpleDVM
 //import com.gigforce.modules.feature_chat.core.ViewTypes
+
+data class ChatListItemDataWrapper(
+        val chatItem : ChatListItemDataObject,
+        val sharedFilesBundle : Bundle?
+): SimpleDVM(ViewTypes.CHAT_HEADER)
 
 data class ChatListItemDataObject(
     val chatType:String,
@@ -29,4 +35,4 @@ data class ChatListItemDataObject(
 
     val status : Int
 
-): SimpleDVM(ViewTypes.CHAT_HEADER) {}
+)

@@ -106,8 +106,7 @@
                     android:scaleY="0.8"
                     android:src="@drawable/ic_edit_pink"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                   />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <LinearLayout
@@ -131,6 +130,80 @@
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/group_details_divider_0"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#f2f2f2"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/group_deactivated_container" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/group_write_controls_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/group_details_divider_0">
+
+                    <TextView
+                        android:id="@+id/group_controls_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/lato"
+                        android:layout_marginTop="8dp"
+                        android:lineHeight="17sp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:text="Group Controls"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/only_admin_can_post_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/group_controls_label">
+
+                        <TextView
+                            android:id="@+id/only_admins_can_post_switch_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato"
+                            android:lineHeight="17sp"
+                            android:paddingTop="6dp"
+
+                            android:text="Only admins can post in group"
+                            android:textColor="@color/black_two"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/only_admins_can_post_switch"
+                            android:layout_width="wrap_content"
+                            android:theme="@style/Theme.SwitchMaterialLipstickPink"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:focusable="false"
+                            android:layout_marginEnd="8dp" />
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
                     android:id="@+id/group_details_divider_1"
@@ -138,7 +211,7 @@
                     android:layout_height="2dp"
                     android:layout_marginTop="16dp"
                     android:background="#f2f2f2"
-                    app:layout_constraintTop_toBottomOf="@id/group_deactivated_container" />
+                    app:layout_constraintTop_toBottomOf="@id/group_write_controls_layout" />
 
                 <LinearLayout
                     android:id="@+id/media_title_layout"
@@ -151,14 +224,14 @@
                     <TextView
                         android:id="@+id/media_label"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato"
+                        android:lineHeight="17sp"
                         android:paddingTop="16dp"
                         android:paddingBottom="20dp"
                         android:text="Media"
-                        android:lineHeight="17sp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -316,10 +389,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:fontFamily="@font/lato"
+                        android:lineHeight="17sp"
                         android:text="Add new Giger "
                         android:textColor="@android:color/black"
                         android:textSize="14sp"
-                        android:lineHeight="17sp"
                         android:textStyle="normal" />
 
                 </LinearLayout>

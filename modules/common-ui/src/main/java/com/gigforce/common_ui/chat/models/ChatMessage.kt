@@ -2,10 +2,7 @@ package com.gigforce.common_ui.chat.models
 
 import android.graphics.Bitmap
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
-import com.gigforce.core.SimpleDVM
-import com.gigforce.common_ui.core.ChatConstants
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
@@ -111,42 +108,7 @@ class ChatMessage(
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
 
-) : SimpleDVM(
-        defaultViewType = -1,
-        onClickNavPath = null
-),
-    IMediaMessage {
-
-    override fun getViewType(): Int {
-
-        if (this.chatType == ChatConstants.CHAT_TYPE_USER) {
-            return when (this.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.flowType == "in") ViewTypes.IN_TEXT else ViewTypes.OUT_TEXT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.flowType == "in") ViewTypes.IN_IMAGE else ViewTypes.OUT_IMAGE
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.flowType == "in") ViewTypes.IN_DOCUMENT else ViewTypes.OUT_DOCUMENT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.flowType == "in") ViewTypes.IN_VIDEO else ViewTypes.OUT_VIDEO
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.flowType == "in") ViewTypes.IN_LOCATION else ViewTypes.OUT_LOCATION
-                else -> -1
-            }
-        } else if (this.chatType == ChatConstants.CHAT_TYPE_GROUP) {
-
-            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-
-            return when (this.type) {
-                ChatConstants.MESSAGE_TYPE_TEXT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_TEXT else ViewTypes.GROUP_OUT_TEXT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_IMAGE else ViewTypes.GROUP_OUT_IMAGE
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DOCUMENT else ViewTypes.GROUP_OUT_DOCUMENT
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_VIDEO else ViewTypes.GROUP_OUT_VIDEO
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> if (this.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_LOCATION else ViewTypes.GROUP_OUT_LOCATION
-                else -> -1
-            }
-        }
-
-        return -1
-    }
-
-
-}
+) : IMediaMessage
 
 interface IMediaMessage {
     var type: String
