@@ -1292,6 +1292,7 @@ color background_material_light
 color black
 color blackDark
 color blackLight
+color blackLightFull
 color black_42
 color black_666
 color black_85
@@ -2438,6 +2439,7 @@ drawable ic_balance_expanded
 drawable ic_baseline_autorenew_24
 drawable ic_baseline_close_24
 drawable ic_baseline_forward_24
+drawable ic_baseline_keyboard_arrow_right_24
 drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_search_24
 drawable ic_baseline_up_24
@@ -2656,6 +2658,7 @@ id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
 id action_text
+id action_title
 id actions
 id activity_chooser_view_content
 id add
@@ -2855,6 +2858,7 @@ id expand_activities_button
 id expanded_menu
 id fade
 id feature_icon
+id feature_item_rv
 id feature_title
 id featured_rv
 id fill
@@ -2883,6 +2887,7 @@ id glide_custom_view_target_tag
 id goal_status_icon
 id gone
 id graph_recycler
+id grayline3
 id group_divider
 id guideline
 id guideline2
@@ -2908,6 +2913,7 @@ id ignoreRequest
 id image
 id imageLayout
 id imageView
+id imageView10
 id imageView18
 id image_content_root
 id image_rl
@@ -3279,6 +3285,7 @@ id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textTitle
+id textView124
 id textView21
 id textView3
 id textView38
@@ -3631,6 +3638,8 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout other_feature_item_layout
+layout other_features_layout
 layout payment_dispute_expanded_page
 layout payment_dispute_page
 layout payment_disputed_expanded_card

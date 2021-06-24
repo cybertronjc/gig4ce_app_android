@@ -1271,6 +1271,7 @@ color background_material_light
 color black
 color blackDark
 color blackLight
+color blackLightFull
 color black_42
 color black_666
 color black_85
@@ -2408,6 +2409,7 @@ drawable ic_baseline_camera_40
 drawable ic_baseline_check_32
 drawable ic_baseline_close_24
 drawable ic_baseline_close_32
+drawable ic_baseline_keyboard_arrow_right_24
 drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_search_24
 drawable ic_camera_round
@@ -2603,6 +2605,7 @@ id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
 id action_text
+id action_title
 id actions
 id activity_chooser_view_content
 id add
@@ -2792,6 +2795,7 @@ id expanded_menu
 id exposureCorrection
 id fade
 id feature_icon
+id feature_item_rv
 id feature_title
 id featured_rv
 id fill
@@ -2820,6 +2824,7 @@ id glSurface
 id gl_surface_view
 id glide_custom_view_target_tag
 id gone
+id grayline3
 id group_divider
 id guideline
 id h263
@@ -2842,6 +2847,7 @@ id ignoreRequest
 id image
 id imageLayout
 id imageView
+id imageView10
 id imageView18
 id image_content_root
 id image_rl
@@ -3147,6 +3153,7 @@ id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textTitle
+id textView124
 id textView21
 id textView3
 id textView41
@@ -3471,6 +3478,8 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout other_feature_item_layout
+layout other_features_layout
 layout pop_up_menu_tv
 layout select_dialog_item_material
 layout select_dialog_multichoice_material

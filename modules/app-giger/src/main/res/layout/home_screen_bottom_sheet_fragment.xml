@@ -609,7 +609,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView124" />
 
         <ImageView
-            android:id="@+id/textView125"
+            android:id="@+id/action_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="16dp"
@@ -619,7 +619,7 @@
             app:layout_constraintTop_toTopOf="@+id/help_topic_bs_calendar_screen" />
 
         <TextView
-            android:id="@+id/textView126"
+            android:id="@+id/action_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
@@ -627,9 +627,9 @@
             android:text="@string/browse_all_help_topic"
             android:textColor="#000000"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView125"
-            app:layout_constraintStart_toEndOf="@+id/textView125"
-            app:layout_constraintTop_toTopOf="@+id/textView125" />
+            app:layout_constraintBottom_toBottomOf="@+id/action_image"
+            app:layout_constraintStart_toEndOf="@+id/action_image"
+            app:layout_constraintTop_toTopOf="@+id/action_image" />
 
         <ImageView
             android:id="@+id/imageView10"
@@ -648,7 +648,7 @@
             android:layout_marginLeft="20dp"
             android:visibility="gone"
             android:background="@color/shadow_color"
-            app:layout_constraintStart_toEndOf="@+id/textView125"
+            app:layout_constraintStart_toEndOf="@+id/action_image"
             app:layout_constraintTop_toBottomOf="@+id/help_topic_bs_calendar_screen" />
 
         <View

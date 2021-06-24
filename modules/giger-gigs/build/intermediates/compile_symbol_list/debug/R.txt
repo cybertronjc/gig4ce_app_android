@@ -1325,6 +1325,7 @@ int color background_material_light 0x0
 int color black 0x0
 int color blackDark 0x0
 int color blackLight 0x0
+int color blackLightFull 0x0
 int color black_2222 0x0
 int color black_42 0x0
 int color black_666 0x0
@@ -2787,6 +2788,7 @@ int id action_mode_bar_stub 0x0
 int id action_mode_close_button 0x0
 int id action_share 0x0
 int id action_text 0x0
+int id action_title 0x0
 int id actions 0x0
 int id activity_chooser_view_content 0x0
 int id actual_checkin_time_tv 0x0
@@ -3084,6 +3086,7 @@ int id exposureCorrection 0x0
 int id fade 0x0
 int id favoriteCB 0x0
 int id feature_icon 0x0
+int id feature_item_rv 0x0
 int id feature_title 0x0
 int id featured_rv 0x0
 int id feedback_layout 0x0
@@ -3694,8 +3697,6 @@ int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
 int id textTitle 0x0
 int id textView124 0x0
-int id textView125 0x0
-int id textView126 0x0
 int id textView127 0x0
 int id textView21 0x0
 int id textView3 0x0
@@ -4160,6 +4161,8 @@ int layout notification_template_media 0x0
 int layout notification_template_media_custom 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int layout other_feature_item_layout 0x0
+int layout other_features_layout 0x0
 int layout pop_up_menu_tv 0x0
 int layout profile_photo_bottom_sheet 0x0
 int layout recycler_item_gig_attendance 0x0

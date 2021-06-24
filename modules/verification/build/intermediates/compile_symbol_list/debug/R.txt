@@ -1302,6 +1302,7 @@ int color battleship_grey 0x0
 int color black 0x0
 int color blackDark 0x0
 int color blackLight 0x0
+int color blackLightFull 0x0
 int color black_42 0x0
 int color black_666 0x0
 int color black_85 0x0
@@ -2463,6 +2464,7 @@ int drawable ic_attachment_grey 0x0
 int drawable ic_attachment_pink 0x0
 int drawable ic_bank 0x0
 int drawable ic_baseline_close_24 0x0
+int drawable ic_baseline_keyboard_arrow_right_24 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
 int drawable ic_baseline_search_24 0x0
 int drawable ic_cal_gradient 0x0
@@ -2732,6 +2734,7 @@ int id action_mode_bar 0x0
 int id action_mode_bar_stub 0x0
 int id action_mode_close_button 0x0
 int id action_text 0x0
+int id action_title 0x0
 int id actions 0x0
 int id activity_chooser_view_content 0x0
 int id add 0x0
@@ -3047,6 +3050,7 @@ int id fade 0x0
 int id fathersNameET 0x0
 int id fathersNameLabel 0x0
 int id feature_icon 0x0
+int id feature_item_rv 0x0
 int id feature_title 0x0
 int id featured_rv 0x0
 int id fill 0x0
@@ -3079,6 +3083,7 @@ int id gl_surface_view 0x0
 int id glide_custom_view_target_tag 0x0
 int id gone 0x0
 int id gotItBtn 0x0
+int id grayline3 0x0
 int id group_divider 0x0
 int id guideline 0x0
 int id h263 0x0
@@ -3110,6 +3115,7 @@ int id image 0x0
 int id imageLabelTV 0x0
 int id imageLayout 0x0
 int id imageView 0x0
+int id imageView10 0x0
 int id imageView18 0x0
 int id imageView4 0x0
 int id imageView6 0x0
@@ -3507,6 +3513,7 @@ int id text2 0x0
 int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
 int id textTitle 0x0
+int id textView124 0x0
 int id textView21 0x0
 int id textView3 0x0
 int id textView30 0x0
@@ -3913,6 +3920,8 @@ int layout notification_template_media 0x0
 int layout notification_template_media_custom 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int layout other_feature_item_layout 0x0
+int layout other_features_layout 0x0
 int layout pop_up_menu_tv 0x0
 int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0

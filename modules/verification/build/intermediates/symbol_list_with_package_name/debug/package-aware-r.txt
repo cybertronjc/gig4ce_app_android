@@ -1303,6 +1303,7 @@ color battleship_grey
 color black
 color blackDark
 color blackLight
+color blackLightFull
 color black_42
 color black_666
 color black_85
@@ -2464,6 +2465,7 @@ drawable ic_attachment_grey
 drawable ic_attachment_pink
 drawable ic_bank
 drawable ic_baseline_close_24
+drawable ic_baseline_keyboard_arrow_right_24
 drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_search_24
 drawable ic_cal_gradient
@@ -2733,6 +2735,7 @@ id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
 id action_text
+id action_title
 id actions
 id activity_chooser_view_content
 id add
@@ -3048,6 +3051,7 @@ id fade
 id fathersNameET
 id fathersNameLabel
 id feature_icon
+id feature_item_rv
 id feature_title
 id featured_rv
 id fill
@@ -3080,6 +3084,7 @@ id gl_surface_view
 id glide_custom_view_target_tag
 id gone
 id gotItBtn
+id grayline3
 id group_divider
 id guideline
 id h263
@@ -3111,6 +3116,7 @@ id image
 id imageLabelTV
 id imageLayout
 id imageView
+id imageView10
 id imageView18
 id imageView4
 id imageView6
@@ -3508,6 +3514,7 @@ id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textTitle
+id textView124
 id textView21
 id textView3
 id textView30
@@ -3914,6 +3921,8 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout other_feature_item_layout
+layout other_features_layout
 layout pop_up_menu_tv
 layout select_dialog_item_material
 layout select_dialog_multichoice_material

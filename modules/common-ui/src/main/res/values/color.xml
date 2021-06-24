@@ -5,6 +5,7 @@
     <color name="blackDark">#000000</color>
     <color name="black">#333333</color>
     <color name="blackLight">#666666</color>
+    <color name="blackLightFull">#c8c7cc</color>
 
     <color name="white">#ffffff</color>
 

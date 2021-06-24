@@ -2,6 +2,7 @@ package com.gigforce.giger_app.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.gigforce.common_ui.viewdatamodels.OtherFeatureComponentDVM
 import com.gigforce.common_ui.viewdatamodels.StandardActionCardDVM
 import com.gigforce.giger_app.dataviewmodel.*
 import com.gigforce.learning.dataviewmodels.LearningLayoutDVM
@@ -68,6 +69,9 @@ class HomeCardsFBRepository @Inject constructor() : IHomeCardsFBRepository {
             }
             "upcoming_gigs_info" ->{
                 return snapshot.toObject(UpcomingGigSectionDVM::class.java)
+            }
+            "sec_other_features" ->{
+                return snapshot.toObject(OtherFeatureComponentDVM::class.java)
             }
             else -> return null
         }

@@ -285,7 +285,9 @@ id I_need_checkin_label
 id action_decline_gig
 id action_feedback
 id action_help
+id action_image
 id action_share
+id action_title
 id actual_checkin_time_tv
 id acutal_checkin_layout
 id addAttachmentLayout
@@ -646,8 +648,6 @@ id tb_gig_history
 id tellAboutGigLabel
 id text
 id textView124
-id textView125
-id textView126
 id textView127
 id textView21
 id textView41

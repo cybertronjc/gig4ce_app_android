@@ -80,7 +80,9 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingRight="@dimen/size16"
-            android:paddingLeft="@dimen/size16"/>
+            android:paddingLeft="@dimen/size16"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/see_more_btn"

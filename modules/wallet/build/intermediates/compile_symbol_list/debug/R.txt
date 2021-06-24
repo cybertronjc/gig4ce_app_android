@@ -1291,6 +1291,7 @@ int color background_material_light 0x0
 int color black 0x0
 int color blackDark 0x0
 int color blackLight 0x0
+int color blackLightFull 0x0
 int color black_42 0x0
 int color black_666 0x0
 int color black_85 0x0
@@ -2437,6 +2438,7 @@ int drawable ic_balance_expanded 0x0
 int drawable ic_baseline_autorenew_24 0x0
 int drawable ic_baseline_close_24 0x0
 int drawable ic_baseline_forward_24 0x0
+int drawable ic_baseline_keyboard_arrow_right_24 0x0
 int drawable ic_baseline_play_circle_outline_24_ 0x0
 int drawable ic_baseline_search_24 0x0
 int drawable ic_baseline_up_24 0x0
@@ -2655,6 +2657,7 @@ int id action_mode_bar 0x0
 int id action_mode_bar_stub 0x0
 int id action_mode_close_button 0x0
 int id action_text 0x0
+int id action_title 0x0
 int id actions 0x0
 int id activity_chooser_view_content 0x0
 int id add 0x0
@@ -2854,6 +2857,7 @@ int id expand_activities_button 0x0
 int id expanded_menu 0x0
 int id fade 0x0
 int id feature_icon 0x0
+int id feature_item_rv 0x0
 int id feature_title 0x0
 int id featured_rv 0x0
 int id fill 0x0
@@ -2882,6 +2886,7 @@ int id glide_custom_view_target_tag 0x0
 int id goal_status_icon 0x0
 int id gone 0x0
 int id graph_recycler 0x0
+int id grayline3 0x0
 int id group_divider 0x0
 int id guideline 0x0
 int id guideline2 0x0
@@ -2907,6 +2912,7 @@ int id ignoreRequest 0x0
 int id image 0x0
 int id imageLayout 0x0
 int id imageView 0x0
+int id imageView10 0x0
 int id imageView18 0x0
 int id image_content_root 0x0
 int id image_rl 0x0
@@ -3278,6 +3284,7 @@ int id text2 0x0
 int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
 int id textTitle 0x0
+int id textView124 0x0
 int id textView21 0x0
 int id textView3 0x0
 int id textView38 0x0
@@ -3630,6 +3637,8 @@ int layout notification_template_media 0x0
 int layout notification_template_media_custom 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int layout other_feature_item_layout 0x0
+int layout other_features_layout 0x0
 int layout payment_dispute_expanded_page 0x0
 int layout payment_dispute_page 0x0
 int layout payment_disputed_expanded_card 0x0

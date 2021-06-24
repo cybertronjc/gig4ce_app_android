@@ -1326,6 +1326,7 @@ color background_material_light
 color black
 color blackDark
 color blackLight
+color blackLightFull
 color black_2222
 color black_42
 color black_666
@@ -2788,6 +2789,7 @@ id action_mode_bar_stub
 id action_mode_close_button
 id action_share
 id action_text
+id action_title
 id actions
 id activity_chooser_view_content
 id actual_checkin_time_tv
@@ -3085,6 +3087,7 @@ id exposureCorrection
 id fade
 id favoriteCB
 id feature_icon
+id feature_item_rv
 id feature_title
 id featured_rv
 id feedback_layout
@@ -3695,8 +3698,6 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textTitle
 id textView124
-id textView125
-id textView126
 id textView127
 id textView21
 id textView3
@@ -4161,6 +4162,8 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout other_feature_item_layout
+layout other_features_layout
 layout pop_up_menu_tv
 layout profile_photo_bottom_sheet
 layout recycler_item_gig_attendance
