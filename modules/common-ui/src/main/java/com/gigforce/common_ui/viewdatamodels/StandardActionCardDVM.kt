@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.viewdatamodels
 
+import android.os.Bundle
 import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.core.NavArgs
 import com.gigforce.core.SimpleDVM
@@ -16,6 +17,7 @@ open class StandardActionCardDVM(
     val bgcolor: Int = 0,
     val textColor: Int = 0,
     val marginRequired: Boolean = false,
+    var bundle: Bundle? = null,
     val defaultViewType: Int = CommonViewTypes.VIEW_STANDARD_ACTION_CARD
 ) : SimpleDVM(defaultViewType){
 

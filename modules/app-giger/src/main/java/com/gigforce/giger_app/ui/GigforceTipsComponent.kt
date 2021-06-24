@@ -7,9 +7,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
+import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.toBundle
 import com.gigforce.giger_app.R
 import com.gigforce.giger_app.dataviewmodel.GigForceTipsDVM
+import com.gigforce.landing_screen.landingscreen.LandingPageConstants
 
 class GigforceTipsComponent(context: Context, attrs: AttributeSet?) :
     FeatureLayoutComponent(context, attrs) {
@@ -21,7 +24,11 @@ class GigforceTipsComponent(context: Context, attrs: AttributeSet?) :
 
     override fun bind(data: Any?) {
         if(data is GigForceTipsDVM){
-            if(data.allTips.size>0) {
+            if(data.allTips.isNotEmpty()) {
+                data.allTips.map { it.bundle = mapOf(
+                    LandingPageConstants.INTENT_EXTRA_CAME_FROM_LANDING_SCREEN to true,
+                    LandingPageConstants.INTENT_EXTRA_ACTION to AppConstants.ACTION_OPEN_EDIT_LANGUAGE_BOTTOM_SHEET
+                ).toBundle() }
                 setCollection(data.allTips)
                 if (getFeatureRV().onFlingListener == null) {
                     var pagerHelper = PagerSnapHelper()

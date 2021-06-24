@@ -240,7 +240,7 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
                     it.type?.let { it1 ->
                         when (it1) {
                             "youtube_video" -> playvideo(it.link)
-                            "navigation" -> navigation.navigateTo(it.navPath ?: "")
+                            "navigation" -> navigation.navigateTo(it.navPath ?: "",data.bundle)
                         }
                     }
                 }
