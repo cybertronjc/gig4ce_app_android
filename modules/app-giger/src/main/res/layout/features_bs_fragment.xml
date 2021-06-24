@@ -32,5 +32,14 @@
         android:scrollbars="none" />
     <!--        </LinearLayout>-->
     <!--    </androidx.core.widget.NestedScrollView>-->
-
+    <TextView
+        android:id="@+id/application_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:letterSpacing="0"
+        android:textColor="@color/onboarding_rv_item_color_40"
+        android:textSize="12sp" />
 </LinearLayout>
