@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
+import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
@@ -298,14 +300,17 @@ class Login : Fragment() {
             doActionOnClick()
         }
 
-//        //coloring signup terms text
-//        val wordtoSpan: Spannable =
-//            SpannableString(resources.getString(R.string.terms_text))
-//        wordtoSpan.setSpan(
-//            ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 20, wordtoSpan.length,
-//            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-//        )
-//        termsTextView.setText(wordtoSpan)
+        termsTextView.setOnClickListener {
+            val docIntent = Intent(
+                activity,
+                DocViewerActivity::class.java
+            )
+            docIntent.putExtra(
+                StringConstants.DOC_URL.value,
+                "http://panel.gigforce.in/tnc"
+            )
+            activity?.startActivity(docIntent)
+        }
 
     }
 
