@@ -30,7 +30,6 @@ class InvoiceViewModel : ViewModel() {
                 var userInvoices = ArrayList<Invoice>()
                 if (querySnapshot != null) {
 //                    gigsQuery.postValue(querySnapshot.documents.forEach { t -> t.data })
-                    //Log.d("RosterViewModel", querySnapshot.documentstoString())
                     querySnapshot.documents.forEach { t ->
                         Log.d("RosterViewModel", t.toString())
                         t.toObject(Invoice::class.java)?.let { userInvoices.add(it) }
