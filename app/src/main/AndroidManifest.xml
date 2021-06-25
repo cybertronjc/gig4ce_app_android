@@ -64,16 +64,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data
-            android:name="CLEVERTAP_ACCOUNT_ID"
-            android:value="67Z-W98-795Z" />
-        <meta-data
-            android:name="CLEVERTAP_TOKEN"
-            android:value="bc0-1a6" />
-        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
-        <meta-data
-            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
-            android:value="1" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -105,19 +95,6 @@
             android:name="firebase_messaging_auto_init_enabled"
             android:value="true" />
 
-        <!--        <service-->
-        <!--            android:name="com.clevertap.android.sdk.FcmTokenListenerService">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
-
-        <!--        <service-->
-        <!--            android:name="com.clevertap.android.sdk.FcmMessageListenerService">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
 
 
         <!--        <receiver-->

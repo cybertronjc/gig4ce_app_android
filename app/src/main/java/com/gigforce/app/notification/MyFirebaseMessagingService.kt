@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.TaskStackBuilder
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.MainActivity
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.toBundle
@@ -110,15 +109,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 for ((key, value) in remoteMessage.data.entries) {
                     extras.putString(key, value)
                 }
-                val info = CleverTapAPI.getNotificationInfo(extras)
                 val moEInfo = MoEPushHelper.getInstance().isFromMoEngagePlatform(extras)
-                if (info.fromCleverTap) {
-                    CleverTapAPI.createNotification(applicationContext, extras)
-                } else if(moEInfo){
+                if(moEInfo){
                     MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
                 } else {
-                    // not from CleverTap handle yourself or pass to another provider
-                    handleNotificationMessageNotFromCleverTap(remoteMessage)
+                    // not from MoEngage handle yourself or pass to another provider
+                    handleNotificationMessageNotFromMoEngage(remoteMessage)
                 }
             }
         } catch (t: Throwable) {
@@ -130,7 +126,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private fun handleNotificationMessageNotFromCleverTap(remoteMessage: RemoteMessage) {
+    private fun handleNotificationMessageNotFromMoEngage(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {

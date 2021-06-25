@@ -18,7 +18,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
@@ -287,7 +286,6 @@ class MainActivity : AppCompatActivity(),
     private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
         GetFirebaseInstanceID()
-        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
     override fun onNewIntent(intent: Intent?) {

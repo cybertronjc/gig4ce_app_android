@@ -1,13 +1,10 @@
 package com.gigforce.app.di.implementations
 
-import android.app.Activity
-import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
-import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.BuildConfig
 import com.gigforce.app.MainApplication
 import com.gigforce.core.extensions.toBundle
@@ -18,7 +15,6 @@ import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.moe.pushlibrary.MoEHelper
-import com.moengage.core.MoEngage
 import com.moengage.core.Properties
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.branch.referral.Branch
@@ -33,7 +29,7 @@ class EventTrackerImp @Inject constructor(
     var mixpanel: MixpanelAPI? = MixpanelAPI.getInstance(context, BuildConfig.MIX_PANEL_KEY)
 
 
-    private var cleverTapApi: CleverTapAPI? = CleverTapAPI.getDefaultInstance(context)
+
     private var moEngageHelper: MoEHelper? = MoEHelper.getInstance(context)
 
     private val appsFlyerLib: AppsFlyerLib by lazy {
@@ -50,9 +46,6 @@ class EventTrackerImp @Inject constructor(
         mixpanel?.track("User identified")
 
         firebaseAnalytics.setUserId(userId)
-        cleverTapApi?.pushProfile(mapOf(
-                "user_id" to userId
-        ))
         appsFlyerLib.setCustomerIdAndTrack(userId, context.applicationContext)
 
         //branch to mixpanel
@@ -86,7 +79,6 @@ class EventTrackerImp @Inject constructor(
 
         logEventOnMixPanel(args)
         logEventOnFirebaseAnalytics(args)
-        logEventOnCleverTap(args)
         logEventOnAppsFlyer(args)
         logEventOnMoEngage(args)
     }
@@ -94,24 +86,8 @@ class EventTrackerImp @Inject constructor(
 
 
     override fun setUpAnalyticsTools(){
-        setupCleverTap()
         setupBranchWithMixpanel()
         setUpAppsFlyer()
-    }
-
-
-    //setup clevertap
-    private fun setupCleverTap() {
-        CleverTapAPI.createNotificationChannel(
-            context,
-            "gigforce-general",
-            "Gigforce",
-            "Gigforce Push Notifications",
-            NotificationManager.IMPORTANCE_MAX,
-            true
-        )
-
-        cleverTapApi?.pushEvent("MAIN_APP_CREATED")
     }
 
     private fun setupBranchWithMixpanel() {
@@ -194,14 +170,6 @@ class EventTrackerImp @Inject constructor(
         }
     }
 
-    private fun logEventOnCleverTap(args: TrackingEventArgs) {
-        try {
-            cleverTapApi?.pushEvent(args.eventName, args.props)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CrashlyticsLogger.e("EventTrackerImp", "While logging event on CleverTap", e)
-        }
-    }
 
     private fun logEventOnFirebaseAnalytics(args: TrackingEventArgs) {
         try {
