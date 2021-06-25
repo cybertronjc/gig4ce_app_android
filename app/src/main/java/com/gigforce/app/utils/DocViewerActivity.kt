@@ -36,14 +36,14 @@ class DocViewerActivity : AppCompatActivity() {
         pdfView!!.settings.useWideViewPort = true;
 
         pdfView!!.loadUrl(
-            if (isImage) imageString else if (isPdf)
+             if (isPdf)
                 "https://docs.google.com/gview?embedded=true&url=${
                     URLEncoder.encode(
                         imageString,
                         "UTF-8"
                     )
                 }"
-            else imageString
+             else imageString
         )
         pdfView!!.webViewClient = object : WebViewClient() {
             var checkOnPageStartedCalled = false
