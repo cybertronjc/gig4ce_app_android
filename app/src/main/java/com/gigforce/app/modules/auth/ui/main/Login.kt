@@ -307,7 +307,7 @@ class Login : Fragment() {
             )
             docIntent.putExtra(
                 StringConstants.DOC_URL.value,
-                "http://panel.gigforce.in/tnc"
+                "https://gigforce.in/terms-of-use "
             )
             activity?.startActivity(docIntent)
         }
