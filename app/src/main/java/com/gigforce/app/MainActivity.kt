@@ -516,19 +516,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_REQUEST_CODE) {
             when (resultCode) {
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
-                    //  handle user's approval }
-//                    if (currentPriority == 0){
-//                        showToast("Update Approved by User: Flexible", this)
-//                        showToast("We will notify you when the download is completed", this)
-//                    } else {
-//                        showToast("Update Approved by User: Immediate", this)
-//                    }
-
-
                 }
                 RESULT_CANCELED -> {
                     //  handle user's rejection
@@ -566,8 +558,6 @@ class MainActivity : AppCompatActivity(),
                     showToast("Update Failure Internal", this)
                 }
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
