@@ -18,7 +18,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.clevertap.android.sdk.CleverTapAPI
 import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
@@ -287,7 +286,7 @@ class MainActivity : AppCompatActivity(),
     private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
         GetFirebaseInstanceID()
-        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
+//        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -516,11 +515,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UPDATE_REQUEST_CODE) {
             when (resultCode) {
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
+                    if (currentPriority == 0){
+                        showToast("Update is being downloaded in background", this)
+                    }
                 }
                 RESULT_CANCELED -> {
                     //  handle user's rejection
@@ -558,6 +559,9 @@ class MainActivity : AppCompatActivity(),
                     showToast("Update Failure Internal", this)
                 }
             }
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
