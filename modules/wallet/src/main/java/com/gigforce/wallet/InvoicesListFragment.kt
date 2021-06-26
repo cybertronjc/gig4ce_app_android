@@ -72,14 +72,6 @@ class InvoicesListFragment : WalletBaseFragment() {
                }
            }
        })
-//       invoiceViewModel.allInvoices.observe(viewLifecycleOwner, Observer {
-//           run {
-//               it?.let {
-//                   Log.d("invoices", it.toString())
-//                   showInvoices(it)
-//               }
-//           }
-//       })
     }
 
     private fun showInvoices(invoices: ArrayList<InvoiceDataModel>) {
@@ -91,7 +83,7 @@ class InvoicesListFragment : WalletBaseFragment() {
             invoices_error.gone()
             invoices_rv.layoutManager = LinearLayoutManager(
                 activity?.applicationContext,
-                LinearLayoutManager.HORIZONTAL,
+                LinearLayoutManager.VERTICAL,
                 false)
             invoices_rv.adapter = context?.let { InvoiceListAdapter(it, invoices) }
 
