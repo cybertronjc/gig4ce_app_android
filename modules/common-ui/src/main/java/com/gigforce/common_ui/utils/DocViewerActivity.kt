@@ -1,4 +1,4 @@
-package com.gigforce.app.utils
+package com.gigforce.common_ui.utils
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import com.gigforce.app.R
+import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
 import java.net.URLEncoder
 

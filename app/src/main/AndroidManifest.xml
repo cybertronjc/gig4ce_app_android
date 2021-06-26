@@ -139,7 +139,7 @@
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".utils.DocViewerActivity"
+            android:name="com.gigforce.common_ui.utils.DocViewerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity

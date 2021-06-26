@@ -1,22 +1,39 @@
 package com.gigforce.wallet
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.shimmer.ShimmerHelper
+import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.invisible
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.wallet.models.Invoice
+import com.gigforce.wallet.models.InvoiceDataModel
 import com.gigforce.wallet.vm.InvoiceViewModel
+import com.jay.widget.StickyHeaders
 import com.jay.widget.StickyHeadersLinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_invoices_list.*
 import kotlinx.android.synthetic.main.help_expanded_page.*
+import kotlinx.android.synthetic.main.help_row.view.*
+import kotlinx.android.synthetic.main.invoice_collapsed_card.view.*
+import kotlinx.android.synthetic.main.recview_wallet_month.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,7 +64,7 @@ class InvoicesListFragment : WalletBaseFragment() {
         observer()
     }
     private fun observer() {
-       invoiceViewModel.allInvoices.observe(viewLifecycleOwner, Observer {
+       invoicesListViewModel.allInvoices.observe(viewLifecycleOwner, Observer {
            run {
                it?.let {
                    Log.d("invoices", it.toString())
@@ -55,69 +72,34 @@ class InvoicesListFragment : WalletBaseFragment() {
                }
            }
        })
+//       invoiceViewModel.allInvoices.observe(viewLifecycleOwner, Observer {
+//           run {
+//               it?.let {
+//                   Log.d("invoices", it.toString())
+//                   showInvoices(it)
+//               }
+//           }
+//       })
     }
 
-    private fun showInvoices(invoices: ArrayList<Invoice>) {
+    private fun showInvoices(invoices: ArrayList<InvoiceDataModel>) {
         if (invoices.size == 0){
             invoices_error.visible()
             invoices_rv.gone()
         }
         else{
             invoices_error.gone()
-            invoices_rv.layoutManager = StickyHeadersLinearLayoutManager<TransactionAdapter>(requireContext())
-            invoices_rv.adapter = TransactionAdapter(arrangeTransactions(invoices))
+            invoices_rv.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false)
+            invoices_rv.adapter = context?.let { InvoiceListAdapter(it, invoices) }
 
         }
     }
 
     private fun listener() {
         iv_back_invoices.setOnClickListener { requireActivity().onBackPressed() }
-    }
-
-    private fun arrangeTransactions(allTransactions: ArrayList<Invoice>): ArrayList<TransactionAdapter.IRow> {
-        // sort key is - "YYYYMMDD"
-        val transactions = allTransactions.sortedByDescending { it ->
-            (String.format("%04d", it.year) + String.format(
-                "%02d",
-                it.month
-            ) + String.format("%02d", it.date)).toInt()
-        }
-
-        val result = ArrayList<TransactionAdapter.IRow>()
-
-        var prevMonth = 0
-        var prevYear = 0
-        for (transaction in transactions) {
-            if (prevMonth == transaction.month && prevYear == transaction.year) {
-                Log.d("WEP", "Adding SECTION " + transaction.toString())
-                // no change in month
-                result.add(
-                    TransactionAdapter.SectionRow(
-                        transaction
-                    )
-                )
-            } else {
-                // month change
-                Log.d("WEP", "Adding SECTION " + transaction.toString())
-                result.add(
-                    TransactionAdapter.HeaderRow(
-                        String.format("%02d / %d", transaction.month, transaction.year)
-                    )
-                )
-
-                result.add(
-                    TransactionAdapter.SectionRow(
-                        transaction
-                    )
-                )
-                prevMonth = transaction.month
-                prevYear = transaction.year
-            }
-        }
-
-        Log.d("WEP", transactions.toString())
-
-        return result
     }
 
     private fun changeStatusBarColor() {
@@ -132,6 +114,66 @@ class InvoicesListFragment : WalletBaseFragment() {
         win?.setStatusBarColor(resources.getColor(R.color.status_bar_pink))
     }
 
+
+}
+
+class InvoiceListAdapter(private val context: Context, private val invoices: ArrayList<InvoiceDataModel>) :
+    RecyclerView.Adapter<InvoiceListAdapter.InvoiceViewHolder>() {
+
+//    private var invoiceList: List<JpExplore> = emptyList()
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): InvoiceViewHolder {
+        val view = LayoutInflater.from(
+            parent.context
+        ).inflate(R.layout.invoice_list_item_view, parent, false)
+        return InvoiceViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return invoices.count()
+    }
+
+
+    override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
+        holder.bindValues(invoices.get(position), position)
+    }
+
+    inner class InvoiceViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+
+        private var invoiceNoTv: TextView = itemView.findViewById(R.id.invoice_no)
+        private var invoiceDate: TextView = itemView.findViewById(R.id.invoice_date)
+        private var invoiceAmount: TextView = itemView.findViewById(R.id.invoice_amount)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        fun bindValues(invoiceDataModel: InvoiceDataModel, position: Int) {
+            invoiceNoTv.text = invoiceDataModel.invoiceNo
+            invoiceDate.text = "Date: " + DateHelper.getDateInDDMMYYYY(invoiceDataModel.invoiceDate)
+            invoiceAmount.text = "Rs. " +invoiceDataModel.invoicedAmount.toString()
+
+        }
+
+        override fun onClick(v: View?) {
+            val docIntent = Intent(
+                context,
+                DocViewerActivity::class.java
+            )
+            docIntent.putExtra(
+                StringConstants.DOC_URL.value,
+                invoices.get(position).invoiceLink
+            )
+            context.startActivity(docIntent)
+        }
+
+    }
 
 }
 
