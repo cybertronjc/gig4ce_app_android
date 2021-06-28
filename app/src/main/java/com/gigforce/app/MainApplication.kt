@@ -18,17 +18,6 @@ import io.branch.referral.Branch
 @HiltAndroidApp
 class MainApplication : Application() {
 
-//    var mixpanel: MixpanelAPI? = null
-//    private var cleverTapAPI: CleverTapAPI? = null
-
-
-//    private val firebaseAnalytics: FirebaseAnalytics by lazy {
-//        FirebaseAnalytics.getInstance(this)
-//    }
-
-//    private val appsFlyerLib: AppsFlyerLib by lazy {
-//        AppsFlyerLib.getInstance()
-//    }
     lateinit var sp: SharedPreAndCommonUtilInterface
     var moEngage = MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY)
         .configureNotificationMetaData(NotificationConfig(R.drawable.ic_notification_icon, R.drawable.ic_notification_icon, R.color.colorPrimary, null, true, isBuildingBackStackEnabled = false, isLargeIconDisplayEnabled = true))
@@ -39,7 +28,6 @@ class MainApplication : Application() {
         super.onCreate()
         setUpBranchTool()
         setUpMoengage()
-        //setupCleverTap()
         //setupMixpanel()
         //setUpAppsFlyer()
         //setUpUserOnAnalyticsAndCrashlytics()
@@ -127,9 +115,6 @@ class MainApplication : Application() {
 //        FirebaseCrashlytics.getInstance().setUserId(it.uid)
 //
 //        firebaseAnalytics.setUserId(it.uid)
-//        cleverTapAPI?.pushProfile(mapOf(
-//            "user_id" to it.uid
-//        ))
 //
 //        mixpanel?.identify(it.uid);
 //        mixpanel?.getPeople()?.identify(it.uid)
@@ -149,22 +134,7 @@ class MainApplication : Application() {
 //    }
 //}
 //
-//private fun setupCleverTap() {
-//    val clevertapDefaultInstance =
-//        CleverTapAPI.getDefaultInstance(applicationContext)
-//
-//    cleverTapAPI = CleverTapAPI.getDefaultInstance(applicationContext)
-//    CleverTapAPI.createNotificationChannel(
-//        applicationContext,
-//        "gigforce-general",
-//        "Gigforce",
-//        "Gigforce Push Notifications",
-//        NotificationManager.IMPORTANCE_MAX,
-//        true
-//    )
-//
-//    cleverTapAPI?.pushEvent("MAIN_APP_CREATED")
-//}
+
 //
 //private val appsFlyerConversationListener: AppsFlyerConversionListener = object : AppsFlyerConversionListener {
 //

@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="@color/lipstick_2"
-                app:navigationIcon="@drawable/ct_ic_arrow_back_white_24dp"
+                app:navigationIcon="@drawable/ic_arrow_back_white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="Help Videos"
                 app:titleTextColor="@color/white" />

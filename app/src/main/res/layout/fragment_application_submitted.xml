@@ -16,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/colorPrimary">
 
-
         <ImageView
             android:id="@+id/ic_back_iv"
             android:layout_width="32dp"
@@ -25,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ct_ic_arrow_back_white_24dp" />
+            app:srcCompat="@drawable/ic_arrow_back_white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
