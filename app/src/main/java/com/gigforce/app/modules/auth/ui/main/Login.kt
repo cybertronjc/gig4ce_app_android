@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
