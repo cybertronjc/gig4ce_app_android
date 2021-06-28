@@ -124,6 +124,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
                                     lastMsgFlowType = it.lastMsgFlowType,
                                     chatType = it.chatType,
                                     status = it.status,
+                                    lastMessageDeleted = it.lastMessageDeleted,
                                     senderName = it.senderName
                             ),
                             viewModel = viewModel
