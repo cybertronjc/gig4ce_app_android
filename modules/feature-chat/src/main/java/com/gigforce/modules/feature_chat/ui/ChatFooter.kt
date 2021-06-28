@@ -39,7 +39,8 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
 
         private val tokenizerConfig = WordTokenizerConfig.Builder()
                 .setWordBreakChars(", ")
-                .setExplicitChars("")
+                .setExplicitChars("@")
+//                .setExplicitChars("")
                 .setMaxNumKeywords(2)
                 .setThreshold(1)
                 .build()
