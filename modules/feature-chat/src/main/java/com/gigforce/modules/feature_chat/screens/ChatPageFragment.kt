@@ -275,7 +275,8 @@ class ChatPageFragment : Fragment(),
 
     private fun adjustUiAccToGroupChat() {
         toolbar.hideActionMenu()
-        chatFooter.setViewModel(groupChatViewModel)
+        chatFooter.setGroupViewModel(groupChatViewModel)
+        chatFooter.enableUserSuggestions()
 
         toolbar.showSubtitle("Tap to open details")
         toolbar.setSubtitleClickListener(View.OnClickListener {

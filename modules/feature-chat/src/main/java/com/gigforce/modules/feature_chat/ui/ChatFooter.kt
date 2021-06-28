@@ -68,10 +68,6 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         suggestionRecyclerView.adapter = mentionAdapter
 
         et_message = this.findViewById(R.id.et_typedMessageValue)
-        et_message.tokenizer = WordTokenizer(tokenizerConfig)
-        et_message.setQueryTokenReceiver(this)
-        et_message.setSuggestionsVisibilityManager(this)
-
         btn_send = this.findViewById(R.id.btn_send_chat)
         attachmentOptionButton = this.findViewById(R.id.iv_greyPlus)
 
@@ -79,8 +75,14 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         replyLayout = this.findViewById(R.id.chat_footer_type_layout)
     }
 
-    fun setViewModel(viewModel: GroupChatViewModel) {
+    fun setGroupViewModel(viewModel: GroupChatViewModel) {
         this.viewModel = viewModel
+    }
+
+    fun enableUserSuggestions(){
+        et_message.tokenizer = WordTokenizer(tokenizerConfig)
+        et_message.setQueryTokenReceiver(this)
+        et_message.setSuggestionsVisibilityManager(this)
     }
 
     override fun onQueryReceived(queryToken: QueryToken): MutableList<String> {
