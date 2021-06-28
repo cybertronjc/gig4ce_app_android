@@ -296,6 +296,7 @@ int attr cameraVideoSizeMinWidth 0x0
 int attr cameraVideoSizeSmallest 0x0
 int attr cameraWhiteBalance 0x0
 int attr cameraZoom 0x0
+int attr caption 0x0
 int attr cardBackgroundColor 0x0
 int attr cardCornerRadius 0x0
 int attr cardElevation 0x0
@@ -1807,6 +1808,7 @@ int dimen dp_xl2 0x0
 int dimen dp_xl3 0x0
 int dimen dp_xl4 0x0
 int dimen dp_xl5 0x0
+int dimen dp_xl6 0x0
 int dimen dp_xsm1 0x0
 int dimen dp_xsm2 0x0
 int dimen eight_dp 0x0
@@ -2608,6 +2610,7 @@ int drawable ic_set_preference 0x0
 int drawable ic_star 0x0
 int drawable ic_status_pending 0x0
 int drawable ic_three_dots 0x0
+int drawable ic_tick_primary 0x0
 int drawable ic_time_help_ 0x0
 int drawable ic_time_light_grey 0x0
 int drawable ic_tip 0x0
@@ -2660,6 +2663,7 @@ int drawable radio_button_drawable 0x0
 int drawable rect_assessment_status_completed 0x0
 int drawable rect_assessment_status_pending 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
+int drawable rect_border_grey 0x0
 int drawable rect_button_gradient 0x0
 int drawable rect_button_outline 0x0
 int drawable round_pink 0x0
@@ -3294,6 +3298,7 @@ int id learning_img 0x0
 int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
+int id left_img 0x0
 int id left_to_right 0x0
 int id lesson_completion_tv 0x0
 int id lessonsSeeMoreButton 0x0
@@ -3529,6 +3534,7 @@ int id right 0x0
 int id rightToLeft 0x0
 int id right_arrow2 0x0
 int id right_icon 0x0
+int id right_image 0x0
 int id right_side 0x0
 int id right_to_left 0x0
 int id rl_gigs 0x0
@@ -4173,6 +4179,7 @@ int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
 int layout select_dialog_singlechoice_material 0x0
 int layout shimmer_data_layout 0x0
+int layout simple_card_component 0x0
 int layout support_simple_spinner_dropdown_item 0x0
 int layout test_action_chip 0x0
 int layout test_chip_zero_corner_radius 0x0
@@ -4823,6 +4830,10 @@ int style Base_Widget_MaterialComponents_Snackbar 0x0
 int style Base_Widget_MaterialComponents_TextInputEditText 0x0
 int style Base_Widget_MaterialComponents_TextInputLayout 0x0
 int style Base_Widget_MaterialComponents_TextView 0x0
+int style Body1 0x0
+int style Caption1 0x0
+int style Caption2 0x0
+int style CardCaption1 0x0
 int style CardCaptionTitle 0x0
 int style CardStyle 0x0
 int style CardStyle_ItemStyle 0x0
@@ -5252,6 +5263,8 @@ int style Theme_MaterialComponents_Light_NoActionBar_Bridge 0x0
 int style Theme_MaterialComponents_NoActionBar 0x0
 int style Theme_MaterialComponents_NoActionBar_Bridge 0x0
 int style Theme_RadioButtonLipstickPink 0x0
+int style Title 0x0
+int style Title1 0x0
 int style ToolbarCustomCardViewStyle 0x0
 int style VideoInfoCardTitle 0x0
 int style VideoInfoItemCardTitle 0x0
@@ -5466,6 +5479,7 @@ int style Widget_MaterialProgressBar_ProgressBar_NoPadding 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding 0x0
 int style Widget_Support_CoordinatorLayout 0x0
+int style button_style 0x0
 int style circleImageView 0x0
 int style ucrop_ImageViewWidgetIcon 0x0
 int style ucrop_TextViewCropAspectRatio 0x0
@@ -7144,6 +7158,9 @@ int[] styleable SignInButton { 0x0, 0x0, 0x0 }
 int styleable SignInButton_buttonSize 0
 int styleable SignInButton_colorScheme 1
 int styleable SignInButton_scopeUris 2
+int[] styleable SimpleCardComponent { 0x0, 0x0 }
+int styleable SimpleCardComponent_caption 0
+int styleable SimpleCardComponent_title 1
 int[] styleable SlideToActView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable SlideToActView_animate_completion 0
 int styleable SlideToActView_animation_duration 1

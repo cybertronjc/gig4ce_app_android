@@ -34,6 +34,8 @@ class CommonViewTypes {
         const val VIEW_VIDEOS_ITEM_CARD2 = 20205
         const val VIEW_ASSESMENT_ITEM_CARD = 20206
 
+        const val VIEW_SIMPLE_CARD = 20301
+
 
     }
 }

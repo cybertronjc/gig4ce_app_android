@@ -290,6 +290,7 @@ int attr cameraVideoSizeMinHeight 0x0
 int attr cameraVideoSizeMinWidth 0x0
 int attr cameraVideoSizeSmallest 0x0
 int attr cameraWhiteBalance 0x0
+int attr caption 0x0
 int attr cardBackgroundColor 0x0
 int attr cardCornerRadius 0x0
 int attr cardElevation 0x0
@@ -1774,6 +1775,7 @@ int dimen dp_xl2 0x0
 int dimen dp_xl3 0x0
 int dimen dp_xl4 0x0
 int dimen dp_xl5 0x0
+int dimen dp_xl6 0x0
 int dimen dp_xsm1 0x0
 int dimen dp_xsm2 0x0
 int dimen eight_dp 0x0
@@ -2522,6 +2524,7 @@ int drawable ic_search 0x0
 int drawable ic_set_preference 0x0
 int drawable ic_stop 0x0
 int drawable ic_three_dots 0x0
+int drawable ic_tick_primary 0x0
 int drawable ic_time 0x0
 int drawable ic_time_fa6400 0x0
 int drawable ic_time_help_ 0x0
@@ -2573,6 +2576,7 @@ int drawable radio_button_drawable 0x0
 int drawable rect_assessment_status_completed 0x0
 int drawable rect_assessment_status_pending 0x0
 int drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077 0x0
+int drawable rect_border_grey 0x0
 int drawable rect_button_outline 0x0
 int drawable rounded_layout 0x0
 int drawable shape_circle_lipstick 0x0
@@ -2648,6 +2652,7 @@ int id VeriDD_back 0x0
 int id VeriDD_front 0x0
 int id WHITE 0x0
 int id WhiteBar 0x0
+int id aadhaar_number 0x0
 int id aadharAvailaibilityOptionRG 0x0
 int id aadharBackImageEditErrorMessage 0x0
 int id aadharBackImageHolder 0x0
@@ -2678,6 +2683,7 @@ int id aadharViewFrontLabel 0x0
 int id aadharViewLayout 0x0
 int id aadharViewLayout1 0x0
 int id aadharYesRB 0x0
+int id aadharcard_til 0x0
 int id accLabel 0x0
 int id accNoLabel 0x0
 int id accNumberET 0x0
@@ -2760,11 +2766,13 @@ int id adjust_width 0x0
 int id alertTitle 0x0
 int id aligned 0x0
 int id all 0x0
+int id allDocsRV 0x0
 int id always 0x0
 int id animateToEnd 0x0
 int id animateToStart 0x0
 int id anonymous_button 0x0
 int id appBar 0x0
+int id appBar2 0x0
 int id appBarComp 0x0
 int id appProfileComponent 0x0
 int id areaET 0x0
@@ -2864,6 +2872,7 @@ int id center_horizontal 0x0
 int id center_vertical 0x0
 int id chain 0x0
 int id chat_icon 0x0
+int id checkBox 0x0
 int id checkInTV 0x0
 int id checkbox 0x0
 int id checked 0x0
@@ -2918,7 +2927,9 @@ int id cut 0x0
 int id cv_top 0x0
 int id dark 0x0
 int id dash 0x0
+int id dataBinding 0x0
 int id date_picker_actions 0x0
+int id date_rl 0x0
 int id daylight 0x0
 int id decelerate 0x0
 int id decelerateAndComplete 0x0
@@ -3083,6 +3094,9 @@ int id gl_surface_view 0x0
 int id glide_custom_view_target_tag 0x0
 int id gone 0x0
 int id gotItBtn 0x0
+int id grayLine 0x0
+int id grayLine2 0x0
+int id grayLine3 0x0
 int id grayline3 0x0
 int id group_divider 0x0
 int id guideline 0x0
@@ -3117,8 +3131,10 @@ int id imageLayout 0x0
 int id imageView 0x0
 int id imageView10 0x0
 int id imageView18 0x0
+int id imageView3 0x0
 int id imageView4 0x0
 int id imageView6 0x0
+int id imageView7 0x0
 int id image_content_root 0x0
 int id image_rl 0x0
 int id image_root 0x0
@@ -3169,6 +3185,7 @@ int id layout_title 0x0
 int id left 0x0
 int id leftToRight 0x0
 int id left_aligned 0x0
+int id left_img 0x0
 int id left_to_right 0x0
 int id lesson_completion_tv 0x0
 int id lessonsSeeMoreButton 0x0
@@ -3264,11 +3281,13 @@ int id name 0x0
 int id nameET 0x0
 int id nameLabel 0x0
 int id name_layout 0x0
+int id name_til 0x0
 int id nav_controller_view_tag 0x0
 int id nav_host_fragment_container 0x0
 int id navigateTV 0x0
 int id navigation_header_container 0x0
 int id never 0x0
+int id next 0x0
 int id none 0x0
 int id normal 0x0
 int id notification_background 0x0
@@ -3277,9 +3296,12 @@ int id notification_main_column_container 0x0
 int id nv_giger_id 0x0
 int id off 0x0
 int id on 0x0
+int id onAttachStateChangeListener 0x0
+int id onDateChanged 0x0
 int id optionIconIV 0x0
 int id optionTitleTV 0x0
 int id option_menu_iv 0x0
+int id or_tv 0x0
 int id outline 0x0
 int id outward 0x0
 int id oval_gradient_iv 0x0
@@ -3337,6 +3359,7 @@ int id percent 0x0
 int id phone_button 0x0
 int id phone_layout 0x0
 int id phone_number 0x0
+int id phone_number_aadhaar 0x0
 int id picture 0x0
 int id pin 0x0
 int id pinET 0x0
@@ -3373,6 +3396,7 @@ int id reverseSawtooth 0x0
 int id right 0x0
 int id rightToLeft 0x0
 int id right_icon 0x0
+int id right_image 0x0
 int id right_side 0x0
 int id right_to_left 0x0
 int id rl_no_dl 0x0
@@ -3513,15 +3537,27 @@ int id text2 0x0
 int id textSpacerNoButtons 0x0
 int id textSpacerNoTitle 0x0
 int id textTitle 0x0
+int id textView 0x0
+int id textView10 0x0
+int id textView11 0x0
+int id textView12 0x0
 int id textView124 0x0
+int id textView2 0x0
 int id textView21 0x0
 int id textView3 0x0
 int id textView30 0x0
+int id textView4 0x0
 int id textView41 0x0
+int id textView5 0x0
+int id textView6 0x0
 int id textView67 0x0
+int id textView7 0x0
+int id textView8 0x0
+int id textView9 0x0
 int id textViewaddress 0x0
 int id textViewbank 0x0
 int id textViewcontact_redundant 0x0
+int id textWatcher 0x0
 int id text_input_end_icon 0x0
 int id text_input_error_icon 0x0
 int id text_input_password_toggle 0x0
@@ -3623,6 +3659,7 @@ int id uploadDocumentCardView 0x0
 int id uploadDocumentLabel 0x0
 int id uploadImageLayout 0x0
 int id uploadStatusTV 0x0
+int id upload_adhaar_Card 0x0
 int id useLogo 0x0
 int id veriScreenTitle 0x0
 int id verificationCompletedBtn 0x0
@@ -3636,6 +3673,7 @@ int id videoUploadingLayout 0x0
 int id video_decoder_gl_surface_view 0x0
 int id video_time 0x0
 int id video_title 0x0
+int id viewPager2 0x0
 int id view_bottom 0x0
 int id view_offset_helper 0x0
 int id view_overlay 0x0
@@ -3700,6 +3738,9 @@ int interpolator mtrl_fast_out_linear_in 0x0
 int interpolator mtrl_fast_out_slow_in 0x0
 int interpolator mtrl_linear 0x0
 int interpolator mtrl_linear_out_slow_in 0x0
+int layout aadhaar_card_image_upload_fragment 0x0
+int layout aadhaar_card_options_fragment 0x0
+int layout aadhaar_card_phone_number_fragment 0x0
 int layout abc_action_bar_title_item 0x0
 int layout abc_action_bar_up_container 0x0
 int layout abc_action_bar_view_list_nav_layout 0x0
@@ -3927,6 +3968,7 @@ int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
 int layout select_dialog_singlechoice_material 0x0
 int layout shimmer_data_layout 0x0
+int layout simple_card_component 0x0
 int layout support_simple_spinner_dropdown_item 0x0
 int layout test_action_chip 0x0
 int layout test_chip_zero_corner_radius 0x0
@@ -3955,6 +3997,7 @@ int layout upload_aadhar_card_fragment 0x0
 int layout upload_car_client_activation 0x0
 int layout upload_pan_card_fragment 0x0
 int layout verification_image_card_component 0x0
+int layout verification_main_fragment 0x0
 int layout verified_button 0x0
 int layout view_assessment_card_layout 0x0
 int layout view_play_card_layout 0x0
@@ -4766,6 +4809,10 @@ int style Base_Widget_MaterialComponents_Snackbar 0x0
 int style Base_Widget_MaterialComponents_TextInputEditText 0x0
 int style Base_Widget_MaterialComponents_TextInputLayout 0x0
 int style Base_Widget_MaterialComponents_TextView 0x0
+int style Body1 0x0
+int style Caption1 0x0
+int style Caption2 0x0
+int style CardCaption1 0x0
 int style CardCaptionTitle 0x0
 int style CardStyle 0x0
 int style CardStyle_ItemStyle 0x0
@@ -5193,6 +5240,8 @@ int style Theme_MaterialComponents_Light_NoActionBar_Bridge 0x0
 int style Theme_MaterialComponents_NoActionBar 0x0
 int style Theme_MaterialComponents_NoActionBar_Bridge 0x0
 int style Theme_RadioButtonLipstickPink 0x0
+int style Title 0x0
+int style Title1 0x0
 int style ToolbarCustomCardViewStyle 0x0
 int style VideoInfoCardTitle 0x0
 int style VideoInfoItemCardTitle 0x0
@@ -5407,6 +5456,7 @@ int style Widget_MaterialProgressBar_ProgressBar_NoPadding 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small 0x0
 int style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding 0x0
 int style Widget_Support_CoordinatorLayout 0x0
+int style button_style 0x0
 int style circleImageView 0x0
 int style ucrop_ImageViewWidgetIcon 0x0
 int style ucrop_TextViewCropAspectRatio 0x0
@@ -7060,6 +7110,9 @@ int[] styleable SignInButton { 0x0, 0x0, 0x0 }
 int styleable SignInButton_buttonSize 0
 int styleable SignInButton_colorScheme 1
 int styleable SignInButton_scopeUris 2
+int[] styleable SimpleCardComponent { 0x0, 0x0 }
+int styleable SimpleCardComponent_caption 0
+int styleable SimpleCardComponent_title 1
 int[] styleable SlideToActView { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable SlideToActView_animate_completion 0
 int styleable SlideToActView_animation_duration 1

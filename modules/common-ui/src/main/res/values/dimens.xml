@@ -50,6 +50,7 @@
     <dimen name="dp_xl3">34dp</dimen>
     <dimen name="dp_xl4">40dp</dimen>
     <dimen name="dp_xl5">50dp</dimen>
+    <dimen name="dp_xl6">60dp</dimen>
 
     <dimen name="chip_height">32dp</dimen>
     <dimen name="chip_horizontal_padding">12dp</dimen>

@@ -291,6 +291,7 @@ attr cameraVideoSizeMinHeight
 attr cameraVideoSizeMinWidth
 attr cameraVideoSizeSmallest
 attr cameraWhiteBalance
+attr caption
 attr cardBackgroundColor
 attr cardCornerRadius
 attr cardElevation
@@ -1775,6 +1776,7 @@ dimen dp_xl2
 dimen dp_xl3
 dimen dp_xl4
 dimen dp_xl5
+dimen dp_xl6
 dimen dp_xsm1
 dimen dp_xsm2
 dimen eight_dp
@@ -2523,6 +2525,7 @@ drawable ic_search
 drawable ic_set_preference
 drawable ic_stop
 drawable ic_three_dots
+drawable ic_tick_primary
 drawable ic_time
 drawable ic_time_fa6400
 drawable ic_time_help_
@@ -2574,6 +2577,7 @@ drawable radio_button_drawable
 drawable rect_assessment_status_completed
 drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
+drawable rect_border_grey
 drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
@@ -2649,6 +2653,7 @@ id VeriDD_back
 id VeriDD_front
 id WHITE
 id WhiteBar
+id aadhaar_number
 id aadharAvailaibilityOptionRG
 id aadharBackImageEditErrorMessage
 id aadharBackImageHolder
@@ -2679,6 +2684,7 @@ id aadharViewFrontLabel
 id aadharViewLayout
 id aadharViewLayout1
 id aadharYesRB
+id aadharcard_til
 id accLabel
 id accNoLabel
 id accNumberET
@@ -2761,11 +2767,13 @@ id adjust_width
 id alertTitle
 id aligned
 id all
+id allDocsRV
 id always
 id animateToEnd
 id animateToStart
 id anonymous_button
 id appBar
+id appBar2
 id appBarComp
 id appProfileComponent
 id areaET
@@ -2865,6 +2873,7 @@ id center_horizontal
 id center_vertical
 id chain
 id chat_icon
+id checkBox
 id checkInTV
 id checkbox
 id checked
@@ -2919,7 +2928,9 @@ id cut
 id cv_top
 id dark
 id dash
+id dataBinding
 id date_picker_actions
+id date_rl
 id daylight
 id decelerate
 id decelerateAndComplete
@@ -3084,6 +3095,9 @@ id gl_surface_view
 id glide_custom_view_target_tag
 id gone
 id gotItBtn
+id grayLine
+id grayLine2
+id grayLine3
 id grayline3
 id group_divider
 id guideline
@@ -3118,8 +3132,10 @@ id imageLayout
 id imageView
 id imageView10
 id imageView18
+id imageView3
 id imageView4
 id imageView6
+id imageView7
 id image_content_root
 id image_rl
 id image_root
@@ -3170,6 +3186,7 @@ id layout_title
 id left
 id leftToRight
 id left_aligned
+id left_img
 id left_to_right
 id lesson_completion_tv
 id lessonsSeeMoreButton
@@ -3265,11 +3282,13 @@ id name
 id nameET
 id nameLabel
 id name_layout
+id name_til
 id nav_controller_view_tag
 id nav_host_fragment_container
 id navigateTV
 id navigation_header_container
 id never
+id next
 id none
 id normal
 id notification_background
@@ -3278,9 +3297,12 @@ id notification_main_column_container
 id nv_giger_id
 id off
 id on
+id onAttachStateChangeListener
+id onDateChanged
 id optionIconIV
 id optionTitleTV
 id option_menu_iv
+id or_tv
 id outline
 id outward
 id oval_gradient_iv
@@ -3338,6 +3360,7 @@ id percent
 id phone_button
 id phone_layout
 id phone_number
+id phone_number_aadhaar
 id picture
 id pin
 id pinET
@@ -3374,6 +3397,7 @@ id reverseSawtooth
 id right
 id rightToLeft
 id right_icon
+id right_image
 id right_side
 id right_to_left
 id rl_no_dl
@@ -3514,15 +3538,27 @@ id text2
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textTitle
+id textView
+id textView10
+id textView11
+id textView12
 id textView124
+id textView2
 id textView21
 id textView3
 id textView30
+id textView4
 id textView41
+id textView5
+id textView6
 id textView67
+id textView7
+id textView8
+id textView9
 id textViewaddress
 id textViewbank
 id textViewcontact_redundant
+id textWatcher
 id text_input_end_icon
 id text_input_error_icon
 id text_input_password_toggle
@@ -3624,6 +3660,7 @@ id uploadDocumentCardView
 id uploadDocumentLabel
 id uploadImageLayout
 id uploadStatusTV
+id upload_adhaar_Card
 id useLogo
 id veriScreenTitle
 id verificationCompletedBtn
@@ -3637,6 +3674,7 @@ id videoUploadingLayout
 id video_decoder_gl_surface_view
 id video_time
 id video_title
+id viewPager2
 id view_bottom
 id view_offset_helper
 id view_overlay
@@ -3701,6 +3739,9 @@ interpolator mtrl_fast_out_linear_in
 interpolator mtrl_fast_out_slow_in
 interpolator mtrl_linear
 interpolator mtrl_linear_out_slow_in
+layout aadhaar_card_image_upload_fragment
+layout aadhaar_card_options_fragment
+layout aadhaar_card_phone_number_fragment
 layout abc_action_bar_title_item
 layout abc_action_bar_up_container
 layout abc_action_bar_view_list_nav_layout
@@ -3928,6 +3969,7 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout shimmer_data_layout
+layout simple_card_component
 layout support_simple_spinner_dropdown_item
 layout test_action_chip
 layout test_chip_zero_corner_radius
@@ -3956,6 +3998,7 @@ layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
 layout verification_image_card_component
+layout verification_main_fragment
 layout verified_button
 layout view_assessment_card_layout
 layout view_play_card_layout
@@ -4767,6 +4810,10 @@ style Base_Widget_MaterialComponents_Snackbar
 style Base_Widget_MaterialComponents_TextInputEditText
 style Base_Widget_MaterialComponents_TextInputLayout
 style Base_Widget_MaterialComponents_TextView
+style Body1
+style Caption1
+style Caption2
+style CardCaption1
 style CardCaptionTitle
 style CardStyle
 style CardStyle_ItemStyle
@@ -5194,6 +5241,8 @@ style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_RadioButtonLipstickPink
+style Title
+style Title1
 style ToolbarCustomCardViewStyle
 style VideoInfoCardTitle
 style VideoInfoItemCardTitle
@@ -5408,6 +5457,7 @@ style Widget_MaterialProgressBar_ProgressBar_NoPadding
 style Widget_MaterialProgressBar_ProgressBar_Small
 style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding
 style Widget_Support_CoordinatorLayout
+style button_style
 style circleImageView
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
@@ -5558,6 +5608,7 @@ styleable ShapeAppearance cornerFamily cornerFamilyBottomLeft cornerFamilyBottom
 styleable ShapeableImageView contentPadding contentPaddingBottom contentPaddingEnd contentPaddingLeft contentPaddingRight contentPaddingStart contentPaddingTop shapeAppearance shapeAppearanceOverlay strokeColor strokeWidth
 styleable ShimmerFrameLayout shimmer_auto_start shimmer_base_alpha shimmer_base_color shimmer_clip_to_children shimmer_colored shimmer_direction shimmer_dropoff shimmer_duration shimmer_fixed_height shimmer_fixed_width shimmer_height_ratio shimmer_highlight_alpha shimmer_highlight_color shimmer_intensity shimmer_repeat_count shimmer_repeat_delay shimmer_repeat_mode shimmer_shape shimmer_tilt shimmer_width_ratio
 styleable SignInButton buttonSize colorScheme scopeUris
+styleable SimpleCardComponent caption title
 styleable SlideToActView animate_completion animation_duration area_margin border_radius bump_vibration icon_margin inner_color outer_color rotate_icon slider_height slider_icon slider_icon_color slider_locked slider_reversed text text_appearance text_color text_size text_style
 styleable SlideToActViewTheme slideToActViewStyle
 styleable Slider android_enabled android_stepSize android_value android_valueFrom android_valueTo haloColor haloRadius labelBehavior labelStyle thumbColor thumbElevation thumbRadius thumbStrokeColor thumbStrokeWidth tickColor tickColorActive tickColorInactive tickVisible trackColor trackColorActive trackColorInactive trackHeight

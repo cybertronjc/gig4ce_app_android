@@ -446,9 +446,28 @@
         android:id="@+id/editTagBottomSheet"
         android:name="com.gigforce.app.modules.profile.EditTagBottomSheet"
         android:label="EditTagBottomSheet" />
+<!--    android:name="com.gigforce.verification.gigerVerfication.GigerVerificationFragment"-->
+
+
     <fragment
+        android:name="com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardOptionsFragment"
+        android:id="@+id/aadhaarOptionsFragment"
+        android:label="Aadhaar Options"
+        tools:layout="@layout/aadhaar_card_options_fragment"/>
+
+    <fragment
+        android:id="@+id/aadhaarcardimageupload"
+        android:name="com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardImageUploadFragment"
+        tools:layout="@layout/aadhaar_card_image_upload_fragment"
+        />
+    <fragment
+        android:id="@+id/aadhaarcardphonenumber"
+        android:name="com.gigforce.verification.mainverification.aadhaarcard.AadhaarCardPhoneNumberFragment"
+        tools:layout="@layout/aadhaar_card_phone_number_fragment"/>
+
+    <fragment
+        android:name="com.gigforce.verification.mainverification.VerificationMainFragment"
         android:id="@+id/gigerVerificationFragment"
-        android:name="com.gigforce.verification.gigerVerfication.GigerVerificationFragment"
         android:label="fragment_giger_verification"
         tools:layout="@layout/fragment_giger_verification" />
     <fragment

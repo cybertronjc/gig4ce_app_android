@@ -279,6 +279,7 @@ attr cameraVideoSizeMinHeight
 attr cameraVideoSizeMinWidth
 attr cameraVideoSizeSmallest
 attr cameraWhiteBalance
+attr caption
 attr cardBackgroundColor
 attr cardCornerRadius
 attr cardElevation
@@ -1736,6 +1737,7 @@ dimen dp_xl2
 dimen dp_xl3
 dimen dp_xl4
 dimen dp_xl5
+dimen dp_xl6
 dimen dp_xsm1
 dimen dp_xsm2
 dimen eight_dp
@@ -2448,6 +2450,7 @@ drawable ic_rejected
 drawable ic_search
 drawable ic_set_preference
 drawable ic_three_dots
+drawable ic_tick_primary
 drawable ic_time_help_
 drawable ic_time_light_grey
 drawable ic_tip
@@ -2491,6 +2494,7 @@ drawable radio_button_drawable
 drawable rect_assessment_status_completed
 drawable rect_assessment_status_pending
 drawable rect_bg_rad_rad_5_sg_e42c64_eg_990077
+drawable rect_border_grey
 drawable rect_button_outline
 drawable rounded_layout
 drawable shape_circle_lipstick
@@ -2889,6 +2893,7 @@ id layout_title
 id left
 id leftToRight
 id left_aligned
+id left_img
 id left_to_right
 id lesson_completion_tv
 id lessonsSeeMoreButton
@@ -3033,6 +3038,7 @@ id reverseSawtooth
 id right
 id rightToLeft
 id right_icon
+id right_image
 id right_side
 id right_to_left
 id root
@@ -3485,6 +3491,7 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout shimmer_data_layout
+layout simple_card_component
 layout support_simple_spinner_dropdown_item
 layout test_action_chip
 layout test_chip_zero_corner_radius
@@ -4082,6 +4089,10 @@ style Base_Widget_MaterialComponents_Snackbar
 style Base_Widget_MaterialComponents_TextInputEditText
 style Base_Widget_MaterialComponents_TextInputLayout
 style Base_Widget_MaterialComponents_TextView
+style Body1
+style Caption1
+style Caption2
+style CardCaption1
 style CardCaptionTitle
 style CardStyle
 style CardStyle_ItemStyle
@@ -4507,6 +4518,8 @@ style Theme_MaterialComponents_Light_NoActionBar_Bridge
 style Theme_MaterialComponents_NoActionBar
 style Theme_MaterialComponents_NoActionBar_Bridge
 style Theme_RadioButtonLipstickPink
+style Title
+style Title1
 style ToolbarCustomCardViewStyle
 style VideoInfoCardTitle
 style VideoInfoItemCardTitle
@@ -4720,6 +4733,7 @@ style Widget_MaterialProgressBar_ProgressBar_NoPadding
 style Widget_MaterialProgressBar_ProgressBar_Small
 style Widget_MaterialProgressBar_ProgressBar_Small_NoPadding
 style Widget_Support_CoordinatorLayout
+style button_style
 style circleImageView
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
@@ -4866,6 +4880,7 @@ styleable ShapeAppearance cornerFamily cornerFamilyBottomLeft cornerFamilyBottom
 styleable ShapeableImageView contentPadding contentPaddingBottom contentPaddingEnd contentPaddingLeft contentPaddingRight contentPaddingStart contentPaddingTop shapeAppearance shapeAppearanceOverlay strokeColor strokeWidth
 styleable ShimmerFrameLayout shimmer_auto_start shimmer_base_alpha shimmer_base_color shimmer_clip_to_children shimmer_colored shimmer_direction shimmer_dropoff shimmer_duration shimmer_fixed_height shimmer_fixed_width shimmer_height_ratio shimmer_highlight_alpha shimmer_highlight_color shimmer_intensity shimmer_repeat_count shimmer_repeat_delay shimmer_repeat_mode shimmer_shape shimmer_tilt shimmer_width_ratio
 styleable SignInButton buttonSize colorScheme scopeUris
+styleable SimpleCardComponent caption title
 styleable Slider android_enabled android_stepSize android_value android_valueFrom android_valueTo haloColor haloRadius labelBehavior labelStyle thumbColor thumbElevation thumbRadius thumbStrokeColor thumbStrokeWidth tickColor tickColorActive tickColorInactive tickVisible trackColor trackColorActive trackColorInactive trackHeight
 styleable Snackbar snackbarButtonStyle snackbarStyle snackbarTextViewStyle
 styleable SnackbarLayout actionTextColorAlpha android_maxWidth animationMode backgroundOverlayColorAlpha backgroundTint backgroundTintMode elevation maxActionInlineWidth
