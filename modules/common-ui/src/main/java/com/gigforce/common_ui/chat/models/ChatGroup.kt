@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.chat.models
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 data class ChatGroup(
@@ -29,14 +30,27 @@ data class ChatGroup(
     @set:PropertyName("groupMembers")
     var groupMembers: List<ContactModel> = emptyList(),
 
+    @get:PropertyName("deletedGroupMembers")
+    @set:PropertyName("deletedGroupMembers")
+    var deletedGroupMembers: List<ContactModel> = emptyList(),
+
     @get:PropertyName("creationDetails")
     @set:PropertyName("creationDetails")
     var creationDetails: GroupCreationDetails? = null,
 
     @get:PropertyName("groupDeactivated")
     @set:PropertyName("groupDeactivated")
-    var groupDeactivated: Boolean = false
-)
+    var groupDeactivated: Boolean = false,
+
+    @get:PropertyName("onlyAdminCanPostInGroup")
+    @set:PropertyName("onlyAdminCanPostInGroup")
+    var onlyAdminCanPostInGroup: Boolean = false,
+
+    @Exclude
+    var currenUserRemovedFromGroup: Boolean = false,
+    )
+
+
 
 data class GroupCreationDetails(
 

@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
@@ -156,4 +157,7 @@ class NavManagerImpl @Inject constructor(
         fragment.show(childFragmentManager, WhyWeNeedThisBottomSheet.TAG)
     }
 
+    override fun getCurrentDestination(): NavDestination? {
+        return getNavController().currentDestination
+    }
 }

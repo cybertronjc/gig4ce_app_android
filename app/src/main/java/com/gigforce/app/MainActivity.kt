@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -25,6 +26,7 @@ import com.gigforce.app.notification.NotificationConstants
 import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
+import com.gigforce.common_ui.MimeTypes
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.ChatHeadersViewModel
@@ -151,63 +153,159 @@ class MainActivity : AppCompatActivity(),
             notificationIntentRecevier,
             intentFilters
         )
+        if (Intent.ACTION_SEND == intent.action && isUserLoggedIn()) {
+            //User Clicked on share in gallery
+            formatDataSharedAndOpenChat(intent!!)
+        } else if (Intent.ACTION_SEND_MULTIPLE == intent.action && isUserLoggedIn()) {
+            formatMultipleDataSharedAndOpenChat(intent)
+        } else {
+            when {
+                intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
 
-        when {
-            intent.getBooleanExtra(StringConstants.NAV_TO_CLIENT_ACT.value, false) -> {
+                    if (!isUserLoggedIn()) {
+                        proceedWithNormalNavigation()
+                        return
+                    }
 
-                if(!isUserLoggedIn())
-                {
-                    proceedWithNormalNavigation()
-                    return
-                }
-
-                navController.popBackStack()
-                navController.navigate(
-                    R.id.fragment_client_activation, bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
-                            StringConstants.JOB_PROFILE_ID.value
-                        ),
-                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                            StringConstants.INVITE_USER_ID.value
-                        ),
-                        StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
+                    navController.popBackStack()
+                    navController.navigate(
+                            R.id.fragment_client_activation, bundleOf(
+                            StringConstants.JOB_PROFILE_ID.value to intent.getStringExtra(
+                                    StringConstants.JOB_PROFILE_ID.value
+                            ),
+                            StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                                    StringConstants.INVITE_USER_ID.value
+                            ),
+                            StringConstants.CLIENT_ACTIVATION_VIA_DEEP_LINK.value to true
                     )
-                )
-            }
-
-            intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
-
-                if(!isUserLoggedIn())
-                {
-                    proceedWithNormalNavigation()
-                    return
+                    )
                 }
+
+                intent.getBooleanExtra(StringConstants.NAV_TO_ROLE.value, false) -> {
+
+                    if (!isUserLoggedIn()) {
+                        proceedWithNormalNavigation()
+                        return
+                    }
 
 //                LandingScreenFragmentDirections.openRoleDetailsHome( intent.getStringExtra(StringConstants.ROLE_ID.value),true)
-                navController.popBackStack()
-                navController.navigate(
-                    R.id.fragment_role_details, bundleOf(
-                        StringConstants.ROLE_ID.value to intent.getStringExtra(
-                            StringConstants.ROLE_ID.value
-                        ),
-                        StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
-                            StringConstants.INVITE_USER_ID.value
-                        ),
-                        StringConstants.ROLE_VIA_DEEPLINK.value to true
+                    navController.popBackStack()
+                    navController.navigate(
+                            R.id.fragment_role_details, bundleOf(
+                            StringConstants.ROLE_ID.value to intent.getStringExtra(
+                                    StringConstants.ROLE_ID.value
+                            ),
+                            StringConstants.INVITE_USER_ID.value to intent.getStringExtra(
+                                    StringConstants.INVITE_USER_ID.value
+                            ),
+                            StringConstants.ROLE_VIA_DEEPLINK.value to true
                     )
-                )
-            }
-            intent.getStringExtra(IS_DEEPLINK) == "true" -> {
-                handleDeepLink()
-            }
-            else -> {
-                proceedWithNormalNavigation()
+                    )
+                }
+                intent.getStringExtra(IS_DEEPLINK) == "true" -> {
+                    handleDeepLink()
+                }
+                else -> {
+                    proceedWithNormalNavigation()
+                }
             }
         }
 
         if (firebaseAuth.currentUser != null) {
             lookForNewChatMessages()
         }
+    }
+
+    private fun formatDataSharedAndOpenChat(intent: Intent) {
+        if (intent.type?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
+            handleSendImage(intent) // Handle single image being sent
+        } else if (intent.type?.startsWith(MimeTypes.VIDEO_MATCHER) == true) {
+            handleVideoImage(intent)
+        } else if (
+                MimeTypes.DOC == intent.type ||
+                MimeTypes.DOCX == intent.type ||
+                MimeTypes.PDF == intent.type ||
+                MimeTypes.XLS == intent.type ||
+                MimeTypes.XLSX == intent.type
+        ) {
+            handleDocumentSend(intent)
+        }
+    }
+
+    private fun formatMultipleDataSharedAndOpenChat(intent: Intent) {
+        val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+
+        if(filesSelectedUris.size > 10){
+            Toast.makeText(this, "Max 10 files can be shared at once", Toast.LENGTH_SHORT).show()
+            proceedWithNormalNavigation()
+            return
+        }
+
+        val documentsUris :ArrayList<Uri> = arrayListOf()
+        val imagesUri :ArrayList<Uri> = arrayListOf()
+        val videosUri :ArrayList<Uri> = arrayListOf()
+
+        filesSelectedUris.forEach {
+
+            val mimeType = contentResolver.getType(it)
+
+            if (mimeType?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
+                imagesUri.add(it)
+            } else if (mimeType?.startsWith(MimeTypes.VIDEO_MATCHER) == true) {
+                videosUri.add(it)
+            } else if (
+                    MimeTypes.DOC == mimeType ||
+                    MimeTypes.DOCX == mimeType ||
+                    MimeTypes.PDF == mimeType||
+                    MimeTypes.XLS == mimeType ||
+                    MimeTypes.XLSX == mimeType
+            ) {
+                documentsUris.add(it)
+            }
+        }
+
+        val itemSharedBundle = bundleOf(
+                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to videosUri,
+                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to imagesUri,
+                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to documentsUris
+        )
+
+        navController.navigate(R.id.chatListFragment,
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to itemSharedBundle)
+        )
+    }
+
+    private fun handleDocumentSend(intent: Intent) {
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val sharedFileBundle = bundleOf(
+                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to arrayListOf(documentUri)
+        )
+
+        navController.navigate(R.id.chatListFragment,
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        )
+    }
+
+    private fun handleVideoImage(intent: Intent) {
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val sharedFileBundle = bundleOf(
+                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to arrayListOf(documentUri)
+        )
+
+        navController.navigate(R.id.chatListFragment,
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        )
+    }
+
+    private fun handleSendImage(intent: Intent) {
+        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val sharedFileBundle = bundleOf(
+                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to arrayListOf(documentUri)
+        )
+
+        navController.navigate(R.id.chatListFragment,
+                bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle)
+        )
     }
 
     private fun isUserLoggedIn(): Boolean {
@@ -296,7 +394,12 @@ class MainActivity : AppCompatActivity(),
             it.printDebugLog("printDebugLog")
         }
 
-        if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
+        if (Intent.ACTION_SEND == intent?.action && isUserLoggedIn()) {
+            //User Clicked on share in gallery
+            formatDataSharedAndOpenChat(intent)
+        } else if (Intent.ACTION_SEND_MULTIPLE == intent?.action && isUserLoggedIn()) {
+            formatMultipleDataSharedAndOpenChat(intent)
+        } else if (intent?.getStringExtra(IS_DEEPLINK) == "true") {
             handleDeepLink()
         }
     }

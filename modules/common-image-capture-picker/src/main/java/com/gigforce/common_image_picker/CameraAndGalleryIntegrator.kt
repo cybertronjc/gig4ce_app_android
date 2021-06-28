@@ -177,7 +177,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         callback.imageResult(outputFileUri)
     }
 
-    private fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
+    fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
 
@@ -201,7 +201,6 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
         val size = getImageDimensions(uri)
         uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
-
         uCrop.withOptions(getCropOptions())
 
         if (fragment != null) {

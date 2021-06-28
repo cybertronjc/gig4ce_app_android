@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.NavDestination
 
 interface INavigation {
     fun getNavController(): NavController
@@ -25,4 +26,5 @@ interface INavigation {
     fun navigateToAttendanceImageCaptureActivity(photoCropIntent: Intent,requestCodeUploadPanImage: Int,requireContext: Context, fragment: Fragment)
     fun navigateUp()
     fun navigateToWhyNeedThisBSFragment(childFragmentManager: FragmentManager, bundle : Bundle)
+    fun getCurrentDestination() : NavDestination?
 }

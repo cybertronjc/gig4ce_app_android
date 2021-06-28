@@ -109,6 +109,7 @@ class ImageViewerFragment : Fragment() {
 
                 when (it) {
                     is CaptureImageSharedViewState.ImageUploadFailed -> {
+                        if(!isAdded) return@Observer
 
                         progressBar.visibility = View.GONE
                         MaterialAlertDialogBuilder(requireContext())
@@ -118,6 +119,7 @@ class ImageViewerFragment : Fragment() {
                             .show()
                     }
                     is CaptureImageSharedViewState.ImageUploading -> {
+                        if(!isAdded) return@Observer
 
                         progressBar.visibility = View.VISIBLE
                         progressBar.progress = it.progress

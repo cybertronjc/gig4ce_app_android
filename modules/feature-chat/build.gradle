@@ -20,6 +20,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildFeatures {
+        dataBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -103,4 +107,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    implementation 'com.linkedin.android.spyglass:spyglass:3.0.1'
 }

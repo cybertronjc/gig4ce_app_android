@@ -1,5 +1,8 @@
 package com.gigforce.common_ui.chat
 
+//import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
+//import com.gigforce.modules.feature_chat.core.ChatConstants
+//import com.gigforce.modules.feature_chat.models.*
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,18 +11,18 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.chat.models.ChatReportedUser
+import com.gigforce.common_ui.chat.models.ContactModel
+import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.core.date.DateHelper
 import com.gigforce.core.extensions.addOrThrow
+import com.gigforce.core.extensions.commitOrThrow
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.extensions.updateOrThrow
 import com.gigforce.core.file.FileUtils
 import com.gigforce.core.image.ImageUtils
-//import com.gigforce.modules.feature_chat.ChatLocalDirectoryReferenceManager
-//import com.gigforce.modules.feature_chat.core.ChatConstants
-//import com.gigforce.modules.feature_chat.models.*
-import com.gigforce.common_ui.chat.models.*
-import com.gigforce.core.extensions.commitOrThrow
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -233,7 +236,12 @@ class ChatRepository constructor(
             uri: Uri
     ) {
 
-        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
+        val newFileName = "Doc-${getUID()}-${DateHelper.getFullDateTimeStamp()}.${
+            getExtensionFromUri(
+                    context,
+                    uri
+            )
+        }"
 
         val documentsDirectoryRef = chatLocalDirectoryReferenceManager.documentsDirectoryRef
         val documentFile = File(documentsDirectoryRef, newFileName)
@@ -304,12 +312,12 @@ class ChatRepository constructor(
                         .updateOrThrow("isBlocked", true)
             }
 
-            val contactDetails =  if(otherUserId.isNotBlank())
+            val contactDetails = if (otherUserId.isNotBlank())
                 getDetailsOfUserFromContacts(otherUserId)
             else
                 null
 
-            if(contactDetails != null)
+            if (contactDetails != null)
                 tryUpdatingBlockedInFlagInContacts(contactDetails.mobile, true)
         } else {
             var isUserBlocked = false
@@ -318,8 +326,8 @@ class ChatRepository constructor(
             else
                 null
 
-           val contactDetails =  if(otherUserId.isNotBlank())
-               getDetailsOfUserFromContacts(otherUserId)
+            val contactDetails = if (otherUserId.isNotBlank())
+                getDetailsOfUserFromContacts(otherUserId)
             else
                 null
 
@@ -332,7 +340,7 @@ class ChatRepository constructor(
                         .updateOrThrow("isBlocked", !isUserBlocked)
             }
 
-            if(contactDetails != null)
+            if (contactDetails != null)
                 tryUpdatingBlockedInFlagInContacts(contactDetails.mobile, !isUserBlocked)
         }
     }
@@ -345,7 +353,11 @@ class ChatRepository constructor(
             return
 
         try {
-            getDetailsOfUserFromContactsQuery(otherUserMobileNo = formatMobileNoForChatContact(otherUserMobileNo))
+            getDetailsOfUserFromContactsQuery(
+                    otherUserMobileNo = formatMobileNoForChatContact(
+                            otherUserMobileNo
+                    )
+            )
                     .updateOrThrow("isUserBlocked", block)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -413,10 +425,10 @@ class ChatRepository constructor(
                 .getOrThrow()
 
         return if (contactRef.isEmpty) {
-             ContactModel(id = otherUserId)
+            ContactModel(id = otherUserId)
         } else {
             contactRef.first().toObject(ContactModel::class.java).apply {
-                this.id =  contactRef.first().id
+                this.id = contactRef.first().id
             }
         }
     }
@@ -447,17 +459,21 @@ class ChatRepository constructor(
         if (querySnap.size() > 0) {
 
             val batch = db.batch()
-            batch.update(headerRef, mapOf(
+            batch.update(
+                    headerRef, mapOf(
                     "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
-            ))
+            )
+            )
 
             querySnap.documents.forEach {
 
                 Log.d("ChatRepo", "Message Id - ${it.id}")
                 val messageDocRef = chatCollectionRef.document(it.id)
-                batch.update(messageDocRef, mapOf(
+                batch.update(
+                        messageDocRef, mapOf(
                         "status" to ChatConstants.MESSAGE_STATUS_RECEIVED_BY_USER
-                ))
+                )
+                )
             }
 
             batch.commitOrThrow()
@@ -475,7 +491,8 @@ class ChatRepository constructor(
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         } else {
             val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+            val mimeType =
+                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         }
     }
@@ -493,6 +510,25 @@ class ChatRepository constructor(
             throw IllegalArgumentException("invalid mobile no")
         }
     }
+
+    /**
+     * Updating delete flag from current users messages , on update
+     * a trigger runs and updated flag in other users messages
+     */
+    suspend fun deleteMessage(
+            chatHeaderId: String,
+            messageId: String
+    ) = db.collection(COLLECTION_CHATS)
+            .document(getUID())
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(chatHeaderId)
+            .collection(COLLECTION_CHATS_MESSAGES)
+            .document(messageId)
+            .updateOrThrow(mapOf(
+                    "isDeleted" to true,
+                    "deletedOn" to Timestamp.now()
+            ))
+
 
     companion object {
         const val COLLECTION_CHATS = "chats"

@@ -921,6 +921,10 @@
         android:id="@+id/invoicesListFragment"
         android:name="com.gigforce.wallet.InvoicesListFragment"
         android:label="InvoicesListFragment" />
+    <fragment
+        android:id="@+id/messageViewingInfoFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment"
+        android:label="Message Viewing" />
 
 
 </navigation>

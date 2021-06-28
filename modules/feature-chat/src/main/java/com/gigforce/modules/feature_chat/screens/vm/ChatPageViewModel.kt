@@ -20,6 +20,7 @@ import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
@@ -48,13 +49,13 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class ChatPageViewModel constructor(
-    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-    //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
-    private var downloadAttachmentService: DownloadChatAttachmentService = RetrofitFactory.createService(
-        DownloadChatAttachmentService::class.java
-    ),
-    private var chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository(),
-    private var chatRepository: ChatRepository = ChatRepository()
+        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+        //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository(),
+        private var downloadAttachmentService: DownloadChatAttachmentService = RetrofitFactory.createService(
+                DownloadChatAttachmentService::class.java
+        ),
+        private var chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository(),
+        private var chatRepository: ChatRepository = ChatRepository()
 ) : ViewModel() {
 
     private val TAG: String = "chats/viewmodel"
@@ -87,11 +88,11 @@ class ChatPageViewModel constructor(
 
 
     fun setRequiredDataAndStartListeningToMessages(
-        otherUserId: String,
-        headerId: String?,
-        otherUserName: String?,
-        otherUserProfilePicture: String?,
-        otherUserMobileNo: String?
+            otherUserId: String,
+            headerId: String?,
+            otherUserName: String?,
+            otherUserProfilePicture: String?,
+            otherUserMobileNo: String?
     ) {
         this.otherUserId = otherUserId
         this.otherUserName = otherUserName
@@ -106,10 +107,10 @@ class ChatPageViewModel constructor(
 
             if (!otherUserName.isNullOrBlank()) {
                 _otherUserInfo.value = ContactModel(
-                    id = otherUserId,
-                    headerId = headerId,
-                    name = otherUserName,
-                    imageThumbnailPathInStorage = otherUserProfilePicture
+                        id = otherUserId,
+                        headerId = headerId,
+                        name = otherUserName,
+                        imageThumbnailPathInStorage = otherUserProfilePicture
                 )
             }
 
@@ -118,7 +119,7 @@ class ChatPageViewModel constructor(
 
             if (otherUserMobileNo.isNullOrBlank()) {
                 viewModelScope.launch {
-                     val userMobileNo = tryFetchingUsersNoFromProfile()
+                    val userMobileNo = tryFetchingUsersNoFromProfile()
 
                     if (userMobileNo.isNotBlank()) {
                         startListeningForContactChanges(userMobileNo)
@@ -137,24 +138,24 @@ class ChatPageViewModel constructor(
         }
 
         headerInfoChangeListener = getHeaderReference(headerId)
-            .addSnapshotListener { snapshot, error ->
+                .addSnapshotListener { snapshot, error ->
 
-                snapshot?.let {
-                    val chatHeader = it.toObject(ChatHeader::class.java)!!.apply {
-                        id = it.id
-                    }
+                    snapshot?.let {
+                        val chatHeader = it.toObject(ChatHeader::class.java)!!.apply {
+                            id = it.id
+                        }
 
-                    _headerInfo.value = chatHeader
+                        _headerInfo.value = chatHeader
 
-                    if (chatHeader.unseenCount != 0) {
-                        setMessagesUnseenCountToZero()
+                        if (chatHeader.unseenCount != 0) {
+                            setMessagesUnseenCountToZero()
+                        }
                     }
                 }
-            }
     }
 
     private fun setMessagesAsRead(
-        unreadMessages: List<ChatMessage>
+            unreadMessages: List<ChatMessage>
     ) = GlobalScope.launch {
 
         try {
@@ -181,41 +182,41 @@ class ChatPageViewModel constructor(
     }
 
     private fun startListeningForContactChanges(
-        mobileNo: String
+            mobileNo: String
     ) {
 
 
         contactInfoChangeListener = chatRepository.getDetailsOfUserFromContactsQuery(
-            formatMobileNoForChatContact(
-                mobileNo
-            )
+                formatMobileNoForChatContact(
+                        mobileNo
+                )
         )
-            .addSnapshotListener { value, error ->
+                .addSnapshotListener { value, error ->
 
-                value?.let {
+                    value?.let {
 
-                    if (it.exists()) {
-                        val contactInfo = it.toObject(ContactModel::class.java).apply {
-                            this?.id = it.id
+                        if (it.exists()) {
+                            val contactInfo = it.toObject(ContactModel::class.java).apply {
+                                this?.id = it.id
+                            }
+
+                            _otherUserInfo.value = contactInfo
                         }
+                    }
 
-                        _otherUserInfo.value = contactInfo
+                    error?.let {
+                        it.printStackTrace()
                     }
                 }
-
-                error?.let {
-                    it.printStackTrace()
-                }
-            }
 
     }
 
     private fun checkIfHeaderIsPresentInHeadersList() = viewModelScope.launch {
         val querySnap = firebaseDB.collection("chats")
-            .document(uid)
-            .collection("headers")
-            .whereEqualTo("otherUserId", otherUserId)
-            .getOrThrow()
+                .document(uid)
+                .collection("headers")
+                .whereEqualTo("otherUserId", otherUserId)
+                .getOrThrow()
 
         if (!querySnap.isEmpty) {
             headerId = querySnap.documents[0].id
@@ -225,14 +226,14 @@ class ChatPageViewModel constructor(
 
     private fun getHeaderReference(headerId: String): DocumentReference {
         return firebaseDB.collection("chats")
-            .document(uid)
-            .collection("headers")
-            .document(headerId)
+                .document(uid)
+                .collection("headers")
+                .document(headerId)
     }
 
     private fun getReference(headerId: String): CollectionReference {
         return getHeaderReference(headerId)
-            .collection("chat_messages")
+                .collection("chat_messages")
     }
 
     private fun initForHeader() {
@@ -250,40 +251,40 @@ class ChatPageViewModel constructor(
          */
 
         messagesListener = getReference(headerId)
-            .orderBy("timestamp", Query.Direction.ASCENDING)
-            .addSnapshotListener { snapshot, exception ->
-                Log.v(TAG, "new Snapshot Received")
-                Log.v(TAG, "${snapshot?.documents?.size} Documents")
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener { snapshot, exception ->
+                    Log.v(TAG, "new Snapshot Received")
+                    Log.v(TAG, "${snapshot?.documents?.size} Documents")
 
-                snapshot?.let {
-                    val messages = it.documents.map {
-                        it.toObject(ChatMessage::class.java)!!.apply {
-                            this.id = it.id
-                            this.chatType = ChatConstants.CHAT_TYPE_USER
+                    snapshot?.let {
+                        val messages = it.documents.map {
+                            it.toObject(ChatMessage::class.java)!!.apply {
+                                this.id = it.id
+                                this.chatType = ChatConstants.CHAT_TYPE_USER
+                            }
                         }
-                    }
-                    this.chatMessages = messages.toMutableList()
+                        this.chatMessages = messages.toMutableList()
 
-                    chatMessages?.let {
+                        chatMessages?.let {
 
-                        val unreadMessages = it.filter {
-                            it.flowType == ChatConstants.FLOW_TYPE_IN &&
-                                    it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
-                                    it.senderMessageId.isNotBlank()
+                            val unreadMessages = it.filter {
+                                it.flowType == ChatConstants.FLOW_TYPE_IN &&
+                                        it.status < ChatConstants.MESSAGE_STATUS_READ_BY_USER &&
+                                        it.senderMessageId.isNotBlank()
+                            }
+                            setMessagesAsRead(unreadMessages)
                         }
-                        setMessagesAsRead(unreadMessages)
-                    }
 
-                    _messages.postValue(messages)
+                        _messages.postValue(messages)
+                    }
                 }
-            }
     }
 
     private var _sendingMessage = MutableLiveData<ChatMessage>()
     val sendingMessageOld: LiveData<ChatMessage> = _sendingMessage
 
     fun sendNewText(
-        text: String
+            text: String
     ) = viewModelScope.launch {
 
         try {
@@ -294,37 +295,37 @@ class ChatPageViewModel constructor(
             }
 
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid,
-                    mobileNo = currentUser.phoneNumber!!
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT,
-                content = text,
-                timestamp = Timestamp.now()
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid,
+                            mobileNo = currentUser.phoneNumber!!
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT,
+                    content = text,
+                    timestamp = Timestamp.now()
             )
             getReference(headerId).document(message.id).setOrThrow(message)
 
             //Update Header for current User
             firebaseDB.collection("chats")
-                .document(uid)
-                .collection("headers")
-                .document(headerId)
-                .updateOrThrow(
-                    mapOf(
-                        "lastMessageType" to ChatConstants.MESSAGE_TYPE_TEXT,
-                        "lastMsgText" to text,
-                        "lastMsgTimestamp" to Timestamp.now(),
-                        "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
-                        "unseenCount" to 0
+                    .document(uid)
+                    .collection("headers")
+                    .document(headerId)
+                    .updateOrThrow(
+                            mapOf(
+                                    "lastMessageType" to ChatConstants.MESSAGE_TYPE_TEXT,
+                                    "lastMsgText" to text,
+                                    "lastMsgTimestamp" to Timestamp.now(),
+                                    "lastMsgFlowType" to ChatConstants.FLOW_TYPE_OUT,
+                                    "unseenCount" to 0
+                            )
                     )
-                )
         } catch (e: Exception) {
             e.printStackTrace()
             //handle error
@@ -333,18 +334,18 @@ class ChatPageViewModel constructor(
 
     private suspend fun createHeaderForBothUsers() {
         val headerIdFromChat = checkAndReturnIfHeaderIsPresentInchat(
-            forUserId = currentUser.uid,
-            otherUserId = otherUserId
+                forUserId = currentUser.uid,
+                otherUserId = otherUserId
         )
 
         if (headerIdFromChat != null) {
             headerId = headerIdFromChat
         } else {
             headerId = createHeader(
-                currentUser.uid,
-                otherUserId,
-                otherUserName,
-                otherUserProfilePicture
+                    currentUser.uid,
+                    otherUserId,
+                    otherUserName,
+                    otherUserProfilePicture
             )
             createHeaderInOtherUsersCollection()
         }
@@ -359,15 +360,15 @@ class ChatPageViewModel constructor(
     }
 
     private suspend fun checkAndReturnIfHeaderIsPresentInchat(
-        forUserId: String,
-        otherUserId: String
+            forUserId: String,
+            otherUserId: String
     ): String? {
         val query = firebaseDB.collection("chats")
-            .document(forUserId)
-            .collection("headers")
-            .whereEqualTo("forUserId", forUserId)
-            .whereEqualTo("otherUserId", otherUserId)
-            .getOrThrow()
+                .document(forUserId)
+                .collection("headers")
+                .whereEqualTo("forUserId", forUserId)
+                .whereEqualTo("otherUserId", otherUserId)
+                .getOrThrow()
 
         return if (query.isEmpty)
             return null
@@ -386,19 +387,19 @@ class ChatPageViewModel constructor(
                 ""
             } else {
                 firebaseStorage
-                    .reference
-                    .child("profile_pics")
-                    .child(profileData.profileAvatarName)
-                    .getDownloadUrlOrThrow()
-                    .toString()
+                        .reference
+                        .child("profile_pics")
+                        .child(profileData.profileAvatarName)
+                        .getDownloadUrlOrThrow()
+                        .toString()
             }
         }
 
         val query = firebaseDB.collection("chats")
-            .document(otherUserId)
-            .collection("contacts")
-            .whereEqualTo("uid", uid)
-            .getOrThrow()
+                .document(otherUserId)
+                .collection("contacts")
+                .whereEqualTo("uid", uid)
+                .getOrThrow()
 
         val contactModel = if (query.isEmpty) {
             null
@@ -411,9 +412,9 @@ class ChatPageViewModel constructor(
         var userName = contactModel?.name
         if (userName == null && !contactModel?.mobile.isNullOrBlank()) {
             userName =
-                "+" + contactModel?.mobile?.substring(0, 2) + "-" + contactModel?.mobile?.substring(
-                    2
-                )
+                    "+" + contactModel?.mobile?.substring(0, 2) + "-" + contactModel?.mobile?.substring(
+                            2
+                    )
         }
 
         if (userName == null) {
@@ -422,32 +423,32 @@ class ChatPageViewModel constructor(
         }
 
         val chatHeader = ChatHeader(
-            forUserId = otherUserId,
-            otherUserId = uid,
-            lastMsgTimestamp = null,
-            chatType = ChatConstants.CHAT_TYPE_USER,
-            unseenCount = 0,
-            otherUser = UserInfo(
-                id = uid,
-                name = userName ?: "",
-                profilePic = fullPath,
-                type = "user"
-            ),
-            lastMsgFlowType = ""
+                forUserId = otherUserId,
+                otherUserId = uid,
+                lastMsgTimestamp = null,
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                unseenCount = 0,
+                otherUser = UserInfo(
+                        id = uid,
+                        name = userName ?: "",
+                        profilePic = fullPath,
+                        type = "user"
+                ),
+                lastMsgFlowType = ""
         )
 
         firebaseDB.collection("chats")
-            .document(otherUserId)
-            .collection("headers")
-            .document(headerId)
-            .setOrThrow(chatHeader)
+                .document(otherUserId)
+                .collection("headers")
+                .document(headerId)
+                .setOrThrow(chatHeader)
     }
 
     fun sendNewDocumentMessage(
-        context: Context,
-        text: String = "",
-        fileName: String?,
-        uri: Uri
+            context: Context,
+            text: String = "",
+            fileName: String?,
+            uri: Uri
     ) = GlobalScope.launch {
 
         try {
@@ -456,31 +457,31 @@ class ChatPageViewModel constructor(
             }
 
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
-                content = text,
-                timestamp = Timestamp.now(),
-                attachmentPath = null,
-                attachmentName = fileName
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT,
+                    content = text,
+                    timestamp = Timestamp.now(),
+                    attachmentPath = null,
+                    attachmentName = fileName
             )
             showMessageAsSending(message)
 
 
             chatRepository.sendDocumentMessage(
-                context = context,
-                chatHeaderId = headerId,
-                message = message,
-                fileName = fileName ?: "document",
-                uri = uri
+                    context = context,
+                    chatHeaderId = headerId,
+                    message = message,
+                    fileName = fileName ?: "document",
+                    uri = uri
             )
         } catch (e: Exception) {
             //handle error
@@ -501,8 +502,9 @@ class ChatPageViewModel constructor(
 
     @SuppressLint("NewApi")
     fun sendNewImageMessage(
-        text: String = "",
-        uri: Uri
+            context: Context,
+            text: String = "",
+            uri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -510,39 +512,43 @@ class ChatPageViewModel constructor(
                 createHeaderForBothUsers()
             }
 
-            val thumbnail = createThumbnail(uri)
+            val thumbnail = createThumbnail(context,uri)
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
-                content = text,
-                timestamp = Timestamp.now(),
-                attachmentPath = null,
-                thumbnailBitmap = thumbnail
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE,
+                    content = text,
+                    timestamp = Timestamp.now(),
+                    attachmentPath = null,
+                    thumbnailBitmap = thumbnail
             )
             showMessageAsSending(message)
 //            _sendingMessage.postValue(message)
 
             chatRepository.sendImageMessage(headerId, message, uri)
         } catch (e: Exception) {
-            //handle error
+            e.printStackTrace()
         }
     }
 
-    private fun createThumbnail(uri: Uri) = try {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
-        } else {
-            ImageUtils.resizeBitmap(uri.path!!, 96, 96)
-        }
+    private fun createThumbnail(
+            context: Context,
+            uri: Uri) = try {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
+//        } else {
+//            ImageUtils.resizeBitmap(uri.path!!, 96, 96)
+//        }
+
+        ImageUtils.resizeBitmap(context,uri,96,96)
     } catch (e: Exception) {
         null
     }
@@ -562,36 +568,37 @@ class ChatPageViewModel constructor(
             }
 
             val thumbnailForUi =
-                videoInfo.thumbnail?.copy(videoInfo.thumbnail?.config, videoInfo.thumbnail?.isMutable ?: false)
+                    videoInfo.thumbnail?.copy(videoInfo.thumbnail?.config, videoInfo.thumbnail?.isMutable
+                            ?: false)
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
-                content = text,
-                timestamp = Timestamp.now(),
-                attachmentPath = null,
-                attachmentName = videoInfo.name,
-                videoLength = videoInfo.duration,
-                thumbnailBitmap = videoInfo.thumbnail
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO,
+                    content = text,
+                    timestamp = Timestamp.now(),
+                    attachmentPath = null,
+                    attachmentName = videoInfo.name,
+                    videoLength = videoInfo.duration,
+                    thumbnailBitmap = videoInfo.thumbnail
             )
             showMessageAsSending(message)
 
 //            _sendingMessage.postValue(message)
 
             chatRepository.sendVideoMessage(
-                context = context,
-                chatHeaderId = headerId,
-                message = message,
-                uri = uri,
-                videoInfo = videoInfo
+                    context = context,
+                    chatHeaderId = headerId,
+                    message = message,
+                    uri = uri,
+                    videoInfo = videoInfo
             )
         } catch (e: Exception) {
             //handle error
@@ -599,10 +606,10 @@ class ChatPageViewModel constructor(
     }
 
     fun sendLocationMessage(
-        latitude: Double,
-        longitude: Double,
-        physicalAddress: String,
-        mapImageFile: File?
+            latitude: Double,
+            longitude: Double,
+            physicalAddress: String,
+            mapImageFile: File?
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         try {
@@ -618,29 +625,29 @@ class ChatPageViewModel constructor(
             }
 
             val message = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                headerId = headerId,
-                senderInfo = UserInfo(
-                    id = currentUser.uid
-                ),
-                receiverInfo = UserInfo(
-                    id = otherUserId
-                ),
-                flowType = "out",
-                chatType = ChatConstants.CHAT_TYPE_USER,
-                type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION,
-                timestamp = Timestamp.now(),
-                location = GeoPoint(latitude, longitude),
-                locationPhysicalAddress = physicalAddress,
-                thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
+                    id = UUID.randomUUID().toString(),
+                    headerId = headerId,
+                    senderInfo = UserInfo(
+                            id = currentUser.uid
+                    ),
+                    receiverInfo = UserInfo(
+                            id = otherUserId
+                    ),
+                    flowType = "out",
+                    chatType = ChatConstants.CHAT_TYPE_USER,
+                    type = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION,
+                    timestamp = Timestamp.now(),
+                    location = GeoPoint(latitude, longitude),
+                    locationPhysicalAddress = physicalAddress,
+                    thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
             )
             showMessageAsSending(message)
 
 //            _sendingMessage.postValue(message)
             chatRepository.sendLocationMessage(
-                chatHeaderId = headerId,
-                message = message,
-                bitmap = mapImage
+                    chatHeaderId = headerId,
+                    message = message,
+                    bitmap = mapImage
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -648,102 +655,102 @@ class ChatPageViewModel constructor(
     }
 
     private suspend fun uploadChatAttachment(fileNameWithExtension: String, image: Uri) =
-        suspendCoroutine<String> { cont ->
-            val filePathOnServer = firebaseStorage.reference
-                .child("chat_attachments")
-                .child(fileNameWithExtension)
+            suspendCoroutine<String> { cont ->
+                val filePathOnServer = firebaseStorage.reference
+                        .child("chat_attachments")
+                        .child(fileNameWithExtension)
 
-            filePathOnServer
-                .putFile(image)
-                .addOnSuccessListener {
-                    filePathOnServer
-                        .downloadUrl
+                filePathOnServer
+                        .putFile(image)
                         .addOnSuccessListener {
-                            cont.resume(it.toString())
+                            filePathOnServer
+                                    .downloadUrl
+                                    .addOnSuccessListener {
+                                        cont.resume(it.toString())
 
-                        }.addOnFailureListener {
+                                    }.addOnFailureListener {
+                                        cont.resumeWithException(it)
+                                    }
+                        }
+                        .addOnFailureListener {
                             cont.resumeWithException(it)
                         }
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
-        }
+            }
 
     private suspend fun uploadChatAttachment(fileNameWithExtension: String, data: ByteArray) =
-        suspendCoroutine<String> { cont ->
-            val filePathOnServer = firebaseStorage.reference
-                .child("chat_attachments")
-                .child(fileNameWithExtension)
+            suspendCoroutine<String> { cont ->
+                val filePathOnServer = firebaseStorage.reference
+                        .child("chat_attachments")
+                        .child(fileNameWithExtension)
 
-            filePathOnServer
-                .putBytes(data)
-                .addOnSuccessListener {
-                    filePathOnServer
-                        .downloadUrl
+                filePathOnServer
+                        .putBytes(data)
                         .addOnSuccessListener {
-                            cont.resume(it.toString())
+                            filePathOnServer
+                                    .downloadUrl
+                                    .addOnSuccessListener {
+                                        cont.resume(it.toString())
 
-                        }.addOnFailureListener {
+                                    }.addOnFailureListener {
+                                        cont.resumeWithException(it)
+                                    }
+                        }
+                        .addOnFailureListener {
                             cont.resumeWithException(it)
                         }
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
-        }
+            }
 
     private fun prepareUniqueImageName(fileNameWithExtension: String): String {
 
         val extension = fileNameWithExtension.substringBeforeLast('.')
         val timeStamp = SimpleDateFormat(
-            "yyyyMMdd_HHmmss",
-            Locale.getDefault()
+                "yyyyMMdd_HHmmss",
+                Locale.getDefault()
         ).format(Date())
         return "${currentUser.uid}$timeStamp$extension"
     }
 
     private suspend fun createHeader(
-        forUserId: String,
-        otherUserId: String,
-        otherUserName: String?,
-        otherUserProfilePicture: String?
+            forUserId: String,
+            otherUserId: String,
+            otherUserName: String?,
+            otherUserProfilePicture: String?
     ): String {
 
         val chatHeader = ChatHeader(
-            forUserId = forUserId,
-            otherUserId = otherUserId,
-            lastMsgTimestamp = null,
-            chatType = ChatConstants.CHAT_TYPE_USER,
-            unseenCount = 0,
-            otherUser = UserInfo(
-                id = "",
-                name = otherUserName ?: "",
-                profilePic = otherUserProfilePicture ?: "",
-                type = "user"
-            ),
-            lastMsgFlowType = ""
+                forUserId = forUserId,
+                otherUserId = otherUserId,
+                lastMsgTimestamp = null,
+                chatType = ChatConstants.CHAT_TYPE_USER,
+                unseenCount = 0,
+                otherUser = UserInfo(
+                        id = "",
+                        name = otherUserName ?: "",
+                        profilePic = otherUserProfilePicture ?: "",
+                        type = "user"
+                ),
+                lastMsgFlowType = ""
         )
 
         val docRef = firebaseDB
-            .collection("chats")
-            .document(uid)
-            .collection("headers")
-            .addOrThrow(chatHeader)
+                .collection("chats")
+                .document(uid)
+                .collection("headers")
+                .addOrThrow(chatHeader)
 
         return docRef.id
     }
 
     private suspend fun saveHeaderIdToContact(
-        userId: String,
-        headerId: String
+            userId: String,
+            headerId: String
     ) {
 
         val userDocument = firebaseDB.collection("chats")
-            .document(uid)
-            .collection("contacts")
-            .whereEqualTo("uid", userId)
-            .getOrThrow()
+                .document(uid)
+                .collection("contacts")
+                .whereEqualTo("uid", userId)
+                .getOrThrow()
 
         if (userDocument.isEmpty) {
             throw IllegalStateException("ChatMessagesViewModel :saveHeaderIdToContact(), no user found with uid : $userId in contacts")
@@ -751,10 +758,10 @@ class ChatPageViewModel constructor(
             val userDocumentId = userDocument.documents.first().id
 
             firebaseDB.collection("chats")
-                .document(uid)
-                .collection("contacts")
-                .document(userDocumentId)
-                .updateOrThrow("headerId", headerId)
+                    .document(uid)
+                    .collection("contacts")
+                    .document(userDocumentId)
+                    .updateOrThrow("headerId", headerId)
         }
     }
 
@@ -767,71 +774,71 @@ class ChatPageViewModel constructor(
 
         try {
             firebaseDB.collection("chats")
-                .document(uid)
-                .collection("headers")
-                .document(headerId)
-                .updateOrThrow("unseenCount", 0)
+                    .document(uid)
+                    .collection("headers")
+                    .document(headerId)
+                    .updateOrThrow("unseenCount", 0)
         } catch (e: Exception) {
             Log.e(TAG, "Unable to set unseen count to zero", e)
         }
     }
 
     private val _chatAttachmentDownloadState: MutableLiveData<ChatAttachmentDownloadState> =
-        MutableLiveData()
+            MutableLiveData()
     val chatAttachmentDownloadState: LiveData<ChatAttachmentDownloadState> =
-        _chatAttachmentDownloadState
+            _chatAttachmentDownloadState
 
     fun downloadAndSaveFile(appDirectoryFileRef: File, position: Int, chatMessage: ChatMessage) =
-        viewModelScope.launch {
-            val downloadLink = chatMessage.attachmentPath ?: return@launch
-            if (!appDirectoryFileRef.exists())
-                appDirectoryFileRef.mkdirs()
+            viewModelScope.launch {
+                val downloadLink = chatMessage.attachmentPath ?: return@launch
+                if (!appDirectoryFileRef.exists())
+                    appDirectoryFileRef.mkdirs()
 
-            _chatAttachmentDownloadState.value = DownloadStarted(position)
+                _chatAttachmentDownloadState.value = DownloadStarted(position)
 
-            try {
+                try {
 
-                val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
-                val fileRef = if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
-                    val imagesDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
+                    val fileName: String = FirebaseUtils.extractFilePath(downloadLink)
+                    val fileRef = if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE) {
+                        val imagesDirectoryRef =
+                                File(appDirectoryFileRef, ChatConstants.DIRECTORY_IMAGES)
 
-                    if (!imagesDirectoryRef.exists())
-                        imagesDirectoryRef.mkdirs()
+                        if (!imagesDirectoryRef.exists())
+                            imagesDirectoryRef.mkdirs()
 
-                    File(imagesDirectoryRef, fileName)
-                } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
-                    val videosDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
-                    if (!videosDirectoryRef.exists())
-                        videosDirectoryRef.mkdirs()
+                        File(imagesDirectoryRef, fileName)
+                    } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO) {
+                        val videosDirectoryRef =
+                                File(appDirectoryFileRef, ChatConstants.DIRECTORY_VIDEOS)
+                        if (!videosDirectoryRef.exists())
+                            videosDirectoryRef.mkdirs()
 
-                    File(videosDirectoryRef, fileName)
-                } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
-                    val imagesDirectoryRef =
-                        File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
-                    File(imagesDirectoryRef, fileName)
-                } else {
-                    throw IllegalArgumentException("other types not supperted yet")
-                }
+                        File(videosDirectoryRef, fileName)
+                    } else if (chatMessage.type == ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT) {
+                        val imagesDirectoryRef =
+                                File(appDirectoryFileRef, ChatConstants.DIRECTORY_DOCUMENTS)
+                        File(imagesDirectoryRef, fileName)
+                    } else {
+                        throw IllegalArgumentException("other types not supperted yet")
+                    }
 
-                val response = downloadAttachmentService.downloadAttachment(downloadLink)
-                if (response.isSuccessful) {
-                    val body = response.body()!!
-                    FileUtils.writeResponseBodyToDisk(body, fileRef)
-                    _chatAttachmentDownloadState.value = DownloadCompleted(position)
+                    val response = downloadAttachmentService.downloadAttachment(downloadLink)
+                    if (response.isSuccessful) {
+                        val body = response.body()!!
+                        FileUtils.writeResponseBodyToDisk(body, fileRef)
+                        _chatAttachmentDownloadState.value = DownloadCompleted(position)
+                        _chatAttachmentDownloadState.value = null
+                    } else {
+                        throw Exception("Unable to dowload payslip, ${response.message()}")
+                    }
+                } catch (e: Exception) {
+                    _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
+                            position,
+                            e.message ?: "Unable to download attachment"
+                    )
                     _chatAttachmentDownloadState.value = null
-                } else {
-                    throw Exception("Unable to dowload payslip, ${response.message()}")
                 }
-            } catch (e: Exception) {
-                _chatAttachmentDownloadState.value = ErrorWhileDownloadingAttachment(
-                    position,
-                    e.message ?: "Unable to download attachment"
-                )
-                _chatAttachmentDownloadState.value = null
             }
-        }
 
     private var _blockingOrUnblockingUser = MutableLiveData<Lse>()
     val blockingOrUnblockingUser: LiveData<Lse> = _blockingOrUnblockingUser
@@ -842,59 +849,59 @@ class ChatPageViewModel constructor(
 
         try {
             chatRepository.blockOrUnblockUser(
-                chatHeaderId = headerId,
-                otherUserId = otherUserId,
-                forceBlock = false
+                    chatHeaderId = headerId,
+                    otherUserId = otherUserId,
+                    forceBlock = false
             )
 
             _blockingOrUnblockingUser.value = Lse.success()
             _blockingOrUnblockingUser.value = null
         } catch (e: Exception) {
             _blockingOrUnblockingUser.value =
-                Lse.error(e.message ?: "unable to block or unblock user")
+                    Lse.error(e.message ?: "unable to block or unblock user")
             _blockingOrUnblockingUser.value = null
         }
     }
 
-    private suspend fun tryFetchingUsersNoFromProfile() : String{
+    private suspend fun tryFetchingUsersNoFromProfile(): String {
         try {
-           val profile =  chatProfileFirebaseRepository.getProfileDataIfExist(otherUserId)
+            val profile = chatProfileFirebaseRepository.getProfileDataIfExist(otherUserId)
             otherUserMobileNo = profile?.loginMobile
 
-            Log.wtf("D","S")
+            Log.wtf("D", "S")
             return profile?.loginMobile ?: ""
         } catch (e: Exception) {
-           // otherUserMobileNo = ""
-            return  ""
+            // otherUserMobileNo = ""
+            return ""
         }
     }
 
     fun reportAndBlockUser(
-        chatHeader: String,
-        otherUserId: String,
-        reason: String
+            chatHeader: String,
+            otherUserId: String,
+            reason: String
     ) = viewModelScope.launch {
 
         _blockingOrUnblockingUser.value = Lse.loading()
         try {
 
             chatRepository.reportAndBlockUser(
-                chatHeader,
-                otherUserId,
-                reason
+                    chatHeader,
+                    otherUserId,
+                    reason
             )
 
             _blockingOrUnblockingUser.value = Lse.success()
             _blockingOrUnblockingUser.value = null
         } catch (e: Exception) {
             _blockingOrUnblockingUser.value =
-                Lse.error(e.message ?: "unable to block or unblock user")
+                    Lse.error(e.message ?: "unable to block or unblock user")
             _blockingOrUnblockingUser.value = null
         }
     }
 
     fun formatMobileNoForChatContact(
-        mobileNo: String
+            mobileNo: String
     ): String {
         return if (mobileNo.length == 10) {
             "91$mobileNo"
@@ -915,5 +922,24 @@ class ChatPageViewModel constructor(
 
         headerInfoChangeListener?.remove()
         contactInfoChangeListener?.remove()
+    }
+
+    fun deleteMessage(
+        messageId: String
+    ) = viewModelScope.launch{
+        try {
+
+            chatRepository.deleteMessage(
+                chatHeaderId = headerId,
+                messageId = messageId
+            )
+        } catch (e : Exception){
+
+            CrashlyticsLogger.e(
+                TAG,
+                "while deleting users message",
+                e
+            )
+        }
     }
 }
