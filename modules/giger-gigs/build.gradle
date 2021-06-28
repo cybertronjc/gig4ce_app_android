@@ -112,9 +112,6 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
 
-    // swipe button
-    implementation "com.ncorti:slidetoact:0.8.0"
-
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'

@@ -64,7 +64,6 @@ class AttendanceGigerAttendanceRecyclerItemView(
             viewData = gigerAttendanceData
 
             viewBinding.userNameTv.text = gigerAttendanceData.gigerName
-            viewBinding.userDesignationTv.text = gigerAttendanceData.gigerDesignation
             viewBinding.callGigerBtn.isVisible = gigerAttendanceData.gigerPhoneNumber.isNotBlank()
 
             setUserImage(gigerAttendanceData.gigerImage)

@@ -27,41 +27,47 @@ sealed class GigerAttendanceUnderManagerViewModelState {
 
     object NoAttendanceFound : GigerAttendanceUnderManagerViewModelState()
 
-    data class UserMarkedPresent(
-            val message: String
-    ) : GigerAttendanceUnderManagerViewModelState()
-
-    data class ErrorWhileMarkingUserPresent(
-            val error: String
-    ) : GigerAttendanceUnderManagerViewModelState()
-
-    // Null means keep the data unchanged dont touch it on view
-    data class FiltersUpdated(
-            val shouldRemoveOlderStatusTabs: Boolean,
-            val attendanceStatuses: List<AttendanceStatusAndCountItemData>?,
-            val business: List<String>?,
-            val shiftTimings: List<AttendanceFilterItemShift>?
-    ) : GigerAttendanceUnderManagerViewModelState()
-
     data class ErrorInLoadingDataFromServer(
-            val error: String,
-            val shouldShowErrorButton: Boolean
+        val error: String,
+        val shouldShowErrorButton: Boolean
     ) : GigerAttendanceUnderManagerViewModelState()
 
     data class AttendanceDataLoaded(
-            val shouldEnableAttendanceControls: Boolean,
-            val attendanceItemData: List<AttendanceRecyclerItemData>
+        val attendanceSwipeControlsEnabled: Boolean,
+        val enablePresentSwipeAction: Boolean,
+        val enableDeclineSwipeAction: Boolean,
+        val attendanceItemData: List<AttendanceRecyclerItemData>
     ) : GigerAttendanceUnderManagerViewModelState()
 }
 
+
+sealed class GigerAttendanceUnderManagerViewModelMarkAttendanceState {
+
+    data class UserMarkedPresent(
+        val message: String
+    ) : GigerAttendanceUnderManagerViewModelMarkAttendanceState()
+
+    data class ErrorWhileMarkingUserPresent(
+        val error: String
+    ) : GigerAttendanceUnderManagerViewModelMarkAttendanceState()
+
+}
+
+data class AttendanceFilters(
+    val shouldRemoveOlderStatusTabs: Boolean,
+    val attendanceStatuses: List<AttendanceStatusAndCountItemData>?,
+    val business: List<String>?,
+    val shiftTimings: List<AttendanceFilterItemShift>?
+)
+
 @HiltViewModel
 class GigerAttendanceUnderManagerViewModel @Inject constructor(
-        private val buildConfig: IBuildConfigVM
+    private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
 
     //todo shift up
     private val gigersAttendanceRepository: GigersAttendanceRepository =
-            GigersAttendanceRepository(buildConfig)
+        GigersAttendanceRepository(buildConfig)
 
     /* data*/
     private var currentlyShownAttendanceData: List<GigerAttendance>? = null
@@ -76,36 +82,44 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
     private var timeFormat24Hour: SimpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private var timeFormat12Hour: SimpleDateFormat =
-            SimpleDateFormat("hh:mm a", Locale.getDefault())
+        SimpleDateFormat("hh:mm a", Locale.getDefault())
 
     //To view Observables
     private val _gigerAttendanceUnderManagerViewState =
-            MutableLiveData<GigerAttendanceUnderManagerViewModelState>()
+        MutableLiveData<GigerAttendanceUnderManagerViewModelState>()
     val gigerAttendanceUnderManagerViewState: LiveData<GigerAttendanceUnderManagerViewModelState> =
-            _gigerAttendanceUnderManagerViewState
+        _gigerAttendanceUnderManagerViewState
+
+    private val _filters = MutableLiveData<AttendanceFilters>()
+    val filters: LiveData<AttendanceFilters> = _filters
+
+    private val _markAttendanceState =
+        MutableLiveData<GigerAttendanceUnderManagerViewModelMarkAttendanceState>()
+    val markAttendanceState: LiveData<GigerAttendanceUnderManagerViewModelMarkAttendanceState> =
+        _markAttendanceState
 
 
     fun fetchUsersAttendanceDate(
-            date: LocalDate
+        date: LocalDate
     ) = viewModelScope.launch(Dispatchers.IO) {
         currentlyFetchingForDate = date
         areTabsDirty = true
 
         _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.LoadingDataFromServer
+            GigerAttendanceUnderManagerViewModelState.LoadingDataFromServer
         )
 
         try {
             delay(200)
             val gigersAttendance = gigersAttendanceRepository.getAttendance(
-                    date
+                date
             )
             resetAllFilters()
             currentlyShownAttendanceData = gigersAttendance
 
             if (gigersAttendance.isEmpty()) {
                 _gigerAttendanceUnderManagerViewState.postValue(
-                        GigerAttendanceUnderManagerViewModelState.NoAttendanceFound
+                    GigerAttendanceUnderManagerViewModelState.NoAttendanceFound
                 )
             } else {
                 prepareAllFilters()
@@ -113,35 +127,35 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.ErrorInLoadingDataFromServer(
-                            error = e.message ?: "Error while loading attendance",
-                            shouldShowErrorButton = true
-                    )
+                GigerAttendanceUnderManagerViewModelState.ErrorInLoadingDataFromServer(
+                    error = e.message ?: "Error while loading attendance",
+                    shouldShowErrorButton = true
+                )
             )
 
             CrashlyticsLogger.e(
-                    TAG,
-                    "fetching gigers attendance",
-                    e
+                TAG,
+                "fetching gigers attendance",
+                e
             )
         }
     }
 
     private fun prepareStatusAndAttendanceItems(
-            gigersAttendance: List<GigerAttendance>
+        gigersAttendance: List<GigerAttendance>
     ): List<AttendanceRecyclerItemData> {
 
 
         val attendanceGroupedByShiftAndCompany = groupAttendanceByShiftTimeAndCompany(
-                gigersAttendance
+            gigersAttendance
         )
         return mapGroupedAttendanceForRecyclerView(
-                attendanceGroupedByShiftAndCompany
+            attendanceGroupedByShiftAndCompany
         )
     }
 
     private fun mapGroupedAttendanceForRecyclerView(
-            attendanceGroupedByShiftAndCompany: List<Map<String, Map<String, List<GigerAttendance>>>>
+        attendanceGroupedByShiftAndCompany: List<Map<String, Map<String, List<GigerAttendance>>>>
     ): MutableList<AttendanceRecyclerItemData> {
         val attendanceRecyclerItemData: MutableList<AttendanceRecyclerItemData> = mutableListOf()
         attendanceGroupedByShiftAndCompany.forEach {
@@ -150,15 +164,15 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
                 companyToAttendanceGroup.forEach { (companyName, gigerAttendance) ->
                     attendanceRecyclerItemData.add(
-                            AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData(
-                                    businessName = companyName,
-                                    shiftName = formatShiftTime(shiftTime)
-                            )
+                        AttendanceRecyclerItemData.AttendanceRecyclerItemBusinessAndShiftNameData(
+                            businessName = companyName,
+                            shiftName = formatShiftTime(shiftTime)
+                        )
                     )
 
                     gigerAttendance.forEach {
                         attendanceRecyclerItemData.add(
-                                mapRemoteGigerAttendanceToRecyclerViewAttendance(it)
+                            mapRemoteGigerAttendanceToRecyclerViewAttendance(it)
                         )
                     }
                 }
@@ -202,7 +216,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     private fun prepareAttendanceStatusMasterAndTheirCount(
-            gigersAttendance: List<GigerAttendance>
+        gigersAttendance: List<GigerAttendance>
     ): List<AttendanceStatusAndCountItemData> {
 
         val statusList = gigersAttendance.filter {
@@ -211,19 +225,19 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             it.attendanceStatus
         }.map { distinctStatus ->
             AttendanceStatusAndCountItemData(
-                    status = distinctStatus.attendanceStatus!!,
-                    attendanceCount = gigersAttendance.count { it.attendanceStatus == distinctStatus.attendanceStatus },
-                    statusSelected = distinctStatus.attendanceStatus!! == currentlySelectedStatus
+                status = distinctStatus.attendanceStatus!!,
+                attendanceCount = gigersAttendance.count { it.attendanceStatus == distinctStatus.attendanceStatus },
+                statusSelected = distinctStatus.attendanceStatus!! == currentlySelectedStatus
             )
         }.toMutableList()
 
 
         statusList.add(
-                0, AttendanceStatusAndCountItemData(
+            0, AttendanceStatusAndCountItemData(
                 status = "All",
                 attendanceCount = gigersAttendance.size,
                 statusSelected = currentlySelectedStatus == null
-        )
+            )
         )
 
 
@@ -231,24 +245,24 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     private fun mapRemoteGigerAttendanceToRecyclerViewAttendance(
-            gigerAttendance: GigerAttendance
+        gigerAttendance: GigerAttendance
     ): AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData {
 
         return AttendanceRecyclerItemData.AttendanceRecyclerItemAttendanceData(
-                attendanceStatus = gigerAttendance.attendanceStatus!!,
-                gigId = gigerAttendance.gigId ?: "",
-                gigerId = gigerAttendance.uid!!,
-                gigerName = gigerAttendance.name ?: "Name: NA",
-                gigerPhoneNumber = gigerAttendance.phoneNumber ?: "",
-                gigerDesignation = gigerAttendance.role ?: "Role: NA",
-                gigerImage = gigerAttendance.profilePicture ?: "",
-                gigStatus = gigerAttendance.gigStatus ?: "",
-                gigerOffice = gigerAttendance.location ?: ""
+            attendanceStatus = gigerAttendance.attendanceStatus!!,
+            gigId = gigerAttendance.gigId ?: "",
+            gigerId = gigerAttendance.uid!!,
+            gigerName = gigerAttendance.name ?: "Name: NA",
+            gigerPhoneNumber = gigerAttendance.phoneNumber ?: "",
+            gigerDesignation = gigerAttendance.role ?: "Role: NA",
+            gigerImage = gigerAttendance.profilePicture ?: "",
+            gigStatus = gigerAttendance.gigStatus ?: "",
+            gigerOffice = gigerAttendance.location ?: ""
         )
     }
 
     fun filterAttendanceByStatus(
-            status: String?
+        status: String?
     ) = viewModelScope.launch(Dispatchers.IO) {
 
         currentlySelectedStatus = status
@@ -256,7 +270,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     fun filterAttendanceByBusiness(
-            business: String?
+        business: String?
     ) = viewModelScope.launch(Dispatchers.IO) {
 
         currentlySelectedBusiness = business
@@ -265,7 +279,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     fun filterDataByShift(
-            shiftName: String?
+        shiftName: String?
     ) = viewModelScope.launch(Dispatchers.IO) {
 
         currentlySelectedShiftTime = shiftName
@@ -273,7 +287,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     fun searchAttendance(
-            searchTerm: String
+        searchTerm: String
     ) = viewModelScope.launch(Dispatchers.IO) {
         currentlySearchTerm = searchTerm
         filterCachedResultsAndEmit()
@@ -286,7 +300,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
         if (currentlyShownAttendanceData!!.isEmpty()) {
             _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.NoAttendanceFound
+                GigerAttendanceUnderManagerViewModelState.NoAttendanceFound
             )
             return
         }
@@ -294,23 +308,24 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
         val filteredAttendanceData = filterAttendanceData()
         val attendanceData = prepareStatusAndAttendanceItems(
-                filteredAttendanceData
+            filteredAttendanceData
         )
 
-//        delay(300)
         _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.AttendanceDataLoaded(
-                        currentlyFetchingForDate == LocalDate.now(),
-                        attendanceItemData = attendanceData
-                )
+            GigerAttendanceUnderManagerViewModelState.AttendanceDataLoaded(
+                attendanceSwipeControlsEnabled = !currentlyFetchingForDate.isBefore(LocalDate.now()),
+                enablePresentSwipeAction = currentlyFetchingForDate == LocalDate.now(),
+                enableDeclineSwipeAction = !currentlyFetchingForDate.isBefore(LocalDate.now()),
+                attendanceItemData = attendanceData
+            )
         )
     }
 
     private fun filterAttendanceData(): List<GigerAttendance> {
         if (currentlySelectedStatus.isNullOrBlank() &&
-                currentlySearchTerm.isNullOrBlank() &&
-                currentlySelectedShiftTime.isNullOrBlank() &&
-                currentlySelectedBusiness.isNullOrBlank()
+            currentlySearchTerm.isNullOrBlank() &&
+            currentlySelectedShiftTime.isNullOrBlank() &&
+            currentlySelectedBusiness.isNullOrBlank()
         ) return currentlyShownAttendanceData ?: emptyList()
 
         return currentlyShownAttendanceData?.filter {
@@ -332,55 +347,55 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     private fun prepareAllFilters() {
         val gigAttendanceData = currentlyShownAttendanceData ?: return
         val statuses = gigAttendanceData
-                .filter {
-                    !it.attendanceStatus.isNullOrBlank()
-                }.distinctBy {
-                    it.attendanceStatus
-                }.map { gigerAttendanceItem ->
-                    AttendanceStatusAndCountItemData(
-                            status = gigerAttendanceItem.attendanceStatus!!,
-                            attendanceCount = gigAttendanceData.count { gigerAttendanceItem.attendanceStatus == it.attendanceStatus },
-                            statusSelected = false
+            .filter {
+                !it.attendanceStatus.isNullOrBlank()
+            }.distinctBy {
+                it.attendanceStatus
+            }.map { gigerAttendanceItem ->
+                AttendanceStatusAndCountItemData(
+                    status = gigerAttendanceItem.attendanceStatus!!,
+                    attendanceCount = gigAttendanceData.count { gigerAttendanceItem.attendanceStatus == it.attendanceStatus },
+                    statusSelected = false
+                )
+            }.toMutableList()
+            .apply {
+                this.add(
+                    0, AttendanceStatusAndCountItemData(
+                        status = "All",
+                        attendanceCount = gigAttendanceData.size,
+                        statusSelected = true
                     )
-                }.toMutableList()
-                .apply {
-                    this.add(
-                            0, AttendanceStatusAndCountItemData(
-                            status = "All",
-                            attendanceCount = gigAttendanceData.size,
-                            statusSelected = true
-                    )
-                    )
-                }
+                )
+            }
 
         val businesses = gigAttendanceData
-                .filter {
-                    !it.companyName.isNullOrBlank()
-                }.map {
-                    it.companyName!!
-                }.distinct()
+            .filter {
+                !it.companyName.isNullOrBlank()
+            }.map {
+                it.companyName!!
+            }.distinct()
 
         val slotTimings = gigAttendanceData
-                .filter {
-                    !it.shiftTime.isNullOrBlank()
-                }.map {
-                    it.shiftTime!!
-                }.distinct()
-                .map {
-                    AttendanceFilterItemShift(
-                            shift = it,
-                            shiftTimeForView = formatShiftTime(it)
-                    )
-                }
-
-
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
-                        shouldRemoveOlderStatusTabs = true,
-                        attendanceStatuses = statuses,
-                        business = businesses,
-                        shiftTimings = slotTimings
+            .filter {
+                !it.shiftTime.isNullOrBlank()
+            }.map {
+                it.shiftTime!!
+            }.distinct()
+            .map {
+                AttendanceFilterItemShift(
+                    shift = it,
+                    shiftTimeForView = formatShiftTime(it)
                 )
+            }
+
+
+        _filters.postValue(
+            AttendanceFilters(
+                shouldRemoveOlderStatusTabs = true,
+                attendanceStatuses = statuses,
+                business = businesses,
+                shiftTimings = slotTimings
+            )
         )
     }
 
@@ -396,37 +411,37 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
 
         val gigWithCurrentStatus = gigAttendanceData
-                .filter {
-                    currentlySelectedStatus == it.attendanceStatus
-                }
+            .filter {
+                currentlySelectedStatus == it.attendanceStatus
+            }
 
         val businesses = gigWithCurrentStatus
-                .filter {
-                    !it.companyName.isNullOrBlank()
-                }.map {
-                    it.companyName!!
-                }.distinct()
+            .filter {
+                !it.companyName.isNullOrBlank()
+            }.map {
+                it.companyName!!
+            }.distinct()
 
         val shiftTimings = gigWithCurrentStatus
-                .filter {
-                    !it.shiftTime.isNullOrBlank()
-                }.map {
-                    it.shiftTime!!
-                }.distinct()
-                .map {
-                    AttendanceFilterItemShift(
-                            shift = it,
-                            shiftTimeForView = formatShiftTime(it)
-                    )
-                }
-
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
-                        shouldRemoveOlderStatusTabs = false,
-                        attendanceStatuses = null,
-                        business = businesses,
-                        shiftTimings = shiftTimings
+            .filter {
+                !it.shiftTime.isNullOrBlank()
+            }.map {
+                it.shiftTime!!
+            }.distinct()
+            .map {
+                AttendanceFilterItemShift(
+                    shift = it,
+                    shiftTimeForView = formatShiftTime(it)
                 )
+            }
+
+        _filters.postValue(
+            AttendanceFilters(
+                shouldRemoveOlderStatusTabs = false,
+                attendanceStatuses = null,
+                business = businesses,
+                shiftTimings = shiftTimings
+            )
         )
     }
 
@@ -435,39 +450,39 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
         val gigAttendanceData = currentlyShownAttendanceData ?: return
 
         val gigWithCurrentStatus = gigAttendanceData
-                .filter {
+            .filter {
 
-                    if (currentlySelectedStatus != null && currentlySelectedBusiness != null) {
-                        it.gigStatus == currentlySelectedStatus && it.companyName == currentlySelectedBusiness
-                    } else if (currentlySelectedStatus != null) {
-                        it.gigStatus == currentlySelectedStatus
-                    } else if (currentlySelectedBusiness != null) {
-                        it.companyName == currentlySelectedBusiness
-                    } else {
-                        true
-                    }
+                if (currentlySelectedStatus != null && currentlySelectedBusiness != null) {
+                    it.gigStatus == currentlySelectedStatus && it.companyName == currentlySelectedBusiness
+                } else if (currentlySelectedStatus != null) {
+                    it.gigStatus == currentlySelectedStatus
+                } else if (currentlySelectedBusiness != null) {
+                    it.companyName == currentlySelectedBusiness
+                } else {
+                    true
                 }
+            }
 
         val shiftTimings = gigWithCurrentStatus
-                .filter {
-                    !it.shiftTime.isNullOrBlank()
-                }.map {
-                    it.shiftTime!!
-                }.distinct()
-                .map {
-                    AttendanceFilterItemShift(
-                            shift = it,
-                            shiftTimeForView = formatShiftTime(it)
-                    )
-                }
-
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
-                        shouldRemoveOlderStatusTabs = false,
-                        attendanceStatuses = null,
-                        business = null,
-                        shiftTimings = shiftTimings
+            .filter {
+                !it.shiftTime.isNullOrBlank()
+            }.map {
+                it.shiftTime!!
+            }.distinct()
+            .map {
+                AttendanceFilterItemShift(
+                    shift = it,
+                    shiftTimeForView = formatShiftTime(it)
                 )
+            }
+
+        _filters.postValue(
+            AttendanceFilters(
+                shouldRemoveOlderStatusTabs = false,
+                attendanceStatuses = null,
+                business = null,
+                shiftTimings = shiftTimings
+            )
         )
     }
 
@@ -479,13 +494,13 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
     }
 
     fun markUserCheckedIn(
-            gigId: String,
-            userName: String
+        gigId: String,
+        userName: String
     ) = viewModelScope.launch {
 
         try {
             gigersAttendanceRepository.markUserAttendanceAsPresent(
-                    gigId
+                gigId
             )
             currentlyShownAttendanceData?.find {
                 gigId == it.gigId
@@ -493,26 +508,27 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
                 it.attendanceStatus = "Present"
                 it.gigStatus = GigStatus.ONGOING.getStatusString()
             }
-            _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.UserMarkedPresent(
-                            "$userName marked present"
-                    )
+            _markAttendanceState.postValue(
+                GigerAttendanceUnderManagerViewModelMarkAttendanceState.UserMarkedPresent(
+                    "$userName marked present"
+                )
             )
             delay(300)
             updateStatusCounts()
+            delay(300)
             filterCachedResultsAndEmit()
         } catch (e: Exception) {
             CrashlyticsLogger.e(TAG, "while marking present in tl", e)
-            _gigerAttendanceUnderManagerViewState.postValue(
-                    GigerAttendanceUnderManagerViewModelState.ErrorWhileMarkingUserPresent(
-                            error = "Error while marking $userName present"
-                    )
+            _markAttendanceState.postValue(
+                GigerAttendanceUnderManagerViewModelMarkAttendanceState.ErrorWhileMarkingUserPresent(
+                    error = "Error while marking $userName present"
+                )
             )
         }
     }
 
     fun gigDeclinedUpdateGigerStatusInView(
-            gigId: String
+        gigId: String
     ) = viewModelScope.launch {
 
         currentlyShownAttendanceData?.find {
@@ -522,6 +538,7 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
             it.gigStatus = GigStatus.DECLINED.getStatusString()
         }
         updateStatusCounts()
+        delay(300)
         filterCachedResultsAndEmit()
     }
 
@@ -529,34 +546,34 @@ class GigerAttendanceUnderManagerViewModel @Inject constructor(
 
         val gigAttendanceData = currentlyShownAttendanceData ?: return
         val statuses = gigAttendanceData
-                .filter {
-                    !it.attendanceStatus.isNullOrBlank()
-                }.distinctBy {
-                    it.attendanceStatus
-                }.map { gigerAttendanceItem ->
-                    AttendanceStatusAndCountItemData(
-                            status = gigerAttendanceItem.attendanceStatus!!,
-                            attendanceCount = gigAttendanceData.count { gigerAttendanceItem.attendanceStatus == it.attendanceStatus },
-                            statusSelected = false
-                    )
-                }.toMutableList()
-                .apply {
-                    this.add(
-                            0, AttendanceStatusAndCountItemData(
-                            status = "All",
-                            attendanceCount = gigAttendanceData.size,
-                            statusSelected = true
-                    )
-                    )
-                }
-
-        _gigerAttendanceUnderManagerViewState.postValue(
-                GigerAttendanceUnderManagerViewModelState.FiltersUpdated(
-                        shouldRemoveOlderStatusTabs = false,
-                        attendanceStatuses = statuses,
-                        business = null,
-                        shiftTimings = null
+            .filter {
+                !it.attendanceStatus.isNullOrBlank()
+            }.distinctBy {
+                it.attendanceStatus
+            }.map { gigerAttendanceItem ->
+                AttendanceStatusAndCountItemData(
+                    status = gigerAttendanceItem.attendanceStatus!!,
+                    attendanceCount = gigAttendanceData.count { gigerAttendanceItem.attendanceStatus == it.attendanceStatus },
+                    statusSelected = false
                 )
+            }.toMutableList()
+            .apply {
+                this.add(
+                    0, AttendanceStatusAndCountItemData(
+                        status = "All",
+                        attendanceCount = gigAttendanceData.size,
+                        statusSelected = true
+                    )
+                )
+            }
+
+        _filters.postValue(
+            AttendanceFilters(
+                shouldRemoveOlderStatusTabs = false,
+                attendanceStatuses = statuses,
+                business = null,
+                shiftTimings = null
+            )
         )
 
     }

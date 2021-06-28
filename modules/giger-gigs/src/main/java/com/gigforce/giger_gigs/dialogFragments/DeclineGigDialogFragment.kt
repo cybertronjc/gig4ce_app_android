@@ -152,6 +152,11 @@ class DeclineGigDialogFragment : DialogFragment() {
 
 
     private fun initView() {
+        declineGigLabel.text = if(isAnyUserOtherThanGigerIsDecliningTheGig)
+            getString(R.string.please_let_us_know_your_reason_why_giger_declining_this_gig)
+        else
+            getString(R.string.please_let_us_know_your_reason_why_are_you_declining_this_gig)
+
         reason_sick_leave.text = if (isAnyUserOtherThanGigerIsDecliningTheGig)
             getString(R.string.giger_on_sick_leave_today)
         else

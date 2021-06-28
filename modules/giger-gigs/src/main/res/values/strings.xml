@@ -45,6 +45,8 @@
     <string name="this_gig_is_unsuitable_for_giger">This gig is unsuitable for giger.</string>
     <string name="i_have_some_personal_work">I have some personal work.</string>
     <string name="giger_have_some_personal_work">Giger has some personal work.</string>
+    <string name="please_let_us_know_your_reason_why_giger_declining_this_gig">Please let us know the reason, why are you declining this gig.</string>
+
 
 
 </resources>

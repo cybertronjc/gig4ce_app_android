@@ -745,6 +745,24 @@ attr maxLines
 attr maxVelocity
 attr maxWidth
 attr maxWidthPct
+attr mcv_allowClickDaysOutsideCurrentMonth
+attr mcv_calendarMode
+attr mcv_dateTextAppearance
+attr mcv_firstDayOfWeek
+attr mcv_headerTextAppearance
+attr mcv_leftArrow
+attr mcv_monthLabels
+attr mcv_rightArrow
+attr mcv_selectionColor
+attr mcv_selectionMode
+attr mcv_showOtherDates
+attr mcv_showWeekDays
+attr mcv_tileHeight
+attr mcv_tileSize
+attr mcv_tileWidth
+attr mcv_titleAnimationOrientation
+attr mcv_weekDayLabels
+attr mcv_weekDayTextAppearance
 attr measureWithLargestChild
 attr menu
 attr mimeType
@@ -1376,6 +1394,7 @@ color light_grey
 color light_pink
 color lipstick
 color lipstick_2
+color lipstick_3
 color lipstick_two
 color material_blue_grey_800
 color material_blue_grey_900
@@ -1411,6 +1430,8 @@ color material_timepicker_button_stroke
 color material_timepicker_clock_text_color
 color material_timepicker_clockface
 color material_timepicker_modebutton_tint
+color mcv_text_date_dark
+color mcv_text_date_light
 color mtrl_bottom_nav_colored_item_tint
 color mtrl_bottom_nav_colored_ripple_color
 color mtrl_bottom_nav_item_tint
@@ -1778,6 +1799,8 @@ dimen material_input_text_to_prefix_suffix_padding
 dimen material_text_view_test_line_height
 dimen material_text_view_test_line_height_override
 dimen material_timepicker_dialog_buttons_margin_top
+dimen mcv_arrow_margin
+dimen mcv_arrow_padding
 dimen minImageHeight
 dimen minImageWidth
 dimen mtrl_alert_dialog_background_inset_bottom
@@ -2405,7 +2428,10 @@ drawable ic_baseline_play_circle_outline_24_
 drawable ic_baseline_share_24
 drawable ic_calendar
 drawable ic_calendar_
+drawable ic_calendar_black
 drawable ic_call
+drawable ic_call_doc_scheduler_2
+drawable ic_call_drawable_2
 drawable ic_call_giger_id
 drawable ic_call_pink
 drawable ic_camera_round
@@ -2477,9 +2503,12 @@ drawable ic_search
 drawable ic_set_preference
 drawable ic_star
 drawable ic_status_pending
+drawable ic_swipe_check_in_24
+drawable ic_swipe_decline_24
 drawable ic_three_dots
 drawable ic_time_help_
 drawable ic_tip
+drawable ic_user_2
 drawable ic_warning
 drawable ic_warning_
 drawable ic_warning_white
@@ -2498,6 +2527,8 @@ drawable material_ic_keyboard_arrow_previous_black_24dp
 drawable material_ic_keyboard_arrow_right_black_24dp
 drawable material_ic_menu_arrow_down_black_24dp
 drawable material_ic_menu_arrow_up_black_24dp
+drawable mcv_action_next
+drawable mcv_action_previous
 drawable mtrl_dialog_background
 drawable mtrl_dropdown_arrow
 drawable mtrl_ic_arrow_drop_down
@@ -2536,6 +2567,13 @@ drawable sl_favorite_24_dp
 drawable slidetoact_animated_ic_check
 drawable slidetoact_ic_arrow
 drawable slidetoact_ic_check
+drawable spinner_background_gig_attendance
+drawable spinner_background_rectangle_round_grey
+drawable status_absent_chip_background
+drawable status_present_chip_background
+drawable status_selected_border
+drawable status_tab_indicator
+drawable status_unselected_border
 drawable test_custom_background
 drawable toolbar_background
 drawable toolbar_search_background
@@ -2687,6 +2725,8 @@ id attendance_monthly_rv
 id attendance_montly_progress_bar
 id attendance_overview_layout
 id attendance_present_chip
+id attendance_recycler_view
+id attendance_shimmer_container
 id attendance_top_bar
 id attendance_type_chipgroup
 id auto
@@ -2702,6 +2742,7 @@ id banner_image
 id banner_root
 id banner_title
 id barrier
+id barrier1
 id baseline
 id beginning
 id blocking
@@ -2719,6 +2760,8 @@ id browser_actions_menu_view
 id bt_download_id_gig_page
 id bt_download_id_gig_past_gigs
 id btn_holder
+id business_label
+id business_spinner
 id button
 id buttonPanel
 id buttonSpace
@@ -2732,6 +2775,7 @@ id calendar_iv
 id callCardView
 id call_btn
 id call_card_view
+id call_giger_btn
 id call_tv
 id camera_layout
 id camera_permission_image_view
@@ -2762,12 +2806,14 @@ id checkOutIV
 id check_in_label
 id checkbox
 id checked
+id checkin_image
 id checkin_time_tv
 id chip
 id chip1
 id chip2
 id chip3
 id chip_group
+id chip_like_shimmer_controller
 id chronometer
 id circle_center
 id circular
@@ -2835,6 +2881,7 @@ id cv_scroll_to_top_gig_hist
 id cv_top
 id dark
 id dash
+id dataBinding
 id dateIV
 id dateTV
 id dateYearTV
@@ -2846,6 +2893,7 @@ id decelerate
 id decelerateAndComplete
 id declineGigLabel
 id declineGigMainLayout
+id decline_image
 id decline_slider_btn
 id decor_content_parent
 id default_activity_button
@@ -2895,6 +2943,7 @@ id endToStart
 id end_padder
 id enterAlways
 id enterAlwaysCollapsed
+id error_info_layout
 id estimateTimeToReachTV
 id exitUntilCollapsed
 id exo_ad_overlay
@@ -2946,6 +2995,7 @@ id fragment_container
 id fragment_container_view_tag
 id fragment_phone
 id fragment_register_email
+id friday
 id fullMapAddresLabel
 id fullMapAddresTV
 id gallery_layout
@@ -3029,6 +3079,8 @@ id gig_type
 id gig_type_iv
 id gig_type_label
 id gig_type_layout
+id gigers_under_manager_main_error
+id gigers_under_manager_main_layout
 id gigs_recycler_view
 id glide_custom_view_target_tag
 id gone
@@ -3139,6 +3191,7 @@ id mapCardView
 id mapView
 id margin_8
 id masked
+id match_parent
 id material_clock_display
 id material_clock_face
 id material_clock_hand
@@ -3158,6 +3211,7 @@ id material_timepicker_mode_button
 id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
+id mcv_pager
 id media_actions
 id menu_crop
 id menu_loader
@@ -3173,7 +3227,10 @@ id modal_content_root
 id modal_root
 id module_completed_iv
 id module_completed_perc_tv
+id monday
+id month
 id month_grid
+id month_name
 id month_navigation_bar
 id month_navigation_fragment_toggle
 id month_navigation_next
@@ -3203,6 +3260,7 @@ id mtrl_picker_text_input_range_end
 id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id mtrl_view_tag_bottom_padding
+id multiple
 id multiply
 id myp_month
 id myp_year
@@ -3213,6 +3271,7 @@ id nav_host_fragment_container
 id navigateTV
 id navigation_header_container
 id never
+id next
 id no_gigs_layout
 id none
 id normal
@@ -3224,6 +3283,8 @@ id notification_main_column_container
 id off
 id okay_btn
 id on
+id onAttachStateChangeListener
+id onDateChanged
 id option_menu_iv
 id other_options_recycler_view
 id outline
@@ -3283,6 +3344,7 @@ id presentGigcheckInIV
 id presentGigpunchInTimeTV
 id presentGigpunchOutTimeTV
 id presentOrFutureGigControls
+id previous
 id primary_action
 id primary_button
 id processingLabel
@@ -3309,6 +3371,7 @@ id punch_out_time_tv
 id punch_out_tv
 id radial
 id radio
+id range
 id ratingBar
 id ratingMainLayout
 id rating_star_iv
@@ -3356,6 +3419,7 @@ id row_index_key
 id rv_gigs_gig_history
 id rv_on_going_gigs_gig_hist
 id satellite
+id saturday
 id save_image_matrix
 id save_non_transition_alpha
 id save_overlay_view
@@ -3391,6 +3455,7 @@ id selectRadioButton
 id select_date_layout
 id select_dialog_listview
 id selected
+id selected_slot_tv
 id selection_type
 id send_code
 id send_sms_tos
@@ -3414,6 +3479,9 @@ id separator_vertical_2
 id sheetEdge
 id shiftIconIV
 id shiftTV
+id shift_label
+id shift_spinner
+id shift_time_tv
 id shimmer_card
 id shimmer_controller
 id shortcut
@@ -3425,7 +3493,11 @@ id show_pic
 id sign_in_email_sent_header_text
 id sign_in_email_sent_text
 id sin
+id single
 id slide
+id slot_calendar
+id slot_container
+id slot_label
 id smallLabel
 id snackbar_action
 id snackbar_text
@@ -3454,7 +3526,13 @@ id staticLayout
 id staticPostLayout
 id status_bar_latest_event_content
 id status_card_view
+id status_container
+id status_count_tv
 id status_iv
+id status_layout
+id status_shimmer_container
+id status_tab_layout
+id status_tv
 id statusbarutil_fake_status_bar_view
 id statusbarutil_translucent_view
 id stop
@@ -3465,8 +3543,14 @@ id submitBtn
 id submit_area
 id submit_confirmation_code
 id subtitle
+id sunday
 id surface_view
 id sv_giger_id
+id swipe_bck_left_half
+id swipe_bck_right_half
+id swipe_check_in_label
+id swipe_decline_label
+id swipe_label
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -3501,6 +3585,7 @@ id textView21
 id textView3
 id textView41
 id textView67
+id textWatcher
 id text_input_end_icon
 id text_input_error_icon
 id text_input_password_toggle
@@ -3517,6 +3602,7 @@ id textinput_suffix_text
 id texture_view
 id textview
 id thumbnail
+id thursday
 id ticker
 id time
 id time_layout
@@ -3559,6 +3645,7 @@ id trimModeLine
 id trouble_signing_in
 id trouble_signing_in_possible_fixes
 id try_later_btn
+id tuesday
 id tv_allow_access
 id tv_brand_name_giger_id
 id tv_completed_gig_hist
@@ -3616,8 +3703,11 @@ id userReceivedRatingAttachmentsContainer
 id userReceivedRatingBar
 id userReceivedRatingFeedbackTV
 id userReceviedFeedbackRatingLayout
+id user_attendance_status_textview
+id user_designation_tv
 id user_image_iv
 id user_name_tv
+id user_phone_number
 id usersFeedbackTV
 id v_car_left_bg_rv_gig_hist
 id verification_status_cardview
@@ -3628,8 +3718,10 @@ id videos_list
 id view4
 id view40
 id view41
+id view_background
 id view_bottom
 id view_finder
+id view_foreground
 id view_middle_rv_gig_hist
 id view_offset_helper
 id view_one
@@ -3643,6 +3735,8 @@ id visible_removing_fragment_view_tag
 id wageIV
 id wageTV
 id warningIconIV
+id wednesday
+id week
 id welcome_back_email_link_body
 id welcome_back_idp_button
 id welcome_back_idp_prompt
@@ -3740,6 +3834,7 @@ layout activity_photo_crop
 layout banner
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
+layout calendar_view
 layout card
 layout card_landscape_inner
 layout card_portrait_inner
@@ -3813,6 +3908,9 @@ layout fragment_gig_regularise_attendance
 layout fragment_gig_regularise_attendance_main
 layout fragment_gig_single_day_attendance_details
 layout fragment_gig_single_day_attendance_details_main
+layout fragment_giger_attendance_under_manager
+layout fragment_giger_under_managers_attendance
+layout fragment_giger_under_managers_attendance_main
 layout fragment_gigs_list_for_decline
 layout fragment_image_viewer
 layout fragment_main_learning_role_based_learnings
@@ -3935,10 +4033,14 @@ layout pop_up_menu_tv
 layout recycler_item_gig_attendance
 layout recycler_item_gig_people_to_expect
 layout recycler_item_other_option
+layout recycler_row_attendance_status
+layout recycler_row_business_name_shift_time
 layout recycler_row_gig_list_for_decline
+layout recycler_row_giger_attendance
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout shimmer_chip_like_layout
 layout shimmer_data_layout
 layout support_simple_spinner_dropdown_item
 layout test_action_chip
@@ -4017,6 +4119,7 @@ string appbar_scrolling_view_behavior
 string back_button
 string bottom_sheet_behavior
 string bottomsheet_action_expand_halfway
+string calendar
 string call
 string cancelling_out_a_gig
 string card_content_descriptor
@@ -4188,6 +4291,9 @@ string fui_welcome_back_idp_prompt
 string fui_welcome_back_password_prompt_body
 string gig_id
 string gig_location
+string giger_can_t_reach_the_location_today
+string giger_have_some_personal_work
+string giger_on_sick_leave_today
 string giger_since
 string gigforce_pvt_ltd
 string github_client_id
@@ -4196,6 +4302,7 @@ string hello_blank_fragment
 string hide_bottom_view_on_scroll_behavior
 string hours
 string i_can_t_reach_the_location_today
+string i_have_some_personal_work
 string i_m_on_sick_leave_today
 string icon_content_description
 string issued_on
@@ -4257,6 +4364,7 @@ string mtrl_picker_toggle_to_year_selection
 string my_gigs
 string nav_app_bar_navigate_up_description
 string nav_app_bar_open_drawer_description
+string next
 string no_gigs_present
 string no_more_gig
 string no_on_going_gigs
@@ -4277,6 +4385,7 @@ string please_let_us_know_more_about_your_gig
 string please_let_us_know_your_reason_why_are_you_declining_this_gig
 string plus_see_less
 string plus_see_more
+string previous
 string profile_image_gig_history
 string punch_in
 string punch_out
@@ -4288,6 +4397,7 @@ string reason
 string search_menu_title
 string status_bar_notification_info_overflow
 string submit_all_caps
+string this_gig_is_unsuitable_for_giger
 string this_gig_is_unsuitable_for_me
 string title_settings_dialog
 string twitter_consumer_key
@@ -4823,6 +4933,9 @@ style TextAppearance_GigforceStyles_Headline6
 style TextAppearance_GigforceStyles_Overline
 style TextAppearance_GigforceStyles_Subtitle1
 style TextAppearance_GigforceStyles_Subtitle2
+style TextAppearance_MaterialCalendarWidget_Date
+style TextAppearance_MaterialCalendarWidget_Header
+style TextAppearance_MaterialCalendarWidget_WeekDay
 style TextAppearance_MaterialComponents_Badge
 style TextAppearance_MaterialComponents_Body1
 style TextAppearance_MaterialComponents_Body2
@@ -5283,6 +5396,7 @@ styleable MaterialButton android_background android_checkable android_insetBotto
 styleable MaterialButtonToggleGroup checkedButton selectionRequired singleSelection
 styleable MaterialCalendar android_windowFullscreen dayInvalidStyle daySelectedStyle dayStyle dayTodayStyle nestedScrollable rangeFillColor yearSelectedStyle yearStyle yearTodayStyle
 styleable MaterialCalendarItem android_insetBottom android_insetLeft android_insetRight android_insetTop itemFillColor itemShapeAppearance itemShapeAppearanceOverlay itemStrokeColor itemStrokeWidth itemTextColor
+styleable MaterialCalendarView mcv_allowClickDaysOutsideCurrentMonth mcv_calendarMode mcv_dateTextAppearance mcv_firstDayOfWeek mcv_headerTextAppearance mcv_leftArrow mcv_monthLabels mcv_rightArrow mcv_selectionColor mcv_selectionMode mcv_showOtherDates mcv_showWeekDays mcv_tileHeight mcv_tileSize mcv_tileWidth mcv_titleAnimationOrientation mcv_weekDayLabels mcv_weekDayTextAppearance
 styleable MaterialCardView android_checkable cardForegroundColor checkedIcon checkedIconMargin checkedIconSize checkedIconTint rippleColor shapeAppearance shapeAppearanceOverlay state_dragged strokeColor strokeWidth
 styleable MaterialCheckBox buttonTint useMaterialThemeColors
 styleable MaterialComponentsTheme bottomSheetDialogTheme bottomSheetStyle chipGroupStyle chipStandaloneStyle chipStyle colorAccent colorBackgroundFloating colorPrimary colorPrimaryDark colorSecondary editTextStyle floatingActionButtonStyle materialButtonStyle materialCardViewStyle navigationViewStyle scrimBackground snackbarButtonStyle tabStyle textAppearanceBody1 textAppearanceBody2 textAppearanceButton textAppearanceCaption textAppearanceHeadline1 textAppearanceHeadline2 textAppearanceHeadline3 textAppearanceHeadline4 textAppearanceHeadline5 textAppearanceHeadline6 textAppearanceOverline textAppearanceSubtitle1 textAppearanceSubtitle2 textInputStyle
