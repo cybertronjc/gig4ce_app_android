@@ -15,7 +15,7 @@ class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
     private val removePdfTopIcon =
-            "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
+        "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +23,10 @@ class DocViewerActivity : AppCompatActivity() {
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
-        showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"));
+        showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
     }
 
-    private fun showPdfFile(imageString: String?, isImage: Boolean) {
+    private fun showPdfFile(imageString: String?, isImage: Boolean, isPdf: Boolean) {
         showProgress()
         pdfView!!.invalidate()
         pdfView!!.settings.javaScriptEnabled = true
@@ -36,13 +36,14 @@ class DocViewerActivity : AppCompatActivity() {
         pdfView!!.settings.useWideViewPort = true;
 
         pdfView!!.loadUrl(
-                if (isImage) imageString else
-                    "https://docs.google.com/gview?embedded=true&url=${
-                        URLEncoder.encode(
-                                imageString,
-                                "UTF-8"
-                        )
-                    }"
+             if (isPdf)
+                "https://docs.google.com/gview?embedded=true&url=${
+                    URLEncoder.encode(
+                        imageString,
+                        "UTF-8"
+                    )
+                }"
+             else imageString
         )
         pdfView!!.webViewClient = object : WebViewClient() {
             var checkOnPageStartedCalled = false
@@ -55,7 +56,7 @@ class DocViewerActivity : AppCompatActivity() {
                     pdfView!!.loadUrl(removePdfTopIcon)
                     hideProgress()
                 } else {
-                    showPdfFile(imageString, isImage)
+                    showPdfFile(imageString, isImage, isPdf)
                 }
             }
         }

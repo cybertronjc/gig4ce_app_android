@@ -5,23 +5,27 @@ import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.gigforce.app.R
-import com.gigforce.app.core.base.BaseFragment
+import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.TrackingEventArgs
@@ -36,7 +40,6 @@ import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
-import kotlin.jvm.Throws
 
 @AndroidEntryPoint
 class Login : Fragment() {
@@ -74,7 +77,7 @@ class Login : Fragment() {
     ): View? {
         //this.setDarkStatusBarTheme(false);
 
-        return inflater.inflate(R.layout.login_frament, container,false)
+        return inflater.inflate(R.layout.login_frament, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -297,6 +300,18 @@ class Login : Fragment() {
             doActionOnClick()
         }
 
+        termsTextView.setOnClickListener {
+            val docIntent = Intent(
+                activity,
+                DocViewerActivity::class.java
+            )
+            docIntent.putExtra(
+                StringConstants.DOC_URL.value,
+                "https://gigforce.in/terms-of-use "
+            )
+            activity?.startActivity(docIntent)
+        }
+
     }
 
     private fun fillMobileDigitBoxes(ind: Int, md: String, add: Boolean) {
@@ -330,7 +345,10 @@ class Login : Fragment() {
             cvloginwrong.visibility = VISIBLE
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
-        } else {
+        } else if (!termsCheckbox.isChecked){
+            showToast("Accept Terms and Conditions to continue")
+        }
+        else {
             viewModel.sendVerificationCode(phoneNumber)
         }
     }
