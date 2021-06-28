@@ -64,16 +64,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data
-            android:name="CLEVERTAP_ACCOUNT_ID"
-            android:value="67Z-W98-795Z" />
-        <meta-data
-            android:name="CLEVERTAP_TOKEN"
-            android:value="bc0-1a6" />
-        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
-        <meta-data
-            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
-            android:value="1" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -103,6 +93,16 @@
             android:name="firebase_messaging_auto_init_enabled"
             android:value="true" />
 
+
+
+        <!--        <receiver-->
+        <!--            android:name=".modules.auth.ui.main.SmsRetrieverBroadcastReceiver"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -114,7 +114,7 @@
             android:name="com.gigforce.app.modules.photocrop.PhotoCrop"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".utils.DocViewerActivity"
+            android:name="com.gigforce.common_ui.utils.DocViewerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity

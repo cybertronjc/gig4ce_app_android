@@ -290,6 +290,7 @@ class LoginViewModel @Inject constructor(
                                 updateRegisterStatusToDB()
 
                             }
+                            updateTermsAcceptedToDB()
 
                         } else {
                             eventTracker.pushEvent(
@@ -299,6 +300,7 @@ class LoginViewModel @Inject constructor(
                                     )
                             )
                             updateRegisterStatusToDB()
+                            updateTermsAcceptedToDB()
 
                         }
                     }.addOnFailureListener { exception ->
@@ -306,6 +308,16 @@ class LoginViewModel @Inject constructor(
                     }
         }
 
+    }
+
+    private fun updateTermsAcceptedToDB() {
+        FirebaseAuth.getInstance().currentUser?.let { it ->
+            FirebaseFirestore
+                .getInstance()
+                .collection("Profiles").document(it.uid).update(mapOf("termsAccepted" to true)).addOnFailureListener { exception ->
+                    FirebaseCrashlytics.getInstance().log("Exception : updateTermsAcceptedToDB Method $exception")
+                }
+        }
     }
 
     private fun updateRegisterStatusToDB() {

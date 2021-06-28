@@ -888,8 +888,7 @@
     <dialog
         android:id="@+id/viewFullScreenImageDialogFragment"
         android:name="com.gigforce.common_ui.utils.ViewFullScreenImageDialogFragment"
-        android:label="ViewFullScreenImageDialogFragment"
-        />
+        android:label="ViewFullScreenImageDialogFragment" />
     <dialog
         android:id="@+id/viewFullScreenVideoDialogFragment"
         android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
@@ -918,6 +917,10 @@
         android:id="@+id/gigerAttendanceUnderManagerFragment"
         android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
         android:label="Giger Attendance under Mgr" />
+    <fragment
+        android:id="@+id/invoicesListFragment"
+        android:name="com.gigforce.wallet.InvoicesListFragment"
+        android:label="InvoicesListFragment" />
     <fragment
         android:id="@+id/messageViewingInfoFragment"
         android:name="com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment"

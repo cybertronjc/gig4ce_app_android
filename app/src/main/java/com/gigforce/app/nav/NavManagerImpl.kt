@@ -12,7 +12,7 @@ import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
 import com.gigforce.app.modules.photocrop.PhotoCrop
-import com.gigforce.app.utils.DocViewerActivity
+import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants

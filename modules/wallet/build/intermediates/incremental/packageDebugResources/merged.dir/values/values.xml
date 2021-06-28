@@ -4,12 +4,14 @@
     <color name="app_red">#E02020</color>
     <color name="gray_color">#6d7278</color>
     <color name="grey_c7">#c7c7c7</color>
+    <color name="status_bar_pink">#e53369</color>
     <dimen name="size_1">1dp</dimen>
     <dimen name="size_36">36dp</dimen>
     <string name="current_month">Current Month</string>
     <string name="earning_info"><b>Earning:</b> Sum of the amount received for gigs completed in this month + Sum of the amount yet to be received for completed gigs in this month</string>
     <string name="explore_now">Explore Now</string>
     <string name="giger">Giger</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="invoice_generated_info"><b>Invoice generated:</b> The gig where a receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
     <string name="invoice_info"><b>Invoice:</b> The receipt of completion of a gig and acknowledgment of the payment to be made to the giger.</string>
     <string name="looks_like_you_have_not_explored_much">Looks like you have not explored much</string>
