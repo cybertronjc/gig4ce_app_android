@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -60,7 +61,25 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private lateinit var toolbar: GigforceToolbar
     private lateinit var coreRecyclerView: CoreRecyclerView
 
-    private var sharedFileSubmitted= false
+    private var sharedFileSubmitted = false
+
+    private val backPressHandler = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            if (toolbar.isSearchCurrentlyShown) {
+                hideSoftKeyboard()
+            } else if (sharedFileSubmitted) {
+                navigation.navigateTo("common/landingScreen")
+            } else {
+                isEnabled = false
+                activity?.onBackPressed()
+            }
+        }
+    }
+
+    private fun handleBackPress() {
+
+    }
 
     private fun setObserver(owner: LifecycleOwner) {
         Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
@@ -147,9 +166,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     ) {
         arguments?.let {
 
-            if(!sharedFileSubmitted) {
-                val sharedFilesBundle =
-                    it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
+            if (!sharedFileSubmitted) {
+                val sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
                 viewModel.sharedFiles = sharedFilesBundle
                 sharedFileSubmitted = true
             }
@@ -190,16 +208,23 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
 
             if (toolbar.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
+            } else if (sharedFileSubmitted) {
+                navigation.navigateTo("common/landingScreen")
             } else {
+                backPressHandler.isEnabled = false
                 activity?.onBackPressed()
             }
         }
     }
 
     private fun initListeners() {
-
         toolbar.showSearchOption("Search Chats")
         toolbar.setOnSearchTextChangeListener(this)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                backPressHandler
+        )
     }
 
     private fun askForStoragePermission() {
@@ -259,7 +284,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus()?.getWindowToken(), 0)
     }
 
-    companion object{
+    companion object {
         const val INTENT_EXTRA_SHARED_FILE_DEPLOYED_TO_ITEMS_ONCE = "deployed_once"
     }
 }
