@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -56,6 +58,8 @@ abstract class ImageMessageView(
     private lateinit var attachmentDownloadingProgressBar: ProgressBar
     private lateinit var receivedStatusIV: ImageView
 
+    //Data
+    private lateinit var chatMessage : ChatMessage
 
     init {
         setDefault()
@@ -159,6 +163,7 @@ abstract class ImageMessageView(
     }
 
     override fun onBind(msg: ChatMessage) {
+        chatMessage = msg
         textViewTime.text = msg.timestamp?.toDisplayText()
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
@@ -236,7 +241,8 @@ abstract class ImageMessageView(
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE &&  type == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible =  type == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =  type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
 
         popUpMenu.setOnMenuItemClickListener(this)
         popUpMenu.show()
@@ -250,13 +256,26 @@ abstract class ImageMessageView(
         when (itemClicked.itemId) {
             R.id.action_copy -> {}
             R.id.action_delete -> deleteMessage()
+            R.id.action_message_info -> viewMessageInfo()
         }
         return true
     }
 
+    private fun viewMessageInfo() {
+        navigation.navigateTo("chats/messageInfo",
+            bundleOf(
+                GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to chatMessage.groupId,
+                GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to chatMessage.id
+            )
+        )
+    }
+
     private fun deleteMessage() {
         if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            //
+
+            oneToOneChatViewModel.deleteMessage(
+                    message.id
+            )
         } else if (messageType == MessageType.GROUP_MESSAGE) {
             groupChatViewModel.deleteMessage(
                 message.id

@@ -26,6 +26,8 @@ import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
+import com.gigforce.modules.feature_chat.models.GroupChatMember
+import com.gigforce.modules.feature_chat.models.MessageReceivingAndReadingInfo
 import com.gigforce.modules.feature_chat.repositories.ChatContactsRepository
 import com.gigforce.modules.feature_chat.repositories.ChatProfileFirebaseRepository
 import com.google.firebase.Timestamp
@@ -83,6 +85,7 @@ class GroupChatViewModel constructor(
     //Create group
     override fun setGroupId(groupId: String) {
         this.groupId = groupId
+        Log.d(TAG,"Group id set $groupId")
     }
 
     private val _createGroup: MutableLiveData<Lce<String>> = MutableLiveData()
@@ -156,6 +159,15 @@ class GroupChatViewModel constructor(
                     if (userContacts != null) {
                         compareGroupMembersWithContactsAndEmit()
                     }
+
+                    val isUserDeletedFromgroup =
+                        groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid } != null
+                    val limitToTimeStamp = if (isUserDeletedFromgroup) {
+                        groupDetails!!.deletedGroupMembers.find { it.uid == currentUser.uid }!!.deletedOn
+                    } else
+                        null
+
+                    startWatchingGroupMessages(limitToTimeStamp)
                 }
             }
 
@@ -207,7 +219,7 @@ class GroupChatViewModel constructor(
 
     override fun getGroupInfoAndStartListeningToMessages() {
         startWatchingGroupDetails()
-        startWatchingGroupMessages()
+        //startWatchingGroupMessages()
         startWatchingUserGroupHeader()
         startContactsChangeListener()
     }
@@ -239,31 +251,67 @@ class GroupChatViewModel constructor(
         Log.d(TAG, "userGroupHeaderChangeListener attached")
     }
 
-    private fun startWatchingGroupMessages() {
+    private fun startWatchingGroupMessages(
+        limitToTimeStamp: Timestamp? = null
+    ) {
+        if (groupMessagesListener != null && limitToTimeStamp != null) {
+            Log.d(TAG, "already a listener attached,user removed from group")
+            groupMessagesListener?.remove()
+            groupMessagesListener = null
+            return
+        }
+
         if (groupMessagesListener != null) {
             Log.d(TAG, "already a listener attached,no-op")
             return
         }
 
-        groupMessagesListener = chatGroupRepository
+        var getGroupMessagesQuery = chatGroupRepository
             .groupMessagesRef(groupId)
             .orderBy("timestamp", Query.Direction.ASCENDING)
+
+        if (limitToTimeStamp != null)
+            getGroupMessagesQuery =
+                getGroupMessagesQuery.whereLessThan("timestamp", limitToTimeStamp)
+
+        groupMessagesListener = getGroupMessagesQuery
             .addSnapshotListener { value, error ->
 
                 if (error != null)
                     Log.e(TAG, "Error while listening group messages", error)
 
                 grpMessages = value?.documents?.map { doc ->
-                    doc.toObject(ChatMessage::class.java)!!.apply {
-                        id = doc.id
-                        this.chatType = ChatConstants.CHAT_TYPE_GROUP
+                    doc.toObject(ChatMessage::class.java)!!.also {
+                        it.id = doc.id
+                        it.chatType = ChatConstants.CHAT_TYPE_GROUP
+                        it.groupId = groupId
                     }
                 }?.toMutableList()
+
+                checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
                 if (userContacts != null) {
                     compareGroupMessagesWithContactsAndEmit()
                 }
             }
+    }
+
+    private fun checkForRecevinginfoElseMarkMessageAsReceived(
+        grpMessages: MutableList<ChatMessage>
+    ) = viewModelScope.launch {
+        val messageWithNotReceivedStatus = grpMessages.filter { msg ->
+            msg.groupMessageReadBy.find { it.uid == currentUser.uid } == null
+        }
+
+
+        try {
+            chatGroupRepository.markMessagesAsRead(
+                groupId,
+                messageWithNotReceivedStatus
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 
@@ -334,7 +382,8 @@ class GroupChatViewModel constructor(
 //    val sendingMessage: LiveData<GroupMessage> = _sendingMessage
 
     fun sendNewText(
-        text: String
+        text: String,
+        mentionUsers : List<MentionUser>
     ) = viewModelScope.launch {
 
         try {
@@ -346,7 +395,8 @@ class GroupChatViewModel constructor(
                 chatType = ChatConstants.CHAT_TYPE_GROUP,
                 flowType = ChatConstants.FLOW_TYPE_OUT,
                 content = text,
-                timestamp = Timestamp.now()
+                timestamp = Timestamp.now(),
+                mentionedUsersInfo = mentionUsers
             )
 
             chatGroupRepository.sendTextMessage(groupId, message)
@@ -364,16 +414,15 @@ class GroupChatViewModel constructor(
 
         try {
 
-            val thumbnail =
-                try {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
-                    } else {
-                        ImageUtils.resizeBitmap(uri.path!!, 96, 96)
-                    }
-                } catch (e: Exception) {
-                    null
+            val thumbnail = try {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    ThumbnailUtils.createImageThumbnail(File(uri.path), Size(96, 96), null)
+                } else {
+                    ImageUtils.resizeBitmap(uri.path!!, 96, 96)
                 }
+            } catch (e: Exception) {
+                null
+            }
 
             val message = ChatMessage(
                 id = UUID.randomUUID().toString(),
@@ -396,7 +445,7 @@ class GroupChatViewModel constructor(
                 imageUri = uri
             )
         } catch (e: Exception) {
-            //handle error
+            e.printStackTrace()
         }
     }
 
@@ -713,14 +762,14 @@ class GroupChatViewModel constructor(
     }
 
     fun isContactModelOfCurrentUser(
-        contact : ContactModel
+        contact: ContactModel
     ): Boolean {
         return contact.uid == currentUser.uid
     }
 
     fun dismissAsGroupAdmin(
         uid: String
-    ) = viewModelScope.launch{
+    ) = viewModelScope.launch {
         try {
 
             chatGroupRepository.dismissUserAsGroupAdmin(
@@ -738,7 +787,7 @@ class GroupChatViewModel constructor(
 
     fun makeUserGroupAdmin(
         uid: String
-    ) = viewModelScope.launch{
+    ) = viewModelScope.launch {
         try {
 
             chatGroupRepository.makeUserGroupAdmin(
@@ -754,37 +803,74 @@ class GroupChatViewModel constructor(
         }
     }
 
-    fun getCurrentChatGroupInfo(): ChatGroup?  = groupDetails
+    fun getCurrentChatGroupInfo(): ChatGroup? = groupDetails
 
-    fun allowEveryoneToPostInThisGroup() = viewModelScope.launch{
+    fun allowEveryoneToPostInThisGroup() = viewModelScope.launch {
         try {
 
             chatGroupRepository.allowEveryoneToPostInThisGroup(
-                    groupId
+                groupId
             )
         } catch (e: Exception) {
             CrashlyticsLogger.e(
-                    TAG,
-                    "dismissAsGroupAdmin",
-                    e
+                TAG,
+                "dismissAsGroupAdmin",
+                e
             )
         }
     }
 
-    fun limitPostingToAdminsInGroup() = viewModelScope.launch{
+    fun limitPostingToAdminsInGroup() = viewModelScope.launch {
         try {
 
             chatGroupRepository.limitPostingToAdminsInGroup(
-                    groupId
+                groupId
             )
         } catch (e: Exception) {
             CrashlyticsLogger.e(
-                    TAG,
-                    "dismissAsGroupAdmin",
-                    e
+                TAG,
+                "dismissAsGroupAdmin",
+                e
             )
         }
     }
+
+    //Message reading info
+    private val _messageReadingInfo: MutableLiveData<MessageReceivingAndReadingInfo> =
+        MutableLiveData()
+    val messageReadingInfo: LiveData<MessageReceivingAndReadingInfo> = _messageReadingInfo
+
+    fun getMessageReadingInfo(
+        groupId: String,
+        messageId: String
+    ) = viewModelScope.launch {
+
+        try {
+            val chatGroup = chatGroupRepository.getGroupDetails(groupId)
+            val chatMessage = chatGroupRepository.getChatMessage(groupId, messageId)
+                ?: throw IllegalStateException("no chat message found, for group id $groupId message: $messageId")
+            val messageReadByUsers = chatMessage.groupMessageReadBy.filter {
+                it.uid != currentUser.uid
+            }
+
+            val totalUsersCount = chatGroup.groupMembers
+                .filter { it.uid != currentUser.uid }
+                .count()
+
+            _messageReadingInfo.value = MessageReceivingAndReadingInfo(
+                totalMembers = totalUsersCount,
+                receivingInfo = emptyList(),
+                readingInfo = messageReadByUsers
+            )
+        } catch (e: Exception) {
+            CrashlyticsLogger.e(
+                TAG,
+                "while getting message info for reading data",
+                e
+            )
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()
@@ -803,6 +889,18 @@ class GroupChatViewModel constructor(
         Log.d(TAG, "userGroupHeaderChangeListener detached")
     }
 
+    fun getGroupMembersNameSuggestions(keywords: String): List<GroupChatMember> {
+        val chatGroupMembers = groupDetails?.groupMembers ?: return emptyList()
+        return chatGroupMembers.filter {
+            it.name?.startsWith(keywords, true) ?: false
+        }.map {
+            GroupChatMember(
+                    it.name!!,
+                    it.uid!!,
+                    it.getUserProfileImageUrlOrPath()?:""
+            )
+        }
+    }
 
 
     companion object {

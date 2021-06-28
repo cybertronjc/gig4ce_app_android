@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.core.os.bundleOf
+import androidx.navigation.navOptions
 import com.gigforce.common_ui.ViewFullScreenImageDialogFragment
 import com.gigforce.common_ui.ViewFullScreenVideoDialogFragment
 import com.gigforce.common_ui.core.ChatConstants
@@ -49,7 +50,8 @@ class ChatNavigation(
             headerId: String,
             otherUserName: String,
             otherUserProfilePicture: String,
-            sharedFileBundle: Bundle?
+            sharedFileBundle: Bundle?,
+            cameFromLinkInOtherChat : Boolean = false
     ) {
 
         Log.i("Chat/Nav/Impl", "Navigate to Chat Page Tapped")
@@ -63,8 +65,17 @@ class ChatNavigation(
                         ChatPageFragment.INTENT_EXTRA_CHAT_HEADER_ID to headerId,
                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_NAME to otherUserName,
                         ChatPageFragment.INTENT_EXTRA_OTHER_USER_IMAGE to otherUserProfilePicture,
-                        ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle
-                )
+                        ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFileBundle,
+                        ChatPageFragment.INTENT_EXTRA_CAME_FROM_LINK_IN_OTHER_CHAT to cameFromLinkInOtherChat
+                ),
+                navOptions {
+                    this.anim {
+                        this.enter = R.anim.nav_default_enter_anim
+                        this.exit = R.anim.nav_default_exit_anim
+                        this.popEnter= R.anim.nav_default_pop_enter_anim
+                        this.popExit= R.anim.nav_default_pop_exit_anim
+                    }
+                }
         )
     }
 
@@ -81,12 +92,20 @@ class ChatNavigation(
     fun openFullScreenImageViewDialogFragment(
             uri: Uri
     ) {
-        iNavigation.navigateTo(
-                dest = "common/viewImageFullScreen",
-                args = bundleOf(
-                        ViewFullScreenImageDialogFragment.INTENT_EXTRA_IMAGE_URI to uri.toString()
-                )
-        )
+        try {
+
+            val currentDestination = iNavigation.getCurrentDestination()?.label
+            if("ViewFullScreenImageDialogFragment" == currentDestination) return
+
+            iNavigation.navigateTo(
+                    dest = "common/viewImageFullScreen",
+                    args = bundleOf(
+                            ViewFullScreenImageDialogFragment.INTENT_EXTRA_IMAGE_URI to uri.toString()
+                    )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
@@ -121,6 +140,10 @@ class ChatNavigation(
                 dest = "chats/groupMediaList",
                 args = bundleOf(GroupMediaListFragment2.INTENT_EXTRA_GROUP_ID to groupId)
         )
+    }
+
+    fun navigateUp(){
+        iNavigation.navigateUp()
     }
 
 }

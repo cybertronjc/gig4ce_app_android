@@ -30,6 +30,10 @@ data class ChatGroup(
     @set:PropertyName("groupMembers")
     var groupMembers: List<ContactModel> = emptyList(),
 
+    @get:PropertyName("deletedGroupMembers")
+    @set:PropertyName("deletedGroupMembers")
+    var deletedGroupMembers: List<ContactModel> = emptyList(),
+
     @get:PropertyName("creationDetails")
     @set:PropertyName("creationDetails")
     var creationDetails: GroupCreationDetails? = null,

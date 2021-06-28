@@ -64,7 +64,11 @@ data class ContactModel(
 
         @get:PropertyName("isUserBlocked")
         @set:PropertyName("isUserBlocked")
-        var isUserBlocked: Boolean = false
+        var isUserBlocked: Boolean = false,
+
+        @get:PropertyName("deletedOn")
+        @set:PropertyName("deletedOn")
+        var deletedOn: Timestamp? = null,
 ) : Parcelable {
 
     @Exclude

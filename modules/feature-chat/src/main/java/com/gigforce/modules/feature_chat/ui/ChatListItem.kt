@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.TextDrawable
+import com.gigforce.common_ui.chat.ChatHeadersViewModel
 import com.gigforce.common_ui.chat.models.ChatListItemDataObject
 import com.gigforce.common_ui.chat.models.ChatListItemDataWrapper
 import com.gigforce.core.IViewHolder
@@ -50,6 +51,7 @@ class ChatListItem(
     private lateinit var unseenMessageCountIV: ImageView
     private lateinit var userOnlineIV: ImageView
     private lateinit var statusIV: ImageView
+    private lateinit var viewModel : ChatHeadersViewModel
 
     private val storage: FirebaseStorage by lazy {
         FirebaseStorage.getInstance()
@@ -76,13 +78,12 @@ class ChatListItem(
     }
 
     private var dObj: ChatListItemDataObject? = null
-    private var sharedFilesBundle : Bundle? = null
 
     override fun bind(data: Any?) {
         dObj = null
         data?.let {
             val dataAndSharedData = data as ChatListItemDataWrapper
-            sharedFilesBundle = dataAndSharedData.sharedFilesBundle
+            viewModel = dataAndSharedData.viewModel
             dObj = dataAndSharedData.chatItem
             dObj?.let { chatHeader ->
 
@@ -230,10 +231,10 @@ class ChatListItem(
                 headerId = it.id,
                 otherUserName = it.title,
                 otherUserProfilePicture = it.profilePath,
-                sharedFileBundle = sharedFilesBundle
+                sharedFileBundle = viewModel.sharedFiles
             )
 
-            sharedFilesBundle = null
+            viewModel.sharedFiles = null
         }
     }
 }

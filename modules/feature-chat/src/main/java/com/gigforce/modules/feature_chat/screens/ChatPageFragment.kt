@@ -87,6 +87,7 @@ class ChatPageFragment : Fragment(),
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
     private lateinit var userBlockedOrRemovedLayout: TextView
+    private var cameFromLinkInOtherChat: Boolean = false
 
     private val viewModel: ChatPageViewModel by viewModels()
     private val groupChatViewModel: GroupChatViewModel by lazy {
@@ -149,7 +150,10 @@ class ChatPageFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         getDataFromIntents(arguments, savedInstanceState)
         validateIfRequiredDataIsAvailable()
-        StatusBarUtil.setColorNoTranslucent(requireActivity(), ResourcesCompat.getColor(resources, R.color.lipstick_2, null))
+        StatusBarUtil.setColorNoTranslucent(
+                requireActivity(),
+                ResourcesCompat.getColor(resources, R.color.lipstick_2, null)
+        )
 
         checkForPermissionElseRequest()
         cancelAnyNotificationIfShown()
@@ -164,16 +168,14 @@ class ChatPageFragment : Fragment(),
     private fun checkIfUserHasSharedAnyFile(arguments: Bundle?) {
         val sharedFileBundle = arguments?.getBundle(INTENT_EXTRA_SHARED_FILES_BUNDLE) ?: return
 
-        val imagesShared: ArrayList<Uri>? = sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_IMAGES)
+        val imagesShared: ArrayList<Uri>? =
+                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_IMAGES)
         if (imagesShared != null && imagesShared.isNotEmpty()) {
-
-//            imagesShared.forEach {
-//
-//            }
             cameraAndGalleryIntegrator.startImageCropper(imagesShared.first(), imageCropOptions)
         }
 
-        val videosShared: ArrayList<Uri>? = sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_VIDEOS)
+        val videosShared: ArrayList<Uri>? =
+                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_VIDEOS)
         if (videosShared != null && videosShared.isNotEmpty()) {
 
             videosShared.forEach {
@@ -181,7 +183,8 @@ class ChatPageFragment : Fragment(),
             }
         }
 
-        val documentsShared: ArrayList<Uri>? = sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_DOCUMENTS)
+        val documentsShared: ArrayList<Uri>? =
+                sharedFileBundle.getParcelableArrayList(INTENT_EXTRA_SHARED_DOCUMENTS)
         if (documentsShared != null && documentsShared.isNotEmpty()) {
 
             documentsShared.forEach {
@@ -271,10 +274,8 @@ class ChatPageFragment : Fragment(),
     }
 
     private fun adjustUiAccToGroupChat() {
-//        toolbarOverflowBtn.gone()
         toolbar.hideActionMenu()
-//        tv_lastSeenValue.visible()
-//        tv_lastSeenValue.text =
+        chatFooter.setViewModel(groupChatViewModel)
 
         toolbar.showSubtitle("Tap to open details")
         toolbar.setSubtitleClickListener(View.OnClickListener {
@@ -397,6 +398,7 @@ class ChatPageFragment : Fragment(),
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
         arguments?.let {
+            cameFromLinkInOtherChat = it.getBoolean(INTENT_EXTRA_CAME_FROM_LINK_IN_OTHER_CHAT, false)
             chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)
                     ?: throw IllegalArgumentException("please provide INTENT_EXTRA_CHAT_TYPE in intent extra")
             fromClientActivation = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
@@ -408,6 +410,7 @@ class ChatPageFragment : Fragment(),
         }
 
         savedInstanceState?.let {
+            cameFromLinkInOtherChat = it.getBoolean(INTENT_EXTRA_CAME_FROM_LINK_IN_OTHER_CHAT, false)
             chatType = it.getString(INTENT_EXTRA_CHAT_TYPE)!!
             fromClientActivation = it.getBoolean(StringConstants.FROM_CLIENT_ACTIVATON.value, false)
             receiverPhotoUrl = it.getString(INTENT_EXTRA_OTHER_USER_IMAGE) ?: ""
@@ -422,6 +425,7 @@ class ChatPageFragment : Fragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.apply {
+            putBoolean(INTENT_EXTRA_CAME_FROM_LINK_IN_OTHER_CHAT, cameFromLinkInOtherChat)
             putString(INTENT_EXTRA_OTHER_USER_IMAGE, receiverPhotoUrl)
             putString(INTENT_EXTRA_OTHER_USER_NAME, receiverName)
             putString(INTENT_EXTRA_CHAT_HEADER_ID, chatHeaderOrGroupId)
@@ -445,7 +449,11 @@ class ChatPageFragment : Fragment(),
 
         override fun handleOnBackPressed() {
             hideSoftKeyboard()
-            chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
+
+            if (cameFromLinkInOtherChat)
+                chatNavigation.navigateUp()
+            else
+                chatNavigation.navigateBackToChatListIfExistElseOneStepBack()
         }
     }
 
@@ -538,7 +546,7 @@ class ChatPageFragment : Fragment(),
                 })
 
         viewModel.headerInfo
-                .observe(viewLifecycleOwner,  {
+                .observe(viewLifecycleOwner, {
 
                     if (it.isBlocked) {
                         userBlockedOrRemovedLayout.visible()
@@ -723,12 +731,14 @@ class ChatPageFragment : Fragment(),
 
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "*/*"
-        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
+        putExtra(
+                Intent.EXTRA_MIME_TYPES, arrayOf(
                 MimeTypes.DOC,
                 MimeTypes.DOCX,
                 MimeTypes.XLS,
                 MimeTypes.XLSX,
-                MimeTypes.PDF)
+                MimeTypes.PDF
+        )
         )
         startActivityForResult(this, REQUEST_PICK_DOCUMENT)
     }
@@ -738,13 +748,14 @@ class ChatPageFragment : Fragment(),
         chatFooter.btn_send.setOnClickListener {
             if (validateNewMessageTask()) {
                 val message = chatFooter.et_message.text.toString().capitalize().trim()
-                chatFooter.et_message.setText("")
+                val usersMentioned = chatFooter.getMentionedPeopleInText()
 
+                chatFooter.et_message.setText("")
 
                 if (chatType == ChatConstants.CHAT_TYPE_USER)
                     viewModel.sendNewText(message)
                 else
-                    groupChatViewModel.sendNewText(message)
+                    groupChatViewModel.sendNewText(message, usersMentioned)
             }
         }
     }
@@ -1120,6 +1131,7 @@ class ChatPageFragment : Fragment(),
         const val INTENT_EXTRA_OTHER_USER_ID = "sender_id"
         const val INTENT_EXTRA_OTHER_USER_NAME = "sender_name"
         const val INTENT_EXTRA_OTHER_USER_IMAGE = "sender_profile"
+        const val INTENT_EXTRA_CAME_FROM_LINK_IN_OTHER_CHAT = "came_from_link"
 
         const val INTENT_EXTRA_SHARED_FILES_BUNDLE = "shared_file_bundle"
         const val INTENT_EXTRA_SHARED_IMAGES = "shared_images"

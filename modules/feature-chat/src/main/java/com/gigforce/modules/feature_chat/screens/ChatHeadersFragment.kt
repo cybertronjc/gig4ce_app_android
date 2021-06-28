@@ -60,9 +60,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
     private lateinit var toolbar: GigforceToolbar
     private lateinit var coreRecyclerView: CoreRecyclerView
 
-    private var sharedFilesBundleForChatItems: Bundle? = null
-    private var sharedFilesBundle: Bundle? = null
-    private var sharedFileAddToItems = false
+    private var sharedFileSubmitted= false
 
     private fun setObserver(owner: LifecycleOwner) {
         Log.d("chat/header/fragment", "UserId " + FirebaseAuth.getInstance().currentUser!!.uid)
@@ -109,12 +107,9 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
                                     status = it.status,
                                     senderName = it.senderName
                             ),
-                            sharedFilesBundle = sharedFilesBundleForChatItems
+                            viewModel = viewModel
                     )
                 })
-
-        sharedFilesBundleForChatItems = null
-        sharedFileAddToItems = true
 
     }
 
@@ -151,21 +146,18 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
             savedInstanceState: Bundle?
     ) {
         arguments?.let {
-            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
-            sharedFilesBundleForChatItems = sharedFilesBundle?.clone() as Bundle?
-        }
 
-        savedInstanceState?.let {
-            sharedFileAddToItems = it.getBoolean(INTENT_EXTRA_SHARED_FILE_DEPLOYED_TO_ITEMS_ONCE)
-            sharedFilesBundle = it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
-            sharedFilesBundleForChatItems = if(sharedFileAddToItems) null else sharedFilesBundle?.clone() as Bundle?
+            if(!sharedFileSubmitted) {
+                val sharedFilesBundle =
+                    it.getBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE)
+                viewModel.sharedFiles = sharedFilesBundle
+                sharedFileSubmitted = true
+            }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBundle(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE, sharedFilesBundle)
-        outState.putBoolean(INTENT_EXTRA_SHARED_FILE_DEPLOYED_TO_ITEMS_ONCE, sharedFileAddToItems)
     }
 
     private fun findViews(view: View) {
@@ -173,8 +165,9 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         contactsFab.setOnClickListener {
 
             chatNavigation.navigateToContactsPage(
-                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFilesBundle)
+                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
             )
+            viewModel.sharedFiles = null
         }
 
         coreRecyclerView = view.findViewById(R.id.rv_chat_headers)
@@ -186,21 +179,21 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         contactsButton.setOnClickListener {
 
             chatNavigation.navigateToContactsPage(
-                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to sharedFilesBundle)
+                    bundleOf(ChatPageFragment.INTENT_EXTRA_SHARED_FILES_BUNDLE to viewModel.sharedFiles)
             )
-            sharedFilesBundle = null
+            viewModel.sharedFiles = null
         }
 
         toolbar.showTitle("Chats")
         toolbar.hideActionMenu()
-        toolbar.setBackButtonListener(View.OnClickListener {
+        toolbar.setBackButtonListener {
 
             if (toolbar.isSearchCurrentlyShown) {
                 hideSoftKeyboard()
             } else {
                 activity?.onBackPressed()
             }
-        })
+        }
     }
 
     private fun initListeners() {
@@ -257,7 +250,7 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         }
     }
 
-    fun hideSoftKeyboard() {
+    private fun hideSoftKeyboard() {
 
         val activity = activity ?: return
 

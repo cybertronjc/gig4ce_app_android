@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.gigforce.core.IViewHolder
@@ -25,20 +26,29 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.core.navigation.INavigation
+import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 abstract class DocumentMessageView(
         private val flowType: MessageFlowType,
         private val messageType: MessageType,
         context: Context,
         attrs: AttributeSet?
 ) : MediaMessage(context, attrs),
-        IViewHolder, View.OnClickListener, View.OnLongClickListener,
+        IViewHolder,
+    View.OnClickListener,
+    View.OnLongClickListener,
     PopupMenu.OnMenuItemClickListener {
+
+    @Inject
+    lateinit var navigation: INavigation
 
     //Views
     private lateinit var linearLayout: ConstraintLayout
@@ -48,6 +58,9 @@ abstract class DocumentMessageView(
     private lateinit var cardView: CardView
     private lateinit var progressbar: View
     private lateinit var receivedStatusIV: ImageView
+
+    //Data
+    private lateinit var chatMessage : ChatMessage
 
     init {
         setDefault()
@@ -73,6 +86,7 @@ abstract class DocumentMessageView(
     }
 
     override fun onBind(msg: ChatMessage) {
+        chatMessage = msg
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
@@ -195,7 +209,7 @@ abstract class DocumentMessageView(
         }
 
         try {
-            val file = downloadMediaFile()
+            downloadMediaFile()
             this.launch(Dispatchers.Main) {
                 handleDownloadedCompleted()
             }
@@ -216,7 +230,8 @@ abstract class DocumentMessageView(
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE && flowType == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible =  flowType == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_message_info).isVisible =  flowType == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
 
         popUpMenu.setOnMenuItemClickListener(this)
         popUpMenu.show()
@@ -230,13 +245,26 @@ abstract class DocumentMessageView(
         when (itemClicked.itemId) {
             R.id.action_copy -> {}
             R.id.action_delete -> deleteMessage()
+            R.id.action_message_info -> viewMessageInfo()
         }
         return true
     }
 
+    private fun viewMessageInfo() {
+        navigation.navigateTo("chats/messageInfo",
+            bundleOf(
+                GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to chatMessage.groupId,
+                GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to chatMessage.id
+                )
+        )
+    }
+
     private fun deleteMessage() {
         if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            //
+
+            oneToOneChatViewModel.deleteMessage(
+                message.id
+            )
         } else if (messageType == MessageType.GROUP_MESSAGE) {
             groupChatViewModel.deleteMessage(
                 message.id

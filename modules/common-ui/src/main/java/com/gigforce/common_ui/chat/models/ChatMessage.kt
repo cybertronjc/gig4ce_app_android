@@ -49,6 +49,10 @@ class ChatMessage(
     @set:PropertyName("content")
     var content: String = "",
 
+    @get:PropertyName("mentionedUsersInfo")
+    @set:PropertyName("mentionedUsersInfo")
+    var mentionedUsersInfo: List<MentionUser> = emptyList(),
+
     @get:PropertyName("videoLength")
     @set:PropertyName("videoLength")
     var videoLength: Long = 0,
@@ -103,6 +107,22 @@ class ChatMessage(
     @get:PropertyName("receiverInfo")
     @set:PropertyName("receiverInfo")
     var receiverInfo: UserInfo? = UserInfo(),
+
+    @get:PropertyName("isDeleted")
+    @set:PropertyName("isDeleted")
+    var isDeleted: Boolean = false,
+
+    @get:PropertyName("deletedOn")
+    @set:PropertyName("deletedOn")
+    var deletedOn: Timestamp? = null,
+
+    @get:PropertyName("groupMessageReadBy")
+    @set:PropertyName("groupMessageReadBy")
+    var groupMessageReadBy: List<MessageReceivingInfo> = emptyList(),
+
+    @get:PropertyName("groupId")
+    @set:PropertyName("groupId")
+    var groupId: String = "",
 
     @get:Exclude
     @set:Exclude

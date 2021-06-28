@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
@@ -19,28 +20,50 @@
             tools:text="This group doesn't support replies"
             android:orientation="horizontal" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chat_footer_type_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="8dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mention_suggestion_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
                 android:id="@+id/iv_greyPlus"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
                 android:layout_marginStart="14dp"
                 android:scaleX="0.6"
                 android:scaleY="0.6"
+                android:layout_marginTop="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mention_suggestion_rv"
                 android:src="@drawable/ic_attachment_grey" />
 
-            <EditText
+            <ImageButton
+                android:id="@+id/btn_send_chat"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/ic_baseline_send_24"
+                app:layout_constraintTop_toBottomOf="@id/mention_suggestion_rv"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <com.linkedin.android.spyglass.ui.MentionsEditText
                 android:id="@+id/et_typedMessageValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
@@ -50,20 +73,16 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:textColor="#585858"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:imeOptions="flagNoExtractUi"
+                app:layout_constraintTop_toBottomOf="@id/mention_suggestion_rv"
+                app:layout_constraintEnd_toStartOf="@id/btn_send_chat"
+                app:layout_constraintStart_toEndOf="@id/iv_greyPlus"
+                />
 
-            <ImageButton
-                android:id="@+id/btn_send_chat"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="10dp"
-                android:background="@null"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:src="@drawable/ic_baseline_send_24" />
 
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 

@@ -306,17 +306,13 @@ class GroupDetailsFragment : Fragment(),
         )
     }
 
-    private fun showDownloadingDialog() {
-//        UtilMethods.showLoading(requireContext())
-    }
-
     private fun openDocument(file: File) {
 
         Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(
                     FileProvider.getUriForFile(
                             requireContext(),
-                            "com.gigforce.app.provider",
+                            "${requireContext().packageName}.provider",
                             file
                     ), "application/pdf"
             )
@@ -404,41 +400,8 @@ class GroupDetailsFragment : Fragment(),
                 showToast("Everyone can post in group now")
             }
         }
-
-//        only_admin_can_post_layout.setOnClickListener {
-//            val currentGroup = viewModel.getCurrentChatGroupInfo() ?: return@setOnClickListener
-//
-//            if(currentGroup.onlyAdminCanPostInGroup){
-//                showAllEveryoneToPostInGroupDialog()
-//            } else {
-//                showBlockEveryoneFromPostingInGroup()
-//            }
-//        }
     }
 
-    private fun showBlockEveryoneFromPostingInGroup() {
-        MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Allow only admins to post")
-                .setMessage("Allow only admins in group to post content on this group ?")
-                .setPositiveButton("Yes") { _, _ -> viewModel.limitPostingToAdminsInGroup() }
-                .setNegativeButton("No") { _, _ ->
-
-                    only_admins_can_post_switch.isChecked = !only_admins_can_post_switch.isChecked
-                }
-                .show()
-    }
-
-    private fun showAllEveryoneToPostInGroupDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Allow Everyone to post")
-                .setMessage("Allow everyone in this group to post content on this group ?")
-                .setPositiveButton("Yes") { _, _ -> viewModel.allowEveryoneToPostInThisGroup() }
-                .setNegativeButton("No") { _, _ ->
-
-                    only_admins_can_post_switch.isChecked = !only_admins_can_post_switch.isChecked
-                }
-                .show()
-    }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_message_user -> {

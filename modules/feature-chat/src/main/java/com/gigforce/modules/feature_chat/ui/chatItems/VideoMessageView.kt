@@ -11,9 +11,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
@@ -21,8 +24,7 @@ import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
-import com.gigforce.common_ui.chat.ChatConstants
-import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -54,12 +56,11 @@ abstract class VideoMessageView(
     private lateinit var receivedStatusIV: ImageView
 
     @Inject
-    lateinit var navigation : INavigation
+    lateinit var navigation: INavigation
 
-    private val chatNavigation : ChatNavigation by lazy {
+    private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
     }
-
 
     init {
         setDefault()
@@ -108,7 +109,8 @@ abstract class VideoMessageView(
         videoLength.text = convertMicroSecondsToNormalFormat(msg.videoLength)
         textViewTime.text = msg.timestamp?.toDisplayText()
 
-        senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+        senderNameTV.isVisible =
+            messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
         senderNameTV.text = msg.senderInfo.name
 
         loadThumbnail(msg)
@@ -130,7 +132,7 @@ abstract class VideoMessageView(
             if (downloadedFile != null) {
                 handleVideoDownloaded()
             } else {
-                    handleVideoNotDownloaded()
+                handleVideoNotDownloaded()
             }
         }
     }
@@ -272,7 +274,8 @@ abstract class VideoMessageView(
         popUpMenu.inflate(R.menu.menu_chat_clipboard)
 
         popUpMenu.menu.findItem(R.id.action_copy).isVisible = false
-        popUpMenu.menu.findItem(R.id.action_delete).isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_delete).isVisible = type == MessageFlowType.OUT
+        popUpMenu.menu.findItem(R.id.action_message_info).isVisible = type == MessageFlowType.OUT && messageType == MessageType.GROUP_MESSAGE
 
         popUpMenu.setOnMenuItemClickListener(this)
         popUpMenu.show()
@@ -284,19 +287,31 @@ abstract class VideoMessageView(
         val itemClicked = item ?: return true
 
         when (itemClicked.itemId) {
-            R.id.action_copy -> {}
+            R.id.action_copy -> { }
             R.id.action_delete -> deleteMessage()
+            R.id.action_message_info -> viewMessageInfo()
         }
         return true
     }
 
+    private fun viewMessageInfo() {
+        navigation.navigateTo("chats/messageInfo",
+            bundleOf(
+                GroupMessageViewInfoFragment.INTENT_EXTRA_GROUP_ID to message.groupId,
+                GroupMessageViewInfoFragment.INTENT_EXTRA_MESSAGE_ID to message.id
+            )
+        )
+    }
     private fun deleteMessage() {
         if (messageType == MessageType.ONE_TO_ONE_MESSAGE) {
-            //
+
+            oneToOneChatViewModel.deleteMessage(
+                message.id
+            )
         } else if (messageType == MessageType.GROUP_MESSAGE) {
 
             groupChatViewModel.deleteMessage(
-                    message.id
+                message.id
             )
         }
     }

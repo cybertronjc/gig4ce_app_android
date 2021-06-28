@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.net.toUri
@@ -25,6 +26,8 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.util.*
 import kotlin.coroutines.resume
@@ -32,17 +35,17 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class ChatGroupRepository constructor(
-        private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
-        private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
-        //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance(),
+    private val chatProfileFirebaseRepository: ChatProfileFirebaseRepository = ChatProfileFirebaseRepository()
+    //  private val profileFirebaseRepository: ProfileFirebaseRepository = ProfileFirebaseRepository()
 ) : BaseChatRepository() {
 
     private val currentUser = FirebaseAuth.getInstance().currentUser!!
 
     private val userChatCollectionRef: DocumentReference by lazy {
         FirebaseFirestore.getInstance()
-                .collection(COLLECTION_CHATS)
-                .document(getUID())
+            .collection(COLLECTION_CHATS)
+            .document(getUID())
     }
 
     private val userChatContactsCollectionRef: CollectionReference by lazy {
@@ -56,17 +59,17 @@ class ChatGroupRepository constructor(
 
     fun getUserContacts(): CollectionReference {
         return userChatCollectionRef
-                .collection(COLLECTION_CHATS_CONTACTS)
+            .collection(COLLECTION_CHATS_CONTACTS)
     }
 
     fun groupMessagesRef(groupId: String) = db.collection(COLLECTION_GROUP_CHATS)
-            .document(groupId)
-            .collection(COLLECTION_GROUP_MESSAGES)
+        .document(groupId)
+        .collection(COLLECTION_GROUP_MESSAGES)
 
     fun userGroupHeaderRef(groupId: String) = db.collection(COLLECTION_CHATS)
-            .document(getUID())
-            .collection(COLLECTION_CHAT_HEADERS)
-            .document(groupId)
+        .document(getUID())
+        .collection(COLLECTION_CHAT_HEADERS)
+        .document(groupId)
 
     suspend fun createGroup(groupName: String, groupMembers: List<ContactModel>): String {
 
@@ -86,83 +89,41 @@ class ChatGroupRepository constructor(
         members.forEach {
 
             val headerRef = db.collection(COLLECTION_CHATS)
-                    .document(it.uid!!)
-                    .collection(COLLECTION_CHAT_HEADERS)
-                    .document(group.id)
+                .document(it.uid!!)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(group.id)
 
             batch.set(
-                    headerRef, ChatHeader(
+                headerRef, ChatHeader(
                     forUserId = it.uid!!,
                     chatType = ChatConstants.CHAT_TYPE_GROUP,
                     groupId = group.id,
                     groupName = groupName,
                     lastMsgTimestamp = Timestamp.now(),
                     lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
-            )
+                )
             )
         }
         batch.commitOrThrow()
         return group.id
     }
 
-    suspend fun addUserToGroup(groupId: String, members: List<ContactModel>) {
-
-        val groupInfo = getGroupDetails(groupId)
-        val grpMembers = groupInfo.groupMembers.toMutableList()
-
-        //Creating Headers in each users doc
-        val batch = db.batch()
-
-        val filteredMemList = members.filter {
-            grpMembers.find { grpMem -> grpMem.uid == it.uid } == null
-        }
-
-        filteredMemList.forEach {
-            it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
-        }
-
-        grpMembers.addAll(filteredMemList)
-        groupInfo.groupMembers = grpMembers
-
-        val groupDataRef = db.collection(COLLECTION_GROUP_CHATS).document(groupId)
-        batch.set(groupDataRef, groupInfo)
-
-        filteredMemList.forEach {
-            val headerRef = db.collection(COLLECTION_CHATS)
-                    .document(it.uid!!)
-                    .collection(COLLECTION_CHAT_HEADERS)
-                    .document(groupId)
-
-            batch.set(
-                    headerRef, ChatHeader(
-                    forUserId = it.uid!!,
-                    chatType = ChatConstants.CHAT_TYPE_GROUP,
-                    groupId = groupId,
-                    groupName = groupInfo.name,
-                    lastMsgTimestamp = Timestamp.now(),
-                    removedFromGroup = false,
-                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
-            )
-            )
-        }
-        batch.commitOrThrow()
-    }
 
     suspend fun getProfileData(): ChatProfileData = suspendCoroutine { cont ->
 
         db.collection("Profiles")
-                .document(currentUser.uid)
-                .get()
-                .addOnSuccessListener {
+            .document(currentUser.uid)
+            .get()
+            .addOnSuccessListener {
 
-                    val profileData = it.toObject(ChatProfileData::class.java)
-                            ?: throw  IllegalStateException("unable to parse profile object")
-                    profileData.id = it.id
-                    cont.resume(profileData)
-                }
-                .addOnFailureListener {
-                    cont.resumeWithException(it)
-                }
+                val profileData = it.toObject(ChatProfileData::class.java)
+                    ?: throw  IllegalStateException("unable to parse profile object")
+                profileData.id = it.id
+                cont.resume(profileData)
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
     }
 
 
@@ -170,34 +131,34 @@ class ChatGroupRepository constructor(
         val profile = getProfileData()
 
         val profilePic =
-                if (profile.profileAvatarName.isBlank() || profile.profileAvatarName == "avatar.jpg")
-                    null
-                else {
-                    "profile_pics/${profile.profileAvatarName}"
-                }
+            if (profile.profileAvatarName.isBlank() || profile.profileAvatarName == "avatar.jpg")
+                null
+            else {
+                "profile_pics/${profile.profileAvatarName}"
+            }
 
         return ContactModel(
-                name = profile.name,
-                uid = getUID(),
-                imageUrl = profilePic,
-                isUserGroupManager = true,
-                mobile = currentUser.phoneNumber ?: ""
+            name = profile.name,
+            uid = getUID(),
+            imageUrl = profilePic,
+            isUserGroupManager = true,
+            mobile = currentUser.phoneNumber ?: ""
         )
     }
 
     private suspend fun createGroupData(
-            groupName: String,
-            groupMembers: List<ContactModel>,
-            currentUserInfo: ContactModel
+        groupName: String,
+        groupMembers: List<ContactModel>,
+        currentUserInfo: ContactModel
     ): ChatGroup {
         val chatGroup = ChatGroup(
-                name = groupName,
-                groupMembers = groupMembers,
-                creationDetails = GroupCreationDetails(
-                        createdBy = currentUserInfo.uid!!,
-                        creatorName = currentUserInfo.name!!,
-                        createdOn = Timestamp.now()
-                )
+            name = groupName,
+            groupMembers = groupMembers,
+            creationDetails = GroupCreationDetails(
+                createdBy = currentUserInfo.uid!!,
+                creatorName = currentUserInfo.name!!,
+                createdOn = Timestamp.now()
+            )
         )
 
         chatGroup.groupMembers.forEach {
@@ -210,7 +171,7 @@ class ChatGroupRepository constructor(
     }
 
     fun getGroupDetailsRef(groupId: String) =
-            db.collection(COLLECTION_GROUP_CHATS).document(groupId)
+        db.collection(COLLECTION_GROUP_CHATS).document(groupId)
 
     suspend fun getGroupDetails(groupId: String): ChatGroup {
         val groupSnap = getGroupDetailsRef(groupId).getOrThrow()
@@ -220,16 +181,16 @@ class ChatGroupRepository constructor(
     }
 
     suspend fun sendTextMessage(
-            groupId: String,
-            message: ChatMessage
+        groupId: String,
+        message: ChatMessage
     ) {
         createMessageEntry(groupId, message)
     }
 
     suspend fun sendNewImageMessage(
-            groupId: String,
-            message: ChatMessage,
-            imageUri: Uri
+        groupId: String,
+        message: ChatMessage,
+        imageUri: Uri
     ) = GlobalScope.launch(Dispatchers.IO) {
 
         val file = imageUri.toFile()
@@ -238,46 +199,46 @@ class ChatGroupRepository constructor(
         val thumbnailPathOnServer = if (thumbnail != null) {
             val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                    "thumb-${file.name}",
-                    imageInBytes,
-                    groupId,
-                    isGroupChatMessage = true,
-                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+                "thumb-${file.name}",
+                imageInBytes,
+                groupId,
+                isGroupChatMessage = true,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
             )
         } else {
             null
         }
 
         val pathOnServer = uploadChatAttachment(
-                file.name,
-                imageUri,
-                groupId,
-                isGroupChatMessage = true,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+            file.name,
+            imageUri,
+            groupId,
+            isGroupChatMessage = true,
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
         )
         message.thumbnail = thumbnailPathOnServer
         message.attachmentPath = pathOnServer
 
         createMessageEntry(groupId, message)
         updateMediaInfoInGroupMedia(
-                groupId,
-                ChatConstants.ATTACHMENT_TYPE_IMAGE,
-                message.id,
-                "",
-                pathOnServer,
-                thumbnailPathOnServer
+            groupId,
+            ChatConstants.ATTACHMENT_TYPE_IMAGE,
+            message.id,
+            "",
+            pathOnServer,
+            thumbnailPathOnServer
         )
     }
 
 
     @Suppress("DEPRECATION")
     suspend fun sendNewVideoMessage(
-            context: Context,
-            groupId: String,
-            videosDirectoryRef: File,
-            videoInfo: VideoInfo,
-            uri: Uri,
-            message: ChatMessage
+        context: Context,
+        groupId: String,
+        videosDirectoryRef: File,
+        videoInfo: VideoInfo,
+        uri: Uri,
+        message: ChatMessage
     ) {
 
         val newFileName = if (videoInfo.name.isBlank()) {
@@ -297,8 +258,8 @@ class ChatGroupRepository constructor(
         val shouldCompressVideo = shouldCompressVideo(videoInfo)
         val compressedFileUri = if (shouldCompressVideo) {
             val transcodedFile = File(
-                    videosDirectoryRef,
-                    newFileName
+                videosDirectoryRef,
+                newFileName
             )
             transcodeVideo(context, uri, transcodedFile)
             transcodedFile.toUri()
@@ -313,22 +274,22 @@ class ChatGroupRepository constructor(
         val thumbnailPathOnServer = if (thumbnail != null) {
             val imageInBytes = ImageUtils.convertToByteArray(thumbnail)
             uploadChatAttachment(
-                    "thumb-$newFileName",
-                    imageInBytes,
-                    groupId,
-                    isGroupChatMessage = true,
-                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
+                "thumb-$newFileName",
+                imageInBytes,
+                groupId,
+                isGroupChatMessage = true,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE
             )
         } else {
             null
         }
 
         val pathOnServer = uploadChatAttachment(
-                newFileName,
-                compressedFileUri,
-                groupId,
-                true,
-                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
+            newFileName,
+            compressedFileUri,
+            groupId,
+            true,
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO
         )
 
         message.attachmentPath = pathOnServer
@@ -336,93 +297,93 @@ class ChatGroupRepository constructor(
 
         createMessageEntry(groupId, message)
         updateMediaInfoInGroupMedia(
-                groupId,
-                ChatConstants.ATTACHMENT_TYPE_VIDEO,
-                message.id,
-                videoInfo.name,
-                pathOnServer,
-                thumbnailPathOnServer,
-                message.videoLength
+            groupId,
+            ChatConstants.ATTACHMENT_TYPE_VIDEO,
+            message.id,
+            videoInfo.name,
+            pathOnServer,
+            thumbnailPathOnServer,
+            message.videoLength
         )
     }
 
     suspend fun sendNewDocumentMessage(
-            context: Context,
-            groupId: String,
-            message: ChatMessage,
-            fileName: String,
-            uri: Uri
+        context: Context,
+        groupId: String,
+        message: ChatMessage,
+        fileName: String,
+        uri: Uri
     ) {
         val newFileName =
-                "Doc-$groupId-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
+            "Doc-$groupId-${DateHelper.getFullDateTimeStamp()}.${getExtensionFromUri(context, uri)}"
 
 
         val pathOnServer = uploadChatAttachment(
-                newFileName,
-                uri,
-                groupId,
-                isGroupChatMessage = true,
-                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
+            newFileName,
+            uri,
+            groupId,
+            isGroupChatMessage = true,
+            messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT
         )
         message.attachmentPath = pathOnServer
 
         createMessageEntry(groupId, message)
         updateMediaInfoInGroupMedia(
-                groupId,
-                ChatConstants.ATTACHMENT_TYPE_DOCUMENT,
-                message.id,
-                fileName,
-                pathOnServer,
-                null
+            groupId,
+            ChatConstants.ATTACHMENT_TYPE_DOCUMENT,
+            message.id,
+            fileName,
+            pathOnServer,
+            null
         )
     }
 
 
     private suspend fun createMessageEntry(
-            groupId: String,
-            message: ChatMessage
+        groupId: String,
+        message: ChatMessage
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .collection(COLLECTION_GROUP_MESSAGES)
-                .document(message.id)
-                .setOrThrow(message)
+            .document(groupId)
+            .collection(COLLECTION_GROUP_MESSAGES)
+            .document(message.id)
+            .setOrThrow(message)
     }
 
 
     private suspend fun updateMediaInfoInGroupMedia(
-            groupId: String,
-            type: String,
-            messageId: String,
-            fileName: String?,
-            pathOnServer: String,
-            thumbnailPath: String? = null,
-            videoAttachmentLength: Long = 0
+        groupId: String,
+        type: String,
+        messageId: String,
+        fileName: String?,
+        pathOnServer: String,
+        thumbnailPath: String? = null,
+        videoAttachmentLength: Long = 0
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .updateOrThrow(
-                        "groupMedia", FieldValue.arrayUnion(
-                        GroupMedia(
-                                id = UUID.randomUUID().toString(),
-                                groupHeaderId = groupId,
-                                messageId = messageId,
-                                attachmentType = type,
-                                timestamp = Timestamp.now(),
-                                thumbnail = thumbnailPath,
-                                attachmentName = fileName,
-                                attachmentPath = pathOnServer,
-                                videoAttachmentLength = videoAttachmentLength
-                        )
+            .document(groupId)
+            .updateOrThrow(
+                "groupMedia", FieldValue.arrayUnion(
+                    GroupMedia(
+                        id = UUID.randomUUID().toString(),
+                        groupHeaderId = groupId,
+                        messageId = messageId,
+                        attachmentType = type,
+                        timestamp = Timestamp.now(),
+                        thumbnail = thumbnailPath,
+                        attachmentName = fileName,
+                        attachmentPath = pathOnServer,
+                        videoAttachmentLength = videoAttachmentLength
+                    )
                 )
-                )
+            )
     }
 
     suspend fun changeGroupName(groupId: String, newGroupName: String) {
 
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .updateOrThrow("name", newGroupName)
+            .document(groupId)
+            .updateOrThrow("name", newGroupName)
 
         val groupDetails = getGroupDetails(groupId)
 
@@ -430,13 +391,13 @@ class ChatGroupRepository constructor(
         groupDetails.groupMembers.forEach {
 
             val headerRef = db.collection(COLLECTION_CHATS)
-                    .document(it.uid!!)
-                    .collection(COLLECTION_CHAT_HEADERS)
-                    .document(groupId)
+                .document(it.uid!!)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(groupId)
 
             batch.update(
-                    headerRef,
-                    mapOf("groupName" to newGroupName)
+                headerRef,
+                mapOf("groupName" to newGroupName)
             )
         }
         batch.commitOrThrow()
@@ -444,10 +405,10 @@ class ChatGroupRepository constructor(
 
     suspend fun setUnseenMessagecountToZero(groupHeaderId: String) {
         db.collection("chats")
-                .document(getUID())
-                .collection("headers")
-                .document(groupHeaderId)
-                .updateOrThrow("unseenCount", 0)
+            .document(getUID())
+            .collection("headers")
+            .document(groupHeaderId)
+            .updateOrThrow("unseenCount", 0)
     }
 
     suspend fun deactivateOrActivateGroup(groupHeaderId: String) {
@@ -455,14 +416,14 @@ class ChatGroupRepository constructor(
 
         val batch = db.batch()
         val groupRef = db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupHeaderId)
+            .document(groupHeaderId)
         batch.update(groupRef, "groupDeactivated", !groupDetails.groupDeactivated)
 
         groupDetails.groupMembers.forEach {
             val headerRef = db.collection("chats")
-                    .document(it.uid!!)
-                    .collection("headers")
-                    .document(groupHeaderId)
+                .document(it.uid!!)
+                .collection("headers")
+                .document(groupHeaderId)
 
             batch.update(headerRef, "groupDeactivated", !groupDetails.groupDeactivated)
         }
@@ -470,24 +431,82 @@ class ChatGroupRepository constructor(
         batch.commit()
     }
 
+    suspend fun addUserToGroup(groupId: String, members: List<ContactModel>) {
+
+        val groupInfo = getGroupDetails(groupId)
+        val grpMembers = groupInfo.groupMembers.toMutableList()
+        val deletedGrpMembers = groupInfo.deletedGroupMembers.toMutableList()
+
+        //Creating Headers in each users doc
+        val batch = db.batch()
+
+        val filteredMemList = members.filter {
+            grpMembers.find { grpMem -> grpMem.uid == it.uid } == null
+        }
+
+        filteredMemList.forEach {
+            it.name = chatProfileFirebaseRepository.getProfileDataIfExist(it.uid)?.name ?: ""
+        }
+
+        grpMembers.addAll(filteredMemList)
+        grpMembers.onEach {
+            it.deletedOn = null
+        }
+        groupInfo.groupMembers = grpMembers
+
+        val updatedDeletedMemebers = deletedGrpMembers.filter {
+            members.find { member -> it.uid == member.uid } == null
+        }
+        groupInfo.deletedGroupMembers = updatedDeletedMemebers
+
+        val groupDataRef = db.collection(COLLECTION_GROUP_CHATS).document(groupId)
+        batch.set(groupDataRef, groupInfo)
+
+        filteredMemList.forEach {
+            val headerRef = db.collection(COLLECTION_CHATS)
+                .document(it.uid!!)
+                .collection(COLLECTION_CHAT_HEADERS)
+                .document(groupId)
+
+            batch.set(
+                headerRef, ChatHeader(
+                    forUserId = it.uid!!,
+                    chatType = ChatConstants.CHAT_TYPE_GROUP,
+                    groupId = groupId,
+                    groupName = groupInfo.name,
+                    lastMsgTimestamp = Timestamp.now(),
+                    removedFromGroup = false,
+                    lastMsgFlowType = ChatConstants.FLOW_TYPE_OUT
+                )
+            )
+        }
+        batch.commitOrThrow()
+    }
+
     suspend fun removeUserFromGroup(groupHeaderId: String, userUid: String) {
         val groupDetails = getGroupDetails(groupHeaderId)
         val updatedUserList = groupDetails.groupMembers.filter {
             it.uid != userUid
         }
+        val deletedUser = groupDetails.groupMembers.filter {
+            it.uid == userUid
+        }.onEach {
+            it.deletedOn = Timestamp.now()
+        }
+
         groupDetails.groupMembers = updatedUserList
+        groupDetails.deletedGroupMembers = groupDetails.deletedGroupMembers.plus(deletedUser)
 
         val batch = db.batch()
         val groupRef = db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupHeaderId)
+            .document(groupHeaderId)
         batch.set(groupRef, groupDetails)
 
         val userHeaderRef = db.collection(COLLECTION_CHATS)
-                .document(userUid)
-                .collection(COLLECTION_CHAT_HEADERS)
-                .document(groupHeaderId)
+            .document(userUid)
+            .collection(COLLECTION_CHAT_HEADERS)
+            .document(groupHeaderId)
         batch.update(userHeaderRef, "removedFromGroup", true)
-
         batch.commit()
     }
 
@@ -506,19 +525,19 @@ class ChatGroupRepository constructor(
     }
 
     suspend fun sendLocationMessage(
-            groupId: String,
-            message: ChatMessage,
-            bitmap: Bitmap?
+        groupId: String,
+        message: ChatMessage,
+        bitmap: Bitmap?
     ) {
 
         val attachmentPathOnServer = if (bitmap != null) {
             val imageInBytes = ImageUtils.convertToByteArray(bitmap)
             uploadChatAttachment(
-                    fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
-                    file = imageInBytes,
-                    headerId = groupId,
-                    isGroupChatMessage = false,
-                    messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
+                fileNameWithExtension = "map-${DateHelper.getFullDateTimeStamp()}.png",
+                file = imageInBytes,
+                headerId = groupId,
+                isGroupChatMessage = false,
+                messageType = ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION
             )
         } else {
             null
@@ -538,8 +557,8 @@ class ChatGroupRepository constructor(
     }
 
     fun getExtensionFromUri(
-            context: Context,
-            uri: Uri
+        context: Context,
+        uri: Uri
     ): String? {
 
         return if (ContentResolver.SCHEME_CONTENT.equals(uri.scheme)) {
@@ -549,25 +568,31 @@ class ChatGroupRepository constructor(
         } else {
             val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
             val mimeType =
-                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
         }
     }
 
     suspend fun deleteMessage(
-            groupId: String,
-            messageId: String
+        groupId: String,
+        messageId: String
     ) = db.collection(COLLECTION_GROUP_CHATS)
-            .document(groupId)
-            .collection(COLLECTION_GROUP_MESSAGES)
-            .document(messageId)
-            .deleteOrThrow()
+        .document(groupId)
+        .collection(COLLECTION_GROUP_MESSAGES)
+        .document(messageId)
+        .updateOrThrow(
+            mapOf(
+                "isDeleted" to true,
+                "deletedOn" to Timestamp.now()
+            )
+        )
+
 
     suspend fun makeUserGroupAdmin(
-        groupId :String,
-        uid : String
-    ){
-       val groupDetails =  getGroupDetails(groupId)
+        groupId: String,
+        uid: String
+    ) {
+        val groupDetails = getGroupDetails(groupId)
 
         groupDetails.groupMembers.find { contact ->
             contact.uid == uid
@@ -579,10 +604,10 @@ class ChatGroupRepository constructor(
     }
 
     suspend fun dismissUserAsGroupAdmin(
-        groupId :String,
-        uid : String
-    ){
-        val groupDetails =  getGroupDetails(groupId)
+        groupId: String,
+        uid: String
+    ) {
+        val groupDetails = getGroupDetails(groupId)
 
         groupDetails.groupMembers.find { contact ->
             contact.uid == uid
@@ -594,22 +619,78 @@ class ChatGroupRepository constructor(
     }
 
     suspend fun allowEveryoneToPostInThisGroup(
-            groupId : String
+        groupId: String
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .updateOrThrow("onlyAdminCanPostInGroup", false)
+            .document(groupId)
+            .updateOrThrow("onlyAdminCanPostInGroup", false)
     }
 
     suspend fun limitPostingToAdminsInGroup(
-            groupId : String
+        groupId: String
     ) {
         db.collection(COLLECTION_GROUP_CHATS)
-                .document(groupId)
-                .updateOrThrow("onlyAdminCanPostInGroup", true)
+            .document(groupId)
+            .updateOrThrow("onlyAdminCanPostInGroup", true)
     }
 
+    private var currentBatchSize = 0
+    private val mutex = Mutex()
+    private var batch = db.batch()
+
+    suspend fun markMessagesAsRead(
+        groupId: String,
+        messageWithNotReceivedStatus: List<ChatMessage>
+    ) = mutex.withLock {
+        val groupMessagesCollectionRef = groupMessagesRef(groupId)
+
+        val currentUserModel = createContactModelsForCurrentUser()
+        val receivingObject = MessageReceivingInfo(
+            uid = currentUser.uid,
+            profileName = currentUserModel.name ?: "",
+            profilePicture = currentUserModel.getUserProfileImageUrlOrPath() ?: ""
+        )
+
+        messageWithNotReceivedStatus.forEach {
+            val messageRef = groupMessagesCollectionRef.document(it.id)
+            batch.update(
+                messageRef,
+                mapOf("groupMessageReadBy" to FieldValue.arrayUnion(receivingObject))
+            )
+            checkBatchForOverFlowAndCommit()
+        }
+
+        if (currentBatchSize != 0) {
+            batch.commitOrThrow()
+        }
+    }
+
+    private suspend fun checkBatchForOverFlowAndCommit() {
+        currentBatchSize++
+        Log.d(TAG, "Size updated to $currentBatchSize")
+
+        if (currentBatchSize > 480) {
+            //   batchArray.add(batch)
+            batch.commitOrThrow()
+            currentBatchSize = 0
+
+            batch = db.batch()
+            Log.d(TAG, "New Batch $batch")
+        }
+    }
+
+    suspend fun getChatMessage(
+        groupId: String,
+        messageId: String
+    ) = groupMessagesRef(groupId)
+        .document(messageId)
+        .getOrThrow()
+        .toObject(ChatMessage::class.java)
+
+
     companion object {
+        const val TAG = "ChatGrouprepository"
+
         const val COLLECTION_CHATS = "chats"
         const val COLLECTION_CHATS_CONTACTS = "contacts"
         const val COLLECTION_GROUP_CHATS = "chat_groups"

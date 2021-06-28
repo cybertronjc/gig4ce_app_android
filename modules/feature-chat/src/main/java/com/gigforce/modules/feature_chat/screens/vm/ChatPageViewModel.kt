@@ -20,6 +20,7 @@ import com.gigforce.common_ui.chat.models.VideoInfo
 import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.viewdatamodels.chat.ChatHeader
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.*
 import com.gigforce.core.fb.FirebaseUtils
 import com.gigforce.core.file.FileUtils
@@ -921,5 +922,24 @@ class ChatPageViewModel constructor(
 
         headerInfoChangeListener?.remove()
         contactInfoChangeListener?.remove()
+    }
+
+    fun deleteMessage(
+        messageId: String
+    ) = viewModelScope.launch{
+        try {
+
+            chatRepository.deleteMessage(
+                chatHeaderId = headerId,
+                messageId = messageId
+            )
+        } catch (e : Exception){
+
+            CrashlyticsLogger.e(
+                TAG,
+                "while deleting users message",
+                e
+            )
+        }
     }
 }
