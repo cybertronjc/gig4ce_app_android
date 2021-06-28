@@ -138,7 +138,7 @@ class LandingScreenFragment : Fragment() {
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
-        //checkforForceupdate()
+        checkforForceupdate()
 
 
 //        checkforLanguagedSelectedForLastLogin()
@@ -203,33 +203,33 @@ class LandingScreenFragment : Fragment() {
 //        }
 //    }
 
-//    private fun checkforForceupdate() {
-//        ConfigRepository().getForceUpdateCurrentVersion(object :
-//            ConfigRepository.LatestAPPUpdateListener {
-//            override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
-//                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
-//                //doubt
-//                    appDialogsInterface.showConfirmationDialogType3(
-//                        getString(R.string.new_version_available),
-//                        getString(R.string.new_version_available_detail),
-//                        getString(R.string.update_now),
-//                        getString(R.string.cancel_update),
-//                        object :
-//                            ConfirmationDialogOnClickListener {
-//                            override fun clickedOnYes(dialog: Dialog?) {
-//                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
-//                            }
-//
-//                            override fun clickedOnNo(dialog: Dialog?) {
-//                                if (latestAPPUpdateModel.force_update_required)
-//                                    activity?.finish()
-//                                dialog?.dismiss()
-//                            }
-//
-//                        })
-//            }
-//        })
-//    }
+    private fun checkforForceupdate() {
+        ConfigRepository().getForceUpdateCurrentVersion(object :
+            ConfigRepository.LatestAPPUpdateListener {
+            override fun getCurrentAPPVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel) {
+                if (latestAPPUpdateModel.active && isNotLatestVersion(latestAPPUpdateModel))
+                //doubt
+                    appDialogsInterface.showConfirmationDialogType3(
+                        getString(R.string.new_version_available),
+                        getString(R.string.new_version_available_detail),
+                        getString(R.string.update_now),
+                        getString(R.string.cancel_update),
+                        object :
+                            ConfirmationDialogOnClickListener {
+                            override fun clickedOnYes(dialog: Dialog?) {
+                                redirectToStore("https://play.google.com/store/apps/details?id=com.gigforce.app")
+                            }
+
+                            override fun clickedOnNo(dialog: Dialog?) {
+                                if (latestAPPUpdateModel.force_update_required)
+                                    activity?.finish()
+                                dialog?.dismiss()
+                            }
+
+                        })
+            }
+        })
+    }
 
     private fun isNotLatestVersion(latestAPPUpdateModel: ConfigRepository.LatestAPPUpdateModel): Boolean {
         try {
