@@ -63,7 +63,12 @@ class GroupMessageReadItemView(
             dObj.let { chatHeader ->
 
                 textViewName.text = chatHeader.profileName
-                contextImageView.loadImageIfUrlElseTryFirebaseStorage(chatHeader.profilePicture)
+
+                if(chatHeader.profilePicture.isNotBlank()) {
+                    contextImageView.loadImageIfUrlElseTryFirebaseStorage(chatHeader.profilePicture,R.drawable.ic_user_2,R.drawable.ic_user_2)
+                } else {
+                    contextImageView.loadImage(R.drawable.ic_user_2)
+                }
                 txtSubtitle.text = "Read on ${formatDate(chatHeader.readOn)}"
             }
         }
