@@ -924,6 +924,13 @@ class BSCalendarScreenFragment : Fragment() {
                 navigationPath = "verification/main"
             )
         )
+        datalist.add(
+            FeatureModel(
+                "Invoices",
+                R.drawable.wallet,
+                navigationPath = "wallet/invoicesList"
+            )
+        )
 
         if(isUserTl) {
 
