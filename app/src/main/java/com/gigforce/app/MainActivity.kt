@@ -286,6 +286,7 @@ class MainActivity : AppCompatActivity(),
     private fun proceedWithNormalNavigation() {
         checkForAllAuthentication()
         GetFirebaseInstanceID()
+//        CleverTapAPI.getDefaultInstance(applicationContext)?.pushEvent("MAIN_ACTIVITY_CREATED")
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -518,15 +519,9 @@ class MainActivity : AppCompatActivity(),
             when (resultCode) {
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
-                    //  handle user's approval }
-//                    if (currentPriority == 0){
-//                        showToast("Update Approved by User: Flexible", this)
-//                        showToast("We will notify you when the download is completed", this)
-//                    } else {
-//                        showToast("Update Approved by User: Immediate", this)
-//                    }
-
-
+                    if (currentPriority == 0){
+                        showToast("Update is being downloaded in background", this)
+                    }
                 }
                 RESULT_CANCELED -> {
                     //  handle user's rejection
@@ -564,7 +559,8 @@ class MainActivity : AppCompatActivity(),
                     showToast("Update Failure Internal", this)
                 }
             }
-        } else {
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }

@@ -130,8 +130,14 @@ public class ImagePicker {
     public static Intent getPickImageIntentsOnly(Context context) {
         Intent chooserIntent = null;
         List<Intent> intentList = new ArrayList<>();
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent pickIntent = null;
+        try {
+            pickIntent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         Uri tempUri = FileProvider.getUriForFile(
                 context.getApplicationContext(),
                 context.getApplicationContext().getPackageName() + ".provider",

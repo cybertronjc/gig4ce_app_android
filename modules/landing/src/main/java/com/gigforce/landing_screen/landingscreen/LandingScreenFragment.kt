@@ -138,7 +138,7 @@ class LandingScreenFragment : Fragment() {
         listener()
         observers()
         broadcastReceiverForLanguageCahnge()
-        //checkforForceupdate()
+        checkforForceupdate()
 
 
 //        checkforLanguagedSelectedForLastLogin()
