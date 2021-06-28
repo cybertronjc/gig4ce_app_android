@@ -174,7 +174,13 @@ class LoginViewModel @Inject constructor(
 //
 //        PhoneAuthProvider.verifyPhoneNumber(phoneNumberOptions)
 
-                userAuthStatus = userAuthRepo.getUserAuthStatus(phoneNumber.substring(3,phoneNumber.length))
+                userAuthStatus = try {
+                    userAuthRepo.getUserAuthStatus(phoneNumber.substring(3,phoneNumber.length))
+                } catch (e: Exception) {
+                    UserAuthStatusModel(
+                        status = false
+                    )
+                }
                 if (userAuthStatus?.status == true) {
 
                     if (userAuthStatus?.isUserRegistered == true) {
@@ -197,8 +203,6 @@ class LoginViewModel @Inject constructor(
                                 )
                         )
                     }
-
-
                 }
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber, // Phone number to verify
