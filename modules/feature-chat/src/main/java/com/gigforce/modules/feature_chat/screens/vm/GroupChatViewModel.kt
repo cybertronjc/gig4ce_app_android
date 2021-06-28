@@ -892,6 +892,8 @@ class GroupChatViewModel constructor(
     fun getGroupMembersNameSuggestions(keywords: String): List<GroupChatMember> {
         val chatGroupMembers = groupDetails?.groupMembers ?: return emptyList()
         return chatGroupMembers.filter {
+            it.uid != currentUser.uid
+        }.filter {
             it.name?.startsWith(keywords, true) ?: false
         }.map {
             GroupChatMember(
