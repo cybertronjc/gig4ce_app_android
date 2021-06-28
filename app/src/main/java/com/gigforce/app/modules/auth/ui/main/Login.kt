@@ -345,7 +345,10 @@ class Login : Fragment() {
             cvloginwrong.visibility = VISIBLE
             login_button.isEnabled = true
             login_button.background = resources.getDrawable(R.drawable.gradient_button)
-        } else {
+        } else if (!termsCheckbox.isChecked){
+            showToast("Accept Terms and Conditions to continue")
+        }
+        else {
             viewModel.sendVerificationCode(phoneNumber)
         }
     }

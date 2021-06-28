@@ -326,7 +326,6 @@
             android:layout_height="36dp"
             android:layout_marginBottom="8dp"
             android:checked="true"
-            android:clickable="false"
             android:layout_marginStart="@dimen/size_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/login_button"/>
