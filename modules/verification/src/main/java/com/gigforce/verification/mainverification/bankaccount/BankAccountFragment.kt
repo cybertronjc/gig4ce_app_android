@@ -14,18 +14,18 @@ class BankAccountFragment : Fragment() {
         fun newInstance() = BankAccountFragment()
     }
 
-    private lateinit var viewModel: BlankAccountViewModel
+    private lateinit var viewModel: BankAccountViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.blank_account_fragment, container, false)
+        return inflater.inflate(R.layout.bank_account_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(BlankAccountViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BankAccountViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

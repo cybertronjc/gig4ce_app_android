@@ -2,6 +2,6 @@ package com.gigforce.verification.mainverification.bankaccount
 
 import androidx.lifecycle.ViewModel
 
-class BlankAccountViewModel : ViewModel() {
+class BankAccountViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
