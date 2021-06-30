@@ -34,7 +34,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.progressBar
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.toolbar

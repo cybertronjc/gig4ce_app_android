@@ -43,7 +43,7 @@ abstract class BaseNavigationImpl : INavigation {
     fun registerRoute(dest: String, destResId: Int) {
         if (this.navMap.containsKey(dest)) {
             Log.w("Base/Nav", "Overriding existing nav key registration")
-            throw Exception("Nav Key Already Exists") // Comment if not required
+            throw Exception("Nav Key Already Exists $dest") // Comment if not required
         }
         this.navMap[dest] = destResId
     }

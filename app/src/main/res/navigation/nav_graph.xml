@@ -454,8 +454,7 @@
     <fragment
         android:id="@+id/addDrivingLicenseInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
-        android:label="fragment_add_driving_license_info"
-        tools:layout="@layout/fragment_add_driving_license_info" />
+        android:label="fragment_add_driving_license_info" />
     <fragment
         android:id="@+id/addPanCardInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment"
@@ -712,11 +711,11 @@
         android:name="com.gigforce.learning.assessment.questionnaire.QuestionnaireFragment"
         android:label="application_questionnaire"
         tools:layout="@layout/layout_questionnaire_fragment" />
-    <fragment
-        android:id="@+id/fragment_upload_dl_cl_act"
-        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.UploadDrivingLicense"
-        android:label="fragment_upload_dl_cl_act"
-        tools:layout="@layout/layout_fragment_client_activation" />
+<!--    <fragment-->
+<!--        android:id="@+id/fragment_upload_dl_cl_act"-->
+<!--        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.UploadDrivingLicense"-->
+<!--        android:label="fragment_upload_dl_cl_act"-->
+<!--        tools:layout="@layout/layout_fragment_client_activation" />-->
 
     <fragment
         android:id="@+id/fragment_gig_activation"

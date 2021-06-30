@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -22,7 +23,6 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.MimeTypes

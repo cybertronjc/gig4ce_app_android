@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.progressBa
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.toolbar
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.*
 import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view_2.*
-import kotlinx.android.synthetic.main.fragment_add_bank_details_info_2.*
+//import kotlinx.android.synthetic.main.fragment_add_bank_details_info_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import javax.inject.Inject
 

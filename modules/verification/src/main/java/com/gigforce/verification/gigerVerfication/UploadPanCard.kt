@@ -36,8 +36,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
-import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.panViewLayout
+//import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.*
+//import kotlinx.android.synthetic.main.fragment_add_pan_card_info_2.panViewLayout
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_main_2.*
 import kotlinx.android.synthetic.main.fragment_add_pan_card_info_view_2.*
 import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
