@@ -301,6 +301,7 @@ int attr cardUseCompatPadding 0x0
 int attr cardViewStyle 0x0
 int attr chainUseRtl 0x0
 int attr checkboxStyle 0x0
+int attr checkboxtext 0x0
 int attr checkedButton 0x0
 int attr checkedChip 0x0
 int attr checkedIcon 0x0
@@ -470,6 +471,7 @@ int attr divider 0x0
 int attr dividerHorizontal 0x0
 int attr dividerPadding 0x0
 int attr dividerVertical 0x0
+int attr docinfotext 0x0
 int attr dragDirection 0x0
 int attr dragScale 0x0
 int attr dragThreshold 0x0
@@ -815,6 +817,7 @@ int attr minHideDelay 0x0
 int attr minSeparation 0x0
 int attr minTouchTargetSize 0x0
 int attr minWidth 0x0
+int attr missingdoctext 0x0
 int attr mock_diagonalsColor 0x0
 int attr mock_label 0x0
 int attr mock_labelBackgroundColor 0x0
@@ -911,6 +914,7 @@ int attr progressBarPadding 0x0
 int attr progressBarStyle 0x0
 int attr queryBackground 0x0
 int attr queryHint 0x0
+int attr querytext 0x0
 int attr radioButtonStyle 0x0
 int attr radius 0x0
 int attr rangeFillColor 0x0
@@ -1208,6 +1212,7 @@ int attr ucrop_show_frame 0x0
 int attr ucrop_show_grid 0x0
 int attr ucrop_show_oval_crop_frame 0x0
 int attr unplayed_color 0x0
+int attr uppercaption 0x0
 int attr uri 0x0
 int attr useCompatPadding 0x0
 int attr useMaterialThemeColors 0x0
@@ -2722,6 +2727,8 @@ int id accessibility_custom_action_7 0x0
 int id accessibility_custom_action_8 0x0
 int id accessibility_custom_action_9 0x0
 int id accountNoEditText 0x0
+int id account_holder_name 0x0
+int id account_number_itl 0x0
 int id action0 0x0
 int id action_bar 0x0
 int id action_bar_activity_content 0x0
@@ -2809,6 +2816,7 @@ int id bankNameTV 0x0
 int id bankViewImageErrorMessage 0x0
 int id bankViewImageIV 0x0
 int id bankViewLayout 0x0
+int id bank_name_til 0x0
 int id banner_body 0x0
 int id banner_content_root 0x0
 int id banner_image 0x0
@@ -2989,6 +2997,7 @@ int id doYouHavePassbookLabel 0x0
 int id dobET 0x0
 int id dobLabel 0x0
 int id doc_separator 0x0
+int id docdetail 0x0
 int id documentUploadLabelTV 0x0
 int id documentUploadSubLabelTV 0x0
 int id dragDown 0x0
@@ -3123,6 +3132,7 @@ int id ifscEditText 0x0
 int id ifscErrorMessage 0x0
 int id ifscLabel 0x0
 int id ifscNoTV 0x0
+int id ifsc_code 0x0
 int id ignore 0x0
 int id ignoreRequest 0x0
 int id image 0x0
@@ -3241,6 +3251,7 @@ int id message_body 0x0
 int id message_title 0x0
 int id middle 0x0
 int id mini 0x0
+int id missingtext 0x0
 int id modal_content_root 0x0
 int id modal_root 0x0
 int id module_completed_iv 0x0
@@ -3380,6 +3391,7 @@ int id progressBar 0x0
 int id progressBar1 0x0
 int id progress_circular 0x0
 int id progress_horizontal 0x0
+int id querytext 0x0
 int id quiz_icon_iv 0x0
 int id radial 0x0
 int id radio 0x0
@@ -3596,6 +3608,7 @@ int id top_cl 0x0
 int id top_level_view 0x0
 int id top_progress_bar 0x0
 int id top_to_bottom 0x0
+int id toplayoutblock 0x0
 int id torch 0x0
 int id touch_outside 0x0
 int id transition_current_scene 0x0
@@ -3660,6 +3673,7 @@ int id uploadDocumentLabel 0x0
 int id uploadImageLayout 0x0
 int id uploadStatusTV 0x0
 int id upload_adhaar_Card 0x0
+int id uppercaption 0x0
 int id useLogo 0x0
 int id veriScreenTitle 0x0
 int id verificationCompletedBtn 0x0
@@ -3772,6 +3786,7 @@ int layout abc_select_dialog_material 0x0
 int layout abc_tooltip 0x0
 int layout app_bar_layout 0x0
 int layout banner 0x0
+int layout blank_account_fragment 0x0
 int layout browser_actions_context_menu_page 0x0
 int layout browser_actions_context_menu_row 0x0
 int layout cameraview_gl_view 0x0
@@ -3963,6 +3978,7 @@ int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
 int layout other_feature_item_layout 0x0
 int layout other_features_layout 0x0
+int layout pan_card_fragment 0x0
 int layout pop_up_menu_tv 0x0
 int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
@@ -3996,6 +4012,7 @@ int layout upcoming_gig_card_component 0x0
 int layout upload_aadhar_card_fragment 0x0
 int layout upload_car_client_activation 0x0
 int layout upload_pan_card_fragment 0x0
+int layout veri_screen_info_component 0x0
 int layout verification_image_card_component 0x0
 int layout verification_main_fragment 0x0
 int layout verified_button 0x0
@@ -7426,6 +7443,13 @@ int styleable Variant_region_heightLessThan 1
 int styleable Variant_region_heightMoreThan 2
 int styleable Variant_region_widthLessThan 3
 int styleable Variant_region_widthMoreThan 4
+int[] styleable VeriScreenInfoComponent { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int styleable VeriScreenInfoComponent_checkboxtext 0
+int styleable VeriScreenInfoComponent_docinfotext 1
+int styleable VeriScreenInfoComponent_missingdoctext 2
+int styleable VeriScreenInfoComponent_querytext 3
+int styleable VeriScreenInfoComponent_title 4
+int styleable VeriScreenInfoComponent_uppercaption 5
 int[] styleable View { 0x10100da, 0x1010000, 0x0, 0x0, 0x0 }
 int styleable View_android_focusable 0
 int styleable View_android_theme 1

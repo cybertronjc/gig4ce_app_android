@@ -302,6 +302,7 @@ attr cardUseCompatPadding
 attr cardViewStyle
 attr chainUseRtl
 attr checkboxStyle
+attr checkboxtext
 attr checkedButton
 attr checkedChip
 attr checkedIcon
@@ -471,6 +472,7 @@ attr divider
 attr dividerHorizontal
 attr dividerPadding
 attr dividerVertical
+attr docinfotext
 attr dragDirection
 attr dragScale
 attr dragThreshold
@@ -816,6 +818,7 @@ attr minHideDelay
 attr minSeparation
 attr minTouchTargetSize
 attr minWidth
+attr missingdoctext
 attr mock_diagonalsColor
 attr mock_label
 attr mock_labelBackgroundColor
@@ -912,6 +915,7 @@ attr progressBarPadding
 attr progressBarStyle
 attr queryBackground
 attr queryHint
+attr querytext
 attr radioButtonStyle
 attr radius
 attr rangeFillColor
@@ -1209,6 +1213,7 @@ attr ucrop_show_frame
 attr ucrop_show_grid
 attr ucrop_show_oval_crop_frame
 attr unplayed_color
+attr uppercaption
 attr uri
 attr useCompatPadding
 attr useMaterialThemeColors
@@ -2723,6 +2728,8 @@ id accessibility_custom_action_7
 id accessibility_custom_action_8
 id accessibility_custom_action_9
 id accountNoEditText
+id account_holder_name
+id account_number_itl
 id action0
 id action_bar
 id action_bar_activity_content
@@ -2810,6 +2817,7 @@ id bankNameTV
 id bankViewImageErrorMessage
 id bankViewImageIV
 id bankViewLayout
+id bank_name_til
 id banner_body
 id banner_content_root
 id banner_image
@@ -2990,6 +2998,7 @@ id doYouHavePassbookLabel
 id dobET
 id dobLabel
 id doc_separator
+id docdetail
 id documentUploadLabelTV
 id documentUploadSubLabelTV
 id dragDown
@@ -3124,6 +3133,7 @@ id ifscEditText
 id ifscErrorMessage
 id ifscLabel
 id ifscNoTV
+id ifsc_code
 id ignore
 id ignoreRequest
 id image
@@ -3242,6 +3252,7 @@ id message_body
 id message_title
 id middle
 id mini
+id missingtext
 id modal_content_root
 id modal_root
 id module_completed_iv
@@ -3381,6 +3392,7 @@ id progressBar
 id progressBar1
 id progress_circular
 id progress_horizontal
+id querytext
 id quiz_icon_iv
 id radial
 id radio
@@ -3597,6 +3609,7 @@ id top_cl
 id top_level_view
 id top_progress_bar
 id top_to_bottom
+id toplayoutblock
 id torch
 id touch_outside
 id transition_current_scene
@@ -3661,6 +3674,7 @@ id uploadDocumentLabel
 id uploadImageLayout
 id uploadStatusTV
 id upload_adhaar_Card
+id uppercaption
 id useLogo
 id veriScreenTitle
 id verificationCompletedBtn
@@ -3773,6 +3787,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout app_bar_layout
 layout banner
+layout blank_account_fragment
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
 layout cameraview_gl_view
@@ -3964,6 +3979,7 @@ layout notification_template_part_chronometer
 layout notification_template_part_time
 layout other_feature_item_layout
 layout other_features_layout
+layout pan_card_fragment
 layout pop_up_menu_tv
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
@@ -3997,6 +4013,7 @@ layout upcoming_gig_card_component
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout veri_screen_info_component
 layout verification_image_card_component
 layout verification_main_fragment
 layout verified_button
@@ -5638,6 +5655,7 @@ styleable Tooltip android_layout_margin android_minHeight android_minWidth andro
 styleable Transform android_elevation android_rotation android_rotationX android_rotationY android_scaleX android_scaleY android_transformPivotX android_transformPivotY android_translationX android_translationY android_translationZ
 styleable Transition android_id autoTransition constraintSetEnd constraintSetStart duration layoutDuringTransition motionInterpolator pathMotionArc staggered transitionDisable transitionFlags
 styleable Variant constraints region_heightLessThan region_heightMoreThan region_widthLessThan region_widthMoreThan
+styleable VeriScreenInfoComponent checkboxtext docinfotext missingdoctext querytext title uppercaption
 styleable View android_focusable android_theme paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewPager2 android_orientation

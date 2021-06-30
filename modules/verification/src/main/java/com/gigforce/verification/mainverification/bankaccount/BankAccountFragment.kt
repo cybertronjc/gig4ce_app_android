@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.gigforce.verification.R
 
-class BlankAccountFragment : Fragment() {
+class BankAccountFragment : Fragment() {
 
     companion object {
-        fun newInstance() = BlankAccountFragment()
+        fun newInstance() = BankAccountFragment()
     }
 
     private lateinit var viewModel: BlankAccountViewModel

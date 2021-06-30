@@ -30,13 +30,7 @@ class NavForVerificationModule(
         baseImplementation.registerRoute("${moduleName}/aadhaarOptionsFragment", R.id.aadhaarOptionsFragment)
         baseImplementation.registerRoute("${moduleName}/aadhaarcardimageupload",R.id.aadhaarcardimageupload)
         baseImplementation.registerRoute("${moduleName}/aadhaarcardphonenumber",R.id.aadhaarcardphonenumber)
-
-
-
-
-
-
-
+        baseImplementation.registerRoute("${moduleName}/bank_account_fragment",R.id.bank_account_fragment)
 
     }
 }

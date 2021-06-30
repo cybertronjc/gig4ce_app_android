@@ -428,4 +428,12 @@
         <item name="android:insetLeft">0dp</item>
         <item name="android:minWidth">0dp</item>
     </style>
+    <declare-styleable name="VeriScreenInfoComponent">
+        <attr format="string" name="uppercaption"/>
+        <attr format="string" name="title"/>
+        <attr format="string" name="docinfotext"/>
+        <attr format="string" name="querytext"/>
+        <attr format="string" name="checkboxtext"/>
+        <attr format="string" name="missingdoctext"/>
+    </declare-styleable>
 </resources>

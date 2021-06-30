@@ -38,7 +38,11 @@ class VerificationMainFragment : Fragment() {
 
     private fun listener() {
         next.setOnClickListener{
-            navigation.navigateTo("verification/aadhaarOptionsFragment")
+            navigation.navigateTo("verification/aadhaarcardimageupload")
+            navigation.navigateTo("verification/aadhaarcardphonenumber")
+            navigation.navigateTo("verification/bank_account_fragment")
+
+
         }
     }
 

@@ -2,6 +2,12 @@ R_DEF: Internal format may change without notice
 local
 array gender_values
 array indian_states
+attr? checkboxtext
+attr? docinfotext
+attr? missingdoctext
+attr? querytext
+attr? title
+attr? uppercaption
 color app_red
 color battle_ship_grey
 color battleship_grey
@@ -232,6 +238,8 @@ id accLabel
 id accNoLabel
 id accNumberET
 id accountNoEditText
+id account_holder_name
+id account_number_itl
 id add_veri_address_city
 id add_veri_address_line1
 id add_veri_address_line2
@@ -277,6 +285,7 @@ id bankNameTV
 id bankViewImageErrorMessage
 id bankViewImageIV
 id bankViewLayout
+id bank_name_til
 id buttonAadhaar1
 id buttonAadhaar2
 id buttonDL1
@@ -349,6 +358,7 @@ id doYouHavePassbookLabel
 id dobET
 id dobLabel
 id doc_separator
+id docdetail
 id documentUploadLabelTV
 id documentUploadSubLabelTV
 id drivingBankDetailsSeparator
@@ -378,6 +388,7 @@ id ifscEditText
 id ifscErrorMessage
 id ifscLabel
 id ifscNoTV
+id ifsc_code
 id imageLabelTV
 id imageView3
 id imageView4
@@ -403,6 +414,7 @@ id ll_questionnaire
 id locationET
 id locationLabel
 id main_card
+id missingtext
 id nameET
 id nameLabel
 id name_til
@@ -455,6 +467,7 @@ id pinET
 id pinLabel
 id progressBar
 id progressBar1
+id querytext
 id recordVideoButton
 id recordingTimerLayout
 id retake_video
@@ -492,10 +505,12 @@ id textView9
 id textViewaddress
 id textViewbank
 id textViewcontact_redundant
+id title
 id titleTV
 id toolbar
 id topSeaparator
 id topSeaparator2
+id toplayoutblock
 id tvAadhaar3
 id tvAadhaar5
 id tvAadhaar6
@@ -527,6 +542,7 @@ id uploadDocumentLabel
 id uploadImageLayout
 id uploadStatusTV
 id upload_adhaar_Card
+id uppercaption
 id veriScreenTitle
 id verificationCompletedBtn
 id verificationMainLayout
@@ -537,6 +553,7 @@ id whyWeNeedThisViewTV
 layout aadhaar_card_image_upload_fragment
 layout aadhaar_card_options_fragment
 layout aadhaar_card_phone_number_fragment
+layout blank_account_fragment
 layout fragment_add_aadhar_card_info
 layout fragment_add_aadhar_card_info_main
 layout fragment_add_aadhar_card_view
@@ -584,9 +601,11 @@ layout layout_verification_dl
 layout layout_verification_done
 layout layout_verification_dropdown
 layout layout_verification_pancard
+layout pan_card_fragment
 layout upload_aadhar_card_fragment
 layout upload_car_client_activation
 layout upload_pan_card_fragment
+layout veri_screen_info_component
 layout verification_image_card_component
 layout verification_main_fragment
 string aadhar_card
@@ -824,3 +843,4 @@ string you_are_reuploading_aadhar
 string you_are_reuploading_pan_card
 string your_are_reuploading_bank_details
 style IconOnlyButton
+styleable VeriScreenInfoComponent uppercaption title docinfotext querytext checkboxtext missingdoctext

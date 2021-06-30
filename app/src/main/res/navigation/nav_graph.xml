@@ -466,6 +466,12 @@
         tools:layout="@layout/aadhaar_card_phone_number_fragment"/>
 
     <fragment
+        android:id="@+id/bank_account_fragment"
+        android:name="com.gigforce.verification.mainverification.bankaccount.BankAccountFragment"
+        tools:layout="@layout/blank_account_fragment"
+        />
+
+    <fragment
         android:name="com.gigforce.verification.mainverification.VerificationMainFragment"
         android:id="@+id/gigerVerificationFragment"
         android:label="fragment_giger_verification"
