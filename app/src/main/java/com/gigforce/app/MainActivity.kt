@@ -56,6 +56,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.GsonBuilder
 import com.moengage.core.internal.utils.MoEUtils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -489,17 +490,22 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupFirebaseConfig(){
-        val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
         try {
-            Log.d("Update", "Data fetched from Remote Config")
-            //showToast("Data fetched from Remote Config", this)
-            val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
-            if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
+            val configSettings = FirebaseRemoteConfigSettings.Builder().build()
+            firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
+                .addOnCompleteListener {
+                    // now cache is updated you can fetch values
+                    val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
+                    Log.d("Update", "Data fetched from Remote Config")
+                    showToast("Data fetched from Remote Config", this)
+                    val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
+                    if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
+                }
         }
         catch (e: Exception){
             e.printStackTrace()
             Log.d("Update", "Fetching error from Remote config")
-            //showToast("Fetching error from Remote config", this)
+            showToast("Fetching error from Remote config", this)
         }
     }
     private fun showRestartDialog() {
@@ -533,40 +539,35 @@ class MainActivity : AppCompatActivity(),
         appUpdatePriority?.let {
             val versionUpdateInfo = gson.fromJson(it, VersionUpdateInfo::class.java)
             currentPriority = getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
-            if (currentPriority != -1) {
-                appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                        if (currentPriority == 0 /* flexible priority */
-                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    if ((currentPriority == 0 /* flexible priority */ || currentPriority == -1 /* default priority*/)
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
 
-                            // Request the update.
-                            requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
-                            appUpdateManager.registerListener(this@MainActivity)
-                            showToast("Update Available", this)
+                        // Request the update.
+                        requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
+                        appUpdateManager.registerListener(this@MainActivity)
+                        showToast("Update Available", this)
 //                            showToast(
 //                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
 //                                    this
 //                            )
 //                            showToast("Requesting Flexible update priority: " + currentPriority, this)
 
-                        } else if (currentPriority == 1 /* immediate priority */
-                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                            //request for immediate update
-                            requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                            showToast("Update Available", this)
+                    } else if (currentPriority == 1 /* immediate priority */
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                        //request for immediate update
+                        requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                        showToast("Update Available", this)
 //                            showToast(
 //                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
 //                                    this
 //                            )
 //                            showToast("Requesting Immediate update priority: " + currentPriority, this)
-                        }
-                    }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
-                        showToast("Update not available", this)
                     }
+                }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                    showToast("Update not available", this)
                 }
-            } else {
-                Log.d("Update", "Latest version installed")
-                //showToast("Latest version installed", this)
             }
         }
     }
