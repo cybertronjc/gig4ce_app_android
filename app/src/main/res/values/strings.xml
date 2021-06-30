@@ -1417,7 +1417,7 @@
     <string name="select_skills_you_have">Select Skills you have</string>
     <string name="search_skills">Search Skills</string>
     <string name="add_about_me">Add About Me</string>
-    <string name="terms_text">I accept TnC. click here to view policy</string>
+    <string name="terms_text">I accept Terms and Conditions. <u>Click here</u> to view policy</string>
 
 
     <string-array name="lang_array">
