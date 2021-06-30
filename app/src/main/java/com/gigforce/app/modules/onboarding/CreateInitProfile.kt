@@ -14,19 +14,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.app.R
-import com.gigforce.app.modules.onboarding.controls.OBTextView
-import com.gigforce.app.modules.onboarding.controls.OBToggleButton
-import com.gigforce.app.modules.onboarding.controls.ViewChanger
 import com.gigforce.app.modules.onboarding.models.UserData
 import com.gigforce.core.utils.GlideApp
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_confirm_otp.*
 import kotlinx.android.synthetic.main.fragment_create_init_profile.*
 import kotlinx.android.synthetic.main.fragment_create_init_profile.onboarding_chat_send_btn
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_profile_main_expanded.view.*
-import kotlinx.android.synthetic.main.fragment_userinfo.*
 import kotlinx.android.synthetic.main.fragment_userinfo.view.*
 import kotlinx.android.synthetic.main.item_ob_chat_in.view.*
 

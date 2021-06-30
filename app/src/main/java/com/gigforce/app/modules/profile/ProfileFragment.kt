@@ -17,11 +17,10 @@ import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.core.extensions.gone
 import com.gigforce.common_ui.viewmodels.GigVerificationViewModel
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.giger_gigs.photocrop.PhotoCrop
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.utils.GlideApp
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.datamodels.GigerVerificationStatus
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewmodels.ProfileViewModel
 import com.google.android.material.appbar.AppBarLayout

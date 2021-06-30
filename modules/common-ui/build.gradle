@@ -110,4 +110,7 @@ dependencies {
 
     //Transcoder for compressing video files
     implementation 'com.otaliastudios:transcoder:0.9.1'
+
+    // timeline view
+    implementation 'com.github.vipulasri:timelineview:1.1.5'
 }

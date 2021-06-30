@@ -289,7 +289,7 @@ class LearningDetailsLessonsAdapter constructor(
 
         val slideVideoThumbnail = itemView.videoThumbnailIV
         val slideVideoTitle = itemView.video_title
-        val slideVideoLength = itemView.video_time
+        val slideVideoLength = itemView.video_title
         val slidePlayIV = itemView.play_button_iv
         val slideVideoTimeImageLabel = itemView.time_imageview
         val slideVideoplayButton = itemView.time_imageview

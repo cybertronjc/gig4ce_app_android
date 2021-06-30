@@ -1,6 +1,9 @@
 package com.gigforce.core
 
 object AppConstants {
+    val USER_PROFILE_PIC: String = "profile_pic"
+    val USER_MOBILE_NUMBER: String = "mobileno"
+    val USER_NAME: String = "username"
     val LANGUAGE_SELECTED: String = "language_selected"
     const val UNLOCK_FEATURE = false
     const val ON_BOARDING_COMPLETED = "on_boarding_completed"
@@ -62,5 +65,12 @@ object AppConstants {
     const val INTENT_EXTRA_GIG_ID = "gig_id"
 
     const val INTEN_EXTRA_DATE = "date"
+
+
+    //app bar component constants
+    const val BACKGROUND_TYPE_DEFAULT = 0
+    const val BACKGROUND_TYPE_PINKBAR = 101
+    const val BACKGROUND_TYPE_WHITEBAR = 102
+    const val BACKGROUND_TYPE_GREYBAR = 103
 
 }

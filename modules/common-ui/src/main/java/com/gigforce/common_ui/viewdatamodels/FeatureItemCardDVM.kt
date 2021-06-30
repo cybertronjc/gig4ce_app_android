@@ -12,7 +12,8 @@ class FeatureItemCardDVM(
     var isSelectedView : Boolean = false,
     val subtitle:String? = null,
     val navPath:String? = null,
-    val args:Bundle? = null
+    val args:Bundle? = null,
+    val priority:Int = 0
 ): SimpleDVM(CommonViewTypes.VIEW_FEATURE_ITEM_CARD, navPath) {
     override fun getNavArgs(): NavArgs? {
         navPath?.let {

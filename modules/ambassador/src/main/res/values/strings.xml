@@ -202,5 +202,13 @@
     <string name="upload_documents">Upload Documents</string>
     <string name="i_will_do_it_later"><u>I will do it later</u></string>
     <string name="reupload"><u>Reupload</u></string>
+    <string name="thankyou">ThankYou</string>
+    <string name="share_the_joy_of_working_with_gigforce_and_invite_your_friends">Share the joy of working with Gigforce and invite your friends.</string>
+    <string name="okay_lower_case">Okay</string>
+    <string name="refer_your_friends">Refer Your Friends</string>
+    <string name="you_helped">You helped</string>
+    <string name="and">and</string>
+    <string name="more">more</string>
+    <string name="find_gigs_on">find gigs on Gigforce.</string>
 
 </resources>

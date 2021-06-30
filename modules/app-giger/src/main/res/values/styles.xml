@@ -67,4 +67,14 @@
         <item name="fontWeight">900</item>
     </style>
 
+    <style name="CalendarRvStyle">
+        <item name="android:scrollbarTrackVertical">@drawable/scroll_bar_track</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:color">#80e9e9e9</item>
+
+
+    </style>
+
 </resources>

@@ -3,13 +3,14 @@ package com.gigforce.common_ui.repository.repo
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.core.StringConstants
 import com.gigforce.common_ui.datamodels.datamodels.CourseDM
 import com.gigforce.common_ui.datamodels.datamodels.CourseMappingDM
 import com.gigforce.common_ui.datamodels.datamodels.UserInterestsAndRolesDM
+import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
+import com.gigforce.core.StringConstants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -31,10 +32,9 @@ class LearningDataRepository @Inject constructor() :
     }
 
     override fun loadData() {
-        FirebaseFirestore.getInstance().collection("Course_blocks").orderBy("priority")
+        FirebaseFirestore.getInstance().collection("Course_blocks")
             .whereEqualTo("type", "course").whereEqualTo("isopened", true)
             .addSnapshotListener { value, error ->
-
                 val doc = value?.documents
                 doc?.let {
                     val _data = ArrayList<FeatureItemCardDVM>()
@@ -45,7 +45,7 @@ class LearningDataRepository @Inject constructor() :
 //                        val priority = (item?.get("priority") as? Int) ?: 500
                         val coverPic = item?.get("cover_pic") as? String
                         val nav_path = "learning/main"//item?.get("nav_path") as? String
-
+                        val priority = item?.get("priority") as? Int ?:0
                         _data.add(
                             FeatureItemCardDVM(
                                 id = item.id,
@@ -55,11 +55,15 @@ class LearningDataRepository @Inject constructor() :
                                 navPath = nav_path,
                                 args = bundleOf(
                                     StringConstants.COURSE_ID.value to item?.id
-                                )
+                                ),
+                                priority = priority
                             )
                         )
                     }
+                    _data.sortBy { it.priority }
                     allCourses.value = _data
+                }?: run {
+                    allCourses.value = ArrayList<FeatureItemCardDVM>()
                 }
 
             }

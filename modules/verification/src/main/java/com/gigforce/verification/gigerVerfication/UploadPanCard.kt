@@ -95,12 +95,17 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     }
 
     private fun initViews() {
-        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
-        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
+        panImageHolder.setDocumentUploadLabel(getString(R.string.upload_pan_card))
+        panImageHolder.setDocumentUploadSubLabel(getString(R.string.please_upload_your_pan))
+//        panImageHolder.documentUploadLabelTV.text = getString(R.string.upload_pan_card)
+//        panImageHolder.documentUploadSubLabelTV.text = getString(R.string.please_upload_your_pan)
         panSubmitSliderBtn.isEnabled = false
         iv_back_application_client_activation.setOnClickListener {
             onBackPressed()
         }
+        appBarComp.setBackButtonListener(View.OnClickListener {
+            onBackPressed()
+        })
 
 
         helpIconViewIV.setOnClickListener {
@@ -469,13 +474,15 @@ class UploadPanCard : Fragment(), SelectImageSourceBottomSheetActionListener,
     }
 
     private fun showPanInfoCard(panInfoPath: Uri) {
-        panImageHolder.uploadDocumentCardView.visibility = View.GONE
-        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
-
-        Glide.with(requireContext())
-            .load(panInfoPath)
-            .placeholder(getCircularProgressDrawable())
-            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+//        panImageHolder.uploadDocumentCardView.visibility = View.GONE
+//        panImageHolder.uploadImageLayout.visibility = View.VISIBLE
+//
+//        Glide.with(requireContext())
+//            .load(panInfoPath)
+//            .placeholder(getCircularProgressDrawable())
+//            .into(panImageHolder.uploadImageLayout.clickedImageIV)
+        panImageHolder.makeEditLayoutVisible()
+        panImageHolder.setImage(panInfoPath)
     }
 
     override fun onBackPressed(): Boolean {

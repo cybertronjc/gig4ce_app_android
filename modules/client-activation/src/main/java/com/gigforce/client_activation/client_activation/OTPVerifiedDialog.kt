@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Html
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.StringConstants
+import com.gigforce.common_ui.dialog.RejectionDialog
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible

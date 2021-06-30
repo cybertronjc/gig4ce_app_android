@@ -18,7 +18,8 @@ import com.example.learning.R
 import com.gigforce.learning.learning.courseDetails.LearningCourseDetailsFragment
 import com.gigforce.core.datamodels.learning.Course
 //import com.gigforce.app.utils.Lce
-import com.gigforce.common_ui.ILoginInfoRepo
+import com.gigforce.common_ui.IUserInfo
+import com.gigforce.common_ui.UserInfoImp
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.datamodels.ShimmerDataModel
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
@@ -34,7 +35,6 @@ import com.gigforce.core.utils.Lce
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
-//import kotlinx.android.synthetic.main.calendar_home_screen.chat_icon_iv
 import kotlinx.android.synthetic.main.fragment_main_learning_assessments.*
 import kotlinx.android.synthetic.main.fragment_main_learning_explore_learnings_layout.*
 import kotlinx.android.synthetic.main.fragment_main_learning_journey_layout.*
@@ -44,12 +44,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainLearningFragment : Fragment(), IOnBackPressedOverride {
-    //, IOnBackPressedOverride
-    //    private val viewModelProfile: ProfileViewModel by viewModels()
     private val learningViewModel: LearningViewModel by viewModels()
 
     @Inject
-    lateinit var loginInfo: ILoginInfoRepo
+    lateinit var loginInfo: IUserInfo
+
+    @Inject lateinit var userinfo: UserInfoImp
 
     private val mainLearningViewModel: MainLearningViewModel by viewModels()
 
@@ -58,11 +58,7 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = /*inflateView(
-        R.layout.fragment_main_learning,
-        inflater,
-        container
-    )*/inflater.inflate(R.layout.fragment_main_learning, container, false)
+    ) = inflater.inflate(R.layout.fragment_main_learning, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,6 +68,8 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 //            activity?.onBackPressed()
             parentFragmentManager.popBackStack()
         }
+
+//
 
         journey_completed_cardview.setOnClickListener {
 //            navigate(R.id.myLearningFragment)
@@ -238,11 +236,7 @@ class MainLearningFragment : Fragment(), IOnBackPressedOverride {
 
 
     private fun observerProfile() {
-        loginInfo.getData().observe(viewLifecycleOwner, Observer { profile ->
-            profile?.profilePicPath?.let {
-                displayImage(it)
-            }
-        })
+        displayImage(userinfo.getData().profilePicPath)
 //        viewModelProfile.getProfileData().observe(viewLifecycleOwner, Observer { profile ->
 //            displayImage(profile?.profileAvatarName!!)
 //        })

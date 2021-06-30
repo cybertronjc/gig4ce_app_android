@@ -31,10 +31,14 @@ class ClientActivationDataRepository @Inject constructor():
                 for (item in it) {
                     val title = item?.get("cardTitle") as? String ?: "-"
                     val cardImage = item?.get("cardImage") as? String
+                    val priority = item?.get("priority") as? Int ?: 0
                     _data.add(FeatureItemCardDVM(id=item.id,title = title, image = cardImage, navPath = "client_activation",args = bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to item?.id)))
+                        StringConstants.JOB_PROFILE_ID.value to item?.id),priority = priority))
                 }
+                _data.sortBy { it.priority }
                 data.value = _data
+            }?:run{
+                data.value = ArrayList<FeatureItemCardDVM>()
             }
 
         }

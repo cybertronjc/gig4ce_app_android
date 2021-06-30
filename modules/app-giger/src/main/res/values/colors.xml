@@ -21,4 +21,7 @@
     <color name="upcoming_gig_title">#25265e</color>
     <color name="upcoming_gig_time">#787993</color>
 
+    <color name="onboarding_rv_item_color_40">#40131415</color>
+    <color name="shadow_color">#c8c7cc</color>
+
 </resources>

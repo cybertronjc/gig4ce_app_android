@@ -10,8 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
-import com.gigforce.app.modules.markattendance.AttendanceImageCaptureActivity
-import com.gigforce.app.modules.photocrop.PhotoCrop
+import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
+import com.gigforce.giger_gigs.photocrop.PhotoCrop
 import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
@@ -36,6 +36,9 @@ class NavManagerImpl @Inject constructor(
     override fun registerAllRoutes() {
         this.registerRoute("referrals", R.id.referrals_fragment)
         this.registerRoute("login", R.id.Login)
+        this.registerRoute("languageSelectFragment", R.id.languageSelectFragment)
+        this.registerRoute("authFlowFragment", R.id.authFlowFragment)
+        this.registerRoute("rosterDayFragment", R.id.authFlowFragment)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)

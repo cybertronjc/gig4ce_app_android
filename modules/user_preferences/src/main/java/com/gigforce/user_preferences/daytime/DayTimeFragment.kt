@@ -114,7 +114,8 @@ class DayTimeFragment : Fragment() {
     private fun listener() {
         textView49.setOnClickListener { navigation.navigateTo("preferences/weekDayFragment") }
         textView55.setOnClickListener{ navigation.navigateTo("preferences/weekEndFragment") }
-        back_arrow_iv.setOnClickListener{ activity?.onBackPressed() }
+        //back_arrow_iv.setOnClickListener{ activity?.onBackPressed() }
+        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
         // weekday listener
         workFromHomeSwitch.setOnClickListener { view ->
             var isChecked = (view as Switch).isChecked

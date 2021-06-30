@@ -6,8 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mostpopularlearning_cl"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/learning_recommendation_layout">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/explore_learning_label"

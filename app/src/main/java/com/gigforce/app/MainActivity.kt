@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -35,6 +34,7 @@ import com.gigforce.common_ui.viewdatamodels.landing.VersionUpdateInfo
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
@@ -53,13 +53,13 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.GsonBuilder
 import com.moengage.core.internal.utils.MoEUtils.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -92,12 +92,18 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Inject
-    lateinit var navigation:INavigation
+    lateinit var navigation: INavigation
+
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
+    @Inject
+    lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
-    @Inject lateinit var eventTracker: IEventTracker
+
 
     override fun getINavigation(): INavigation {
         return navigation
@@ -107,11 +113,13 @@ class MainActivity : AppCompatActivity(),
         ChatNotificationHandler(applicationContext)
     }
 
-    private val intentFilters = IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+    private val intentFilters =
+        IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
     private val notificationIntentRecevier = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+            val remoteMessage: RemoteMessage =
+                intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
                     ?: return
 
             if(!isUserLoggedIn()){
@@ -120,7 +128,8 @@ class MainActivity : AppCompatActivity(),
             }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
-                    navController.currentDestination?.label  != "fragment_chat_page")
+                navController.currentDestination?.label != "fragment_chat_page"
+            )
                 chatNotificationHandler.handleChatNotification(remoteMessage)
         }
     }
@@ -131,8 +140,8 @@ class MainActivity : AppCompatActivity(),
             && intent.action != null
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
-            finish();
-            return;
+            finish()
+            return
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
@@ -147,7 +156,7 @@ class MainActivity : AppCompatActivity(),
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
-       // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
+        // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             notificationIntentRecevier,
@@ -214,8 +223,33 @@ class MainActivity : AppCompatActivity(),
         if (firebaseAuth.currentUser != null) {
             lookForNewChatMessages()
         }
+        profileDataSnapshot()
     }
+    private fun profileDataSnapshot() {
+        FirebaseAuth.getInstance().addAuthStateListener { it1 ->
+            it1.currentUser?.uid?.let {
+                FirebaseFirestore.getInstance().collection("Profiles").document(it)
+                    .addSnapshotListener { value, e ->
+                        value?.data?.let {
+                            value.toObject(ProfileData::class.java)?.let {
+                                shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                    it1.currentUser?.phoneNumber ?: ""
+                                )
+                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                shareDataAndCommUtil.saveUserProfilePic(
+                                    it.profileAvatarThumbnail ?: ""
+                                )
+                            }
+                        }
+                    }
+            } ?: run {
+                shareDataAndCommUtil.saveLoggedInMobileNumber("")
+                shareDataAndCommUtil.saveLoggedInUserName("")
+                shareDataAndCommUtil.saveUserProfilePic("")
+            }
 
+        }
+    }
     private fun formatDataSharedAndOpenChat(intent: Intent) {
         if (intent.type?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
             handleSendImage(intent) // Handle single image being sent
@@ -309,7 +343,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun isUserLoggedIn(): Boolean {
-       return FirebaseAuth.getInstance().currentUser != null
+        return FirebaseAuth.getInstance().currentUser != null
     }
 
     private fun lookForNewChatMessages() {
@@ -330,12 +364,14 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
                 Log.d("MainActivity", "redirecting to attendance page 2")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -442,7 +478,7 @@ class MainActivity : AppCompatActivity(),
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
 
         var fragmentholder: Fragment? =
-            navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
+            navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
             handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
@@ -715,7 +751,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun setData(bundle: Bundle) {
-        this.bundle = bundle;
+        this.bundle = bundle
     }
 
     override fun getData(): Bundle {

@@ -106,6 +106,7 @@ class OnboardingFragmentNew : Fragment(){
         activity?.let {
             onboarding_pager.adapter =
                     MutlifragmentAdapter(it)
+            appBar.setSteps("Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}")
             steps.text =
                     "Step 1/${(onboarding_pager.adapter as MutlifragmentAdapter).fragmentArr.size}"
         }
@@ -114,7 +115,8 @@ class OnboardingFragmentNew : Fragment(){
                 saveDataToDB(onboarding_pager.currentItem)
 
                 onboarding_pager.currentItem = onboarding_pager.currentItem + 1
-                steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+                //steps.text = "Steps ${onboarding_pager.currentItem + 1}/9"
+                appBar.setSteps("Steps ${onboarding_pager.currentItem + 1}/9")
 
                 if (onboarding_pager.currentItem == 8) {
                     val fragmentAdapter = onboarding_pager.adapter as MutlifragmentAdapter
@@ -140,6 +142,19 @@ class OnboardingFragmentNew : Fragment(){
                     activity?.onBackPressed()
                 }
         }
+
+        appBar.setBackButtonListener(object: View.OnClickListener {
+
+            override fun onClick(p0: View?) {
+                if (!isFragmentLastStateFound())
+                    if (onboarding_pager.currentItem != 0)
+                        onboarding_pager.currentItem = onboarding_pager.currentItem - 1
+                    else {
+                        hideKeyboard()
+                        activity?.onBackPressed()
+                    }
+            }
+        })
 
 
         onboarding_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
