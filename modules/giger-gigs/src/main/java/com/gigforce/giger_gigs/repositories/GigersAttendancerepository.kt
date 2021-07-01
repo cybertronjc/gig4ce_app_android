@@ -80,30 +80,6 @@ class GigersAttendanceRepository constructor(
         )
 
 
-    suspend fun markUserAttendanceAsGigDeclined(
-        gigId: String,
-        reason: String
-    ) = gigsCollectionRef.document(gigId)
-        .updateOrThrow(
-            mapOf(
-                "attendance.checkInAddress" to "",
-                "attendance.checkInImage" to null,
-                "attendance.checkInLat" to null,
-                "attendance.checkInLong" to null,
-                "attendance.checkInLocationAccuracy" to null,
-                "attendance.checkInLocationFake" to false,
-                "attendance.checkInGeoPoint" to null,
-                "attendance.checkInMarked" to false,
-                "attendance.checkInDistanceBetweenGigAndUser" to -1.0f,
-                "attendance.checkInSource" to "tl_app",
-                "attendance.checkInDataOverWrittenBy" to "tl_app",
-                "gigStatus" to GigStatus.DECLINED.getStatusString(),
-                "declinedBy" to firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow().uid,
-                "declineReason" to reason
-            )
-        )
-
-
     companion object {
         const val TAG = "GigersAttendanceRepository"
     }
