@@ -29,8 +29,9 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
                         super.bind(FeatureLayoutDVM("", "", emptyList()))
                     } else {
                         val list: List<Any> = it.slice(IntRange(0, itemToShow - 1))
-                        list.toMutableList().add(SeeMoreItemDVM("", "", data.seeMoreNav))
-                        super.bind(FeatureLayoutDVM(data.image,data.title, list))
+                        val list1 = list.toMutableList()
+                        list1.add(SeeMoreItemDVM("", "", data.seeMoreNav))
+                        super.bind(FeatureLayoutDVM(data.image,data.title, list1))
 
                     }
                 } else {

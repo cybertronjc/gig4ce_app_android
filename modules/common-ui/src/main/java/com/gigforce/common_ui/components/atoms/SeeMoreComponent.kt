@@ -26,7 +26,7 @@ class SeeMoreComponent(context: Context, attrs: AttributeSet?) :
     init {
         this.layoutParams =
             FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         view = LayoutInflater.from(context).inflate(R.layout.see_more_view_item, this, true)
