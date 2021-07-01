@@ -46,11 +46,13 @@ class AppProfilePicComponent(context: Context, attrs: AttributeSet?) : FrameLayo
     }
 
     private fun setImageToProfilePic(image: String) {
-        val profilePicRef: StorageReference =
-            FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
-        GlideApp.with(context)
-            .load(profilePicRef)
-            .into(profileImg)
+        if(image.isNotBlank()) {
+            val profilePicRef: StorageReference =
+                FirebaseStorage.getInstance().reference.child("profile_pics").child(image)
+            GlideApp.with(context)
+                .load(profilePicRef)
+                .into(profileImg)
+        }
     }
 
     override fun onClick(v: View?) {
