@@ -12,8 +12,7 @@ import com.gigforce.core.datamodels.learning.Course
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -36,24 +35,42 @@ class LearningDataRepository @Inject constructor() :
     }
 
     private fun loaLearningData() {
-        GlobalScope.launch {
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+        scope.launch {
             val _data = ArrayList<FeatureItemCardDVM>()
             val allCourses1 = getAllCourses().forEach { item->_data.add(
-                FeatureItemCardDVM(
-                    id = item.id,
-                    title = item.name,
-                    subtitle = item.level,
-                    image = item.coverPicture,
-                    navPath = "learning/main",
-                    args = bundleOf(
-                        StringConstants.COURSE_ID.value to item?.id
-                    ),
-                    priority = item.priority
-                )
+                    FeatureItemCardDVM(
+                            id = item.id,
+                            title = item.name,
+                            subtitle = item.level,
+                            image = item.coverPicture,
+                            navPath = "learning/main",
+                            args = bundleOf(
+                                    StringConstants.COURSE_ID.value to item?.id
+                            ),
+                            priority = item.priority
+                    )
             ) }
             allCourses.value = _data
-
         }
+//        GlobalScope.launch {
+//            val _data = ArrayList<FeatureItemCardDVM>()
+//            val allCourses1 = getAllCourses().forEach { item->_data.add(
+//                FeatureItemCardDVM(
+//                    id = item.id,
+//                    title = item.name,
+//                    subtitle = item.level,
+//                    image = item.coverPicture,
+//                    navPath = "learning/main",
+//                    args = bundleOf(
+//                        StringConstants.COURSE_ID.value to item?.id
+//                    ),
+//                    priority = item.priority
+//                )
+//            ) }
+//            allCourses.value = _data
+//
+//        }
     }
 
     companion object {
