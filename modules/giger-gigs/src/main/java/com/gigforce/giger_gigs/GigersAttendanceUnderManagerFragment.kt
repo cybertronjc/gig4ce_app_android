@@ -334,8 +334,8 @@ class GigersAttendanceUnderManagerFragment : Fragment(), AttendanceSwipeHandler.
     ) = viewBinding.apply {
 
         swipeTouchHandler.attendanceSwipeControlsEnabled = attendanceSwipeControlsEnabled
-        swipeTouchHandler.enablePresentSwipeAction = enablePresentSwipeAction
-        swipeTouchHandler.enableDeclineSwipeAction = enableDeclineSwipeAction
+        swipeTouchHandler.markPresentSwipeActionEnabled = enablePresentSwipeAction
+        swipeTouchHandler.declineSwipeActionEnabled = enableDeclineSwipeAction
 
         this.gigersUnderManagerMainLayout.errorInfoLayout.gone()
         this.gigersUnderManagerMainLayout.apply {
