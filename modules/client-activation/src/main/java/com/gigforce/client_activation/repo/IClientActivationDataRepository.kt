@@ -11,13 +11,13 @@ import javax.inject.Inject
 
 interface IClientActivationDataRepository {
     fun loadData()
-    fun getData(): LiveData<List<FeatureItemCardDVM>>
+    fun getData(): LiveData<List<Any>>
 }
 
 class ClientActivationDataRepository @Inject constructor():
     IClientActivationDataRepository {
 
-    private var data: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
+    private var data: MutableLiveData<List<Any>> = MutableLiveData()
 
     init {
         loadData()
@@ -44,7 +44,7 @@ class ClientActivationDataRepository @Inject constructor():
         }
     }
 
-    override fun getData(): LiveData<List<FeatureItemCardDVM>> {
+    override fun getData(): LiveData<List<Any>> {
         return data
     }
 
