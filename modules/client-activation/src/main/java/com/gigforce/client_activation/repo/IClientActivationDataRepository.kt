@@ -25,7 +25,7 @@ class ClientActivationDataRepository @Inject constructor():
     }
 
     override fun loadData() {
-        FirebaseFirestore.getInstance().collection("Job_Profiles").orderBy("isActive").addSnapshotListener { value, error ->
+        FirebaseFirestore.getInstance().collection("Job_Profiles").whereEqualTo("isActive", true).addSnapshotListener { value, error ->
             val doc = value?.documents
             doc?.let {
                 val _data = ArrayList<FeatureItemCardDVM>()

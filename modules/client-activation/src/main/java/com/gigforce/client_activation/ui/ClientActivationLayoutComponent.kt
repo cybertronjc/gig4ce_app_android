@@ -23,7 +23,7 @@ class ClientActivationLayoutComponent(context: Context, attrs: AttributeSet?) :
     override fun bind(data: Any?) {
         if(data is ClientActivationLayoutDVM){
             repository.getData().observeForever {
-                if (it.size > data.showItem) {
+                if (it.isNotEmpty()) {
                     var itemToShow = data.showItem
                     if (itemToShow == 0) {
                         super.bind(FeatureLayoutDVM("", "", emptyList()))
