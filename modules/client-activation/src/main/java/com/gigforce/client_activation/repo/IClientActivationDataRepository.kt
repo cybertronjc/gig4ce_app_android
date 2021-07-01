@@ -6,18 +6,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
 import com.gigforce.core.StringConstants
+import com.gigforce.core.analytics.ClientActivationEvents
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 interface IClientActivationDataRepository {
     fun loadData()
-    fun getData(): LiveData<List<FeatureItemCardDVM>>
+    fun getData(): LiveData<List<Any>>
 }
 
 class ClientActivationDataRepository @Inject constructor():
     IClientActivationDataRepository {
 
-    private var data: MutableLiveData<List<FeatureItemCardDVM>> = MutableLiveData()
+    private var data: MutableLiveData<List<Any>> = MutableLiveData()
 
     init {
         loadData()
@@ -30,10 +31,15 @@ class ClientActivationDataRepository @Inject constructor():
                 val _data = ArrayList<FeatureItemCardDVM>()
                 for (item in it) {
                     val title = item?.get("cardTitle") as? String ?: "-"
+                    val onlyTitle = item?.get("title") as? String ?: "-"
                     val cardImage = item?.get("cardImage") as? String
                     val priority = item?.get("priority") as? Int ?: 0
                     _data.add(FeatureItemCardDVM(id=item.id,title = title, image = cardImage, navPath = "client_activation",args = bundleOf(
-                        StringConstants.JOB_PROFILE_ID.value to item?.id),priority = priority))
+                        StringConstants.JOB_PROFILE_ID.value to item?.id),priority = priority, eventName = onlyTitle +"_"+ ClientActivationEvents.EVENT_USER_CLICKED, props = mapOf(
+                        "id" to item.id,
+                        "title" to onlyTitle,
+                        "screen_source" to "Client Activation"
+                    )))
                 }
                 _data.sortBy { it.priority }
                 data.value = _data
@@ -44,7 +50,7 @@ class ClientActivationDataRepository @Inject constructor():
         }
     }
 
-    override fun getData(): LiveData<List<FeatureItemCardDVM>> {
+    override fun getData(): LiveData<List<Any>> {
         return data
     }
 

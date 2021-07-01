@@ -3,6 +3,7 @@ package com.gigforce.giger_app
 import android.content.Context
 import android.view.View
 import com.gigforce.common_ui.components.atoms.OtherFeatureItemComponent
+import com.gigforce.common_ui.components.atoms.SeeMoreComponent
 import com.gigforce.common_ui.components.cells.*
 import com.gigforce.common_ui.components.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.components.molecules.FeatureItemCardComponent
@@ -29,6 +30,8 @@ class LandingViewTypeLoader : IViewTypeLoader {
             CommonViewTypes.VIEW_VIDEOS_ITEM_CARD2 -> VideoPlayCardComponent(context, null)
             CommonViewTypes.VIEW_OTHER_FEATURE -> OtherFeatureComponent(context, null)
             CommonViewTypes.VIEW_OTHER_FEATURE_ITEM -> OtherFeatureItemComponent(context, null)
+            CommonViewTypes.VIEW_SEE_MORE_ITEM -> SeeMoreComponent(context, null)
+
             else -> null
         }
     }
