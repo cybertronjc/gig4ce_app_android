@@ -3,7 +3,7 @@ package com.gigforce.giger_app
 import android.content.Context
 import android.view.View
 import com.gigforce.common_ui.components.cells.*
-import com.gigforce.common_ui.core.CommonViewTypes
+import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.common_ui.components.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.components.molecules.FeatureItemCardComponent
 import com.gigforce.common_ui.components.molecules.VideoItemCardComponent
