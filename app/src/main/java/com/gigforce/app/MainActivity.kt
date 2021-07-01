@@ -36,6 +36,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
@@ -645,10 +646,11 @@ class MainActivity : AppCompatActivity(),
                 }
                 RESULT_IN_APP_UPDATE_FAILED -> {
                     //if you want to request the update again just call checkUpdate()
-                    Log.d("Update", "" + "Update Failure")
+                    Log.d("Update", "" + "Update Internal Failure")
                     //  handle update failure
                     //showToast("Update Failure Internal", this)
                     eventTracker.pushEvent(TrackingEventArgs("Update Failed", null))
+                    CrashlyticsLogger.d("InAppUpdate", "Update Internal Failure" )
                 }
             }
         }
@@ -672,6 +674,11 @@ class MainActivity : AppCompatActivity(),
                     showToast("Update download in progress", this)
                     // If an in-app update is already running, resume the update.
                     requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                }
+                else {
+                    //Update failed
+                    eventTracker.pushEvent(TrackingEventArgs("Update Failed on Resume", null))
+                    CrashlyticsLogger.d("InAppUpdate", "Update Failed on Resume , ${appUpdateInfo.installStatus()}")
                 }
 
             }
