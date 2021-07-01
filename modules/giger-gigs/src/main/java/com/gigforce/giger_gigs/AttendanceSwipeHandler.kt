@@ -32,6 +32,7 @@ class AttendanceSwipeHandler(
                 return when {
                     "Present".equals(gigData.attendanceStatus, true) && enableDeclineSwipeAction-> ItemTouchHelper.LEFT
                     "Declined".equals(gigData.attendanceStatus, true) && enablePresentSwipeAction -> ItemTouchHelper.RIGHT
+                    "Absent".equals(gigData.attendanceStatus, true) && enablePresentSwipeAction && enableDeclineSwipeAction -> ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
                     "Absent".equals(gigData.attendanceStatus, true) && enablePresentSwipeAction -> ItemTouchHelper.RIGHT
                     "Absent".equals(gigData.attendanceStatus, true) && enableDeclineSwipeAction -> ItemTouchHelper.LEFT
                     else -> 0 //Disabling swipe
