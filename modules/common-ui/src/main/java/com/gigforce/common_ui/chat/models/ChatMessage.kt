@@ -1,6 +1,7 @@
 package com.gigforce.common_ui.chat.models
 
 import android.graphics.Bitmap
+import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
@@ -123,6 +124,10 @@ class ChatMessage(
     @get:PropertyName("groupId")
     @set:PropertyName("groupId")
     var groupId: String = "",
+
+    @get:PropertyName("ImageMetaData")
+    @set:PropertyName("ImageMetaData")
+    var imageMetaData: ImageMetaData? = null,
 
     @get:Exclude
     @set:Exclude

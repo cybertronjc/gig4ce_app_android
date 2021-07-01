@@ -1118,6 +1118,7 @@ class ChatPageFragment : Fragment(),
             )
         else {
             groupChatViewModel.sendNewImageMessage(
+                    context = requireContext().applicationContext,
                     text = "",
                     uri = uri
             )
