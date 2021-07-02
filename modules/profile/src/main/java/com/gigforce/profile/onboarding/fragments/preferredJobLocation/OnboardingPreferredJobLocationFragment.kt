@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.ProfilePropArgs
 import com.gigforce.core.TrackingEventArgs
@@ -233,6 +234,11 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 confirmSubCityList.clear()
                 selectedCity?.subLocation = confirmSubCityList
                 setSelectedCityTracker()
+                return false
+            }
+        } else {
+            if (confirmSubCityList.size > 3){
+                showToast("You cannot select more than 3 localities")
                 return false
             }
         }
