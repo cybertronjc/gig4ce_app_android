@@ -237,7 +237,7 @@ class MainActivity : AppCompatActivity(),
                                 )
                                 shareDataAndCommUtil.saveLoggedInUserName(it.name)
                                 shareDataAndCommUtil.saveUserProfilePic(
-                                    it.profileAvatarThumbnail ?: ""
+                                    if(it.profileAvatarName.isNotEmpty())it.profileAvatarName else (it.profileAvatarThumbnail?:"")
                                 )
                             }
                         }

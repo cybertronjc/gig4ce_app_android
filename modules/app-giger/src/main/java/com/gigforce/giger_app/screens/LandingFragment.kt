@@ -32,16 +32,5 @@ class LandingFragment : Fragment() {
         viewModel._allLandingData.observe(viewLifecycleOwner, Observer {
             landing_rv.collection = it
         })
-        listeners()
     }
-
-
-
-    private fun listeners() {
-        app_bar.setOnClickListener {
-            navigation.navigateTo("bottom_sheet")
-        }
-
-    }
-
 }
