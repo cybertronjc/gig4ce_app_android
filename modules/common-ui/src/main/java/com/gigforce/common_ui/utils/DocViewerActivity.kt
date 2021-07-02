@@ -9,11 +9,13 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
+import kotlinx.android.synthetic.main.acitivity_doc_viewer.*
 import java.net.URLEncoder
 
 class DocViewerActivity : AppCompatActivity() {
     private var pdfView: WebView? = null
     private var progress: ProgressBar? = null
+    var pageTitle: String? = null
     private val removePdfTopIcon =
         "javascript:(function() {" + "document.querySelector('[role=\"toolbar\"]').remove();})()"
 
@@ -23,7 +25,19 @@ class DocViewerActivity : AppCompatActivity() {
         pdfView = findViewById(R.id.webview)
         progress = findViewById(R.id.pb_doc)
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
+        pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
         showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
+        setListeners()
+    }
+
+    private fun setListeners() {
+        toolbarBack.setOnClickListener {
+            onBackPressed()
+        }
+        toolbarTitle.text = pageTitle
+        accept.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun showPdfFile(imageString: String?, isImage: Boolean, isPdf: Boolean) {

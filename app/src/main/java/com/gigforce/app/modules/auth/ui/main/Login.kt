@@ -309,6 +309,7 @@ class Login : Fragment() {
                 StringConstants.DOC_URL.value,
                 "https://gigforce.in/terms-of-use "
             )
+            docIntent.putExtra(StringConstants.WEB_TITLE.value, "Terms and Conditions")
             activity?.startActivity(docIntent)
         }
 
