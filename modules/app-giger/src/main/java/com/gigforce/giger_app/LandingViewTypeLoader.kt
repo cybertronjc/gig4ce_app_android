@@ -9,7 +9,6 @@ import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.common_ui.components.molecules.FeatureItemCard2Component
 import com.gigforce.common_ui.components.molecules.FeatureItemCardComponent
 import com.gigforce.common_ui.components.molecules.VideoItemCardComponent
-import com.gigforce.common_ui.core.CommonViewTypes
 import com.gigforce.core.IViewTypeLoader
 
 class LandingViewTypeLoader : IViewTypeLoader {
