@@ -20,11 +20,14 @@ class LearningLayoutComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var repository: ILearningDataRepository
 
-
     override fun bind(data: Any?) {
         if (data is LearningLayoutDVM) {
             repository.getData().observeForever {
+                try{
                 super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it))
+                }catch(e:Exception){
+
+                }
             }
         }
     }

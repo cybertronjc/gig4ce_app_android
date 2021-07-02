@@ -72,7 +72,11 @@ open class FeatureLayoutComponent(context: Context, attrs: AttributeSet?) :
     }
 
     open fun setCollection(data: List<Any>) {
-        featured_rv.collection = data
+        try {
+            featured_rv.collection = data
+        }catch (e : Exception){
+
+        }
     }
 
     fun enableSeemoreButton() {
