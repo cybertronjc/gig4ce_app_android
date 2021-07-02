@@ -454,13 +454,12 @@
     <fragment
         android:id="@+id/addDrivingLicenseInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
-        android:label="fragment_add_driving_license_info"
-        tools:layout="@layout/fragment_add_driving_license_info" />
+        android:label="fragment_add_driving_license_info" />
     <fragment
         android:id="@+id/addPanCardInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment"
         android:label="fragment_add_pan_card_info"
-        tools:layout="@layout/fragment_add_pan_card_info" />
+        tools:layout="@layout/fragment_add_pan_card_info_2" />
     <fragment
         android:id="@+id/addAadharCardInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment"
@@ -469,7 +468,7 @@
         android:id="@+id/addBankDetailsInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment"
         android:label="fragment_add_bank_details_info"
-        tools:layout="@layout/fragment_add_bank_details_info" />
+        tools:layout="@layout/fragment_add_bank_details_info_2" />
     <dialog
         android:id="@+id/editAadharInfoBottomSheet"
         android:name="com.gigforce.verification.gigerVerfication.aadharCard.EditAadharInfoBottomSheet"
@@ -712,11 +711,11 @@
         android:name="com.gigforce.learning.assessment.questionnaire.QuestionnaireFragment"
         android:label="application_questionnaire"
         tools:layout="@layout/layout_questionnaire_fragment" />
-    <fragment
-        android:id="@+id/fragment_upload_dl_cl_act"
-        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.UploadDrivingLicense"
-        android:label="fragment_upload_dl_cl_act"
-        tools:layout="@layout/layout_fragment_client_activation" />
+<!--    <fragment-->
+<!--        android:id="@+id/fragment_upload_dl_cl_act"-->
+<!--        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.UploadDrivingLicense"-->
+<!--        android:label="fragment_upload_dl_cl_act"-->
+<!--        tools:layout="@layout/layout_fragment_client_activation" />-->
 
     <fragment
         android:id="@+id/fragment_gig_activation"
@@ -887,6 +886,18 @@
         android:id="@+id/uploadPanCard"
         android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
         android:label="UploadPanCard" />
+    <fragment
+        android:id="@+id/gigerAttendanceUnderManagerFragment"
+        android:name="com.gigforce.giger_gigs.GigersAttendanceUnderManagerFragment"
+        android:label="Giger Attendance under Mgr" />
+    <fragment
+        android:id="@+id/invoicesListFragment"
+        android:name="com.gigforce.wallet.InvoicesListFragment"
+        android:label="InvoicesListFragment" />
+    <fragment
+        android:id="@+id/messageViewingInfoFragment"
+        android:name="com.gigforce.modules.feature_chat.screens.GroupMessageViewInfoFragment"
+        android:label="Message Viewing" />
 
 
 </navigation>

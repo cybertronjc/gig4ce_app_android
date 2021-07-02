@@ -1,5 +1,6 @@
 package com.gigforce.common_ui.chat
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +29,7 @@ class ChatHeadersViewModel constructor(
     private val uid = FirebaseAuth.getInstance().currentUser?.uid!!
     private var firebaseDB = FirebaseFirestore.getInstance()
     private var chatHeadersSnapshotListener: ListenerRegistration? = null
+    var sharedFiles : Bundle? = null
 
     init {
         startWatchingChatHeaders()

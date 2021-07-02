@@ -87,7 +87,9 @@ class ClientActiExploreAdapter(
             val charString = constraint.toString()
 
             if (charString.isEmpty()) {
-                filteredJobList = originalJobList
+                val filterResults = FilterResults()
+                filterResults.values = originalJobList
+                return filterResults
             } else {
                 val filteredList: MutableList<JpExplore> = mutableListOf()
                 for (job in originalJobList) {
@@ -97,12 +99,13 @@ class ClientActiExploreAdapter(
                         )
                     ) filteredList.add(job)
                 }
-                filteredJobList = filteredList
+
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
             }
 
-            val filterResults = FilterResults()
-            filterResults.values = filteredJobList
-            return filterResults
+
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {

@@ -16,6 +16,7 @@ import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
 import com.gigforce.core.navigation.INavigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.moe.pushlibrary.MoEHelper
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,6 +67,7 @@ class AuthFlowFragment : Fragment() {
             eventTracker.setProfileProperty(ProfilePropArgs("Mobile Number", currentUser?.phoneNumber.toString()))
             eventTracker.setUserProperty(mapOf("mobile_number" to currentUser?.phoneNumber.toString(), "firebase_uid" to currentUser?.uid.toString()))
             eventTracker.setProfileProperty(ProfilePropArgs("Firebase UID", currentUser?.uid.toString()))
+            eventTracker.setProfileProperty(ProfilePropArgs("Mobile Number", currentUser?.phoneNumber.toString()))
             Log.d("navigate", "navigate to onboarding loader")
             navigation.popAllBackStates()
             navigation.navigateTo("loader_screen")

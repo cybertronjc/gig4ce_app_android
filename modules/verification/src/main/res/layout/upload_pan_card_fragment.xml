@@ -79,7 +79,7 @@
 
             <include
                 android:id="@+id/panMainLayout1"
-                layout="@layout/fragment_add_pan_card_info_main"
+                layout="@layout/fragment_add_pan_card_info_main_2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
@@ -90,7 +90,7 @@
 
             <include
                 android:id="@+id/panViewLayout1"
-                layout="@layout/fragment_add_pan_card_info_view"
+                layout="@layout/fragment_add_pan_card_info_view_2"
                 android:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

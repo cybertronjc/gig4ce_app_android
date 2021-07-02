@@ -105,14 +105,17 @@ class SyncContactsService : Service(), Loader.OnLoadCompleteListener<Cursor> {
                     cursor.getColumnIndex((ContactsContract.Contacts._ID))
             )
 
-            contacts.add(
+            if(phone != null) {
+
+                contacts.add(
                     ContactModel(
-                            id = null,
-                            mobile = cleanPhoneNo(phone),
-                            name = name,
-                            contactId = contactId
+                        id = null,
+                        mobile = cleanPhoneNo(phone),
+                        name = name,
+                        contactId = contactId
                     )
-            )
+                )
+            }
         }
 
         return contacts

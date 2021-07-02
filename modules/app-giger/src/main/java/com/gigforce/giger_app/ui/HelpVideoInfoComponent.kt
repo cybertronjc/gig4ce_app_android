@@ -2,9 +2,11 @@ package com.gigforce.giger_app.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
+import com.gigforce.common_ui.viewdatamodels.FeatureLayoutDVM
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -25,31 +27,34 @@ class HelpVideoInfoComponent(context: Context, attrs: AttributeSet?) :
 
     init {
         this.setOrientationAndRows(1, 1)
-        this.setSectionTitle("Help")
-        this.setSectionIcon()
     }
 
     override fun bind(data: Any?) {
         if (data is HelpVideosSectionDVM) {
             repository.getData().observeForever {
-                if (it.size > data.showVideo) {
+                if (it.isNotEmpty()) {
                     var videoToShow = data.showVideo
                     if (videoToShow == 0) {
-                        this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
+                        super.bind(FeatureLayoutDVM("", "", emptyList()))
                     } else {
-                        this.findViewById<ConstraintLayout>(R.id.top_cl).visible()
                         if(it.size>videoToShow){
                             enableSeemoreButton()
                         }
-                        this.setCollection(it.slice(IntRange(0, videoToShow - 1)))
+                        super.bind(FeatureLayoutDVM(data.imageUrl, data.title, it.slice(IntRange(0, videoToShow - 1))))
 
                     }
                 } else {
-                    this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
+                    super.bind(FeatureLayoutDVM("", "", emptyList()))
                 }
             }
 
             this.findViewById<TextView>(R.id.layout_title).setOnClickListener {
+                data.navPath?.let {
+                    navigation.navigateTo(it)
+                }
+            }
+
+            this.findViewById<View>(R.id.see_more_btn).setOnClickListener {
                 data.navPath?.let {
                     navigation.navigateTo(it)
                 }

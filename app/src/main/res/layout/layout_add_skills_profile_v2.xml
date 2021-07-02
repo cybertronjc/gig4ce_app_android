@@ -127,7 +127,7 @@
                 app:chipIcon="@drawable/ic_landinghome_search"
                 app:chipIconEnabled="true"
                 app:chipStrokeWidth="1dp"
-                app:drawableTint="@color/app_chip_bck_colors" />
+                app:drawableTint="@color/app_chip_bck_colors_ui" />
         </com.google.android.material.chip.ChipGroup>
 
         <RelativeLayout

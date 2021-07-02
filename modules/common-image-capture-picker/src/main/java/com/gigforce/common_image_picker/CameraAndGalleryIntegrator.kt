@@ -77,7 +77,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
             activity
         }
 
-        val intents = ImagePicker.getCaptureImageIntentsOnly(context)
+        val intents = ImagePicker.getCaptureImageIntentsOnly(context) ?: return
         if(openFrontCamera){
             when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> {
@@ -177,7 +177,7 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
         callback.imageResult(outputFileUri)
     }
 
-    private fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
+    fun startImageCropper(uri: Uri, imageCropOptions: ImageCropOptions) {
         Log.v("Start Crop", "started")
         //can use this for a new name every time
 
@@ -201,7 +201,6 @@ class CameraAndGalleryIntegrator : ClickOrSelectImageBottomSheet.OnPickOrCapture
 
         val size = getImageDimensions(uri)
         uCrop.withAspectRatio(size.width.toFloat(), size.height.toFloat())
-
         uCrop.withOptions(getCropOptions())
 
         if (fragment != null) {

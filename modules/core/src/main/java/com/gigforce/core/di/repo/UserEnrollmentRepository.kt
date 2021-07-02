@@ -136,7 +136,8 @@ class UserEnrollmentRepository @Inject constructor(
         userId: String,
         latitude: Double,
         longitude: Double,
-        fullAddress: String
+        fullAddress: String,
+        editedUsingMasterOtp: Boolean = false
     ) {
         db.collection(COLLECTION_NAME)
             .document(getUID())
@@ -149,7 +150,8 @@ class UserEnrollmentRepository @Inject constructor(
                             latitude = latitude,
                             longitude = longitude,
                             completeAddress = fullAddress,
-                            entryType = "edit_by_ambassador"
+                            entryType = "edit_by_ambassador",
+                            editedUsingMasterOtp = editedUsingMasterOtp
                         )
                     )
                 )

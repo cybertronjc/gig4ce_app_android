@@ -57,8 +57,8 @@ enum class TextColorOptions(val value: Int) {
 
 @AndroidEntryPoint
 open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
-        FrameLayout(context, attrs),
-        IViewHolder {
+    FrameLayout(context, attrs),
+    IViewHolder {
 
     private var buttonClickListener: OnClickListener? = null
     private var secondButtonClickListener: OnClickListener? = null
@@ -66,16 +66,28 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     private var textColorOption: TextColorOptions = TextColorOptions.Default
 
     @Inject
-    lateinit var navigation : INavigation
+    lateinit var navigation: INavigation
+
     init {
         this.layoutParams =
-                LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         LayoutInflater.from(context).inflate(R.layout.cell_standard_action_card, this, true)
 
         attrs?.let {
-            val styledAttributeSet = context.obtainStyledAttributes(it, R.styleable.StandardActionCardComponent, 0, 0)
-            this.bgColorOption = ColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_bgcolor, 0))
-            this.textColorOption = TextColorOptions.getByValue(styledAttributeSet.getInt(R.styleable.StandardActionCardComponent_textcolor, 0))
+            val styledAttributeSet =
+                context.obtainStyledAttributes(it, R.styleable.StandardActionCardComponent, 0, 0)
+            this.bgColorOption = ColorOptions.getByValue(
+                styledAttributeSet.getInt(
+                    R.styleable.StandardActionCardComponent_bgcolor,
+                    0
+                )
+            )
+            this.textColorOption = TextColorOptions.getByValue(
+                styledAttributeSet.getInt(
+                    R.styleable.StandardActionCardComponent_textcolor,
+                    0
+                )
+            )
             backgroundColor = this.bgColorOption
             textColor = this.textColorOption
 
@@ -128,31 +140,39 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         this.secondButtonClickListener = secondButtonClickListener
     }
 
-    fun setImageFromUrl(url: String) {
+    fun setImageFromUrl(url: String, imageType: String) {
         GlideApp.with(context)
-                .load(url)
-                .into(image)
+            .load(url)
+            .into(if (imageType.equals("image")) image else icon)
     }
 
-    fun setImageFromFirebaseUrl(storageReference: StorageReference) {
+    fun setImageFromFirebaseUrl(storageReference: StorageReference, imageType: String) {
         GlideApp.with(context)
-                .load(storageReference)
-                .into(image)
+            .load(storageReference)
+            .into(if (imageType.equals("image")) image else icon)
     }
 
     fun setImage(data: StandardActionCardDVM) {
 
-        if (data.image is Int && data.image !=-1) {
-            image.setImageResource(data.image)
+        if(data.imageType.equals("image"))
+        {
+            image.visible()
+            icon.gone()
+        } else {
+            image.gone()
+            icon.visible()
         }
-        else {
+
+        if (data.image is Int && data.image != -1) {
+            image.setImageResource(data.image)
+        } else {
             data.imageUrl?.let {
-                if(it.isNotBlank() && it.isNotEmpty()) {
+                if (it.isNotBlank() && it.isNotEmpty()) {
                     if (it.contains("http") || it.contains("https")) {
-                        setImageFromUrl(it)
+                        setImageFromUrl(it, data.imageType)
                     } else {
                         val gsReference = FirebaseStorage.getInstance().getReferenceFromUrl(it)
-                        setImageFromFirebaseUrl(gsReference)
+                        setImageFromFirebaseUrl(gsReference,data.imageType)
                     }
                 }
                 return
@@ -164,10 +184,10 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
         get() = applyMargin
         set(value) {
             val params =
-                    LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.WRAP_CONTENT
-                    )
+                LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT
+                )
             if (value) {
                 val left: Int = getPixelValue(16)//context.resources.getDimension(R.dimen.size4))
                 val top: Int = getPixelValue(16)
@@ -188,7 +208,6 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
     fun getPixelValue(value: Int): Int {
         return (value * Resources.getSystem().displayMetrics.density).toInt()
     }
-
 
 
     private fun playvideo(link: String?) {
@@ -217,18 +236,19 @@ open class StandardActionCardComponent(context: Context, attrs: AttributeSet?) :
             data.action1?.let {
                 primary_action.visible()
                 primary_action.text = it.title ?: ""
-                primary_action.setOnClickListener{it2->
-                    it.type?.let {it1->
-                        when(it1){
-                            "youtube_video"->playvideo(it.link)
-                            "navigation" -> navigation.navigateTo(it.navPath?:"")
+                primary_action.setOnClickListener { it2 ->
+                    it.type?.let { it1 ->
+                        when (it1) {
+                            "youtube_video" -> playvideo(it.link)
+                            "navigation" -> navigation.navigateTo(it.navPath ?: "",data.bundle)
                         }
                     }
                 }
             } ?: primary_action.gone()
 
             data.action2?.let {
-                secondary_action.isVisible = it.title?.isNotEmpty()?:false && it.title?.isNotBlank()?:false
+                secondary_action.isVisible =
+                    it.title?.isNotEmpty() ?: false && it.title?.isNotBlank() ?: false
                 secondary_action.text = it.title ?: ""
             } ?: secondary_action.gone()
 

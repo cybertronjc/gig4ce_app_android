@@ -10,12 +10,11 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCardDVM
-import com.gigforce.core.INavArgsProvider
-import com.gigforce.core.IViewHolder
-import com.gigforce.core.NavArgs
+import com.gigforce.core.*
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
+import com.google.android.exoplayer2.analytics.AnalyticsListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.feature_item_card.view.*
 import javax.inject.Inject
@@ -41,6 +40,9 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
     @Inject
     lateinit var navigation: INavigation
 
+    @Inject
+    lateinit var eventTracker: IEventTracker
+
     var data:Any? = null
 
     override fun getNavArgs():NavArgs? {
@@ -57,6 +59,10 @@ open class FeatureItemCardComponent(context: Context, attrs: AttributeSet?) :
             getNavArgs() ?. let {
                 this.setOnClickListener{ view ->
                     navigation.navigateTo(it.navPath, it.args)
+                    data.eventName?.let {
+                        eventTracker.pushEvent(TrackingEventArgs(it, data.props))
+                    }
+
                 }
             }
             if(data.isSelectedView) borderFrameLayout.visible() else borderFrameLayout.gone()

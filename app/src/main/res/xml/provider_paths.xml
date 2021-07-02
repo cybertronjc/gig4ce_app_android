@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <root-path
+        name="root"
+        paht="."
+        />
     <external-path
         name="external_files"
         path="." />
+    <external-files-path
+        name="my_images"
+        path="/" />
     <files-path
         name="name"
         path="path" />

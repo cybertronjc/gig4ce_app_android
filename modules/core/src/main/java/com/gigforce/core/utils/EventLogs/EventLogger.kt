@@ -22,6 +22,6 @@ class EventLogger (context: Context) {
 
     fun setUserProperty(name: String, value: String){
         mFirebaseAnalytics.setUserProperty(name, value)
-        // todo: set into CleverTap As Well
+
     }
 }

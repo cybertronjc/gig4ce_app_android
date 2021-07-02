@@ -31,7 +31,6 @@ import com.gigforce.common_ui.viewmodels.gig.GigViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_gigs_list_for_decline.*
 import java.time.LocalDate
@@ -116,26 +115,23 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
 
         gigs_recycler_view.adapter = mAdapter
 
-        decline_slider_btn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-                override fun onSlideComplete(view: SlideToActView) {
+        decline_slider_btn.setOnClickListener {
 
-                    val selectedGig = mAdapter.getSelectedGig().map {
-                        it.gigId
-                    }
-                    if (selectedGig.isNotEmpty() && isAdded) {
-                        DeclineGigDialogFragment.launch(
-                            selectedGig,
-                            childFragmentManager,
-                            this@GigsListForDeclineBottomSheet
-                        )
-                    } else {
-                        view.resetSlider()
-                        Toast.makeText(requireContext(), "Please Select Gig", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
+            val selectedGig = mAdapter.getSelectedGig().map {
+                it.gigId
             }
+            if (selectedGig.isNotEmpty() && isAdded) {
+                DeclineGigDialogFragment.launch(
+                    selectedGig,
+                    childFragmentManager,
+                    this@GigsListForDeclineBottomSheet
+                )
+            } else {
+                Toast.makeText(requireContext(), "Please Select Gig", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
         PushDownAnim.setPushDownAnimTo(tv_okay_no_gigs_present)
             .setOnClickListener(View.OnClickListener {
                 dismiss()
@@ -168,9 +164,7 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
     private fun showTodaysGig(content: List<Gig>) {
         progress_bar.gone()
 
-        if (decline_slider_btn.isCompleted()) {
-            decline_slider_btn.resetSlider()
-        }
+
         disableSubmitButton()
 
         gig_message_tv.text = when {
@@ -215,22 +209,10 @@ class GigsListForDeclineBottomSheet : BottomSheetDialogFragment(),
 
     private fun disableSubmitButton() {
         decline_slider_btn.isEnabled = false
-
-        decline_slider_btn.textColor = ResourcesCompat.getColor(resources, R.color.warm_grey, null)
-        decline_slider_btn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        decline_slider_btn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun enableSubmitButton() {
         decline_slider_btn.isEnabled = true
-
-        decline_slider_btn.textColor = ResourcesCompat.getColor(resources, R.color.lipstick, null)
-        decline_slider_btn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        decline_slider_btn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     companion object {

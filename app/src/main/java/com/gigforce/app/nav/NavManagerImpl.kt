@@ -7,11 +7,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.giger_gigs.captureimage.AttendanceImageCaptureActivity
 import com.gigforce.giger_gigs.photocrop.PhotoCrop
-import com.gigforce.client_activation.client_activation.DocViewerActivity
+import com.gigforce.common_ui.utils.DocViewerActivity
 import com.gigforce.client_activation.client_activation.PlayVideoDialogWithUrl
 import com.gigforce.common_ui.BaseNavigationImpl
 import com.gigforce.common_ui.StringConstants
@@ -37,18 +38,18 @@ class NavManagerImpl @Inject constructor(
         this.registerRoute("login", R.id.Login)
         this.registerRoute("languageSelectFragment", R.id.languageSelectFragment)
         this.registerRoute("authFlowFragment", R.id.authFlowFragment)
-        this.registerRoute("rosterDayFragment", R.id.authFlowFragment)
+        this.registerRoute("rosterDayFragment", R.id.rosterDayFragment)
         this.registerRoute("bottom_sheet", R.id.bsFragment)
         this.registerRoute("loader_screen", R.id.onboardingLoaderfragment)
         this.registerRoute("all_videos", R.id.helpVideosFragment)
         this.registerRoute("main_home_screen", R.id.mainHomeScreen)
-        this.registerRoute("gigContactPersonBottomSheet",R.id.gigContactPersonBottomSheet)
-        this.registerRoute("landinghomefragment",R.id.landinghomefragment)
-        this.registerRoute("videoResumeFragment",R.id.videoResumeFragment)
-        this.registerRoute("fragment_explore_by_role",R.id.fragment_explore_by_role)
-        this.registerRoute("fragment_role_details",R.id.fragment_role_details)
-        this.registerRoute("payslipMonthlyFragment",R.id.payslipMonthlyFragment)
-        this.registerRoute("gigsListForDeclineBottomSheet",R.id.gigsListForDeclineBottomSheet)
+        this.registerRoute("gigContactPersonBottomSheet", R.id.gigContactPersonBottomSheet)
+        this.registerRoute("landinghomefragment", R.id.landinghomefragment)
+        this.registerRoute("videoResumeFragment", R.id.videoResumeFragment)
+        this.registerRoute("fragment_explore_by_role", R.id.fragment_explore_by_role)
+        this.registerRoute("fragment_role_details", R.id.fragment_role_details)
+        this.registerRoute("payslipMonthlyFragment", R.id.payslipMonthlyFragment)
+        this.registerRoute("gigsListForDeclineBottomSheet", R.id.gigsListForDeclineBottomSheet)
         this.registerRoute("explorebyrole", R.id.explore_by_role)
         this.registerRoute("jdscreen", R.id.jdScreenFragment)
         this.registerRoute("education_expended", R.id.educationExpandedFragment)
@@ -119,10 +120,12 @@ class NavManagerImpl @Inject constructor(
         )
     }
 
-    override fun navigateToPhotoCrop(intent: Intent,
-                                     requestCodeUploadPanImage: Int,
-                                     requireContext: Context,
-                                     fragment: Fragment) {
+    override fun navigateToPhotoCrop(
+        intent: Intent,
+        requestCodeUploadPanImage: Int,
+        requireContext: Context,
+        fragment: Fragment
+    ) {
         val photoCropIntent = Intent(requireContext, PhotoCrop::class.java)
         photoCropIntent.putExtra("purpose", intent.getStringExtra("purpose"))
         if (intent.hasExtra("uid"))
@@ -147,10 +150,16 @@ class NavManagerImpl @Inject constructor(
     }
 
 
-    override fun navigateToWhyNeedThisBSFragment(childFragmentManager: FragmentManager,bundle : Bundle){
+    override fun navigateToWhyNeedThisBSFragment(
+        childFragmentManager: FragmentManager,
+        bundle: Bundle
+    ) {
         val fragment = WhyWeNeedThisBottomSheet()
         fragment.arguments = bundle
         fragment.show(childFragmentManager, WhyWeNeedThisBottomSheet.TAG)
     }
 
+    override fun getCurrentDestination(): NavDestination? {
+        return getNavController().currentDestination
+    }
 }

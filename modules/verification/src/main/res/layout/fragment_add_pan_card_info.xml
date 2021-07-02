@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundType="PinkBar"
+            app:titleText="@string/giger_verification"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +48,7 @@
         <include
             android:id="@+id/panViewLayout"
             android:visibility="gone"
-            layout="@layout/fragment_add_pan_card_info_view"/>
+            layout="@layout/fragment_add_pan_card_info_view_2"/>
 
 
         <ProgressBar

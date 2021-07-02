@@ -75,8 +75,17 @@ class LanguageAdapter(
         this.filteredLanguageList = contacts
         notifyDataSetChanged()
     }
-    fun getSelectedLanguage(): Language {
-        return originalLanguageList.get(selectedItemIndex)
+    fun getSelectedLanguage():Language{
+
+        if(selectedItemIndex == -1 ){
+            return  Language(
+                    languageCode = "en",
+                    languageName = "English",
+                    bigTextToDisplay = "Aa"
+            )
+        } else {
+            return originalLanguageList.get(selectedItemIndex)
+        }
     }
     override fun getFilter(): Filter = contactsFilter
 

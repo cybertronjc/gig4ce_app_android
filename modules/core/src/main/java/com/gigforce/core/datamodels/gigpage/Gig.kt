@@ -438,6 +438,10 @@ data class JobProfile(
         @set:PropertyName("id")
         var id: String? = null,
 
+        @get:PropertyName("activationCode")
+        @set:PropertyName("activationCode")
+        var activationCode: String? = null,
+
         @get:PropertyName("title")
         @set:PropertyName("title")
         var title: String? = null

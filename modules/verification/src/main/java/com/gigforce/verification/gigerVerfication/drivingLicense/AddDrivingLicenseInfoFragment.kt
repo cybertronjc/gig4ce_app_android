@@ -34,10 +34,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.jaeger.library.StatusBarUtil
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view.*
-import kotlinx.android.synthetic.main.verification_image_card_component.view.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_2.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_2.progressBar
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_2.toolbar
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_main_2.*
+import kotlinx.android.synthetic.main.fragment_add_driving_license_info_view_2.*
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -74,7 +76,7 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_add_driving_license_info, container, false)
+    ) = inflater.inflate(R.layout.fragment_add_driving_license_info_2, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,6 +121,12 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 navigation.popBackStack("verification/main",inclusive = false)
             })
         }
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
+            })
+        }
+
         helpIconViewIV.setOnClickListener {
             showWhyWeNeedThisDialog()
         }
@@ -182,25 +190,21 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
                 disableSubmitButton()
         }
 
-        dlSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
+        dlSubmitSliderBtn.setOnClickListener {
 
-                override fun onSlideComplete(view: SlideToActView) {
+            if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update)) {
 
-                    if (dlYesRB.isChecked || dlSubmitSliderBtn.text == getString(R.string.update)) {
+                if (stateSpinner.selectedItemPosition == 0) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.select_dl_state))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
+                }
 
-                        if (stateSpinner.selectedItemPosition == 0) {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.select_dl_state))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            dlSubmitSliderBtn.resetSlider()
-                            return
-                        }
-
-                            val dlNo =
-                                    drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
+                val dlNo =
+                    drivingLicenseEditText.text.toString().toUpperCase(Locale.getDefault())
 //                            if (!VerificationValidations.isDLNumberValid(dlNo)) {
 //
 //                                MaterialAlertDialogBuilder(requireContext())
@@ -213,38 +217,37 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
 //                                return
 //                            }
 
-                        if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
+                if (dlSubmitSliderBtn.text != getString(R.string.update) && (dlFrontImagePath == null || dlBackImagePath == null)) {
 
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle(getString(R.string.alert))
-                                .setMessage(getString(R.string.capture_both_sides_dl))
-                                .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-                                .show()
-                            dlSubmitSliderBtn.resetSlider()
-                            return
-                        }
-
-                        val state = stateSpinner.selectedItem.toString()
-
-                        viewModel.updateDLData(
-                            true,
-                            dlFrontImagePath,
-                            dlBackImagePath,
-                            state,
-                            dlNo
-                        )
-
-                    } else if (dlNoRB.isChecked) {
-                        viewModel.updateDLData(
-                            false,
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                    }
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(getString(R.string.alert))
+                        .setMessage(getString(R.string.capture_both_sides_dl))
+                        .setPositiveButton(getString(R.string.okay)) { _, _ -> }
+                        .show()
+                    return@setOnClickListener
                 }
+
+                val state = stateSpinner.selectedItem.toString()
+
+                viewModel.updateDLData(
+                    true,
+                    dlFrontImagePath,
+                    dlBackImagePath,
+                    state,
+                    dlNo
+                )
+
+            } else if (dlNoRB.isChecked) {
+                viewModel.updateDLData(
+                    false,
+                    null,
+                    null,
+                    null,
+                    null
+                )
             }
+
+        }
 
 
         editLayout.setOnClickListener {
@@ -487,7 +490,6 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
     private fun errorOnUploadingDocuments(error: String) {
         progressBar.visibility = View.GONE
         dlMainLayout.visibility = View.VISIBLE
-        dlSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -630,20 +632,10 @@ class AddDrivingLicenseInfoFragment : Fragment(), IOnBackPressedOverride {
 
     private fun enableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = true
-
-        dlSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        dlSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         dlSubmitSliderBtn.isEnabled = false
-
-        dlSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        dlSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {

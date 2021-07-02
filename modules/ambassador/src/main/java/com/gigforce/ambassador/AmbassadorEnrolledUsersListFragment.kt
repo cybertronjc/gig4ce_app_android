@@ -17,6 +17,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.ambassador.user_rollment.verify_mobile.ConfirmOtpFragment
@@ -65,9 +66,9 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         LocationUpdates()
     }
 
-    private val viewModel: AmbassadorEnrollViewModel by activityViewModels()
-    private val profileViewModel: ProfileViewModel by activityViewModels()
-    private val gigVerificationViewModel: GigVerificationViewModel by activityViewModels()
+    private val viewModel: AmbassadorEnrollViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+    private val gigVerificationViewModel: GigVerificationViewModel by viewModels()
 
     private val completedItems = LinkedHashMap<String, Boolean>()
     private var redirectToNextStep = false
@@ -193,9 +194,8 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
         testingchipgrp.addChips(viewModel.getChipsData())
         testingchipgrp.setOnCheckedChangeListener(object : ChipGroupComponent.OnCustomCheckedChangeListener{
             override fun onCheckedChangeListener(model: ChipGroupModel) {
-                if (model.text == "Profile1") {
+                if (model.chipId == 0) {
                     //hide chip
-
                     user_details_layout.gone()
                     enrolled_users_rv.visible()
                     toolbar_layout.showSearchOption("Search User")
@@ -210,7 +210,7 @@ class AmbassadorEnrolledUsersListFragment : Fragment(),
                         share_link.gone()
                         no_users_enrolled_layout.visible()
                     }
-                } else if (model.text == "My Details1") {
+                } else if (model.chipId == 1) {
 
                     //hide
                     no_users_enrolled_layout.gone()

@@ -31,12 +31,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.storage.FirebaseStorage
 import com.ncorti.slidetoact.SlideToActView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.progressBar
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info.toolbar
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main.*
-import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view.*
-import kotlinx.android.synthetic.main.verification_image_card_component.view.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.progressBar
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_2.toolbar
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_info_main_2.*
+import kotlinx.android.synthetic.main.fragment_add_aadhar_card_view_2.*
+//import kotlinx.android.synthetic.main.fragment_add_bank_details_info_2.*
+import kotlinx.android.synthetic.main.fragment_verification_image_holder.view.*
 import javax.inject.Inject
 
 enum class AadharCardSides {
@@ -66,7 +67,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.fragment_add_aadhar_card_info, container, false)
+    ) = inflater.inflate(R.layout.fragment_add_aadhar_card_info_2, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,6 +102,12 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
             })
 
+        }
+
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                navigation.popBackStack("verification/main",inclusive = false)
+            })
         }
 
         whyWeNeedThisViewTV.setOnClickListener {
@@ -183,10 +190,7 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         }
 
 
-        aadharSubmitSliderBtn.onSlideCompleteListener =
-            object : SlideToActView.OnSlideCompleteListener {
-
-                override fun onSlideComplete(view: SlideToActView) {
+        aadharSubmitSliderBtn.setOnClickListener {
 
                     if (aadharYesRB.isChecked || aadharSubmitSliderBtn.text == getString(R.string.update)) {
                         if (aadharCardET.text!!.length != 12) {
@@ -200,8 +204,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setMessage(getString(R.string.enter_valid_aadhar_no))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
+
+                            return@setOnClickListener
                         }
 
 
@@ -212,8 +216,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                                 .setMessage(getString(R.string.select_or_capture_both_sides_of_aadhar))
                                 .setPositiveButton(getString(R.string.okay)) { _, _ -> }
                                 .show()
-                            aadharSubmitSliderBtn.resetSlider()
-                            return
+
+                            return@setOnClickListener
                         }
 
                         val aadharNo = aadharCardET.text.toString()
@@ -228,8 +232,8 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
                     } else if (aadharNoRB.isChecked) {
                         viewModel.updateAadharData(false, null, null, null)
                     }
-                }
-            }
+         }
+
 
 
         editLayout.setOnClickListener {
@@ -423,7 +427,6 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
         progressBar.visibility = View.GONE
         aadharViewLayout.gone()
         aadharEditLayout.visibility = View.VISIBLE
-        aadharSubmitSliderBtn.resetSlider()
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.alert))
@@ -571,20 +574,10 @@ class AddAadharCardInfoFragment : Fragment(), IOnBackPressedOverride {
 
     private fun enableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = true
-
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
     }
 
     private fun disableSubmitButton() {
         aadharSubmitSliderBtn.isEnabled = false
-
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
     }
 
     private fun showImageInfoLayout() {

@@ -21,8 +21,8 @@ import javax.inject.Inject
 class AmbassadorEnrollViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    private val ambassadorEnrollmentRepository: com.gigforce.ambassador.AmbassadorEnrollmentRepository =
-        com.gigforce.ambassador.AmbassadorEnrollmentRepository()
+    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository =
+        AmbassadorEnrollmentRepository()
     private val profileFirebaseRepository: ProfileFirebaseRepository =
         ProfileFirebaseRepository()
     private val userEnrollmentRepository: UserEnrollmentRepository =
@@ -37,8 +37,8 @@ class AmbassadorEnrollViewModel @Inject constructor(
     }
     fun getChipsData(): List<ChipGroupModel> {
         var chips = arrayListOf<ChipGroupModel>()
-        chips.add(ChipGroupModel("Profile1", R.drawable.ic_gig_success_icon))
-        chips.add(ChipGroupModel("My Details1", R.drawable.ic_gig_success_icon))
+        chips.add(ChipGroupModel("Profile", R.drawable.ic_gig_success_icon,0))
+        chips.add(ChipGroupModel("My Details", R.drawable.ic_gig_success_icon,1))
         return chips
     }
     private fun startWatchingEnrolledUsersList() {

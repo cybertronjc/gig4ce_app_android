@@ -58,7 +58,7 @@ import javax.inject.Inject
 class AddProfilePictureFragment : Fragment(),
     ClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener,IOnBackPressedOverride {
 
-    private val viewModel: UserDetailsViewModel by activityViewModels()
+    private val viewModel: UserDetailsViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private var userId: String? = null
     private var userName: String = ""
