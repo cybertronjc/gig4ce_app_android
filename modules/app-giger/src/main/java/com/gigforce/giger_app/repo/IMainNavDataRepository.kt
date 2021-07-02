@@ -5,11 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.FeatureItemCard2DVM
 import com.gigforce.core.extensions.getOrThrow
 import com.gigforce.core.userSessionManagement.FirebaseAuthStateListener
+import com.gigforce.giger_app.R
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 interface IMainNavDataRepository {
     fun reload()
@@ -42,36 +47,45 @@ class MainNavDataRepository @Inject constructor() :
                         _data.add(FeatureItemCard2DVM(title = title, image_type = icon_type, navPath = navPath,index = index.toInt()))
                     }
                     _data.sortBy { it.index }
+                    val scope = CoroutineScope(Job() + Dispatchers.Main)
+                    scope.launch {
+                    var data1 = prepareMenus()
+                        var data2 = getBussinessContactQueryMeth(data1)
+                        if(data2){
+                            _data.add(FeatureItemCard2DVM(title ="Gigers Attendance", image_type = null,navPath = "gig/gigerAttendanceUnderManagerFragment",imageRes = R.drawable.ic_group_black))
+                        }
+                        data.value = _data
+                    }
                     data.value = _data
                 }
             }
         }
     }
 
-//    private suspend fun prepareMenus() {
-//
-//        try {
-//            val currentUser =
-//                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
-//            val phoneNumber = currentUser.phoneNumber!!
-//            val phoneNumber2 = phoneNumber.substring(1)
-//            val phoneNumber3 = "0" + phoneNumber.substring(3)
-//            val phoneNumber4 = phoneNumber.substring(3)
-//
-//            val getBussinessContactQuery = bsCalendarScreenRepository
-//                .db
-//                .collection("Business_Contacts")
-//                .whereIn(
-//                    "primary_no",
-//                    arrayListOf(phoneNumber, phoneNumber2, phoneNumber3, phoneNumber4)
-//                )
-//                .getOrThrow()
-//
-//            _isUserTlCheck.postValue(getBussinessContactQuery.size() > 0)
-//        } catch (e: Exception) {
-//            _isUserTlCheck.postValue(false)
-//        }
-//    }
+    private suspend fun prepareMenus() : FirebaseUser = suspendCoroutine { cont ->
+
+        try {
+            val currentUser =
+                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+            cont.resume(currentUser)
+        } catch (e: Exception) {
+        }
+    }
+    private suspend fun getBussinessContactQueryMeth(currentUser : FirebaseUser) : Boolean {
+        val phoneNumber = currentUser.phoneNumber!!
+        val phoneNumber2 = phoneNumber.substring(1)
+        val phoneNumber3 = "0" + phoneNumber.substring(3)
+        val phoneNumber4 = phoneNumber.substring(3)
+
+        val getBussinessContactQuery = FirebaseFirestore.getInstance()
+                .collection("Business_Contacts")
+                .whereIn(
+                        "primary_no",
+                        arrayListOf(phoneNumber, phoneNumber2, phoneNumber3, phoneNumber4)
+                )
+                .getOrThrow()
+        return getBussinessContactQuery.size() > 0
+    }
 
     override fun getData(): LiveData<List<FeatureItemCard2DVM>> {
         return data
