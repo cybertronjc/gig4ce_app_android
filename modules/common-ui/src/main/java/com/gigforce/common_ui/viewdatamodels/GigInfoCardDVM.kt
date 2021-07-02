@@ -1,7 +1,7 @@
 package com.gigforce.common_ui.viewdatamodels
 
 import androidx.annotation.Keep
-import com.gigforce.common_ui.core.CommonViewTypes
+import com.gigforce.core.datamodels.CommonViewTypes
 import com.gigforce.core.SimpleDVM
 import com.gigforce.core.datamodels.gigpage.GigAttendance
 import com.google.firebase.Timestamp
@@ -11,7 +11,6 @@ import com.google.firebase.firestore.PropertyName
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Keep

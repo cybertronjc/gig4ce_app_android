@@ -20,10 +20,10 @@ import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.utils.TextDrawable
-import com.gigforce.common_ui.viewdatamodels.MyGig
-import com.gigforce.common_ui.viewdatamodels.MyGigStatus
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.AppConstants
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
@@ -83,7 +83,7 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
     var checkInClickListener: AdapterClickListener<Any>? = null
 
     override fun bind(obj: Any?) {
-        if (obj is MyGig) {
+        if (obj is Gig) {
             ivContact.setImageResource(R.drawable.ic_phone_white_24dp)
             ivContact.setColorFilter(
                 ContextCompat.getColor(
@@ -159,20 +159,20 @@ class UpcomingGigCardComponent(context: Context, attrs: AttributeSet?) :  FrameL
             else
                 obj.gigContactDetails?.contactName
 
-            val gigStatus = MyGigStatus.fromGig(obj as MyGig)
+            val gigStatus = GigStatus.fromGig(obj as Gig)
             when (gigStatus) {
-                MyGigStatus.UPCOMING,
-                MyGigStatus.DECLINED,
-                MyGigStatus.CANCELLED,
-                MyGigStatus.COMPLETED,
-                MyGigStatus.MISSED -> {
+                GigStatus.UPCOMING,
+                GigStatus.DECLINED,
+                GigStatus.CANCELLED,
+                GigStatus.COMPLETED,
+                GigStatus.MISSED -> {
 
                     checkInTV.isEnabled = false
                     checkInTV.text = "Check In"
                 }
-                MyGigStatus.ONGOING,
-                MyGigStatus.PENDING,
-                MyGigStatus.NO_SHOW -> {
+                GigStatus.ONGOING,
+                GigStatus.PENDING,
+                GigStatus.NO_SHOW -> {
 
                     checkInTV.setOnClickListener {
                         navigation.navigateTo("gig/attendance", bundleOf(

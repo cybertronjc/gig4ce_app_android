@@ -1,4 +1,4 @@
-package com.gigforce.common_ui.core
+package com.gigforce.core.datamodels
 
 class CommonViewTypes {
     /*
