@@ -145,7 +145,6 @@ class MainActivity : AppCompatActivity(),
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
-
         eventTracker.setUpAnalyticsTools()
         appUpdateManager = AppUpdateManagerFactory.create(baseContext)
         setupFirebaseConfig()
@@ -464,7 +463,6 @@ class MainActivity : AppCompatActivity(),
         navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
     }
-
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
