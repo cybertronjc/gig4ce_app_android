@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navStartingFragment">
+
+    <fragment
+        android:id="@+id/navStartingFragment"
+        android:name="com.gigforce.app.NavStartingFragment"
+        tools:layout="@layout/fragment_nav_starting">
+    </fragment>
 
     <fragment
         android:id="@+id/aboutExpandedFragment"
@@ -41,9 +47,7 @@
         android:id="@+id/authFlowFragment"
         android:name="com.gigforce.app.modules.auth.AuthFlowFragment" />
 
-    <fragment
-        android:id="@+id/markAttendanceFragment"
-        android:name="com.gigforce.app.modules.markattendance.MarkAttendanceFragment" />
+
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.gigforce.user_preferences.PreferencesFragment"
@@ -66,7 +70,7 @@
 
     <fragment
         android:id="@+id/onboardingLoaderfragment"
-        android:name="com.gigforce.app.modules.onboardingmain.OnboardingLoaderFragment"
+        android:name="com.gigforce.app.modules.auth.OnboardingLoaderFragment"
         tools:layout="@layout/onboarding_loader_fragment" />
 
     <fragment
@@ -95,21 +99,6 @@
         <action
             android:id="@+id/action_experienceExpandedFragment_to_addExperienceBottomSheet"
             app:destination="@id/addExperienceBottomSheet" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.gigforce.app.modules.home.HomeFragment"
-        android:label="home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_homeScreenIcons"
-            app:destination="@id/loginSuccessfulFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/tempFragment"
-        android:name="com.gigforce.app.TempFragment"
-        android:label="TempFragment"
-        tools:layout="@layout/calendar_dialog">
     </fragment>
 
 
@@ -140,11 +129,13 @@
             app:destination="@id/editCoverBottomSheet" />
     </fragment>
 
+<!--    android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"-->
+<!--    com.gigforce.giger_app.screens.LandingFragment-->
+
     <fragment
         android:id="@+id/landinghomefragment"
-        android:name="com.gigforce.landing_screen.landingscreen.LandingScreenFragment"
-        android:label="landing_home_fragment"
-        tools:layout="@layout/landingscreen_fragment">
+        android:name="com.gigforce.giger_app.screens.LandingFragment"
+        android:label="landing_home_fragment">
         <action
             android:id="@+id/action_landinghomefragment_to_gigerVerificationFragment"
             app:destination="@id/gigerVerificationFragment"
@@ -227,7 +218,7 @@
     </fragment>
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.gigforce.app.modules.language.LanguageSelectFragment"
+        android:name="com.gigforce.giger_app.applanguage.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_introSlidesFragment"
@@ -264,7 +255,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainHomeScreen"
-        android:name="com.gigforce.app.modules.calendarscreen.CalendarHomeScreen"
+        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.CalendarHomeScreen"
         android:label="HomeScreenIcons">
         <action
             android:id="@+id/action_homeScreenIcons_to_profileFragment"
@@ -375,7 +366,7 @@
         android:label="EditCoverBottomSheet" />
     <fragment
         android:id="@+id/homeScreenNew"
-        android:name="com.gigforce.app.modules.calendarscreen.CalendarHomeScreen"
+        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.CalendarHomeScreen"
         android:label="home_screen_new_fragment"
         tools:layout="@layout/item_homescreen1" />
     <dialog
@@ -463,8 +454,7 @@
     <fragment
         android:id="@+id/addDrivingLicenseInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment"
-        android:label="fragment_add_driving_license_info"
-        tools:layout="@layout/fragment_add_driving_license_info" />
+        android:label="fragment_add_driving_license_info" />
     <fragment
         android:id="@+id/addPanCardInfoFragment"
         android:name="com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment"
@@ -522,9 +512,7 @@
         android:label="MonthlyEarningPage" />
     <fragment
         android:id="@+id/mainLearningFragment"
-        android:name="com.gigforce.learning.learning.MainLearningFragment"
-        android:label="fragment_main_learning"
-        tools:layout="@layout/fragment_main_learning" />
+        android:name="com.gigforce.learning.learning.MainLearningFragment" />
 
     <fragment
         android:id="@+id/gigPageExpanded"
@@ -572,8 +560,7 @@
     <fragment
         android:id="@+id/helpVideosFragment"
         android:name="com.gigforce.landing_screen.landingscreen.help.HelpVideosFragment"
-        android:label="fragment_help_video"
-        tools:layout="@layout/fragment_help_video" />
+        android:label="fragment_help_video"/>
 
     <fragment
         android:id="@+id/gig_history_fragment"
@@ -592,13 +579,11 @@
     <fragment
         android:id="@+id/assessmentListFragment"
         android:name="com.gigforce.learning.assessment.AssessmentListFragment"
-        android:label="fragment_assessment_list"
-        tools:layout="@layout/fragment_assessment_list" />
+        android:label="fragment_assessment_list"/>
     <fragment
         android:id="@+id/myLearningFragment"
         android:name="com.gigforce.learning.learning.myLearning.MyLearningFragment"
-        android:label="fragment_my_learning"
-        tools:layout="@layout/fragment_my_learning" />
+        android:label="fragment_my_learning" />
     <fragment
         android:id="@+id/courseContentListFragment"
         android:name="com.gigforce.learning.learning.courseContent.CourseContentListFragment"
@@ -606,7 +591,7 @@
         tools:layout="@layout/fragment_course_content_list" />
     <fragment
         android:id="@+id/referrals_fragment"
-        android:name="com.gigforce.app.modules.referrals.ReferralsFragment"
+        android:name="com.gigforce.ambassador.referrals.ReferralsFragment"
         android:label="fragment_referrals"
         tools:layout="@layout/fragment_referrals" />
     <fragment
@@ -643,22 +628,11 @@
         tools:layout="@layout/layout_add_bio_fragment">
 
     </fragment>
-    <fragment
-        android:id="@+id/fragment_marked_as_interest"
-        android:name="com.gigforce.app.modules.explore_by_role.MarkedInterestSuccessFragment"
-        android:label="fragment_marked_as_interest"
-        tools:layout="@layout/layout_marked_interest_success_fragment">
-        <action
-            android:id="@+id/open_role_details"
-            app:destination="@id/fragment_role_details" />
-    </fragment>
 
     <fragment
         android:id="@+id/fragment_home_bottom_sheet"
-        android:name="com.gigforce.app.modules.calendarscreen.BSCalendarScreenFragment"
-        android:label="fragment_home_bottom_sheet"
-
-        tools:layout="@layout/home_screen_bottom_sheet_fragment" >
+        android:name="com.gigforce.giger_app.calendarscreen.maincalendarscreen.bottomsheet.BSCalendarScreenFragment"
+        android:label="fragment_home_bottom_sheet" >
 
 <!--        <action-->
 <!--            android:id="@+id/action_fragment_to_second_graph"-->
@@ -734,14 +708,14 @@
 
     <fragment
         android:id="@+id/application_questionnaire"
-        android:name="com.gigforce.app.modules.questionnaire.QuestionnaireFragment"
+        android:name="com.gigforce.learning.assessment.questionnaire.QuestionnaireFragment"
         android:label="application_questionnaire"
         tools:layout="@layout/layout_questionnaire_fragment" />
-    <fragment
-        android:id="@+id/fragment_upload_dl_cl_act"
-        android:name="com.gigforce.app.modules.giger_verification.UploadDrivingLicense"
-        android:label="fragment_upload_dl_cl_act"
-        tools:layout="@layout/layout_fragment_client_activation" />
+<!--    <fragment-->
+<!--        android:id="@+id/fragment_upload_dl_cl_act"-->
+<!--        android:name="com.gigforce.verification.gigerVerfication.drivingLicense.UploadDrivingLicense"-->
+<!--        android:label="fragment_upload_dl_cl_act"-->
+<!--        tools:layout="@layout/layout_fragment_client_activation" />-->
 
     <fragment
         android:id="@+id/fragment_gig_activation"
@@ -877,8 +851,7 @@
     <fragment
         android:id="@+id/chatPageFragment"
         android:name="com.gigforce.modules.feature_chat.screens.ChatPageFragment"
-        android:label="fragment_chat_page"
-        tools:layout="@layout/fragment_chat_old" />
+        android:label="fragment_chat_page"/>
 
     <fragment
         android:id="@+id/contactsFragment"
@@ -891,7 +864,7 @@
         android:label="ViewFullScreenImageDialogFragment" />
     <dialog
         android:id="@+id/viewFullScreenVideoDialogFragment"
-        android:name="com.gigforce.app.utils.ViewFullScreenVideoDialogFragment"
+        android:name="com.gigforce.modules.feature_chat.ViewFullScreenVideoDialogFragment"
         android:label="ViewFullScreenVideoDialogFragment" />
     <fragment
         android:id="@+id/groupDetailsFragment2"

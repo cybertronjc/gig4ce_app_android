@@ -5,6 +5,7 @@
     <color name="blackDark">#000000</color>
     <color name="black">#333333</color>
     <color name="blackLight">#666666</color>
+    <color name="blackLightFull">#c8c7cc</color>
 
     <color name="white">#ffffff</color>
 
@@ -49,6 +50,8 @@
     <color name="black_666">#666666</color>
     <color name="black_42">#424242</color>
     <color name="greyish_brown">#444444</color>
+    <color name="edit_note_line">#68979797</color>
+
     <color name="d9_black">#d9000000</color>
     <color name="light_pink">#ffd9e6</color>
 
@@ -69,5 +72,29 @@
     <color name="gig_timer_completed_grey">#e8e8e8</color>
     <color name="gig_timer_no_show_red">#ff8b8b</color>
     <color name="gig_timer_upcoming_pink">#f7d16a</color>
+
+    <color name="warm_grey_two">#979797</color>
+    <color name="darkish_pink_two">#e94b81</color>
+
+    <color name="upcoming_gig_title">#25265e</color>
+    <color name="upcoming_gig_time">#787993</color>
+    <color name="black_85">#d9000000</color>
+
+    <color name="colorChipBackground">#e0e0e0</color>
+    <color name="colorChipBackgroundClicked">#424242</color>
+    <color name="colorChipText">#424242</color>
+    <color name="colorChipTextClicked">#F5F5F5</color>
+    <color name="colorChipCloseInactive">#757575</color>
+    <color name="colorChipCloseClicked">#F5F5F5</color>
+
+    <color name="grey_transparetn">#4B979797</color>
+    <color name="text_yellow">#fa6400</color>
+    <color name="text_orange">#f7b500</color>
+    <color name="text_green">#468800</color>
+
+    <color name="status_bg_pending">#f5a623</color>
+    <color name="status_bg_completed">#72a839</color>
+
+    <color name="app_card_heading_color1">#292929</color>
 
 </resources>

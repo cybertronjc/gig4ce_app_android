@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/size_56"
+        app:backgroundType="PinkBar"
+        app:titleText="Application"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tv_client_activation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/toolbar_bg_client_activation"
         android:minHeight="@dimen/size_72"
+        android:visibility="gone"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         android:elevation="24dp"
@@ -60,7 +72,7 @@
         android:paddingBottom="@dimen/size_142"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_client_activation">
+        app:layout_constraintTop_toBottomOf="@+id/appBar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

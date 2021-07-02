@@ -2,8 +2,9 @@ package com.gigforce.giger_app.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.gigforce.common_ui.cells.FeatureLayoutComponent
+import com.gigforce.common_ui.components.cells.FeatureLayoutComponent
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.visible
 import com.gigforce.giger_app.R
@@ -24,6 +25,7 @@ class UpcomingGigsComponent(context: Context, attrs: AttributeSet?) :
         this.setSectionIcon()
 
         repository.getData().observeForever {
+            Log.d("dataUpcomingGigCard", it.toString())
             if (it.size == 0) {
                 this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
             } else {

@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cv_top"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="22dp"
     android:paddingStart="20dp"
+    android:paddingTop="22dp"
     android:paddingEnd="20dp"
     android:paddingBottom="16dp">
 
-    <ImageView
-        android:id="@+id/image"
+    <RelativeLayout
+        android:id="@+id/image_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="100dp"
-        android:minHeight="50dp"
-        app:layout_constraintHeight_min="50dp"
-        app:layout_constraintWidth_max="80dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="110dp"
+            android:layout_height="90dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tv_title"
         style="@style/CardTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="8dp"
         android:text="Card Title"
         app:layout_constraintEnd_toEndOf="@+id/primary_action"
-        app:layout_constraintStart_toEndOf="@+id/image"
-        app:layout_constraintTop_toTopOf="@+id/image" />
+        app:layout_constraintStart_toEndOf="@+id/image_rl"
+        app:layout_constraintTop_toTopOf="@+id/image_rl" />
 
     <TextView
         android:id="@+id/tv_desc"
         style="@style/CardSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Description here"
         android:layout_marginTop="8dp"
+        android:text="Description here"
         app:layout_constraintEnd_toEndOf="@+id/primary_action"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
@@ -54,7 +63,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_desc"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/secondary_action"
@@ -62,8 +71,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:visibility="gone"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/primary_action"
         app:layout_constraintEnd_toStartOf="@+id/primary_action"
         app:layout_constraintTop_toTopOf="@+id/primary_action" />

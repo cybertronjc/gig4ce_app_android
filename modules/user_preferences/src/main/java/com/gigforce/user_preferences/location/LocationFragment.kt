@@ -91,6 +91,7 @@ class LocationFragment : Fragment() {
 
     private fun listener() {
         back_arrow_iv.setOnClickListener(View.OnClickListener { activity?.onBackPressed() })
+        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
         imageview_plus.setOnClickListener(View.OnClickListener {
             if (viewModel.getCurrentAddress()!!.isEmpty()) {
                 navigation.navigateTo("preferences/preferredLocationFragment")

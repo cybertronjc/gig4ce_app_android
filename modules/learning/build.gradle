@@ -39,6 +39,7 @@ dependencies {
     implementation project(path: ':modules:core')
     implementation project(path: ':modules:common-ui')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    def kotlinCoroutineVersion = "1.0.1"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -91,5 +92,11 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.5'
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
+    implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
+    //Kotlin Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
 
 }

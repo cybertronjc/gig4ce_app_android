@@ -8,7 +8,7 @@
     tools:context=".screens.LandingFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.gigforce.common_ui.cells.AppBarComponent
+    <com.gigforce.common_ui.components.cells.AppBarComponent
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

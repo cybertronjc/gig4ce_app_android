@@ -1,60 +1,110 @@
 package com.gigforce.giger_app.repo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gigforce.common_ui.viewdatamodels.GigInfoCardDVM
-import com.gigforce.common_ui.viewdatamodels.VideoItemCardDVM
+import com.gigforce.common_ui.viewdatamodels.GigStatus
+import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.fb.BaseFirestoreDBRepository
-import com.google.firebase.firestore.FirebaseFirestore
+import com.gigforce.core.utils.Lce
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 interface IUpcomingGigInfoRepository {
     fun loadData()
-    fun getData(): LiveData<List<Any>>
+    fun getData(): LiveData<List<Gig>>
 }
 
 class UpcomingGigInfoRepository @Inject constructor() : IUpcomingGigInfoRepository,
     BaseFirestoreDBRepository() {
-    private var data: MutableLiveData<List<Any>> = MutableLiveData()
+    private var data: MutableLiveData<List<Gig>> = MutableLiveData()
+    private val _upcomingGigs1 = MutableLiveData<List<Gig>>()
+    val upcomingGigs1: LiveData<List<Gig>> get() = _upcomingGigs1
+    private var dataNew: MutableLiveData<List<Any>> = MutableLiveData()
+    private val _upcomingGigs = MutableLiveData<Lce<List<Gig>>>()
+    val upcomingGigs: LiveData<Lce<List<Gig>>> get() = _upcomingGigs
+    private var mWatchUpcomingRepoRegistration: ListenerRegistration? = null
+
+    fun watchUpcomingGigs() {
+        _upcomingGigs.value = Lce.loading()
+        mWatchUpcomingRepoRegistration = getCurrentUserGigs()
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+
+                if (querySnapshot != null) {
+                    extractUpcomingGigs(querySnapshot)
+                } else {
+                    _upcomingGigs.value = Lce.error(firebaseFirestoreException!!.message!!)
+                }
+            }
+    }
+    var currentDateTime: MutableLiveData<LocalDateTime> = MutableLiveData(LocalDateTime.now())
+
+    open fun getCurrentUserGigs() = getCollectionReference().whereEqualTo("gigerId", getUID())
 
     companion object {
         val COLLECTION_NAME = "Gigs"
     }
 
+
     init {
         loadData()
     }
 
-    fun getFirebaseReference() {
-        var calendar: Calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        getCollectionReference().whereEqualTo("gigerId", getUID()).whereGreaterThan(
+     fun getUpcomingGigs(date : LocalDate){
+        val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+       getCollectionReference().whereEqualTo("gigerId", getUID()).whereLessThanOrEqualTo(
             "startDateTime",
-            calendar.time
-        ).orderBy("startDateTime")
-            .addSnapshotListener { value, error ->
-                value?.documents?.let { it ->
+            dateFull
+        ).addSnapshotListener { value, error ->
+            val tomorrow = date.plusDays(1)
+           error?.let { 
+               Log.d("errorData", it.toString())
+           }
+            value?.let {
+                Log.d("errorData", it.documents?.toString())
+                val userGigs: MutableList<Gig> = it?.documents?.map {
+                    it.toObject(Gig::class.java)!!
+                }.toMutableList()
 
-                    val _data = ArrayList<GigInfoCardDVM>()
-                    it.forEach { doc ->
-                        doc.toObject(GigInfoCardDVM::class.java)?.let { data ->
-                            data.gigId = doc.id
-                            _data.add(data)
-                        }
-                    }
-                    data.value = _data
+                Log.d("listData", userGigs.toString())
+                data.value = userGigs
 
-                }
             }
+        }
+    }
+
+    private fun extractUpcomingGigs(querySnapshot: QuerySnapshot) {
+        val userGigs: MutableList<Gig> = extractGigs(querySnapshot)
+
+        val upcomingGigs = userGigs.filter {
+            val gigStatus = GigStatus.fromGig(it)
+            gigStatus == GigStatus.UPCOMING || gigStatus == GigStatus.ONGOING || gigStatus == GigStatus.PENDING || gigStatus == GigStatus.NO_SHOW
+        }.sortedBy {
+            it.startDateTime.seconds
+        }
+        _upcomingGigs.value = Lce.content(upcomingGigs)
+    }
+
+    private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
+        return querySnapshot.documents.map { t ->
+            t.toObject(Gig::class.java)!!
+        }.toMutableList()
     }
 
     override fun loadData() {
-        getFirebaseReference()
+        //getUpcomingGigs(currentDateTime.value!!.toLocalDate())
+        watchUpcomingGigs()
     }
 
-    override fun getData(): LiveData<List<Any>> {
+    override fun getData(): LiveData<List<Gig>> {
         return data
     }
 
