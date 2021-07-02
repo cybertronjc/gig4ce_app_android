@@ -18,16 +18,17 @@ import kotlin.coroutines.suspendCoroutine
 
 interface IMainNavDataRepository {
     fun reload()
-    fun getData():LiveData<List<FeatureItemCard2DVM>>
+    fun getData(): LiveData<List<FeatureItemCard2DVM>>
 }
 
 class MainNavDataRepository @Inject constructor() :
-    IMainNavDataRepository {
+        IMainNavDataRepository {
 
-    private var data:MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
+    private var data: MutableLiveData<List<FeatureItemCard2DVM>> = MutableLiveData()
     private val firebaseAuthStateListener: FirebaseAuthStateListener by lazy {
         FirebaseAuthStateListener.getInstance()
     }
+
     init {
         reload()
     }
@@ -35,26 +36,26 @@ class MainNavDataRepository @Inject constructor() :
     override fun reload() {
         FirebaseFirestore.getInstance().collection("AppConfigs").document("main_nav").addSnapshotListener { value, error ->
             val doc = value?.data
-            doc ?. let {
+            doc?.let {
                 val list = doc.get("data") as? List<Map<String, Any>>
-                list ?. let {
+                list?.let {
                     val _data = ArrayList<FeatureItemCard2DVM>()
-                    for(item in list){
+                    for (item in list) {
                         val title = item.get("title") as? String ?: "-"
                         val index = (item.get("index") as? Long) ?: 500
                         val icon_type = item.get("icon") as? String
                         val navPath = item.get("navPath") as? String
-                        _data.add(FeatureItemCard2DVM(title = title, image_type = icon_type, navPath = navPath,index = index.toInt()))
+                        _data.add(FeatureItemCard2DVM(title = title, image_type = icon_type, navPath = navPath, index = index.toInt()))
                     }
                     _data.sortBy { it.index }
                     val scope = CoroutineScope(Job() + Dispatchers.Main)
                     scope.launch {
-                    var data1 = prepareMenus()
+                        var data1 = prepareMenus()
                         var data2 = getBussinessContactQueryMeth(data1)
-                        if(data2){
-                            _data.add(FeatureItemCard2DVM(title ="Gigers Attendance", image_type = null,navPath = "gig/gigerAttendanceUnderManagerFragment",imageRes = R.drawable.ic_group_black))
+                        if (data2) {
+                            _data.add(FeatureItemCard2DVM(title = "Gigers Attendance", image_type = null, navPath = "gig/gigerAttendanceUnderManagerFragment", imageRes = R.drawable.ic_group_black))
+                            data.value = _data
                         }
-                        data.value = _data
                     }
                     data.value = _data
                 }
@@ -62,16 +63,17 @@ class MainNavDataRepository @Inject constructor() :
         }
     }
 
-    private suspend fun prepareMenus() : FirebaseUser = suspendCoroutine { cont ->
+    private suspend fun prepareMenus(): FirebaseUser = suspendCoroutine { cont ->
 
         try {
             val currentUser =
-                firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
+                    firebaseAuthStateListener.getCurrentSignInUserInfoOrThrow()
             cont.resume(currentUser)
         } catch (e: Exception) {
         }
     }
-    private suspend fun getBussinessContactQueryMeth(currentUser : FirebaseUser) : Boolean {
+
+    private suspend fun getBussinessContactQueryMeth(currentUser: FirebaseUser): Boolean {
         val phoneNumber = currentUser.phoneNumber!!
         val phoneNumber2 = phoneNumber.substring(1)
         val phoneNumber3 = "0" + phoneNumber.substring(3)

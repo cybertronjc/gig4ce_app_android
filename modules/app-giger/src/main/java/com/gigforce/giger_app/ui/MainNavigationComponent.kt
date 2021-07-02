@@ -25,12 +25,14 @@ class MainNavigationComponent(context: Context, attrs: AttributeSet?) :
         this.setSectionIcon()
 
         repository.getData().observeForever {
-            if (it.size == 0) {
-                this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
-            } else {
-                this.findViewById<ConstraintLayout>(R.id.top_cl).visible()
-                this.setCollection(it)
-            }
+            try {
+                if (it.size == 0) {
+                    this.findViewById<ConstraintLayout>(R.id.top_cl).gone()
+                } else {
+                    this.findViewById<ConstraintLayout>(R.id.top_cl).visible()
+                    this.setCollection(it)
+                }
+            }catch (e:Exception){}
         }
     }
 
