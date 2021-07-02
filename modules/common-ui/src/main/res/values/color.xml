@@ -70,4 +70,6 @@
     <color name="gig_timer_no_show_red">#ff8b8b</color>
     <color name="gig_timer_upcoming_pink">#f7d16a</color>
 
+    <color name="status_bar_pink">#e53369</color>
+
 </resources>
