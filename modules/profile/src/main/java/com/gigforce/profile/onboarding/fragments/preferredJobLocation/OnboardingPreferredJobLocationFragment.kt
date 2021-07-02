@@ -181,7 +181,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
             }
         }
 
-        formCompletionListener?.enableDisableNextButton(confirmSubCityList.isNotEmpty())
+        formCompletionListener?.enableDisableNextButton(confirmSubCityList.size in 1..3)
     }
 
     override fun onCitySelected(city: City,isMajorCity : Boolean) {
@@ -236,11 +236,6 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 setSelectedCityTracker()
                 return false
             }
-        } else {
-            if (confirmSubCityList.size > 3){
-                showToast("You cannot select more than 3 localities")
-                return false
-            }
         }
        // setSelectedCityTracker()
         setSelectedCitySubCityTracker()
@@ -248,7 +243,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     }
 
     private fun setSelectedCitySubCityTracker() {
-        if (confirmSubCityList.size > 0) {
+        if (confirmSubCityList.size in 1..3) {
             selectedCity?.name?.let {
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
@@ -283,7 +278,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 formCompletionListener?.enableDisableNextButton(false)
             }
         } else {
-            if (confirmSubCityList.size > 0) {
+            if (confirmSubCityList.size in 1..3) {
                 formCompletionListener?.enableDisableNextButton(true)
             } else {
                 formCompletionListener?.enableDisableNextButton(false)
