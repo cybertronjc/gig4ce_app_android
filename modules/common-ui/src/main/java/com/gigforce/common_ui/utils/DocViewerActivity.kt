@@ -35,12 +35,12 @@ class DocViewerActivity : AppCompatActivity() {
         val stringExtra = intent.getStringExtra(StringConstants.DOC_URL.value)
         pageTitle = intent.getStringExtra(StringConstants.WEB_TITLE.value)
         showPdfFile(stringExtra, stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"));
-        makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png"), stringExtra.contains(".pdf"))
+        makeToolbarVisible(stringExtra.contains(".jpg") || stringExtra.contains(".png") || stringExtra.contains(".pdf"))
         setListeners()
     }
 
-    private fun makeToolbarVisible(isImage: Boolean, isPdf: Boolean) {
-       if (isImage || isPdf){
+    private fun makeToolbarVisible(isImageOrPdf: Boolean) {
+       if (isImageOrPdf){
            toolbar_doc.gone()
            acceptLayout.gone()
        } else {
