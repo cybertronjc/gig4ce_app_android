@@ -171,6 +171,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
         val uniqueList = confirmSubCityList.toSet().toList()
         confirmSubCityList.clear()
         uniqueList.forEach { obj -> confirmSubCityList.add(obj) }
+
         if (add) {
             confirmSubCityList.add(text)
             Log.d("added", "text" + " list: " + confirmSubCityList.toString())
@@ -180,8 +181,9 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
+        formCompletionListener?.enableDisableNextButton(confirmSubCityList.size > 0)
 
-        formCompletionListener?.enableDisableNextButton(confirmSubCityList.size in 1..3)
+
     }
 
     override fun onCitySelected(city: City,isMajorCity : Boolean) {
@@ -243,7 +245,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
     }
 
     private fun setSelectedCitySubCityTracker() {
-        if (confirmSubCityList.size in 1..3) {
+        if (confirmSubCityList.size > 0) {
             selectedCity?.name?.let {
                 var map = mapOf("Location" to it, "SubLocation" to confirmSubCityList)
                 eventTracker.pushEvent(TrackingEventArgs(OnboardingEvents.EVENT_USER_UPDATED_PREF_LOCATION, map))
@@ -278,7 +280,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 formCompletionListener?.enableDisableNextButton(false)
             }
         } else {
-            if (confirmSubCityList.size in 1..3) {
+            if (confirmSubCityList.size > 0) {
                 formCompletionListener?.enableDisableNextButton(true)
             } else {
                 formCompletionListener?.enableDisableNextButton(false)
