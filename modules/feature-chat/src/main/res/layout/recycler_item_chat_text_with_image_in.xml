@@ -39,14 +39,15 @@
                 tools:text="Himanshu" />
 
             <FrameLayout
+                android:id="@+id/image_container_layout"
                 android:layout_width="196dp"
                 android:layout_height="196dp">
 
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_image"
-                    android:layout_width="196dp"
-                    android:layout_height="196dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

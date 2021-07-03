@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.ThumbnailUtils
 import android.net.Uri
 import android.util.Log
 import android.util.Patterns
-import android.util.Size
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +21,6 @@ import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.getFileOrThrow
 import com.gigforce.core.fb.FirebaseUtils
-import com.gigforce.core.image.ImageUtils
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.Lse
 import com.gigforce.modules.feature_chat.*
@@ -287,6 +284,8 @@ class GroupChatViewModel constructor(
                             it.chatType = ChatConstants.CHAT_TYPE_GROUP
                             it.groupId = groupId
                         }
+                    }?.filter {
+                        !it.isMessageChatEvent || (it.isMessageChatEvent && it.eventInfo?.eventForUserUid == currentUser.uid)
                     }?.toMutableList()
 
                     checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)

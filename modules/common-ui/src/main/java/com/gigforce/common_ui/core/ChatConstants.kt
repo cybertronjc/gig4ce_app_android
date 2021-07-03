@@ -47,4 +47,7 @@ object ChatConstants {
     const val COLLECTION_GROUP_CHATS = "chat_groups"
     const val COLLECTION_GROUP_MESSAGES = "group_messages"
     const val COLLECTION_CHAT_HEADERS = "headers"
+
+    const val MESSAGE_TYPE_ASSIGNED_ADMIN = "assigned_admin"
+    const val MESSAGE_TYPE_REMOVED_ADMIN = "removed_admin"
 }
