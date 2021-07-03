@@ -263,7 +263,8 @@ class ChatHeadersFragment : Fragment(), GigforceToolbar.SearchTextChangeListener
         } else {
             coreRecyclerView.filter {
 
-                val item = it as ChatListItemDataObject
+                val itemWrapper = it as ChatListItemDataWrapper
+                val item = itemWrapper.chatItem
                 item.groupName.contains(
                         newText, true
                 ) || item.title.contains(
