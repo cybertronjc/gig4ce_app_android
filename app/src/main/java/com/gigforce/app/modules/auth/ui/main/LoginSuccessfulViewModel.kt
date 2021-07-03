@@ -119,10 +119,12 @@ class LoginSuccessfulViewModel constructor(
     }
 
     private fun insertDataToDB() {
+
+        //            .document(profileFirebaseRepository.getUID())
         profileFirebaseRepository
                 .db
                 .collection("Version_info")
-                .document()
+                .document(FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid)
                 .set(
                         UserVersionInfo(
                                 currentVersion = BuildConfig.VERSION_NAME
