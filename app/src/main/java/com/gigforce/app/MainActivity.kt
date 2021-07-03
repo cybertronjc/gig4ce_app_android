@@ -34,7 +34,9 @@ import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.viewdatamodels.landing.VersionUpdateInfo
 import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
+import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
@@ -56,6 +58,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.GsonBuilder
 import com.moengage.core.internal.utils.MoEUtils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -490,15 +493,16 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupFirebaseConfig(){
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
+//        Log.d("Update_cancelled", ""+update_cancelled)
         try {
-            Log.d("Update", "Data fetched from Remote Config")
+            //Log.d("Update", "Data fetched from Remote Config")
             //showToast("Data fetched from Remote Config", this)
             val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
             if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
         }
         catch (e: Exception){
             e.printStackTrace()
-            Log.d("Update", "Fetching error from Remote config")
+            //Log.d("Update", "Fetching error from Remote config")
             //showToast("Fetching error from Remote config", this)
         }
     }
@@ -533,40 +537,25 @@ class MainActivity : AppCompatActivity(),
         appUpdatePriority?.let {
             val versionUpdateInfo = gson.fromJson(it, VersionUpdateInfo::class.java)
             currentPriority = getCurrentVersionCode()?.let { getUpdatePriority(it, versionUpdateInfo) }
-            if (currentPriority != -1) {
-                appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                        if (currentPriority == 0 /* flexible priority */
-                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    if ((currentPriority == 0 /* flexible priority */ || currentPriority == -1 /* default priority*/)
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
 
-                            // Request the update.
-                            requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
-                            appUpdateManager.registerListener(this@MainActivity)
-                            showToast("Update Available", this)
-//                            showToast(
-//                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
-//                                    this
-//                            )
-//                            showToast("Requesting Flexible update priority: " + currentPriority, this)
+                        // Request the update.
+                        requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
+                        appUpdateManager.registerListener(this@MainActivity)
+                        showToast("Update Available", this)
 
-                        } else if (currentPriority == 1 /* immediate priority */
-                                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                            //request for immediate update
-                            requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                            showToast("Update Available", this)
-//                            showToast(
-//                                    "Version code available ${appUpdateInfo.availableVersionCode()}",
-//                                    this
-//                            )
-//                            showToast("Requesting Immediate update priority: " + currentPriority, this)
-                        }
-                    }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
-                        showToast("Update not available", this)
+                    } else if (currentPriority == 1 /* immediate priority */
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                        //request for immediate update
+                        requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                        showToast("Update Available", this)
                     }
+                }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                    //showToast("Update not available", this)
                 }
-            } else {
-                Log.d("Update", "Latest version installed")
-                //showToast("Latest version installed", this)
             }
         }
     }
@@ -608,12 +597,10 @@ class MainActivity : AppCompatActivity(),
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
         val now = System.currentTimeMillis()
         val diffMillis = now - lastCheckedMillis
-        if (update_cancelled == true && (diffMillis >= 3600000 * 12)) { // in  12 hours
+        if (update_cancelled == true && (diffMillis >= oneHour * 12)) { // in  12 hours
             sharedPreAndCommonUtilInterface.saveLong("once_a_day", now)
             //check for update
             checkforUpdate(appUpdatePriority)
-        } else {
-            showToast("You will be notified again in 15 minutes", this)
         }
     }
 
@@ -622,13 +609,15 @@ class MainActivity : AppCompatActivity(),
             when (resultCode) {
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
+                    eventTracker.pushEvent(TrackingEventArgs("Update Requested by User", null))
                     if (currentPriority == 0){
                         showToast("Update is being downloaded in background", this)
                     }
                 }
                 RESULT_CANCELED -> {
                     //  handle user's rejection
-                    showToast("Update Cancelled by User", this)
+                    //showToast("Update Cancelled by User", this)
+                    eventTracker.pushEvent(TrackingEventArgs("Update Cancelled by User", null))
                     if (currentPriority == 1) {
                         //request the update again
                         appDialogsInterface.showConfirmationDialogType3(
@@ -657,9 +646,11 @@ class MainActivity : AppCompatActivity(),
                 }
                 RESULT_IN_APP_UPDATE_FAILED -> {
                     //if you want to request the update again just call checkUpdate()
-                    Log.d("Update", "" + "Update Failure")
+                    Log.d("Update", "" + "Update Internal Failure")
                     //  handle update failure
-                    showToast("Update Failure Internal", this)
+                    //showToast("Update Failure Internal", this)
+                    eventTracker.pushEvent(TrackingEventArgs("Update Failed", null))
+                    CrashlyticsLogger.d("InAppUpdate", "Update Internal Failure" )
                 }
             }
         }
@@ -685,8 +676,11 @@ class MainActivity : AppCompatActivity(),
                     requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                 }
                 else {
-                    //showToast("On Resume" + "${appUpdateInfo.installStatus()}", this)
+                    //Update failed
+                    eventTracker.pushEvent(TrackingEventArgs("Update Failed on Resume", null))
+                    CrashlyticsLogger.d("InAppUpdate", "Update Failed on Resume , ${appUpdateInfo.installStatus()}")
                 }
+
             }
     }
 
@@ -712,6 +706,7 @@ class MainActivity : AppCompatActivity(),
     companion object {
         const val IS_DEEPLINK = "is_deeplink"
         private const val UPDATE_REQUEST_CODE = 100
+        private const val oneHour = 1000 * 60 * 60 // this result to 3600000
     }
 
     override fun setData(bundle: Bundle) {
