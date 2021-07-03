@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     android:clipToPadding="false">
 
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundType="PinkBar"
+        android:minHeight="@dimen/size_56"
+        app:titleText="@string/my_gigs"
+        android:visibility="gone"
+        app:isProfileVisible="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_gig_history"
         android:layout_width="match_parent"
@@ -13,6 +26,7 @@
         android:contentInsetStart="0dp"
         android:contentInsetLeft="0dp"
         app:contentInsetLeft="0dp"
+        android:visibility="visible"
         app:contentInsetStart="0dp"
         android:background="@color/lipstick_2"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,90 +5,74 @@
     android:id="@+id/top_cl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/size16"
-    android:paddingTop="@dimen/size16">
-
-    <View
-        android:id="@+id/left_aligned"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_img"
-        android:layout_width="wrap_content"
+        android:id="@+id/title_cl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/left_aligned"
-        app:layout_constraintTop_toTopOf="@id/left_aligned">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginRight="@dimen/size8"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/size16"
+        android:layout_marginTop="@dimen/size16"
+        android:layout_marginBottom="@dimen/size16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
-            android:id="@+id/margin_8"
-            android:layout_width="@dimen/size8"
-            android:layout_height="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/layout_img"
-            app:layout_constraintStart_toEndOf="@+id/layout_img"
-            app:layout_constraintTop_toTopOf="@+id/layout_img" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:id="@+id/left_aligned"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/layout_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Learning"
-        android:theme="@style/FetureCardTitle"
-        app:layout_constraintBottom_toBottomOf="@id/left_aligned"
-        app:layout_constraintStart_toEndOf="@+id/layout_img"
-        app:layout_constraintTop_toTopOf="@id/left_aligned" />
-
-    <com.gigforce.core.recyclerView.CoreRecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:layout_marginBottom="@dimen/size16"
-        android:clipToPadding="false"
-        android:paddingRight="@dimen/size16"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_title"
-        android:visibility="gone"/>
-
-
-
-
-
-
-
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size16"
-        android:layout_marginBottom="@dimen/size16"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_title">
-
-        <LinearLayout
-            android:id="@+id/assessment_loader"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone" />
+            app:layout_constraintStart_toStartOf="@id/left_aligned"
+            app:layout_constraintTop_toTopOf="@id/left_aligned">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="@dimen/size8"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <View
+                android:id="@+id/margin_8"
+                android:layout_width="@dimen/size8"
+                android:layout_height="8dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toTopOf="@id/image" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/layout_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/FeatureCardTitle"
+            app:layout_constraintBottom_toBottomOf="@id/left_aligned"
+            app:layout_constraintStart_toEndOf="@id/layout_img"
+            app:layout_constraintTop_toTopOf="@id/left_aligned" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size16"
+        android:layout_marginTop="@dimen/size16"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/title_cl"
+        app:layout_constraintTop_toBottomOf="@+id/title_cl">
 
         <com.gigforce.core.recyclerView.CoreRecyclerView
             android:id="@+id/featured_rv"
@@ -96,14 +80,20 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingRight="@dimen/size16"
-            android:visibility="gone"/>
+            android:paddingLeft="@dimen/size16"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="none" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/see_more_btn"
+            style="@style/ActionOutlineButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_marginTop="@dimen/size_16"
+            android:layout_marginRight="@dimen/size16"
+            android:layout_marginLeft="@dimen/size16"
+            android:text="@string/see_more"
             android:visibility="gone" />
-
 
         <TextView
             android:id="@+id/main_learning_assessment_error"
@@ -112,8 +102,9 @@
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_cross_grey"
             android:drawablePadding="10dp"
-            tools:text="Unable to load your stuff" />
+            android:text="Unable to load your stuff"
+            android:visibility="gone" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

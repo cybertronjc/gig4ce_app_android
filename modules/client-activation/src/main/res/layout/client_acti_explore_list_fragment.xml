@@ -4,12 +4,25 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.gigforce.common_ui.components.cells.AppBar
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isSearchVisible="true"
+        app:backgroundType="PinkBar"
+        app:searchHint="Search Business/ Job"
+        app:titleText="Explore Gigs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_explore_fragment"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:background="@drawable/toolbar_bg_client_activation"
         android:minHeight="@dimen/size_56"
+        android:visibility="gone"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +100,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tb_explore_fragment">
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
         <ProgressBar
             android:id="@+id/explore_progress_bar"

@@ -37,7 +37,6 @@ import com.gigforce.verification.R
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_giger_verification.*
-import kotlinx.android.synthetic.main.fragment_giger_verification.toolbar
 import kotlinx.android.synthetic.main.fragment_giger_verification_item.view.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.*
 import kotlinx.android.synthetic.main.fragment_giger_verification_main.view.*
@@ -206,6 +205,20 @@ class GigerVerificationFragment : Fragment(), IOnBackPressedOverride {
             })
 
         }
+
+        appBarComp.apply {
+            setBackButtonListener(View.OnClickListener {
+                activity?.onBackPressed()
+            })
+        }
+
+//        appBarComp.apply {
+//            setAppBarTitle(getString(R.string.giger_verification))
+//            setBackButtonListener(View.OnClickListener {
+//                activity?.onBackPressed()
+//            })
+//        }
+
 
         Glide.with(requireContext())
             .load(R.drawable.ic_video_round)

@@ -9,7 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
-import com.gigforce.app.DeepLinkActivity
+import com.gigforce.app.MainActivity
 import com.gigforce.app.R
 import com.gigforce.app.notification.NotificationChannels.CHAT_NOTIFICATIONS
 import com.gigforce.app.notification.NotificationChannels.URGENT_NOTIFICATIONS
@@ -29,7 +29,7 @@ class NotificationHelper(private val mContext: Context) {
 
         val finalPendingIntent = if (pendingIntent == null) {
             /**Creates an explicit intent for an Activity in your app */
-            val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
+            val resultIntent = Intent(mContext, MainActivity::class.java)
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             val resultPendingIntent = PendingIntent.getActivity(
                 mContext,
@@ -89,7 +89,7 @@ class NotificationHelper(private val mContext: Context) {
         message: String
     ) {
         /**Creates an explicit intent for an Activity in your app */
-        val resultIntent = Intent(mContext, DeepLinkActivity::class.java)
+        val resultIntent = Intent(mContext, MainActivity::class.java)
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resultPendingIntent = PendingIntent.getActivity(
             mContext,

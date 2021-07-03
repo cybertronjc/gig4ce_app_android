@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.client_activation.client_activation.models.RequiredFeatures
 
 class AdapterViewApplication(

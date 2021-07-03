@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gigforce.core.extensions.gone
 import com.gigforce.landing_screen.R
-//import com.gigforce.app.R
 import kotlinx.android.synthetic.main.fragment_help_video.*
 import com.jaeger.library.StatusBarUtil
 

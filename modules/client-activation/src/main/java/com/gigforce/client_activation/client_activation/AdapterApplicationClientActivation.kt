@@ -9,15 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
-import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
-import com.gigforce.client_activation.client_activation.models.City
 import com.gigforce.core.datamodels.client_activation.Dependency
 import com.gigforce.common_ui.utils.getCircularProgressDrawable
-import com.gigforce.core.extensions.gone
-import com.gigforce.core.extensions.visible
-import kotlinx.android.synthetic.main.layout_rv_status_pending.view.*
 
 class AdapterApplicationClientActivation :
         RecyclerView.Adapter<AdapterApplicationClientActivation.ApplicationViewHolder>() {

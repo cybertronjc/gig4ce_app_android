@@ -23,7 +23,6 @@ import com.gigforce.app.modules.onboardingmain.OnboardingMainFragment
 import com.gigforce.app.notification.ChatNotificationHandler
 import com.gigforce.app.notification.MyFirebaseMessagingService
 import com.gigforce.app.notification.NotificationConstants
-import com.gigforce.app.utils.GigNavigation
 import com.gigforce.common_ui.AppDialogsInterface
 import com.gigforce.common_ui.ConfirmationDialogOnClickListener
 import com.gigforce.common_ui.MimeTypes
@@ -36,6 +35,7 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
@@ -55,6 +55,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -99,6 +100,8 @@ class MainActivity : AppCompatActivity(),
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
     @Inject
+    lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
+    @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
     @Inject lateinit var eventTracker: IEventTracker
 
@@ -110,11 +113,13 @@ class MainActivity : AppCompatActivity(),
         ChatNotificationHandler(applicationContext)
     }
 
-    private val intentFilters = IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+    private val intentFilters =
+        IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
     private val notificationIntentRecevier = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            val remoteMessage: RemoteMessage = intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+            val remoteMessage: RemoteMessage =
+                intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
                     ?: return
 
             if(!isUserLoggedIn()){
@@ -123,7 +128,8 @@ class MainActivity : AppCompatActivity(),
             }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
-                    navController.currentDestination?.label  != "fragment_chat_page")
+                navController.currentDestination?.label != "fragment_chat_page"
+            )
                 chatNotificationHandler.handleChatNotification(remoteMessage)
         }
     }
@@ -134,12 +140,11 @@ class MainActivity : AppCompatActivity(),
             && intent.action != null
             && intent.action.equals(Intent.ACTION_MAIN)
         ) {
-            finish();
-            return;
+            finish()
+            return
         }
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_main)
-
         eventTracker.setUpAnalyticsTools()
         appUpdateManager = AppUpdateManagerFactory.create(baseContext)
         setupFirebaseConfig()
@@ -217,8 +222,33 @@ class MainActivity : AppCompatActivity(),
         if (firebaseAuth.currentUser != null) {
             lookForNewChatMessages()
         }
+        profileDataSnapshot()
     }
+    private fun profileDataSnapshot() {
+        FirebaseAuth.getInstance().addAuthStateListener { it1 ->
+            it1.currentUser?.uid?.let {
+                FirebaseFirestore.getInstance().collection("Profiles").document(it)
+                    .addSnapshotListener { value, e ->
+                        value?.data?.let {
+                            value.toObject(ProfileData::class.java)?.let {
+                                shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                    it1.currentUser?.phoneNumber ?: ""
+                                )
+                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                shareDataAndCommUtil.saveUserProfilePic(
+                                    if(it.profileAvatarName.isNotEmpty())it.profileAvatarName else (it.profileAvatarThumbnail?:"")
+                                )
+                            }
+                        }
+                    }
+            } ?: run {
+                shareDataAndCommUtil.saveLoggedInMobileNumber("")
+                shareDataAndCommUtil.saveLoggedInUserName("")
+                shareDataAndCommUtil.saveUserProfilePic("")
+            }
 
+        }
+    }
     private fun formatDataSharedAndOpenChat(intent: Intent) {
         if (intent.type?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
             handleSendImage(intent) // Handle single image being sent
@@ -312,7 +342,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun isUserLoggedIn(): Boolean {
-       return FirebaseAuth.getInstance().currentUser != null
+        return FirebaseAuth.getInstance().currentUser != null
     }
 
     private fun lookForNewChatMessages() {
@@ -333,12 +363,14 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
                 Log.d("MainActivity", "redirecting to attendance page 2")
                 navController.popAllBackStates()
-                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
+                navigation.navigateTo("gig/attendance",intent.extras)
+//                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
@@ -431,7 +463,6 @@ class MainActivity : AppCompatActivity(),
         navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
     }
-
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
@@ -445,7 +476,7 @@ class MainActivity : AppCompatActivity(),
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
 
         var fragmentholder: Fragment? =
-            navHostFragment!!.childFragmentManager.fragments[navHostFragment!!.childFragmentManager.fragments.size - 1]
+            navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
             handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
@@ -493,7 +524,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupFirebaseConfig(){
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
-//        Log.d("Update_cancelled", ""+update_cancelled)
         try {
             //Log.d("Update", "Data fetched from Remote Config")
             //showToast("Data fetched from Remote Config", this)
@@ -710,7 +740,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun setData(bundle: Bundle) {
-        this.bundle = bundle;
+        this.bundle = bundle
     }
 
     override fun getData(): Bundle {

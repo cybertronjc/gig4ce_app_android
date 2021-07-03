@@ -48,5 +48,8 @@
     <string name="please_let_us_know_your_reason_why_giger_declining_this_gig">Please let us know the reason, why are you declining this gig.</string>
 
 
+    <string name="update_document_picture">Update Picture</string>
+    <string name="remove_document_picture">Remove Picture</string>
+    <string name="document_picture">Image Option</string>
 
 </resources>

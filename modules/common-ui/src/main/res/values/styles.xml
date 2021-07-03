@@ -26,22 +26,22 @@
         <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
-    <style name="FetureCardTitle" parent="Widget.AppCompat.TextView">
+    <style name="FeatureCardTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
-        <item name="fontFamily">@font/lato</item>
-        <item name="android:textSize">@dimen/sp_large</item>
-    </style>
-
-    <style name="FetureItemCardTitle" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/d9_black</item>
-        <item name="fontFamily">@font/lato</item>
+        <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textSize">@dimen/sp_normal</item>
     </style>
 
-    <style name="FetureItemCardSubtitle" parent="Widget.AppCompat.TextView">
-        <item name="android:textColor">@color/black</item>
+    <style name="FeatureItemCardTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/d9_black</item>
         <item name="fontFamily">@font/lato</item>
         <item name="android:textSize">@dimen/sp_sm2</item>
+    </style>
+
+    <style name="FeatureItemCardSubtitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/lato</item>
+        <item name="android:textSize">@dimen/sp_sm4</item>
     </style>
 
     <style name="VideoInfoCardTitle" parent="Widget.AppCompat.TextView">
@@ -111,7 +111,7 @@
     <style name="TextAppearance.GigforceStyles.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">@font/lato</item>
         <item name="android:fontFamily">@font/lato</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.GigforceStyles.Body1" parent="TextAppearance.MaterialComponents.Body1">
@@ -157,6 +157,9 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="AppCardHeading1" parent="TextAppearance.GigforceStyles.Body2">
+        <item name="android:textColor">@color/app_card_heading_color1</item>
+    </style>
 
     <style name="GigforceTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -186,6 +189,7 @@
         <item name="textAppearanceSubtitle1">@style/TextAppearance.GigforceStyles.Subtitle1</item>
         <item name="textAppearanceSubtitle2">@style/TextAppearance.GigforceStyles.Subtitle2</item>
         <item name="iconButtonStyle">@style/IconButtonStyle</item>
+        <item name="chipStyle">@style/RoundedSquaredChipsUI</item>
     </style>
 
     <style name="AppBarTitle" parent="Widget.MaterialComponents.TextView">
@@ -197,8 +201,12 @@
     </style>
 
     <style name="CardTitle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="fontFamily">@font/lato_bold</item>
     </style>
+
+
 
     <style name="CardSubtitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceSubtitle2</item>
@@ -256,6 +264,16 @@
         <item name="colorOnPrimary">@color/blackLight</item>
     </style>
 
+    <style name="RoundedSquaredChipsUI" parent="@style/Widget.MaterialComponents.Chip.Choice">
+<!--        <item name="chipBackgroundColor">@color/app_chip_bck_colors_ui</item>-->
+        <item name="android:textColor">@color/app_chip_text_colors_ui</item>
+        <item name="chipStrokeColor">@color/app_enrolled_users_chip_stroke_colors_ui</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedSquaredChipsStyle</item>
+    </style>
+    <style name="RoundedSquaredChipsStyle" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
 
 </resources>

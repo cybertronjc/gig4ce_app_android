@@ -3,8 +3,6 @@ package com.gigforce.common_ui.viewmodels.userpreferences
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gigforce.core.datamodels.user_preferences.EarningDataModel
-import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.configrepository.ConfigDataModel
 import com.gigforce.common_ui.configrepository.ConfigRepository
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
@@ -12,7 +10,8 @@ import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
 import com.gigforce.core.datamodels.profile.AddressFirestoreModel
 import com.gigforce.core.datamodels.profile.AddressModel
 import com.gigforce.core.datamodels.profile.ProfileData
-import com.google.firebase.firestore.DocumentReference
+import com.gigforce.core.datamodels.user_preferences.EarningDataModel
+import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import java.text.SimpleDateFormat
@@ -24,8 +23,6 @@ class SharedPreferenceViewModel : ViewModel {
         var preferencesDataModelObj: PreferencesDataModel =
             PreferencesDataModel()
         var profileDataModelObj: ProfileData = ProfileData()
-        var addressModelObj: AddressModel = AddressModel()
-        var configDataModel: ConfigDataModel? = null
     }
 
     var profileFirebaseRepository =
@@ -34,13 +31,10 @@ class SharedPreferenceViewModel : ViewModel {
     var preferencesRepository: PreferencesRepository =
         PreferencesRepository()
 
-    //    var profileRepository:ProfileFirebaseRepository = ProfileFirebaseRepository()
-    var citiesRepository: CitiesRepository = CitiesRepository()
     var preferenceDataModel: MutableLiveData<PreferencesDataModel> =
         MutableLiveData<PreferencesDataModel>()
     var configRepository = ConfigRepository()
 
-    //    var profileDataModel: MutableLiveData<ProfileData> = MutableLiveData<ProfileData>()
     constructor()
     constructor(configDataModel1: ConfigDataModel?) {
         configDataModel = configDataModel1
@@ -106,16 +100,6 @@ class SharedPreferenceViewModel : ViewModel {
                     )
                 }
             })
-
-//        profileRepository.getDBCollection().addSnapshotListener(EventListener<DocumentSnapshot> {
-//                value, e ->
-//            if (e != null) {
-//                return@EventListener
-//            }
-//            profileDataModel.postValue(
-//                value!!.toObject(ProfileData::class.java)
-//            )
-//        })
 
 
     }
@@ -315,21 +299,11 @@ class SharedPreferenceViewModel : ViewModel {
         profileFirebaseRepository.setAddress(addressMap)
     }
 
-    fun getLocations(): ArrayList<DocumentReference> {
-        return preferencesDataModelObj.locations
-    }
-
-    fun setLocations(locations: LocationPreferenceModel) {
-        preferencesRepository.setData(locations)
-    }
 
     fun setWorkFromHome(boolean: Boolean) {
         preferencesRepository.setData("workFromHome", boolean)
     }
 
-    fun getCities(): ArrayList<String> {
-        return citiesRepository.getCities()
-    }
 
     fun saveLanguageToFirebase(langStr: String, langCode: String) {
         preferencesRepository.setDataAsKeyValue("languageName", langStr)

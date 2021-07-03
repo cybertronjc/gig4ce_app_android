@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gigforce.common_ui.R
+import com.gigforce.common_ui.components.atoms.models.ChipGroupModel
 import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.datamodels.ambassador.EnrolledUser
@@ -19,8 +21,8 @@ import javax.inject.Inject
 class AmbassadorEnrollViewModel @Inject constructor(
     private val buildConfig: IBuildConfigVM
 ) : ViewModel() {
-    private val ambassadorEnrollmentRepository: com.gigforce.ambassador.AmbassadorEnrollmentRepository =
-        com.gigforce.ambassador.AmbassadorEnrollmentRepository()
+    private val ambassadorEnrollmentRepository: AmbassadorEnrollmentRepository =
+        AmbassadorEnrollmentRepository()
     private val profileFirebaseRepository: ProfileFirebaseRepository =
         ProfileFirebaseRepository()
     private val userEnrollmentRepository: UserEnrollmentRepository =
@@ -33,7 +35,12 @@ class AmbassadorEnrollViewModel @Inject constructor(
     init {
         startWatchingEnrolledUsersList()
     }
-
+    fun getChipsData(): List<ChipGroupModel> {
+        var chips = arrayListOf<ChipGroupModel>()
+        chips.add(ChipGroupModel("Profile", R.drawable.ic_gig_success_icon,0))
+        chips.add(ChipGroupModel("My Details", R.drawable.ic_gig_success_icon,1))
+        return chips
+    }
     private fun startWatchingEnrolledUsersList() {
         enrolledUserListener = ambassadorEnrollmentRepository
             .getEnrolledUsersQuery()

@@ -5,7 +5,7 @@ import com.gigforce.app.R
 abstract class OnVideoResumeCompleted {
 
         fun getResourceToNavigateTo():Int {
-            return R.id.homeFragment
+            return -1//R.id.homeFragment
         }
 
         abstract fun invoke()

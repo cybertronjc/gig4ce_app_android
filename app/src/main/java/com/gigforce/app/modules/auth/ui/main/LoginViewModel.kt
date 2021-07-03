@@ -204,6 +204,14 @@ class LoginViewModel @Inject constructor(
                         )
                     }
                 }
+                else{
+                    TrackingEventArgs(
+                        eventName = AuthEvents.LOGIN_SIGNUP_STARTED_API_ERROR,
+                        props = if (isResendCall) null else mapOf(
+                            "phone_no" to phoneNumber
+                        )
+                    )
+                }
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber, // Phone number to verify
                         60, // Timeout duration

@@ -72,6 +72,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
+    implementation 'com.google.firebase:firebase-firestore:21.5.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
+
+    //Camera View
+    implementation 'com.otaliastudios:cameraview:2.6.2'
 }
