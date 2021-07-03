@@ -40,6 +40,7 @@ object AuthEvents{
     const val LOGIN_RESEND_OTP = "login_resend_otp"
     const val LOGIN_ERROR = "login_error"
 
+    const val LOGIN_SIGNUP_STARTED_API_ERROR = "login_started_api_error"
 
     const val SIGN_OUT_SUCCESS = "signout_success"
     const val SIGN_UP_OTP_SCREEN_LOADED = "verify_otp_loaded"

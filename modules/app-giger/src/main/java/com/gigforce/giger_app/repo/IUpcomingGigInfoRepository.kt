@@ -91,6 +91,7 @@ class UpcomingGigInfoRepository @Inject constructor() : IUpcomingGigInfoReposito
             it.startDateTime.seconds
         }
         _upcomingGigs.value = Lce.content(upcomingGigs)
+        data.value = upcomingGigs
     }
 
     private fun extractGigs(querySnapshot: QuerySnapshot): MutableList<Gig> {
