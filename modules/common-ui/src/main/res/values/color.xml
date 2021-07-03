@@ -97,4 +97,6 @@
 
     <color name="app_card_heading_color1">#292929</color>
 
+    <color name="status_bar_pink">#e53369</color>
+
 </resources>
