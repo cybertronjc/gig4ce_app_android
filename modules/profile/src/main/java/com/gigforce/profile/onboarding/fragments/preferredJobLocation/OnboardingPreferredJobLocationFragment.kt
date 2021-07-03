@@ -181,7 +181,7 @@ class OnboardingPreferredJobLocationFragment() : Fragment(),
                 Log.d("removed", "text" + " list: " + confirmSubCityList.toString())
             }
         }
-        formCompletionListener?.enableDisableNextButton(confirmSubCityList.size > 0)
+        formCompletionListener?.enableDisableNextButton(confirmSubCityList.isNotEmpty())
 
 
     }
