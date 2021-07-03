@@ -125,8 +125,8 @@ class ChatMessage(
     @set:PropertyName("groupId")
     var groupId: String = "",
 
-    @get:PropertyName("ImageMetaData")
-    @set:PropertyName("ImageMetaData")
+    @get:PropertyName("imageMetaData")
+    @set:PropertyName("imageMetaData")
     var imageMetaData: ImageMetaData? = null,
 
     @get:Exclude

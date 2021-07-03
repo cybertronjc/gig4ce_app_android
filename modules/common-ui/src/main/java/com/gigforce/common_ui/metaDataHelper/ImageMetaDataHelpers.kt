@@ -7,15 +7,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Size
 import android.webkit.MimeTypeMap
 import com.gigforce.core.image.ImageUtils
 
 object ImageMetaDataHelpers {
 
     fun getImageMetaData(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): ImageMetaData {
         val size = getImageSize(context, image)
         val aspectRatio = getAspectRatio(size)
@@ -26,20 +25,20 @@ object ImageMetaDataHelpers {
         val thumbnail = getImageThumbnail(context, image, size)
 
         return ImageMetaData(
-                size = size,
-                aspectRatio = aspectRatio,
-                length = imageLength,
-                name = imageName,
-                mimeType = mimeType,
-                extension = imageExtension,
-                thumbnail = thumbnail
+            size = size,
+            aspectRatio = aspectRatio,
+            length = imageLength,
+            name = imageName,
+            mimeType = mimeType,
+            extension = imageExtension,
+            thumbnail = thumbnail
         )
     }
 
     private fun getImageThumbnail(
-            context: Context,
-            image: Uri,
-            size: Size
+        context: Context,
+        image: Uri,
+        size: ImageSize
     ): Bitmap? {
         var targetHeight = 96
         var targetWidth = 96
@@ -57,27 +56,27 @@ object ImageMetaDataHelpers {
     }
 
     fun getImageSize(
-            context: Context,
-            image: Uri
-    ): Size {
+        context: Context,
+        image: Uri
+    ): ImageSize {
         val bitmapFactoryOptions = BitmapFactory.Options()
-                .apply { inJustDecodeBounds = true }
+            .apply { inJustDecodeBounds = true }
 
         BitmapFactory.decodeStream(
-                context.applicationContext.contentResolver.openInputStream(image),
-                null,
-                bitmapFactoryOptions
+            context.applicationContext.contentResolver.openInputStream(image),
+            null,
+            bitmapFactoryOptions
         )
 
-        return Size(
-                bitmapFactoryOptions.outWidth,
-                bitmapFactoryOptions.outHeight,
+        return ImageSize(
+            bitmapFactoryOptions.outWidth,
+            bitmapFactoryOptions.outHeight,
         )
     }
 
     fun getAspectRatio(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): Float {
         val imageSize = getImageSize(context, image)
         return if (imageSize.height == 0) {
@@ -88,7 +87,7 @@ object ImageMetaDataHelpers {
     }
 
     fun getAspectRatio(
-            imageSize: Size
+        imageSize: ImageSize
     ): Float {
         return if (imageSize.height == 0) {
             0.0f
@@ -99,17 +98,17 @@ object ImageMetaDataHelpers {
 
     @SuppressLint("Recycle")
     fun getImageLength(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): Long {
 
         var imageSize = 0L
         context.applicationContext.contentResolver.query(
-                image,
-                null,
-                null,
-                null,
-                null
+            image,
+            null,
+            null,
+            null,
+            null
         )?.let {
 
             if (it.count != 0) {
@@ -129,17 +128,17 @@ object ImageMetaDataHelpers {
 
     @SuppressLint("Recycle")
     fun getImageName(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): String {
 
         var imageName = ""
         context.applicationContext.contentResolver.query(
-                image,
-                null,
-                null,
-                null,
-                null
+            image,
+            null,
+            null,
+            null,
+            null
         )?.let {
 
             if (it.count != 0) {
@@ -156,7 +155,7 @@ object ImageMetaDataHelpers {
     }
 
     fun getImageName(
-            cursor: Cursor
+        cursor: Cursor
     ): String {
         var imageName = ""
         if (cursor.count != 0) {
@@ -169,20 +168,20 @@ object ImageMetaDataHelpers {
     }
 
     fun getImageMimeType(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): String? = context.applicationContext.contentResolver.getType(image)
 
     fun getImageExtension(
-            context: Context,
-            image: Uri
+        context: Context,
+        image: Uri
     ): String? {
         val mimeType = getImageMimeType(context, image) ?: return null
         return getImageExtension(mimeType)
     }
 
     fun getImageExtension(
-            mimeType: String?
+        mimeType: String?
     ): String? {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
     }
