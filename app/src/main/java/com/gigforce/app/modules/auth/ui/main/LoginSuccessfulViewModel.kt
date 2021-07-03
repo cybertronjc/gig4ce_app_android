@@ -124,11 +124,10 @@ class LoginSuccessfulViewModel constructor(
         profileFirebaseRepository
                 .db
                 .collection("Version_info")
-                .document(FirebaseAuthStateListener.getInstance().getCurrentSignInUserInfoOrThrow().uid)
-                .set(
-                        UserVersionInfo(
-                                currentVersion = BuildConfig.VERSION_NAME
-                        )
+                .add(
+                   UserVersionInfo(
+                    currentVersion = BuildConfig.VERSION_NAME
+                  )
                 )
     }
 
