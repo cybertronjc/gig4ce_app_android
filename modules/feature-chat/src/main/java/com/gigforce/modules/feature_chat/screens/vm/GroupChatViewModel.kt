@@ -288,10 +288,12 @@ class GroupChatViewModel constructor(
                     }
                 }?.toMutableList()
 
-                checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
+                if(grpMessages != null) {
+                    checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
-                if (userContacts != null) {
-                    compareGroupMessagesWithContactsAndEmit()
+                    if (userContacts != null) {
+                        compareGroupMessagesWithContactsAndEmit()
+                    }
                 }
             }
     }

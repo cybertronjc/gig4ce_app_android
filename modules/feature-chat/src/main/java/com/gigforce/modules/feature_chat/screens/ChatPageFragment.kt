@@ -260,6 +260,11 @@ class ChatPageFragment : Fragment(),
             adjustUiAccToOneToOneChat()
             subscribeOneToOneViewModel()
         } else if (chatType == ChatConstants.CHAT_TYPE_GROUP) {
+            if (chatHeaderOrGroupId.isNullOrBlank()) {
+                CrashlyticsLogger.e(TAG, "getting args from arguments", Exception("$chatHeaderOrGroupId <-- String passed as groupId"))
+                throw IllegalArgumentException("$chatHeaderOrGroupId <-- String passed as groupId")
+            }
+
             groupChatViewModel.setGroupId(chatHeaderOrGroupId!!)
             adjustUiAccToGroupChat()
             subscribeChatGroupViewModel()
