@@ -601,6 +601,27 @@ class ChatGroupRepository constructor(
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
             .updateOrThrow("groupMembers", groupDetails.groupMembers)
+
+        val message = ChatMessage(
+                id = UUID.randomUUID().toString(),
+                headerId = groupId,
+                isMessageChatEvent = true,
+                type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
+                chatType = ChatConstants.CHAT_TYPE_GROUP,
+                flowType = ChatConstants.FLOW_TYPE_OUT,
+                content = "",
+                timestamp = Timestamp.now(),
+                eventInfo = EventInfo(
+                        eventForUserUid = uid,
+                        eventDoneByUserUid = currentUser.uid,
+                        eventText = "You're now an admin"
+                )
+        )
+
+        db.collection(COLLECTION_GROUP_CHATS)
+                .document(groupId)
+                .collection(COLLECTION_GROUP_MESSAGES)
+                .addOrThrow(message)
     }
 
     suspend fun dismissUserAsGroupAdmin(
@@ -616,6 +637,27 @@ class ChatGroupRepository constructor(
         db.collection(COLLECTION_GROUP_CHATS)
             .document(groupId)
             .updateOrThrow("groupMembers", groupDetails.groupMembers)
+
+        val message = ChatMessage(
+            id = UUID.randomUUID().toString(),
+            headerId = groupId,
+            isMessageChatEvent = true,
+            type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
+            chatType = ChatConstants.CHAT_TYPE_GROUP,
+            flowType = ChatConstants.FLOW_TYPE_OUT,
+            content = "",
+            timestamp = Timestamp.now(),
+            eventInfo = EventInfo(
+                eventForUserUid = uid,
+                eventDoneByUserUid = currentUser.uid,
+                eventText = "You've been dismissed as admin"
+            )
+        )
+
+        db.collection(COLLECTION_GROUP_CHATS)
+            .document(groupId)
+            .collection(COLLECTION_GROUP_MESSAGES)
+            .addOrThrow(message)
     }
 
     suspend fun allowEveryoneToPostInThisGroup(

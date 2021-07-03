@@ -1,26 +1,29 @@
 package com.gigforce.common_ui.repository.gig
 
+import android.location.Location
+import com.gigforce.common_ui.repository.ProfileFirebaseRepository
 import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.core.base.basefirestore.BaseFirestoreDBRepository
+import com.gigforce.core.datamodels.gigpage.BussinessLocation
+import com.gigforce.core.datamodels.gigpage.Gig
+import com.gigforce.core.datamodels.gigpage.GigOrder
+import com.gigforce.core.datamodels.gigpage.JobProfileFull
+import com.gigforce.core.extensions.*
+import com.gigforce.user_tracking.models.UserGigLocationTrack
+import com.gigforce.user_tracking.models.UserLocation
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import android.location.Location
-import com.gigforce.common_ui.repository.ProfileFirebaseRepository
-import com.gigforce.core.datamodels.gigpage.*
-import com.gigforce.core.extensions.*
-import com.gigforce.user_tracking.models.UserGigLocationTrack
-import com.gigforce.user_tracking.models.UserLocation
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.GeoPoint
-import java.time.LocalDateTime
 
 open class GigsRepository : BaseFirestoreDBRepository() {
 
@@ -43,59 +46,65 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         }
 
     suspend fun markCheckIn(
-            gigId: String,
-            location : Location?,
-            distanceBetweenGigAndUser : Float,
-            locationPhysicalAddress: String,
-            image: String,
-            checkInTime: Timestamp,
-            checkInTimeAccToUser: Timestamp? = null,
-            remarks: String? = null
+        gigId: String,
+        location: Location?,
+        distanceBetweenGigAndUser: Float,
+        locationPhysicalAddress: String,
+        image: String,
+        checkInTime: Timestamp,
+        checkInTimeAccToUser: Timestamp? = null,
+        remarks: String? = null
     ) {
 
         val attendanceUpdateMap: Map<String, Any?> = if (checkInTimeAccToUser == null) {
             mapOf(
-                    "attendance.checkInAddress" to locationPhysicalAddress,
-                    "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to location?.latitude,
-                    "attendance.checkInLong" to location?.longitude,
-                    "attendance.checkInLocationAccuracy" to location?.accuracy,
-                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
-                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
-                    "attendance.checkInMarked" to true,
-                    "attendance.checkInTime" to checkInTime,
-                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
-                    "attendance.checkInSource" to "from_gig_in_app",
-                    "gigStatus" to GigStatus.ONGOING.getStatusString()
+                "attendance.checkInAddress" to locationPhysicalAddress,
+                "attendance.checkInImage" to image,
+                "attendance.checkInLat" to location?.latitude,
+                "attendance.checkInLong" to location?.longitude,
+                "attendance.checkInLocationAccuracy" to location?.accuracy,
+                "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                "attendance.checkInGeoPoint" to if (location != null) GeoPoint(
+                    location.latitude,
+                    location.longitude
+                ) else null,
+                "attendance.checkInMarked" to true,
+                "attendance.checkInTime" to checkInTime,
+                "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                "attendance.checkInSource" to "from_gig_in_app",
+                "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         } else {
             mapOf(
-                    "attendance.checkInAddress" to locationPhysicalAddress,
-                    "attendance.checkInImage" to image,
-                    "attendance.checkInLat" to location?.latitude,
-                    "attendance.checkInLong" to location?.longitude,
-                    "attendance.checkInLocationAccuracy" to location?.accuracy,
-                    "attendance.checkInLocationFake" to location?.isFromMockProvider,
-                    "attendance.checkInGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
-                    "attendance.checkInMarked" to true,
-                    "attendance.checkInTime" to checkInTime,
-                    "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
-                    "regularisationRequest.requestedOn" to Timestamp.now(),
-                    "regularisationRequest.regularisationSettled" to false,
-                    "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
-                    "regularisationRequest.checkOutTimeAccToUser" to null,
-                    "regularisationRequest.remarksFromUser" to remarks,
-                    "regularisationRequest.remarksFromManager" to null,
-                    "attendance.checkInSource" to "from_gig_in_app",
-                    "gigStatus" to GigStatus.ONGOING.getStatusString()
+                "attendance.checkInAddress" to locationPhysicalAddress,
+                "attendance.checkInImage" to image,
+                "attendance.checkInLat" to location?.latitude,
+                "attendance.checkInLong" to location?.longitude,
+                "attendance.checkInLocationAccuracy" to location?.accuracy,
+                "attendance.checkInLocationFake" to location?.isFromMockProvider,
+                "attendance.checkInGeoPoint" to if (location != null) GeoPoint(
+                    location.latitude,
+                    location.longitude
+                ) else null,
+                "attendance.checkInMarked" to true,
+                "attendance.checkInTime" to checkInTime,
+                "attendance.checkInDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                "regularisationRequest.requestedOn" to Timestamp.now(),
+                "regularisationRequest.regularisationSettled" to false,
+                "regularisationRequest.checkInTimeAccToUser" to checkInTimeAccToUser,
+                "regularisationRequest.checkOutTimeAccToUser" to null,
+                "regularisationRequest.remarksFromUser" to remarks,
+                "regularisationRequest.remarksFromManager" to null,
+                "attendance.checkInSource" to "from_gig_in_app",
+                "gigStatus" to GigStatus.ONGOING.getStatusString()
             )
         }
 
         getCollectionReference()
-                .document(gigId)
-                .updateOrThrow(attendanceUpdateMap)
+            .document(gigId)
+            .updateOrThrow(attendanceUpdateMap)
 
-        if(location != null ) {
+        if (location != null) {
             submitUserLocationInTrackingCollection(
                 geoPoint = GeoPoint(location.latitude, location.longitude),
                 couldBeAFakeLocation = location.isFromMockProvider,
@@ -107,58 +116,64 @@ open class GigsRepository : BaseFirestoreDBRepository() {
     }
 
     suspend fun markCheckOut(
-            gigId: String,
-            location : Location?,
-            distanceBetweenGigAndUser : Float,
-            locationPhysicalAddress: String,
-            image: String,
-            checkOutTime: Timestamp,
-            checkOutTimeAccToUser: Timestamp? = null,
-            remarks: String? = null
+        gigId: String,
+        location: Location?,
+        distanceBetweenGigAndUser: Float,
+        locationPhysicalAddress: String,
+        image: String,
+        checkOutTime: Timestamp,
+        checkOutTimeAccToUser: Timestamp? = null,
+        remarks: String? = null
     ) {
 
         val attendanceUpdateMap: Map<String, Any?> = if (checkOutTimeAccToUser == null) {
             mapOf(
-                    "attendance.checkOutAddress" to locationPhysicalAddress,
-                    "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to location?.latitude,
-                    "attendance.checkOutLong" to location?.longitude,
-                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
-                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
-                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
-                    "attendance.checkOutMarked" to true,
-                    "attendance.checkOutTime" to checkOutTime,
-                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
-                    "attendance.checkOutSource" to "from_gig_in_app",
-                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
+                "attendance.checkOutAddress" to locationPhysicalAddress,
+                "attendance.checkOutImage" to image,
+                "attendance.checkOutLat" to location?.latitude,
+                "attendance.checkOutLong" to location?.longitude,
+                "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                "attendance.checkOutGeoPoint" to if (location != null) GeoPoint(
+                    location.latitude,
+                    location.longitude
+                ) else null,
+                "attendance.checkOutMarked" to true,
+                "attendance.checkOutTime" to checkOutTime,
+                "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                "attendance.checkOutSource" to "from_gig_in_app",
+                "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         } else {
             mapOf(
-                    "attendance.checkOutAddress" to locationPhysicalAddress,
-                    "attendance.checkOutImage" to image,
-                    "attendance.checkOutLat" to location?.latitude,
-                    "attendance.checkOutLong" to location?.longitude,
-                    "attendance.checkOutLocationAccuracy" to location?.accuracy,
-                    "attendance.checkOutLocationFake" to location?.isFromMockProvider,
-                    "attendance.checkOutGeoPoint" to if(location != null) GeoPoint(location.latitude,location.longitude) else null,
-                    "attendance.checkOutMarked" to true,
-                    "attendance.checkOutTime" to checkOutTime,
-                    "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
-                    "regularisationRequest.requestedOn" to Timestamp.now(),
-                    "regularisationRequest.regularisationSettled" to false,
-                    "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
-                    "regularisationRequest.remarksFromUser" to remarks,
-                    "regularisationRequest.remarksFromManager" to null,
-                    "attendance.checkOutSource" to "from_gig_in_app",
-                    "gigStatus" to GigStatus.COMPLETED.getStatusString()
+                "attendance.checkOutAddress" to locationPhysicalAddress,
+                "attendance.checkOutImage" to image,
+                "attendance.checkOutLat" to location?.latitude,
+                "attendance.checkOutLong" to location?.longitude,
+                "attendance.checkOutLocationAccuracy" to location?.accuracy,
+                "attendance.checkOutLocationFake" to location?.isFromMockProvider,
+                "attendance.checkOutGeoPoint" to if (location != null) GeoPoint(
+                    location.latitude,
+                    location.longitude
+                ) else null,
+                "attendance.checkOutMarked" to true,
+                "attendance.checkOutTime" to checkOutTime,
+                "attendance.checkOutDistanceBetweenGigAndUser" to distanceBetweenGigAndUser,
+                "regularisationRequest.requestedOn" to Timestamp.now(),
+                "regularisationRequest.regularisationSettled" to false,
+                "regularisationRequest.checkOutTimeAccToUser" to checkOutTimeAccToUser,
+                "regularisationRequest.remarksFromUser" to remarks,
+                "regularisationRequest.remarksFromManager" to null,
+                "attendance.checkOutSource" to "from_gig_in_app",
+                "gigStatus" to GigStatus.COMPLETED.getStatusString()
             )
         }
 
         getCollectionReference()
-                .document(gigId)
-                .updateOrThrow(attendanceUpdateMap)
+            .document(gigId)
+            .updateOrThrow(attendanceUpdateMap)
 
-        if(location != null) {
+        if (location != null) {
             submitUserLocationInTrackingCollection(
                 geoPoint = GeoPoint(location.latitude, location.longitude),
                 couldBeAFakeLocation = location.isFromMockProvider,
@@ -188,19 +203,19 @@ open class GigsRepository : BaseFirestoreDBRepository() {
                 .document(gigId)
                 .setOrThrow(
                     UserGigLocationTrack(
-                    uid = getUID(),
-                    userName = profile?.name,
-                    userPhoneNumber = user?.phoneNumber,
-                    locations = listOf(
-                        UserLocation(
-                            location = geoPoint,
-                            fakeLocation = couldBeAFakeLocation,
-                            locationAccuracy = locationAccuracy,
-                            locationCapturedTime = Timestamp.now(),
-                            fullAddressFromGps = fullAddressFromGps
+                        uid = getUID(),
+                        userName = profile?.name,
+                        userPhoneNumber = user?.phoneNumber,
+                        locations = listOf(
+                            UserLocation(
+                                location = geoPoint,
+                                fakeLocation = couldBeAFakeLocation,
+                                locationAccuracy = locationAccuracy,
+                                locationCapturedTime = Timestamp.now(),
+                                fullAddressFromGps = fullAddressFromGps
+                            )
                         )
                     )
-                )
                 )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -209,39 +224,39 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     suspend fun getGig(gigId: String) = suspendCoroutine<Gig> { cont ->
         getCollectionReference()
-                .document(gigId)
-                .get()
-                .addOnSuccessListener {
+            .document(gigId)
+            .get()
+            .addOnSuccessListener {
 
-                    runCatching {
-                        val gig = it.toObject(Gig::class.java)
-                        gig?.gigId = it.id
-                        gig!!
-                    }.onSuccess {
-                        cont.resume(it)
-                    }.onFailure {
-                        cont.resumeWithException(it)
-                    }
-                }
-                .addOnFailureListener {
+                runCatching {
+                    val gig = it.toObject(Gig::class.java)
+                    gig?.gigId = it.id
+                    gig!!
+                }.onSuccess {
+                    cont.resume(it)
+                }.onFailure {
                     cont.resumeWithException(it)
                 }
+            }
+            .addOnFailureListener {
+                cont.resumeWithException(it)
+            }
     }
 
     suspend fun getTodaysUpcomingGigs(date: LocalDate): List<Gig> {
 
         val dateFull = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
         val querySnap =
-                getCurrentUserGigs()
-                        .whereGreaterThan("startDateTime", dateFull)
-                        .getOrThrow()
+            getCurrentUserGigs()
+                .whereGreaterThan("startDateTime", dateFull)
+                .getOrThrow()
 
         val tomorrow = date.plusDays(1)
         return extractGigs(querySnap)
-                .filter {
-                    it.startDateTime > Timestamp.now()
-                            &&  it.endDateTime.toLocalDate().isBefore(tomorrow)
-                }
+            .filter {
+                it.startDateTime > Timestamp.now()
+                        && it.endDateTime.toLocalDate().isBefore(tomorrow)
+            }
 
     }
 
@@ -256,25 +271,25 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         return userGigs
     }
 
-     suspend fun getJobDetails(jobId : String) : JobProfileFull {
+    suspend fun getJobDetails(jobId: String): JobProfileFull {
         val getJobProfileQuery = db.collection("Job_Profiles")
-                .document(jobId)
-                .getOrThrow()
+            .document(jobId)
+            .getOrThrow()
 
-       return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
+        return getJobProfileQuery.toObject(JobProfileFull::class.java)!!
     }
 
     suspend fun getGigLocationFromGigOrder(
-            gigOrderId: String
-    ) : Location? {
+        gigOrderId: String
+    ): Location? {
 
         val gigOrder = getGigOrder(gigOrderId) ?: return null
         val officeLocation = gigOrder.workOrderOffice ?: return null
         val officeLocationId = officeLocation.id ?: return null
-        val bussinessLocation =   getBussinessLocation(officeLocationId) ?: return null
+        val bussinessLocation = getBussinessLocation(officeLocationId) ?: return null
 
         return Location(
-                "Office Location"
+            "Office Location"
         ).apply {
             this.latitude = bussinessLocation.geoPoint?.latitude ?: 0.0
             this.longitude = bussinessLocation.geoPoint?.longitude ?: 0.0
@@ -283,28 +298,28 @@ open class GigsRepository : BaseFirestoreDBRepository() {
 
     private suspend fun getGigOrder(gigOrderId: String): GigOrder? {
         val getGigOrderQuery = db.collection("Gig_Order")
-                .document(gigOrderId)
-                .getOrThrow()
+            .document(gigOrderId)
+            .getOrThrow()
 
         if (!getGigOrderQuery.exists())
             return null
 
-       return getGigOrderQuery.toObject(GigOrder::class.java)!!
+        return getGigOrderQuery.toObject(GigOrder::class.java)!!
     }
 
     private suspend fun getBussinessLocation(bussinessLocationId: String): BussinessLocation? {
         val getBussinessLocationQuery = db.collection("Business_Locations")
-                .document(bussinessLocationId)
-                .getOrThrow()
+            .document(bussinessLocationId)
+            .getOrThrow()
 
         if (!getBussinessLocationQuery.exists())
             return null
 
-       return getBussinessLocationQuery.toObject(BussinessLocation::class.java)!!
+        return getBussinessLocationQuery.toObject(BussinessLocation::class.java)!!
     }
 
     suspend fun getOngoingAndUpcomingGigsFor(
-            date: LocalDate
+        date: LocalDate
     ): List<Gig> {
 
         val dateStart = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -313,16 +328,16 @@ open class GigsRepository : BaseFirestoreDBRepository() {
         val dateEnd = Date.from(nextDay.atStartOfDay(ZoneId.systemDefault()).toInstant())
 
         val querySnap =
-                getCurrentUserGigs()
-                        .whereGreaterThan("startDateTime", dateStart)
-                        .whereLessThan("startDateTime", dateEnd)
-                        .getOrThrow()
+            getCurrentUserGigs()
+                .whereGreaterThan("startDateTime", dateStart)
+                .whereLessThan("startDateTime", dateEnd)
+                .getOrThrow()
 
         val currentTime = LocalDateTime.now()
         return extractGigs(querySnap)
-                .filter {
-                    it.endDateTime.toLocalDateTime().isAfter(currentTime)
-                }
+            .filter {
+                it.endDateTime.toLocalDateTime().isAfter(currentTime)
+            }
     }
 
 

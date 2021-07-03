@@ -26,6 +26,8 @@ data class ChatMessageWrapper(
                 val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
                 return if (this.message.senderInfo.id != currentUserId) ViewTypes.GROUP_IN_DELETED_MESSAGE else ViewTypes.GROUP_OUT_DELETED_MESSAGE
             }
+        } else if (this.message.isMessageChatEvent) {
+            return ViewTypes.CHAT_EVENT
         } else if (this.message.chatType == ChatConstants.CHAT_TYPE_USER) {
 
             return when (this.message.type) {
