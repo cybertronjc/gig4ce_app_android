@@ -16,7 +16,8 @@ class DrivingLicenseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.driving_license_fragment, container, false)
+        var viewBinding = DrivingLicenseFragmentBinding.inflate(inflater,container,false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
