@@ -23,7 +23,6 @@ class PanCardFragment : Fragment() {
     ): View? {
         viewBinding = PanCardFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
-//        return inflater.inflate(R.layout.pan_card_fragment, container, false)
     }
 
 
