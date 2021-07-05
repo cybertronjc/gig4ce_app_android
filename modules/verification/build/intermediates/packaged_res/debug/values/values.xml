@@ -51,6 +51,8 @@
     <color name="fa6400">#fa6400</color>
     <color name="green_dc3ab105">#dc3ab105</color>
     <color name="light_grey">#dddddd</color>
+    <color name="upload_error">#d79f3c</color>
+    <color name="upload_success">#00bf80</color>
     <color name="warm_grey_two">#979797</color>
     <color name="white_two">#f4f4f4</color>
     <dimen name="activityPadding">16dp</dimen>
@@ -379,6 +381,7 @@
     <string name="upload_education_certificate">Upload Education Certificate</string>
     <string name="upload_pan_card">Upload Pan Card</string>
     <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
+    <string name="upload_your_aadhar_card_new">Upload your Aadhar Card\nFRONT Side</string>
     <string name="upload_your_driving_license">Please upload your Driving License for\nyour verification.</string>
     <string name="uploaded">Uploaded</string>
     <string name="veriScreenTitle">Hello Giger!</string>
@@ -435,5 +438,6 @@
         <attr format="string" name="querytext"/>
         <attr format="string" name="checkboxtext"/>
         <attr format="string" name="missingdoctext"/>
+        <attr format="integer" name="viewpagercount"/>
     </declare-styleable>
 </resources>

@@ -28,6 +28,7 @@
 
     <string name="upload_aadhar_card_front_side">Upload Aadhar Card(Front Side)</string>
     <string name="upload_your_aadhar_card">Please upload your Aadhar Card for\nyour verification</string>
+    <string name="upload_your_aadhar_card_new">Upload your Aadhar Card\nFRONT Side</string>
     <string name="upload_aadhar_card_back_side">Upload Aadhar Card(Back Side)</string>
     <string name="update">UPDATE</string>
     <string name="alert">Alert</string>

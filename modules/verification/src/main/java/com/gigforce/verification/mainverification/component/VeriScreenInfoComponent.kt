@@ -5,11 +5,22 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.core.AppConstants
+import com.gigforce.core.extensions.gone
 import com.gigforce.verification.R
+import com.gigforce.verification.mainverification.adapters.ViewPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 
 class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
+
+    var pageChangeListener: OnCustomPageSelectListener? = null
+
+    fun setOnCustomPageSelectListener(listener: OnCustomPageSelectListener?) {
+        this.pageChangeListener = listener
+    }
 
     init {
         this.layoutParams =
@@ -38,6 +49,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
             setDocInfo(docinfostr)
             setQueryStr(querytextstr)
             setMissingDocText(missingdoctext)
+
         }
 
     }
@@ -63,4 +75,56 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     private fun setUpperCaption(uppercaptionstr: String) {
         uppercaption.text = uppercaptionstr
     }
+
+    fun setImageViewPager(list: List<KYCImageModel>){
+        val adapter = ViewPagerAdapter(this.context)
+        adapter.setItem(list)
+        viewPager2.adapter = adapter
+        if (list.size == 1){
+            tabLayout.gone()
+        }
+        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+
+        }.attach()
+    }
+
+    fun uploadStatusLayout(status: Int, title: String, subTitle: String){
+        when(status){
+            AppConstants.UPLOAD_SUCCESS -> {
+                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
+                uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_24))
+                uploadTitle.setText(title)
+                uploadSubTitle.setText(subTitle)
+            }
+            AppConstants.UNABLE_TO_FETCH_DETAILS -> {
+                uploadLayout.background = resources.getDrawable(R.drawable.fetch_details_error_layout_bg)
+                uploadTitle.setTextColor(context.resources.getColor(R.color.upload_mismatch))
+                uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_privacy_tip_24))
+                uploadTitle.setText(title)
+                uploadSubTitle.setText(subTitle)
+            }
+            AppConstants.DETAILS_MISMATCH -> {
+                uploadLayout.background = resources.getDrawable(R.drawable.details_mismatch_layout_bg)
+                uploadTitle.setTextColor(context.resources.getColor(R.color.upload_error))
+                uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_dangerous_white_48dp))
+                uploadTitle.setText(title)
+                uploadSubTitle.setText(subTitle)
+            }
+            AppConstants.VERIFICATION_COMPLETED -> {
+                uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)
+                uploadTitle.setTextColor(context.resources.getColor(R.color.upload_success))
+                uploadIcon.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_verified_user_24))
+                uploadTitle.setText(title)
+                uploadSubTitle.setText(subTitle)
+            }
+        }
+    }
+
+    interface OnCustomPageSelectListener {
+        fun onPageSelectListener(model: KYCImageModel)
+    }
+
 }
+
+
