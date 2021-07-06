@@ -35,13 +35,14 @@ import com.gigforce.core.IEventTracker
 import com.gigforce.core.INavigationProvider
 import com.gigforce.core.TrackingEventArgs
 import com.gigforce.core.base.shareddata.SharedPreAndCommonUtilInterface
-import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.crashlytics.CrashlyticsLogger
+import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.extensions.popAllBackStates
 import com.gigforce.core.extensions.printDebugLog
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.utils.NavFragmentsData
 import com.gigforce.landing_screen.landingscreen.LandingScreenFragment
+import com.gigforce.modules.feature_chat.models.SharedFile
 import com.gigforce.modules.feature_chat.screens.ChatPageFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -49,7 +50,6 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.ActivityResult
 import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
@@ -59,19 +59,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.GsonBuilder
 import com.moengage.core.internal.utils.MoEUtils.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
-    NavFragmentsData,
-    INavigationProvider, InstallStateUpdatedListener
-{
+        NavFragmentsData,
+        INavigationProvider, InstallStateUpdatedListener {
 
     private var bundle: Bundle? = null
     private lateinit var navController: NavController
@@ -82,7 +79,8 @@ class MainActivity : AppCompatActivity(),
     private val firebaseRemoteConfig: FirebaseRemoteConfig by lazy {
         FirebaseRemoteConfig.getInstance()
     }
-//    var mixpanel : MixpanelAPI? = null
+
+    //    var mixpanel : MixpanelAPI? = null
     private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
@@ -96,14 +94,18 @@ class MainActivity : AppCompatActivity(),
     }
 
     @Inject
-    lateinit var navigation:INavigation
+    lateinit var navigation: INavigation
+
     @Inject
     lateinit var sharedPreAndCommonUtilInterface: SharedPreAndCommonUtilInterface
+
     @Inject
     lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
+
     @Inject
     lateinit var appDialogsInterface: AppDialogsInterface
-    @Inject lateinit var eventTracker: IEventTracker
+    @Inject
+    lateinit var eventTracker: IEventTracker
 
     override fun getINavigation(): INavigation {
         return navigation
@@ -114,21 +116,21 @@ class MainActivity : AppCompatActivity(),
     }
 
     private val intentFilters =
-        IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
+            IntentFilter(NotificationConstants.BROADCAST_ACTIONS.SHOW_CHAT_NOTIFICATION)
     private val notificationIntentRecevier = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             val remoteMessage: RemoteMessage =
-                intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
-                    ?: return
+                    intent?.getParcelableExtra(MyFirebaseMessagingService.INTENT_EXTRA_REMOTE_MESSAGE)
+                            ?: return
 
-            if(!isUserLoggedIn()){
+            if (!isUserLoggedIn()) {
                 Log.d("MainActivity", "User Not logged in, not showing chat notification")
                 return
             }
 
             if (navController.currentDestination?.label != "fragment_chat_list" &&
-                navController.currentDestination?.label != "fragment_chat_page"
+                    navController.currentDestination?.label != "fragment_chat_page"
             )
                 chatNotificationHandler.handleChatNotification(remoteMessage)
         }
@@ -136,9 +138,9 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isTaskRoot
-            && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
-            && intent.action != null
-            && intent.action.equals(Intent.ACTION_MAIN)
+                && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
+                && intent.action != null
+                && intent.action.equals(Intent.ACTION_MAIN)
         ) {
             finish()
             return
@@ -155,11 +157,11 @@ class MainActivity : AppCompatActivity(),
 
         navController = this.findNavController(R.id.nav_fragment)
         navController.handleDeepLink(intent)
-       // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
+        // sendCommandToService(TrackingConstants.ACTION_START_OR_RESUME_SERVICE)
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            notificationIntentRecevier,
-            intentFilters
+                notificationIntentRecevier,
+                intentFilters
         )
         if (Intent.ACTION_SEND == intent.action && isUserLoggedIn()) {
             //User Clicked on share in gallery
@@ -224,23 +226,25 @@ class MainActivity : AppCompatActivity(),
         }
         profileDataSnapshot()
     }
+
     private fun profileDataSnapshot() {
         FirebaseAuth.getInstance().addAuthStateListener { it1 ->
             it1.currentUser?.uid?.let {
                 FirebaseFirestore.getInstance().collection("Profiles").document(it)
-                    .addSnapshotListener { value, e ->
-                        value?.data?.let {
-                            value.toObject(ProfileData::class.java)?.let {
-                                shareDataAndCommUtil.saveLoggedInMobileNumber(
-                                    it1.currentUser?.phoneNumber ?: ""
-                                )
-                                shareDataAndCommUtil.saveLoggedInUserName(it.name)
-                                shareDataAndCommUtil.saveUserProfilePic(
-                                    if(it.profileAvatarName.isNotEmpty())it.profileAvatarName else (it.profileAvatarThumbnail?:"")
-                                )
+                        .addSnapshotListener { value, e ->
+                            value?.data?.let {
+                                value.toObject(ProfileData::class.java)?.let {
+                                    shareDataAndCommUtil.saveLoggedInMobileNumber(
+                                            it1.currentUser?.phoneNumber ?: ""
+                                    )
+                                    shareDataAndCommUtil.saveLoggedInUserName(it.name)
+                                    shareDataAndCommUtil.saveUserProfilePic(
+                                            if (it.profileAvatarName.isNotEmpty()) it.profileAvatarName else (it.profileAvatarThumbnail
+                                                    ?: "")
+                                    )
+                                }
                             }
                         }
-                    }
             } ?: run {
                 shareDataAndCommUtil.saveLoggedInMobileNumber("")
                 shareDataAndCommUtil.saveLoggedInUserName("")
@@ -249,6 +253,7 @@ class MainActivity : AppCompatActivity(),
 
         }
     }
+
     private fun formatDataSharedAndOpenChat(intent: Intent) {
         if (intent.type?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
             handleSendImage(intent) // Handle single image being sent
@@ -268,32 +273,32 @@ class MainActivity : AppCompatActivity(),
     private fun formatMultipleDataSharedAndOpenChat(intent: Intent) {
         val filesSelectedUris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
 
-        if(filesSelectedUris.size > 10){
+        if (filesSelectedUris.size > 10) {
             Toast.makeText(this, "Max 10 files can be shared at once", Toast.LENGTH_SHORT).show()
             proceedWithNormalNavigation()
             return
         }
 
-        val documentsUris :ArrayList<Uri> = arrayListOf()
-        val imagesUri :ArrayList<Uri> = arrayListOf()
-        val videosUri :ArrayList<Uri> = arrayListOf()
+        val documentsUris: ArrayList<SharedFile> = arrayListOf()
+        val imagesUri: ArrayList<SharedFile> = arrayListOf()
+        val videosUri: ArrayList<SharedFile> = arrayListOf()
 
         filesSelectedUris.forEach {
 
             val mimeType = contentResolver.getType(it)
 
             if (mimeType?.startsWith(MimeTypes.IMAGE_MATCHER) == true) {
-                imagesUri.add(it)
+                imagesUri.add(SharedFile(it))
             } else if (mimeType?.startsWith(MimeTypes.VIDEO_MATCHER) == true) {
-                videosUri.add(it)
+                videosUri.add(SharedFile(it))
             } else if (
                     MimeTypes.DOC == mimeType ||
                     MimeTypes.DOCX == mimeType ||
-                    MimeTypes.PDF == mimeType||
+                    MimeTypes.PDF == mimeType ||
                     MimeTypes.XLS == mimeType ||
                     MimeTypes.XLSX == mimeType
             ) {
-                documentsUris.add(it)
+                documentsUris.add(SharedFile(it))
             }
         }
 
@@ -310,8 +315,14 @@ class MainActivity : AppCompatActivity(),
 
     private fun handleDocumentSend(intent: Intent) {
         val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+
+        val sharedFile = SharedFile(
+                file = documentUri,
+                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+        )
+
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to arrayListOf(documentUri)
+                ChatPageFragment.INTENT_EXTRA_SHARED_DOCUMENTS to arrayListOf(sharedFile)
         )
 
         navController.navigate(R.id.chatListFragment,
@@ -320,9 +331,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun handleVideoImage(intent: Intent) {
-        val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val videoUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+
+        val sharedFile = SharedFile(
+                file = videoUri,
+                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+        )
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to arrayListOf(documentUri)
+                ChatPageFragment.INTENT_EXTRA_SHARED_VIDEOS to arrayListOf(sharedFile)
         )
 
         navController.navigate(R.id.chatListFragment,
@@ -332,8 +348,13 @@ class MainActivity : AppCompatActivity(),
 
     private fun handleSendImage(intent: Intent) {
         val documentUri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        val sharedFile = SharedFile(
+                file = documentUri,
+                text = intent.getStringExtra(Intent.EXTRA_TEXT)
+        )
+
         val sharedFileBundle = bundleOf(
-                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to arrayListOf(documentUri)
+                ChatPageFragment.INTENT_EXTRA_SHARED_IMAGES to arrayListOf(sharedFile)
         )
 
         navController.navigate(R.id.chatListFragment,
@@ -350,7 +371,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun handleDeepLink() {
-        if(!isUserLoggedIn()){
+        if (!isUserLoggedIn()) {
             Log.d("MainActivity", "User Not logged in, not handling deep link")
             proceedWithNormalNavigation()
             return
@@ -363,54 +384,54 @@ class MainActivity : AppCompatActivity(),
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE -> {
                 Log.d("MainActivity", "redirecting to attendance page")
                 navController.popAllBackStates()
-                navigation.navigateTo("gig/attendance",intent.extras)
+                navigation.navigateTo("gig/attendance", intent.extras)
 //                GigNavigation.openGigAttendancePage(navController, false, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GIG_ATTENDANCE_PAGE_2 -> {
                 Log.d("MainActivity", "redirecting to attendance page 2")
                 navController.popAllBackStates()
-                navigation.navigateTo("gig/attendance",intent.extras)
+                navigation.navigateTo("gig/attendance", intent.extras)
 //                GigNavigation.openGigAttendancePage(navController, true, intent.extras)
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_VERIFICATION_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.gigerVerificationFragment,
-                    intent.extras
+                        R.id.gigerVerificationFragment,
+                        intent.extras
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.chatPageFragment,
-                    intent.extras.apply {
-                        this?.putString(
-                            ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
-                            ChatConstants.CHAT_TYPE_USER
-                        )
-                    }
+                        R.id.chatPageFragment,
+                        intent.extras.apply {
+                            this?.putString(
+                                    ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                                    ChatConstants.CHAT_TYPE_USER
+                            )
+                        }
                 )
             }
             NotificationConstants.CLICK_ACTIONS.OPEN_GROUP_CHAT_PAGE -> {
                 Log.d("MainActivity", "redirecting to gig verification page")
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.chatPageFragment,
-                    intent.extras.apply {
-                        this?.putString(
-                            ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
-                            ChatConstants.CHAT_TYPE_GROUP
-                        )
-                    }
+                        R.id.chatPageFragment,
+                        intent.extras.apply {
+                            this?.putString(
+                                    ChatPageFragment.INTENT_EXTRA_CHAT_TYPE,
+                                    ChatConstants.CHAT_TYPE_GROUP
+                            )
+                        }
                 )
             }
             else -> {
                 navController.popAllBackStates()
                 navController.navigate(
-                    R.id.landinghomefragment,
-                    intent.extras
+                        R.id.landinghomefragment,
+                        intent.extras
                 )
             }
         }
@@ -441,21 +462,21 @@ class MainActivity : AppCompatActivity(),
 
     private fun GetFirebaseInstanceID() {
         FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
-                    return@OnCompleteListener
-                }
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("Firebase/InstanceId", "getInstanceId failed", task.exception)
+                        return@OnCompleteListener
+                    }
 
-                // Get new Instance ID token
-                val token = task.result?.token
+                    // Get new Instance ID token
+                    val token = task.result?.token
 
-                // Log and toast
-                val msg = token //getString(R.string.msg_token_fmt, token)
-                Log.v("Firebase/InstanceId", "Firebase Token Received")
-                Log.v("Firebase/InstanceId", msg)
-                //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            })
+                    // Log and toast
+                    val msg = token //getString(R.string.msg_token_fmt, token)
+                    Log.v("Firebase/InstanceId", "Firebase Token Received")
+                    Log.v("Firebase/InstanceId", msg)
+                    //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                })
     }
 
     private fun checkForAllAuthentication() {
@@ -463,6 +484,7 @@ class MainActivity : AppCompatActivity(),
         navController.navigate(R.id.authFlowFragment)
 //        navController.navigate(R.id.languageSelectFragment)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationIntentRecevier)
@@ -473,10 +495,10 @@ class MainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         val navHostFragment: NavHostFragment? =
-            supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
+                supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment?
 
         var fragmentholder: Fragment? =
-            navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
+                navHostFragment!!.childFragmentManager.fragments[navHostFragment.childFragmentManager.fragments.size - 1]
         var handled = false
         try {
             handled = (fragmentholder as IOnBackPressedOverride).onBackPressed()
@@ -522,37 +544,38 @@ class MainActivity : AppCompatActivity(),
         Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    private fun setupFirebaseConfig(){
+    private fun setupFirebaseConfig() {
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
         try {
             //Log.d("Update", "Data fetched from Remote Config")
             //showToast("Data fetched from Remote Config", this)
             val appUpdatePriority = firebaseRemoteConfig.getString("app_update_priority")
             if (update_cancelled == true) runOnceADay(appUpdatePriority) else checkforUpdate(appUpdatePriority)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             //Log.d("Update", "Fetching error from Remote config")
             //showToast("Fetching error from Remote config", this)
         }
     }
+
     private fun showRestartDialog() {
         //appUpdateManager?.completeUpdate()
         appDialogsInterface.showConfirmationDialogType3(
-            getString(R.string.restart_update),
-            getString(R.string.new_version_available_detail),
-            getString(R.string.restart),
-            getString(R.string.cancel_update),
-            object :
-                ConfirmationDialogOnClickListener {
-                override fun clickedOnYes(dialog: Dialog?) {
-                    //restartAppUpdate()
-                    appUpdateManager?.completeUpdate()
-                }
-                override fun clickedOnNo(dialog: Dialog?) {
-                    dialog?.dismiss()
-                }
-            })
+                getString(R.string.restart_update),
+                getString(R.string.new_version_available_detail),
+                getString(R.string.restart),
+                getString(R.string.cancel_update),
+                object :
+                        ConfirmationDialogOnClickListener {
+                    override fun clickedOnYes(dialog: Dialog?) {
+                        //restartAppUpdate()
+                        appUpdateManager?.completeUpdate()
+                    }
+
+                    override fun clickedOnNo(dialog: Dialog?) {
+                        dialog?.dismiss()
+                    }
+                })
     }
 
     private fun restartAppUpdate() {
@@ -570,7 +593,7 @@ class MainActivity : AppCompatActivity(),
             appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                     if ((currentPriority == 0 /* flexible priority */ || currentPriority == -1 /* default priority*/)
-                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
 
                         // Request the update.
                         requestUpdate(appUpdateInfo, AppUpdateType.FLEXIBLE)
@@ -578,17 +601,18 @@ class MainActivity : AppCompatActivity(),
                         showToast("Update Available", this)
 
                     } else if (currentPriority == 1 /* immediate priority */
-                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                         //request for immediate update
                         requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                         showToast("Update Available", this)
                     }
-                }else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
                     //showToast("Update not available", this)
                 }
             }
         }
     }
+
     fun getCurrentVersionCode(): Int? {
         try {
             val versionCode = BuildConfig.VERSION_CODE
@@ -598,30 +622,32 @@ class MainActivity : AppCompatActivity(),
         }
         return 0
     }
-    fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo) : Int {
+
+    fun getUpdatePriority(currentAppVersion: Int, info: VersionUpdateInfo): Int {
         val mostImportantUpdate = info.updates
-            .filter { it.version > currentAppVersion }
-            ?.sortedByDescending { it.updatePriority }
+                .filter { it.version > currentAppVersion }
+                ?.sortedByDescending { it.updatePriority }
         return if (mostImportantUpdate.size > 0) mostImportantUpdate[0].updatePriority else -1
     }
+
     private fun requestUpdate(appUpdateInfo: AppUpdateInfo, updateType: Int) {
         try {
             //showToast("Start update intent", this)
             Log.d("Update", "Start update intent")
             appUpdateManager?.startUpdateFlowForResult(
-                appUpdateInfo,
-                updateType, //  HERE specify the type of update flow you want
+                    appUpdateInfo,
+                    updateType, //  HERE specify the type of update flow you want
                     this@MainActivity,   //  the instance of an activity
-                UPDATE_REQUEST_CODE
+                    UPDATE_REQUEST_CODE
             )
-        }
-        catch (e: java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             e.printStackTrace()
             Log.d("Update", "Start update intent error")
             //showToast("Start update intent error", this)
         }
 
     }
+
     fun runOnceADay(appUpdatePriority: String?) {
         val lastCheckedMillis = sharedPreAndCommonUtilInterface.getLong("once_a_day")
         val update_cancelled = sharedPreAndCommonUtilInterface.getDataBoolean("update_cancelled")
@@ -640,7 +666,7 @@ class MainActivity : AppCompatActivity(),
                 RESULT_OK -> {
                     Log.d("Update", "" + "Result Ok")
                     eventTracker.pushEvent(TrackingEventArgs("Update Requested by User", null))
-                    if (currentPriority == 0){
+                    if (currentPriority == 0) {
                         showToast("Update is being downloaded in background", this)
                     }
                 }
@@ -651,24 +677,25 @@ class MainActivity : AppCompatActivity(),
                     if (currentPriority == 1) {
                         //request the update again
                         appDialogsInterface.showConfirmationDialogType3(
-                            getString(com.gigforce.landing_screen.R.string.new_version_available),
-                            getString(com.gigforce.landing_screen.R.string.new_version_available_detail),
-                            getString(com.gigforce.landing_screen.R.string.update_now),
-                            getString(com.gigforce.landing_screen.R.string.cancel_update),
-                            object :
-                                ConfirmationDialogOnClickListener {
-                                override fun clickedOnYes(dialog: Dialog?) {
-                                    appUpdateManager
-                                        ?.appUpdateInfo
-                                        ?.addOnSuccessListener { appUpdateInfo ->
-                                            requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
-                                        }
-                                }
-                                override fun clickedOnNo(dialog: Dialog?) {
-                                    dialog?.dismiss()
-                                    finish()
-                                }
-                            })
+                                getString(com.gigforce.landing_screen.R.string.new_version_available),
+                                getString(com.gigforce.landing_screen.R.string.new_version_available_detail),
+                                getString(com.gigforce.landing_screen.R.string.update_now),
+                                getString(com.gigforce.landing_screen.R.string.cancel_update),
+                                object :
+                                        ConfirmationDialogOnClickListener {
+                                    override fun clickedOnYes(dialog: Dialog?) {
+                                        appUpdateManager
+                                                ?.appUpdateInfo
+                                                ?.addOnSuccessListener { appUpdateInfo ->
+                                                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                                                }
+                                    }
+
+                                    override fun clickedOnNo(dialog: Dialog?) {
+                                        dialog?.dismiss()
+                                        finish()
+                                    }
+                                })
                     } else {
                         //user can use the app
                         sharedPreAndCommonUtilInterface.saveDataBoolean("update_cancelled", true)
@@ -680,11 +707,10 @@ class MainActivity : AppCompatActivity(),
                     //  handle update failure
                     //showToast("Update Failure Internal", this)
                     eventTracker.pushEvent(TrackingEventArgs("Update Failed", null))
-                    CrashlyticsLogger.d("InAppUpdate", "Update Internal Failure" )
+                    CrashlyticsLogger.d("InAppUpdate", "Update Internal Failure")
                 }
             }
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
@@ -692,26 +718,26 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         appUpdateManager
-            ?.appUpdateInfo
-            ?.addOnSuccessListener { appUpdateInfo ->
-                // If the update is downloaded but not installed,
-                // notify the user to complete the update.
-                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                    showRestartDialog()
-                    showToast("Update Downloaded", this)
-                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
-                ) {
-                    showToast("Update download in progress", this)
-                    // If an in-app update is already running, resume the update.
-                    requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                ?.appUpdateInfo
+                ?.addOnSuccessListener { appUpdateInfo ->
+                    // If the update is downloaded but not installed,
+                    // notify the user to complete the update.
+                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                        showRestartDialog()
+                        showToast("Update Downloaded", this)
+                    } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS && currentPriority == 1
+                    ) {
+                        showToast("Update download in progress", this)
+                        // If an in-app update is already running, resume the update.
+                        requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                    }
                 }
-            }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -742,7 +768,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onStateUpdate(state: InstallState) {
-        if (state.installStatus() == InstallStatus.DOWNLOADED){
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
             showToast("download completed", this)
             showRestartDialog()
             appUpdateManager?.unregisterListener(this)
