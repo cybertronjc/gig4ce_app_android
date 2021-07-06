@@ -277,7 +277,8 @@ class ChatPageViewModel constructor(
     val sendingMessageOld: LiveData<ChatMessage> = _sendingMessage
 
     fun sendNewText(
-            text: String
+            text: String,
+            replyToMessage : ChatMessage?
     ) = viewModelScope.launch {
 
         try {
@@ -301,7 +302,10 @@ class ChatPageViewModel constructor(
                     chatType = ChatConstants.CHAT_TYPE_USER,
                     type = ChatConstants.MESSAGE_TYPE_TEXT,
                     content = text,
-                    timestamp = Timestamp.now()
+                    timestamp = Timestamp.now(),
+                    isAReplyToOtherMessage = replyToMessage != null,
+                    replyForMessageId = replyToMessage!!.id,
+                    replyForMessage = replyToMessage
             )
             getReference(headerId).document(message.id).setOrThrow(message)
 

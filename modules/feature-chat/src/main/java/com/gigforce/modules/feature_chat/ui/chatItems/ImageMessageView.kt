@@ -40,7 +40,9 @@ abstract class ImageMessageView(
 ) : MediaMessage(
         context,
         attrs
-), View.OnClickListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener {
+), View.OnClickListener,
+    View.OnLongClickListener,
+    PopupMenu.OnMenuItemClickListener {
 
     @Inject
     lateinit var navigation: INavigation
@@ -313,6 +315,10 @@ abstract class ImageMessageView(
                     message.id
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

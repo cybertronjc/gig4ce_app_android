@@ -383,7 +383,8 @@ class GroupChatViewModel constructor(
 
     fun sendNewText(
             text: String,
-            mentionUsers: List<MentionUser>
+            mentionUsers: List<MentionUser>,
+            replyToMessage : ChatMessage?
     ) = viewModelScope.launch {
 
         try {
@@ -396,7 +397,10 @@ class GroupChatViewModel constructor(
                     flowType = ChatConstants.FLOW_TYPE_OUT,
                     content = text,
                     timestamp = Timestamp.now(),
-                    mentionedUsersInfo = mentionUsers
+                    mentionedUsersInfo = mentionUsers,
+                    isAReplyToOtherMessage = replyToMessage != null,
+                    replyForMessageId = replyToMessage!!.id,
+                    replyForMessage = replyToMessage
             )
 
             chatGroupRepository.sendTextMessage(groupId, message)

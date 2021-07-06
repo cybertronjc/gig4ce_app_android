@@ -57,6 +57,7 @@ abstract class VideoMessageView(
 
     @Inject
     lateinit var navigation: INavigation
+    private var chatMessage : ChatMessage? = null
 
     private val chatNavigation: ChatNavigation by lazy {
         ChatNavigation(navigation)
@@ -104,6 +105,7 @@ abstract class VideoMessageView(
     }
 
     override fun onBind(msg: ChatMessage) {
+        chatMessage = msg
 
         attachmentNameTV.text = msg.attachmentName
         videoLength.text = convertMicroSecondsToNormalFormat(msg.videoLength)
@@ -199,14 +201,6 @@ abstract class VideoMessageView(
         playDownloadIconIV.gone()
         attachmentUploadingDownloadingProgressBar.visible()
 
-    }
-
-    fun getCircularProgressDrawable(): CircularProgressDrawable {
-        val circularProgressDrawable = CircularProgressDrawable(context)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 20f
-        circularProgressDrawable.start()
-        return circularProgressDrawable
     }
 
     private fun convertMicroSecondsToNormalFormat(videoAttachmentLength: Long): String {
@@ -314,6 +308,10 @@ abstract class VideoMessageView(
                 message.id
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return chatMessage ?: throw IllegalStateException("chat message is null")
     }
 }
 

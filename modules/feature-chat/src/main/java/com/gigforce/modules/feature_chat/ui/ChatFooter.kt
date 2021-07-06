@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -13,8 +15,13 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gigforce.common_ui.chat.models.ChatMessage
 import com.gigforce.common_ui.chat.models.MentionUser
+import com.gigforce.common_ui.core.ChatConstants
 import com.gigforce.common_ui.views.GigforceImageView
+import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.inflate
+import com.gigforce.core.extensions.visible
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.models.GroupChatMember
 import com.gigforce.modules.feature_chat.screens.vm.GroupChatViewModel
@@ -56,6 +63,9 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
     var replyBlockedLayout: TextView
     var replyLayout: View
 
+    private var replyMessagePreviewContainer: LinearLayout
+    private var replyMessage : ChatMessage? = null
+
     private lateinit var viewModel: GroupChatViewModel
 
     init {
@@ -74,13 +84,15 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
 
         replyBlockedLayout = this.findViewById(R.id.group_does_support_replies_text)
         replyLayout = this.findViewById(R.id.chat_footer_type_layout)
+
+        replyMessagePreviewContainer = this.findViewById(R.id.reply_to_message_layout)
     }
 
     fun setGroupViewModel(viewModel: GroupChatViewModel) {
         this.viewModel = viewModel
     }
 
-    fun enableUserSuggestions(){
+    fun enableUserSuggestions() {
         et_message.tokenizer = WordTokenizer(tokenizerConfig)
         et_message.setQueryTokenReceiver(this)
         et_message.setSuggestionsVisibilityManager(this)
@@ -106,15 +118,15 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
 
             val start = text.getSpanStart(span)
             val end = text.getSpanEnd(span)
-            val mentionedPerson = span.mention as GroupChatMember?
+            val mentionedPerson = span.mention as GroupChatMember
 
             personMentions.add(
                     MentionUser(
                             startFrom = start,
                             endTo = end,
-                            userMentionedUid = mentionedPerson?.uid ?: "",
-                            profileName = mentionedPerson?.name ?: "",
-                            profilePicture = mentionedPerson?.profilePicture ?: ""
+                            userMentionedUid = mentionedPerson.uid,
+                            profileName = mentionedPerson.name,
+                            profilePicture = mentionedPerson.profilePicture
                     )
             )
         }
@@ -136,6 +148,106 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         mentionAdapter = PersonMentionAdapter(suggestions)
         suggestionRecyclerView.swapAdapter(mentionAdapter, true)
         displaySuggestions(suggestions.isNotEmpty())
+    }
+
+    fun openReplyUi(
+            chatMessage: ChatMessage
+    ) {
+        this.replyMessage = chatMessage
+        replyMessagePreviewContainer.removeAllViews()
+
+        val replyView = LayoutInflater.from(context).inflate(
+                R.layout.layout_reply_to_layout,
+                null,
+                false
+        )
+        replyMessagePreviewContainer.addView(replyView)
+
+        //Setting common vars and listeners
+        val senderNameTV: TextView = replyView.findViewById(R.id.user_name_tv)
+        val messageTV: TextView = replyView.findViewById(R.id.tv_msgValue)
+        val closeBtn: View = replyView.findViewById(R.id.close_btn)
+        val messageImageIV: GigforceImageView = replyView.findViewById(R.id.message_image)
+
+        closeBtn.setOnClickListener {
+            closeReplyUi()
+        }
+        senderNameTV.text = chatMessage.senderInfo.name
+
+        when (chatMessage.type) {
+            ChatConstants.MESSAGE_TYPE_TEXT -> {
+                messageTV.text = chatMessage.content
+                messageImageIV.gone()
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
+
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else if(chatMessage.attachmentPath != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                } else {
+                    //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
+
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else {
+                    //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
+                messageTV.text = chatMessage.locationPhysicalAddress
+                messageImageIV.visible()
+
+                if(chatMessage.thumbnailBitmap != null){
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                } else if(chatMessage.thumbnail != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                }else if(chatMessage.attachmentPath != null){
+                    messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                } else {
+                    //load default image
+                }
+            }
+            ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                messageTV.text = chatMessage.attachmentName
+                messageImageIV.visible()
+                messageImageIV.loadImage(R.drawable.ic_document_background)
+            }
+            else -> {
+            }
+        }
+
+        openSoftKeyboard(et_message)
+        et_message.requestFocus()
+    }
+
+    fun closeReplyUi(){
+        replyMessagePreviewContainer.removeAllViews()
+        replyMessage = null
+    }
+
+    fun getReplyToMessage(): ChatMessage? {
+        return replyMessage
+    }
+
+    fun openSoftKeyboard(view: View) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInputFromWindow(
+                view.applicationWindowToken,
+                InputMethod.SHOW_FORCED,
+                0
+        )
     }
 
 
@@ -166,7 +278,7 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
                 viewHolder.picture.loadImage(R.drawable.ic_user_2)
             }
 
-            viewHolder.itemView.setOnClickListener { v: View? ->
+            viewHolder.itemView.setOnClickListener {
                 et_message.insertMention(person)
                 suggestionRecyclerView.swapAdapter(PersonMentionAdapter(emptyList()), true)
                 displaySuggestions(false)

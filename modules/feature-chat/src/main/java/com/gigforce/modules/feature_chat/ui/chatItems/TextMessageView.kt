@@ -42,7 +42,8 @@ abstract class TextMessageView(
 ) : RelativeLayout(context, attrs),
         IViewHolder,
         View.OnLongClickListener,
-        PopupMenu.OnMenuItemClickListener {
+        PopupMenu.OnMenuItemClickListener,
+        BaseChatMessageItemView{
 
     @Inject
     lateinit var navigation: INavigation
@@ -241,6 +242,10 @@ abstract class TextMessageView(
                     cameFromLinkInOtherChat = true
             )
         }
+    }
+
+    override fun getCurrentChatMessageOrThrow(): ChatMessage {
+        return message
     }
 }
 

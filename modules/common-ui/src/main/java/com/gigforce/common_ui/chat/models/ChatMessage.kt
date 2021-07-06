@@ -137,6 +137,18 @@ class ChatMessage(
     @set:PropertyName("eventInfo")
     var eventInfo: EventInfo? = null,
 
+    @get:PropertyName("isAReplyToOtherMessage")
+    @set:PropertyName("isAReplyToOtherMessage")
+    var isAReplyToOtherMessage: Boolean = false,
+
+    @get:PropertyName("replyForMessageId")
+    @set:PropertyName("replyForMessageId")
+    var replyForMessageId: String? = null,
+
+    @get:Exclude
+    @set:Exclude
+    var replyForMessage: ChatMessage? = null,
+
     @get:Exclude
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null

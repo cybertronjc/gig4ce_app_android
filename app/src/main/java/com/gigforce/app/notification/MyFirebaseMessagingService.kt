@@ -16,9 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.pushbase.MoEPushHelper
-import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 import kotlin.random.Random
 
 
@@ -45,29 +43,37 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         FirebaseAuth.getInstance().addAuthStateListener {
             it.currentUser?.let {
                 FirebaseFirestore.getInstance().collection("firebase_tokens").document(token)
-                        .set(
-                                hashMapOf(
-                                        "uid" to it.uid,
-                                        "type" to "fcm",
-                                        "timestamp" to Date().time
-                                )
-                        ).addOnSuccessListener {
-                            Log.v(TAG, "Token Updated on Firestore Successfully")
-                        }.addOnFailureListener {
-                            Log.e(TAG, "Token Update Failed on Firestore", it)
-                            CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on Firestore", it)
-                        }
+                    .set(
+                        hashMapOf(
+                            "uid" to it.uid,
+                            "type" to "fcm",
+                            "timestamp" to Date().time
+                        )
+                    ).addOnSuccessListener {
+                        Log.v(TAG, "Token Updated on Firestore Successfully")
+                    }.addOnFailureListener {
+                        Log.e(TAG, "Token Update Failed on Firestore", it)
+                        CrashlyticsLogger.e(
+                            "MyFirebaseMessagingService",
+                            "Token Update Failed on Firestore",
+                            it
+                        )
+                    }
 
                 try {
                     MoEFireBaseHelper.getInstance().passPushToken(applicationContext, token)
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     Log.e(TAG, "Token Update Failed on MoEngage")
-                    CrashlyticsLogger.e("MyFirebaseMessagingService", "Token Update Failed on MoEngage", e)
+                    CrashlyticsLogger.e(
+                        "MyFirebaseMessagingService",
+                        "Token Update Failed on MoEngage",
+                        e
+                    )
                 }
             } ?: run {
                 Log.v(
-                        TAG,
-                        "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
+                    TAG,
+                    "User Not Authenticated. Ideally set an Auth Listener and Register when Authenticated"
                 )
             }
         }
@@ -109,9 +115,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 for ((key, value) in remoteMessage.data.entries) {
                     extras.putString(key, value)
                 }
+
                 val moEInfo = MoEPushHelper.getInstance().isFromMoEngagePlatform(extras)
-                if(moEInfo){
-                    MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, remoteMessage.data)
+                if (moEInfo) {
+                    MoEFireBaseHelper.getInstance()
+                        .passPushPayload(applicationContext, remoteMessage.data)
                 } else {
                     // not from MoEngage handle yourself or pass to another provider
                     handleNotificationMessageNotFromMoEngage(remoteMessage)
@@ -136,9 +144,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
              * Receiver id is uid of user for whom message was sent,
              * if message was received with delay and logged in user was changed, message is not shown
              */
-            val isForCurrentUserId = remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
+            val isForCurrentUserId =
+                remoteMessage.data.getOrDefault(RECEIVER_ID, "") == currentUser?.uid
             if (!isForCurrentUserId) {
-                Log.d(TAG, "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}")
+                Log.d(
+                    TAG,
+                    "Message Notification Received but receiver id did not match with current user id ${remoteMessage.data}"
+                )
                 return
             }
 
