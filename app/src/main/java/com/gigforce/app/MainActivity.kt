@@ -705,12 +705,6 @@ class MainActivity : AppCompatActivity(),
                     // If an in-app update is already running, resume the update.
                     requestUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
                 }
-                else {
-                    //Update failed
-                    eventTracker.pushEvent(TrackingEventArgs("Update Failed on Resume", null))
-                    CrashlyticsLogger.d("InAppUpdate", "Update Failed on Resume , ${appUpdateInfo.installStatus()}")
-                }
-
             }
     }
 
