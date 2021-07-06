@@ -71,6 +71,7 @@ class GroupChatViewModel constructor(
     private val currentUser by lazy { FirebaseAuth.getInstance().currentUser!! }
     private lateinit var groupId: String
 
+    private var groupEventsListener: ListenerRegistration? = null
     private var groupMessagesListener: ListenerRegistration? = null
     private var groupDetailsListener: ListenerRegistration? = null
     private var groupContactsListener: ListenerRegistration? = null
@@ -79,6 +80,9 @@ class GroupChatViewModel constructor(
     private var groupDetails: ChatGroup? = null
     private var userContacts: List<ContactModel>? = null
     private var grpMessages: MutableList<ChatMessage>? = null
+    private var grpEvents: MutableList<EventInfo>? = null
+
+    private var groupMessagesShownOnView: MutableList<ChatMessage>? = null
 
     //Create group
     override fun setGroupId(groupId: String) {
@@ -165,7 +169,7 @@ class GroupChatViewModel constructor(
                         } else
                             null
 
-                        startWatchingGroupMessages(limitToTimeStamp)
+                        startWatchingGroupMessagesAndEvents(limitToTimeStamp)
                     }
                 }
 
@@ -249,13 +253,16 @@ class GroupChatViewModel constructor(
         Log.d(TAG, "userGroupHeaderChangeListener attached")
     }
 
-    private fun startWatchingGroupMessages(
+    private fun startWatchingGroupMessagesAndEvents(
             limitToTimeStamp: Timestamp? = null
     ) {
         if (groupMessagesListener != null && limitToTimeStamp != null) {
             Log.d(TAG, "already a listener attached,user removed from group")
             groupMessagesListener?.remove()
             groupMessagesListener = null
+
+            groupEventsListener?.remove()
+            groupEventsListener = null
             return
         }
 
@@ -264,13 +271,18 @@ class GroupChatViewModel constructor(
             return
         }
 
+        startListeningToGroupMessages(limitToTimeStamp)
+        startListeningToGroupEvents(limitToTimeStamp)
+    }
+
+    private fun startListeningToGroupMessages(limitToTimeStamp: Timestamp?) {
         var getGroupMessagesQuery = chatGroupRepository
                 .groupMessagesRef(groupId)
                 .orderBy("timestamp", Query.Direction.ASCENDING)
 
-        if (limitToTimeStamp != null)
-            getGroupMessagesQuery =
-                    getGroupMessagesQuery.whereLessThan("timestamp", limitToTimeStamp)
+        if (limitToTimeStamp != null) {
+            getGroupMessagesQuery = getGroupMessagesQuery.whereLessThan("timestamp", limitToTimeStamp)
+        }
 
         groupMessagesListener = getGroupMessagesQuery
                 .addSnapshotListener { value, error ->
@@ -284,14 +296,40 @@ class GroupChatViewModel constructor(
                             it.chatType = ChatConstants.CHAT_TYPE_GROUP
                             it.groupId = groupId
                         }
-                    }?.filter {
-                        !it.isMessageChatEvent || (it.isMessageChatEvent && it.eventInfo?.eventForUserUid == currentUser.uid)
                     }?.toMutableList()
 
                     checkForRecevinginfoElseMarkMessageAsReceived(grpMessages!!)
 
                     if (userContacts != null) {
                         compareGroupMessagesWithContactsAndEmit()
+                    }
+                }
+    }
+
+    private fun startListeningToGroupEvents(limitToTimeStamp: Timestamp?) {
+        var getGroupEventsQuery = chatGroupRepository
+                .groupEventsRef(groupId)
+                .orderBy("eventTime", Query.Direction.ASCENDING)
+
+        if (limitToTimeStamp != null) {
+            getGroupEventsQuery = getGroupEventsQuery.whereLessThan("eventTime", limitToTimeStamp)
+        }
+
+        groupEventsListener = getGroupEventsQuery
+                .addSnapshotListener { value, error ->
+
+                    if (error != null) {
+                        Log.e(TAG, "Error while listening group messages", error)
+
+                    }
+
+                    if (value != null) {
+                        grpEvents = value.documents.map { doc ->
+                            doc.toObject(EventInfo::class.java)!!
+                        }.toMutableList()
+
+                        compareGroupMessagesWithContactsAndEmit()
+
                     }
                 }
     }
@@ -337,7 +375,17 @@ class GroupChatViewModel constructor(
     }
 
     private fun compareGroupMessagesWithContactsAndEmit() {
-        grpMessages!!.forEach { groupMessage ->
+        if (grpMessages == null ||
+                grpEvents == null ||
+                userContacts == null
+        ) {
+            return
+        }
+
+        val groupEvents = grpEvents!!.map { it.toChatMessage() }
+        groupMessagesShownOnView = (grpMessages!! + groupEvents).toMutableList()
+
+        groupMessagesShownOnView!!.onEach { groupMessage ->
 
             val matchInContact = userContacts!!.find { groupMessage.senderInfo.id == it.uid }
 
@@ -348,9 +396,11 @@ class GroupChatViewModel constructor(
                     matchInContact.name ?: ""
                 }
             }
+        }.sortBy {
+            it.timestamp!!.seconds
         }
 
-        _groupMessages.postValue(grpMessages)
+        _groupMessages.postValue(groupMessagesShownOnView)
     }
 
     private var currentUserSenderInfo: UserInfo? = null
@@ -433,8 +483,8 @@ class GroupChatViewModel constructor(
                     imageMetaData = imageMetaData
             )
 
-            grpMessages?.add(message)
-            _groupMessages.postValue(grpMessages)
+            groupMessagesShownOnView?.add(message)
+            _groupMessages.postValue(groupMessagesShownOnView)
 
             chatGroupRepository.sendNewImageMessage(
                     groupId = groupId,
@@ -465,8 +515,8 @@ class GroupChatViewModel constructor(
                     attachmentName = fileName,
                     timestamp = Timestamp.now()
             )
-            grpMessages?.add(message)
-            _groupMessages.postValue(grpMessages)
+            groupMessagesShownOnView?.add(message)
+            _groupMessages.postValue(groupMessagesShownOnView)
 
             chatGroupRepository.sendNewDocumentMessage(
                     context,
@@ -509,8 +559,8 @@ class GroupChatViewModel constructor(
                     thumbnailBitmap = thumbnailForUi
             )
 
-            grpMessages?.add(message)
-            _groupMessages.postValue(grpMessages)
+            groupMessagesShownOnView?.add(message)
+            _groupMessages.postValue(groupMessagesShownOnView)
 
             chatGroupRepository.sendNewVideoMessage(
                     context = context.applicationContext,
@@ -557,8 +607,8 @@ class GroupChatViewModel constructor(
                     thumbnailBitmap = mapImage?.copy(mapImage.config, mapImage.isMutable)
             )
 
-            grpMessages?.add(message)
-            _groupMessages.postValue(grpMessages)
+            groupMessagesShownOnView?.add(message)
+            _groupMessages.postValue(groupMessagesShownOnView)
 
             chatGroupRepository.sendLocationMessage(
                     groupId = groupId,
@@ -873,6 +923,9 @@ class GroupChatViewModel constructor(
         super.onCleared()
         groupMessagesListener?.remove()
         groupMessagesListener = null
+
+        groupEventsListener?.remove()
+        groupEventsListener = null
 
         groupDetailsListener?.remove()
         groupDetailsListener = null

@@ -139,9 +139,15 @@ abstract class VideoMessageView(
 
     private fun loadThumbnail(msg: ChatMessage) {
         if (msg.thumbnailBitmap != null) {
-            imageView.loadImage(msg.thumbnailBitmap!!)
+            imageView.loadImage(msg.thumbnailBitmap!!,true)
         } else if (msg.thumbnail != null) {
-            imageView.loadImageIfUrlElseTryFirebaseStorage(msg.thumbnail!!)
+
+            imageView.loadImageIfUrlElseTryFirebaseStorage(
+                    msg.thumbnail!!,
+            -1,
+                    -1,
+                    true
+                    )
         }
     }
 
