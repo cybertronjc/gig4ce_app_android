@@ -34,11 +34,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_xl1"
-                app:docinfotext="Please upload your Aadhaar Card (FRONT and BACK Side) for Document verification Process"
+                app:docinfotext="Please upload your Pan Card (FRONT and BACK Side) for Document verification Process"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:missingdoctext="I don’t have an Aadhhar Card"
-                app:title="Aadhaar Card"
+                app:missingdoctext="I don’t have a Pan Card"
+                app:title="Pan Card"
                 app:uppercaption="You need to verify your" />
 
             <com.gigforce.common_ui.components.atoms.GrayLine

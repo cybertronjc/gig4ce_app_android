@@ -1,6 +1,7 @@
 package com.gigforce.verification.mainverification.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.gigforce.core.utils.GlideApp
 import com.gigforce.verification.R
 
 
-class ViewPagerAdapter(private val context: Context) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
+class ViewPagerAdapter(private val itemClickListener: (View) -> (Unit)) : RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
 
     private var list: List<KYCImageModel> = listOf()
 
@@ -33,7 +34,8 @@ class ViewPagerAdapter(private val context: Context) : RecyclerView.Adapter<View
 
     override fun getItemCount(): Int = list.size
 
-    class ViewPagerViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewPagerViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView),
+         View.OnClickListener {
 
         constructor(parent: ViewGroup) : this(
             LayoutInflater.from(parent.context).inflate(
@@ -41,6 +43,9 @@ class ViewPagerAdapter(private val context: Context) : RecyclerView.Adapter<View
                 parent, false
             )
         )
+        init {
+            itemView.setOnClickListener(this)
+        }
         private var title: TextView = itemView.findViewById(R.id.title)
         private var backgroundImage: ImageView = itemView.findViewById(R.id.imageBack)
 
@@ -50,5 +55,10 @@ class ViewPagerAdapter(private val context: Context) : RecyclerView.Adapter<View
                 .load(kYCImageModel.imageIcon)
                 .into(backgroundImage)
         }
+
+        override fun onClick(v: View?) {
+            v?.let { itemClickListener(it) }
+        }
+
     }
 }

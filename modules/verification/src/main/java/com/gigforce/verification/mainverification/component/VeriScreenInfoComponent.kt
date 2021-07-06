@@ -2,6 +2,7 @@ package com.gigforce.verification.mainverification.component
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -17,6 +18,7 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
     var pageChangeListener: OnCustomPageSelectListener? = null
+    var pageClickListener: OnClickListener? = null
 
     fun setOnCustomPageSelectListener(listener: OnCustomPageSelectListener?) {
         this.pageChangeListener = listener
@@ -77,15 +79,19 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setImageViewPager(list: List<KYCImageModel>){
-        val adapter = ViewPagerAdapter(this.context)
+        val adapter = ViewPagerAdapter{
+            pageClickListener?.onClick(it)
+        }
         adapter.setItem(list)
         viewPager2.adapter = adapter
         if (list.size == 1){
             tabLayout.gone()
         }
+        Log.d("adapter", ""+adapter.itemCount + " list: " + list.toString())
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
 
         }.attach()
+
     }
 
     fun uploadStatusLayout(status: Int, title: String, subTitle: String){
@@ -123,6 +129,9 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
 
     interface OnCustomPageSelectListener {
         fun onPageSelectListener(model: KYCImageModel)
+    }
+    fun setPrimaryClick(pageClickListener: OnClickListener) {
+        this.pageClickListener = pageClickListener
     }
 
 }

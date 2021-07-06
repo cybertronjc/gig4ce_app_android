@@ -51,7 +51,8 @@
     <color name="fa6400">#fa6400</color>
     <color name="green_dc3ab105">#dc3ab105</color>
     <color name="light_grey">#dddddd</color>
-    <color name="upload_error">#d79f3c</color>
+    <color name="upload_error">#ea6a5e</color>
+    <color name="upload_mismatch">#d79f3c</color>
     <color name="upload_success">#00bf80</color>
     <color name="warm_grey_two">#979797</color>
     <color name="white_two">#f4f4f4</color>
@@ -438,6 +439,5 @@
         <attr format="string" name="querytext"/>
         <attr format="string" name="checkboxtext"/>
         <attr format="string" name="missingdoctext"/>
-        <attr format="integer" name="viewpagercount"/>
     </declare-styleable>
 </resources>

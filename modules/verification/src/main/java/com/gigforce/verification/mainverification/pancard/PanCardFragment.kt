@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.gigforce.common_ui.viewdatamodels.KYCImageModel
+import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 
 class PanCardFragment : Fragment() {
@@ -25,6 +27,19 @@ class PanCardFragment : Fragment() {
         return viewBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setViews()
+        observer()
 
+    }
 
+    private fun observer() {
+
+    }
+
+    private fun setViews() {
+        val list = listOf(KYCImageModel("Pan Card", R.drawable.ic_front))
+        viewBinding.toplayoutblock.setImageViewPager(list)
+    }
 }
