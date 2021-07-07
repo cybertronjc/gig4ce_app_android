@@ -40,20 +40,21 @@ class CalendarHomeScreenViewModel : ViewModel() {
     fun getAllData() {
         mainHomeRepository.getCollectionReference()
             .whereEqualTo("gigerId", mainHomeRepository.getUID())
-            .whereNotEqualTo("status",GigStatus.DECLINED.getStatusString())
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (arrMainHomeDataModel != null) {
                     arrMainHomeDataModel?.clear()
                     if (querySnapshot != null) {
-                        querySnapshot.documents.filter {
-                            //Because firebase support only 1 != in query
-                            GigStatus.CANCELLED.getStatusString() != it.getString("status")
-                        }.forEach { t ->
+                        querySnapshot.documents.onEach { t ->
+                            val gig =  t.toObject(Gig::class.java)
 
-                            Log.d("gig id : data", t.id.toString())
-                            t.toObject(Gig::class.java)
-                                ?.let { arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(it)) }
+                            if(gig != null){
+
+                                val gigStatus = GigStatus.fromGig(gig)
+                                if(gigStatus != GigStatus.CANCELLED && gigStatus != GigStatus.DECLINED)
+                                    arrMainHomeDataModel?.add(AllotedGigDataModel.getGigData(gig))
+                            }
                         }
+
                         mainHomeLiveDataModel.postValue(
                             MainHomeCompleteGigModel()
                         )
