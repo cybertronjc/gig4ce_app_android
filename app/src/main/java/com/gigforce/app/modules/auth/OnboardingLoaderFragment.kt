@@ -40,7 +40,7 @@ class OnboardingLoaderFragment : BaseFragment() {
     @Inject
     lateinit var shareDataAndCommUtil: SharedPreAndCommonUtilInterface
 
-    private val SPLASH_TIME_OUT: Long = 2500
+    private val SPLASH_TIME_OUT: Long = 250
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
