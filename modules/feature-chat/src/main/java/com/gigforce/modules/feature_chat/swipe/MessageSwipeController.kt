@@ -16,11 +16,17 @@ import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.core.CoreViewHolder
 import com.gigforce.modules.feature_chat.R
 import com.gigforce.modules.feature_chat.ui.chatItems.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class MessageSwipeController(
     private val context: Context,
     private val swipeControllerActions: SwipeControllerActions
 ) : ItemTouchHelper.Callback() {
+
+    private val currentUser : FirebaseUser? by lazy {
+        FirebaseAuth.getInstance().currentUser
+    }
 
     private lateinit var imageDrawable: Drawable
     private var currentItemViewHolder: RecyclerView.ViewHolder? = null
@@ -67,8 +73,11 @@ class MessageSwipeController(
                 val chatMessage =
                     (viewHolder.itemView as BaseChatMessageItemView).getCurrentChatMessageOrThrow()
 
-                if (chatMessage.flowType != ChatConstants.FLOW_TYPE_IN) {
-                    return makeMovementFlags(ACTION_STATE_IDLE, 0) //Disabling swipe
+                if (chatMessage.type == ChatConstants.CHAT_TYPE_USER && chatMessage.flowType != ChatConstants.FLOW_TYPE_IN
+                        || (chatMessage.type == ChatConstants.CHAT_TYPE_GROUP && chatMessage.senderInfo.id == currentUser?.uid)
+                ) {
+                    // Disabling swipe for outgoing message
+                    return makeMovementFlags(ACTION_STATE_IDLE, 0)
                 }
 
                 return makeMovementFlags(ACTION_STATE_IDLE, RIGHT)

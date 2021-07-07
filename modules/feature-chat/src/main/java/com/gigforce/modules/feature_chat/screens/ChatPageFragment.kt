@@ -24,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
@@ -91,7 +90,6 @@ class ChatPageFragment : Fragment(),
     //Views
     private lateinit var chatRecyclerView: CoreRecyclerView
     private lateinit var chatFooter: ChatFooter
-    private lateinit var userBlockedOrRemovedLayout: TextView
     private var cameFromLinkInOtherChat: Boolean = false
 
     private val viewModel: ChatPageViewModel by viewModels()
@@ -326,35 +324,26 @@ class ChatPageFragment : Fragment(),
                 showGroupDetails(it)
                 if (it.groupDeactivated) {
 
-                    userBlockedOrRemovedLayout.visible()
-                    userBlockedOrRemovedLayout.text = "This group is deactivated by admin"
-                    chatFooter.gone()
+                    chatFooter.blockUserInputAndShowMessage("This group is deactivated by an admin")
+                    messageSwipeController.disableSwipe()
                 } else if (it.currenUserRemovedFromGroup) {
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
 
-                    chatFooter.replyLayout.gone()
-                    chatFooter.replyBlockedLayout.visible()
-                    chatFooter.replyBlockedLayout.text = "You have been removed from this group"
+                    chatFooter.blockUserInputAndShowMessage("You have been removed from this group")
+                    messageSwipeController.disableSwipe()
                 } else if (it.onlyAdminCanPostInGroup) {
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
 
                     if (groupChatViewModel.isUserGroupAdmin()) {
-                        chatFooter.replyBlockedLayout.gone()
-                        chatFooter.replyLayout.visible()
+                        chatFooter.enableUserInput()
+                        messageSwipeController.enableSwipe()
                     } else {
 
-                        chatFooter.replyLayout.gone()
-                        chatFooter.replyBlockedLayout.visible()
-                        chatFooter.replyBlockedLayout.text = "Only admin can post in this group"
+                        chatFooter.blockUserInputAndShowMessage("Only admin can post in this group")
+                        messageSwipeController.disableSwipe()
                     }
                 } else {
 
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
-                    chatFooter.replyBlockedLayout.gone()
-                    chatFooter.replyLayout.visible()
+                    chatFooter.enableUserInput()
+                    messageSwipeController.enableSwipe()
                 }
             })
 
@@ -407,8 +396,6 @@ class ChatPageFragment : Fragment(),
 
         val itemTouchHelper = ItemTouchHelper(messageSwipeController)
         itemTouchHelper.attachToRecyclerView(chatRecyclerView)
-
-        userBlockedOrRemovedLayout = view.findViewById(R.id.contact_blocked_label)
     }
 
     private fun getDataFromIntents(arguments: Bundle?, savedInstanceState: Bundle?) {
@@ -540,12 +527,11 @@ class ChatPageFragment : Fragment(),
                 }
 
                 if (it.isUserBlocked) {
-                    userBlockedOrRemovedLayout.visible()
-                    userBlockedOrRemovedLayout.text = "You've blocked this contact"
-                    chatFooter.gone()
+                    chatFooter.blockUserInputAndShowMessage("You've blocked this contact")
+                    messageSwipeController.disableSwipe()
                 } else {
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
+                    chatFooter.enableUserInput()
+                    messageSwipeController.enableSwipe()
                 }
             })
 
@@ -564,14 +550,12 @@ class ChatPageFragment : Fragment(),
 
         viewModel.headerInfo
             .observe(viewLifecycleOwner, {
-
                 if (it.isBlocked) {
-                    userBlockedOrRemovedLayout.visible()
-                    userBlockedOrRemovedLayout.text = "You've blocked this contact"
-                    chatFooter.gone()
+                    chatFooter.blockUserInputAndShowMessage("You've blocked this contact")
+                    messageSwipeController.disableSwipe()
                 } else {
-                    userBlockedOrRemovedLayout.gone()
-                    chatFooter.visible()
+                    chatFooter.enableUserInput()
+                    messageSwipeController.enableSwipe()
                 }
 
                 if (it.isOtherUserOnline) {

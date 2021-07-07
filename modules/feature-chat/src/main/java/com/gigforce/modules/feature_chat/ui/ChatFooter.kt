@@ -250,6 +250,20 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
         )
     }
 
+    fun blockUserInputAndShowMessage(
+            message : String
+    ){
+        replyLayout.gone()
+        replyBlockedLayout.visible()
+        replyBlockedLayout.text = message
+    }
+
+    fun enableUserInput(){
+        replyBlockedLayout.gone()
+        replyBlockedLayout.text = ""
+        replyLayout.visible()
+    }
+
 
     // --------------------------------------------------
     // PersonMentionAdapter Class
