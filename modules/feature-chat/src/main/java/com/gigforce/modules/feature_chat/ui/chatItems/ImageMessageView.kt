@@ -2,6 +2,7 @@ package com.gigforce.modules.feature_chat.ui.chatItems
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,8 +11,8 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.text.util.LinkifyCompat
 import androidx.core.view.isVisible
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
@@ -53,6 +54,7 @@ abstract class ImageMessageView(
 
     private lateinit var senderNameTV: TextView
     private lateinit var imageView: ImageView
+    private lateinit var messageTV: TextView
     private lateinit var textViewTime: TextView
     private lateinit var cardView: CardView
     private lateinit var downloadIconIV: ImageView
@@ -82,6 +84,7 @@ abstract class ImageMessageView(
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
         attachmentDownloadingProgressBar = this.findViewById(R.id.attachment_downloading_pb)
         imageContainerFrameLayout = this.findViewById(R.id.image_container_layout)
+        messageTV = this.findViewById(R.id.messageTV)
     }
 
     fun setDefault() {
@@ -96,7 +99,7 @@ abstract class ImageMessageView(
     }
 
     private fun setOnClickListeners() {
-        cardView.setOnClickListener(this)
+        imageContainerFrameLayout.setOnClickListener(this)
         cardView.setOnLongClickListener(this)
     }
 
@@ -106,23 +109,6 @@ abstract class ImageMessageView(
         downloadIconIV.visible()
     }
 
-    private fun loadThumbnail(msg: ChatMessage) {
-        if (msg.thumbnailBitmap != null) {
-
-            Glide.with(context)
-                    .load(msg.thumbnailBitmap)
-                    .placeholder(getCircularProgressDrawable())
-                    .centerCrop()
-                    .into(imageView)
-        } else if (msg.thumbnail != null) {
-
-            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
-            Glide.with(context)
-                    .load(thumbnailStorageRef)
-                    .placeholder(getCircularProgressDrawable())
-                    .into(imageView)
-        }
-    }
 
     private fun handleDownloadInProgress() {
         downloadOverlayIV.visible()
@@ -131,7 +117,9 @@ abstract class ImageMessageView(
     }
 
 
-    private fun handleImage(msg: ChatMessage) {
+    private fun handleImage(
+            msg: ChatMessage
+    ) {
         imageView.setImageDrawable(null)
 
         if (msg.thumbnailBitmap != null) {
@@ -155,20 +143,71 @@ abstract class ImageMessageView(
         downloadIconIV.gone()
     }
 
-    private fun handleImageDownloaded(downloadedFile: File) {
+    private fun loadThumbnail(
+            msg: ChatMessage
+    ) {
+        if (msg.thumbnailBitmap != null) {
+
+            var glideRequestManager = Glide.with(context)
+                    .load(msg.thumbnailBitmap)
+                    .placeholder(getCircularProgressDrawable())
+
+            if (msg.imageMetaData == null ||
+                    msg.imageMetaData!!.isHeightBigger() ||
+                    msg.imageMetaData!!.isAspectRatioTooExtreme()
+            ) {
+                glideRequestManager = glideRequestManager.centerCrop()
+            }
+
+            glideRequestManager.into(imageView)
+        } else if (msg.thumbnail != null) {
+
+            val thumbnailStorageRef = storage.reference.child(msg.thumbnail!!)
+            var glideRequestManager = Glide.with(context)
+                    .load(thumbnailStorageRef)
+                    .placeholder(getCircularProgressDrawable())
+
+            if (msg.imageMetaData == null ||
+                    msg.imageMetaData!!.isHeightBigger() ||
+                    msg.imageMetaData!!.isAspectRatioTooExtreme()
+            ) {
+                glideRequestManager = glideRequestManager.centerCrop()
+            }
+
+            glideRequestManager.into(imageView)
+        }
+    }
+
+    private fun handleImageDownloaded(
+            downloadedFile: File
+    ) {
 
         attachmentDownloadingProgressBar.gone()
         downloadOverlayIV.gone()
         downloadIconIV.gone()
 
-        Glide.with(context)
+        var glideRequestManager = Glide.with(context)
                 .load(downloadedFile)
                 .placeholder(getCircularProgressDrawable())
-                .into(imageView)
+
+        if (message.imageMetaData == null ||
+                message.imageMetaData!!.isHeightBigger() ||
+                message.imageMetaData!!.isAspectRatioTooExtreme()
+        ) {
+            glideRequestManager = glideRequestManager.centerCrop()
+        }
+
+        glideRequestManager.into(imageView)
     }
 
     override fun onBind(msg: ChatMessage) {
         chatMessage = msg
+
+        messageTV.isVisible = msg.content.isNotEmpty()
+        messageTV.text = msg.content
+        if (msg.content.isNotEmpty())
+            LinkifyCompat.addLinks(messageTV, Linkify.ALL)
+
         textViewTime.text = msg.timestamp?.toDisplayText()
 
         senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
@@ -181,29 +220,33 @@ abstract class ImageMessageView(
 
     private fun adjustImageSizeAcc(msg: ChatMessage) {
         if (msg.imageMetaData == null) {
-            imageContainerFrameLayout.layoutParams.width = 196.dp
-            imageContainerFrameLayout.layoutParams.height = 196.dp
+            imageContainerFrameLayout.layoutParams.width = 230.dp
+            imageContainerFrameLayout.layoutParams.height = 230.dp
         } else {
             val imageMetaData = msg.imageMetaData!!
             if (imageMetaData.size.height == 0 ||
                     imageMetaData.size.height == imageMetaData.size.width) {
-                imageContainerFrameLayout.layoutParams.width = 196.dp
-                imageContainerFrameLayout.layoutParams.height = 196.dp
+                imageContainerFrameLayout.layoutParams.width = 230.dp
+                imageContainerFrameLayout.layoutParams.height = 230.dp
             } else {
                 val isHeightBiggerThanWidth = imageMetaData.size.height > imageMetaData.size.width
                 if (isHeightBiggerThanWidth) {
-                    val aspectRatio = (imageMetaData.size.height / imageMetaData.size.width.toFloat())
-                    val newHeight = (196 * aspectRatio).toInt().dp
-                    val layoutParams =  imageContainerFrameLayout.layoutParams
-                    layoutParams.width = 196.dp
-                    layoutParams.height = newHeight
+                    val layoutParams = imageContainerFrameLayout.layoutParams
+                    layoutParams.width = 230.dp
+                    layoutParams.height = 230.dp
                     imageContainerFrameLayout.layoutParams = layoutParams
                 } else {
-                    val aspectRatio = (imageMetaData.size.width / imageMetaData.size.height.toFloat())
-                    val newWidth = (196 * aspectRatio).toInt().dp
-                    val layoutParams =  imageContainerFrameLayout.layoutParams
-                    layoutParams.width = newWidth
-                    layoutParams.height = 196.dp
+                    val minHeight = (230 * 0.6).toInt().dp
+                    val aspectRatio = (imageMetaData.size.height / imageMetaData.size.width.toFloat())
+
+                    var newHeight = (230 * aspectRatio).toInt().dp
+                    if (newHeight < minHeight) {
+                        newHeight = minHeight
+                    }
+
+                    val layoutParams = imageContainerFrameLayout.layoutParams
+                    layoutParams.width = 230.dp
+                    layoutParams.height = newHeight
                     imageContainerFrameLayout.layoutParams = layoutParams
                 }
             }

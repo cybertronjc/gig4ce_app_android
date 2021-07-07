@@ -32,8 +32,25 @@ data class ImageMetaData(
 
         @get:Exclude
         @set:Exclude
-        var thumbnail: Bitmap?= null
-)
+        var thumbnail: Bitmap? = null
+) {
+
+    @Exclude
+    fun isImageDimensionsNotAvailableOrImageIsSquare(): Boolean {
+        return size.height == 0 || size.height == size.width || aspectRatio!! > 0.9f || aspectRatio!! < 1.1f
+    }
+
+    @Exclude
+    fun isHeightBigger(): Boolean {
+        return size.height > size.width
+    }
+
+    @Exclude
+    fun isAspectRatioTooExtreme(): Boolean {
+        val aspectRat = aspectRatio ?: return false
+        return aspectRat <= 0.5f || aspectRat >= 1.5f
+    }
+}
 
 data class ImageSize(
 

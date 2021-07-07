@@ -8,6 +8,7 @@ import com.gigforce.core.datamodels.custom_gig_preferences.UnavailableDataModel
 import com.gigforce.core.datamodels.gigpage.Gig
 import com.gigforce.core.datamodels.user_preferences.PreferencesDataModel
 import com.gigforce.common_ui.repository.prefrepo.PreferencesRepository
+import com.gigforce.common_ui.viewdatamodels.GigStatus
 import com.gigforce.giger_app.calendarscreen.MainHomeCompleteGigModel
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.AllotedGigDataModel
 import com.gigforce.giger_app.calendarscreen.maincalendarscreen.verticalcalendar.VerticalCalendarDataItemModel
@@ -39,11 +40,15 @@ class CalendarHomeScreenViewModel : ViewModel() {
     fun getAllData() {
         mainHomeRepository.getCollectionReference()
             .whereEqualTo("gigerId", mainHomeRepository.getUID())
+            .whereNotEqualTo("status",GigStatus.DECLINED.getStatusString())
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (arrMainHomeDataModel != null) {
                     arrMainHomeDataModel?.clear()
                     if (querySnapshot != null) {
-                        querySnapshot.documents.forEach { t ->
+                        querySnapshot.documents.filter {
+                            //Because firebase support only 1 != in query
+                            GigStatus.CANCELLED.getStatusString() != it.getString("status")
+                        }.forEach { t ->
 
                             Log.d("gig id : data", t.id.toString())
                             t.toObject(Gig::class.java)

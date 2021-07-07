@@ -40,8 +40,8 @@
 
             <FrameLayout
                 android:id="@+id/image_container_layout"
-                android:layout_width="196dp"
-                android:layout_height="196dp">
+                android:layout_width="230dp"
+                android:layout_height="230dp">
 
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -78,6 +78,23 @@
                     android:layout_gravity="center" />
 
             </FrameLayout>
+
+            <TextView
+                android:id="@+id/messageTV"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="0"
+                android:textColorLink="@android:color/black"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:visibility="gone"
+                android:linksClickable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_container_layout"
+                tools:text="How ar my brother" />
 
             <ImageView
                 android:id="@+id/tv_received_status"
