@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
@@ -107,6 +109,15 @@ class DocViewerActivity : AppCompatActivity() {
                 } else {
                     showPdfFile(imageString, isImage, isPdf)
                 }
+            }
+
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+
             }
         }
     }

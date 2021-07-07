@@ -45,6 +45,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 />
 
+
+            <LinearLayout
+                android:id="@+id/reply_messages_quote_container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="150dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                />
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,11 +63,10 @@
                 android:textSize="16sp"
                 android:id="@+id/tv_msgValue"
                 android:linksClickable="true"
-
                 android:textColorLink="@android:color/black"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"
-                app:layout_constraintTop_toBottomOf="@id/user_name_tv"
+                app:layout_constraintTop_toBottomOf="@id/reply_messages_quote_container_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="ddwdewdeewdd wdewde"
                 />

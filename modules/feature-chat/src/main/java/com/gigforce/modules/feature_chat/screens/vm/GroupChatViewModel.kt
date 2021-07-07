@@ -396,6 +396,11 @@ class GroupChatViewModel constructor(
                     matchInContact.name ?: ""
                 }
             }
+
+            if(groupMessage.isAReplyToOtherMessage && groupMessage.replyForMessageId != null){
+                groupMessage.replyForMessage = grpMessages!!.find { it.id == groupMessage.replyForMessageId }
+            }
+
         }.sortBy {
             it.timestamp!!.seconds
         }
@@ -449,14 +454,19 @@ class GroupChatViewModel constructor(
                     timestamp = Timestamp.now(),
                     mentionedUsersInfo = mentionUsers,
                     isAReplyToOtherMessage = replyToMessage != null,
-                    replyForMessageId = replyToMessage!!.id,
+                    replyForMessageId = replyToMessage?.id,
                     replyForMessage = replyToMessage
             )
 
             chatGroupRepository.sendTextMessage(groupId, message)
         } catch (e: Exception) {
             e.printStackTrace()
-            //handle error
+
+            CrashlyticsLogger.e(
+                TAG,
+                "while sending text message",
+                e
+            )
         }
     }
 

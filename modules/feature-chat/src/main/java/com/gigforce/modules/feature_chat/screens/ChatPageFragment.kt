@@ -775,6 +775,8 @@ class ChatPageFragment : Fragment(),
                             usersMentioned,
                             chatFooter.getReplyToMessage()
                     )
+
+                chatFooter.closeReplyUi()
             }
         }
     }

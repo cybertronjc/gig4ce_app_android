@@ -20,8 +20,11 @@ import com.bumptech.glide.Glide
 import com.gigforce.common_ui.DisplayUtil
 import com.gigforce.common_ui.chat.ChatConstants
 import com.gigforce.common_ui.chat.models.ChatMessage
+import com.gigforce.common_ui.views.GigforceImageView
 import com.gigforce.core.IViewHolder
+import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.toDisplayText
+import com.gigforce.core.extensions.visible
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.modules.feature_chat.ChatNavigation
 import com.gigforce.modules.feature_chat.R
@@ -57,6 +60,7 @@ abstract class TextMessageView(
     private lateinit var msgView: TextView
     private lateinit var timeView: TextView
     private lateinit var receivedStatusIV: ImageView
+    private lateinit var quotedMessagePreviewContainer : LinearLayout
 
     private lateinit var message: ChatMessage
     private lateinit var oneToOneChatViewModel: ChatPageViewModel
@@ -89,6 +93,7 @@ abstract class TextMessageView(
         timeView = this.findViewById(R.id.tv_msgTimeValue)
         receivedStatusIV = this.findViewById(R.id.tv_received_status)
 
+        quotedMessagePreviewContainer = findViewById(R.id.reply_messages_quote_container_layout)
         containerView = this.findViewById(R.id.ll_msgContainer)
         containerView.setOnLongClickListener(this)
 
@@ -104,9 +109,10 @@ abstract class TextMessageView(
             groupChatViewModel = dataAndViewModels.groupChatViewModel
             oneToOneChatViewModel = dataAndViewModels.oneToOneChatViewModel
 
-            senderNameTV.isVisible =
-                    messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
+            senderNameTV.isVisible = messageType == MessageType.GROUP_MESSAGE && type == MessageFlowType.IN
             senderNameTV.text = message.senderInfo.name
+
+            setQuotedMessageOnView(message)
 
             if (message.mentionedUsersInfo.isNotEmpty()) {
                 val incrementingMentions = message.mentionedUsersInfo.sortedBy { it.startFrom }
@@ -132,6 +138,85 @@ abstract class TextMessageView(
 
             timeView.setText(message.timestamp?.toDisplayText())
             setReceivedStatus(message)
+        }
+    }
+
+    private fun setQuotedMessageOnView(
+        chatMessage: ChatMessage
+    ) {
+        if(message.isAReplyToOtherMessage){
+            quotedMessagePreviewContainer.removeAllViews()
+
+            val replyView = LayoutInflater.from(context).inflate(
+                R.layout.layout_reply_to_layout,
+                null,
+                false
+            )
+            quotedMessagePreviewContainer.addView(replyView)
+
+            //Setting common vars and listeners
+            val senderNameTV: TextView = replyView.findViewById(R.id.user_name_tv)
+            val messageTV: TextView = replyView.findViewById(R.id.tv_msgValue)
+            val messageImageIV: GigforceImageView = replyView.findViewById(R.id.message_image)
+
+            senderNameTV.text = chatMessage.senderInfo.name
+
+            when (chatMessage.type) {
+                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT -> {
+                    messageTV.text = chatMessage.content
+                    messageImageIV.gone()
+                }
+                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+                    messageTV.text = chatMessage.attachmentName
+                    messageImageIV.visible()
+
+                    if(chatMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                    } else if(chatMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                    }else if(chatMessage.attachmentPath != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                    } else {
+                        //load default image
+                    }
+                }
+                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+                    messageTV.text = chatMessage.attachmentName
+                    messageImageIV.visible()
+
+                    if(chatMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                    } else if(chatMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                    }else {
+                        //load default image
+                    }
+                }
+                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
+                    messageTV.text = chatMessage.locationPhysicalAddress
+                    messageImageIV.visible()
+
+                    if(chatMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
+                    } else if(chatMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                    }else if(chatMessage.attachmentPath != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                    } else {
+                        //load default image
+                    }
+                }
+                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                    messageTV.text = chatMessage.attachmentName
+                    messageImageIV.visible()
+                    messageImageIV.loadImage(R.drawable.ic_document_background)
+                }
+                else -> {
+                }
+            }
+
+        } else{
+            quotedMessagePreviewContainer.removeAllViews()
         }
     }
 

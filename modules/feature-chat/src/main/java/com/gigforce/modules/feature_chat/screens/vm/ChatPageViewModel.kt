@@ -304,7 +304,7 @@ class ChatPageViewModel constructor(
                     content = text,
                     timestamp = Timestamp.now(),
                     isAReplyToOtherMessage = replyToMessage != null,
-                    replyForMessageId = replyToMessage!!.id,
+                    replyForMessageId = replyToMessage?.id,
                     replyForMessage = replyToMessage
             )
             getReference(headerId).document(message.id).setOrThrow(message)
