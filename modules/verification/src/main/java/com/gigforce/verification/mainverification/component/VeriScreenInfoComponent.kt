@@ -1,24 +1,30 @@
 package com.gigforce.verification.mainverification.component
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.bumptech.glide.Glide
+import com.gigforce.common_ui.utils.getCircularProgressDrawable
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.AppConstants
 import com.gigforce.core.extensions.gone
+import com.gigforce.core.extensions.visible
 import com.gigforce.verification.R
 import com.gigforce.verification.mainverification.adapters.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import kotlinx.android.synthetic.main.verification_image_card_component.view.*
 
 class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
     var pageChangeListener: OnCustomPageSelectListener? = null
     var pageClickListener: OnClickListener? = null
+    lateinit var adapter: ViewPagerAdapter
 
     fun setOnCustomPageSelectListener(listener: OnCustomPageSelectListener?) {
         this.pageChangeListener = listener
@@ -79,22 +85,29 @@ class VeriScreenInfoComponent(context: Context, attrs: AttributeSet?) :
     }
 
     fun setImageViewPager(list: List<KYCImageModel>){
-        val adapter = ViewPagerAdapter{
+        viewPager2.visible()
+        tabLayout.visible()
+        adapter = ViewPagerAdapter{
             pageClickListener?.onClick(it)
         }
-        adapter.setItem(list)
+        adapter?.setItem(list)
         viewPager2.adapter = adapter
         if (list.size == 1){
             tabLayout.gone()
         }
-        Log.d("adapter", ""+adapter.itemCount + " list: " + list.toString())
+        Log.d("adapter", ""+adapter?.itemCount + " list: " + list.toString())
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
 
         }.attach()
 
     }
 
+    fun setDocumentImage(position : Int, uri: Uri){
+        adapter.updateData(position, uri)
+    }
+
     fun uploadStatusLayout(status: Int, title: String, subTitle: String){
+        uploadLayout.visible()
         when(status){
             AppConstants.UPLOAD_SUCCESS -> {
                 uploadLayout.background = resources.getDrawable(R.drawable.upload_successfull_layout_bg)

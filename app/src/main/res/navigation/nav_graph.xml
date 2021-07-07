@@ -912,6 +912,14 @@
         android:id="@+id/uploadPanCard"
         android:name="com.gigforce.verification.gigerVerfication.UploadPanCard"
         android:label="UploadPanCard" />
+    <fragment
+        android:id="@+id/panCardFragment"
+        android:name="com.gigforce.verification.mainverification.pancard.PanCardFragment"
+        android:label="PanCardFragment" />
+    <fragment
+        android:id="@+id/drivingLicenseFragment"
+        android:name="com.gigforce.verification.mainverification.drivinglicense.DrivingLicenseFragment"
+        android:label="DrivingLicenseFragment" />
 
 
 </navigation>

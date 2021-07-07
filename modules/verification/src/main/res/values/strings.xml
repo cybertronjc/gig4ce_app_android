@@ -86,6 +86,12 @@
     <string name="upload_your_driving_license">Please upload your Driving License for\nyour verification.</string>
     <string name="upload_driving_license_back_side">Upload Driving License (Back Side)</string>
     <string name="upload_driving_license_front_side">Upload Driving License (Front Side)</string>
+    <string name="upload_aadhar_card_back_side_new">Upload your Aadhar Card\nBACK Side</string>
+    <string name="upload_aadhar_card_front_side_new">Upload your Aadhar Card\nFRONT Side</string>
+    <string name="upload_pan_card_new">Please upload your Pan Card\nfor verification</string>
+    <string name="upload_bank_account_new">Upload your Bank Passbook\nFRONT Page</string>
+    <string name="upload_driving_license_back_side_new">Upload your Driving License\nBACK Side</string>
+    <string name="upload_driving_license_front_side_new">Upload your Driving License\nFRONT Side</string>
     <string name="no_i_don_t_have_aadhar_card">No, I don\'t have Aadhar Card</string>
     <string name="yes_i_have_aadhar_card">Yes, I have Aadhar Card</string>
     <string name="do_you_have_aadhar_card">Do you have Aadhar Card ?</string>

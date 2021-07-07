@@ -16,6 +16,7 @@
             android:id="@+id/imageBack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_front"></ImageView>
 
         <RelativeLayout
@@ -42,7 +43,7 @@
                 android:gravity="center"
                 android:textSize="12sp"
                 android:letterSpacing="-0.01"
-                android:text="@string/upload_your_aadhar_card_new"
+                android:text="@string/upload_aadhar_card_back_side_new"
                 android:textColor="@color/colorPrimary" />
 
         </RelativeLayout>

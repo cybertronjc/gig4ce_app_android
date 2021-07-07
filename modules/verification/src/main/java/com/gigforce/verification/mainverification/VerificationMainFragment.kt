@@ -40,7 +40,10 @@ class VerificationMainFragment : Fragment() {
         next.setOnClickListener{
             navigation.navigateTo("verification/aadhaarcardimageupload")
             navigation.navigateTo("verification/aadhaarcardphonenumber")
+            navigation.navigateTo("verification/pancardimageupload")
+            navigation.navigateTo("verification/drivinglicenseimageupload")
             navigation.navigateTo("verification/bank_account_fragment")
+
 
 
         }

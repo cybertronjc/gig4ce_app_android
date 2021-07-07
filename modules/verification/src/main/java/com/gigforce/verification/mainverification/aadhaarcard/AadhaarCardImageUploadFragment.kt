@@ -1,6 +1,7 @@
 package com.gigforce.verification.mainverification.aadhaarcard
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
@@ -15,17 +16,25 @@ import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
-import com.gigforce.core.extensions.visible
+import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
+import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
+import com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AadhaarCardImageUploadFragment : Fragment() {
 
     companion object {
         fun newInstance() = AadhaarCardImageUploadFragment()
         const val REQUEST_CODE_UPLOAD_AADHAR_IMAGE = 2333
     }
+
+    @Inject
+    lateinit var navigation: INavigation
 
     private val viewModel: AadhaarCardImageUploadViewModel by viewModels()
     private lateinit var viewBinding : AadhaarCardImageUploadFragmentBinding
@@ -53,6 +62,7 @@ class AadhaarCardImageUploadFragment : Fragment() {
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
+            if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
     }
 
@@ -61,7 +71,19 @@ class AadhaarCardImageUploadFragment : Fragment() {
     }
 
     private fun setViews() {
-        val list = listOf(KYCImageModel("Aadhar Card", R.drawable.ic_front), KYCImageModel("Aadhar card BACK", R.drawable.ic_back))
+        val frontUri = Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_front))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
+            .build()
+        val backUri = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(resources.getResourcePackageName(R.drawable.ic_back))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_back))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_back))
+            .build()
+        val list = listOf(KYCImageModel(getString(R.string.upload_aadhar_card_front_side_new), frontUri, false), KYCImageModel(getString(R.string.upload_aadhar_card_back_side_new), backUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
     }
 
@@ -79,7 +101,7 @@ class AadhaarCardImageUploadFragment : Fragment() {
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_front.jpg")
         navigation.navigateToPhotoCrop(photoCropIntent,
-            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
+            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
 
     }
@@ -98,7 +120,7 @@ class AadhaarCardImageUploadFragment : Fragment() {
         photoCropIntent.putExtra("detectFace", 0)
         photoCropIntent.putExtra("file", "aadhar_card_back.jpg")
         navigation.navigateToPhotoCrop(photoCropIntent,
-            AddAadharCardInfoFragment.REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
+            REQUEST_CODE_UPLOAD_AADHAR_IMAGE, requireContext(),this)
 //        startActivityForResult(photoCropIntent, REQUEST_CODE_UPLOAD_AADHAR_IMAGE)
     }
 
@@ -118,96 +140,74 @@ class AadhaarCardImageUploadFragment : Fragment() {
                     showBackAadharCard(aadharBackImagePath!!)
                 }
 
-                if (aadharDataCorrectCB.isChecked
-                    && aadharFrontImagePath != null
-                    && aadharBackImagePath != null
-                ) {
-                    enableSubmitButton()
-                } else {
-                    disableSubmitButton()
-                }
-
-                if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
-                    aadharSubmitSliderBtn.visible()
-                    aadharDataCorrectCB.visible()
-                }
+//                if (aadharDataCorrectCB.isChecked
+//                    && aadharFrontImagePath != null
+//                    && aadharBackImagePath != null
+//                ) {
+//                    enableSubmitButton()
+//                } else {
+//                    disableSubmitButton()
+//                }
+//
+//                if (aadharFrontImagePath != null && aadharBackImagePath != null && aadharSubmitSliderBtn.isGone) {
+//                    aadharSubmitSliderBtn.visible()
+//                    aadharDataCorrectCB.visible()
+//                }
 
             }
-
-//            else {
-//                MaterialAlertDialogBuilder(requireContext())
-//                    .setTitle(getString(R.string.alert))
-//                    .setMessage(getString(R.string.unable_to_capture_image))
-//                    .setPositiveButton(getString(R.string.okay)) { _, _ -> }
-//                    .show()
-//            }
         }
     }
-    private fun showAadharImageAndInfoLayout() {
-        aadharBackImageHolder.visibility = View.VISIBLE
-        aadharFrontImageHolder.visibility = View.VISIBLE
-    }
+//    private fun showAadharImageAndInfoLayout() {
+//        aadharBackImageHolder.visibility = View.VISIBLE
+//        aadharFrontImageHolder.visibility = View.VISIBLE
+//    }
+//
+//    private fun hideAadharImageAndInfoLayout() {
+//        aadharBackImageHolder.visibility = View.GONE
+//        aadharFrontImageHolder.visibility = View.GONE
+//        aadharInfoLayout.visibility = View.GONE
+//    }
 
-    private fun hideAadharImageAndInfoLayout() {
-        aadharBackImageHolder.visibility = View.GONE
-        aadharFrontImageHolder.visibility = View.GONE
-        aadharInfoLayout.visibility = View.GONE
-    }
-
-    private fun enableSubmitButton() {
-        aadharSubmitSliderBtn.isEnabled = true
-
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_pink, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.lipstick, null)
-    }
-
-    private fun disableSubmitButton() {
-        aadharSubmitSliderBtn.isEnabled = false
-
-        aadharSubmitSliderBtn.outerColor =
-            ResourcesCompat.getColor(resources, R.color.light_grey, null)
-        aadharSubmitSliderBtn.innerColor =
-            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
-    }
-
-    private fun showImageInfoLayout() {
-        aadharInfoLayout.visibility = View.VISIBLE
-    }
-
-
+//    private fun enableSubmitButton() {
+//        aadharSubmitSliderBtn.isEnabled = true
+//
+//        aadharSubmitSliderBtn.outerColor =
+//            ResourcesCompat.getColor(resources, R.color.light_pink, null)
+//        aadharSubmitSliderBtn.innerColor =
+//            ResourcesCompat.getColor(resources, R.color.lipstick, null)
+//    }
+//
+//    private fun disableSubmitButton() {
+//        aadharSubmitSliderBtn.isEnabled = false
+//
+//        aadharSubmitSliderBtn.outerColor =
+//            ResourcesCompat.getColor(resources, R.color.light_grey, null)
+//        aadharSubmitSliderBtn.innerColor =
+//            ResourcesCompat.getColor(resources, R.color.warm_grey, null)
+//    }
+//
+//    private fun showImageInfoLayout() {
+//        aadharInfoLayout.visibility = View.VISIBLE
+//    }
+//
+//
     private fun showFrontAadharCard(aadharFrontImagePath: Uri) {
-//        aadharFrontImageHolder.uploadDocumentCardView.visibility = View.GONE
-//        aadharFrontImageHolder.uploadImageLayout.visibility = View.VISIBLE
-        aadharFrontImageHolder.makeEditLayoutVisible()
-//        aadharFrontImageHolder.uploadImageLayout.imageLabelTV.text =
-//            getString(R.string.aadhar_card_front_image)
-        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image))
+//        aadharFrontImageHolder.makeEditLayoutVisible()
+//        aadharFrontImageHolder.uploadImageLabel(getString(R.string.aadhar_card_front_image))
+//
+//        aadharFrontImageHolder.setImage(aadharFrontImagePath)
+        viewBinding.toplayoutblock.setDocumentImage(0, aadharFrontImagePath)
 
-        aadharFrontImageHolder.setImage(aadharFrontImagePath)
-//        Glide.with(requireContext())
-//            .load(aadharFrontImagePath)
-//            .placeholder(getCircularProgressDrawable())
-//            .into(aadharFrontImageHolder.clickedImage)
     }
 
     private fun showBackAadharCard(aadharBackImagePath: Uri) {
-        aadharBackImageHolder.makeUploadLayoutVisible()
-        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
-
-        aadharBackImageHolder .setImage(aadharBackImagePath)
-//        aadharBackImageHolder.uploadDocumentCardView.visibility = View.GONE
-//        aadharBackImageHolder.uploadImageLayout.visibility = View.VISIBLE
-//        aadharBackImageHolder.uploadImageLayout.imageLabelTV.text =
-//            getString(R.string.aadhar_card_back_image)
+//        aadharBackImageHolder.makeUploadLayoutVisible()
+//        aadharBackImageHolder.uploadImageLabel(getString(R.string.aadhar_card_back_image))
 //
-//        Glide.with(requireContext())
-//            .load(aadharBackImagePath)
-//            .placeholder(getCircularProgressDrawable())
-//            .into(aadharBackImageHolder.uploadImageLayout.clickedImageIV)
+//        aadharBackImageHolder .setImage(aadharBackImagePath)
+        viewBinding.toplayoutblock.setDocumentImage(1, aadharBackImagePath)
     }
-
+//
 
 
 
