@@ -178,7 +178,7 @@ data class EventInfo(
                 chatType = ChatConstants.CHAT_TYPE_GROUP,
                 flowType = ChatConstants.FLOW_TYPE_OUT,
                 content = "",
-                timestamp = Timestamp.now(),
+                timestamp = eventTime,
                 eventInfo = this
         )
     }
