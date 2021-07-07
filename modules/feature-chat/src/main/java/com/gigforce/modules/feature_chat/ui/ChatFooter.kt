@@ -184,7 +184,7 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
                 messageImageIV.visible()
 
                 if(chatMessage.thumbnailBitmap != null){
-                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
                 } else if(chatMessage.thumbnail != null){
                     messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
                 }else if(chatMessage.attachmentPath != null){
@@ -198,7 +198,7 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
                 messageImageIV.visible()
 
                 if(chatMessage.thumbnailBitmap != null){
-                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
                 } else if(chatMessage.thumbnail != null){
                     messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
                 }else {
@@ -210,7 +210,7 @@ class ChatFooter(context: Context, attrs: AttributeSet) :
                 messageImageIV.visible()
 
                 if(chatMessage.thumbnailBitmap != null){
-                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!)
+                    messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
                 } else if(chatMessage.thumbnail != null){
                     messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
                 }else if(chatMessage.attachmentPath != null){
