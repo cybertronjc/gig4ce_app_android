@@ -27,6 +27,7 @@ import com.gigforce.common_ui.chat.models.ChatGroup
 import com.gigforce.common_ui.chat.models.ContactModel
 import com.gigforce.common_ui.chat.models.GroupMedia
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.core.crashlytics.CrashlyticsLogger
 import com.gigforce.core.extensions.gone
 import com.gigforce.core.extensions.onTextChanged
 import com.gigforce.core.extensions.visible
@@ -208,6 +209,11 @@ class GroupDetailsFragment : Fragment(),
                         }
                     }
                 })
+
+        if (groupId.isEmpty()) {
+            CrashlyticsLogger.e(TAG, "getting args from arguments", Exception("$groupId <-- String passed as groupId"))
+            throw IllegalArgumentException("$groupId <-- String passed as groupId")
+        }
 
         viewModel.setGroupId(groupId)
         viewModel.startWatchingGroupDetails()

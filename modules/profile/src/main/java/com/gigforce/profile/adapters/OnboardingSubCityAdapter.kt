@@ -1,11 +1,13 @@
 package com.gigforce.profile.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.gigforce.profile.R
 import com.gigforce.profile.models.SubCity
@@ -82,7 +84,13 @@ class OnboardingSubCityAdapter(
 
         override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
             val subCity = originalSubCityList.get(adapterPosition)
-            onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity.name)
+            if (selectedSubCityList.size == 3 && isChecked){
+                subCityCheckbox.isChecked = false
+                Toast.makeText(context, "Maximum three localities can be selected!!", Toast.LENGTH_SHORT).show()
+            } else {
+                onSubCitySelectedListener?.onSubCitySelected(isChecked, subCity.name)
+            }
+
         }
 
     }

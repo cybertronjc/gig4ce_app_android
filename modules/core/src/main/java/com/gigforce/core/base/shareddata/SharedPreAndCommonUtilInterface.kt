@@ -28,4 +28,12 @@ interface SharedPreAndCommonUtilInterface {
     fun getCurrentVersion(): String
     fun saveLong(key: String?, value: Long)
     fun getLong(key: String?): Long
+
+    fun saveLoggedInUserName(username : String)
+    fun getLoggedInUserName():String
+    fun saveLoggedInMobileNumber(mobileno : String)
+    fun getLoggedInMobileNumber():String
+    fun saveUserProfilePic(profilePic : String)
+    fun getUserProfilePic() : String
+
 }

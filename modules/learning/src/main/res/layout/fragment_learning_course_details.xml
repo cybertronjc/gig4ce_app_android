@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/course_details_main_layout"
-        layout="@layout/fragment_learning_course_details_main"/>
+        layout="@layout/layout_fragment_course_details"/>
 
 
     <ProgressBar

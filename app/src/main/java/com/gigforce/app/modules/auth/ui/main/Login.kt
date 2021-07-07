@@ -40,11 +40,13 @@ import kotlinx.android.synthetic.main.mobile_number_digit_layout.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 @AndroidEntryPoint
 class Login : Fragment() {
     companion object {
         fun newInstance() = Login()
+        private const val TERMS_REQUEST_CODE = 90
     }
 
     @Inject
@@ -309,7 +311,8 @@ class Login : Fragment() {
                 StringConstants.DOC_URL.value,
                 "https://gigforce.in/terms-of-use "
             )
-            activity?.startActivity(docIntent)
+            docIntent.putExtra(StringConstants.WEB_TITLE.value, "Terms and Conditions")
+            startActivityForResult(docIntent, TERMS_REQUEST_CODE)
         }
 
     }
@@ -400,6 +403,11 @@ class Login : Fragment() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+        else if (requestCode == TERMS_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            if (!termsCheckbox.isChecked){
+                termsCheckbox.isChecked = true
             }
         }
     }

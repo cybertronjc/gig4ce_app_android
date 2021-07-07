@@ -195,9 +195,8 @@
         </LinearLayout>
 
 
-        <include
+        <com.gigforce.verification.VerficationImageCardComponent
             android:id="@+id/aadharFrontImageHolder"
-            layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
@@ -219,9 +218,8 @@
 
 
 
-        <include
+        <com.gigforce.verification.VerficationImageCardComponent
             android:id="@+id/aadharBackImageHolder"
-            layout="@layout/fragment_verification_image_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"

@@ -1,12 +1,15 @@
 package com.gigforce.common_ui.chat.models
 
 import android.graphics.Bitmap
+import com.gigforce.common_ui.chat.ChatConstants
+import com.gigforce.common_ui.metaDataHelper.ImageMetaData
 import com.gigforce.common_ui.viewdatamodels.chat.UserInfo
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.PropertyName
+import java.util.*
 
 class ChatMessage(
     @DocumentId
@@ -124,11 +127,62 @@ class ChatMessage(
     @set:PropertyName("groupId")
     var groupId: String = "",
 
+    @get:PropertyName("imageMetaData")
+    @set:PropertyName("imageMetaData")
+    var imageMetaData: ImageMetaData? = null,
+
+    @get:PropertyName("isChatEvent")
+    @set:PropertyName("isChatEvent")
+    var isMessageChatEvent: Boolean = false,
+
+    @get:PropertyName("eventInfo")
+    @set:PropertyName("eventInfo")
+    var eventInfo: EventInfo? = null,
+
     @get:Exclude
     @set:Exclude
     var thumbnailBitmap: Bitmap? = null
 
 ) : IMediaMessage
+
+
+data class EventInfo(
+
+        @get:PropertyName("groupId")
+        @set:PropertyName("groupId")
+        var groupId: String = "",
+
+        @get:PropertyName("showEventToUsersWithUid")
+        @set:PropertyName("showEventToUsersWithUid")
+        var showEventToUsersWithUid: List<String> = emptyList(),
+
+        @get:PropertyName("eventDoneByUserUid")
+        @set:PropertyName("eventDoneByUserUid")
+        var eventDoneByUserUid: String = "",
+
+        @get:PropertyName("eventText")
+        @set:PropertyName("eventText")
+        var eventText: String = "",
+
+        @get:PropertyName("eventTime")
+        @set:PropertyName("eventTime")
+        var eventTime: Timestamp =  Timestamp.now()
+){
+
+    fun toChatMessage(): ChatMessage{
+        return ChatMessage(
+                id = UUID.randomUUID().toString(),
+                headerId = groupId,
+                isMessageChatEvent = true,
+                type = ChatConstants.MESSAGE_TYPE_EVENT_ASSIGNED_ADMIN,
+                chatType = ChatConstants.CHAT_TYPE_GROUP,
+                flowType = ChatConstants.FLOW_TYPE_OUT,
+                content = "",
+                timestamp = eventTime,
+                eventInfo = this
+        )
+    }
+}
 
 interface IMediaMessage {
     var type: String

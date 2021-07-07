@@ -52,6 +52,8 @@ class ChatViewTypeLoader: IViewTypeLoader {
 
             ViewTypes.GROUP_MESSAGE_READ_INFO -> GroupMessageReadItemView(context)
 
+            ViewTypes.CHAT_EVENT -> ChatEventView(context,null)
+
             ViewTypes.GROUP_DETAILS_GROUP_MEMBER -> TODO()
             ViewTypes.GROUP_DETAILS_MEDIA -> TODO()
 

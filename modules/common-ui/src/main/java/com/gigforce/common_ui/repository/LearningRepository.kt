@@ -565,6 +565,18 @@ class LearningRepository : BaseFirestoreDBRepository() {
             db.collection(COURSE_PROGRESS_NAME).addOrThrow(it)
         }
     }
+    suspend fun getAllCourses(): List<Course> {
+
+        if (mProfile == null) {
+            mProfile = profileFirebaseRepository.getProfileData()
+        }
+
+        return getAllCoursesC().filter {
+            it.isActive && doesCourseFullFillsCondition(it)
+        }.sortedBy {
+            it.priority
+        }
+    }
 
     suspend fun getRoleBasedCourses(): List<Course> {
 
@@ -611,18 +623,7 @@ class LearningRepository : BaseFirestoreDBRepository() {
             }
     }
 
-    suspend fun getAllCourses(): List<Course> {
 
-        if (mProfile == null) {
-            mProfile = profileFirebaseRepository.getProfileData()
-        }
-
-        return getAllCoursesC().filter {
-            it.isActive && doesCourseFullFillsCondition(it)
-        }.sortedBy {
-            it.priority
-        }
-    }
 
     private suspend fun getAllCoursesC(): List<Course> = suspendCoroutine { cont ->
         getCollectionReference()

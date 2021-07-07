@@ -59,7 +59,15 @@
     <string name="as_you_clear_more_assessments">As you clear more assessments suitable gigs will get assigned soon</string>
     <string name="do_it_later"><u>Do It Later</u></string>
     <string name="back_button">Back Button</string>
-
+    <string name="questionnaire">Questionnaire</string>
+    <string name="back_cap">Back</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="select_date">Select Date</string>
+    <string name="refer_your_friends">Refer Your Friends</string>
+    <string name="next_camel_case">Next</string>
+    <string name="current_state">Current State</string>
+    <string name="current_city">Current City</string>
 
 
 </resources>

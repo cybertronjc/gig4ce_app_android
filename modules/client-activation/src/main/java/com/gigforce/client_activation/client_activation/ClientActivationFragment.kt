@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -25,15 +24,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gigforce.client_activation.R
 import com.gigforce.client_activation.client_activation.adapters.ActiveLocationsAdapter
-import com.gigforce.client_activation.client_activation.models.City
+import com.gigforce.core.datamodels.client_activation.City
 import com.gigforce.core.datamodels.client_activation.JpApplication
 import com.gigforce.common_ui.MenuItem
 import com.gigforce.common_ui.StringConstants
-import com.gigforce.common_ui.adapter.AdapterPreferredLocation
 import com.gigforce.common_ui.core.IOnBackPressedOverride
 import com.gigforce.common_ui.decors.HorizontaltemDecoration
 import com.gigforce.common_ui.ext.getCircularProgressDrawable
 import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.listeners.AppBarClicks
 import com.gigforce.common_ui.shimmer.ShimmerHelper
 import com.gigforce.common_ui.utils.LocationUpdates
 import com.gigforce.common_ui.utils.PopMenuAdapter
@@ -48,10 +47,6 @@ import com.gigforce.core.navigation.INavigation
 import com.gigforce.core.recyclerView.GenericRecyclerAdapterTemp
 import com.gigforce.core.utils.Lce
 import com.gigforce.core.utils.NavFragmentsData
-import com.google.android.flexbox.AlignItems
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -158,6 +153,65 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
         iv_back_client_activation.setOnClickListener {
             navigation.popBackStack()
         }
+        appBar.setBackButtonListener(View.OnClickListener {
+            navigation.popBackStack()
+        })
+
+        appBar.setOnMenuClickListener(object : AppBarClicks.OnMenuClickListener{
+            override fun onMenuClick(v: View) {
+                 customPowerMenu =
+                CustomPowerMenu.Builder(requireContext(), PopMenuAdapter())
+                    .addItem(
+                        MenuItem(getString(R.string.share))
+                    )
+
+                    .setShowBackground(false)
+                    .setOnMenuItemClickListener(object :
+                        OnMenuItemClickListener<MenuItem> {
+                        override fun onItemClick(
+                            position: Int,
+                            item: MenuItem?
+                        ) {
+                            pb_client_activation.visible()
+                            Firebase.dynamicLinks.shortLinkAsync {
+                                longLink =
+                                    Uri.parse(buildDeepLink(Uri.parse("http://www.gig4ce.com/?job_profile_id=$mJobProfileId&invite=${viewModel.getUID()}")).toString())
+                            }.addOnSuccessListener { result ->
+                                // Short link created
+                                val shortLink = result.shortLink
+                                shareToAnyApp(shortLink.toString())
+                            }.addOnFailureListener {
+                                // Error
+                                // ...
+                                showToast(it.message!!)
+                            }
+                            customPowerMenu?.dismiss()
+                        }
+
+                    })
+                    .setAnimation(MenuAnimation.DROP_DOWN)
+                    .setMenuRadius(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+                    .setMenuShadow(
+                        resources.getDimensionPixelSize(R.dimen.size_4).toFloat()
+                    )
+
+                    .build()
+            customPowerMenu?.showAsDropDown(
+                v,
+                -(((customPowerMenu?.getContentViewWidth()
+                    ?: 0) - (v.resources.getDimensionPixelSize(R.dimen.size_32))
+                        )
+                        ),
+                -(resources.getDimensionPixelSize(
+                    R.dimen.size_24
+                )
+                        )
+            )
+        }
+
+        })
 
         iv_options_client_activation.setOnClickListener {
 
@@ -269,7 +323,12 @@ class ClientActivationFragment : Fragment(), IOnBackPressedOverride,
             it.locationList?.map { item -> item.location }?.let { locations ->
                 var cityList = ArrayList<City>()
                 for (i in 0..locations.size - 1){
-                    cityList.add(City(locations.get(i), getCityIcon(locations.get(i))))
+                    cityList.add(
+                        City(
+                            locations.get(i),
+                            getCityIcon(locations.get(i))
+                        )
+                    )
                 }
                 adapterPreferredLocation?.setData(cityList)
             }

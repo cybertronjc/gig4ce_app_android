@@ -26,9 +26,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gigforce.app.R
 import com.gigforce.app.core.base.BaseFragment
 import com.gigforce.common_ui.ext.showToast
-//import com.gigforce.app.modules.gigPage.GigPageFragment
 import com.gigforce.core.datamodels.profile.ProfileData
 import com.gigforce.core.IEventTracker
+import com.gigforce.core.navigation.INavigation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -41,15 +41,15 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     @Inject
     lateinit var eventTracker: IEventTracker
+    @Inject lateinit var navigation : INavigation
 
-    private val SPLASH_TIME_OUT: Long = 2000 // 1 sec
     var layout: View? = null
     private lateinit var viewModel: LoginSuccessfulViewModel
     private var profileData: ProfileData? = null
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 //        this.setDarkStatusBarTheme()
         layout = inflateView(R.layout.fragment_login_success, inflater, container)
@@ -64,12 +64,6 @@ class LoginSuccessfulFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginSuccessfulViewModel::class.java)
         observer()
-//        layout?.setOnClickListener() {
-//        }
-//        successful_screen.setOnClickListener(){
-//            popFragmentFromStack(R.id.homeScreenIcons)
-//            navigateWithAllPopupStack(R.id.homeScreenIcons1);
-//        }
         checkForGpsPermissionsAndGpsStatus()
     }
 
@@ -83,7 +77,9 @@ class LoginSuccessfulFragment : BaseFragment() {
                     if (it.isonboardingdone != null && it.isonboardingdone) {
                         saveOnBoardingCompleted()
 //                        navigateWithAllPopupStack(R.id.landinghomefragment)
-                        navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
+                        navigation.popAllBackStates()
+                        navigation.navigateTo("loader_screen")
+//                        navigateWithAllPopupStack(R.id.onboardingLoaderfragment)
                     } else {
 
                         navigateWithAllPopupStack(R.id.onboardingfragment)
@@ -102,20 +98,18 @@ class LoginSuccessfulFragment : BaseFragment() {
         val is_gps_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (userGpsDialogActionCount == 0 && !is_gps_enabled) {
             showEnableGPSDialog()
-            checkInCheckOutSliderBtn?.resetSlider()
             return
         }
 
         val has_permission_coarse_location = ContextCompat.checkSelfPermission(
-                requireActivity(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            requireActivity(),
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         if (userGpsDialogActionCount == 1 || has_permission_coarse_location) {
             checkAndUpdateUserDetails()
         } else {
             requestPermissionForGPS()
-            checkInCheckOutSliderBtn?.resetSlider()
         }
     }
 
@@ -132,14 +126,14 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     private fun turnGPSOn() {
         val provider = Settings.Secure.getString(
-                context?.contentResolver,
-                Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+            context?.contentResolver,
+            Settings.Secure.LOCATION_PROVIDERS_ALLOWED
         )
         if (!provider.contains("gps")) { //if gps is disabled
             val poke = Intent()
             poke.setClassName(
-                    "com.android.settings",
-                    "com.android.settings.widget.SettingsAppWidgetProvider"
+                "com.android.settings",
+                "com.android.settings.widget.SettingsAppWidgetProvider"
             )
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE)
             poke.data = Uri.parse("3")
@@ -148,7 +142,7 @@ class LoginSuccessfulFragment : BaseFragment() {
             } ?: run {
 
                 FirebaseCrashlytics.getInstance()
-                        .log("Context found null in GigPageFragment/turnGPSOn()")
+                    .log("Context found null in GigPageFragment/turnGPSOn()")
             }
         }
     }
@@ -211,15 +205,15 @@ class LoginSuccessfulFragment : BaseFragment() {
 
     private fun initializeGPS() {
         fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
+            LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     private fun checkAndUpdateUserDetails() {
         val manager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val is_GPS_enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val has_GPS_permission = ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         if (is_GPS_enabled && has_GPS_permission) {
@@ -264,9 +258,9 @@ class LoginSuccessfulFragment : BaseFragment() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {

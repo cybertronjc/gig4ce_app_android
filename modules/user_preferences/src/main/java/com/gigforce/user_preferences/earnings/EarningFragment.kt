@@ -67,6 +67,7 @@ class EarningFragment : Fragment(), IOnBackPressedOverride {
         back_arrow_iv.setOnClickListener {
             activity?.onBackPressed()
         }
+        appBar.setBackButtonListener(View.OnClickListener { activity?.onBackPressed() })
         perDayGoalSB.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value =

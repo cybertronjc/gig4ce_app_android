@@ -1,7 +1,7 @@
 package com.gigforce.client_activation.client_activation.adapters
 
 import android.content.Context
-import com.gigforce.client_activation.client_activation.models.City
+import com.gigforce.core.datamodels.client_activation.City
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.gigforce.client_activation.client_activation.explore.OnJobSelectedListener
-import com.gigforce.client_activation.client_activation.models.JpExplore
 import com.gigforce.client_activation.R
 class ActiveLocationsAdapter(
     private val context: Context

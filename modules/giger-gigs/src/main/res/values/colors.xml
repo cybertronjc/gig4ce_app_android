@@ -26,4 +26,8 @@
     <color name="black_color_future_date">#333333</color>
     <color name="warm_grey_two">#979797</color>
     <color name="black_three">#333333</color>
+    <color name="lightGrey">#c7c7cc</color>
+    <color name="colorLigthSeparater">#e4e4e4</color>
+    <color name="gray_chat_module">#979797</color>
+
 </resources>

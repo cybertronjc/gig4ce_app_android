@@ -95,6 +95,10 @@ class ApplicationClientActivationFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        appBar.setBackButtonListener(View.OnClickListener {
+            activity?.onBackPressed()
+        })
+
         tv_action_application_client_activation.setOnClickListener {
 
             val bussinessTitle = jpSettings?.businessTitle ?: ""
@@ -166,7 +170,8 @@ class ApplicationClientActivationFragment : Fragment(),
 
             tv_thanks_application.text = Html.fromHtml(it?.title ?: "")
             tv_completion_application.text = it?.subTitle ?: ""
-            tv_title_application_client_activation.text = it?.businessTitle ?: ""
+            appBar.setAppBarTitle(it?.businessTitle ?: "")
+            //tv_title_application_client_activation.text = it?.businessTitle ?: ""
             viewModel.updateDraftJpApplication(
                     mJobProfileId,
                     it?.requiredFeatures ?: listOf()

@@ -76,6 +76,59 @@
         <attr name="civ_dashed_border" format="boolean" />
         <attr name="civ_is_qr" format="boolean" />
     </declare-styleable>
+    
+    <declare-styleable name="ChipGroupComponent">
+        <attr name="chipGroupComp" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="ChipComponent">
+        <attr name="chipComponent" format="reference"/>
+        <attr name="chip_selectable" format="boolean" />
+        <attr name="chip_text" format="string"/>
+        <attr name="chipSelected" format="boolean"/>
+        <attr name="chipStrokeWidth" format="dimension"/>
+        <attr name="chipCornerRadius" format="dimension" />
+        <attr name="chip_strokeSize" format="dimension" />
+        <attr name="chip_backgroundColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+        <attr name="chip_textColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+
+        <attr name="chip_strokeColor" format="enum">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="WHITE" value="200"/>
+            <enum name="LIGHT_PINK" value="201"/>
+            <enum name="LIGHT_BLUE" value="202"/>
+            <enum name="LIPSTICK" value="203"/>
+            <enum name="GRAY" value="204"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="AppBar">
+        <attr name="titleText" format="string"/>
+        <attr name="searchHint" format="string"/>
+        <attr name="isSearchVisible" format="boolean"/>
+        <attr name="isMenuItemVisible" format="boolean"/>
+        <attr name="isProfileVisible" format="boolean"/>
+        <attr name="isStepsVisible" format="boolean"/>
+        <attr name="backgroundType" format="enum">
+            <enum name="PinkBar" value="101"/>
+            <enum name="WhiteBar" value="102"/>
+            <enum name="GreyBar" value="103"/>
+        </attr>
+    </declare-styleable>
 
     <declare-styleable name="EditTextWithSuffix">
         <attr name="suffix" format="string|reference" />

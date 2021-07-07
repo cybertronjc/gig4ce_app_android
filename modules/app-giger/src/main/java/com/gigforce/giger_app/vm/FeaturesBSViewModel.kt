@@ -1,5 +1,6 @@
 package com.gigforce.giger_app.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ class FeaturesBSViewModel @Inject constructor(
         bsDataRepository.getData().observeForever {
             it?.let {
                 this.allBSData.value = it
+                Log.d("dataFeatureVM", it.toString())
             }
         }
     }
