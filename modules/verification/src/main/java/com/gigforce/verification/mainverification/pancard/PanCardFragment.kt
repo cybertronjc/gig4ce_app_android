@@ -12,15 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.datamodels.verification.PanCardDataModel
+import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.navigation.INavigation
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
+import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PanCardFragment : Fragment() {
+class PanCardFragment() : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
 
     companion object {
         fun newInstance() = PanCardFragment()
@@ -37,6 +42,7 @@ class PanCardFragment : Fragment() {
     private var clickedImagePath: Uri? = null
     private val viewModel: PanCardViewModel by viewModels()
     private lateinit var viewBinding: PanCardFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +66,8 @@ class PanCardFragment : Fragment() {
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            launchSelectImageSourceDialog()
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Pan Card", this)
+            //launchSelectImageSourceDialog()
         })
     }
 
@@ -144,8 +151,19 @@ class PanCardFragment : Fragment() {
 //        if (panDataCorrectCB.isChecked)
 //            enableSubmitButton()
 //    }
+    private fun callOcrApi(){
+
+    }
 
     private fun showPanInfoCard(panInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, panInfoPath)
+        //call ocr api
+    }
+    override fun onClickPictureThroughCameraClicked() {
+        launchSelectImageSourceDialog()
+    }
+
+    override fun onPickImageThroughCameraClicked() {
+        launchSelectImageSourceDialog()
     }
 }

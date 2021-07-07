@@ -22,12 +22,14 @@ import com.gigforce.verification.databinding.DrivingLicenseFragmentBinding
 import com.gigforce.verification.gigerVerfication.drivingLicense.AddDrivingLicenseInfoFragment
 import com.gigforce.verification.gigerVerfication.drivingLicense.DrivingLicenseSides
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DrivingLicenseFragment : Fragment() {
+class DrivingLicenseFragment : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
     companion object {
         fun newInstance() = DrivingLicenseFragment()
         const val REQUEST_CODE_UPLOAD_DL = 2333
@@ -63,7 +65,8 @@ class DrivingLicenseFragment : Fragment() {
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Driving License", this)
+            //if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
     }
 
@@ -195,6 +198,13 @@ class DrivingLicenseFragment : Fragment() {
 
     private fun showBackDrivingLicense(drivingBackPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(1, drivingBackPath)
+    }
+    override fun onClickPictureThroughCameraClicked() {
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+    }
+
+    override fun onPickImageThroughCameraClicked() {
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
     }
 
 }

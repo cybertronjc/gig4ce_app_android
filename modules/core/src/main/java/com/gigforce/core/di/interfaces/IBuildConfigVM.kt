@@ -9,4 +9,5 @@ interface IBuildConfigVM {
     fun getGeneratePayslipURL():String
     fun getApplicationID():String
     fun getSendSMSURL():String
+    fun getVerificationKycOcrResult():String
 }

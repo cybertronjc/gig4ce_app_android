@@ -21,11 +21,14 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.BankAccountFragmentBinding
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.bankDetails.AddBankDetailsInfoFragment
+import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class BankAccountFragment : Fragment() {
+class BankAccountFragment : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
 
     companion object {
         fun newInstance() = BankAccountFragment()
@@ -61,7 +64,8 @@ class BankAccountFragment : Fragment() {
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            showCameraAndGalleryOption()
+            //showCameraAndGalleryOption()
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Bank Passbook", this)
         })
     }
 
@@ -146,6 +150,13 @@ class BankAccountFragment : Fragment() {
 
     private fun showPassbookInfoCard(bankInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, bankInfoPath)
+    }
+    override fun onClickPictureThroughCameraClicked() {
+        showCameraAndGalleryOption()
+    }
+
+    override fun onPickImageThroughCameraClicked() {
+        showCameraAndGalleryOption()
     }
 
 

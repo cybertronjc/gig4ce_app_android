@@ -21,12 +21,14 @@ import com.gigforce.verification.R
 import com.gigforce.verification.databinding.AadhaarCardImageUploadFragmentBinding
 import com.gigforce.verification.gigerVerfication.aadharCard.AadharCardSides
 import com.gigforce.verification.gigerVerfication.aadharCard.AddAadharCardInfoFragment
+import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AadhaarCardImageUploadFragment : Fragment() {
+class AadhaarCardImageUploadFragment : Fragment(),
+    VerificationClickOrSelectImageBottomSheet.OnPickOrCaptureImageClickListener{
 
     companion object {
         fun newInstance() = AadhaarCardImageUploadFragment()
@@ -62,7 +64,8 @@ class AadhaarCardImageUploadFragment : Fragment() {
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
             //call for bottom sheet
-            if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+            VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Aadhar Card", this)
+            //if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
         })
     }
 
@@ -72,7 +75,7 @@ class AadhaarCardImageUploadFragment : Fragment() {
 
     private fun setViews() {
         val frontUri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
             .authority(resources.getResourcePackageName(R.drawable.ic_front))
             .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
             .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
@@ -168,7 +171,7 @@ class AadhaarCardImageUploadFragment : Fragment() {
 //        aadharInfoLayout.visibility = View.GONE
 //    }
 
-//    private fun enableSubmitButton() {
+    //    private fun enableSubmitButton() {
 //        aadharSubmitSliderBtn.isEnabled = true
 //
 //        aadharSubmitSliderBtn.outerColor =
@@ -206,6 +209,14 @@ class AadhaarCardImageUploadFragment : Fragment() {
 //
 //        aadharBackImageHolder .setImage(aadharBackImagePath)
         viewBinding.toplayoutblock.setDocumentImage(1, aadharBackImagePath)
+    }
+
+    override fun onClickPictureThroughCameraClicked() {
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
+    }
+
+    override fun onPickImageThroughCameraClicked() {
+        if (viewBinding.toplayoutblock.viewPager2.currentItem == 0) openCameraAndGalleryOptionForFrontSideImage() else openCameraAndGalleryOptionForBackSideImage()
     }
 //
 
