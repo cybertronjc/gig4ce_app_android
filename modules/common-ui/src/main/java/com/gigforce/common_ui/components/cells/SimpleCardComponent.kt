@@ -29,11 +29,18 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
             setTitle(title)
             setSubTitle(subTitle)
         }
+
         view.setOnClickListener{
             customOnclickListner?.onClick(it)
-            if(right_image.isVisible) right_image.gone() else right_image.visible()
+            if(right_image.isVisible){
+                right_image.gone()
+            }  else{
+                right_image.visible()
+            }
         }
+
     }
+
 
     fun setTitle(title1 : String){
         title.text = title1
@@ -60,6 +67,18 @@ class SimpleCardComponent(context: Context, attrs: AttributeSet?) : FrameLayout(
         if(data is SimpleCardDVM){
             setTitle(data.title)
             setSubTitle(data.subtitle)
+            setViewSelected(data.isSelected)
+            view.setOnClickListener(null)
+            view.setOnClickListener{
+                customOnclickListner?.onClick(it)
+                if(right_image.isVisible){
+                    right_image.gone()
+                    data.isSelected = false
+                }  else{
+                    right_image.visible()
+                    data.isSelected = true
+                }
+            }
         }
     }
 

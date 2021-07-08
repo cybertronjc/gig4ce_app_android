@@ -15,10 +15,10 @@ class VerificationMainViewModel : ViewModel() {
 
     private fun getAllDocuments() {
         var allDocs = ArrayList<SimpleCardDVM>()
-        allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds",""))
-        allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds",""))
-        allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds",""))
-        allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds",""))
+        allDocs.add(SimpleCardDVM("PAN Card","Takes about 45 seconds","","verification/pancardimageupload" ))
+        allDocs.add(SimpleCardDVM("Aadhaar Card","Takes about 45 seconds","", "verification/aadhaarOptionsFragment"))
+        allDocs.add(SimpleCardDVM("Driving licence","Takes about 45 seconds","", "verification/drivinglicenseimageupload"))
+        allDocs.add(SimpleCardDVM("Bank Details","Takes about 45 seconds","", "verification/bank_account_fragment"))
         _allDocumentsData.value = allDocs
     }
 }

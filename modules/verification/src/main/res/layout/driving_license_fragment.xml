@@ -84,7 +84,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/name_til"
+                    android:id="@+id/name_til_dl"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -102,6 +102,25 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dlno_til"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_sm1"
+                    android:layout_marginTop="@dimen/dp_xl1"
+                    android:layout_marginRight="@dimen/dp_sm1"
+                    android:hint="DL Number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_til_dl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/issue_date_rl"
                     android:layout_width="0dp"
@@ -109,14 +128,13 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:layout_marginBottom="@dimen/dp_sm1"
                     android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/name_til">
+                    app:layout_constraintTop_toBottomOf="@+id/dlno_til">
 
                     <TextView
+                        android:id="@+id/issueDate"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="@dimen/dp_xsm1"
@@ -143,7 +161,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_sm1"
                         android:background="@color/white"
-                        android:visibility="gone"
                         android:text="   Issue Date   "
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -159,12 +176,13 @@
                     android:layout_marginRight="@dimen/dp_sm1"
                     android:layout_marginBottom="@dimen/dp_sm1"
                     android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/submit_button_dl"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/issue_date_rl">
 
                     <TextView
+                        android:id="@+id/expiryDate"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="@dimen/dp_xsm1"
@@ -196,6 +214,33 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/submit_button_dl"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/app_gradient_button"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_22"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size_36"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/submit_button_dl"
+                    app:layout_constraintEnd_toEndOf="@+id/submit_button_dl"
+                    app:layout_constraintStart_toStartOf="@+id/submit_button_dl"
+                    app:layout_constraintTop_toTopOf="@+id/submit_button_dl" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

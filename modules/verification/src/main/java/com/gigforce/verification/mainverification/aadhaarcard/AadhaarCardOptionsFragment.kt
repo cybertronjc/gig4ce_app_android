@@ -49,12 +49,15 @@ class AadhaarCardOptionsFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
+        viewBinding.uploadAdhaarCard.setViewSelected(false)
+        viewBinding.phoneNumberAadhaar.setViewSelected(false)
         if(view?.id == viewBinding.uploadAdhaarCard.id){
 
-            viewBinding.phoneNumberAadhaar.setViewSelected(false)
+            viewBinding.uploadAdhaarCard.setViewSelected(true)
+
         }
         else{
-            viewBinding.uploadAdhaarCard.setViewSelected(false)
+            viewBinding.phoneNumberAadhaar.setViewSelected(true)
         }
 
     }

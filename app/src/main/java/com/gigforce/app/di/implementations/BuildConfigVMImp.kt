@@ -15,4 +15,5 @@ class BuildConfigVMImp @Inject constructor() : IBuildConfigVM {
     override fun getApplicationID(): String = BuildConfig.APPLICATION_ID
     override fun getSendSMSURL() : String = BuildConfig.SEND_SMS_URL
     override fun getVerificationKycOcrResult(): String = BuildConfig.KYC_OCR_URL
+    override fun getKycVerificationUrl(): String = BuildConfig.KYC_VERIFY_URL
 }

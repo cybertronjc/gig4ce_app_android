@@ -82,7 +82,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name_til"
+                android:id="@+id/name_til_aadhar"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/date_rl"
+                android:id="@+id/date_rl_aadhar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -109,15 +109,16 @@
                 android:layout_marginTop="@dimen/dp_xl1"
                 android:layout_marginRight="@dimen/dp_sm1"
                 android:layout_marginBottom="@dimen/dp_sm1"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/submit_button_aadhar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_til">
+                app:layout_constraintTop_toBottomOf="@+id/name_til_aadhar">
 
                 <TextView
+                    android:id="@+id/dateOfBirthAadhar"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:hint="Year of birth"
+                    android:hint="Date of birth"
                     android:gravity="center_vertical|start"
                     android:paddingLeft="@dimen/dp_sm1"
                     android:background="@drawable/rect_border_grey"
@@ -143,10 +144,37 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginLeft="@dimen/dp_sm1"
-                    android:text="   Year of birth   "
+                    android:text="   Date of birth   "
                     android:background="@color/white"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/submit_button_aadhar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/app_gradient_button"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_22"
+                android:gravity="center"
+                android:minHeight="@dimen/size_36"
+                android:text="Next"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/submit_button_aadhar"
+                app:layout_constraintEnd_toEndOf="@+id/submit_button_aadhar"
+                app:layout_constraintStart_toStartOf="@+id/submit_button_aadhar"
+                app:layout_constraintTop_toTopOf="@+id/submit_button_aadhar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

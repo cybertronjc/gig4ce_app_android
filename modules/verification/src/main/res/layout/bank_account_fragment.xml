@@ -73,7 +73,7 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Account Number"
+                    android:hint="Name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView10">
@@ -92,7 +92,7 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
-                    android:hint="Bank Number"
+                    android:hint="Account Number"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/account_number_itl">
@@ -130,7 +130,9 @@
                     android:layout_marginLeft="@dimen/dp_sm1"
                     android:layout_marginTop="@dimen/dp_xl1"
                     android:layout_marginRight="@dimen/dp_sm1"
+                    android:layout_marginBottom="@dimen/dp_sm1"
                     android:hint="Account holder name"
+                    app:layout_constraintBottom_toTopOf="@id/submit_button_bank"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ifsc_code">
@@ -141,6 +143,33 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/submit_button_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/app_gradient_button"
+                    android:layout_marginStart="@dimen/size_16"
+                    android:layout_marginEnd="@dimen/size_16"
+                    android:layout_marginBottom="@dimen/size_22"
+                    android:gravity="center"
+                    android:minHeight="@dimen/size_36"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@+id/account_holder_name"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/submit_button_bank"
+                    app:layout_constraintEnd_toEndOf="@+id/submit_button_bank"
+                    app:layout_constraintStart_toStartOf="@+id/submit_button_bank"
+                    app:layout_constraintTop_toTopOf="@+id/submit_button_bank" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

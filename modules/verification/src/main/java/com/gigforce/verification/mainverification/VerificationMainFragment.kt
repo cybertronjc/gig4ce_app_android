@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.gigforce.common_ui.components.cells.SimpleCardComponent
+import com.gigforce.common_ui.ext.showToast
+import com.gigforce.common_ui.viewdatamodels.SimpleCardDVM
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.recyclerView.ItemClickListener
 import com.gigforce.verification.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.verification_main_fragment.*
@@ -37,15 +41,16 @@ class VerificationMainFragment : Fragment() {
     }
 
     private fun listener() {
+
         next.setOnClickListener{
-            navigation.navigateTo("verification/aadhaarcardimageupload")
-            navigation.navigateTo("verification/aadhaarcardphonenumber")
-            navigation.navigateTo("verification/pancardimageupload")
-            navigation.navigateTo("verification/drivinglicenseimageupload")
-            navigation.navigateTo("verification/bank_account_fragment")
 
-
-
+            allDocsRV.collection?.let {
+                it.asReversed().forEach {
+                    if ((it as SimpleCardDVM).isSelected){
+                        navigation.navigateTo(it.navpath)
+                    }
+                }
+            }
         }
     }
 

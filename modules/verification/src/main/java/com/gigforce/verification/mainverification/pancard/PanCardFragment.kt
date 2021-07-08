@@ -1,27 +1,41 @@
 package com.gigforce.verification.mainverification.pancard
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.gigforce.common_ui.ext.showToast
 import com.gigforce.common_ui.viewdatamodels.KYCImageModel
 import com.gigforce.core.datamodels.verification.PanCardDataModel
-import com.gigforce.core.di.interfaces.IBuildConfigVM
 import com.gigforce.core.navigation.INavigation
+import com.gigforce.core.utils.DateHelper
 import com.gigforce.verification.R
 import com.gigforce.verification.databinding.PanCardFragmentBinding
 import com.gigforce.verification.gigerVerfication.panCard.AddPanCardInfoFragment
+import com.gigforce.verification.mainverification.Data
 import com.gigforce.verification.mainverification.VerificationClickOrSelectImageBottomSheet
-import com.gigforce.verification.mainverification.VerificationKycRepo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_edit_driving_license.*
+import kotlinx.android.synthetic.main.pan_card_fragment.*
 import kotlinx.android.synthetic.main.veri_screen_info_component.view.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import java.net.URI
+import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class PanCardFragment() : Fragment(),
@@ -57,11 +71,24 @@ class PanCardFragment() : Fragment(),
         setViews()
         observer()
         listeners()
-
+        initViewModel()
     }
 
     private fun observer() {
 
+
+    }
+    private fun initViewModel() {
+        viewModel.kycOcrResult.observe(viewLifecycleOwner, Observer {
+            it.let {
+                showToast("Ocr status "+  it.status)
+            }
+        })
+        viewModel.kycVerifyResult.observe(viewLifecycleOwner, Observer {
+            it.let {
+                showToast("Verification "+ it.status)
+            }
+        })
     }
     private fun listeners() {
         viewBinding.toplayoutblock.setPrimaryClick(View.OnClickListener {
@@ -69,6 +96,14 @@ class PanCardFragment() : Fragment(),
             VerificationClickOrSelectImageBottomSheet.launch(parentFragmentManager, "Upload Pan Card", this)
             //launchSelectImageSourceDialog()
         })
+
+        date_rl.setOnClickListener {
+            dateOfBirthPicker.show()
+        }
+
+        submit_button_pan.setOnClickListener {
+            callKycVerificationApi()
+        }
     }
 
     private fun setViews() {
@@ -80,6 +115,43 @@ class PanCardFragment() : Fragment(),
             .build()
         val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
+    }
+
+    private fun callKycOcrApi(path: Uri){
+
+        var image: MultipartBody.Part? = null
+        if (path != null) {
+            val file = File(URI(path.toString()))
+            Log.d("Register", "Nombre del archivo " + file.getName())
+            // create RequestBody instance from file
+            val requestFile: RequestBody =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            // MultipartBody.Part is used to send also the actual file name
+            image =
+                MultipartBody.Part.createFormData("imagenPerfil", file.getName(), requestFile)
+        }
+        image?.let { viewModel.getKycOcrResult("pan", "", it) }
+    }
+
+    private val dateOfBirthPicker: DatePickerDialog by lazy {
+        val cal = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
+                val newCal = Calendar.getInstance()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                dateOfBirth.setText(DateHelper.getDateInDDMMYYYY(newCal.time))
+            },
+            1990,
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
+
+        datePickerDialog.datePicker.maxDate = Calendar.getInstance().timeInMillis
+        datePickerDialog
     }
 
     private fun launchSelectImageSourceDialog() {
@@ -151,13 +223,17 @@ class PanCardFragment() : Fragment(),
 //        if (panDataCorrectCB.isChecked)
 //            enableSubmitButton()
 //    }
-    private fun callOcrApi(){
-
+    private fun callKycVerificationApi(){
+        var list = listOf(Data("name", name_til.editText?.text.toString()),
+            Data("no", pan_til.editText?.text.toString()),
+            Data("dob", dateOfBirth.text.toString()))
+        viewModel.getKycVerificationResult("pan", list)
     }
 
     private fun showPanInfoCard(panInfoPath: Uri) {
         viewBinding.toplayoutblock.setDocumentImage(0, panInfoPath)
         //call ocr api
+        callKycOcrApi(panInfoPath)
     }
     override fun onClickPictureThroughCameraClicked() {
         launchSelectImageSourceDialog()
