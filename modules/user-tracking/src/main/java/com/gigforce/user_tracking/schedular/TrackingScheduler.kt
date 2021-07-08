@@ -58,35 +58,6 @@ class TrackingScheduler constructor(
         )
     }
 
-//    private suspend fun scheduleTrackers() {
-//        try {
-//
-//            val gigs = gigsRepository.getOngoingAndUpcomingGigsFor(LocalDate.now())
-//            val profile = profileFirebaseRepository.getProfileDataIfExist()
-//
-//            for (gig in gigs) {
-//
-//                val possibleAlarmsBtw = TrackingScheduleCalculator.getPossibleAlarmTimesBetween(
-//                        start = gig.startDateTime,
-//                        end = gig.endDateTime
-//                )
-//                scheduleAlarmsBetween(
-//                        alarmTimes = possibleAlarmsBtw,
-//                        gigId = gig.gigId,
-//                        userName = profile?.name
-//                )
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            CrashlyticsLogger.e(
-//                    TAG,
-//                    "Scheduling Alarms",
-//                    e
-//            )
-//        }
-//    }
-
-
     private fun scheduleAlarmsBetween(
             alarmTimes: List<LocalDateTime>,
             gigId: String,
