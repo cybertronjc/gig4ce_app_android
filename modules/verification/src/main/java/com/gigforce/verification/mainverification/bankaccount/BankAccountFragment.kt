@@ -126,9 +126,9 @@ class BankAccountFragment : Fragment(),
     private fun setViews() {
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_front))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
+            .authority(resources.getResourcePackageName(R.drawable.ic_passbook_illustration))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_passbook_illustration))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_passbook_illustration))
             .build()
         val list =
             listOf(KYCImageModel(getString(R.string.upload_bank_account_new), frontUri, false))

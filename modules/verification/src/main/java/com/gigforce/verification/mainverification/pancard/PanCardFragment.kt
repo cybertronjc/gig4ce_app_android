@@ -139,9 +139,9 @@ class PanCardFragment() : Fragment(),
     private fun setViews() {
         val frontUri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-            .authority(resources.getResourcePackageName(R.drawable.ic_front))
-            .appendPath(resources.getResourceTypeName(R.drawable.ic_front))
-            .appendPath(resources.getResourceEntryName(R.drawable.ic_front))
+            .authority(resources.getResourcePackageName(R.drawable.ic_pan_illustration))
+            .appendPath(resources.getResourceTypeName(R.drawable.ic_pan_illustration))
+            .appendPath(resources.getResourceEntryName(R.drawable.ic_pan_illustration))
             .build()
         val list = listOf(KYCImageModel(getString(R.string.upload_pan_card_new), frontUri, false))
         viewBinding.toplayoutblock.setImageViewPager(list)
