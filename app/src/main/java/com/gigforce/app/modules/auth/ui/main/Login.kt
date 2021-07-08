@@ -406,8 +406,13 @@ class Login : Fragment() {
             }
         }
         else if (requestCode == TERMS_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            if (!termsCheckbox.isChecked){
-                termsCheckbox.isChecked = true
+
+            try {
+                if (!termsCheckbox.isChecked){
+                    termsCheckbox.isChecked = true
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
