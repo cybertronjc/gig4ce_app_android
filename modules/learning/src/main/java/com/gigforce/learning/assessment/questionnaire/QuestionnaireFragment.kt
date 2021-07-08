@@ -48,7 +48,7 @@ class QuestionnaireFragment : Fragment(), AdapterQuestionnaire.AdapterQuestionna
     private lateinit var viewModel: ViewModelQuestionnaire
     private var selectedPosition = 0
     private val adapter: AdapterQuestionnaire by lazy {
-        AdapterQuestionnaire()
+        AdapterQuestionnaire(requireActivity())
     }
     @Inject lateinit var navigation : INavigation
 
