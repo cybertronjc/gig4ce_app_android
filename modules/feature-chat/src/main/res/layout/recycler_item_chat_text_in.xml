@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minWidth="150dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@id/user_name_tv"
                 />
@@ -63,6 +64,7 @@
                 android:textSize="16sp"
                 android:id="@+id/tv_msgValue"
                 android:linksClickable="true"
+                android:layout_marginTop="6dp"
                 android:textColorLink="@android:color/black"
                 android:fontFamily="@font/lato"
                 android:letterSpacing="0"

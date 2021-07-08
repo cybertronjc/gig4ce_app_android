@@ -10,7 +10,8 @@
     android:layout_gravity="left"
     app:cardCornerRadius="@dimen/chat_item_corner_radius"
     app:cardElevation="0dp"
-
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,18 +36,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteY="8dp" />
-
-        <com.gigforce.common_ui.views.GigforceImageView
-            android:id="@+id/close_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_cross_grey"
-            />
-
 
 
         <TextView

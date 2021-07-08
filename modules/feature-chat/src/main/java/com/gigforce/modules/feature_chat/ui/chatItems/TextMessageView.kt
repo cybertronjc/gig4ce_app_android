@@ -144,11 +144,12 @@ abstract class TextMessageView(
     private fun setQuotedMessageOnView(
         chatMessage: ChatMessage
     ) {
-        if(message.isAReplyToOtherMessage){
+        if(chatMessage.isAReplyToOtherMessage){
+            val replyMessage = chatMessage.replyForMessage!!
             quotedMessagePreviewContainer.removeAllViews()
 
             val replyView = LayoutInflater.from(context).inflate(
-                R.layout.layout_reply_to_layout,
+                R.layout.layout_reply_to_layout_view,
                 null,
                 false
             )
@@ -159,57 +160,57 @@ abstract class TextMessageView(
             val messageTV: TextView = replyView.findViewById(R.id.tv_msgValue)
             val messageImageIV: GigforceImageView = replyView.findViewById(R.id.message_image)
 
-            senderNameTV.text = chatMessage.senderInfo.name
+            senderNameTV.text = replyMessage.senderInfo.name
 
-            when (chatMessage.type) {
-                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT -> {
-                    messageTV.text = chatMessage.content
+            when (replyMessage.type) {
+                ChatConstants.MESSAGE_TYPE_TEXT -> {
+                    messageTV.text = replyMessage.content
                     messageImageIV.gone()
                 }
-                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
-                    messageTV.text = chatMessage.attachmentName
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_IMAGE -> {
+                    messageTV.text = replyMessage.attachmentName
                     messageImageIV.visible()
 
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
-                    }else if(chatMessage.attachmentPath != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                    if(replyMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(replyMessage.thumbnailBitmap!!,true)
+                    } else if(replyMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(replyMessage.thumbnail!!,-1,-1,true)
+                    }else if(replyMessage.attachmentPath != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(replyMessage.attachmentPath!!,-1,-1,true)
                     } else {
                         //load default image
                     }
                 }
-                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
-                    messageTV.text = chatMessage.attachmentName
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_VIDEO -> {
+                    messageTV.text = replyMessage.attachmentName
                     messageImageIV.visible()
 
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
+                    if(replyMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(replyMessage.thumbnailBitmap!!,true)
+                    } else if(replyMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(replyMessage.thumbnail!!,-1,-1,true)
                     }else {
                         //load default image
                     }
                 }
-                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
-                    messageTV.text = chatMessage.locationPhysicalAddress
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_LOCATION -> {
+                    messageTV.text = replyMessage.locationPhysicalAddress
                     messageImageIV.visible()
 
-                    if(chatMessage.thumbnailBitmap != null){
-                        messageImageIV.loadImage(chatMessage.thumbnailBitmap!!,true)
-                    } else if(chatMessage.thumbnail != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.thumbnail!!)
-                    }else if(chatMessage.attachmentPath != null){
-                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(chatMessage.attachmentPath!!)
+                    if(replyMessage.thumbnailBitmap != null){
+                        messageImageIV.loadImage(replyMessage.thumbnailBitmap!!,true)
+                    } else if(replyMessage.thumbnail != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(replyMessage.thumbnail!!,-1,-1,true)
+                    }else if(replyMessage.attachmentPath != null){
+                        messageImageIV.loadImageIfUrlElseTryFirebaseStorage(replyMessage.attachmentPath!!,-1,-1,true)
                     } else {
                         //load default image
                     }
                 }
-                com.gigforce.common_ui.core.ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
-                    messageTV.text = chatMessage.attachmentName
+                ChatConstants.MESSAGE_TYPE_TEXT_WITH_DOCUMENT -> {
+                    messageTV.text = replyMessage.attachmentName
                     messageImageIV.visible()
-                    messageImageIV.loadImage(R.drawable.ic_document_background)
+                    messageImageIV.loadImage(R.drawable.ic_document_background,true)
                 }
                 else -> {
                 }
