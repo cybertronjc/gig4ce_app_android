@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gigforce.common_ui.R
 import com.gigforce.common_ui.StringConstants
@@ -107,6 +110,10 @@ class DocViewerActivity : AppCompatActivity() {
                 } else {
                     showPdfFile(imageString, isImage, isPdf)
                 }
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                Toast.makeText(this@DocViewerActivity, "Error while loading page", Toast.LENGTH_SHORT).show()
             }
         }
     }
