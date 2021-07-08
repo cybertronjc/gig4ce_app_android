@@ -250,18 +250,18 @@ class LoginViewModel @Inject constructor(
                 .signInWithCredential(credential)
                 .addOnSuccessListener {
                     Log.d(TAG, "signInWithCredential:success")
-
-//                    if (it.additionalUserInfo!!.isNewUser) {
-//                        eventTracker.pushEvent(
-//                                TrackingEventArgs(
-//                                        eventName = AuthEvents.SIGN_SUCCESS,
-//                                        props = null
-//                                )
-//                        )
-//                        updateRegisterStatusToDB()
-//                    } else {
+                        Log.e("eventtesting","capturing")
+                    if (it.additionalUserInfo!!.isNewUser) {
+                        eventTracker.pushEvent(
+                                TrackingEventArgs(
+                                        eventName = AuthEvents.SIGN_SUCCESS,
+                                        props = null
+                                )
+                        )
+                        updateRegisterStatusToDB()
+                    } else {
                         checkIfSignInOrSignup() // User can be enrolled by ambassador or by using portal. so need to get detail from profile collection
-//                    }
+                    }
 
                     registerFirebaseToken()
                 }
